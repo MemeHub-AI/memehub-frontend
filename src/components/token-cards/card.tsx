@@ -42,7 +42,7 @@ export const TokenCard = ({ card, className }: Props) => {
     >
       <img src="https://via.placeholder.com/150" alt="img" />
       <img
-        src="https://scrollscan.com/images/svg/brands/main.svg?v=24.5.1.0"
+        src="https://scrollscan.com/images/svg/brands/main.svg"
         alt="chain"
         className="absolute right-2 top-2 w-5"
       />

@@ -30,7 +30,9 @@ export const HotNewsAside = () => {
 
   return (
     <aside className="w-aside">
-      <h2 className="text-green-500 text-xl font-bold mb-4">Hot opportunity</h2>
+      <h2 className="text-red-500 text-xl font-bold mb-4">
+        {t('hot-opportunity')}
+      </h2>
       <div className="flex flex-col gap-3">
         {cards.map((c, i) => (
           <NewsCard c={c} key={i} />
