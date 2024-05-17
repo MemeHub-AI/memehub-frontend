@@ -1,0 +1,28 @@
+import React, { ComponentProps } from 'react'
+import Link from 'next/link'
+
+import { Routes } from '@/routes'
+import { cn } from '@/lib/utils'
+
+interface Props extends ComponentProps<'img'> {
+  showMeme?: boolean
+}
+
+export const Logo = ({ className, showMeme = false, ...props }: Props) => {
+  return (
+    <Link
+      href={Routes.Main}
+      className="font-bold inline-flex items-center gap-2"
+    >
+      {showMeme && <img src="/images/meme.png" alt="meme" className="w-10" />}
+      <img
+        src="/images/logo.svg"
+        alt="logo"
+        className={cn('w-24', className)}
+        {...props}
+      />
+    </Link>
+  )
+}
+
+export default Logo
