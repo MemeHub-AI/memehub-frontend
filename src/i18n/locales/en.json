@@ -91,5 +91,6 @@
   "sign.failed": "Sign failed!",
   "sign.success": "Sign successful!",
   "chain": "Chain",
-  "hot-opportunity": "Hot opportunity"
+  "hot-opportunity": "Hot opportunity",
+  "chains": "Chains"
 }

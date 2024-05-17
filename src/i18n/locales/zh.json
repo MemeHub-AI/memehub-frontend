@@ -87,5 +87,6 @@
   "sign.failed": "签名失败！",
   "sign.success": "签名成功！",
   "chain": "链",
-  "hot-opportunity": "热门机会"
+  "hot-opportunity": "热门机会",
+  "chains": "链"
 }

@@ -3,24 +3,24 @@ import { useTranslation } from 'react-i18next'
 
 const cards = [
   {
-    logo: 'https://picsum.photos/id/1015/150/150',
+    logo: '/images/news-person.png',
     content:
       'Trump expressed support for cryptocurrency, leading to a surge in popularity for Trump-themed MEME coins.',
   },
   {
-    logo: 'https://picsum.photos/id/1015/150/150',
+    logo: '/images/news-compute.png',
     content: 'OpenAI公司推出GPT-40， AI概念MEME大火',
   },
   {
-    logo: 'https://picsum.photos/id/1015/150/150',
+    logo: '/images/news-sea.png',
     content: 'GME股票大涨，带动相关 MEME币大涨',
   },
   {
-    logo: 'https://picsum.photos/id/1015/150/150',
+    logo: '/images/news-rose.png',
     content: 'Blast发币，MEME币掀起新的狂潮',
   },
   {
-    logo: 'https://picsum.photos/id/1015/150/150',
+    logo: '/images/news-cat.png',
     content: '猫咪类MEME大火',
   },
 ]

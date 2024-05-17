@@ -37,6 +37,16 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
       id: 1,
       name: 'Scroll',
     },
+    {
+      id: 1,
+      name: 'BSC',
+      disabled: true,
+    },
+    {
+      id: 1,
+      name: 'Base',
+      disabled: true,
+    },
   ]
   const cards = [
     {
@@ -79,11 +89,11 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
       <div className="flex items-center gap-4">
         <Select onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
-            <SelectValue placeholder={t('chain')} />
+            <SelectValue placeholder={t('chains')} />
           </SelectTrigger>
           <SelectContent>
             {chains.map((c, i) => (
-              <SelectItem key={i} value={String(i)}>
+              <SelectItem key={i} value={String(i)} disabled={c.disabled}>
                 {c.name}
               </SelectItem>
             ))}
