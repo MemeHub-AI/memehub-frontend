@@ -11,7 +11,8 @@ export const Footer = () => {
     <footer className="min-h-footer flex items-center justify-center">
       {t('copyright')} © {new Date().getFullYear()}
       <Link
-        href={Routes.Main}
+        href="https://github.com/MemeHub-AI"
+        target="_blank"
         className="text-blue-600 mx-1 cursor-pointer hover:underline"
       >
         {t('meme-hub')}

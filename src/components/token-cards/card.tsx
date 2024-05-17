@@ -1,6 +1,7 @@
 import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
@@ -49,9 +50,13 @@ export const TokenCard = ({ card, className }: Props) => {
       <div className="self-start py-2 pr-2 h-full w-full flex flex-col justify-between">
         <div>
           <CardTitle className="pt-2">BTC(Bitcoin)</CardTitle>
-          <p className="text-zinc-500 text-xs mt-0.5">
+          <Link
+            href={`${Routes.Account}/${card.address}`}
+            className="text-zinc-500 text-xs mt-0.5 hover:underline"
+            onClick={(e) => e.stopPropagation()}
+          >
             {t('creator')}: {card.creator}
-          </p>
+          </Link>
           <p className="text-zinc-500 text-sm break-all line-clamp-4">
             {card.description}
           </p>

@@ -1,0 +1,94 @@
+import React, { useRef, type ComponentProps } from 'react'
+import { useTranslation } from 'react-i18next'
+import { isEmpty } from 'lodash'
+
+import { createField, useFields } from '@/hooks/use-fields'
+import { FormInputField, FormTextareaField } from '@/components/form-field'
+import { RequirePick } from '@/utils/types'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+
+interface Props extends RequirePick<ComponentProps<'div'>, 'children'> {}
+
+export const ProfileForm = ({ children }: Props) => {
+  const { t } = useTranslation()
+  const closeRef = useRef<HTMLButtonElement>(null)
+  const { fields, fieldsKeys, updateField, validateFields } = useFields({
+    name: createField({
+      isRequired: true,
+      validate: (f) => (isEmpty(f.value?.trim()) ? t('field.empty') : null),
+    }),
+    bio: createField({}),
+  })
+
+  const onChange = ({
+    target,
+  }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    updateField(target.id as keyof typeof fields, {
+      value: target.value,
+    })
+  }
+
+  const onSubmit = () => {
+    if (!validateFields()) return
+    console.log('submit')
+
+    // Clear form & close.
+    updateField('name', { value: '' })
+    updateField('bio', { value: '' })
+    closeRef.current?.click()
+  }
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{t('account.profile.edit')}</DialogTitle>
+        </DialogHeader>
+        <form
+          className="space-y-3"
+          onSubmit={(e) => {
+            e.preventDefault()
+            onSubmit()
+          }}
+        >
+          <FormInputField
+            label={t('name')}
+            placeholder={t('username.placeholder')}
+            id={fieldsKeys.name}
+            isRequired={fields.name.isRequired}
+            error={fields.name.error}
+            value={fields.name.value}
+            onChange={onChange}
+          />
+          <FormTextareaField
+            label={t('bio')}
+            placeholder={t('bio.placeholder')}
+            id={fieldsKeys.bio}
+            value={fields.bio.value}
+            onChange={onChange}
+          />
+          <DialogFooter className="!justify-start max-sm:flex-row max-sm:gap-3">
+            <Button>{t('confirm')}</Button>
+            <DialogClose ref={closeRef} asChild>
+              <Button variant="outline" type="button">
+                {t('cancel')}
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+export default ProfileForm
