@@ -37,7 +37,7 @@ export const HeaderDesktop = (props: Props) => {
           </ul>
         </nav>
         <TokenSearch className="" />
-        <LangSelect className="ml-3" />
+        <LangSelect className="ml-3 flex-shrink-0" />
         <Button
           className="mx-3 max-sm:mx-1.5"
           onClick={() => router.push(Routes.Create)}

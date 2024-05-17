@@ -1,9 +1,8 @@
 import React, { ComponentProps, useState } from 'react'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import { MagnifyingGlassIcon, Cross2Icon } from '@radix-ui/react-icons'
 import { useTranslation } from 'react-i18next'
 
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 export const TokenSearch = (props: ComponentProps<'div'>) => {
@@ -14,7 +13,13 @@ export const TokenSearch = (props: ComponentProps<'div'>) => {
   const onSearch = () => {}
 
   return (
-    <div className={cn('flex items-center pl-2 border rounded-md', className)}>
+    <div
+      className={cn(
+        'flex items-center px-2 border rounded-md w-full',
+        'focus-within:border-black focus-within:shadow group',
+        className
+      )}
+    >
       <MagnifyingGlassIcon
         width={18}
         height={18}

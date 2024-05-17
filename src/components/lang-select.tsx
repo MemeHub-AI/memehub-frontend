@@ -30,7 +30,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="ml-3">
+        <Button variant="ghost" size="icon" className={cn('ml-3', className)}>
           <GlobeIcon width={22} height={22} />
         </Button>
       </DropdownMenuTrigger>
