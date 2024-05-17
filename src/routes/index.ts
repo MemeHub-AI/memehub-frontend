@@ -4,4 +4,6 @@ export enum Routes {
   Create = '/create',
 
   Account = '/account',
+
+  Token = '/token',
 }
