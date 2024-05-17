@@ -9,6 +9,7 @@ import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { Routes } from '@/routes'
 import { LangSelect } from '../lang-select'
+import TokenSearch from '../token-search'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -35,6 +36,7 @@ export const HeaderDesktop = (props: Props) => {
             ))}
           </ul>
         </nav>
+        <TokenSearch className="" />
         <LangSelect className="ml-3" />
         <Button
           className="mx-3 max-sm:mx-1.5"
