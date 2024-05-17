@@ -1,5 +1,17 @@
 {
   "meme-hub": "Meme Hub",
   "copyright": "Copyright",
-  "copyright.reserved": "All rights reserved"
+  "copyright.reserved": "All rights reserved",
+  "lang": "Language",
+  "token.create": "Create token",
+  "disconnect": "Disconnect",
+  "confirm": "Confirm",
+  "cancel": "Cancel",
+  "wallet.connect": "Connect wallet",
+  "wallet.disconnect": "Disconnect wallet",
+  "wallet.connecting": "Connecting...",
+  "wallet.disconnect.confirm": "Are you sure you want to disconnect the wallet connection?",
+  "sign.loading": "Please sign message before",
+  "sign.failed": "Sign failed!",
+  "sign.success": "Sign successful!"
 }

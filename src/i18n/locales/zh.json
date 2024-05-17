@@ -1,5 +1,17 @@
 {
   "meme-hub": "Meme Hub",
   "copyright": "版权",
-  "copyright.reserved": "版权所有"
+  "copyright.reserved": "版权所有",
+  "lang": "语言",
+  "token.create": "创建代币",
+  "disconnect": "断开链接",
+  "confirm": "确定",
+  "cancel": "取消",
+  "wallet.connect": "连接钱包",
+  "wallet.disconnect": "断开连接",
+  "wallet.connecting": "钱包连接中...",
+  "wallet.disconnect.confirm": "您确定要断开钱包连接吗？",
+  "sign.loading": "请先签名授权",
+  "sign.failed": "签名失败！",
+  "sign.success": "签名成功！"
 }
