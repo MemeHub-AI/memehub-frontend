@@ -13,7 +13,7 @@ export const MainPage = () => {
   return (
     <main className="min-h-main px-6 py-3 flex max-sm:px-3 max-sm:pt-0 gap-4">
       <HotNewsAside />
-      <div className="flex-1">
+      <div className="flex-1 max-sm:mt-2">
         <TokenCards />
       </div>
     </main>

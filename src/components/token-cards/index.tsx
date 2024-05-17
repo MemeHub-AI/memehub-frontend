@@ -86,7 +86,7 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
 
   return (
     <>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 max-sm:justify-between">
         <Select onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <SelectValue placeholder={t('chains')} />

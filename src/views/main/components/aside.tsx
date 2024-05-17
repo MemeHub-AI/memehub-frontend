@@ -29,7 +29,7 @@ export const HotNewsAside = () => {
   const { t } = useTranslation()
 
   return (
-    <aside className="w-aside">
+    <aside className="w-aside max-sm:hidden">
       <h2 className="text-red-500 text-xl font-bold mb-4">
         {t('hot-opportunity')}
       </h2>
