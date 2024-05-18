@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Order } from '@/utils/types'
+import { useTokens } from '@/hooks/use-tokens'
 
 export const TokenCards = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -39,12 +40,7 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
     },
     {
       id: 1,
-      name: 'BSC',
-      disabled: true,
-    },
-    {
-      id: 1,
-      name: 'Base',
+      name: 'Ethereum',
       disabled: true,
     },
   ]
@@ -59,6 +55,7 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
       address: '0x5300000000000000000000000000000000000004',
     },
   ]
+  const {} = useTokens()
 
   const onChange = (idx: string) => {
     const item = sortItems[Number(idx)]
