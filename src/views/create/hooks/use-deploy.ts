@@ -5,6 +5,7 @@ import { simulateContract } from '@wagmi/core'
 
 import { factoryConfig } from './../../../contract/factory'
 import { wagmiConfig } from '@/config/wagmi'
+import { toastNoReject } from '@/utils/contract'
 
 const deployFee = 2000671350000000
 const deploySymbol = 'ETH'
@@ -45,11 +46,7 @@ export const useDeploy = () => {
       })
       toast.success(t('submit.success'))
     } catch (e) {
-      if (String(e).toLowerCase().includes('user rejected')) {
-        toast.error(t('user-rejected'))
-        return
-      }
-      toast.error(`${t('submit.error')} ${e}`)
+      toastNoReject(e)
     }
   }
 

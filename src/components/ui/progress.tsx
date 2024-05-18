@@ -8,6 +8,7 @@ interface Props
   indicatorClass?: string
   label?: React.ReactNode
   labelFormat?: boolean
+  labelClass?: string
 }
 
 const Progress = React.forwardRef<
@@ -20,6 +21,7 @@ const Progress = React.forwardRef<
     indicatorClass,
     label,
     labelFormat = true,
+    labelClass,
     ...restProps
   } = props
 
@@ -40,7 +42,12 @@ const Progress = React.forwardRef<
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
       {label && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm">
+        <div
+          className={cn(
+            'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm',
+            labelClass
+          )}
+        >
           {label}
           {labelFormat && '%'}
         </div>

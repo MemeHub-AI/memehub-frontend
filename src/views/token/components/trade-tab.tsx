@@ -9,43 +9,56 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { useTrade } from '../hooks/use-trade'
+import { toast } from 'sonner'
+import BigNumber from 'bignumber.js'
 
 enum Tab {
   Buy = 'buy',
   Sell = 'sell',
 }
 
-const buyItems = [0.1, 1, 2, 5]
-const sellItems = [10, 25, 75, 100]
+const buyItems = ['0.1', '1', '2', '5']
+const sellItems = ['10', '25', '75', '100']
 
 export const TradeTab = (props: ComponentProps<'div'>) => {
   const { className } = props
   const { t } = useTranslation()
   const [tab, setTab] = useState(String(Tab.Buy))
-  const [value, setValue] = useState(0)
-  const [slippage, setSlippage] = useState(10)
+  const [value, setValue] = useState('0')
+  const [slippage, setSlippage] = useState('10')
   const { isTrading, buy, sell, checkTrade } = useTrade()
 
   const isBuy = tab === Tab.Buy
   const isSell = tab === Tab.Sell
   const symbol = 'ETH'
 
-  const onlyNumberChange = (
-    { target }: React.ChangeEvent<HTMLInputElement>,
-    setter: React.Dispatch<React.SetStateAction<number>>
-  ) => {
-    const value = Number(target.value)
-    if (Number.isNaN(value)) return
-    setter(value)
-  }
-
-  // TODO: implementation this function.
-  const onTrade = async () => {
-    const { totalAmount, currentAmount } = await checkTrade('0x')
+  // TODO: dynamic addr.
+  const addr = ''
+  const onBuy = async () => {
+    const { totalAmount, currentAmount } = await checkTrade(addr)
     const total = formatEther(totalAmount)
     const current = formatEther(currentAmount)
 
-    isBuy ? buy(value) : sell(value)
+    if (value + current > total) {
+      const currentTotal = BigNumber(total).minus(current).toString()
+      setValue(currentTotal)
+      toast.info(
+        t('trade.limit').replace('{}', currentTotal).replace('{}', t('buy'))
+      )
+      return
+    }
+
+    if (BigNumber(value).lt(0)) {
+      toast.error(t('trade.is-zero'))
+      return
+    }
+
+    console.log('value', value)
+    buy(value, addr)
+  }
+
+  const onSell = async () => {
+    sell(value, addr)
   }
 
   return (
@@ -70,10 +83,8 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
                 <div className="flex items-center gap-2">
                   <Input
                     value={slippage}
-                    onChange={(e) => {
-                      if (e.target.value.length > 4) return
-                      onlyNumberChange(e, setSlippage)
-                    }}
+                    type="number"
+                    onChange={({ target }) => setSlippage(target.value)}
                   />
                   <span>%</span>
                 </div>
@@ -92,11 +103,9 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
               border="none"
               disableFocusBorder
               className="flex-1"
+              type="number"
               value={value}
-              onChange={(e) => {
-                if (e.target.value.length > 20) return
-                onlyNumberChange(e, setValue)
-              }}
+              onChange={({ target }) => setValue(target.value)}
             />
             <div className="flex items-center">
               <span className="mr-2 text-zinc-600">{symbol}</span>
@@ -110,7 +119,7 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
             </div>
           </div>
           <div className="flex gap-2 mt-3">
-            <Button size="xs" onClick={() => setValue(0)}>
+            <Button size="xs" onClick={() => setValue('0')}>
               {t('reset')}
             </Button>
             {(isBuy ? buyItems : sellItems).map((value, i) => (
@@ -122,8 +131,8 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
         </div>
         <Button
           className="w-full"
-          onClick={onTrade}
-          disabled={isTrading || value <= 0}
+          onClick={isBuy ? onBuy : onSell}
+          disabled={isTrading || Number(value) <= 0}
         >
           {t('trade')}
         </Button>

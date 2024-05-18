@@ -1,7 +1,11 @@
 import { useEffect } from 'react'
 import { useAccount, useConnect, useDisconnect, useSwitchChain } from 'wagmi'
+import { useMutation } from '@tanstack/react-query'
+import { first } from 'lodash'
 
 import { useSign } from './use-sign'
+import { userApi } from '@/api/user'
+import { fmt } from '@/utils/fmt'
 
 export const useWallet = () => {
   const {
@@ -19,20 +23,42 @@ export const useWallet = () => {
   const { switchChainAsync } = useSwitchChain()
   const { signAsync } = useSign()
 
+  const { mutateAsync } = useMutation({
+    mutationKey: [userApi.new.name],
+    mutationFn: userApi.new,
+  })
+
+  const login = (addr: string, chainId: number, message: string) => {
+    mutateAsync({
+      name: fmt.addr(addr),
+      logo: 'https://storage.memehub.ai/avater.png',
+      description: 'A Meme boy/girl',
+      wallet_address: addr,
+      chain_id: String(chainId),
+      sign: message,
+    })
+  }
+
   const connectWallet = async (connector: (typeof connectors)[number]) => {
     try {
-      await connectAsync({ connector })
-      await signAsync()
+      const { accounts, chainId } = await connectAsync({ connector })
+      const address = first(accounts)
+      const message = await signAsync()
+
+      if (!address?.trim()) throw 'No address'
+      login(address, chainId, message)
     } catch (e) {
-      console.error(`Connect wallet error: ${e}`)
+      console.error(`[connectWallet error]: ${e}`)
+      disconnectWallet()
     }
   }
 
   const disconnectWallet = async () => {
+    console.log('disconnect')
     try {
       await disconnectAsync()
     } catch (e) {
-      console.error(`Disconnect wallet error: ${e}`)
+      console.error(`[disconnectWallet error] : ${e}`)
     }
   }
 

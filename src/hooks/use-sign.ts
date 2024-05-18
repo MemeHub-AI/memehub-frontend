@@ -12,18 +12,23 @@ export const useSign = () => {
   const signAsync = async () => {
     const id = toast.loading(t('sign.loading'))
 
-    signMessageAsync({
+    return signMessageAsync({
       account: address,
       connector,
-      message: `Signin:${Date.now()}`,
+      message: `Signin at ${Date.now()}`,
     })
       .then((res) => {
         toast.success(t('sign.success'))
         setIsSigned(true)
         return res
       })
-      .catch(() => toast.error(t('sign.failed')))
-      .finally(() => toast.dismiss(id))
+      .catch((e) => {
+        toast.error(t('sign.failed'))
+        throw new Error(e)
+      })
+      .finally(() => {
+        toast.dismiss(id)
+      })
   }
 
   return {

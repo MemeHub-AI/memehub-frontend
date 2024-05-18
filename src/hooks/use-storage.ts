@@ -24,5 +24,8 @@ export const useStorage = (useSession = false) => {
 
     getLang: () => get('lang'),
     setLang: (v: string) => set('lang', v),
+
+    getToken: () => get('token'),
+    setToken: (v: string) => set('token', v),
   }
 }

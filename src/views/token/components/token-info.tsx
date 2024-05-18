@@ -1,14 +1,16 @@
-import React, { ComponentProps, useState } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
+import BigNumber from 'bignumber.js'
 
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 import { Progress } from '@/components/ui/progress'
-import { HoldersRank } from './holders-rank'
 import { cn } from '@/lib/utils'
+import { useTokenContext } from '@/contexts/token'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const [curveProgress, setCurveProgree] = useState(20)
+  const { current, total } = useTokenContext()
+  const percent = BigNumber(current).div(total).multipliedBy(100).toFixed(3)
 
   return (
     <div className={cn('mt-4', className)}>
@@ -42,8 +44,9 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         <Progress
           className="h-4"
           indicatorClass="bg-blue-600"
-          value={curveProgress}
-          label={curveProgress}
+          labelClass="text-white"
+          value={Number(percent)}
+          label={percent}
         />
         <div className="text-zinc-400 text-xs mt-1">
           {t('bonding-curve.token')

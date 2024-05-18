@@ -102,5 +102,10 @@
   "hash": "Hash",
   "view.hash": "View hash",
   "view.details": "View detalis",
-  "trade.limit": "Only {} is available for {} now"
+  "trade.limit": "Only {} is available for {} now",
+  "trade.loading": "Trading...",
+  "trade.success": "Trade successful!",
+  "trade.failed": "Trade failed",
+  "trade.checking": "Trade checking...",
+  "trade.is-zero": "Trade amount must greater than zero"
 }

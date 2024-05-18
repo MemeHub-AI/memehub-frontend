@@ -101,5 +101,10 @@
   "view.details": "查看详情",
   "trade.limit": "目前只有 {} 可供 {} ",
   "buy": "购买",
-  "sell": "出售"
+  "sell": "出售",
+  "trade.loading": "交易中...",
+  "trade.success": "交易成功！",
+  "trade.failed": "交易失败",
+  "trade.checking": "交易检查中...",
+  "trade.is-zero": "交易金额必须大于零"
 }
