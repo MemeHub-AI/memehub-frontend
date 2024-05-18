@@ -15,11 +15,11 @@ export const WalletAccount = () => {
   return (
     <div className="flex items-center gap-3 max-sm:gap-1">
       <Avatar
-        src="https://ui-avatars.com/api/?name=jd"
-        fallback={address?.slice(-2)}
+        src=""
+        fallback={address?.slice(-4)}
         size={isMobile ? 32 : 36}
         className="rounded-lg cursor-pointer"
-        fallbackClass="rounded-lg"
+        fallbackClass="rounded-lg text-xs"
         onClick={() => router.push(`${Routes.Account}/${address}`)}
       />
       {!isMobile && <WalletDisconnector />}

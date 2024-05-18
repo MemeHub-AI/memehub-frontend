@@ -9,7 +9,8 @@ import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { Routes } from '@/routes'
 import { LangSelect } from '../lang-select'
-import TokenSearch from '../token-search'
+import { TokenSearch } from '../token-search'
+import { SocialLinks } from '../social-links'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -36,8 +37,9 @@ export const HeaderDesktop = (props: Props) => {
             ))}
           </ul>
         </nav>
-        <TokenSearch className="" />
-        <LangSelect className="ml-3 flex-shrink-0" />
+        <TokenSearch />
+        <SocialLinks className="ml-3" />
+        <LangSelect className="flex-shrink-0" />
         <Button
           className="mx-3 max-sm:mx-1.5"
           onClick={() => router.push(Routes.Create)}
