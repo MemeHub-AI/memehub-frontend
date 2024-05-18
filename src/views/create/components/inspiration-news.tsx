@@ -56,11 +56,14 @@ export const InspirationNews = ({ className }: ComponentProps<'div'>) => {
 
   return (
     <div className={className}>
-      <Title>{t('create.inspiration.title')}</Title>
+      <Title className="whitespace-nowrap">
+        {t('create.inspiration.title')}
+      </Title>
       <div className="flex flex-col gap-6 h-[calc(100vh-260px)] overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip">
-        {result?.data?.map((item) => {
+        {result?.data?.map((item, i) => {
           return (
             <div
+              key={i}
               className="flex rounded-2xl cursor-pointer"
               onClick={() => open(item.articles[0].image.newsUrl)}
             >

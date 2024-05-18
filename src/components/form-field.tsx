@@ -1,4 +1,4 @@
-import React, { type ReactNode, type ComponentProps } from 'react'
+import React, { type ReactNode, type ComponentProps, forwardRef } from 'react'
 
 import { Label } from './ui/label'
 import { Input } from './ui/input'
@@ -29,9 +29,10 @@ export const FormField = (props: Props) => {
   )
 }
 
-export const FormInputField = (
-  props: Omit<Props, 'render'> & ComponentProps<'input'>
-) => {
+export const FormInputField = forwardRef<
+  HTMLInputElement,
+  Omit<Props, 'render'> & ComponentProps<'input'>
+>((props, ref) => {
   const { label, isRequired, error, ...restProps } = props
 
   return (
@@ -45,11 +46,12 @@ export const FormInputField = (
           className={cn(error && 'border-red-600')}
           disableFocusBorder={!!error}
           {...restProps}
+          ref={ref}
         />
       }
     />
   )
-}
+})
 
 export const FormTextareaField = (
   props: Omit<Props, 'render'> & ComponentProps<'textarea'>

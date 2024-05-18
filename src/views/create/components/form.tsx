@@ -12,6 +12,8 @@ import { useDeploy } from '../hooks/use-deploy'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
 import { Title } from './title'
+import { useUploadImage } from '@/hooks/use-upload-image'
+import { toast } from 'sonner'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {}
 
@@ -36,6 +38,7 @@ export const CreateTokenForm = (props: Props) => {
     website: createField({}),
   })
   const {
+    contractAddr,
     deployFee,
     deploySymbol,
     isDeploying,
@@ -44,6 +47,7 @@ export const CreateTokenForm = (props: Props) => {
     deploy,
     resetDeploy,
   } = useDeploy()
+  const { url, onChangeUpload } = useUploadImage()
 
   const fee = Number(formatEther(BigInt(deployFee))).toFixed(3)
   const symbol = deploySymbol
@@ -64,12 +68,24 @@ export const CreateTokenForm = (props: Props) => {
     e.preventDefault()
     if (isDeploying) return
     if (!validateFields()) return
+    if (isEmpty(url)) {
+      toast.error(t('create.upload-image'))
+      return
+    }
 
-    deploy(fieldsValues.name, fieldsValues.symbol)
+    deploy({
+      name: fieldsValues.name,
+      ticker: fieldsValues.symbol,
+      desc: fieldsValues.description,
+      image: url,
+      twitter_url: fieldsValues.twitter,
+      telegram_url: fieldsValues.telegram,
+      website: fieldsValues.website,
+    })
   }
 
   return (
-    <div className={className}>
+    <div className={cn('w-96', className)}>
       <AlertDialog
         open={isSuccess}
         onOpenChange={resetDeploy}
@@ -85,17 +101,20 @@ export const CreateTokenForm = (props: Props) => {
             </Link>
             <Link
               className="text-blue-600 hover:underline "
-              href={`${Routes.Token}/0x0c9fffc7749b49f0f482a4fa214d62cfddb4aad0`}
+              href={`${Routes.Token}/${contractAddr}`}
             >
               {t('view.details')}
+            </Link>
+            <Link className="text-blue-600 hover:underline " href={Routes.Main}>
+              {t('view.list')}
             </Link>
           </p>
         }
       />
-      <Title> {t('create.new')}</Title>
+      <Title className="w-fit">{t('create.new')}</Title>
       <form
         className={cn(
-          'flex flex-col space-y-3 w-96 max-sm:w-full max-sm:px-3 max-sm:space-y-2'
+          'flex flex-col space-y-3 w-[460px] max-sm:w-full max-sm:px-3 max-sm:space-y-2'
         )}
         onSubmit={onSubmit}
       >
@@ -143,6 +162,8 @@ export const CreateTokenForm = (props: Props) => {
           type="file"
           isRequired
           disabled={isDeploying}
+          accept="image/*"
+          onChange={onChangeUpload}
         />
 
         {/* Optional fields. */}
@@ -176,7 +197,7 @@ export const CreateTokenForm = (props: Props) => {
           <Button className="self-center px-10 mt-3" disabled={isDeploying}>
             {t('create')}
           </Button>
-          <p className="self-center text-zinc-400">
+          <p className="self-center text-zinc-400 text-xs">
             {t('deploy.fee')}: {fee} {symbol}
           </p>
         </div>

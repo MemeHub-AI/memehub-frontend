@@ -25,3 +25,28 @@ export interface TokenListRes {
     creator: string
   }[]
 }
+
+export interface TokenNewReq {
+  name: string
+  ticker: string
+  desc: string
+  image: string
+  twitter_url: string
+  telegram_url: string
+  website: string
+}
+
+export interface TokenNewRes {
+  coin_id: number
+}
+
+export interface TokenUpdateReq {
+  address: string
+  hash: string
+  status: TokenUpdateStatus
+}
+
+export enum TokenUpdateStatus {
+  Failed,
+  Success,
+}

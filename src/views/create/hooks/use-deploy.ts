@@ -2,10 +2,15 @@ import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { simulateContract } from '@wagmi/core'
+import { useEffect } from 'react'
+import { first } from 'lodash'
+
+import { type TokenNewReq, TokenUpdateStatus } from '@/api/token/types'
 
 import { factoryConfig } from './../../../contract/factory'
 import { wagmiConfig } from '@/config/wagmi'
 import { toastNoReject } from '@/utils/contract'
+import { useToken } from './use-token'
 
 const deployFee = 2000671350000000
 const deploySymbol = 'ETH'
@@ -28,24 +33,51 @@ export const useDeploy = () => {
       onSuccess: () => toast.dismiss(),
     },
   })
-  const { isSuccess, isLoading, isError } = useWaitForTransactionReceipt({
+  const { data, isSuccess, isLoading, isError } = useWaitForTransactionReceipt({
     hash,
   })
+  const { create, update } = useToken()
+  const contractAddr = first(data?.logs)?.address
 
   if (isLoading) {
     toast.loading(t('deploying'))
   }
 
-  const deploy = async (name: string, symbol: string) => {
+  if (isSuccess || isError) {
+    // reset()
+    toast.dismiss()
+  }
+
+  useEffect(() => {
+    if (!isSuccess) return
+
+    update({
+      address: contractAddr!,
+      hash: hash!,
+      status: TokenUpdateStatus.Success,
+    })
+  }, [isSuccess])
+
+  const deploy = async (params: TokenNewReq) => {
+    // Submit info to api. if create success then modify else remove.
+    create(params)
     try {
       await writeContractAsync({
         ...factoryConfig,
         functionName: 'deploy',
-        args: [reserveRatio, reserveTokenAddress, name, symbol, router],
+        args: [
+          reserveRatio,
+          reserveTokenAddress,
+          params.name,
+          params.ticker,
+          router,
+        ],
         value: BigInt(deployFee),
       })
+
       toast.success(t('submit.success'))
     } catch (e) {
+      update({ address: '', hash: '', status: TokenUpdateStatus.Failed })
       toastNoReject(e)
     }
   }
@@ -65,6 +97,7 @@ export const useDeploy = () => {
   }
 
   return {
+    contractAddr,
     deployFee,
     deploySymbol,
     deployHash: hash,

@@ -13,7 +13,7 @@ export enum ContentType {
 
 export interface FetcherOptions extends Omit<RequestInit, 'body'> {
   contentType?: ContentType
-  body?: Record<string, any> | null
+  body?: Record<string, any> | null | FormData
   requireAuth?: boolean
   toJson?: boolean
 }
@@ -30,17 +30,20 @@ export const useFetch = (baseURL: string) => {
   const { getToken } = useStorage()
 
   // Init headers config.
-  const initHeaders = ({ requireAuth = true }: FetcherOptions) => {
-    const headers = new Headers()
+  const initHeaders = ({ requireAuth = true, headers }: FetcherOptions) => {
+    const newHeaders = new Headers(headers)
 
-    headers.set(CommonHeaders.ContentType, ContentType.Json)
+    // Default content type if not.
+    if (!newHeaders.has(CommonHeaders.ContentType)) {
+      newHeaders.set(CommonHeaders.ContentType, ContentType.Json)
+    }
 
     // Add token.
     if (requireAuth && getToken()?.trim()) {
-      headers.set(CommonHeaders.Authorization, `Bearer ${getToken()}`)
+      newHeaders.set(CommonHeaders.Authorization, `Bearer ${getToken()}`)
     }
 
-    return headers
+    return newHeaders
   }
 
   // Process response success.
@@ -70,7 +73,10 @@ export const useFetch = (baseURL: string) => {
     try {
       const response = await fetch(fullURL, {
         ...options,
-        body: options.method !== 'GET' ? JSON.stringify(options.body) : null,
+        body:
+          options.body instanceof FormData
+            ? options.body
+            : JSON.stringify(options.body),
       })
       // Response error.
       if (!response.ok) return response.body as T

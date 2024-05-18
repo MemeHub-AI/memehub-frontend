@@ -108,5 +108,10 @@
   "trade.checking": "Trade checking...",
   "trade.is-zero": "Trade amount must greater than zero",
   "create.inspiration.title": "Meme inspiration💡",
-  "create.new": "Launch next 100x MemeCoin 🚀"
+  "create.new": "Launch next 100x MemeCoin 🚀",
+  "create.upload-image": "Please upload LOGO image",
+  "uploading": "Uploading...",
+  "upload.success": "Upload sucessful!",
+  "upload.failed": "Upload failed",
+  "view.list": "View list"
 }
