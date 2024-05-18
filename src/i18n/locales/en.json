@@ -101,5 +101,6 @@
   "deploy.success": "Your token deploy successful!",
   "hash": "Hash",
   "view.hash": "View hash",
-  "view.details": "View detalis"
+  "view.details": "View detalis",
+  "trade.limit": "Only {} is available for {} now"
 }

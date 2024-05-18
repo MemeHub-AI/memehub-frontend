@@ -1,5 +1,6 @@
 import React, { type ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { formatEther } from 'viem'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -7,6 +8,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { AlertDialog } from '@/components/ui/alert-dialog'
+import { useTrade } from '../hooks/use-trade'
 
 enum Tab {
   Buy = 'buy',
@@ -22,6 +24,7 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
   const [tab, setTab] = useState(String(Tab.Buy))
   const [value, setValue] = useState(0)
   const [slippage, setSlippage] = useState(10)
+  const { isTrading, buy, sell, checkTrade } = useTrade()
 
   const isBuy = tab === Tab.Buy
   const isSell = tab === Tab.Sell
@@ -36,8 +39,13 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
     setter(value)
   }
 
-  const onTrade = () => {
-    console.log('trade', value)
+  // TODO: implementation this function.
+  const onTrade = async () => {
+    const { totalAmount, currentAmount } = await checkTrade('0x')
+    const total = formatEther(totalAmount)
+    const current = formatEther(currentAmount)
+
+    isBuy ? buy(value) : sell(value)
   }
 
   return (
@@ -62,7 +70,10 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
                 <div className="flex items-center gap-2">
                   <Input
                     value={slippage}
-                    onChange={(e) => onlyNumberChange(e, setSlippage)}
+                    onChange={(e) => {
+                      if (e.target.value.length > 4) return
+                      onlyNumberChange(e, setSlippage)
+                    }}
                   />
                   <span>%</span>
                 </div>
@@ -82,7 +93,10 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
               disableFocusBorder
               className="flex-1"
               value={value}
-              onChange={(e) => onlyNumberChange(e, setValue)}
+              onChange={(e) => {
+                if (e.target.value.length > 20) return
+                onlyNumberChange(e, setValue)
+              }}
             />
             <div className="flex items-center">
               <span className="mr-2 text-zinc-600">{symbol}</span>
@@ -106,7 +120,11 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
             ))}
           </div>
         </div>
-        <Button className="w-full" onClick={onTrade}>
+        <Button
+          className="w-full"
+          onClick={onTrade}
+          disabled={isTrading || value <= 0}
+        >
           {t('trade')}
         </Button>
       </Tabs>

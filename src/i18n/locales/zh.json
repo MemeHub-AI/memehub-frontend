@@ -98,5 +98,8 @@
   "deploy.success": "您的代币已成功创建！",
   "hash": "哈希",
   "view.hash": "查看哈希",
-  "view.details": "查看详情"
+  "view.details": "查看详情",
+  "trade.limit": "目前只有 {} 可供 {} ",
+  "buy": "购买",
+  "sell": "出售"
 }

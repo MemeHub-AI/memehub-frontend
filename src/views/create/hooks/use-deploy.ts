@@ -1,8 +1,10 @@
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { simulateContract } from '@wagmi/core'
 
 import { factoryConfig } from './../../../contract/factory'
+import { wagmiConfig } from '@/config/wagmi'
 
 const deployFee = 2000671350000000
 const deploySymbol = 'ETH'
@@ -51,6 +53,15 @@ export const useDeploy = () => {
     }
   }
 
+  const staticDeploy = (name: string, symbol: string) => {
+    return simulateContract(wagmiConfig, {
+      ...factoryConfig,
+      functionName: 'deploy',
+      args: [reserveRatio, reserveTokenAddress, name, symbol, router],
+      value: BigInt(deployFee),
+    })
+  }
+
   const resetDeploy = () => {
     reset()
     toast.dismiss()
@@ -65,5 +76,6 @@ export const useDeploy = () => {
     isError,
     deploy,
     resetDeploy,
+    staticDeploy,
   }
 }
