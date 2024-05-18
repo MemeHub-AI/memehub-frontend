@@ -50,32 +50,13 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
   ]
   const cards = [
     {
-      name: 'Bitcoin',
-      symbol: 'BTC',
-      description:
-        'btc descriptionbtc descriptionbtc descriptionbtc descriptionbtc descriptionbtc descriptionbtc descriptionbtc descriptionbtc descriptionbtc description',
+      name: 'MemeHub',
+      symbol: 'MHUB',
+      description: 'description...',
       creator: 'L1en',
       marketCap: 12312321,
       commentCount: 123123891,
-      address: 'So11111111111111111111111111111111111111112',
-    },
-    {
-      name: 'Ethereum',
-      symbol: 'ETH',
-      description: 'eth description',
-      creator: 'Linken',
-      marketCap: 222111,
-      commentCount: 3413132,
-      address: 'So11111111111111111111111111111111111111112',
-    },
-    {
-      name: 'Solana',
-      symbol: 'SOL',
-      description: 'sol description',
-      creator: 'Linksol',
-      marketCap: 312234,
-      commentCount: 2332,
-      address: 'So11111111111111111111111111111111111111112',
+      address: '0x5300000000000000000000000000000000000004',
     },
   ]
 

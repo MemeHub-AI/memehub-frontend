@@ -1,5 +1,9 @@
 import Head from 'next/head'
 import { useTranslation } from 'react-i18next'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 import type { AppProps } from 'next/app'
 
@@ -8,6 +12,10 @@ import { AppLayout } from '@/components/layouts/app'
 import { AppProviders } from '@/components/app-providers'
 import { useMounted } from '@/hooks/use-mounted'
 import { useLang } from '@/hooks/use-lang'
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
+dayjs.extend(relativeTime)
 
 export default function App({ Component, pageProps }: AppProps) {
   const { isNotMounted } = useMounted(onMounted)

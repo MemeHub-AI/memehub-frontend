@@ -18,155 +18,118 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
+import { Routes } from '@/routes'
+import { useRouter } from 'next/router'
 
 const comments = [
   {
     id: '123',
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message:
-      'mf comes from a race of weed smoking aliens he was riding green candles whilst getting high. all of a sudden a pajeet hit him with a red candle and now he tryna get back to heights he reached before. help him get high and find his weed smoking buddies',
-    imageUrl:
-      'https://pump.mypinata.cloud/ipfs/QmeXaMn2yBXkvWYdRjwEi1DWeZY72oSTay6uta7Ugy1wLQ',
+    message: 'hi',
     mentions: [],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
     isLiked: true,
   },
   {
     id: '456',
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message: '#2165699 mf couldnt dodge the pajeet red candle',
+    message: 'hello',
     imageUrl: '',
     mentions: [],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
     isLiked: true,
   },
   {
     id: nanoid(),
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message: '#2165699 mf couldnt dodge the pajeet red candle',
+    message: 'hello',
     imageUrl: '',
     mentions: ['123'],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
   },
   {
     id: nanoid(),
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message: '#2165699 mf couldnt dodge the pajeet red candle',
+    message: 'hello',
     imageUrl: '',
     mentions: ['456'],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
   },
   {
     id: nanoid(),
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message: '#2165699 mf couldnt dodge the pajeet red candle',
+    message: 'hello',
     imageUrl: '',
     mentions: [],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
   },
   {
     id: nanoid(),
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message: '#2165699 mf couldnt dodge the pajeet red candle',
+    message: 'hello',
     imageUrl: '',
     mentions: [],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
   },
   {
     id: nanoid(),
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message: '#2165699 mf couldnt dodge the pajeet red candle',
+    message: 'hello',
     imageUrl: '',
     mentions: [],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
   },
   {
     id: nanoid(),
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message: '#2165699 mf couldnt dodge the pajeet red candle',
+    message: 'hello',
     imageUrl: '',
     mentions: [],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
   },
   {
     id: nanoid(),
     profileUrl: '/profile/9VK7SR',
-    avatarUrl:
-      'https://pump.fun/pepe.png?img-width=16&img-dpr=2&img-onerror=redirect',
+    avatarUrl: '/images/meme.png',
     username: '9VK7SR (dev)',
     timestamp: '2024/5/13 11:47:08',
-    message: '#2165699 mf couldnt dodge the pajeet red candle',
+    message: 'hello',
     imageUrl: '',
     mentions: [],
     likes: 1,
     replyTo: null,
-    transactionUrl:
-      'https://solscan.io/tx/5QENLPRhfCDumvnMrunZCk17GeEVBoh68sEGaKmnYrPWgAhggn8mGA2QvqEs49Ksp6gu1pjk2iVkitPZGH1fptxi',
-    transactionAmount: '0.4200 SOL',
   },
 ]
 
@@ -217,6 +180,7 @@ interface CardProps extends Pick<Props, 'readonly'> {
 
 export const CommentCard = ({ c, readonly }: CardProps) => {
   const { t } = useTranslation()
+  const router = useRouter()
 
   return (
     <Card
@@ -226,14 +190,17 @@ export const CommentCard = ({ c, readonly }: CardProps) => {
       hover="bg"
     >
       {/* User profile */}
-      <div className="flex items-center gap-2 hover:text-blue-600 transition-all w-fit cursor-pointer">
+      <div
+        className="flex items-center gap-2 group transition-all w-fit cursor-pointer"
+        onClick={() => router.push(`${Routes.Account}/${c.username}`)}
+      >
         <Avatar
           src={c.avatarUrl}
           size={32}
           className="border border-zinc-400"
         />
         <div className="flex flex-col">
-          <span className="text-sm">{c.username}</span>
+          <span className="text-sm group-hover:underline">{c.username}</span>
           <span className="text-zinc-400 text-xs">
             <span>{c.timestamp}</span>
           </span>
@@ -252,7 +219,7 @@ export const CommentCard = ({ c, readonly }: CardProps) => {
         </div>
       )}
 
-      {/* Comment details */}
+      {/* Comment content */}
       <div className="">{c.message}</div>
 
       {/* Like, comment */}

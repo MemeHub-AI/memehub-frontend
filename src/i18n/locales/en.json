@@ -43,7 +43,7 @@
   "buy": "Buy",
   "sell": "Sell",
   "switch-to": "Switch to",
-  "set-max-slippage": "Set max slippage",
+  "set-max-slippage": "Slippage",
   "trade": "Trade",
   "thread": "thread",
   "trades": "Trades",
@@ -92,5 +92,6 @@
   "sign.success": "Sign successful!",
   "chain": "Chain",
   "hot-opportunity": "Hot opportunity",
-  "chains": "Chains"
+  "chains": "Chains",
+  "bonding-curve.token": " When the market value reaches {}, the bonding curve will automatically add all tokens to the {} liquidity pool and then burn them."
 }

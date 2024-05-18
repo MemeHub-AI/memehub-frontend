@@ -9,6 +9,7 @@ interface Props extends AlertDialogPrimitive.AlertDialogProps {
   title: React.ReactNode
   description?: React.ReactNode
   triggerProps?: AlertDialogPrimitive.DialogTriggerProps
+  footerClass?: string
   onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   onConfirm?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
@@ -24,6 +25,7 @@ const AlertDialog = React.forwardRef<
     onCancel,
     onConfirm,
     triggerProps,
+    footerClass,
     ...restProps
   } = props
   const { t } = useTranslation()
@@ -40,7 +42,9 @@ const AlertDialog = React.forwardRef<
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
-        <AlertDialogFooter className="max-sm:flex max-sm:flex-row">
+        <AlertDialogFooter
+          className={cn('max-sm:flex max-sm:flex-row', footerClass)}
+        >
           <AlertDialogCancel
             onClick={onCancel}
             className="max-sm:mt-0 max-sm:flex-1"

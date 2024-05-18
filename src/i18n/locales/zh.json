@@ -88,5 +88,7 @@
   "sign.success": "签名成功！",
   "chain": "链",
   "hot-opportunity": "热门机会",
-  "chains": "链"
+  "chains": "链",
+  "bonding-curve.token": "当市值达到 {} 时，bonding curve 会自动全部代币添加到 {} 流动池子中，然后销毁",
+  "set-max-slippage": "滑点"
 }

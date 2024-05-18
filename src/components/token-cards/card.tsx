@@ -49,7 +49,9 @@ export const TokenCard = ({ card, className }: Props) => {
       />
       <div className="self-start py-2 pr-2 h-full w-full flex flex-col justify-between">
         <div>
-          <CardTitle className="pt-2">BTC(Bitcoin)</CardTitle>
+          <CardTitle className="pt-2">
+            {card.name}({card.symbol})
+          </CardTitle>
           <Link
             href={`${Routes.Account}/${card.address}`}
             className="text-zinc-500 text-xs mt-0.5 hover:underline"

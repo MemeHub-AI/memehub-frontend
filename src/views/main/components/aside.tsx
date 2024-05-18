@@ -45,7 +45,7 @@ export const HotNewsAside = () => {
 const NewsCard = ({ c }: { c: (typeof cards)[number] }) => {
   return (
     <div className="flex gap-2 hover:text-blue-600 transition-all cursor-pointer">
-      <img src={c.logo} alt="logo" className="w-28 h-20 object-fill rounded" />
+      <img src={c.logo} alt="logo" className="w-32 h-20 object-fill rounded" />
       <p className="font-bold text-sm flex-1">{c.content}</p>
     </div>
   )
