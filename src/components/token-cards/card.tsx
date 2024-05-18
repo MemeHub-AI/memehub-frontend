@@ -7,10 +7,10 @@ import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
-import { TokenListResult } from '@/api/token/types'
+import { TokenListItem } from '@/api/token/types'
 
 interface Props extends ComponentProps<'div'> {
-  card: TokenListResult
+  card: TokenListItem
 }
 
 export const TokenCard = ({ card, className }: Props) => {
@@ -28,7 +28,12 @@ export const TokenCard = ({ card, className }: Props) => {
         className
       )}
       hover="border"
-      onClick={() => router.push(`${Routes.Token}/${card.address}`)}
+      onClick={() =>
+        router.push({
+          pathname: `${Routes.Token}/${card.address}`,
+          query: { id: card.id },
+        })
+      }
     >
       <img src={card.image} alt="img" className="h-32 w-32 object-cover" />
       <img

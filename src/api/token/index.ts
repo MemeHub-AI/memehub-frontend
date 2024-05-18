@@ -7,6 +7,7 @@ import type {
   TokenNewReq,
   TokenNewRes,
   TokenUpdateReq,
+  TokenListItem,
 } from './types'
 
 export const tokenApi = {
@@ -20,5 +21,8 @@ export const tokenApi = {
   },
   update(id: string | number, req: TokenUpdateReq) {
     return api.PATCH<null>(`/api/v1/coin/coins/${id}/`, { body: req })
+  },
+  details(id: string | number) {
+    return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${id}/`)
   },
 }

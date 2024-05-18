@@ -1,9 +1,12 @@
 import { createContext, createElement, useContext, type ReactNode } from 'react'
 
+import type { TokenListItem } from '@/api/token/types'
+
 interface ContextValue {
   total: string
   current: string
   refetchInfo: Function
+  tokenInfo: TokenListItem | undefined
 }
 
 const TokenContext = createContext<ContextValue | null>(null)

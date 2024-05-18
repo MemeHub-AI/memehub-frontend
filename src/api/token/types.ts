@@ -7,15 +7,15 @@ export interface TokenListRes {
   count: string
   next: null
   previous: null
-  results: TokenListResult[]
+  results: TokenListItem[]
 }
 
-export interface TokenListResult {
+export interface TokenListItem {
   id: string
   address: string
   name: string
   ticker: string
-  description: string
+  desc: string
   image: string
   twitter_url: string
   telegram_url: string

@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { useReadContracts } from 'wagmi'
 import { formatEther } from 'viem'
+import { useQuery } from '@tanstack/react-query'
 
 import { TradeTab } from './components/trade-tab'
 import { Button } from '@/components/ui/button'
@@ -12,6 +13,7 @@ import { useResponsive } from '@/hooks/use-responsive'
 import { HoldersRank } from './components/holders-rank'
 import { TokenProvider } from '@/contexts/token'
 import { continousTokenAbi } from '@/contract/continous-token'
+import { tokenApi } from '@/api/token'
 
 const address = ''
 export const TokenPage = () => {
@@ -37,13 +39,25 @@ export const TokenPage = () => {
   const total = formatEther(weiTotal)
   const current = formatEther(weiCurrent)
 
+  const { data: { data: tokenData } = {} } = useQuery({
+    queryKey: [tokenApi.details.name],
+    queryFn: () => tokenApi.details(1),
+  })
+
+  console.log('tokenData', tokenData)
+
   return (
-    <TokenProvider total={total} current={current} refetchInfo={refetch}>
-      <main className="px-4 max-sm:px-3 pt-4">
-        <Button className="mb-3" onClick={router.back}>
+    <TokenProvider
+      total={total}
+      current={current}
+      tokenInfo={tokenData}
+      refetchInfo={refetch}
+    >
+      <main className="px-4 max-sm:px-3 pt-4 max-w-main mx-auto">
+        <Button className="mb-3 self-start" onClick={router.back}>
           {t('back')}
         </Button>
-        <div className="flex space-x-4 max-sm:flex-col max-sm:space-x-0">
+        <div className="flex space-x-4 max-sm:flex-col max-sm:space-x-0 mt-4">
           {/* Left */}
           <div className="flex flex-col flex-1">
             {isMobile && <TradeTab />}

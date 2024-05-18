@@ -9,8 +9,9 @@ import { useTokenContext } from '@/contexts/token'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { current, total } = useTokenContext()
+  const { current, total, tokenInfo } = useTokenContext()
   const percent = BigNumber(current).div(total).multipliedBy(100).toFixed(3)
+  const marketMax = '100'
 
   return (
     <div className={cn('mt-4', className)}>
@@ -19,22 +20,24 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         <Dialog>
           <DialogTrigger asChild>
             <img
-              src="/images/meme.png"
+              src={tokenInfo?.image}
               alt="logo"
-              className="w-32 object-contain rounded cursor-pointer"
+              className="w-40 h-40  object-cover rounded cursor-pointer"
             />
           </DialogTrigger>
           <DialogContent className="p-0" showClose={false}>
             <img
-              src="/images/meme.png"
+              src={tokenInfo?.image}
               alt="logo"
               className="w-full object-contain"
             />
           </DialogContent>
         </Dialog>
         <div>
-          <div className="font-bold leading-none">MemeHub(MHUB)</div>
-          <div className="text-xs text-gray-400 mt-1">description...</div>
+          <div className="font-bold leading-none">
+            {tokenInfo?.name}({tokenInfo?.ticker})
+          </div>
+          <div className="text-xs text-gray-400 mt-1">{tokenInfo?.desc}</div>
         </div>
       </div>
 
@@ -49,10 +52,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           label={percent}
         />
         <div className="text-zinc-400 text-xs mt-1">
-          {t('bonding-curve.token')
-            .replace('{}', '100$')
-            .replace('{}', 'DEXTools')}{' '}
-          <br />
+          {t('bonding-curve.token').replace('{}', `$${marketMax}`)}
         </div>
       </div>
 
