@@ -12,6 +12,7 @@ import { AppLayout } from '@/components/layouts/app'
 import { AppProviders } from '@/components/app-providers'
 import { useMounted } from '@/hooks/use-mounted'
 import { useLang } from '@/hooks/use-lang'
+import { Toaster } from '@/components/ui/sonner'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -44,6 +45,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <AppProviders>
         <AppLayout>
           <Component {...pageProps} />
+          <Toaster />
         </AppLayout>
       </AppProviders>
     </>

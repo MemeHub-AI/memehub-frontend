@@ -90,5 +90,13 @@
   "hot-opportunity": "热门机会",
   "chains": "链",
   "bonding-curve.token": "当市值达到 {} 时，bonding curve 会自动全部代币添加到 {} 流动池子中，然后销毁",
-  "set-max-slippage": "滑点"
+  "set-max-slippage": "滑点",
+  "submit.success": "已提交，请稍等",
+  "submit.error": "提交失败：",
+  "deploying": "部署中...",
+  "user-rejected": "用户已拒绝",
+  "deploy.success": "您的代币已成功创建！",
+  "hash": "哈希",
+  "view.hash": "查看哈希",
+  "view.details": "查看详情"
 }

@@ -26,12 +26,6 @@ export const TokenCard = ({ card, className }: Props) => {
 
   const percent = 30
 
-  const onClick = () => {
-    router.push({
-      pathname: Routes.Token,
-    })
-  }
-
   return (
     <Card
       className={cn(
@@ -39,7 +33,7 @@ export const TokenCard = ({ card, className }: Props) => {
         className
       )}
       hover="border"
-      onClick={onClick}
+      onClick={() => router.push(`${Routes.Token}/${card.address}`)}
     >
       <img src="https://via.placeholder.com/150" alt="img" />
       <img

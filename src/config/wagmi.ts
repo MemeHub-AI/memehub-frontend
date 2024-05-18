@@ -21,6 +21,6 @@ const dev = createConfig({
   ssr: true,
 })
 
-export const wagmiConfig = dev
+export const wagmiConfig = prod
 
 export const chain = first(wagmiConfig.chains)!

@@ -8,14 +8,14 @@ import { type Field, createField, useFields } from '@/hooks/use-fields'
 import { FormInputField, FormTextareaField } from '@/components/form-field'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
-  onSubmit?: (
-    data: Record<string, string>,
-    e: React.FormEvent<HTMLFormElement>
-  ) => void
+  fee: string
+  symbol: string
+  disabeld?: boolean
+  onSubmit?: (data: Record<string, string>) => void
 }
 
 export const CreateTokenForm = (props: Props) => {
-  const { className } = props
+  const { fee, symbol, className, disabeld = false, onSubmit } = props
   const { t } = useTranslation()
   const { fields, fieldsValues, updateField, validateFields } = useFields({
     name: createField({
@@ -35,9 +35,6 @@ export const CreateTokenForm = (props: Props) => {
     website: createField({}),
   })
 
-  const deployFee = 0.001
-  const deploySymbol = 'ETH'
-
   function emptyValid(f: Field) {
     return isEmpty(f.value) ? t('field.empty') : null
   }
@@ -50,10 +47,6 @@ export const CreateTokenForm = (props: Props) => {
     updateField(target.id as keyof typeof fields, { value: target.value })
   }
 
-  const onSubmit = () => {
-    console.log('create token', fieldsValues)
-  }
-
   return (
     <form
       className={cn(
@@ -62,7 +55,8 @@ export const CreateTokenForm = (props: Props) => {
       )}
       onSubmit={(e) => {
         e.preventDefault()
-        if (validateFields()) onSubmit()
+        if (disabeld) return
+        if (validateFields()) onSubmit?.(fieldsValues)
       }}
     >
       {/* Name/Symbol */}
@@ -75,7 +69,9 @@ export const CreateTokenForm = (props: Props) => {
           isRequired={fields.name.isRequired}
           error={fields.name.error}
           value={fields.name.value}
+          disabled={disabeld}
           onChange={onChange}
+          autoComplete="off"
         />
         <FormInputField
           id="symbol"
@@ -84,7 +80,9 @@ export const CreateTokenForm = (props: Props) => {
           isRequired={fields.symbol.isRequired}
           error={fields.symbol.error}
           value={fields.symbol.value}
+          disabled={disabeld}
           onChange={onChange}
+          autoComplete="off"
         />
       </div>
       <FormTextareaField
@@ -95,6 +93,7 @@ export const CreateTokenForm = (props: Props) => {
         isRequired={fields.description.isRequired}
         error={fields.description.error}
         value={fields.description.value}
+        disabled={disabeld}
         onChange={onChange}
       />
       <FormInputField
@@ -103,6 +102,7 @@ export const CreateTokenForm = (props: Props) => {
         placeholder={t('logo.placeholder')}
         type="file"
         isRequired
+        disabled={disabeld}
       />
 
       {/* Optional fields. */}
@@ -111,6 +111,7 @@ export const CreateTokenForm = (props: Props) => {
         label={t('twitter-x')}
         placeholder={withOptional(t('twitter-x.placeholder'))}
         value={fields.twitter.value}
+        disabled={disabeld}
         onChange={onChange}
       />
       <FormInputField
@@ -118,6 +119,7 @@ export const CreateTokenForm = (props: Props) => {
         label={t('telegram')}
         placeholder={withOptional(t('telegram.placeholder'))}
         value={fields.telegram.value}
+        disabled={disabeld}
         onChange={onChange}
       />
       <FormInputField
@@ -125,14 +127,17 @@ export const CreateTokenForm = (props: Props) => {
         label={t('website')}
         placeholder={withOptional(t('website.placeholder'))}
         value={fields.website.value}
+        disabled={disabeld}
         onChange={onChange}
       />
 
       {/* Submit button */}
       <div className="flex flex-col items-center space-y-2">
-        <Button className="self-center px-10 mt-3">{t('create')}</Button>
+        <Button className="self-center px-10 mt-3" disabled={disabeld}>
+          {t('create')}
+        </Button>
         <p className="self-center text-zinc-400">
-          {t('deploy.fee')}: {deployFee} {deploySymbol}
+          {t('deploy.fee')}: {fee} {symbol}
         </p>
       </div>
     </form>
