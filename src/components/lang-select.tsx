@@ -1,6 +1,6 @@
 import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { GlobeIcon } from '@radix-ui/react-icons'
+import { Languages } from 'lucide-react'
 
 import {
   Select,
@@ -31,7 +31,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className={cn(className)}>
-          <GlobeIcon width={22} height={22} />
+          <Languages size={20} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

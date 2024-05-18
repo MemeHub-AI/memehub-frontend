@@ -81,7 +81,7 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
           </SelectContent>
         </Select>
 
-        <Select defaultValue={String(0)} onValueChange={onChange}>
+        {/* <Select defaultValue={String(0)} onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <div>
               <span>{t('sort-by')}: </span>
@@ -95,7 +95,7 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
               </SelectItem>
             ))}
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
       <div
         className={cn(
