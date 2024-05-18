@@ -1,10 +1,10 @@
 import { api, type ApiResponse } from '..'
 
-import type { NewUserReq } from './types'
+import type { NewUserReq, NewUserRes } from './types'
 
 export const userApi = {
   new(req: NewUserReq) {
-    return api.POST<ApiResponse<NewUserReq>>('/api/v1/user/users/', {
+    return api.POST<ApiResponse<NewUserRes>>('/api/v1/user/users/', {
       body: req,
     })
   },
