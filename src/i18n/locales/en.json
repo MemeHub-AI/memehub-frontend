@@ -31,7 +31,6 @@
   "field.empty": "This field cannot be empty",
   "search.placeholder": "Enter keywords to search for tokens",
   "token.create": "Create token",
-  "token.create.new": "Create a new token",
   "creator": "Creator",
   "market-cap": "Market cap",
   "comments": "Comments",
@@ -107,5 +106,7 @@
   "trade.success": "Trade successful!",
   "trade.failed": "Trade failed",
   "trade.checking": "Trade checking...",
-  "trade.is-zero": "Trade amount must greater than zero"
+  "trade.is-zero": "Trade amount must greater than zero",
+  "create.inspiration.title": "Meme inspiration💡",
+  "create.new": "Launch next 100x MemeCoin 🚀"
 }
