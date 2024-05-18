@@ -15,7 +15,8 @@ export const useTokens = () => {
     getNextPageParam: (_, __, page) => page + 1,
   })
 
-  console.log('data', data)
-
-  return {}
+  return {
+    totalToken: data?.pages[0].count || '0',
+    tokens: data?.pages.map((p) => p.results).flat() || [],
+  }
 }

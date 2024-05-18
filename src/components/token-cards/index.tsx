@@ -13,8 +13,21 @@ import {
 import { Order } from '@/utils/types'
 import { useTokens } from '@/hooks/use-tokens'
 
+const chains = [
+  {
+    id: 1,
+    name: 'Scroll',
+  },
+  {
+    id: 1,
+    name: 'Ethereum',
+    disabled: true,
+  },
+]
+
 export const TokenCards = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
+  const { tokens } = useTokens()
   const sortItems = [
     {
       label: t('market.sort.asc'),
@@ -33,33 +46,9 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
       order: Order.Desc,
     },
   ]
-  const chains = [
-    {
-      id: 1,
-      name: 'Scroll',
-    },
-    {
-      id: 1,
-      name: 'Ethereum',
-      disabled: true,
-    },
-  ]
-  const cards = [
-    {
-      name: 'MemeHub',
-      symbol: 'MHUB',
-      description: 'description...',
-      creator: 'L1en',
-      marketCap: 12312321,
-      commentCount: 123123891,
-      address: '0x5300000000000000000000000000000000000004',
-    },
-  ]
-  const {} = useTokens()
 
   const onChange = (idx: string) => {
     const item = sortItems[Number(idx)]
-    console.log('item', item)
   }
 
   return (
@@ -101,8 +90,8 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
           className
         )}
       >
-        {cards.map((c, i) => (
-          <TokenCard key={i} card={c} />
+        {tokens.map((t, i) => (
+          <TokenCard key={i} card={t} />
         ))}
       </div>
     </>

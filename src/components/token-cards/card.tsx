@@ -7,24 +7,19 @@ import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
+import { TokenListResult } from '@/api/token/types'
 
 interface Props extends ComponentProps<'div'> {
-  card: {
-    name: string
-    symbol: string
-    description: string
-    creator: string
-    marketCap: number
-    commentCount: number
-    address: string
-  }
+  card: TokenListResult
 }
 
 export const TokenCard = ({ card, className }: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
 
-  const percent = 30
+  const percent = 0
+
+  console.log('card', card)
 
   return (
     <Card
@@ -35,7 +30,7 @@ export const TokenCard = ({ card, className }: Props) => {
       hover="border"
       onClick={() => router.push(`${Routes.Token}/${card.address}`)}
     >
-      <img src="https://via.placeholder.com/150" alt="img" />
+      <img src={card.image} alt="img" className="h-32 w-32 object-cover" />
       <img
         src="https://scrollscan.com/images/svg/brands/main.svg"
         alt="chain"
@@ -44,14 +39,14 @@ export const TokenCard = ({ card, className }: Props) => {
       <div className="self-start py-2 pr-2 h-full w-full flex flex-col justify-between">
         <div>
           <CardTitle className="pt-2">
-            {card.name}({card.symbol})
+            {card.name} {card.ticker && `(${card.ticker})`}
           </CardTitle>
           <Link
             href={`${Routes.Account}/${card.address}`}
             className="text-zinc-500 text-xs mt-0.5 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
-            {t('creator')}: {card.creator}
+            {t('creator')}: {card.creator_name}
           </Link>
           <p className="text-zinc-500 text-sm break-all line-clamp-4">
             {card.description}
