@@ -14,6 +14,8 @@ import { Routes } from '@/routes'
 import { Title } from './title'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { toast } from 'sonner'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { useAccount } from 'wagmi'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {}
 
@@ -48,6 +50,8 @@ export const CreateTokenForm = (props: Props) => {
     resetDeploy,
   } = useDeploy()
   const { url, onChangeUpload } = useUploadImage()
+  const { isConnected } = useAccount()
+  const { setConnectOpen } = useWalletStore()
 
   const fee = Number(formatEther(BigInt(deployFee))).toFixed(3)
   const symbol = deploySymbol
@@ -66,6 +70,8 @@ export const CreateTokenForm = (props: Props) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    if (!isConnected) return setConnectOpen(true)
     if (isDeploying) return
     if (!validateFields()) return
     if (isEmpty(url)) {
