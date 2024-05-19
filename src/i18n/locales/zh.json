@@ -112,5 +112,8 @@
   "uploading": "上传中...",
   "upload.success": "上传成功！",
   "upload.failed": "上传失败",
-  "view.list": "查看列表"
+  "view.list": "查看列表",
+  "balance.token": "代币余额：",
+  "balance": "余额",
+  "balance.illegality": "余额不足"
 }

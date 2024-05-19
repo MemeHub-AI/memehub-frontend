@@ -4,7 +4,7 @@ import { Address, formatEther } from 'viem'
 import { toast } from 'sonner'
 import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
+import { useAccount, useBalance, useReadContract } from 'wagmi'
 import { isEmpty } from 'lodash'
 
 import { Card } from '@/components/ui/card'
@@ -17,6 +17,9 @@ import { useTrade } from '../hooks/use-trade'
 import { useTokenContext } from '@/contexts/token'
 import { useWallet } from '@/hooks/use-wallet'
 import { useWalletStore } from '@/stores/use-wallet-store'
+import { useTradeInfo } from '../hooks/use-trade-info'
+import { wagmiConfig } from '@/config/wagmi'
+import { continousTokenAbi } from '@/contract/continous-token'
 
 enum Tab {
   Buy = 'buy',
@@ -34,14 +37,26 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
   const [slippage, setSlippage] = useState('5')
   const { isTrading, buy, sell, checkTrade } = useTrade()
   const router = useRouter()
-  const { total } = useTokenContext()
+  const { address: account } = useAccount()
+  const { tokenInfo } = useTokenContext()
+
+  const address = router.query.address as Address
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
+  const { getAvailableToken } = useTradeInfo(address)
+  const { data: ethBalances } = useBalance({ address: account })
+  const { data: tokenBalances } = useReadContract({
+    abi: continousTokenAbi,
+    address,
+    functionName: 'balanceOf',
+    args: [account!],
+  })
 
   const isBuy = tab === Tab.Buy
   const isSell = tab === Tab.Sell
   const symbol = 'ETH'
-  const address = router.query.address as Address
+  const ethBalance = formatEther(ethBalances?.value || BigInt(0))
+  const tokenBalance = formatEther(tokenBalances || BigInt(0))
 
   const onBuy = async () => {
     const { totalAmount, currentAmount } = await checkTrade(address)
@@ -66,10 +81,22 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
   }
 
   const onSell = async () => {
+    if (BigNumber(value).gt(tokenBalance)) {
+      toast.error(t('balance.illegality'))
+      return
+    }
+
     sell(value, address)
   }
 
-  const setPercent = (value: string) => {}
+  const setPercent = async (value: string) => {
+    const percent = BigNumber(value)
+      .multipliedBy(tokenBalance)
+      .div(100)
+      .toString()
+
+    setValue(Number(percent).toFixed(3))
+  }
 
   return (
     <Card className={cn('p-3 grid gap-4 rounded-lg', className)}>
@@ -126,15 +153,23 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
               onChange={({ target }) => setValue(target.value)}
             />
             <div className="flex items-center">
-              <span className="mr-2 text-zinc-600">{symbol}</span>
+              <span className="mr-2 text-zinc-600">
+                {isBuy ? symbol : tokenInfo?.ticker}
+              </span>
               <img
                 loading="lazy"
-                decoding="async"
                 width={20}
                 height={20}
-                src="/images/scroll.svg"
+                className="object-contain"
+                src={isBuy ? '/images/scroll.svg' : tokenInfo?.image}
               />
             </div>
+          </div>
+          <div className="text-zinc-500 text-xs flex justify-end mt-1 mr-1">
+            {t('balance')}:{' '}
+            {isBuy
+              ? Number(ethBalance).toFixed(3)
+              : Number(tokenBalance).toFixed(3)}
           </div>
           <div className="flex gap-2 mt-3">
             <Button size="xs" onClick={() => setValue('0')}>
@@ -151,6 +186,7 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
             ))}
           </div>
         </div>
+
         <Button
           className="w-full"
           onClick={() => {

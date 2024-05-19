@@ -39,8 +39,8 @@ export const TokenPage = () => {
   const current = formatEther(weiCurrent)
 
   const { data: { data: tokenData } = {} } = useQuery({
-    queryKey: [tokenApi.details.name],
-    queryFn: () => tokenApi.details(1),
+    queryKey: [tokenApi.details.name, router.query.id],
+    queryFn: () => tokenApi.details(router.query.id as string),
   })
 
   return (

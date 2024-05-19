@@ -1,12 +1,12 @@
 import { readContract } from '@wagmi/core'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { Address, parseEther } from 'viem'
+import { Address, formatEther, parseEther } from 'viem'
 
 import { wagmiConfig } from '@/config/wagmi'
 import { continousTokenAbi } from '@/contract/continous-token'
 
-export const useTokenInfo = (address: Address) => {
+export const useTradeInfo = (address: Address) => {
   const { t } = useTranslation()
 
   const getBuyTokenFromEth = async (amount: string) => {
@@ -77,14 +77,14 @@ export const useTokenInfo = (address: Address) => {
     }
   }
 
-  const getAvailabelToklen = async () => {
+  const getAvailableToken = async () => {
     const data = await readContract(wagmiConfig, {
       abi: continousTokenAbi,
       address,
       functionName: 'CAN_MINI',
     })
 
-    return data
+    return formatEther(data)
   }
 
   return {
@@ -93,5 +93,6 @@ export const useTokenInfo = (address: Address) => {
     getTokenRequiredEth,
     getPrice,
     getTotalCurrent,
+    getAvailableToken,
   }
 }

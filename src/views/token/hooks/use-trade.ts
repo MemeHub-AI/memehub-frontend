@@ -8,9 +8,11 @@ import { useTranslation } from 'react-i18next'
 import { continousTokenAbi } from '@/contract/continous-token'
 import { wagmiConfig } from '@/config/wagmi'
 import { toastNoReject } from '@/utils/contract'
+import { useTokenContext } from '@/contexts/token'
 
 export const useTrade = () => {
   const { t } = useTranslation()
+  const { refetchInfo } = useTokenContext()
   const {
     data: hash,
     isPending,
@@ -44,6 +46,7 @@ export const useTrade = () => {
 
   if (isSuccess || isError) {
     reset()
+    refetchInfo()
   }
 
   const checkTrade = async (address: Address) => {

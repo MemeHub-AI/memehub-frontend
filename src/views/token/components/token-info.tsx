@@ -11,7 +11,8 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { current, total, tokenInfo } = useTokenContext()
   const percent = BigNumber(current).div(total).multipliedBy(100).toFixed(3)
-  const marketMax = '100'
+  const marketMax = BigNumber(total).toFixed(3)
+  const symbol = 'ETH'
 
   return (
     <div className={cn('mt-4', className)}>
@@ -52,7 +53,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           label={percent}
         />
         <div className="text-zinc-400 text-xs mt-1">
-          {t('bonding-curve.token').replace('{}', `$${marketMax}`)}
+          {t('bonding-curve.token').replace('{}', `${marketMax} ${symbol}`)}
         </div>
       </div>
 
