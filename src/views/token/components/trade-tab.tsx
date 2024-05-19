@@ -4,6 +4,8 @@ import { Address, formatEther } from 'viem'
 import { toast } from 'sonner'
 import BigNumber from 'bignumber.js'
 import { useRouter } from 'next/router'
+import { useAccount } from 'wagmi'
+import { isEmpty } from 'lodash'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -13,6 +15,8 @@ import { cn } from '@/lib/utils'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { useTrade } from '../hooks/use-trade'
 import { useTokenContext } from '@/contexts/token'
+import { useWallet } from '@/hooks/use-wallet'
+import { useWalletStore } from '@/stores/use-wallet-store'
 
 enum Tab {
   Buy = 'buy',
@@ -31,6 +35,8 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
   const { isTrading, buy, sell, checkTrade } = useTrade()
   const router = useRouter()
   const { total } = useTokenContext()
+  const { isConnected } = useAccount()
+  const { setConnectOpen } = useWalletStore()
 
   const isBuy = tab === Tab.Buy
   const isSell = tab === Tab.Sell
@@ -56,7 +62,6 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
       return
     }
 
-    console.log('value', value)
     buy(value, address)
   }
 
@@ -89,12 +94,20 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
                   <Input
                     value={slippage}
                     type="number"
-                    onChange={({ target }) => setSlippage(target.value)}
+                    onChange={({ target }) => {
+                      if (target.value.length > 3) return
+                      setSlippage(target.value)
+                    }}
                   />
                   <span>%</span>
                 </div>
               </div>
             }
+            onConfirm={() => {
+              if (isEmpty(slippage) || BigNumber(slippage).lt(0)) {
+                setSlippage('5')
+              }
+            }}
           >
             <Button size="xs">
               {t('set-max-slippage')}({slippage}%)
@@ -140,7 +153,13 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
         </div>
         <Button
           className="w-full"
-          onClick={isBuy ? onBuy : onSell}
+          onClick={() => {
+            if (!isConnected) {
+              setConnectOpen(true)
+              return
+            }
+            isBuy ? onBuy() : onSell()
+          }}
           disabled={isTrading || Number(value) <= 0}
         >
           {t('trade')}

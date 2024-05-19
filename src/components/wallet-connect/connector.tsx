@@ -6,25 +6,26 @@ import { useResponsive } from '@/hooks/use-responsive'
 import { Button } from '../ui/button'
 import { Dialog, DialogTitle } from '../ui/dialog'
 import { Avatar } from '../ui/avatar'
+import { useWalletStore } from '@/stores/use-wallet-store'
 
 export const WalletConnector = () => {
-  const [open, setOpen] = useState(false)
+  const { connectOpen, setConnectOpen } = useWalletStore()
   const { t } = useTranslation()
   const { isConnecting, connectors, connectWallet } = useWallet()
   const { isMobile } = useResponsive()
 
-  const disabled = isConnecting && open
+  const disabled = isConnecting && connectOpen
 
   return (
     <>
       <Button
         disabled={disabled}
         size={isMobile ? 'sm' : 'default'}
-        onClick={() => setOpen(true)}
+        onClick={() => setConnectOpen(true)}
       >
         {disabled ? t('wallet.connecting') : t('wallet.connect')}
       </Button>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={connectOpen} onOpenChange={setConnectOpen}>
         <DialogTitle>{t('walle.select')}</DialogTitle>
         {/* Exclude `injected` connect */}
         {connectors.slice(1).map((c, i) => (
