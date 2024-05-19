@@ -59,6 +59,7 @@ export const useDeploy = () => {
   }, [isSuccess])
 
   const deploy = async (params: TokenNewReq) => {
+    console.log('params', params)
     // Submit info to api. if create success then modify else remove.
     create(params)
     try {

@@ -48,16 +48,16 @@ export const InspirationNews = ({ className }: ComponentProps<'div'>) => {
                   alt=""
                 />
               </div>
-              <div className="py-2 pr-2 ml-3 flex flex-col justify-between ">
+              <div className="py-0 pr-2 ml-3 flex flex-col justify-between">
                 <h1 className="text-2xl  cursor-pointer hover:text-gray-500 max-sm:text-xl leading-none">
                   {item.title?.query}
                 </h1>
-                <div className="truncate max-w-[calc(30vw-150px)]  max-sm:mt-1 max-md:max-w-[65vw]">
+                <div className="max-sm:mt-1 max-md:max-w-[65vw] line-clamp-2 text-zinc-500">
                   {item.articles[0]?.title}
                 </div>
-                <div className=" text-gray-500 max-sm:mt-2 leading-none">
+                {/* <div className=" text-gray-500 max-sm:mt-2 leading-none">
                   {dayjs(item.articles[0].timestamp * 1000).fromNow()}
-                </div>
+                </div> */}
               </div>
             </div>
           )

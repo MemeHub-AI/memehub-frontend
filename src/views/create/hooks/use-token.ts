@@ -16,6 +16,9 @@ export const useToken = () => {
   const { mutateAsync: updateToken } = useMutation({
     mutationKey: [tokenApi.update.name],
     mutationFn: (req: TokenUpdateReq) => {
+      if (id === -1) {
+        return Promise.reject('id is not set')
+      }
       return tokenApi.update(id, req)
     },
   })
