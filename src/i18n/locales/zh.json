@@ -115,5 +115,6 @@
   "view.list": "查看列表",
   "balance.token": "代币余额：",
   "balance": "余额",
-  "balance.illegality": "余额不足"
+  "balance.illegality": "余额不足",
+  "loading": "加载中..."
 }

@@ -116,5 +116,6 @@
   "view.list": "View list",
   "balance.token": "Token balance:",
   "balance": "balance",
-  "balance.illegality": "not sufficient funds"
+  "balance.illegality": "not sufficient funds",
+  "loading": "Loading..."
 }
