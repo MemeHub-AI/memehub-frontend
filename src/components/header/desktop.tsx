@@ -44,6 +44,7 @@ export const HeaderDesktop = (props: Props) => {
           className="mx-3 max-sm:mx-1.5"
           onClick={() => router.push(Routes.Create)}
           size="default"
+          disabled={router.pathname === Routes.Create}
         >
           {t('token.create')}
         </Button>

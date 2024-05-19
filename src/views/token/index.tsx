@@ -2,7 +2,7 @@ import React from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { useReadContracts } from 'wagmi'
-import { formatEther } from 'viem'
+import { Address, formatEther } from 'viem'
 import { useQuery } from '@tanstack/react-query'
 
 import { TradeTab } from './components/trade-tab'
@@ -15,7 +15,6 @@ import { TokenProvider } from '@/contexts/token'
 import { continousTokenAbi } from '@/contract/continous-token'
 import { tokenApi } from '@/api/token'
 
-const address = ''
 export const TokenPage = () => {
   const { t } = useTranslation()
   const router = useRouter()
@@ -24,12 +23,12 @@ export const TokenPage = () => {
     contracts: [
       {
         abi: continousTokenAbi,
-        address,
+        address: router.query.address as Address,
         functionName: 'ETH_AMOUNT',
       },
       {
         abi: continousTokenAbi,
-        address,
+        address: router.query.address as Address,
         functionName: 'raiseEthAmount',
       },
     ],
@@ -43,8 +42,6 @@ export const TokenPage = () => {
     queryKey: [tokenApi.details.name],
     queryFn: () => tokenApi.details(1),
   })
-
-  console.log('tokenData', tokenData)
 
   return (
     <TokenProvider

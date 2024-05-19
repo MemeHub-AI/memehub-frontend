@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import { isEmpty } from 'lodash'
+import { useRouter } from 'next/router'
 
 import { Card } from '@/components/ui/card'
 import { CommentForm } from './form'
@@ -19,14 +20,13 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 import { Routes } from '@/routes'
-import { useRouter } from 'next/router'
 
 const comments = [
   {
     id: '123',
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hi',
     mentions: [],
@@ -36,9 +36,9 @@ const comments = [
   },
   {
     id: '456',
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hello',
     imageUrl: '',
@@ -49,9 +49,9 @@ const comments = [
   },
   {
     id: nanoid(),
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hello',
     imageUrl: '',
@@ -61,9 +61,9 @@ const comments = [
   },
   {
     id: nanoid(),
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hello',
     imageUrl: '',
@@ -73,9 +73,9 @@ const comments = [
   },
   {
     id: nanoid(),
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hello',
     imageUrl: '',
@@ -85,9 +85,9 @@ const comments = [
   },
   {
     id: nanoid(),
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hello',
     imageUrl: '',
@@ -97,9 +97,9 @@ const comments = [
   },
   {
     id: nanoid(),
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hello',
     imageUrl: '',
@@ -109,9 +109,9 @@ const comments = [
   },
   {
     id: nanoid(),
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hello',
     imageUrl: '',
@@ -121,9 +121,9 @@ const comments = [
   },
   {
     id: nanoid(),
-    profileUrl: '/profile/9VK7SR',
+    profileUrl: '/profile/7214',
     avatarUrl: '/images/meme.png',
-    username: '9VK7SR (dev)',
+    username: '7214 (dev)',
     timestamp: '2024/5/13 11:47:08',
     message: 'hello',
     imageUrl: '',

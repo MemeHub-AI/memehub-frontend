@@ -1,6 +1,9 @@
 import React, { type ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { formatEther } from 'viem'
+import { Address, formatEther } from 'viem'
+import { toast } from 'sonner'
+import BigNumber from 'bignumber.js'
+import { useRouter } from 'next/router'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -9,15 +12,14 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { useTrade } from '../hooks/use-trade'
-import { toast } from 'sonner'
-import BigNumber from 'bignumber.js'
+import { useTokenContext } from '@/contexts/token'
 
 enum Tab {
   Buy = 'buy',
   Sell = 'sell',
 }
 
-const buyItems = ['0.1', '1', '2', '5']
+const buyItems = ['0.001', '0.01', '1']
 const sellItems = ['10', '25', '75', '100']
 
 export const TradeTab = (props: ComponentProps<'div'>) => {
@@ -25,17 +27,18 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(String(Tab.Buy))
   const [value, setValue] = useState('0')
-  const [slippage, setSlippage] = useState('10')
+  const [slippage, setSlippage] = useState('5')
   const { isTrading, buy, sell, checkTrade } = useTrade()
+  const router = useRouter()
+  const { total } = useTokenContext()
 
   const isBuy = tab === Tab.Buy
   const isSell = tab === Tab.Sell
   const symbol = 'ETH'
+  const address = router.query.address as Address
 
-  // TODO: dynamic addr.
-  const addr = ''
   const onBuy = async () => {
-    const { totalAmount, currentAmount } = await checkTrade(addr)
+    const { totalAmount, currentAmount } = await checkTrade(address)
     const total = formatEther(totalAmount)
     const current = formatEther(currentAmount)
 
@@ -54,12 +57,14 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
     }
 
     console.log('value', value)
-    buy(value, addr)
+    buy(value, address)
   }
 
   const onSell = async () => {
-    sell(value, addr)
+    sell(value, address)
   }
+
+  const setPercent = (value: string) => {}
 
   return (
     <Card className={cn('p-3 grid gap-4 rounded-lg', className)}>
@@ -123,7 +128,11 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
               {t('reset')}
             </Button>
             {(isBuy ? buyItems : sellItems).map((value, i) => (
-              <Button size="xs" key={i} onClick={() => setValue(value)}>
+              <Button
+                size="xs"
+                key={i}
+                onClick={() => (isBuy ? setValue(value) : setPercent(value))}
+              >
                 {value} {isBuy ? symbol : '%'}
               </Button>
             ))}

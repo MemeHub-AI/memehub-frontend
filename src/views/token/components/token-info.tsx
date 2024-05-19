@@ -45,7 +45,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       <div className="my-3">
         <div className="text-sm mb-1">{t('progress.bonding-curve')}:</div>
         <Progress
-          className="h-4"
+          className="h-5"
           indicatorClass="bg-blue-600"
           labelClass="text-white"
           value={Number(percent)}
