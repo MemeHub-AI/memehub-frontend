@@ -52,9 +52,9 @@ export const useTradeInfo = (address: Address) => {
     return data
   }
 
-  const getTotalCurrent = async () => {
+  const getTotalCurrent = async (disableToast = false) => {
     const result = { totalAmount: BigInt(0), currentAmount: BigInt(0) }
-    const id = toast.loading(t('trade.checking'))
+    const id = disableToast ? '' : toast.loading(t('trade.checking'))
 
     try {
       const totalAmount = await readContract(wagmiConfig, {
@@ -73,7 +73,9 @@ export const useTradeInfo = (address: Address) => {
     } catch (error) {
       return result
     } finally {
-      toast.dismiss(id)
+      if (!disableToast) {
+        toast.dismiss(id)
+      }
     }
   }
 

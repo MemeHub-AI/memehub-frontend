@@ -23,7 +23,7 @@ export const TokenCard = ({ card, className }: Props) => {
   const [percent, setPercent] = useState('0')
 
   useEffect(() => {
-    getTotalCurrent().then(({ totalAmount, currentAmount }) => {
+    getTotalCurrent(true).then(({ totalAmount, currentAmount }) => {
       const total = formatEther(totalAmount)
       const current = formatEther(currentAmount)
       setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(3))
