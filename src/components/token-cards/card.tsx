@@ -1,13 +1,16 @@
-import React, { type ComponentProps } from 'react'
+import React, { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { Address, formatEther } from 'viem'
 
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { TokenListItem } from '@/api/token/types'
+import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
+import BigNumber from 'bignumber.js'
 
 interface Props extends ComponentProps<'div'> {
   card: TokenListItem
@@ -16,10 +19,16 @@ interface Props extends ComponentProps<'div'> {
 export const TokenCard = ({ card, className }: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
+  const { getTotalCurrent } = useTradeInfo(card.address as Address)
+  const [percent, setPercent] = useState('0')
 
-  const percent = 0
-
-  console.log('card', card)
+  useEffect(() => {
+    getTotalCurrent().then(({ totalAmount, currentAmount }) => {
+      const total = formatEther(totalAmount)
+      const current = formatEther(currentAmount)
+      setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(3))
+    })
+  }, [])
 
   return (
     <Card
@@ -54,13 +63,13 @@ export const TokenCard = ({ card, className }: Props) => {
             {t('creator')}: {card.creator_name}
           </Link>
           <p className="text-zinc-500 text-sm break-all line-clamp-4">
-            {card.description}
+            {card.desc}
           </p>
         </div>
         <Progress
           className="h-4 self-end w-full mt-1"
           indicatorClass="bg-green-500"
-          value={percent}
+          value={Number(percent)}
           label={percent}
         />
       </div>
