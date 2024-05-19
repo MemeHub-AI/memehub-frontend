@@ -70,6 +70,7 @@ export const CreateTokenForm = (props: Props) => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    toast.dismiss()
 
     if (!isConnected) return setConnectOpen(true)
     if (isDeploying) return
