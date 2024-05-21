@@ -44,7 +44,7 @@
   "postReply": "回复",
   "add a comment": "内容",
   "comment-placeholder": "请输入您要评论的内容...",
-  "meme-hub": "Meme Hub",
+  "meme-hub": "Memehub",
   "vliquidity": "虚拟流动性",
   "back": "返回",
   "reset": "重置",
@@ -116,5 +116,9 @@
   "balance.token": "代币余额：",
   "balance": "余额",
   "balance.illegality": "余额不足",
-  "loading": "加载中..."
+  "loading": "加载中...",
+  "comment.loading": "评论中...",
+  "comment.failed": "评论失败，请重试。",
+  "comment.success": "评论成功！",
+  "comment.like.loading": "点赞中..."
 }

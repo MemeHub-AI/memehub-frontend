@@ -48,7 +48,7 @@
   "trades": "Trades",
   "ostReply": "Post a reply",
   "comment-placeholder": "Please enter the content you want to comment...",
-  "meme-hub": "Meme Hub",
+  "meme-hub": "Memehub",
   "vliquidity": "Virtual liquidity",
   "back": "Back",
   "reset": "Reset",
@@ -117,5 +117,9 @@
   "balance.token": "Token balance:",
   "balance": "balance",
   "balance.illegality": "not sufficient funds",
-  "loading": "Loading..."
+  "loading": "Loading...",
+  "comment.loading": "Commenting...",
+  "comment.failed": "Comment failed, please try again.",
+  "comment.success": "Comment successful!",
+  "comment.like.loading": "Liking..."
 }
