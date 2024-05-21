@@ -127,5 +127,7 @@
   "comment.like.failed": "Like failed, please try again.",
   "comment.like.success": "Like successful!",
   "comment.unlike.failed": "Unlike failed, please try again.",
-  "comment.unlike.success": "Unlike successful!"
+  "comment.unlike.success": "Unlike successful!",
+  "tokens.list.empty": "No memecoin yet",
+  "period": "."
 }

@@ -15,7 +15,9 @@ import type {
 
 export const tokenApi = {
   list(req: TokenListReq) {
-    return api.GET<TokenListRes>('/api/v1/coin/coinslist/' + qs.stringify(req))
+    return api.GET<ApiResponse<TokenListRes>>(
+      '/api/v1/coin/coinslist/' + qs.stringify(req)
+    )
   },
   new(req: TokenNewReq) {
     return api.POST<ApiResponse<TokenNewRes>>('/api/v1/coin/coins/', {

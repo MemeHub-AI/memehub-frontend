@@ -47,24 +47,23 @@ export const CommentCards = ({ readonly = false }: Props) => {
         <CommentForm onComment={onComment} />
       </Dialog>
       {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
-      <div className="flex flex-col gap-2">
-        <CustomSuspense
-          isPending={isFetching}
-          fallback={<CardSkeleton />}
-          nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}
-        >
-          {comments.map((c) => (
-            <CommentCard
-              key={c.id}
-              c={c}
-              readonly={readonly}
-              onLike={likeComment}
-              onUnlike={unlikeComment}
-              onReply={(id) => setReplyId(id)}
-            />
-          ))}
-        </CustomSuspense>
-      </div>
+      <CustomSuspense
+        className="flex flex-col gap-2"
+        isPending={isFetching}
+        fallback={<CardSkeleton />}
+        nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}
+      >
+        {comments.map((c) => (
+          <CommentCard
+            key={c.id}
+            c={c}
+            readonly={readonly}
+            onLike={likeComment}
+            onUnlike={unlikeComment}
+            onReply={(id) => setReplyId(id)}
+          />
+        ))}
+      </CustomSuspense>
       {/* <Pagination className="mt-4">
         <PaginationContent>
           <PaginationItem>
@@ -94,25 +93,29 @@ export const CommentCards = ({ readonly = false }: Props) => {
 }
 
 const CardSkeleton = () => {
-  return Array.from({ length: 3 }).map(() => (
-    <div className="border shadow rounded-md flex flex-col p-4">
-      <div className="flex gap-2 items-stretch">
-        <Skeleton className="rounded-full w-8 h-8" />
-        <div className="flex flex-col justify-between">
-          <Skeleton className="w-16 h-4" />
-          <Skeleton className="w-20 h-3" />
+  return (
+    <div className="flex flex-col gap-2">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div className="border shadow rounded-md flex flex-col p-4" key={i}>
+          <div className="flex gap-2 items-stretch">
+            <Skeleton className="rounded-full w-8 h-8" />
+            <div className="flex flex-col justify-between">
+              <Skeleton className="w-16 h-4" />
+              <Skeleton className="w-20 h-3" />
+            </div>
+          </div>
+          <div className="flex flex-col gap-1 mt-2">
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-4 w-1/3" />
+          </div>
+          <div className="flex gap-2 mt-2">
+            <Skeleton className="h-5 w-8" />
+            <Skeleton className="h-5 w-14" />
+          </div>
         </div>
-      </div>
-      <div className="flex flex-col gap-1 mt-2">
-        <Skeleton className="h-4 w-1/2" />
-        <Skeleton className="h-4 w-1/3" />
-      </div>
-      <div className="flex gap-2 mt-2">
-        <Skeleton className="h-5 w-8" />
-        <Skeleton className="h-5 w-14" />
-      </div>
+      ))}
     </div>
-  ))
+  )
 }
 
 export default CommentCards

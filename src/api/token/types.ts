@@ -1,6 +1,6 @@
 export interface TokenListReq {
   page: string
-  page_size: string
+  size: string
 }
 
 export interface TokenListRes {

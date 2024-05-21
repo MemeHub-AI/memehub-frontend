@@ -1,5 +1,6 @@
 import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
+import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
@@ -12,6 +13,9 @@ import {
 } from '@/components/ui/select'
 import { Order } from '@/utils/types'
 import { useTokens } from '@/hooks/use-tokens'
+import { Skeleton } from '../ui/skeleton'
+import { CustomSuspense } from '../custom-suspense'
+import { Routes } from '@/routes'
 
 const chains = [
   {
@@ -27,7 +31,7 @@ const chains = [
 
 export const TokenCards = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { tokens } = useTokens()
+  const { tokens, isFetching } = useTokens()
   const sortItems = [
     {
       label: t('market.sort.asc'),
@@ -83,18 +87,49 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
           </SelectContent>
         </Select> */}
       </div>
-      <div
+      <CustomSuspense
         className={cn(
           'grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1',
           'max-sm:gap-2',
           className
         )}
+        isPending={isFetching}
+        fallback={<CardSkeleton />}
+        nullback={
+          <div className="text-zinc-500">
+            {t('tokens.list.empty')},
+            <Link className="text-blue-600 ml-2" href={Routes.Create}>
+              {t('token.create')}
+            </Link>
+            {t('period')}
+          </div>
+        }
       >
         {tokens.map((t, i) => (
           <TokenCard key={i} card={t} />
         ))}
-      </div>
+      </CustomSuspense>
     </>
+  )
+}
+
+const CardSkeleton = () => {
+  return (
+    <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1 max-sm:gap-2 ">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div className="border rounded flex gap-2 relative" key={i}>
+          <Skeleton className="w-32 h-32 flex-shrink-0" />
+          <div className="w-full my-2 flex flex-col gap-2 mr-2">
+            <Skeleton className="w-1/2 h-4" />
+            <Skeleton className="w-1/3 h-3" />
+            <Skeleton className="w-[70%] h-3" />
+            <Skeleton className="w-1/2 h-3" />
+            <Skeleton className="w-full h-5 rounded-full mt-2" />
+          </div>
+          <Skeleton className="w-8 h-8 absolute right-2 top-2" />
+        </div>
+      ))}
+    </div>
   )
 }
 

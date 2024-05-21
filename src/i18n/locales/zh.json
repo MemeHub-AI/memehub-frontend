@@ -126,5 +126,7 @@
   "comment.like.failed": "点赞失败，请重试。",
   "comment.like.success": "点赞成功！",
   "comment.unlike.failed": "取消点赞失败，请重试",
-  "comment.unlike.success": "取消点赞成功！"
+  "comment.unlike.success": "取消点赞成功！",
+  "tokens.list.empty": "目前还没有 meme 币",
+  "period": "。"
 }

@@ -5,13 +5,13 @@ import { tokenApi } from '@/api/token'
 
 enum Default {
   Page = 1,
-  PageSize = 10,
+  PageSize = 12,
 }
 
 export const useTokens = () => {
   const { query, ...router } = useRouter()
 
-  const { data } = useInfiniteQuery({
+  const { data, isFetching } = useInfiniteQuery({
     initialPageParam: Number(query.page) || Default.Page,
     queryKey: [tokenApi.list.name, router.isReady],
     queryFn: ({ pageParam }) => {
@@ -19,14 +19,16 @@ export const useTokens = () => {
 
       return tokenApi.list({
         page: pageParam.toString(),
-        page_size: String(query.page_size || Default.PageSize),
+        size: String(query.size || Default.PageSize),
       })
     },
     getNextPageParam: (_, __, page) => page + 1,
   })
+  const flatTokens = data?.pages.map((p) => p.data.results).flat() || []
 
   return {
-    totalToken: data?.pages[0].count || '0',
-    tokens: data?.pages.map((p) => p.results).flat() || [],
+    totalToken: data?.pages[0].data.count || '0',
+    tokens: flatTokens.filter(Boolean),
+    isFetching,
   }
 }
