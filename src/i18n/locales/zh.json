@@ -120,5 +120,11 @@
   "comment.loading": "评论中...",
   "comment.failed": "评论失败，请重试。",
   "comment.success": "评论成功！",
-  "comment.like.loading": "点赞中..."
+  "comment.like.loading": "点赞中...",
+  "comment.list.empty": "还没有评论，赶快来抢前排吧~",
+  "comment.unlike.loading": "取消点赞中...",
+  "comment.like.failed": "点赞失败，请重试。",
+  "comment.like.success": "点赞成功！",
+  "comment.unlike.failed": "取消点赞失败，请重试",
+  "comment.unlike.success": "取消点赞成功！"
 }

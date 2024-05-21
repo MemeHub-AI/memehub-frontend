@@ -8,6 +8,9 @@ import type {
   TokenNewRes,
   TokenUpdateReq,
   TokenListItem,
+  TokenCommentListRes,
+  TokenAddCommentReq,
+  TokenAddCommentRes,
 } from './types'
 
 export const tokenApi = {
@@ -24,5 +27,21 @@ export const tokenApi = {
   },
   details(id: string | number) {
     return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${id}/`)
+  },
+  commentList(id: string) {
+    return api.GET<ApiResponse<TokenCommentListRes[]>>(
+      `/api/v1/coin/comments/${id}/`
+    )
+  },
+  addComment(req: TokenAddCommentReq) {
+    return api.POST<ApiResponse<TokenAddCommentRes>>('/api/v1/coin/comments/', {
+      body: req,
+    })
+  },
+  like(id: string) {
+    return api.POST(`/api/v1/coin/like/${id}/`)
+  },
+  unlike(id: string) {
+    return api.DELETE(`/api/v1/coin/like/${id}/`)
   },
 }

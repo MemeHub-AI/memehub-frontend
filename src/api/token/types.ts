@@ -52,3 +52,30 @@ export enum TokenUpdateStatus {
   Failed,
   Success,
 }
+
+export interface TokenCommentListRes {
+  id: number
+  content: string
+  user: {
+    id: number
+    name: string
+    logo: string
+  }
+  coin: number
+  img: string
+  related_comments: string[]
+  created_at: string
+  likes_count: number
+  is_liked: boolean
+}
+
+export interface TokenAddCommentReq {
+  coin: string
+  content: string
+  img?: string
+  related_comments: string[]
+}
+
+export interface TokenAddCommentRes {
+  user: string[]
+}

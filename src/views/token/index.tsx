@@ -50,7 +50,7 @@ export const TokenPage = () => {
       tokenInfo={tokenData}
       refetchInfo={refetch}
     >
-      <main className="px-4 max-sm:px-3 pt-4 max-w-main mx-auto">
+      <main className="px-4 max-sm:px-3 pt-4 max-w-main mx-auto min-h-main">
         <Button className="mb-3 self-start" onClick={router.back}>
           {t('back')}
         </Button>

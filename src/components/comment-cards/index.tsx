@@ -1,15 +1,9 @@
-import React, { ComponentProps } from 'react'
-import { nanoid } from 'nanoid'
-import { useTranslation } from 'react-i18next'
-import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
-import Link from 'next/link'
+import React, { type ComponentProps, useState } from 'react'
 import { isEmpty } from 'lodash'
-import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
 
-import { Card } from '@/components/ui/card'
-import { CommentForm } from './form'
-import { Avatar } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
+import { CommentCard } from './components/card'
+import { CommentForm } from './components/form'
 import {
   Pagination,
   PaginationContent,
@@ -19,134 +13,59 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { Routes } from '@/routes'
-
-const comments = [
-  {
-    id: '123',
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hi',
-    mentions: [],
-    likes: 1,
-    replyTo: null,
-    isLiked: true,
-  },
-  {
-    id: '456',
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hello',
-    imageUrl: '',
-    mentions: [],
-    likes: 1,
-    replyTo: null,
-    isLiked: true,
-  },
-  {
-    id: nanoid(),
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hello',
-    imageUrl: '',
-    mentions: ['123'],
-    likes: 1,
-    replyTo: null,
-  },
-  {
-    id: nanoid(),
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hello',
-    imageUrl: '',
-    mentions: ['456'],
-    likes: 1,
-    replyTo: null,
-  },
-  {
-    id: nanoid(),
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hello',
-    imageUrl: '',
-    mentions: [],
-    likes: 1,
-    replyTo: null,
-  },
-  {
-    id: nanoid(),
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hello',
-    imageUrl: '',
-    mentions: [],
-    likes: 1,
-    replyTo: null,
-  },
-  {
-    id: nanoid(),
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hello',
-    imageUrl: '',
-    mentions: [],
-    likes: 1,
-    replyTo: null,
-  },
-  {
-    id: nanoid(),
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hello',
-    imageUrl: '',
-    mentions: [],
-    likes: 1,
-    replyTo: null,
-  },
-  {
-    id: nanoid(),
-    profileUrl: '/profile/7214',
-    avatarUrl: '/images/meme.png',
-    username: '7214 (dev)',
-    timestamp: '2024/5/13 11:47:08',
-    message: 'hello',
-    imageUrl: '',
-    mentions: [],
-    likes: 1,
-    replyTo: null,
-  },
-]
+import { useComments } from './hooks/use-comments'
+import { Dialog } from '@/components/ui/dialog'
+import { CustomSuspense } from '../custom-suspense'
+import { Skeleton } from '../ui/skeleton'
 
 interface Props extends ComponentProps<'div'> {
   readonly?: boolean
 }
 
 export const CommentCards = ({ readonly = false }: Props) => {
+  const { t } = useTranslation()
+  const { comments, isFetching, addComment, likeComment, unlikeComment } =
+    useComments()
+  const [replyId, setReplyId] = useState('')
+
+  const onComment = (content: string, mentions: string[], img?: string) => {
+    const related_comments = [...mentions]
+
+    // Reply another comment.
+    if (replyId) related_comments.push(replyId)
+
+    addComment({ content, related_comments, img }).then(() => setReplyId('')) // Close when success.
+  }
+
   return (
     <>
-      {!readonly && <CommentForm className="mb-4" />}
+      <Dialog
+        open={!isEmpty(replyId)}
+        // Close the dialog if `false`.
+        onOpenChange={(value) => !value && setReplyId('')}
+      >
+        <CommentForm onComment={onComment} />
+      </Dialog>
+      {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
       <div className="flex flex-col gap-2">
-        {comments.map((c) => (
-          <CommentCard key={c.id} c={c} readonly={readonly} />
-        ))}
+        <CustomSuspense
+          isPending={isFetching}
+          fallback={<CardSkeleton />}
+          nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}
+        >
+          {comments.map((c) => (
+            <CommentCard
+              key={c.id}
+              c={c}
+              readonly={readonly}
+              onLike={likeComment}
+              onUnlike={unlikeComment}
+              onReply={(id) => setReplyId(id)}
+            />
+          ))}
+        </CustomSuspense>
       </div>
-      <Pagination className="mt-4">
+      {/* <Pagination className="mt-4">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious href="#" />
@@ -169,77 +88,31 @@ export const CommentCards = ({ readonly = false }: Props) => {
             <PaginationNext href="#" />
           </PaginationItem>
         </PaginationContent>
-      </Pagination>
+      </Pagination> */}
     </>
   )
 }
 
-interface CardProps extends Pick<Props, 'readonly'> {
-  c: (typeof comments)[number]
-}
-
-export const CommentCard = ({ c, readonly }: CardProps) => {
-  const { t } = useTranslation()
-  const router = useRouter()
-
-  return (
-    <Card
-      key={c.id}
-      id={c.id}
-      className="p-4 rounded-md cursor-[unset] max-sm:p-3"
-      hover="bg"
-    >
-      {/* User profile */}
-      <div
-        className="flex items-center gap-2 group transition-all w-fit cursor-pointer"
-        onClick={() => router.push(`${Routes.Account}/${c.username}`)}
-      >
-        <Avatar
-          src={c.avatarUrl}
-          size={32}
-          className="border border-zinc-400"
-        />
-        <div className="flex flex-col">
-          <span className="text-sm group-hover:underline">{c.username}</span>
-          <span className="text-zinc-400 text-xs">
-            <span>{c.timestamp}</span>
-          </span>
+const CardSkeleton = () => {
+  return Array.from({ length: 3 }).map(() => (
+    <div className="border shadow rounded-md flex flex-col p-4">
+      <div className="flex gap-2 items-stretch">
+        <Skeleton className="rounded-full w-8 h-8" />
+        <div className="flex flex-col justify-between">
+          <Skeleton className="w-16 h-4" />
+          <Skeleton className="w-20 h-3" />
         </div>
       </div>
-
-      {/* Mentions */}
-      {!isEmpty(c.mentions) && (
-        <div className="flex items-center text-xs text-zinc-400">
-          Mentions:
-          {c.mentions.map((m, i) => (
-            <Link key={i} className="ml-1" href={`#${m}`}>
-              #{m}
-            </Link>
-          ))}
-        </div>
-      )}
-
-      {/* Comment content */}
-      <div className="">{c.message}</div>
-
-      {/* Like, comment */}
-      <div className="flex items-center gap-4 mt-2">
-        <div className="flex items-center gap-1 cursor-pointer">
-          {c.isLiked ? (
-            <HeartFilledIcon className="text-red-600" />
-          ) : (
-            <HeartIcon className="text-zinc-400" />
-          )}
-          <span className="text-sm mb-[0.5px]">{c.likes}</span>
-        </div>
-        {!readonly && (
-          <Button size="xs" variant="outline">
-            {t('replay')}
-          </Button>
-        )}
+      <div className="flex flex-col gap-1 mt-2">
+        <Skeleton className="h-4 w-1/2" />
+        <Skeleton className="h-4 w-1/3" />
       </div>
-    </Card>
-  )
+      <div className="flex gap-2 mt-2">
+        <Skeleton className="h-5 w-8" />
+        <Skeleton className="h-5 w-14" />
+      </div>
+    </div>
+  ))
 }
 
 export default CommentCards

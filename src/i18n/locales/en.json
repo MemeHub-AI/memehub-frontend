@@ -121,5 +121,11 @@
   "comment.loading": "Commenting...",
   "comment.failed": "Comment failed, please try again.",
   "comment.success": "Comment successful!",
-  "comment.like.loading": "Liking..."
+  "comment.like.loading": "Liking...",
+  "comment.list.empty": "No comment yet, quickly come and claim the front row~",
+  "comment.unlike.loading": "Unliking...",
+  "comment.like.failed": "Like failed, please try again.",
+  "comment.like.success": "Like successful!",
+  "comment.unlike.failed": "Unlike failed, please try again.",
+  "comment.unlike.success": "Unlike successful!"
 }

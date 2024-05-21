@@ -12,14 +12,11 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
-  onSubmit?: (
-    data: Record<string, string>,
-    e: React.FormEvent<HTMLFormElement>
-  ) => void
+  onComment?: (content: string, mentions: [], image?: string) => void
 }
 
 export const CommentForm = (props: Props) => {
-  const { className } = props
+  const { className, onComment } = props
   const { t } = useTranslation()
   const { fields, updateField } = useFields({
     comment: createField({}),
@@ -38,8 +35,9 @@ export const CommentForm = (props: Props) => {
       toast.error(t('comment.empty'))
       return
     }
-
-    console.log('send comment', comment)
+    // TODO: implementation iamge url.
+    onComment?.(comment, [], '')
+    updateField('comment', { value: '' })
   }
 
   return (
