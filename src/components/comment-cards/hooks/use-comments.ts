@@ -39,7 +39,7 @@ export const useComments = () => {
     onError: () => toast.error(t('comment.failed')),
     onSuccess: ({ data }) => {
       toast.success(t('comment.success'))
-      setComments((old) => [...old, data])
+      setComments((old) => [data, ...old])
     },
     onSettled: (_, __, ___, id) => toast.dismiss(id),
   })
