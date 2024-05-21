@@ -75,7 +75,3 @@ export interface TokenAddCommentReq {
   img?: string
   related_comments: string[]
 }
-
-export interface TokenAddCommentRes {
-  user: string[]
-}

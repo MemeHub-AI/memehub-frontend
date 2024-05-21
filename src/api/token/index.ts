@@ -10,7 +10,6 @@ import type {
   TokenListItem,
   TokenCommentListRes,
   TokenAddCommentReq,
-  TokenAddCommentRes,
 } from './types'
 
 export const tokenApi = {
@@ -36,14 +35,21 @@ export const tokenApi = {
     )
   },
   addComment(req: TokenAddCommentReq) {
-    return api.POST<ApiResponse<TokenAddCommentRes>>('/api/v1/coin/comments/', {
-      body: req,
-    })
+    return api.POST<ApiResponse<TokenCommentListRes>>(
+      '/api/v1/coin/comments/',
+      {
+        body: req,
+      }
+    )
   },
   like(id: string) {
-    return api.POST(`/api/v1/coin/like/${id}/`)
+    return api.POST<ApiResponse<TokenCommentListRes>>(
+      `/api/v1/coin/like/${id}/`
+    )
   },
   unlike(id: string) {
-    return api.DELETE(`/api/v1/coin/like/${id}/`)
+    return api.DELETE<ApiResponse<TokenCommentListRes>>(
+      `/api/v1/coin/like/${id}/`
+    )
   },
 }
