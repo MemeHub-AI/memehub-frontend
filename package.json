@@ -39,7 +39,7 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "viem": "^2.10.2",
-    "wagmi": "^2.8.3",
+    "wagmi": "^2.9.2",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
