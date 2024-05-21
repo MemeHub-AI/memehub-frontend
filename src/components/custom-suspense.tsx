@@ -14,7 +14,7 @@ export const CustomSuspense = (props: Props) => {
     fallback,
     nullback,
     children,
-    container = 'fragment',
+    container = 'div',
     ...resetProps
   } = props
 
