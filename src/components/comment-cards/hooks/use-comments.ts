@@ -10,7 +10,7 @@ import type { TokenAddCommentReq } from '@/api/token/types'
 
 import { tokenApi } from '@/api/token'
 
-export const useComments = () => {
+export const useComments = (enableFetchComments = true) => {
   const { t } = useTranslation()
   const { query } = useRouter()
 
@@ -19,6 +19,7 @@ export const useComments = () => {
     isFetching,
     refetch: refetchComments,
   } = useQuery({
+    enabled: enableFetchComments,
     queryKey: [tokenApi.commentList.name, query.id],
     queryFn: () => tokenApi.commentList(query.id as string),
   })

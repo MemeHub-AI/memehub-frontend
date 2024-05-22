@@ -1,10 +1,10 @@
 import React, { type ComponentProps } from 'react'
-import { useAccount } from 'wagmi'
 import {
   Pencil2Icon,
   HeartFilledIcon,
   EnvelopeClosedIcon,
 } from '@radix-ui/react-icons'
+import { useTranslation } from 'react-i18next'
 
 import {
   Card,
@@ -20,13 +20,16 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { ProfileForm } from './profile-form'
+import { useUserStore } from '@/stores/use-user-store'
+import { useAccountContext } from '@/contexts/account'
 
 export const Profile = (props: ComponentProps<'div'>) => {
   const { className } = props
-  const { address } = useAccount()
+  const { t } = useTranslation()
+  const { userInfo } = useAccountContext()
 
   return (
-    <Card className={cn('min-w-aside', className)} hover="none">
+    <Card className={cn('w-aside', className)} hover="none">
       <CardHeader className="flex-row gap-4 relative p-4">
         <Label
           htmlFor="avatar-edit"
@@ -36,8 +39,8 @@ export const Profile = (props: ComponentProps<'div'>) => {
           )}
         >
           <Avatar
-            src="https://i.pravatar.cc/150?img=1"
-            fallback="L1en"
+            src={userInfo?.logo || ''}
+            fallback={userInfo?.wallet_address.slice(-4)}
             size={64}
           />
           <Pencil2Icon
@@ -51,9 +54,13 @@ export const Profile = (props: ComponentProps<'div'>) => {
           <Input id="avatar-edit" type="file" className="absolute invisible" />
         </Label>
         <div>
-          <CardTitle>L1en</CardTitle>
-          <CardDescription>{fmt.addr(address)}</CardDescription>
-          <CardDescription>Frontend developer</CardDescription>
+          <CardTitle>{userInfo?.name}</CardTitle>
+          <CardDescription>
+            {fmt.addr(userInfo?.wallet_address)}
+          </CardDescription>
+          <CardDescription className="break-all line-clamp-2">
+            {userInfo?.description}
+          </CardDescription>
         </div>
         {/* Editing profile. */}
         <ProfileForm>
@@ -69,15 +76,15 @@ export const Profile = (props: ComponentProps<'div'>) => {
       {/* <CardContent className="py-0 px-4"></CardContent> */}
       <CardFooter className="p-4 pt-0 flex justify-between">
         <div className="flex items-center gap-1 text-zinc-500 text-sm">
-          Total likes:
+          {t('account.total-likes')}:
           <span className="inline-flex items-center gap-1 text-red-500">
-            0 <HeartFilledIcon />
+            {userInfo?.like_count || 0} <HeartFilledIcon />
           </span>
         </div>
         <div className="flex items-center gap-1 text-sm text-zinc-500 cursor-pointer">
-          Total mentions:
+          {t('account.total-mentions')}:
           <span className="inline-flex items-center gap-1 text-black">
-            0 <EnvelopeClosedIcon />
+            {userInfo?.mention_count || 0} <EnvelopeClosedIcon />
           </span>
         </div>
       </CardFooter>

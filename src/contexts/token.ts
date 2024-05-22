@@ -21,6 +21,9 @@ export const TokenProvider = ({
 export const useTokenContext = () => {
   const context = useContext(TokenContext)
 
-  if (!context) throw new Error('`TokenProvider` not found')
+  if (!context) {
+    throw new Error('`TokenProvider` is not found')
+  }
+
   return context
 }

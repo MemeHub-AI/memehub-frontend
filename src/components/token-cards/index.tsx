@@ -12,10 +12,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Order } from '@/utils/types'
-import { useTokens } from '@/hooks/use-tokens'
 import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { Routes } from '@/routes'
+import { TokenListItem } from '@/api/token/types'
 
 const chains = [
   {
@@ -29,9 +29,13 @@ const chains = [
   },
 ]
 
-export const TokenCards = ({ className }: ComponentProps<'div'>) => {
+interface Props extends ComponentProps<'div'> {
+  cards: TokenListItem[]
+  isPending: boolean
+}
+
+export const TokenCards = ({ className, cards, isPending }: Props) => {
   const { t } = useTranslation()
-  const { tokens, isFetching } = useTokens()
   const sortItems = [
     {
       label: t('market.sort.asc'),
@@ -93,7 +97,7 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
           'max-sm:gap-2',
           className
         )}
-        isPending={isFetching}
+        isPending={isPending}
         fallback={<CardSkeleton />}
         nullback={
           <div className="text-zinc-500">
@@ -105,7 +109,7 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
           </div>
         }
       >
-        {tokens.map((t, i) => (
+        {cards.map((t, i) => (
           <TokenCard key={i} card={t} />
         ))}
       </CustomSuspense>

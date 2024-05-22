@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { Address, formatEther } from 'viem'
+import BigNumber from 'bignumber.js'
 
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
@@ -10,7 +11,6 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { TokenListItem } from '@/api/token/types'
 import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
-import BigNumber from 'bignumber.js'
 
 interface Props extends ComponentProps<'div'> {
   card: TokenListItem
@@ -58,11 +58,11 @@ export const TokenCard = ({ card, className }: Props) => {
             {card.name} {card.ticker && `(${card.ticker})`}
           </CardTitle>
           <Link
-            href={`${Routes.Account}/${card.address}`}
+            href={`${Routes.Account}/${card.creator.id}`}
             className="text-zinc-500 text-xs mt-0.5 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
-            {t('creator')}: {card.creator_name}
+            {t('creator')}: {card.creator.name}
           </Link>
           <p className="text-zinc-500 text-sm break-all line-clamp-4">
             {card.desc}

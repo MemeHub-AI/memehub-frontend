@@ -25,7 +25,11 @@ export interface TokenListItem {
   replies: string
   last_reply: null
   create_time: null
-  creator_name: string
+  creator: {
+    id: number
+    name: string
+    logo: string
+  }
 }
 
 export interface TokenNewReq {
@@ -73,5 +77,5 @@ export interface TokenAddCommentReq {
   coin: string
   content: string
   img?: string
-  related_comments: string[]
+  related_comments: number[]
 }

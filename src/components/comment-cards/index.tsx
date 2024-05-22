@@ -2,6 +2,8 @@ import React, { type ComponentProps, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
+import type { TokenCommentListRes } from '@/api/token/types'
+
 import { CommentCard } from './components/card'
 import { CommentForm } from './components/form'
 import {
@@ -13,54 +15,56 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination'
-import { useComments } from './hooks/use-comments'
 import { Dialog } from '@/components/ui/dialog'
 import { CustomSuspense } from '../custom-suspense'
 import { Skeleton } from '../ui/skeleton'
+import { useComments } from './hooks/use-comments'
 
 interface Props extends ComponentProps<'div'> {
+  cards: TokenCommentListRes[]
+  isPending: boolean
   readonly?: boolean
 }
 
-export const CommentCards = ({ readonly = false }: Props) => {
+export const CommentCards = (props: Props) => {
+  const { cards, isPending, readonly = false } = props
   const { t } = useTranslation()
-  const { comments, isFetching, addComment, likeComment, unlikeComment } =
-    useComments()
-  const [replyId, setReplyId] = useState('')
+  const { addComment, likeComment, unlikeComment } = useComments(false)
+  const [replyId, setReplyId] = useState(-1)
 
-  const onComment = (content: string, mentions: string[], img?: string) => {
+  const onComment = (content: string, mentions: number[], img?: string) => {
     const related_comments = [...mentions]
 
     // Reply another comment.
     if (replyId) related_comments.push(replyId)
 
-    addComment({ content, related_comments, img }).then(() => setReplyId('')) // Close when success.
+    addComment({ content, related_comments, img }).then(() => setReplyId(-1)) // Close when success.
   }
 
   return (
     <>
       <Dialog
-        open={!isEmpty(replyId)}
+        open={replyId !== -1}
         // Close the dialog if `false`.
-        onOpenChange={(value) => !value && setReplyId('')}
+        onOpenChange={(value) => !value && setReplyId(-1)}
       >
         <CommentForm onComment={onComment} />
       </Dialog>
       {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
       <CustomSuspense
         className="flex flex-col gap-2"
-        isPending={isFetching}
+        isPending={isPending}
         fallback={<CardSkeleton />}
         nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}
       >
-        {comments.map((c) => (
+        {cards.map((c) => (
           <CommentCard
             key={c.id}
             c={c}
             readonly={readonly}
             onLike={likeComment}
             onUnlike={unlikeComment}
-            onReply={(id) => setReplyId(id)}
+            onReply={(id) => setReplyId(Number(id || -1))}
           />
         ))}
       </CustomSuspense>
