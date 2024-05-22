@@ -15,10 +15,10 @@ export interface UserLoginRes {
 }
 
 export interface UserUpdateReq {
-  name: string
-  logo: string
-  description: string
-  wallet_address: string
+  name?: string
+  logo?: string
+  description?: string
+  wallet_address?: string
 }
 
 export interface UserInfoRes {
@@ -41,6 +41,7 @@ export interface UserMyInfoRes extends UserInfoRes {
 }
 
 export interface UserMyInfoFollow {
+  id: number
   name: string
   logo: string
   follower_count: number

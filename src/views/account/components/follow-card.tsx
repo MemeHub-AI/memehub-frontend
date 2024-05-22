@@ -7,17 +7,23 @@ import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
 import { fmt } from '@/utils/fmt'
 import { Button } from '@/components/ui/button'
-import { FollowType } from './follow-tab'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useUserStore } from '@/stores/use-user-store'
+import { useUser } from '@/hooks/use-user'
+import { useAccountContext } from '@/contexts/account'
 
 interface Props extends ComponentProps<'div'> {
-  type: FollowType
   card: UserMyInfoFollow
-  onButtonClick?: (type: FollowType, card: UserMyInfoFollow) => void
 }
 
-export const FollowCard = ({ type, card, onButtonClick }: Props) => {
+export const FollowCard = ({ card }: Props) => {
   const { t } = useTranslation()
+  const { isFollowed } = useUserStore()
+  const { follow, unfollow } = useUser({
+    onFollowSuccess: () => refetchUserInfo(),
+  })
+  const { refetchUserInfo } = useAccountContext()
+  const isFollow = isFollowed(card.id.toString())
 
   return (
     <Card className="py-2 px-3 flex items-center justify-between" hover="bg">
@@ -31,11 +37,12 @@ export const FollowCard = ({ type, card, onButtonClick }: Props) => {
       <Button
         size="xs"
         variant="outline"
-        onClick={() => onButtonClick?.(type, card)}
+        onClick={() => {
+          const id = card.id.toString()
+          isFollow ? unfollow(id) : follow(id)
+        }}
       >
-        {type === FollowType.Followers
-          ? `+ ${t('follow')}`
-          : `- ${t('unfollow')}`}
+        {isFollow ? `- ${t('unfollow')}` : `+ ${t('follow')}`}
       </Button>
     </Card>
   )

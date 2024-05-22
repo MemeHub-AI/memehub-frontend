@@ -12,6 +12,8 @@ interface ContextValue {
     | null
     | undefined
   isPending: boolean
+  isOtherUser: boolean
+  refetchUserInfo: Function
 }
 
 const AccountContext = createContext<ContextValue | null>(null)

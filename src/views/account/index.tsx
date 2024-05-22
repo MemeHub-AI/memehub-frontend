@@ -16,15 +16,18 @@ export const AccountPage = () => {
     otherUserInfo,
     isFetchingOtherUserInfo,
     isFetchingUserInfo,
+    refetchUserInfo,
+    refetchOtherUserInfo,
   } = useUserInfo(queryId)
   const currenUserId = String(userInfo?.id || '')
+  const isOtherUser = queryId !== currenUserId
 
   return (
     <AccountProvider
-      // `queryId === currenUserId`, pass the current user info,
-      // otherwise pass other user info.
-      userInfo={queryId === currenUserId ? userInfo : otherUserInfo}
+      userInfo={isOtherUser ? otherUserInfo : userInfo}
       isPending={isFetchingUserInfo || isFetchingOtherUserInfo}
+      isOtherUser={isOtherUser}
+      refetchUserInfo={isOtherUser ? refetchOtherUserInfo : refetchUserInfo}
     >
       <main className="min-h-main px-6 max-sm:px-3 flex gap-4 max-sm:flex-col max-sm:gap-2">
         {/* Left aside */}

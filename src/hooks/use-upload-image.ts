@@ -8,7 +8,14 @@ import type { ApiResponse } from '@/api'
 
 import { otherApi } from '@/api/other'
 
-export const useUploadImage = () => {
+interface Options {
+  onSuccess?: (url: string) => void
+  onErrror?: (reason: string) => void
+  onFinally?: () => void
+}
+
+export const useUploadImage = (options?: Options) => {
+  const { onSuccess, onErrror, onFinally } = options || {}
   const { t } = useTranslation()
   const [url, setUrl] = useState('')
 
@@ -38,13 +45,16 @@ export const useUploadImage = () => {
         image_url: string
       }>
 
-      toast.success(t('upload.success'))
       setUrl(data.image_url)
+      onSuccess?.(data.image_url)
+      toast.success(t('upload.success'))
     } catch (error) {
       console.error(error)
+      onErrror?.(String(error))
       toast.success(t('upload.failed'))
     } finally {
       toast.dismiss(id)
+      onFinally?.()
     }
   }
 

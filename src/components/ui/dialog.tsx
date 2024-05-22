@@ -5,7 +5,7 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 import { cn } from '@/lib/utils'
 
 interface Props extends DialogPrimitive.DialogProps {
-  contentProps?: DialogPrimitive.DialogContentProps
+  contentProps?: DialogContentProps
 }
 
 const Dialog = React.forwardRef<

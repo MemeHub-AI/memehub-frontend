@@ -2,11 +2,19 @@ import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import type { UserMyInfoRes } from '@/api/user/types'
+
 import { userApi } from '@/api/user'
 import { useStorage } from './use-storage'
 import { useUserStore } from '@/stores/use-user-store'
 
-export const useUser = () => {
+interface Options {
+  onUpdateSuccess?: (data: UserMyInfoRes) => void
+  onFollowSuccess?: (data: UserMyInfoRes) => void
+}
+
+export const useUser = (options?: Options) => {
+  const { onUpdateSuccess, onFollowSuccess } = options || {}
   const { t } = useTranslation()
   const { setUserInfo } = useUserStore()
   const { setToken } = useStorage()
@@ -36,6 +44,7 @@ export const useUser = () => {
     onSuccess: ({ data }) => {
       if (!data) return
       setUserInfo(data)
+      onUpdateSuccess?.(data)
       toast.success(t('user.update.success'))
     },
   })
@@ -50,6 +59,7 @@ export const useUser = () => {
     onSuccess: ({ data }) => {
       if (!data) return
       setUserInfo(data)
+      onFollowSuccess?.(data)
       toast.success(t('user.follow.success'))
     },
   })
@@ -64,6 +74,7 @@ export const useUser = () => {
     onSuccess: ({ data }) => {
       if (!data) return
       setUserInfo(data)
+      onFollowSuccess?.(data)
       toast.success(t('user.unfollow.success'))
     },
   })

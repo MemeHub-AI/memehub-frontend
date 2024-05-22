@@ -2,7 +2,6 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FollowCard, FollowCardSkeleton } from './follow-card'
-import { FollowType } from './follow-tab'
 import { useAccountContext } from '@/contexts/account'
 import { CustomSuspense } from '@/components/custom-suspense'
 
@@ -19,7 +18,7 @@ export const FollowersCards = () => {
       nullback={<p className="text-zinc-500">{t('follow.no-followers')}</p>}
     >
       {followers.map((f, i) => (
-        <FollowCard type={FollowType.Followers} card={f} key={i} />
+        <FollowCard card={f} key={i} />
       ))}
     </CustomSuspense>
   )
