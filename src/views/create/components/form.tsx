@@ -118,7 +118,9 @@ export const CreateTokenForm = (props: Props) => {
           </p>
         }
       />
-      <Title className="w-fit">{t('create.new')}</Title>
+      <Title className="w-fit max-sm:px-3 max-sm:mt-10">
+        {t('create.new')}
+      </Title>
       <form
         className={cn(
           'flex flex-col space-y-3 w-[460px] max-sm:w-full max-sm:px-3 max-sm:space-y-2'

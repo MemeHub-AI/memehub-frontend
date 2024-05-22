@@ -14,7 +14,9 @@ export const Logo = ({ className, showMeme = false, ...props }: Props) => {
       href={Routes.Main}
       className="font-bold inline-flex items-center gap-2"
     >
-      {showMeme && <img src="/images/meme.png" alt="meme" className="w-10" />}
+      {showMeme && (
+        <img src="/images/meme.png" alt="meme" className="w-10 max-sm:w-8" />
+      )}
       <img
         src="/images/logo.svg"
         alt="logo"
