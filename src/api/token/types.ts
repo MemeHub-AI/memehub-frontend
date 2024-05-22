@@ -77,5 +77,5 @@ export interface TokenAddCommentReq {
   coin: string
   content: string
   img?: string
-  related_comments: number[]
+  related_comments: string[]
 }

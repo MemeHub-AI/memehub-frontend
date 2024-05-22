@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
@@ -13,6 +13,7 @@ import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components//ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Tooltip } from '@/components/ui/tooltip'
+import { Dialog } from '@/components/ui/dialog'
 
 interface Props {
   c: TokenCommentListRes
@@ -26,6 +27,7 @@ export const CommentCard = (props: Props) => {
   const { c, readonly, onLike, onUnlike, onReply } = props
   const { t } = useTranslation()
   const router = useRouter()
+  const [open, setOpen] = useState(false)
 
   return (
     <Card
@@ -71,6 +73,30 @@ export const CommentCard = (props: Props) => {
 
       {/* Comment content */}
       <div className="">{c.content}</div>
+
+      {/* Comment iamge */}
+      {!isEmpty(c.img) && (
+        <>
+          <Dialog
+            open={open}
+            onOpenChange={setOpen}
+            contentProps={{ className: 'p-0 w-[50vw] border-none' }}
+          >
+            <img
+              src={c.img}
+              alt="image"
+              className="w-full"
+              onClick={() => setOpen(true)}
+            />
+          </Dialog>
+          <img
+            src={c.img}
+            alt="image"
+            className="rounded max-w-64 cursor-pointer"
+            onClick={() => setOpen(true)}
+          />
+        </>
+      )}
 
       {/* Like, comment */}
       <div className="flex items-center gap-4 mt-2">

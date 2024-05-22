@@ -30,26 +30,27 @@ export const CommentCards = (props: Props) => {
   const { cards, isPending, readonly = false } = props
   const { t } = useTranslation()
   const { addComment, likeComment, unlikeComment } = useComments(false)
-  const [replyId, setReplyId] = useState(-1)
+  const [replyId, setReplyId] = useState('')
 
-  const onComment = (content: string, mentions: number[], img?: string) => {
+  const onComment = (content: string, mentions: string[], img?: string) => {
     const related_comments = [...mentions]
 
     // Reply another comment.
     if (replyId) related_comments.push(replyId)
-
-    addComment({ content, related_comments, img }).then(() => setReplyId(-1)) // Close when success.
+    addComment({ content, related_comments, img }).then(() => setReplyId('')) // Close when success.
   }
 
   return (
     <>
+      {/* Reply dialog. */}
       <Dialog
-        open={replyId !== -1}
+        open={!isEmpty(replyId)}
         // Close the dialog if `false`.
-        onOpenChange={(value) => !value && setReplyId(-1)}
+        onOpenChange={(value) => !value && setReplyId('')}
       >
         <CommentForm onComment={onComment} />
       </Dialog>
+
       {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
       <CustomSuspense
         className="flex flex-col gap-2"
@@ -64,7 +65,7 @@ export const CommentCards = (props: Props) => {
             readonly={readonly}
             onLike={likeComment}
             onUnlike={unlikeComment}
-            onReply={(id) => setReplyId(Number(id || -1))}
+            onReply={(id) => setReplyId(id)}
           />
         ))}
       </CustomSuspense>

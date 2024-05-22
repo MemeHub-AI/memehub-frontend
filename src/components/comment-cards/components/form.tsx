@@ -1,8 +1,9 @@
-import React, { type ComponentProps } from 'react'
+import React, { useMemo, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImageIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash'
 import { toast } from 'sonner'
+import { nanoid } from 'nanoid'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -10,6 +11,7 @@ import { createField, useFields } from '@/hooks/use-fields'
 import { FormTextareaField } from '@/components/form-field'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useUploadImage } from '@/hooks/use-upload-image'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   onComment?: (content: string, mentions: [], image?: string) => void
@@ -21,6 +23,10 @@ export const CommentForm = (props: Props) => {
   const { fields, updateField } = useFields({
     comment: createField({}),
   })
+  const { url, onChangeUpload } = useUploadImage()
+  // Generate unique id.
+  const inputId = useMemo(nanoid, [])
+  const textareaId = useMemo(nanoid, [])
 
   const onChange = ({
     target,
@@ -32,11 +38,10 @@ export const CommentForm = (props: Props) => {
     const comment = fields.comment.value.trim()
 
     if (isEmpty(comment)) {
-      toast.error(t('comment.empty'))
-      return
+      return toast.error(t('comment.empty'))
     }
-    // TODO: implementation iamge url.
-    onComment?.(comment, [], '')
+
+    onComment?.(comment, [], url)
     updateField('comment', { value: '' })
   }
 
@@ -49,7 +54,7 @@ export const CommentForm = (props: Props) => {
       }}
     >
       <FormTextareaField
-        id="comment"
+        id={textareaId}
         label={t('comment.new')}
         placeholder={t('comment-placeholder')}
         value={fields.comment.value}
@@ -59,10 +64,15 @@ export const CommentForm = (props: Props) => {
 
       <div className="flex items-center gap-2">
         <Button className="px-10">{t('comment')}</Button>
-        <Label htmlFor="comment-img" variant="icon">
+        <Label htmlFor={inputId} variant="icon">
           <ImageIcon className="cursor-pointer" />
         </Label>
-        <Input type="file" id="comment-img" className="hidden" />
+        <Input
+          type="file"
+          id={inputId}
+          className="hidden"
+          onChange={onChangeUpload}
+        />
       </div>
     </form>
   )
