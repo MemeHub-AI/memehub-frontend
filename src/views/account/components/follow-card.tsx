@@ -1,5 +1,6 @@
 import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
 
 import type { UserMyInfoFollow } from '@/api/user/types'
 
@@ -18,6 +19,7 @@ interface Props extends ComponentProps<'div'> {
 
 export const FollowCard = ({ card }: Props) => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { isFollowed } = useUserStore()
   const { follow, unfollow } = useUser({
     onFollowSuccess: () => refetchUserInfo(),
@@ -26,7 +28,16 @@ export const FollowCard = ({ card }: Props) => {
   const isFollow = isFollowed(card.id.toString())
 
   return (
-    <Card className="py-2 px-3 flex items-center justify-between" hover="bg">
+    <Card
+      className="py-2 px-3 flex items-center justify-between"
+      hover="bg"
+      onClick={() => {
+        router.push({
+          pathname: router.pathname,
+          query: { id: card.id },
+        })
+      }}
+    >
       <div className="flex items-center gap-2">
         <Avatar src={card.logo} fallback={card.name.slice(-4)} />
         <div className="flex flex-col">
@@ -37,7 +48,8 @@ export const FollowCard = ({ card }: Props) => {
       <Button
         size="xs"
         variant="outline"
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation()
           const id = card.id.toString()
           isFollow ? unfollow(id) : follow(id)
         }}
