@@ -1,4 +1,4 @@
-import React, { type ComponentProps, useState } from 'react'
+import React, { type ComponentProps, useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
@@ -31,6 +31,7 @@ export const CommentCards = (props: Props) => {
   const { t } = useTranslation()
   const { addComment, likeComment, unlikeComment } = useComments(false)
   const [replyId, setReplyId] = useState('')
+  const [lastAnchor, setLastAnchor] = useState(-1)
 
   const onComment = (content: string, mentions: string[], img?: string) => {
     const related_comments = [...mentions]
@@ -39,6 +40,12 @@ export const CommentCards = (props: Props) => {
     if (replyId) related_comments.push(replyId)
     addComment({ content, related_comments, img }).then(() => setReplyId('')) // Close when success.
   }
+
+  useEffect(() => {
+    if (lastAnchor === -1) return
+
+    window.setTimeout(() => setLastAnchor(-1), 1_000)
+  }, [lastAnchor])
 
   return (
     <>
@@ -63,9 +70,11 @@ export const CommentCards = (props: Props) => {
             key={c.id}
             c={c}
             readonly={readonly}
+            isActive={c.id === lastAnchor}
             onLike={likeComment}
             onUnlike={unlikeComment}
             onReply={(id) => setReplyId(id)}
+            onAnchorClick={setLastAnchor}
           />
         ))}
       </CustomSuspense>

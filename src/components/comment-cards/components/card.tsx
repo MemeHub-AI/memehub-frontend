@@ -14,17 +14,22 @@ import { Avatar } from '@/components//ui/avatar'
 import { Button } from '@/components/ui/button'
 import { Tooltip } from '@/components/ui/tooltip'
 import { Dialog } from '@/components/ui/dialog'
+import { fmt } from '@/utils/fmt'
+import { cn } from '@/lib/utils'
 
 interface Props {
   c: TokenCommentListRes
   readonly?: boolean
+  isActive?: boolean
   onLike?: (id: string) => void
   onUnlike?: (id: string) => void
   onReply?: (id: string) => void
+  onAnchorClick?: (id: number) => void
 }
 
 export const CommentCard = (props: Props) => {
-  const { c, readonly, onLike, onUnlike, onReply } = props
+  const { c, readonly, isActive, onLike, onUnlike, onReply, onAnchorClick } =
+    props
   const { t } = useTranslation()
   const router = useRouter()
   const [open, setOpen] = useState(false)
@@ -33,7 +38,10 @@ export const CommentCard = (props: Props) => {
     <Card
       key={c.id}
       id={c.id.toString()}
-      className="p-4 rounded-md cursor-[unset] max-sm:p-3"
+      className={cn(
+        'p-4 rounded-md cursor-[unset] max-sm:p-3 scroll-mt-[70px]',
+        isActive && 'bg-zinc-200 hover:bg-zinc-200 animate-pulse'
+      )}
       hover="bg"
     >
       {/* User profile */}
@@ -44,10 +52,12 @@ export const CommentCard = (props: Props) => {
         <Avatar
           src={c.user.logo}
           size={32}
-          className="border border-zinc-400"
+          className="border border-zinc-400 cursor-pointer"
         />
         <div className="flex flex-col">
-          <span className="text-sm hover:underline">{c.user.name}</span>
+          <span className="text-sm hover:underline cursor-pointer">
+            {c.user.name}
+          </span>
           <Tooltip
             tip={dayjs(c.created_at).format('YYYY/MM/DD HH:mm:ss')}
             triggerProps={{ asChild: true }}
@@ -64,8 +74,13 @@ export const CommentCard = (props: Props) => {
         <div className="flex items-center text-xs text-zinc-400">
           {t('mentions')}:
           {c.related_comments.map((m, i) => (
-            <Link key={i} className="ml-1" href={`#${m}`}>
-              #{m}
+            <Link
+              href={fmt.toAnchor(m)}
+              key={i}
+              className="ml-1.5 hover:underline"
+              onClick={() => onAnchorClick?.(m)}
+            >
+              {fmt.toAnchor(m)}
             </Link>
           ))}
         </div>

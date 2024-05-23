@@ -67,7 +67,7 @@ export interface TokenCommentListRes {
   }
   coin: number
   img: string
-  related_comments: string[]
+  related_comments: number[]
   created_at: string
   likes_count: number
   is_liked: boolean

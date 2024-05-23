@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash'
+
 interface FmtAddrOptions {
   len?: number
   separator?: string
@@ -24,5 +26,11 @@ export const fmt = {
 
     const result = toFixed ? percent?.toFixed(toFixed) : percent
     return `${result}%`
+  },
+  toAnchor(value?: string | number) {
+    const val = (value?.toString() || '').trim()
+
+    if (isEmpty(val)) return '#'
+    return `#${val}`
   },
 }
