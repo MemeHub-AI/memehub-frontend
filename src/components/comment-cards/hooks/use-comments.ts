@@ -27,7 +27,7 @@ export const useComments = (enableFetchComments = true) => {
     },
   })
   // Update a single comment, not the refresh list. so we need this state.
-  const [comments, setComments] = useState(commentData?.data ?? [])
+  const [comments, setComments] = useState(commentData?.data.results ?? [])
 
   const updateComment = (data: (typeof comments)[number]) => {
     setComments((old) => old.map((c) => (c.id === data.id ? data : c)))
@@ -80,7 +80,7 @@ export const useComments = (enableFetchComments = true) => {
 
     // Sort by `created_at` DESC.
     setComments(
-      commentData.data.sort((a, b) => {
+      commentData.data.results.sort((a, b) => {
         const tsA = dayjs(a.created_at).unix()
         const tsB = dayjs(b.created_at).unix()
         return tsB - tsA

@@ -11,6 +11,7 @@ import type {
   TokenCommentListRes,
   TokenAddCommentReq,
 } from './types'
+import { Pagination } from '../types'
 
 export const tokenApi = {
   list(req: TokenListReq) {
@@ -30,7 +31,7 @@ export const tokenApi = {
     return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${id}/`)
   },
   commentList(id: string) {
-    return api.GET<ApiResponse<TokenCommentListRes[]>>(
+    return api.GET<ApiResponse<Pagination<TokenCommentListRes>>>(
       `/api/v1/coin/comments/${id}/`
     )
   },
