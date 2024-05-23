@@ -6,7 +6,6 @@ import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import { AppLayout } from '@/components/layouts/app'
 import { AppProviders } from '@/components/app-providers'
-import { Toaster } from '@/components/ui/sonner'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation()
@@ -25,10 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
         />
       </Head>
       <AppProviders>
-        <AppLayout>
-          <Component {...pageProps} />
-          <Toaster />
-        </AppLayout>
+        <AppLayout children={<Component {...pageProps} />} />
       </AppProviders>
     </>
   )

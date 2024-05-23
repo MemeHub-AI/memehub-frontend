@@ -9,6 +9,8 @@ import { Footer } from '../footer'
 import { useMounted } from '@/hooks/use-mounted'
 import { useLang } from '@/hooks/use-lang'
 import { useUserInfo } from '@/hooks/use-user-info'
+import { Toaster } from '@/components/ui/sonner'
+import { BackToTop } from '../back-to-top'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -32,6 +34,8 @@ export const AppLayout = ({ children }: ComponentProps<'div'>) => {
       <Header />
       {children}
       <Footer />
+      <Toaster />
+      <BackToTop />
     </>
   )
 }
