@@ -6,4 +6,8 @@ export interface ApiResponse<T> {
   data: T
 }
 
+export enum ApiCode {
+  Success = 200,
+}
+
 export const api = useFetch(process.env.NEXT_PUBLIC_API_URL!)

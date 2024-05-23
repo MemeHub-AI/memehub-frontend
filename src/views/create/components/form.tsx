@@ -16,27 +16,20 @@ import {
   CreateTokenFormFields,
   type CreateTokenFormFieldsMethods,
 } from './fields'
-import { CreateTokenSuccessDialog } from './dialog'
+import { CreateTokenStatusDialog } from './dialog'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {}
 
 export const CreateTokenForm = (props: Props) => {
   const { className } = props
   const { t } = useTranslation()
-  const {
-    contractAddr,
-    deployFee,
-    deploySymbol,
-    isDeploying,
-    deployHash,
-    isSuccess,
-    deploy,
-    resetDeploy,
-  } = useDeploy()
-  const { url, onChangeUpload } = useUploadImage()
-  const { isConnected } = useAccount()
-  const { setConnectOpen } = useWalletStore()
   const fieldsRef = useRef<CreateTokenFormFieldsMethods>(null)
+  const { isConnected, chainId } = useAccount()
+
+  const useDeployResult = useDeploy()
+  const { deployFee, deploySymbol, isDeploying, deploy } = useDeployResult
+  const { url, onChangeUpload } = useUploadImage()
+  const { setConnectOpen } = useWalletStore()
 
   const fee = Number(formatEther(BigInt(deployFee))).toFixed(3)
   const symbol = deploySymbol
@@ -52,6 +45,7 @@ export const CreateTokenForm = (props: Props) => {
       toast.error(t('create.upload-image'))
       return
     }
+    if (typeof chainId !== 'number') return
 
     const { fieldsValues: f } = fieldsRef.current
     deploy({
@@ -59,6 +53,8 @@ export const CreateTokenForm = (props: Props) => {
       ticker: f.symbol,
       desc: f.description,
       image: url,
+      chain_id: chainId.toString(),
+      // Optional.
       twitter_url: f.twitter,
       telegram_url: f.telegram,
       website: f.website,
@@ -67,12 +63,9 @@ export const CreateTokenForm = (props: Props) => {
 
   return (
     <div className={cn('w-96', className)}>
-      <CreateTokenSuccessDialog
-        open={isSuccess}
-        onOpenChange={resetDeploy}
-        hash={deployHash}
-        contractAddress={contractAddr}
-      />
+      {/* All status dialog during create. */}
+      <CreateTokenStatusDialog {...useDeployResult} />
+
       <Title className="w-fit max-sm:px-3 max-sm:mt-10">
         {t('create.new')}
       </Title>

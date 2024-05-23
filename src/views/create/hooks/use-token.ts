@@ -1,36 +1,27 @@
-import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 
-import type { TokenNewReq, TokenUpdateReq } from '@/api/token/types'
+import type { TokenUpdateReq } from '@/api/token/types'
 
 import { tokenApi } from '@/api/token'
 
-export const useToken = () => {
-  const [id, setId] = useState(-1)
-
-  const { mutateAsync } = useMutation({
-    mutationKey: [tokenApi.new.name],
-    mutationFn: tokenApi.new,
+export const useCreateToken = () => {
+  // Submit created token to backend.
+  const { mutateAsync: create } = useMutation({
+    mutationKey: [tokenApi.create.name],
+    mutationFn: tokenApi.create,
   })
 
-  const { mutateAsync: updateToken } = useMutation({
+  // Update already created token. used for create error or interrupted.
+  const { mutateAsync: update } = useMutation({
     mutationKey: [tokenApi.update.name],
-    mutationFn: (req: TokenUpdateReq) => {
-      if (id === -1) {
-        return Promise.reject('id is not set')
-      }
+    mutationFn: (params: TokenUpdateReq & { id: string }) => {
+      const { id, ...req } = params
       return tokenApi.update(id, req)
     },
   })
 
-  const create = async (params: TokenNewReq) => {
-    const { data } = await mutateAsync(params)
-
-    setId(data.coin_id)
-  }
-
   return {
     create,
-    update: updateToken,
+    update,
   }
 }

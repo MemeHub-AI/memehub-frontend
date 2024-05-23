@@ -18,7 +18,7 @@ export const tokenApi = {
       '/api/v1/coin/coinslist/' + qs.stringify(req)
     )
   },
-  new(req: TokenNewReq) {
+  create(req: TokenNewReq) {
     return api.POST<ApiResponse<TokenNewRes>>('/api/v1/coin/coins/', {
       body: req,
     })

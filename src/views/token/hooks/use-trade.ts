@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { continousTokenAbi } from '@/contract/continous-token'
 import { wagmiConfig } from '@/config/wagmi'
-import { toastNoReject } from '@/utils/contract'
+import { toastCE } from '@/utils/contract'
 import { useTokenContext } from '@/contexts/token'
 
 export const useTrade = () => {
@@ -27,7 +27,7 @@ export const useTrade = () => {
       },
       onError: (e) => {
         toast.dismiss()
-        toastNoReject(e)
+        toastCE(e)
       },
     },
   })
@@ -100,7 +100,7 @@ export const useTrade = () => {
     } catch (e) {
       console.log('buy error:')
       console.error(e)
-      toastNoReject(e)
+      toastCE(e)
     }
   }
 
@@ -113,7 +113,7 @@ export const useTrade = () => {
         args: [parseEther(amount.toString())],
       })
     } catch (e) {
-      toastNoReject(e)
+      toastCE(e)
     }
   }
 

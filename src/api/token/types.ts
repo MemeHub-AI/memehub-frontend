@@ -37,9 +37,11 @@ export interface TokenNewReq {
   ticker: string
   desc: string
   image: string
-  twitter_url: string
-  telegram_url: string
-  website: string
+  hash: string
+  chain_id: string
+  twitter_url?: string
+  telegram_url?: string
+  website?: string
 }
 
 export interface TokenNewRes {
