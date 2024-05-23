@@ -15,30 +15,31 @@ export interface CreateTokenFormFieldsMethods {
   validateFields: () => boolean
 }
 
-export const CreateTokenFormFields = React.forwardRef<
+export const CreateTokenFormFields = forwardRef<
   CreateTokenFormFieldsMethods,
   Props
 >((props, ref) => {
   const { disabled, onUpload } = props
   const { t } = useTranslation()
 
-  const { fields, fieldsValues, updateField, validateFields } = useFields({
-    name: createField({
-      isRequired: true,
-      validate: emptyValid,
-    }),
-    symbol: createField({
-      isRequired: true,
-      validate: emptyValid,
-    }),
-    description: createField({
-      isRequired: true,
-      validate: emptyValid,
-    }),
-    twitter: createField({}),
-    telegram: createField({}),
-    website: createField({}),
-  })
+  const { fields, fieldsKeys, fieldsValues, updateField, validateFields } =
+    useFields({
+      name: createField({
+        isRequired: true,
+        validate: emptyValid,
+      }),
+      symbol: createField({
+        isRequired: true,
+        validate: emptyValid,
+      }),
+      description: createField({
+        isRequired: true,
+        validate: emptyValid,
+      }),
+      twitter: createField({}),
+      telegram: createField({}),
+      website: createField({}),
+    })
 
   function emptyValid(f: Field) {
     return isEmpty(f.value) ? t('field.empty') : null
@@ -61,7 +62,7 @@ export const CreateTokenFormFields = React.forwardRef<
     <>
       <div className="flex justify-between items-center gap-3">
         <FormInputField
-          id="name"
+          id={fieldsKeys.name}
           label={t('fullname')}
           placeholder={t('name.placeholder')}
           autoFocus
@@ -73,7 +74,7 @@ export const CreateTokenFormFields = React.forwardRef<
           autoComplete="off"
         />
         <FormInputField
-          id="symbol"
+          id={fieldsKeys.symbol}
           label={t('symbol')}
           placeholder={t('symbol.placeholder')}
           isRequired={fields.symbol.isRequired}
@@ -85,7 +86,7 @@ export const CreateTokenFormFields = React.forwardRef<
         />
       </div>
       <FormTextareaField
-        id="description"
+        id={fieldsKeys.description}
         label={t('description')}
         rows={5}
         placeholder={t('description.placeholder')}
@@ -108,7 +109,7 @@ export const CreateTokenFormFields = React.forwardRef<
 
       {/* Optional fields. */}
       <FormInputField
-        id="twitter"
+        id={fieldsKeys.twitter}
         label={t('twitter-x')}
         placeholder={withOptional(t('twitter-x.placeholder'))}
         value={fields.twitter.value}
@@ -116,7 +117,7 @@ export const CreateTokenFormFields = React.forwardRef<
         onChange={onChange}
       />
       <FormInputField
-        id="telegram"
+        id={fieldsKeys.telegram}
         label={t('telegram')}
         placeholder={withOptional(t('telegram.placeholder'))}
         value={fields.telegram.value}
@@ -124,7 +125,7 @@ export const CreateTokenFormFields = React.forwardRef<
         onChange={onChange}
       />
       <FormInputField
-        id="website"
+        id={fieldsKeys.website}
         label={t('website')}
         placeholder={withOptional(t('website.placeholder'))}
         value={fields.website.value}

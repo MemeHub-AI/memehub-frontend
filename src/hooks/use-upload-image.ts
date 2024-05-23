@@ -18,16 +18,21 @@ export const useUploadImage = (options?: Options) => {
   const { onSuccess, onErrror, onFinally } = options || {}
   const { t } = useTranslation()
   const [url, setUrl] = useState('')
+  const [file, setFile] = useState<File | null>(null)
 
   const { mutateAsync } = useMutation({
     mutationKey: [otherApi.uploadImage.name],
     mutationFn: otherApi.uploadImage,
   })
 
+  const clearFile = () => setFile(null)
+
   const onChangeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = first(e.target.files)!
     const formData = new FormData()
+
     formData.append('avatar', file)
+    setFile(file)
 
     const id = toast.loading(t('uploading'))
     try {
@@ -50,6 +55,7 @@ export const useUploadImage = (options?: Options) => {
       toast.success(t('upload.success'))
     } catch (error) {
       console.error(error)
+      clearFile()
       onErrror?.(String(error))
       toast.success(t('upload.failed'))
     } finally {
@@ -60,6 +66,8 @@ export const useUploadImage = (options?: Options) => {
 
   return {
     url,
+    file,
     onChangeUpload,
+    clearFile,
   }
 }

@@ -23,7 +23,7 @@ export const CommentForm = (props: Props) => {
   const { fields, updateField } = useFields({
     comment: createField({}),
   })
-  const { url, onChangeUpload } = useUploadImage()
+  const { url, file, onChangeUpload, clearFile } = useUploadImage()
   // Generate unique id.
   const inputId = useMemo(nanoid, [])
   const textareaId = useMemo(nanoid, [])
@@ -31,7 +31,7 @@ export const CommentForm = (props: Props) => {
   const onChange = ({
     target,
   }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    updateField(target.id as keyof typeof fields, { value: target.value })
+    updateField('comment', { value: target.value })
   }
 
   const onSubmit = () => {
@@ -43,6 +43,7 @@ export const CommentForm = (props: Props) => {
 
     onComment?.(comment, [], url)
     updateField('comment', { value: '' })
+    clearFile()
   }
 
   return (
@@ -67,6 +68,7 @@ export const CommentForm = (props: Props) => {
         <Label htmlFor={inputId} variant="icon">
           <ImageIcon className="cursor-pointer" />
         </Label>
+        {file && <p>{file?.name}</p>}
         <Input
           type="file"
           id={inputId}
