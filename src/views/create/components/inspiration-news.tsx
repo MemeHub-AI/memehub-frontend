@@ -1,14 +1,18 @@
-import { type ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
+import { ArrowLeftIcon } from '@radix-ui/react-icons'
+import { useRouter } from 'next/router'
 
 import { Title } from './title'
 import { newsApi } from '@/api/news'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Button } from '@/components/ui/button'
 
 export const InspirationNews = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
+  const router = useRouter()
 
   const { data: result, isFetching } = useQuery({
     queryKey: [newsApi.getNews.name],
@@ -17,9 +21,14 @@ export const InspirationNews = ({ className }: ComponentProps<'div'>) => {
 
   return (
     <div className={className}>
-      <Title className="whitespace-nowrap">
-        {t('create.inspiration.title')}
-      </Title>
+      <div className="flex items-center gap-6">
+        <Button variant="secondary" size="icon" onClick={router.back}>
+          <ArrowLeftIcon />
+        </Button>
+        <Title className="whitespace-nowrap">
+          {t('create.inspiration.title')}
+        </Title>
+      </div>
       <CustomSuspense
         isPending={isFetching}
         fallback={<NewsSkeleton />}
