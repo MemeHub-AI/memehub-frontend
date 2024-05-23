@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { Address, formatEther } from 'viem'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
@@ -19,17 +19,20 @@ interface Props extends ComponentProps<'div'> {
 export const TokenCard = ({ card, className }: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
-  const { getTotalCurrent } = useTradeInfo(card.address as Address)
+  const { getTokenAmounts } = useTradeInfo()
   const [percent, setPercent] = useState('0')
 
+  // Init percent progress.
   useEffect(() => {
-    getTotalCurrent(true).then(({ totalAmount, currentAmount }) => {
-      const total = formatEther(totalAmount)
-      const current = formatEther(currentAmount)
+    getTokenAmounts(card.address as Address).then(
+      ([totalAmount, currentAmount]) => {
+        const total = formatEther(totalAmount)
+        const current = formatEther(currentAmount)
 
-      if (total === '0' || current === '0') return
-      setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(3))
-    })
+        if (total === '0' || current === '0') return
+        setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(3))
+      }
+    )
   }, [])
 
   return (

@@ -1,10 +1,10 @@
-import React, { type ComponentProps, useState } from 'react'
+import React, { type ComponentProps, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Address, formatEther } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 import { useRouter } from 'next/router'
-import { useAccount, useBalance, useReadContract } from 'wagmi'
+import { useAccount } from 'wagmi'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -13,7 +13,6 @@ import { cn } from '@/lib/utils'
 import { useTrade } from '../hooks/use-trade'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useTradeInfo } from '../hooks/use-trade-info'
-import { continousTokenAbi } from '@/contract/continous-token'
 import { SlippageButton } from './slippage-button'
 import { TradeProvider } from '@/contexts/trade'
 import { TradeItems } from './trade-items'
@@ -29,29 +28,19 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(String(Tab.Buy))
   const [value, setValue] = useState('0')
+  const [isBuy, isSell] = useMemo(
+    () => [tab === Tab.Buy, tab === Tab.Sell],
+    [tab]
+  )
   const { query } = useRouter()
   const tokenAddress = query.address as Address
-  const { address } = useAccount()
   const { isConnected } = useAccount()
-  const { data: ethBalances } = useBalance({ address })
 
   const { isTrading, buy, sell, checkTrade } = useTrade()
+  const { ethBalance, tokenBalance } = useTradeInfo()
   const { setConnectOpen } = useWalletStore()
-  const { getAvailableToken } = useTradeInfo(tokenAddress)
 
-  const { data: tokenBalances } = useReadContract({
-    abi: continousTokenAbi,
-    address: tokenAddress,
-    functionName: 'balanceOf',
-    args: [address!],
-    query: { enabled: !!address },
-  })
-
-  const isBuy = tab === Tab.Buy
-  const isSell = tab === Tab.Sell
   const symbol = 'ETH'
-  const ethBalance = formatEther(ethBalances?.value || BigInt(0))
-  const tokenBalance = formatEther(tokenBalances || BigInt(0))
 
   const onBuy = async () => {
     const { totalAmount, currentAmount } = await checkTrade(tokenAddress)

@@ -1,17 +1,45 @@
-import React, { type ComponentProps } from 'react'
+import React, { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
+import { formatEther, type Address } from 'viem'
+import { BigNumber } from 'bignumber.js'
 
 import { Input } from '@/components/ui/input'
 import { useTradeContext } from '@/contexts/trade'
 import { useTokenContext } from '@/contexts/token'
+import { useTradeInfo } from '../hooks/use-trade-info'
 
 interface Props extends ComponentProps<'input'> {}
 
 export const TradeInput = (props: Props) => {
   const { value, onChange } = props
   const { t } = useTranslation()
-  const { isBuy, symbol, ethBalance, tokenBalance } = useTradeContext()
+  const [tokenAmount, setTokenAmount] = useState(0)
+  const { symbol, isBuy, isSell, ethBalance, tokenBalance } = useTradeContext()
   const { tokenInfo } = useTokenContext()
+  const { getBuyTokenAmount, getSellTokenAmount } = useTradeInfo()
+
+  const tokenAddr = tokenInfo?.address as Address
+  const balance = Number(isBuy ? ethBalance : tokenBalance).toFixed(2)
+
+  const calcBuyTokenAmount = () => {
+    getBuyTokenAmount(tokenAddr, value as string).then((weiAmount) => {
+      const amount = BigNumber(formatEther(weiAmount)).toFixed(2)
+      setTokenAmount(Number(amount))
+    })
+  }
+
+  const calcSellTokenAmount = () => {
+    getSellTokenAmount(tokenAddr, value as string).then((weiAmount) => {
+      const amount = BigNumber(formatEther(weiAmount)).toFixed(5)
+      setTokenAmount(Number(amount))
+    })
+  }
+
+  useEffect(() => {
+    if (!tokenAddr) return
+    if (isBuy) return calcBuyTokenAmount()
+    if (isSell) return calcSellTokenAmount()
+  }, [value])
 
   return (
     <>
@@ -38,11 +66,18 @@ export const TradeInput = (props: Props) => {
           />
         </div>
       </div>
-      <div className="text-zinc-500 text-xs flex justify-end mt-1 mr-1">
-        {t('balance')}:{' '}
-        {isBuy
-          ? Number(ethBalance).toFixed(3)
-          : Number(tokenBalance).toFixed(3)}
+
+      <div className="text-zinc-500 text-xs flex justify-between mt-1 mr-1">
+        <span>
+          {isBuy &&
+            `${value || 0} ${symbol} ≈ ${tokenAmount} ${tokenInfo?.ticker}`}
+
+          {isSell &&
+            `${value || 0} ${tokenInfo?.ticker} ≈ ${tokenAmount} ${symbol}`}
+        </span>
+        <span>
+          {t('balance')}: {balance}
+        </span>
       </div>
     </>
   )
