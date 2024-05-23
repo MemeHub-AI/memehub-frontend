@@ -17,18 +17,18 @@ import { tokenApi } from '@/api/token'
 
 export const TokenPage = () => {
   const { t } = useTranslation()
-  const router = useRouter()
+  const { query, ...router } = useRouter()
   const { isMobile } = useResponsive()
   const { data = [], refetch } = useReadContracts({
     contracts: [
       {
         abi: continousTokenAbi,
-        address: router.query.address as Address,
+        address: query.address as Address,
         functionName: 'ETH_AMOUNT',
       },
       {
         abi: continousTokenAbi,
-        address: router.query.address as Address,
+        address: query.address as Address,
         functionName: 'raiseEthAmount',
       },
     ],
@@ -38,9 +38,13 @@ export const TokenPage = () => {
   const total = formatEther(weiTotal)
   const current = formatEther(weiCurrent)
 
+  // Query details info.
   const { data: { data: tokenData } = {} } = useQuery({
-    queryKey: [tokenApi.details.name, router.query.id],
-    queryFn: () => tokenApi.details(router.query.id as string),
+    queryKey: [tokenApi.details.name, query.id],
+    queryFn: () => {
+      if (!query.id) return Promise.reject()
+      return tokenApi.details(query.id as string)
+    },
   })
 
   return (

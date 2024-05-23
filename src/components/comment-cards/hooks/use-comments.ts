@@ -21,7 +21,10 @@ export const useComments = (enableFetchComments = true) => {
   } = useQuery({
     enabled: enableFetchComments,
     queryKey: [tokenApi.commentList.name, query.id],
-    queryFn: () => tokenApi.commentList(query.id as string),
+    queryFn: () => {
+      if (!query.id) return Promise.reject()
+      return tokenApi.commentList(query.id as string)
+    },
   })
   // Update a single comment, not the refresh list. so we need this state.
   const [comments, setComments] = useState(commentData?.data ?? [])
