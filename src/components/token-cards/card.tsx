@@ -39,12 +39,12 @@ export const TokenCard = ({ card, className }: Props) => {
         className
       )}
       hover="border"
-      onClick={() =>
+      onClick={() => {
         router.push({
-          pathname: `${Routes.Token}/${card.address}`,
-          query: { id: card.id },
+          pathname: `${Routes.Token}/${card.id}`,
+          query: { address: card.address },
         })
-      }
+      }}
     >
       <img src={card.image} alt="img" className="h-32 w-32 object-cover" />
       <img

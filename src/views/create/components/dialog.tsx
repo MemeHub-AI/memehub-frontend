@@ -13,6 +13,7 @@ interface Props extends ReturnType<typeof useDeploy> {}
 
 export const CreateTokenStatusDialog = (props: Props) => {
   const {
+    deployedAddress,
     tokenId,
     deployHash,
     isSubmitting,
@@ -116,7 +117,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
             </Link>
             <Link
               className="text-blue-600 hover:underline"
-              href={Routes.Token}
+              href={`${Routes.Token}/${tokenId}?address=${deployedAddress}`}
               onClick={resetDeploy}
             >
               {t('deploy.success.view-details')}
