@@ -14,6 +14,8 @@ interface Options {
   onFinally?: () => void
 }
 
+const MAX_KB = 300
+
 export const useUploadImage = (options?: Options) => {
   const { onSuccess, onErrror, onFinally } = options || {}
   const { t } = useTranslation()
@@ -30,6 +32,12 @@ export const useUploadImage = (options?: Options) => {
   const onChangeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = first(e.target.files)!
     const formData = new FormData()
+    const kbSize = file.size / 1024
+
+    if (kbSize > MAX_KB) {
+      toast.error(`${t('upload.large')}: ${MAX_KB}kb`)
+      return
+    }
 
     formData.append('avatar', file)
     setFile(file)

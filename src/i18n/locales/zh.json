@@ -160,5 +160,6 @@
   "deploy.confirm.error": "区块确认发生错误",
   "deploy.success.view-list": "在代币列表中查看",
   "deploy.success.view-details": "在详情页查看",
-  "deploy.success.view-hash": "在区块浏览器中查看"
+  "deploy.success.view-hash": "在区块浏览器中查看",
+  "upload.large": "上传的图片太大，最大尺寸为"
 }

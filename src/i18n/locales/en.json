@@ -161,5 +161,6 @@
   "deploy.confirm.error": "Block confirm occured error",
   "deploy.success.view-list": "View in the token list",
   "deploy.success.view-details": "View in the details page",
-  "deploy.success.view-hash": "View in the explorer"
+  "deploy.success.view-hash": "View in the explorer",
+  "upload.large": "The uploaded image is too large, max size is"
 }

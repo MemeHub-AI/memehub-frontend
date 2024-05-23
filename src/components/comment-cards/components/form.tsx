@@ -9,9 +9,9 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { createField, useFields } from '@/hooks/use-fields'
 import { FormTextareaField } from '@/components/form-field'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useUploadImage } from '@/hooks/use-upload-image'
+import { ImageUpload } from '@/components/image-upload'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   onComment?: (content: string, mentions: [], image?: string) => void
@@ -69,11 +69,10 @@ export const CommentForm = (props: Props) => {
           <ImageIcon className="cursor-pointer" />
         </Label>
         {file && <p>{file?.name}</p>}
-        <Input
-          type="file"
+        <ImageUpload
           id={inputId}
-          className="hidden"
           onChange={onChangeUpload}
+          className="hidden"
         />
       </div>
     </form>

@@ -22,13 +22,13 @@ import { cn } from '@/lib/utils'
 import { fmt } from '@/utils/fmt'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { ProfileForm } from './profile-form'
 import { useAccountContext } from '@/contexts/account'
 import { useUser } from '@/hooks/use-user'
 import { useUserStore } from '@/stores/use-user-store'
 import { Dialog } from '@/components/ui/dialog'
 import { useUploadImage } from '@/hooks/use-upload-image'
+import { ImageUpload } from '@/components/image-upload'
 
 export const Profile = (props: ComponentProps<'div'>) => {
   const { className } = props
@@ -90,9 +90,8 @@ export const Profile = (props: ComponentProps<'div'>) => {
                   'z-50 opacity-0 group-hover:opacity-100 transition-all text-white'
                 )}
               />
-              <Input
+              <ImageUpload
                 id="avatar-edit"
-                type="file"
                 className="absolute invisible"
                 onChange={onChangeUpload}
               />
