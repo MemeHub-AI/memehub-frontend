@@ -1,15 +1,3 @@
-export interface TokenListReq {
-  page: string
-  size: string
-}
-
-export interface TokenListRes {
-  count: string
-  next: null
-  previous: null
-  results: TokenListItem[]
-}
-
 export interface TokenListItem {
   id: string
   address: string

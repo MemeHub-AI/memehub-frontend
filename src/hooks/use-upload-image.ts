@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
-import type { ApiResponse } from '@/api'
+import type { ApiResponse } from '@/api/types'
 
 import { otherApi } from '@/api/other'
 import { useStorage } from './use-storage'

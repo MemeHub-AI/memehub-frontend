@@ -1,9 +1,7 @@
-import { ApiResponse, api } from '..'
+import { api } from '..'
 import { qs } from '@/hooks/use-fetch'
 
 import type {
-  TokenListReq,
-  TokenListRes,
   TokenNewReq,
   TokenNewRes,
   TokenUpdateReq,
@@ -11,11 +9,11 @@ import type {
   TokenCommentListRes,
   TokenAddCommentReq,
 } from './types'
-import { Pagination } from '../types'
+import { ApiResponse, Pagination, PaginationParams } from '../types'
 
 export const tokenApi = {
-  list(req: TokenListReq) {
-    return api.GET<ApiResponse<TokenListRes>>(
+  list(req: PaginationParams) {
+    return api.GET<ApiResponse<Pagination<TokenListItem>>>(
       '/api/v1/coin/coinslist/' + qs.stringify(req)
     )
   },
@@ -30,9 +28,9 @@ export const tokenApi = {
   details(id: string | number) {
     return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${id}/`)
   },
-  commentList(id: string) {
+  commentList(id: string, req: PaginationParams) {
     return api.GET<ApiResponse<Pagination<TokenCommentListRes>>>(
-      `/api/v1/coin/comments/${id}/`
+      `/api/v1/coin/comments/${id}/` + qs.stringify(req)
     )
   },
   addComment(req: TokenAddCommentReq) {

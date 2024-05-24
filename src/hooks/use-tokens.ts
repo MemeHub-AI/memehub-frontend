@@ -1,34 +1,26 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 
 import { tokenApi } from '@/api/token'
 
-enum Default {
-  Page = 1,
-  PageSize = 12,
-}
-
 export const useTokens = () => {
-  const { query, ...router } = useRouter()
-
-  const { data, isFetching } = useInfiniteQuery({
-    initialPageParam: Number(query.page) || Default.Page,
-    queryKey: [tokenApi.list.name, router.isReady],
+  const { data, isLoading, isFetching, fetchNextPage } = useInfiniteQuery({
+    queryKey: [tokenApi.list.name],
     queryFn: ({ pageParam }) => {
-      if (!router.isReady) return Promise.reject()
-
       return tokenApi.list({
-        page: pageParam.toString(),
-        size: String(query.size || Default.PageSize),
+        page: pageParam,
+        size: 25,
       })
     },
+    initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
   })
-  const flatTokens = data?.pages.map((p) => p.data.results).flat() || []
+  const tokens = data?.pages.map((p) => p.data.results) || []
 
   return {
-    totalToken: data?.pages[0].data.count || '0',
-    tokens: flatTokens.filter(Boolean),
+    totalToken: data?.pages[0].data.count || 0,
+    tokens: tokens.filter(Boolean).flat(),
+    isLoading,
     isFetching,
+    fetchNextPage,
   }
 }

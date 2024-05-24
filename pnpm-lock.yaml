@@ -80,6 +80,9 @@ dependencies:
   react-i18next:
     specifier: ^14.1.1
     version: 14.1.1(i18next@23.11.5)(react-dom@18.3.1)(react-native@0.74.1)(react@18.3.1)
+  react-infinite-scroll-component:
+    specifier: ^6.1.0
+    version: 6.1.0(react@18.3.1)
   react-responsive:
     specifier: ^10.0.0
     version: 10.0.0(react@18.3.1)
@@ -5797,6 +5800,7 @@ packages:
 
   /inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==}
+    deprecated: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
     dependencies:
       once: 1.4.0
       wrappy: 1.0.2
@@ -7496,6 +7500,15 @@ packages:
       react-native: 0.74.1(@babel/core@7.24.5)(@babel/preset-env@7.24.5)(@types/react@18.3.2)(react@18.3.1)
     dev: false
 
+  /react-infinite-scroll-component@6.1.0(react@18.3.1):
+    resolution: {integrity: sha512-SQu5nCqy8DxQWpnUVLx7V7b7LcA37aM7tvoWjTLZp1dk6EJibM5/4EJKzOnl07/BsM1Y40sKLuqjCwwH/xV0TQ==}
+    peerDependencies:
+      react: '>=16.0.0'
+    dependencies:
+      react: 18.3.1
+      throttle-debounce: 2.3.0
+    dev: false
+
   /react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
     dev: false
@@ -8433,6 +8446,11 @@ packages:
 
   /throat@5.0.0:
     resolution: {integrity: sha512-fcwX4mndzpLQKBS1DVYhGAcYaYt7vsHNIvQV+WXMvnow5cgjPphq5CaayLaGsjRdSCKZFNGt7/GYAuXaNOiYCA==}
+    dev: false
+
+  /throttle-debounce@2.3.0:
+    resolution: {integrity: sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==}
+    engines: {node: '>=8'}
     dev: false
 
   /throttle-debounce@3.0.1:

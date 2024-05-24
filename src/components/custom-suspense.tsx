@@ -8,6 +8,7 @@ interface Props extends ComponentProps<'div'> {
   container?: keyof React.ReactDOM | 'fragment'
 }
 
+// TODO: pass `className` to the root element.
 export const CustomSuspense = (props: Props) => {
   const {
     isPending,

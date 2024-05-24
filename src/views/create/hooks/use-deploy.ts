@@ -7,7 +7,7 @@ import type { TokenNewReq } from '@/api/token/types'
 
 import { factoryConfig } from './../../../contract/factory'
 import { useCreateToken } from './use-token'
-import { ApiCode } from '@/api'
+import { ApiCode } from '@/api/types'
 
 const deployFee = 2000671350000000
 const deploySymbol = 'ETH'

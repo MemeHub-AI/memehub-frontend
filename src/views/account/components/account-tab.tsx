@@ -69,6 +69,8 @@ export const AccountTab = () => {
         <TokenCards
           className="md:grid-cols-2 xl:grid-cols-3"
           cards={userInfo?.coins_created ?? []}
+          total={(userInfo?.coins_created ?? []).length}
+          isLoading={isPending}
           isPending={isPending}
         />
       </TabsContent>
@@ -76,6 +78,8 @@ export const AccountTab = () => {
         <CommentCards
           readonly
           cards={userInfo?.replies || []}
+          total={(userInfo?.replies || []).length}
+          isLoading={isPending}
           isPending={isPending}
         />
       </TabsContent>

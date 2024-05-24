@@ -1,5 +1,6 @@
-import { api, type ApiResponse } from '..'
+import { api } from '..'
 
+import type { ApiResponse } from '../types'
 import type {
   UserLoginReq,
   UserLoginRes,

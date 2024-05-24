@@ -163,5 +163,6 @@
   "deploy.success.view-hash": "在区块浏览器中查看",
   "upload.large": "上传的图片太大，最大尺寸为",
   "slippage.title": "设置最大滑点",
-  "slippage.description": "为您的交易设置最大滑点"
+  "slippage.description": "为您的交易设置最大滑点",
+  "nomore": "没有更多了"
 }

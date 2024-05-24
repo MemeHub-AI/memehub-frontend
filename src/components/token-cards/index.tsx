@@ -14,18 +14,36 @@ import {
 import { Order } from '@/utils/types'
 import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
-import { Routes } from '@/routes'
 import { TokenListItem } from '@/api/token/types'
 import { useChainConfig } from '@/hooks/use-chain-config'
+import { Routes } from '@/routes'
+import { useScrollLoad } from '@/hooks/use-scroll-load'
 
 interface Props extends ComponentProps<'div'> {
   cards: TokenListItem[]
-  isPending: boolean
+  total: number
+  isLoading: boolean
+  isPending?: boolean
+  onFetchNext?: () => void
 }
 
-export const TokenCards = ({ className, cards, isPending }: Props) => {
+export const TokenCards = (props: Props) => {
+  const {
+    className,
+    cards,
+    total,
+    isLoading,
+    isPending = false,
+    onFetchNext,
+  } = props
   const { t } = useTranslation()
   const { chains } = useChainConfig()
+  // TODO: Encapsulate a component to handling scroll load.
+  const { noMore } = useScrollLoad({
+    onFetchNext,
+    hasMore: cards.length < total,
+  })
+
   const sortItems = [
     {
       label: t('market.sort.asc'),
@@ -50,8 +68,8 @@ export const TokenCards = ({ className, cards, isPending }: Props) => {
   }
 
   return (
-    <>
-      <div className="flex items-center gap-4 max-sm:justify-between">
+    <div className={cn(className)}>
+      <div className="flex items-center gap-4 max-sm:justify-between ">
         <Select onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <SelectValue placeholder={t('chains')} />
@@ -81,13 +99,13 @@ export const TokenCards = ({ className, cards, isPending }: Props) => {
           </SelectContent>
         </Select> */}
       </div>
+
       <CustomSuspense
         className={cn(
           'grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1',
-          'max-sm:gap-2',
-          className
+          'max-sm:gap-2 '
         )}
-        isPending={isPending}
+        isPending={isLoading}
         fallback={<CardSkeleton />}
         nullback={
           <div className="text-zinc-500">
@@ -102,8 +120,14 @@ export const TokenCards = ({ className, cards, isPending }: Props) => {
         {cards.map((t, i) => (
           <TokenCard key={i} card={t} />
         ))}
+        {isPending && (
+          <p className="text-center text-zinc-500 col-span-2">{t('loading')}</p>
+        )}
+        {noMore && (
+          <p className="text-center text-zinc-500 col-span-2">{t('nomore')}</p>
+        )}
       </CustomSuspense>
-    </>
+    </div>
   )
 }
 

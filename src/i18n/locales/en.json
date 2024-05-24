@@ -164,5 +164,6 @@
   "deploy.success.view-hash": "View in the explorer",
   "upload.large": "The uploaded image is too large, max size is",
   "slippage.title": "Set max slippage",
-  "slippage.description": "Set max slippage for you trade"
+  "slippage.description": "Set max slippage for you trade",
+  "nomore": "No more"
 }

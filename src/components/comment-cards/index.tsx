@@ -6,32 +6,38 @@ import type { TokenCommentListRes } from '@/api/token/types'
 
 import { CommentCard } from './components/card'
 import { CommentForm } from './components/form'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
 import { Dialog } from '@/components/ui/dialog'
 import { CustomSuspense } from '../custom-suspense'
 import { Skeleton } from '../ui/skeleton'
-import { useComments } from './hooks/use-comments'
+import { useComment } from './hooks/use-comment'
+import { useScrollLoad } from '@/hooks/use-scroll-load'
 
 interface Props extends ComponentProps<'div'> {
   cards: TokenCommentListRes[]
-  isPending: boolean
+  total: number
+  isLoading: boolean
+  isPending?: boolean
   readonly?: boolean
+  onFetchNext?: () => void
 }
 
 export const CommentCards = (props: Props) => {
-  const { cards, isPending, readonly = false } = props
+  const {
+    cards,
+    total,
+    isLoading,
+    isPending = false,
+    readonly = false,
+    onFetchNext,
+  } = props
   const { t } = useTranslation()
-  const { addComment, likeComment, unlikeComment } = useComments(false)
   const [replyId, setReplyId] = useState('')
   const [lastAnchor, setLastAnchor] = useState(-1)
+  const { addComment, likeComment, unlikeComment } = useComment()
+  const { noMore } = useScrollLoad({
+    onFetchNext,
+    hasMore: cards.length < total,
+  })
 
   const onComment = (content: string, mentions: string[], img?: string) => {
     const related_comments = [...mentions]
@@ -61,7 +67,7 @@ export const CommentCards = (props: Props) => {
       {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
       <CustomSuspense
         className="flex flex-col gap-2"
-        isPending={isPending}
+        isPending={isLoading}
         fallback={<CardSkeleton />}
         nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}
       >
@@ -77,31 +83,11 @@ export const CommentCards = (props: Props) => {
             onAnchorClick={setLastAnchor}
           />
         ))}
+        {isPending && (
+          <p className="text-zinc-500 text-center">{t('loading')}</p>
+        )}
+        {noMore && <p className="text-zinc-500 text-center">{t('nomore')}</p>}
       </CustomSuspense>
-      {/* <Pagination className="mt-4">
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPrevious href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive>
-              1
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">2</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">10</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNext href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination> */}
     </>
   )
 }
