@@ -39,7 +39,7 @@ export const TradeInput = (props: Props) => {
     if (!tokenAddr) return
     if (isBuy) return calcBuyTokenAmount()
     if (isSell) return calcSellTokenAmount()
-  }, [value])
+  }, [value, isBuy, isSell])
 
   return (
     <>
