@@ -21,6 +21,7 @@ import { Routes } from '@/routes'
 import { TokenListItem } from '@/api/token/types'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useStorage } from '@/hooks/use-storage'
+import { useChainConfig } from '@/hooks/use-chain-config'
 
 interface Props extends ComponentProps<'div'> {
   cards: UserListRes[UserListType.CoinsCreated][]
@@ -40,6 +41,9 @@ export const TokenCards = (props: Props) => {
     onFetchNext,
   } = props
   const { t } = useTranslation()
+
+  const { chains } = useWalletStore()
+  const { getChain, setChain } = useStorage()
   // TODO: Encapsulate a component to handling scroll load.
   const { noMore } = useScrollLoad({
     onFetchNext,
@@ -64,8 +68,6 @@ export const TokenCards = (props: Props) => {
       order: Order.Desc,
     },
   ]
-  const { chains } = useWalletStore()
-  const { getChain, setChain } = useStorage()
 
   const onChange = (chainId: string) => {
     setChain(chainId)

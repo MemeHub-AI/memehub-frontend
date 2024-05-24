@@ -211,5 +211,6 @@
   "creating.meme.info": "正在生成Meme信息",
   "creating.meme.info.error": "AI生成Meme信息失败",
   "get.chain.error": "无法获取平台支持的链",
-  "creating.meme.logo.error": "AI生成Meme logo失败"
+  "creating.meme.logo.error": "AI生成Meme logo失败",
+  "nomore": "没有更多了"
 }

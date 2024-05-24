@@ -10,7 +10,6 @@ import type {
   TokenAddCommentReq,
 } from './types'
 import { ApiResponse, Pagination, PaginationParams } from '../types'
-import { utilTime } from '@/utils/time'
 
 export const tokenApi = {
   list(req: PaginationParams) {
