@@ -23,24 +23,23 @@ export const SlippageButton = () => {
     <div className="flex justify-between w-full gap-2">
       <AlertDialog
         title={<p>{t('slippage.title')}</p>}
-        description={
-          <div>
-            <p className="mb-3">{t('slippage.description')}</p>
-            <div className="flex items-center gap-2">
-              <Input
-                value={slippage}
-                type="number"
-                className="text-black"
-                onChange={({ target }) => {
-                  if (target.value.length > 3) return
-                  setSlippage(target.value)
-                }}
-              />
-              <span>%</span>
-            </div>
+        description={t('slippage.description')}
+        content={
+          <div className="flex items-center gap-2">
+            <Input
+              value={slippage}
+              type="number"
+              className="text-black"
+              onChange={({ target }) => {
+                if (target.value.length > 3) return
+                setSlippage(target.value)
+              }}
+            />
+            <span>%</span>
           </div>
         }
         onConfirm={onConfirm}
+        triggerProps={{ asChild: true }}
       >
         <Button size="xs">
           {t('set-max-slippage')}({slippage}%)
