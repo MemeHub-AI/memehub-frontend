@@ -8,6 +8,8 @@ import {
 import type { UserMyInfoRes } from '@/api/user/types'
 import type { PartialPick } from '@/utils/types'
 
+import { ERR } from '@/errors'
+
 interface Value {
   userInfo:
     | PartialPick<
@@ -31,7 +33,7 @@ export const useAccountContext = () => {
   const context = useContext(AccountContext)
 
   if (!context) {
-    throw new Error('`AccountProvider` is not found.')
+    throw ERR.notFound(AccountProvider.name)
   }
 
   return context

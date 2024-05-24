@@ -5,6 +5,8 @@ import {
   type ProviderProps,
 } from 'react'
 
+import { ERR } from '@/errors'
+
 interface Value {
   isBuy: boolean
   isSell: boolean
@@ -23,7 +25,7 @@ export const useTradeContext = () => {
   const context = useContext(TradeContext)
 
   if (!context) {
-    throw new Error('`TradeProvider` is not found.')
+    throw ERR.notFound(TradeProvider.name)
   }
 
   return context

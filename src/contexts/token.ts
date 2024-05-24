@@ -7,6 +7,8 @@ import {
 
 import type { TokenListItem } from '@/api/token/types'
 
+import { ERR } from '@/errors'
+
 interface Value {
   total: string
   current: string
@@ -24,7 +26,7 @@ export const useTokenContext = () => {
   const context = useContext(TokenContext)
 
   if (!context) {
-    throw new Error('`TokenProvider` is not found.')
+    throw ERR.notFound(TokenProvider.name)
   }
 
   return context
