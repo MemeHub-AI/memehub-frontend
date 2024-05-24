@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
+import { useWriteContract } from 'wagmi'
 import { first } from 'lodash'
 
 import type { Address } from 'viem'
@@ -8,6 +8,7 @@ import type { TokenNewReq } from '@/api/token/types'
 import { factoryConfig } from './../../../contract/factory'
 import { useCreateToken } from './use-token'
 import { ApiCode } from '@/api/types'
+import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 
 const deployFee = 2000671350000000
 const deploySymbol = 'ETH'
@@ -34,7 +35,7 @@ export const useDeploy = () => {
     isSuccess,
     isLoading,
     isError,
-  } = useWaitForTransactionReceipt({ hash })
+  } = useWaitForTx({ hash })
   const deployedAddress = first(data?.logs)?.address
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
