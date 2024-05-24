@@ -51,7 +51,7 @@ export const TokenCard = ({ card, className }: Props) => {
     >
       <img src={card.image} alt="img" className="h-32 w-32 object-cover" />
       <img
-        src="https://scrollscan.com/images/svg/brands/main.svg"
+        src="/images/scroll.svg"
         alt="chain"
         className="absolute right-2 top-2 w-5"
       />

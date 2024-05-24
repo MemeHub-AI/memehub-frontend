@@ -24,10 +24,12 @@ export const AccountPage = () => {
 
   return (
     <AccountProvider
-      userInfo={isOtherUser ? otherUserInfo : userInfo}
-      isPending={isFetchingUserInfo || isFetchingOtherUserInfo}
-      isOtherUser={isOtherUser}
-      refetchUserInfo={isOtherUser ? refetchOtherUserInfo : refetchUserInfo}
+      value={{
+        userInfo: isOtherUser ? otherUserInfo : userInfo,
+        isPending: isFetchingUserInfo || isFetchingOtherUserInfo,
+        isOtherUser: isOtherUser,
+        refetchUserInfo: isOtherUser ? refetchOtherUserInfo : refetchUserInfo,
+      }}
     >
       <main className="min-h-main px-6 max-sm:px-3 flex gap-4 max-sm:flex-col max-sm:gap-2">
         {/* Left aside */}

@@ -19,7 +19,7 @@ export const TokenPage = () => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { isMobile } = useResponsive()
-  const { data = [], refetch } = useReadContracts({
+  const { data = [], refetch: refetchInfo } = useReadContracts({
     contracts: [
       {
         abi: continousTokenAbi,
@@ -39,7 +39,7 @@ export const TokenPage = () => {
   const current = formatEther(weiCurrent)
 
   // Query details info.
-  const { data: { data: tokenData } = {} } = useQuery({
+  const { data: { data: tokenInfo } = {} } = useQuery({
     queryKey: [tokenApi.details.name, query.id],
     queryFn: () => {
       if (!query.id) return Promise.reject()
@@ -49,10 +49,12 @@ export const TokenPage = () => {
 
   return (
     <TokenProvider
-      total={total}
-      current={current}
-      tokenInfo={tokenData}
-      refetchInfo={refetch}
+      value={{
+        total,
+        current,
+        tokenInfo,
+        refetchInfo,
+      }}
     >
       <main className="px-4 max-sm:px-3 pt-4 max-w-main mx-auto min-h-main">
         <Button className="mb-3 self-start" onClick={router.back}>
