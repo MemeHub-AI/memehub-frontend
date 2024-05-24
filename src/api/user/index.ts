@@ -1,10 +1,10 @@
-import { api, type ApiResponse } from '..'
+import { api } from '..'
 
+import type { ApiResponse } from '../types'
 import type {
   UserLoginReq,
   UserLoginRes,
   UserInfoRes,
-  UserMyInfoRes,
   UserUpdateReq,
 } from './types'
 
@@ -18,20 +18,20 @@ export const userApi = {
     return api.GET<ApiResponse<UserInfoRes>>(`/api/v1/user/users/${id}/`)
   },
   getInfoFromToken() {
-    return api.GET<ApiResponse<UserMyInfoRes>>('/api/v1/user/users/')
+    return api.GET<ApiResponse<UserInfoRes>>('/api/v1/user/users/')
   },
   updateInfo(req: UserUpdateReq) {
-    return api.PATCH<ApiResponse<UserMyInfoRes>>('/api/v1/user/users/', {
+    return api.PATCH<ApiResponse<UserInfoRes>>('/api/v1/user/users/', {
       body: req,
     })
   },
   follow(id: string) {
-    return api.POST<ApiResponse<UserMyInfoRes>>(
+    return api.POST<ApiResponse<UserInfoRes>>(
       `/api/v1/user/users/${id}/followers/`
     )
   },
   unfollow(id: string) {
-    return api.DELETE<ApiResponse<UserMyInfoRes>>(
+    return api.DELETE<ApiResponse<UserInfoRes>>(
       `/api/v1/user/users/${id}/followers/`
     )
   },

@@ -1,5 +1,7 @@
+import { api } from '..'
+
 import { CommonHeaders, ContentType } from '@/hooks/use-fetch'
-import { type ApiResponse, api } from '..'
+import { ApiResponse } from '../types'
 
 export const otherApi = {
   uploadImage(formData: FormData) {

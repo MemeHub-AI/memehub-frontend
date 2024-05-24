@@ -184,5 +184,6 @@
   "creating.meme.info": "A Meme is being generated",
   "creating.meme.info.error": "AI failed to generate Meme information",
   "get.chain.error": "Unable to get platform supported chain",
-  "creating.meme.logo.error": "The AI failed to generate the Memel logo"
+  "creating.meme.logo.error": "The AI failed to generate the Memel logo",
+  "nomore": "No more"
 }

@@ -14,20 +14,56 @@ import {
 import { Order } from '@/utils/types'
 import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
-import { Routes } from '@/routes'
 import { TokenListItem } from '@/api/token/types'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useStorage } from '@/hooks/use-storage'
+import { Routes } from '@/routes'
+import { useScrollLoad } from '@/hooks/use-scroll-load'
 
 interface Props extends ComponentProps<'div'> {
-  cards: (TokenListItem | undefined)[]
-  isPending: boolean
+  cards: TokenListItem[]
+  total: number
+  isLoading: boolean
+  isPending?: boolean
+  onFetchNext?: () => void
 }
 
-export const TokenCards = ({ className, cards, isPending }: Props) => {
+export const TokenCards = (props: Props) => {
+  const {
+    className,
+    cards,
+    total,
+    isLoading,
+    isPending = false,
+    onFetchNext,
+  } = props
   const { t } = useTranslation()
   const { chains } = useWalletStore()
   const { getChain, setChain } = useStorage()
+  // TODO: Encapsulate a component to handling scroll load.
+  const { noMore } = useScrollLoad({
+    onFetchNext,
+    hasMore: cards.length < total,
+  })
+
+  const sortItems = [
+    {
+      label: t('market.sort.asc'),
+      order: Order.Asc,
+    },
+    {
+      label: t('market.sort.desc'),
+      order: Order.Desc,
+    },
+    {
+      label: t('comments.sort.asc'),
+      order: Order.Asc,
+    },
+    {
+      label: t('comments.sort.desc'),
+      order: Order.Desc,
+    },
+  ]
 
   const onChange = (chainId: string) => {
     setChain(chainId)
@@ -36,9 +72,9 @@ export const TokenCards = ({ className, cards, isPending }: Props) => {
   const defaultChain = getChain()
 
   return (
-    <>
-      <div className="flex items-center gap-4 max-sm:justify-between">
-        <Select onValueChange={onChange} defaultValue={defaultChain}>
+    <div className={cn(className)}>
+      <div className="flex items-center gap-4 max-sm:justify-between ">
+        <Select onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <SelectValue placeholder={t('chains')} />
           </SelectTrigger>
@@ -71,14 +107,14 @@ export const TokenCards = ({ className, cards, isPending }: Props) => {
           </SelectContent>
         </Select> */}
       </div>
+
       <CustomSuspense
         list={cards}
         className={cn(
           'grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1',
-          'max-sm:gap-2',
-          className
+          'max-sm:gap-2 '
         )}
-        isPending={isPending}
+        isPending={isLoading}
         fallback={<CardSkeleton />}
         nullback={
           <div className="text-zinc-500">
@@ -93,8 +129,14 @@ export const TokenCards = ({ className, cards, isPending }: Props) => {
         {cards.map((t, i) => (
           <TokenCard key={i} card={t} />
         ))}
+        {isPending && (
+          <p className="text-center text-zinc-500 col-span-2">{t('loading')}</p>
+        )}
+        {noMore && (
+          <p className="text-center text-zinc-500 col-span-2">{t('nomore')}</p>
+        )}
       </CustomSuspense>
-    </>
+    </div>
   )
 }
 

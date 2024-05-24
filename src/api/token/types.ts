@@ -1,35 +1,13 @@
-export interface TokenListReq {
-  page: string
-  size: string
-}
+import type { UserCoinsCreated } from '../user/types'
 
-export interface TokenListRes {
-  count: string
-  next: null
-  previous: null
-  results: TokenListItem[]
-}
-
-export interface TokenListItem {
-  id: string
-  address: string
-  name: string
-  ticker: string
-  desc: string
-  image: string
+export interface TokenListItem extends UserCoinsCreated {
   twitter_url: string
   telegram_url: string
   website: string
-  market_cap: string
   virtual_liquidity: string
   replies: string
   last_reply: null
   create_time: null
-  creator: {
-    id: number
-    name: string
-    logo: string
-  }
 }
 
 export interface TokenNewReq {

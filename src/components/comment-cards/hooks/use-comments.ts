@@ -1,99 +1,58 @@
 import { useEffect, useState } from 'react'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
-import dayjs from 'dayjs'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
-import type { TokenAddCommentReq } from '@/api/token/types'
-
 import { tokenApi } from '@/api/token'
+import { TokenCommentListRes } from '@/api/token/types'
 
 export const useComments = (enableFetchComments = true) => {
-  const { t } = useTranslation()
   const { query } = useRouter()
 
   const {
     data: commentData,
+    isLoading,
     isFetching,
     refetch: refetchComments,
-  } = useQuery({
+    fetchNextPage,
+  } = useInfiniteQuery({
     enabled: enableFetchComments,
     queryKey: [tokenApi.commentList.name, query.id],
-    queryFn: () => {
+    queryFn: ({ pageParam }) => {
       if (!query.id) return Promise.reject()
-      return tokenApi.commentList(query.id as string)
+      return tokenApi.commentList(query.id as string, {
+        page: pageParam,
+        size: 5,
+      })
     },
+    initialPageParam: 1,
+    getNextPageParam: (_, __, page) => page + 1,
   })
   // Update a single comment, not the refresh list. so we need this state.
-  const [comments, setComments] = useState(commentData?.data.results ?? [])
+  const [comments, setComments] = useState<TokenCommentListRes[]>([])
 
   const updateComment = (data: (typeof comments)[number]) => {
     setComments((old) => old.map((c) => (c.id === data.id ? data : c)))
   }
 
-  // Add a new comment.
-  const { mutateAsync: addComment } = useMutation({
-    mutationKey: [tokenApi.addComment.name],
-    mutationFn: (req: Omit<TokenAddCommentReq, 'coin'>) => {
-      return tokenApi.addComment({ coin: query.id as string, ...req })
-    },
-    onMutate: () => toast.loading(t('comment.loading')),
-    onError: () => toast.error(t('comment.failed')),
-    onSuccess: ({ data }) => {
-      toast.success(t('comment.success'))
-      setComments((old) => [data, ...old])
-    },
-    onSettled: (_, __, ___, id) => toast.dismiss(id),
-  })
-
-  // Liked a comment.
-  const { mutateAsync: likeComment } = useMutation({
-    mutationKey: [tokenApi.like.name],
-    mutationFn: tokenApi.like,
-    onMutate: () => toast.loading(t('comment.like.loading')),
-    onError: () => toast.error(t('comment.like.failed')),
-    onSuccess: ({ data }) => {
-      toast.success(t('comment.like.success'))
-      updateComment(data)
-    },
-    onSettled: (_, __, ___, id) => toast.dismiss(id),
-  })
-
-  // Unliked a comment.
-  const { mutateAsync: unlikeComment } = useMutation({
-    mutationKey: [tokenApi.unlike.name],
-    mutationFn: tokenApi.unlike,
-    onMutate: () => toast.loading(t('comment.unlike.loading')),
-    onError: () => toast.error(t('comment.unlike.failed')),
-    onSuccess: ({ data }) => {
-      toast.success(t('comment.unlike.success'))
-      updateComment(data)
-    },
-    onSettled: (_, __, ___, id) => toast.dismiss(id),
-  })
-
   // Listen comment list.
   useEffect(() => {
-    if (!commentData || isEmpty(commentData?.data)) return
+    const commentList =
+      commentData?.pages
+        .map((p) => p.data.results)
+        .filter(Boolean)
+        .flat() || []
+    if (!commentData || isEmpty(commentList)) return
 
-    // Sort by `created_at` DESC.
-    setComments(
-      commentData.data.results.sort((a, b) => {
-        const tsA = dayjs(a.created_at).unix()
-        const tsB = dayjs(b.created_at).unix()
-        return tsB - tsA
-      })
-    )
+    setComments(commentList as TokenCommentListRes[])
   }, [commentData])
 
   return {
+    total: commentData?.pages[0].data.count || 0,
     comments,
+    isLoading,
     isFetching,
-    addComment,
-    likeComment,
-    unlikeComment,
     refetchComments,
+    fetchNextPage,
   }
 }

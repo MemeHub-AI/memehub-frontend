@@ -15,7 +15,8 @@ enum Tab {
 export const CommentTradeTab = (props: ComponentProps<'div'>) => {
   const { className } = props
   const { t } = useTranslation()
-  const { comments, isFetching } = useComments()
+  const { comments, total, isLoading, isFetching, fetchNextPage } =
+    useComments()
 
   return (
     <Tabs defaultValue={Tab.Comments} className={cn('mt-4', className)}>
@@ -24,7 +25,13 @@ export const CommentTradeTab = (props: ComponentProps<'div'>) => {
         <TabsTrigger value={Tab.Trades}>{t('trades')}</TabsTrigger>
       </TabsList>
       <TabsContent value={Tab.Comments} className="mt-4 max-sm:mt-2">
-        <CommentCards cards={comments} isPending={isFetching} />
+        <CommentCards
+          cards={comments}
+          total={total}
+          isLoading={isLoading}
+          isPending={isFetching}
+          onFetchNext={fetchNextPage}
+        />
       </TabsContent>
       <TabsContent value={Tab.Trades} className="max-sm:mt-1">
         <TradeTable />

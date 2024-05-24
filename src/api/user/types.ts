@@ -1,4 +1,4 @@
-import { TokenCommentListRes, TokenListItem } from '../token/types'
+import type { PaginationParams } from '../types'
 
 export interface UserLoginReq {
   name?: string
@@ -11,7 +11,7 @@ export interface UserLoginReq {
 
 export interface UserLoginRes {
   token: string
-  user: UserMyInfoRes
+  user: UserInfoRes
 }
 
 export interface UserUpdateReq {
@@ -27,17 +27,8 @@ export interface UserInfoRes {
   logo: string
   description: string
   wallet_address: string
-  followers: UserMyInfoFollow[]
-  following: UserMyInfoFollow[]
   like_count: number
   mention_count: number
-}
-
-export interface UserMyInfoRes extends UserInfoRes {
-  coins_held: []
-  coins_created: TokenListItem[]
-  replies: TokenCommentListRes[]
-  notifications: UserMyInfoNotify[]
 }
 
 export interface UserMyInfoFollow {
@@ -61,4 +52,97 @@ export interface UserMyInfoNotify {
   created_at: string
   likes_count: number
   is_liked: boolean
+}
+
+export enum UserListType {
+  CoinsCreated = 1,
+  Replies,
+  Notifications,
+  Followers,
+  Following,
+  CoinsHeld,
+}
+
+export interface UserListReq extends PaginationParams {
+  type: UserListType
+}
+
+export interface UserListRes {
+  [UserListType.CoinsHeld]: UserCoinsHeld
+  [UserListType.CoinsCreated]: UserCoinsCreated
+  [UserListType.Replies]: UserReplies
+  [UserListType.Notifications]: UserNotification
+  [UserListType.Followers]: UserFollow
+  [UserListType.Following]: UserFollow
+}
+
+export interface UserCoinsCreated {
+  id: number
+  image: string
+  address: string
+  ticker: string
+  creator: {
+    id: number
+    name: string
+    logo: string
+  }
+  name: string
+  desc: string
+  market_cap: number
+  total_replies: number
+  chain: {
+    code: number
+    message: string
+    data: null
+  }
+}
+
+export interface UserReplies {
+  id: number
+  content: string
+  user: {
+    id: number
+    name: string
+    logo: string
+  }
+  coin: number
+  img: string
+  related_comments: number[]
+  created_at: string
+  likes_count: number
+  is_liked: boolean
+}
+
+export interface UserNotification {
+  id: number
+  content: string
+  user: {
+    id: number
+    name: string
+    logo: string
+  }
+  coin: number
+  img: string
+  related_comments: number[]
+  created_at: string
+  likes_count: number
+  is_liked: boolean
+}
+
+export interface UserFollow {
+  id: number
+  name: string
+  logo: string
+  follower_count: number
+}
+
+export interface UserCoinsHeld {
+  id: number
+  amount: number
+  coin: {
+    id: number
+    name: string
+    ticker: string
+    logo: string
+  }
 }
