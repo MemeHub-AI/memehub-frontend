@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { first } from 'lodash'
+import { first, isEmpty } from 'lodash'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import type { ApiResponse } from '@/api'
 
 import { otherApi } from '@/api/other'
+import { useStorage } from './use-storage'
 
 interface Options {
   onSuccess?: (url: string) => void
@@ -21,6 +22,7 @@ export const useUploadImage = (options?: Options) => {
   const { t } = useTranslation()
   const [url, setUrl] = useState('')
   const [file, setFile] = useState<File | null>(null)
+  const { getToken } = useStorage()
 
   const { mutateAsync } = useMutation({
     mutationKey: [otherApi.uploadImage.name],
@@ -44,9 +46,15 @@ export const useUploadImage = (options?: Options) => {
 
     const id = toast.loading(t('uploading'))
     try {
+      const headers = new Headers()
+      const token = getToken() || ''
+      if (!isEmpty(token)) {
+        headers.append('Authorization', `Bearer ${token}`)
+      }
       const response = await fetch('https://api.memehub.ai/api/v1/upload/', {
         method: 'POST',
         body: formData,
+        headers,
       })
 
       if (!response.ok) {
