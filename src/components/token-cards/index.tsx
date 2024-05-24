@@ -16,18 +16,7 @@ import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { Routes } from '@/routes'
 import { TokenListItem } from '@/api/token/types'
-
-const chains = [
-  {
-    id: 1,
-    name: 'Scroll',
-  },
-  {
-    id: 1,
-    name: 'Ethereum',
-    disabled: true,
-  },
-]
+import { useChainConfig } from '@/hooks/use-chain-config'
 
 interface Props extends ComponentProps<'div'> {
   cards: TokenListItem[]
@@ -36,6 +25,7 @@ interface Props extends ComponentProps<'div'> {
 
 export const TokenCards = ({ className, cards, isPending }: Props) => {
   const { t } = useTranslation()
+  const { chains } = useChainConfig()
   const sortItems = [
     {
       label: t('market.sort.asc'),
