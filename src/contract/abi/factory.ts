@@ -1,3 +1,8 @@
+<<<<<<< HEAD:src/contract/abi/factory.ts
+=======
+import { factoryAddress } from '.'
+
+>>>>>>> a04219b (feat: add uniswap v2 trade):src/contract/factory.ts
 export const factoryAbi = [
   {
     inputs: [],

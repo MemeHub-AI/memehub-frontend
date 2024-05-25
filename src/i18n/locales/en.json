@@ -216,5 +216,11 @@
   "creating.meme.info.error": "AI failed to generate Meme information",
   "get.chain.error": "Unable to get platform supported chain",
   "creating.meme.logo.error": "The AI failed to generate the Memel logo",
-  "nomore": "No more"
+  "nomore": "No more",
+  "trade.token.invalid": "Token address is invalid",
+  "trade.account.invalid": "Account address is invalid",
+  "traed.cancel": "Cancel trading",
+  "trade.amount.invalid": "Amount is invalid",
+  "trading": "Trading...",
+  "tx.confirm": "Wai"
 }
