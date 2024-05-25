@@ -25,7 +25,7 @@ export const CustomSuspense = (props: Props) => {
   const { t } = useTranslation()
 
   if (isPending) return fallback
-  if (nullback && isEmpty(children)) return nullback
+  if (nullback && isEmpty(React.Children.toArray(children))) return nullback
   if (container === 'fragment') return <>{children}</>
   if (!list?.length) return <>{t('no.data')}</>
 
