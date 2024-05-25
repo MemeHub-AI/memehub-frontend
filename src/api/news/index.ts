@@ -1,5 +1,6 @@
-import { ApiResponse, api } from '..'
-import { Pagination } from '../types'
+import { api } from '..'
+
+import type { ApiResponse, Pagination } from '../types'
 
 import { CountryData, NewsData } from './types'
 
