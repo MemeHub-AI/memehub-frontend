@@ -14,7 +14,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
 
   setUserInfo: (userInfo) => set({ userInfo }),
   isFollowed: (id) => {
-    const follow = get().userInfo?.following.find((f) => f.id === Number(id))
+    const follow = get().userInfo?.following?.find((f) => f.id === Number(id))
     return !!follow
   },
 }))

@@ -13,12 +13,8 @@ import { resources } from '@/i18n'
 import { useLang } from '@/hooks/use-lang'
 import { cn } from '@/lib/utils'
 import { Button } from './ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { FaCheck } from 'react-icons/fa6'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -28,25 +24,25 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
   const { setLang } = useLang()
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className={cn(className)}>
+    <HoverCard openDelay={0} closeDelay={100}>
+      <HoverCardTrigger className="p-0">
+        <Button variant="ghost" size="icon" isShadow className={cn(className)}>
           <Languages size={20} />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-min py-[6px]">
         {langs.map(([code, { name }], i) => (
-          <DropdownMenuCheckboxItem
-            checked={i18n.language === code}
-            textValue={code}
+          <div
             key={i}
             onClick={() => setLang(code)}
+            className="flex justify-between items-center w-[90px] leading-8 cursor-pointer"
           >
             {name}
-          </DropdownMenuCheckboxItem>
+            {i18n.language === code ? <FaCheck className="ml-5" /> : null}
+          </div>
         ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </HoverCardContent>
+    </HoverCard>
   )
 
   return (

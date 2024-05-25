@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -9,8 +9,9 @@ import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { Routes } from '@/routes'
 import { LangSelect } from '../lang-select'
-import { TokenSearch } from '../token-search'
+import { Input } from '../input'
 import { SocialLinks } from '../social-links'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -22,10 +23,15 @@ export const HeaderDesktop = (props: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
 
+  const [value, setValue] = useState('')
+  const onSearch = () => {
+    console.log('searching...')
+  }
+
   return (
     <>
       <Logo showMeme />
-      <div className="flex items-center">
+      <div className="flex items-center gap-3">
         <nav className="flex items-center gap-3">
           <ul className="flex items-center gap-3">
             {navs.map((n, i) => (
@@ -37,17 +43,29 @@ export const HeaderDesktop = (props: Props) => {
             ))}
           </ul>
         </nav>
-        <TokenSearch />
+        <Input
+          value={value}
+          placeholder={t('search.placeholder')}
+          startIcon={
+            <MagnifyingGlassIcon
+              width={18}
+              height={18}
+              className="cursor-pointer ml-2"
+              onClick={onSearch}
+            />
+          }
+          onChange={({ target }) => setValue(target.value)}
+        />
         <SocialLinks className="ml-3" />
-        <LangSelect className="flex-shrink-0 ml-1" />
-        <Button
-          className="mx-3 max-sm:mx-1.5"
+        <LangSelect className="flex-shrink-0" />
+        {/* <Button
+          className="max-sm:mx-1.5"
           onClick={() => router.push(Routes.Create)}
           size="default"
           disabled={router.pathname === Routes.Create}
         >
           {t('token.create')}
-        </Button>
+        </Button> */}
         <WalletConnect />
       </div>
     </>

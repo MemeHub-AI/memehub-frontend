@@ -1,4 +1,4 @@
 export interface Pagination<T> {
   count: number
-  results: T[]
+  results?: T[]
 }

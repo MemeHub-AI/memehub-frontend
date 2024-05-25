@@ -13,7 +13,7 @@ import { TokenListItem } from '@/api/token/types'
 import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
 
 interface Props extends ComponentProps<'div'> {
-  card: TokenListItem
+  card?: TokenListItem
 }
 
 export const TokenCard = ({ card, className }: Props) => {
@@ -24,7 +24,7 @@ export const TokenCard = ({ card, className }: Props) => {
 
   // Init percent progress.
   useEffect(() => {
-    getTokenAmounts(card.address as Address).then(
+    getTokenAmounts(card?.address as Address).then(
       ([totalAmount, currentAmount]) => {
         const total = formatEther(totalAmount)
         const current = formatEther(currentAmount)
@@ -41,15 +41,16 @@ export const TokenCard = ({ card, className }: Props) => {
         'flex items-stretch rounded overflow-hidden gap-2 relative',
         className
       )}
+      isShadow
       hover="border"
       onClick={() => {
         router.push({
-          pathname: `${Routes.Token}/${card.id}`,
-          query: { address: card.address },
+          pathname: `${Routes.Token}/${card?.id}`,
+          query: { address: card?.address },
         })
       }}
     >
-      <img src={card.image} alt="img" className="h-32 w-32 object-cover" />
+      <img src={card?.image} alt="img" className="h-32 w-32 object-cover" />
       <img
         src="/images/scroll.svg"
         alt="chain"
@@ -58,17 +59,17 @@ export const TokenCard = ({ card, className }: Props) => {
       <div className="self-start py-2 pr-2 h-full w-full flex flex-col justify-between">
         <div>
           <CardTitle className="pt-2">
-            {card.name} {card.ticker && `(${card.ticker})`}
+            {card?.name} {card?.ticker && `(${card?.ticker})`}
           </CardTitle>
           <Link
-            href={`${Routes.Account}/${card.creator.id}`}
+            href={`${Routes.Account}/${card?.creator.id}`}
             className="text-zinc-500 text-xs mt-0.5 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
-            {t('creator')}: {card.creator.name}
+            {t('creator')}: {card?.creator.name}
           </Link>
           <p className="text-zinc-500 text-sm break-all line-clamp-4">
-            {card.desc}
+            {card?.desc}
           </p>
         </div>
         <Progress

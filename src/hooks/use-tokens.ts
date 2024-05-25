@@ -24,10 +24,10 @@ export const useTokens = () => {
     },
     getNextPageParam: (_, __, page) => page + 1,
   })
-  const flatTokens = data?.pages.map((p) => p.data.results).flat() || []
+  const flatTokens = data?.pages.map((p) => p?.data?.results).flat() || []
 
   return {
-    totalToken: data?.pages[0].data.count || '0',
+    totalToken: data?.pages?.[0].data?.count || '0',
     tokens: flatTokens.filter(Boolean),
     isFetching,
   }

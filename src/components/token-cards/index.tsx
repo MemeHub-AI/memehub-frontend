@@ -19,7 +19,7 @@ import { TokenListItem } from '@/api/token/types'
 import { useChainConfig } from '@/hooks/use-chain-config'
 
 interface Props extends ComponentProps<'div'> {
-  cards: TokenListItem[]
+  cards: (TokenListItem | undefined)[]
   isPending: boolean
 }
 
@@ -82,6 +82,7 @@ export const TokenCards = ({ className, cards, isPending }: Props) => {
         </Select> */}
       </div>
       <CustomSuspense
+        list={cards}
         className={cn(
           'grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1',
           'max-sm:gap-2',

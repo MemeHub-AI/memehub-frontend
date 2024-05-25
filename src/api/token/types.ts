@@ -81,3 +81,9 @@ export interface TokenAddCommentReq {
   img?: string
   related_comments: string[]
 }
+
+export interface CreateTokenResult {
+  name: string
+  description: string
+  image: string
+}

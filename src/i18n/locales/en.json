@@ -164,5 +164,21 @@
   "deploy.success.view-hash": "View in the explorer",
   "upload.large": "The uploaded image is too large, max size is",
   "slippage.title": "Set max slippage",
-  "slippage.description": "Set max slippage for you trade"
+  "slippage.description": "Set max slippage for you trade",
+  "ai.generate": "Random generation",
+  "ai.generate.bio": "Gonna create an explosive memecoin about",
+  "input.you.idea": "input your idea",
+  "coinfirm": "Confirm",
+  "ai.creating": "Memehub's AI is Cooking,",
+  "wait": "please wait later",
+  "create.memecoin": "Use AI to create a memecoin",
+  "create.memecoin.with.ai": "Use AI to create a memecoin",
+  "create.memecoin.with.ai.1": " with the theme of $1?",
+  "create.random.memecoin.with.ai": "Use AI to create a random Memecoin?",
+  "create,random.memecoin.with.ai.1": "This explosive idea may kick off the next 10,000x legend.",
+  "meme.it": "Meme it!",
+  "no.data": "No data",
+  "next.moonshot": "💡 Next Moonshot",
+  "hot.opportunity": "🔥Hot Opportunity",
+  "area": "Area"
 }

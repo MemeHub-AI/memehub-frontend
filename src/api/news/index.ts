@@ -1,9 +1,10 @@
 import { ApiResponse, api } from '..'
+import { Pagination } from '../types'
 
-import { NewsList } from './types'
+import { NewsData } from './types'
 
 export const newsApi = {
   async getNews() {
-    return api.GET<NewsList[]>('/api/v1/news/')
+    return api.GET<ApiResponse<Pagination<NewsData>>>('/api/v1/news/')
   },
 }

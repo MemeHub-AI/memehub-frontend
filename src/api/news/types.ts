@@ -1,4 +1,4 @@
-export interface NewsList {
+export interface NewsData {
   title: Title
   image: Image
   articles: Article[]

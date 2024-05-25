@@ -6,11 +6,11 @@ import { cn } from '@/lib/utils'
 
 export const SocialLinks = ({ className }: ComponentProps<'div'>) => {
   return (
-    <div className={cn('flex items-center gap-1', className)}>
-      <Button size="icon" variant="ghost">
+    <div className={cn('flex items-center gap-3', className)}>
+      <Button size="icon" variant="ghost" isShadow>
         <Send strokeWidth={1.5} size={21} />
       </Button>
-      <Button size="icon" variant="ghost">
+      <Button size="icon" variant="ghost" isShadow>
         <Twitter strokeWidth={1.5} size={22} />
       </Button>
     </div>

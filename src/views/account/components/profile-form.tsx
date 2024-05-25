@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
 import { createField, useFields } from '@/hooks/use-fields'
-import { FormInputField, FormTextareaField } from '@/components/form-field'
+import { FormTextareaField } from '@/components/form-field'
+import { FormInputField } from '@/components/form-input-field'
 import { RequirePick } from '@/utils/types'
 import {
   Dialog,

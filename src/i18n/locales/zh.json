@@ -163,5 +163,20 @@
   "deploy.success.view-hash": "在区块浏览器中查看",
   "upload.large": "上传的图片太大，最大尺寸为",
   "slippage.title": "设置最大滑点",
-  "slippage.description": "为您的交易设置最大滑点"
+  "slippage.description": "为您的交易设置最大滑点",
+  "ai.generate": "AI随机生成",
+  "ai.generate.bio": "生成一个爆炸性的Memecoin",
+  "input.you.idea": "输入你的想法",
+  "coinfirm": "确定",
+  "ai.creating": "MemeHub AI正在生成Memecoin",
+  "wait": "请稍等一会",
+  "create.memecoin.with.ai.1": "主题是$1?",
+  "create.memecoin.with.ai": "使用AI创造一个Memecoin",
+  "create,random.memecoin.with.ai.1": "这个爆炸性的想法应该会开启一个10,000x倍传奇",
+  "create.random.memecoin.with.ai": "使用AI来创建一个随机的Memecoin?",
+  "meme.it": "生成Meme币",
+  "no.data": "无数据",
+  "next.moonshot": "💡 下一个登月计划",
+  "hot.opportunity": "🔥热门机会",
+  "area": "地区"
 }

@@ -32,10 +32,10 @@ export const FollowTab = () => {
     <Tabs defaultValue={FollowType.Following}>
       <TabsList className="w-full">
         <TabsTrigger value={FollowType.Following} className="w-full">
-          {t('following')}({userInfo?.following.length || 0})
+          {t('following')}({userInfo?.following?.length || 0})
         </TabsTrigger>
         <TabsTrigger value={FollowType.Followers} className="w-full">
-          {t('followers')}({userInfo?.followers.length || 0})
+          {t('followers')}({userInfo?.followers?.length || 0})
         </TabsTrigger>
       </TabsList>
 

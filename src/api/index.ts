@@ -3,7 +3,7 @@ import { useFetch } from '@/hooks/use-fetch'
 export interface ApiResponse<T> {
   code: number
   message: string
-  data: T
+  data?: T
 }
 
 export enum ApiCode {

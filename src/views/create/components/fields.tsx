@@ -1,9 +1,11 @@
 import React, { forwardRef, useImperativeHandle } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
+import { chain, isEmpty } from 'lodash'
 
-import { FormInputField, FormTextareaField } from '@/components/form-field'
+import { FormTextareaField } from '@/components/form-field'
+import { FormInputField } from '@/components/form-input-field'
 import { type Field, createField, useFields } from '@/hooks/use-fields'
+import { FromRadioField } from '@/components/form-radio-field'
 
 interface Props {
   onUpload: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>
@@ -22,8 +24,24 @@ export const CreateTokenFormFields = forwardRef<
   const { disabled, onUpload } = props
   const { t } = useTranslation()
 
+  const chainId = '1'
+  const chains = [
+    {
+      label: 'Ethereum',
+      value: '1',
+    },
+    {
+      label: 'Binance Smart Chain',
+      value: '56',
+    },
+  ]
+
   const { fields, fieldsKeys, fieldsValues, updateField, validateFields } =
     useFields({
+      chainId: createField({
+        isRequired: true,
+        validate: emptyValid,
+      }),
       name: createField({
         isRequired: true,
         validate: emptyValid,
@@ -61,6 +79,17 @@ export const CreateTokenFormFields = forwardRef<
   return (
     <>
       <div className="flex justify-between items-center gap-3">
+        {/* <FromRadioField
+          id={fieldsKeys.chainId}
+          label={t('chain')}
+          isRequired={fields.chainId.isRequired}
+          error={fields.chainId.error}
+          value={chains as unknown as string}
+          disabled={disabled}
+          onChange={onChange}
+          defaultValue={chainId}
+          autoComplete="off"
+        /> */}
         <FormInputField
           id={fieldsKeys.name}
           label={t('fullname')}

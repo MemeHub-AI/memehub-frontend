@@ -19,6 +19,9 @@ export const WalletConnector = () => {
   return (
     <>
       <Button
+        isShadow
+        frontTextColor="text-black"
+        frontBgc="bg-white"
         disabled={disabled}
         size={isMobile ? 'sm' : 'default'}
         onClick={() => setConnectOpen(true)}
@@ -33,6 +36,8 @@ export const WalletConnector = () => {
             variant="secondary"
             key={i}
             size="lg"
+            isFullWidth
+            className="flex w-full"
             onClick={() => connectWallet(c)}
           >
             <Avatar

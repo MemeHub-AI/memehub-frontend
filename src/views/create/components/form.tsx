@@ -17,6 +17,7 @@ import {
   type CreateTokenFormFieldsMethods,
 } from './fields'
 import { CreateTokenStatusDialog } from './dialog'
+import { AIIdea } from '@/views/main/components/ai-idea'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {}
 
@@ -62,16 +63,19 @@ export const CreateTokenForm = (props: Props) => {
   }
 
   return (
-    <div className={cn('w-96', className)}>
+    <div className={cn('w-96 pr-6 max-sm:pr-0', className)}>
       {/* All status dialog during create. */}
       <CreateTokenStatusDialog {...useDeployResult} />
 
       <Title className="w-fit max-sm:px-3 max-sm:mt-10">
         {t('create.new')}
       </Title>
+
+      <AIIdea></AIIdea>
+
       <form
         className={cn(
-          'flex flex-col space-y-3 w-[460px] max-sm:w-full max-sm:px-3 max-sm:space-y-2'
+          'flex flex-col space-y-3 w-[460px] max-sm:w-full max-sm:px-1 max-sm:space-y-2'
         )}
         onSubmit={onSubmit}
       >
@@ -84,7 +88,14 @@ export const CreateTokenForm = (props: Props) => {
 
         {/* Submit button */}
         <div className="flex flex-col items-center space-y-2">
-          <Button className="self-center px-10 mt-3" disabled={isDeploying}>
+          <Button
+            className="self-center px-10 mt-3"
+            isShadow
+            frontBgc="!bg-black"
+            backBgc="!bg-white"
+            frontTextColor="!text-white"
+            disabled={isDeploying}
+          >
             {t('create')}
           </Button>
           <p className="self-center text-zinc-400 text-xs">
