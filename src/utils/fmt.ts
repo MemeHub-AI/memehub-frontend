@@ -1,3 +1,4 @@
+import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash'
 
 interface FmtAddrOptions {
@@ -32,5 +33,8 @@ export const fmt = {
 
     if (isEmpty(val)) return '#'
     return `#${val}`
+  },
+  tradeFixed(n: BigNumber) {
+    return n.toFixed(n.lt(1) ? 6 : 2)
   },
 }

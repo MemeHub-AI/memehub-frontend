@@ -9,9 +9,12 @@ import { useTokenContext } from '@/contexts/token'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { current, total, tokenInfo } = useTokenContext()
-  const percent = BigNumber(current).div(total).multipliedBy(100).toFixed(3)
-  const marketMax = BigNumber(total).toFixed(3)
+  const { currentToken, totalToken, tokenInfo } = useTokenContext()
+  const percent = BigNumber(currentToken)
+    .div(totalToken)
+    .multipliedBy(100)
+    .toFixed(3)
+  const marketMax = BigNumber(totalToken).toFixed(3)
   const symbol = 'ETH'
 
   return (

@@ -90,7 +90,7 @@
   "chains": "链",
   "bonding-curve.token": "当市值达到 {} 时，bonding curve 会自动全部代币添加到流动池子中，然后销毁。",
   "set-max-slippage": "滑点",
-  "submit.success": "已提交，请稍等...",
+  "submit.success": "交易提交成功，请稍等...",
   "submit.error": "提交失败：",
   "deploying": "部署中...",
   "user-rejected": "您拒绝了本次操作",
@@ -183,5 +183,10 @@
   "creating.meme.info.error": "AI生成Meme信息失败",
   "get.chain.error": "无法获取平台支持的链",
   "creating.meme.logo.error": "AI生成Meme logo失败",
-  "nomore": "没有更多了"
+  "nomore": "没有更多了",
+  "trade.token.invalid": "代币地址无效",
+  "trade.account.invalid": "账户地址无效",
+  "traed.cancel": "取消交易",
+  "trade.amount.invalid": "金额无效",
+  "trading": "交易中..."
 }
