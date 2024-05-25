@@ -22,7 +22,7 @@ export const useComments = (enableFetchComments = true) => {
       if (!query.id) return Promise.reject()
       return tokenApi.commentList(query.id as string, {
         page: pageParam,
-        size: 5,
+        page_size: 5,
       })
     },
     initialPageParam: 1,

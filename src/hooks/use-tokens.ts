@@ -8,7 +8,7 @@ export const useTokens = () => {
     queryFn: ({ pageParam }) => {
       return tokenApi.list({
         page: pageParam,
-        size: 25,
+        page_size: 25,
       })
     },
     initialPageParam: 1,

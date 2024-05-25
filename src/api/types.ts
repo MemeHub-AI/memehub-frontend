@@ -10,7 +10,7 @@ export enum ApiCode {
 
 export interface PaginationParams {
   page: number
-  size: number
+  page_size: number
 }
 
 export interface Pagination<T> {
