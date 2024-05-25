@@ -13,25 +13,26 @@ interface Props extends ComponentProps<'input'> {}
 export const TradeInput = (props: Props) => {
   const { value, onChange } = props
   const { t } = useTranslation()
-  const [tokenAmount, setTokenAmount] = useState(0)
+  const [quoteTokenAmount, setQuoteTokenAmount] = useState(0)
   const { symbol, isBuy, isSell, ethBalance, tokenBalance } = useTradeContext()
   const { tokenInfo } = useTokenContext()
   const { getBuyTokenAmount, getSellTokenAmount } = useTradeInfo()
 
+  const baseTokenAmount = BigNumber(String(value || 0)).toFixed(6)
   const tokenAddr = tokenInfo?.address as Address
-  const balance = Number(isBuy ? ethBalance : tokenBalance).toFixed(2)
+  const balance = BigNumber(isBuy ? ethBalance : tokenBalance).toFixed(2)
 
   const calcBuyTokenAmount = () => {
     getBuyTokenAmount(tokenAddr, value as string).then((weiAmount) => {
       const amount = BigNumber(formatEther(weiAmount)).toFixed(2)
-      setTokenAmount(Number(amount))
+      setQuoteTokenAmount(Number(amount))
     })
   }
 
   const calcSellTokenAmount = () => {
     getSellTokenAmount(tokenAddr, value as string).then((weiAmount) => {
       const amount = BigNumber(formatEther(weiAmount)).toFixed(5)
-      setTokenAmount(Number(amount))
+      setQuoteTokenAmount(Number(amount))
     })
   }
 
@@ -51,7 +52,11 @@ export const TradeInput = (props: Props) => {
           className="flex-1"
           type="number"
           value={value}
-          onChange={onChange}
+          onChange={(e) => {
+            // Cannot enter less than zero.
+            if (BigNumber(e.target.value).lt(0)) return
+            onChange?.(e)
+          }}
         />
         <div className="flex items-center">
           <span className="mr-2 text-zinc-600">
@@ -69,11 +74,9 @@ export const TradeInput = (props: Props) => {
 
       <div className="text-zinc-500 text-xs flex justify-between mt-1 mr-1">
         <span>
-          {isBuy &&
-            `${value || 0} ${symbol} ≈ ${tokenAmount} ${tokenInfo?.ticker}`}
-
-          {isSell &&
-            `${value || 0} ${tokenInfo?.ticker} ≈ ${tokenAmount} ${symbol}`}
+          {isBuy
+            ? `${baseTokenAmount} ${symbol} ≈ ${quoteTokenAmount} ${tokenInfo?.ticker}`
+            : `${baseTokenAmount} ${tokenInfo?.ticker} ≈ ${quoteTokenAmount} ${symbol}`}
         </span>
         <span>
           {t('balance')}: {balance}
