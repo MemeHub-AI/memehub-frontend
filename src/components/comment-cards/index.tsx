@@ -2,8 +2,6 @@ import React, { type ComponentProps, useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
-import type { TokenCommentListRes } from '@/api/token/types'
-
 import { CommentCard } from './components/card'
 import { CommentForm } from './components/form'
 import { Dialog } from '@/components/ui/dialog'
@@ -11,9 +9,10 @@ import { CustomSuspense } from '../custom-suspense'
 import { Skeleton } from '../ui/skeleton'
 import { useComment } from './hooks/use-comment'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
+import { UserListRes, UserListType } from '@/api/user/types'
 
 interface Props extends ComponentProps<'div'> {
-  cards: TokenCommentListRes[]
+  cards: UserListRes[UserListType.Replies][]
   total: number
   isLoading: boolean
   isPending?: boolean

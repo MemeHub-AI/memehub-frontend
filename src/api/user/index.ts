@@ -1,11 +1,15 @@
+import { qs } from '@/hooks/use-fetch'
 import { api } from '..'
 
-import type { ApiResponse } from '../types'
+import type { ApiResponse, Pagination } from '../types'
 import type {
   UserLoginReq,
   UserLoginRes,
   UserInfoRes,
   UserUpdateReq,
+  UserListReq,
+  UserListRes,
+  UserListType,
 } from './types'
 
 export const userApi = {
@@ -19,6 +23,11 @@ export const userApi = {
   },
   getInfoFromToken() {
     return api.GET<ApiResponse<UserInfoRes>>('/api/v1/user/users/')
+  },
+  list<T extends UserListType>(id: string, req: UserListReq) {
+    return api.GET<ApiResponse<Pagination<UserListRes[T]>>>(
+      `/api/v1/user/infolist/${id}/${qs.stringify(req)}`
+    )
   },
   updateInfo(req: UserUpdateReq) {
     return api.PATCH<ApiResponse<UserInfoRes>>('/api/v1/user/users/', {

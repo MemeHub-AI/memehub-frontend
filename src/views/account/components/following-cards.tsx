@@ -2,22 +2,28 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { FollowCard, FollowCardSkeleton } from './follow-card'
-import { useAccountContext } from '@/contexts/account'
 import { CustomSuspense } from '@/components/custom-suspense'
+import { UserFollow } from '@/api/user/types'
 
-export const FollowingCards = () => {
+interface Props {
+  cards: UserFollow[]
+  total: number
+  isLoading: boolean
+  isPending?: boolean
+}
+
+export const FollowingCards = (props: Props) => {
+  const { cards, total, isLoading, isPending } = props
   const { t } = useTranslation()
-  const { userInfo, isPending } = useAccountContext()
-  const { following = [] } = userInfo ?? {}
 
   return (
     <CustomSuspense
       className="flex flex-col gap-2"
-      isPending={isPending}
+      isPending={isLoading}
       fallback={<FollowCardSkeleton />}
       nullback={<p className="text-zinc-500">{t('follow.no-following')}</p>}
     >
-      {following.map((f, i) => (
+      {cards.map((f, i) => (
         <FollowCard card={f} key={i} />
       ))}
     </CustomSuspense>

@@ -5,15 +5,16 @@ import Link from 'next/link'
 import { Address, formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 
+import type { UserCoinsCreated } from '@/api/user/types'
+
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
-import { TokenListItem } from '@/api/token/types'
 import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
 
 interface Props extends ComponentProps<'div'> {
-  card?: TokenListItem
+  card: UserCoinsCreated
 }
 
 export const TokenCard = ({ card, className }: Props) => {

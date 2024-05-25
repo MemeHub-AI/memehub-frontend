@@ -14,14 +14,14 @@ export const useTokens = () => {
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
     select: (data) => ({
-      total: data.pages[0].data.count,
-      list: data.pages.flatMap((p) => p.data.results).filter(Boolean),
+      totalToken: data.pages[0].data.count,
+      tokens: data.pages.flatMap((p) => p.data.results).filter(Boolean),
     }),
   })
 
   return {
-    totalToken: data?.total || 0,
-    tokens: data?.list || [],
+    totalToken: data?.totalToken ?? 0,
+    tokens: data?.tokens ?? [],
     isLoading,
     isFetching,
     fetchNextPage,

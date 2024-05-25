@@ -2,7 +2,7 @@ import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
-import type { UserMyInfoFollow } from '@/api/user/types'
+import type { UserFollow } from '@/api/user/types'
 
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
@@ -14,7 +14,7 @@ import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
 
 interface Props extends ComponentProps<'div'> {
-  card: UserMyInfoFollow
+  card: UserFollow
 }
 
 export const FollowCard = ({ card }: Props) => {

@@ -11,7 +11,7 @@ export const useUserInfo = (id?: string) => {
   const { getToken } = useStorage()
   const token = getToken() || ''
 
-  // Query user info if `id` is provided.
+  // Query other user info.
   const {
     data: otherUserInfo,
     isFetching: isFetchingOtherUserInfo,
@@ -24,7 +24,7 @@ export const useUserInfo = (id?: string) => {
     },
   })
 
-  // Query user info if `token` is already exist.
+  // Query my info.
   const {
     data: userInfo,
     isFetching: isFetchingUserInfo,
@@ -39,8 +39,9 @@ export const useUserInfo = (id?: string) => {
 
   // Update latest user info if it's not null.
   useEffect(() => {
-    if (userInfo?.data) setUserInfo(userInfo.data)
-  }, [userInfo, otherUserInfo])
+    if (!userInfo?.data) return
+    setUserInfo(userInfo.data)
+  }, [userInfo])
 
   return {
     userInfo: userInfo?.data,

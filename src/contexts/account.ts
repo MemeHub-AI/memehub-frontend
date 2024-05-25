@@ -5,19 +5,12 @@ import {
   useContext,
 } from 'react'
 
-import type { UserMyInfoRes } from '@/api/user/types'
-import type { PartialPick } from '@/utils/types'
+import type { UserInfoRes } from '@/api/user/types'
 
 import { ERR } from '@/errors'
 
 interface Value {
-  userInfo:
-    | PartialPick<
-        UserMyInfoRes,
-        'coins_created' | 'replies' | 'notifications' | 'coins_held'
-      >
-    | null
-    | undefined
+  userInfo: UserInfoRes | undefined
   isPending: boolean
   isOtherUser: boolean
   refetchUserInfo: Function

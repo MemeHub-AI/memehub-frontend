@@ -2,6 +2,8 @@ import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
+import type { UserListRes, UserListType } from '@/api/user/types'
+
 import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
 import {
@@ -21,7 +23,7 @@ import { Routes } from '@/routes'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 
 interface Props extends ComponentProps<'div'> {
-  cards: TokenListItem[]
+  cards: UserListRes[UserListType.CoinsCreated][]
   total: number
   isLoading: boolean
   isPending?: boolean
@@ -73,25 +75,22 @@ export const TokenCards = (props: Props) => {
 
   return (
     <div className={cn(className)}>
-      <div className="flex items-center gap-4 max-sm:justify-between ">
-        <Select onValueChange={onChange}>
-          <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
-            <SelectValue placeholder={t('chains')} />
-          </SelectTrigger>
-          <SelectContent>
-            {chains?.map((chain, i) => (
-              <SelectItem
-                key={i}
-                value={chain.id || defaultChain}
-                disabled={chain.disabled || false}
-              >
-                {chain.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      {total !== 0 && (
+        <div className="flex items-center gap-4 max-sm:justify-between ">
+          <Select onValueChange={onChange}>
+            <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
+              <SelectValue placeholder={t('chains')} />
+            </SelectTrigger>
+            <SelectContent>
+              {chains.map((c, i) => (
+                <SelectItem key={i} value={String(i)} disabled={c.disabled}>
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-        {/* <Select defaultValue={String(0)} onValueChange={onChange}>
+          {/* <Select defaultValue={String(0)} onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <div>
               <span>{t('sort-by')}: </span>
@@ -106,7 +105,8 @@ export const TokenCards = (props: Props) => {
             ))}
           </SelectContent>
         </Select> */}
-      </div>
+        </div>
+      )}
 
       <CustomSuspense
         list={cards}

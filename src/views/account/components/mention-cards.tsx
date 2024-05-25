@@ -5,30 +5,43 @@ import Link from 'next/link'
 
 import { Card } from '@/components/ui/card'
 import { Routes } from '@/routes'
-import { UserMyInfoNotify } from '@/api/user/types'
+import { UserListRes, UserListType } from '@/api/user/types'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useScrollLoad } from '@/hooks/use-scroll-load'
 
 interface Props {
-  cards: UserMyInfoNotify[]
-  isPending: boolean
+  cards: UserListRes[UserListType.Notifications][]
+  total: number
+  isLoading: boolean
+  isPending?: boolean
+  onFetchNext?: () => void
 }
 
-export const MentionCards = ({ cards, isPending }: Props) => {
+export const MentionCards = (props: Props) => {
+  const { cards, total, isLoading, isPending, onFetchNext } = props
+  const { t } = useTranslation()
+  const { noMore } = useScrollLoad({
+    onFetchNext,
+    hasMore: total > cards.length,
+  })
+
   return (
     <CustomSuspense
       className="flex flex-col gap-3 max-sm:gap-2"
-      isPending={isPending}
+      isPending={isLoading}
       fallback={<CardSkeleton />}
     >
       {cards.map((c, i) => (
         <MentionCard key={i} c={c} />
       ))}
+      {isPending && <p className="text-zinc-500 text-center">{t('loading')}</p>}
+      {noMore && <p className="text-zinc-500 text-center">{t('nomore')}</p>}
     </CustomSuspense>
   )
 }
 
-const MentionCard = ({ c }: { c: UserMyInfoNotify }) => {
+const MentionCard = ({ c }: { c: UserListRes[UserListType.Notifications] }) => {
   const { t } = useTranslation()
 
   return (

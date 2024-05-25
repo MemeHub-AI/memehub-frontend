@@ -13,81 +13,101 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
-import { useAccountContext } from '@/contexts/account'
-
-export enum FollowType {
-  Followers = 'followers',
-  Following = 'following',
-}
+import { useUserList } from '../hooks/use-user-list'
+import { UserListType } from '@/api/user/types'
 
 export const FollowTab = () => {
   const { t } = useTranslation()
+  const [tab, setTab] = useState(UserListType.Following)
   const { isMobile } = useResponsive()
+  const { followers, following, isLoading, isFetching } = useUserList(tab)
 
-  if (isMobile) return <FollowMobile />
+  // Mobile tabs.
+  if (isMobile) {
+    const isFollowers = tab === UserListType.Followers
+    return (
+      <Dialog>
+        <div className="flex items-center justify-between">
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTab(UserListType.Followers)}
+            >
+              {t('followers')}({followers.total})
+            </Button>
+          </DialogTrigger>
+          <DialogTrigger asChild>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setTab(UserListType.Following)}
+            >
+              {t('following')}({following.total})
+            </Button>
+          </DialogTrigger>
+        </div>
 
-  const { userInfo } = useAccountContext()
+        <DialogContent className="p-4">
+          <DialogHeader>
+            <DialogTitle>
+              {isFollowers ? t('followers.my') : t('following.my')}
+            </DialogTitle>
+          </DialogHeader>
+          {isFollowers ? (
+            <FollowersCards
+              cards={followers.list}
+              total={following.total}
+              isLoading={isLoading}
+              isPending={isFetching}
+            />
+          ) : (
+            <FollowingCards
+              cards={following.list}
+              total={followers.total}
+              isLoading={isLoading}
+              isPending={isFetching}
+            />
+          )}
+        </DialogContent>
+      </Dialog>
+    )
+  }
 
   return (
-    <Tabs defaultValue={FollowType.Following}>
+    <Tabs value={tab.toString()} onValueChange={(t) => setTab(Number(t))}>
       <TabsList className="w-full">
-        <TabsTrigger value={FollowType.Following} className="w-full">
-          {t('following')}({userInfo?.following?.length || 0})
+        <TabsTrigger
+          value={UserListType.Following.toString()}
+          className="w-full"
+        >
+          {t('following')}({following.total})
         </TabsTrigger>
-        <TabsTrigger value={FollowType.Followers} className="w-full">
-          {t('followers')}({userInfo?.followers?.length || 0})
+        <TabsTrigger
+          value={UserListType.Followers.toString()}
+          className="w-full"
+        >
+          {t('followers')}({followers.total})
         </TabsTrigger>
       </TabsList>
 
-      <TabsContent value={FollowType.Followers}>
-        <FollowersCards />
+      <TabsContent value={UserListType.Followers.toString()}>
+        <FollowersCards
+          cards={followers.list}
+          total={followers.total}
+          isLoading={isLoading}
+          isPending={isFetching}
+        />
       </TabsContent>
-      <TabsContent value={FollowType.Following}>
-        <FollowingCards />
+      <TabsContent value={UserListType.Following.toString()}>
+        <FollowingCards
+          cards={following.list}
+          total={following.total}
+          isLoading={isLoading}
+          isPending={isFetching}
+        />
       </TabsContent>
     </Tabs>
-  )
-}
-
-const FollowMobile = () => {
-  const { t } = useTranslation()
-  const [tab, setTab] = useState(FollowType.Followers)
-  const { userInfo } = useAccountContext()
-
-  const isFollowers = tab === FollowType.Followers
-
-  return (
-    <Dialog>
-      <div className="flex items-center justify-between">
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setTab(FollowType.Followers)}
-          >
-            {t('followers')}({userInfo?.followers.length || 0})
-          </Button>
-        </DialogTrigger>
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setTab(FollowType.Following)}
-          >
-            {t('following')}({userInfo?.following.length || 0})
-          </Button>
-        </DialogTrigger>
-      </div>
-
-      <DialogContent className="p-4">
-        <DialogHeader>
-          <DialogTitle>
-            {isFollowers ? t('followers.my') : t('following.my')}
-          </DialogTitle>
-        </DialogHeader>
-        {isFollowers ? <FollowersCards /> : <FollowingCards />}
-      </DialogContent>
-    </Dialog>
   )
 }
 

@@ -7,14 +7,8 @@ import { TokenHeldCards } from './token-held-cards'
 import { MentionCards } from './mention-cards'
 import { CommentCards } from '@/components/comment-cards'
 import { TokenCards } from '@/components/token-cards'
-import { useAccountContext } from '@/contexts/account'
-
-enum Tab {
-  TokensHeld = 'held',
-  TokensCreated = 'created',
-  Comments = 'comments',
-  Mentions = 'mentions',
-}
+import { useUserList } from '../hooks/use-user-list'
+import { UserListType } from '@/api/user/types'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
@@ -22,27 +16,36 @@ export const AccountTab = () => {
   const tabs = [
     {
       label: t('token.held'),
-      value: Tab.TokensHeld,
+      value: UserListType.CoinsHeld,
     },
     {
       label: t('token.created'),
-      value: Tab.TokensCreated,
+      value: UserListType.CoinsCreated,
     },
     {
       label: t('comments'),
-      value: Tab.Comments,
+      value: UserListType.Replies,
     },
     {
       label: t('mentions'),
-      value: Tab.Mentions,
+      value: UserListType.Notifications,
     },
   ]
-  const { userInfo, isPending } = useAccountContext()
+  const tab = String(query.tab || UserListType.CoinsHeld)
+  const {
+    tokenHeld,
+    tokenCreated,
+    comments,
+    mentions,
+    isLoading,
+    isFetching,
+    fetchNextPage,
+  } = useUserList(Number(tab))
 
   return (
     <Tabs
       className="w-full mt-4 max-sm:mt-0"
-      value={(query.tab as string) || Tab.TokensHeld}
+      value={tab}
       onValueChange={(value) => {
         router.push({
           pathname: router.pathname,
@@ -55,38 +58,50 @@ export const AccountTab = () => {
           <TabsTrigger
             className="h-full w-full max-sm:px-2 max-sm:text-xs"
             key={t.value}
-            value={t.value}
+            value={t.value.toString()}
           >
             {t.label}
           </TabsTrigger>
         ))}
       </TabsList>
 
-      <TabsContent value={Tab.TokensHeld}>
+      {/* Token held */}
+      <TabsContent value={UserListType.CoinsHeld.toString()}>
         <TokenHeldCards />
       </TabsContent>
-      <TabsContent value={Tab.TokensCreated}>
+
+      {/* Token created */}
+      <TabsContent value={UserListType.CoinsCreated.toString()}>
         <TokenCards
           className="md:grid-cols-2 xl:grid-cols-3"
-          cards={userInfo?.coins_created ?? []}
-          total={(userInfo?.coins_created ?? []).length}
-          isLoading={isPending}
-          isPending={isPending}
+          cards={tokenCreated.list}
+          total={tokenCreated.total}
+          isLoading={isLoading}
+          isPending={isFetching}
+          onFetchNext={fetchNextPage}
         />
       </TabsContent>
-      <TabsContent value={Tab.Comments}>
+
+      {/* Comments/Replies */}
+      <TabsContent value={UserListType.Replies.toString()}>
         <CommentCards
           readonly
-          cards={userInfo?.replies || []}
-          total={(userInfo?.replies || []).length}
-          isLoading={isPending}
-          isPending={isPending}
+          cards={comments.list}
+          total={comments.total}
+          isLoading={isLoading}
+          isPending={isFetching}
+          onFetchNext={fetchNextPage}
         />
       </TabsContent>
-      <TabsContent value={Tab.Mentions}>
+
+      {/* Mentions/Notifications */}
+      <TabsContent value={UserListType.Notifications.toString()}>
         <MentionCards
-          cards={userInfo?.notifications || []}
-          isPending={isPending}
+          cards={mentions.list}
+          total={mentions.total}
+          isLoading={isLoading}
+          isPending={isFetching}
+          onFetchNext={fetchNextPage}
         />
       </TabsContent>
     </Tabs>

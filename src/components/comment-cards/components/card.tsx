@@ -16,9 +16,10 @@ import { Tooltip } from '@/components/ui/tooltip'
 import { Dialog } from '@/components/ui/dialog'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
+import { UserListRes, UserListType } from '@/api/user/types'
 
 interface Props {
-  c: TokenCommentListRes
+  c: UserListRes[UserListType.Replies]
   readonly?: boolean
   isActive?: boolean
   onLike?: (id: string) => void
