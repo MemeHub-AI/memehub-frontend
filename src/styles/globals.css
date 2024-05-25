@@ -94,7 +94,6 @@
   }
 }
 
-
 .front-content {
   position: relative;
   color: black;
@@ -128,10 +127,8 @@
   transform: translateX(-4px) translateY(-4px);
 }
 
-
 .is-reverse-translate:hover.card {
   transform: translateX(-6px) translateY(-6px);
-
 }
 
 .no-reverse-translate {

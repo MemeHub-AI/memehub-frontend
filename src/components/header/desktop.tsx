@@ -25,6 +25,11 @@ export const HeaderDesktop = (props: Props) => {
     console.log('searching...')
   }
 
+  const [value, setValue] = useState('')
+  const onSearch = () => {
+    console.log('searching...')
+  }
+
   return (
     <>
       <Logo showMeme />
