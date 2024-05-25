@@ -42,7 +42,7 @@ export const useTrade = () => {
     onSuccess: () => toast.success(t('trade.success')),
     onError: () => toast.error(t('trade.failed')),
     onFillay: () => {
-      resetInternalTrade()
+      resetTrade()
       refetchInfo()
       toast.dismiss()
     },
