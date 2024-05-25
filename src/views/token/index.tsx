@@ -1,9 +1,6 @@
 import React from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
-import { useReadContracts } from 'wagmi'
-import { Address, formatEther } from 'viem'
-import { useQuery } from '@tanstack/react-query'
 
 import { TradeTab } from './components/trade-tab'
 import { Button } from '@/components/ui/button'
@@ -12,47 +9,20 @@ import { CommentTradeTab } from './components/comment-trade-tab'
 import { useResponsive } from '@/hooks/use-responsive'
 import { HoldersRank } from './components/holders-rank'
 import { TokenProvider } from '@/contexts/token'
-import { continousTokenAbi } from '@/contract/continous-token'
-import { tokenApi } from '@/api/token'
+import { useTokenInfo } from './hooks/use-token-info'
 
 export const TokenPage = () => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { isMobile } = useResponsive()
-  const { data = [], refetch: refetchInfo } = useReadContracts({
-    contracts: [
-      {
-        abi: continousTokenAbi,
-        address: query.address as Address,
-        functionName: 'ETH_AMOUNT',
-      },
-      {
-        abi: continousTokenAbi,
-        address: query.address as Address,
-        functionName: 'raiseEthAmount',
-      },
-    ],
-  })
-  const weiTotal = data[0]?.result || BigInt(0)
-  const weiCurrent = data[1]?.result || BigInt(0)
-  const total = formatEther(weiTotal)
-  const current = formatEther(weiCurrent)
-
-  // Query details info.
-  const { data: { data: tokenInfo } = {} } = useQuery({
-    queryKey: [tokenApi.details.name, query.id],
-    queryFn: () => {
-      if (!query.id) return Promise.reject()
-      return tokenApi.details(query.id as string)
-    },
-  })
+  const { tokenInfo, totalToken, currentToken, refetchInfo } = useTokenInfo()
 
   return (
     <TokenProvider
       value={{
-        total,
-        current,
         tokenInfo,
+        totalToken,
+        currentToken,
         refetchInfo,
       }}
     >

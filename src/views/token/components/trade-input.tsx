@@ -7,31 +7,34 @@ import { Input } from '@/components/ui/input'
 import { useTradeContext } from '@/contexts/trade'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeInfo } from '../hooks/use-trade-info'
+import { cn } from '@/lib/utils'
+import { fmt } from '@/utils/fmt'
 
 interface Props extends ComponentProps<'input'> {}
 
-export const TradeInput = (props: Props) => {
-  const { value, onChange } = props
+export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
   const [quoteTokenAmount, setQuoteTokenAmount] = useState(0)
-  const { symbol, isBuy, isSell, ethBalance, tokenBalance } = useTradeContext()
+  const { isBuy, isSell, nativeSymbol, ethBalance, tokenBalance } =
+    useTradeContext()
   const { tokenInfo } = useTokenContext()
   const { getBuyTokenAmount, getSellTokenAmount } = useTradeInfo()
 
-  const baseTokenAmount = BigNumber(String(value || 0)).toFixed(6)
+  const tokenSymbol = tokenInfo?.ticker || ''
+  const baseTokenAmount = fmt.tradeFixed(BigNumber(String(value || 0)))
   const tokenAddr = tokenInfo?.address as Address
   const balance = BigNumber(isBuy ? ethBalance : tokenBalance).toFixed(2)
 
   const calcBuyTokenAmount = () => {
     getBuyTokenAmount(tokenAddr, value as string).then((weiAmount) => {
-      const amount = BigNumber(formatEther(weiAmount)).toFixed(2)
+      const amount = fmt.tradeFixed(BigNumber(formatEther(weiAmount)))
       setQuoteTokenAmount(Number(amount))
     })
   }
 
   const calcSellTokenAmount = () => {
     getSellTokenAmount(tokenAddr, value as string).then((weiAmount) => {
-      const amount = BigNumber(formatEther(weiAmount)).toFixed(5)
+      const amount = fmt.tradeFixed(BigNumber(formatEther(weiAmount)))
       setQuoteTokenAmount(Number(amount))
     })
   }
@@ -57,10 +60,11 @@ export const TradeInput = (props: Props) => {
             if (BigNumber(e.target.value).lt(0)) return
             onChange?.(e)
           }}
+          disabled={disabled}
         />
-        <div className="flex items-center">
+        <div className={cn('flex items-center', disabled && 'opacity-50')}>
           <span className="mr-2 text-zinc-600">
-            {isBuy ? symbol : tokenInfo?.ticker}
+            {isBuy ? nativeSymbol : tokenSymbol}
           </span>
           <img
             loading="lazy"
@@ -75,8 +79,8 @@ export const TradeInput = (props: Props) => {
       <div className="text-zinc-500 text-xs flex justify-between mt-1 mr-1">
         <span>
           {isBuy
-            ? `${baseTokenAmount} ${symbol} ≈ ${quoteTokenAmount} ${tokenInfo?.ticker}`
-            : `${baseTokenAmount} ${tokenInfo?.ticker} ≈ ${quoteTokenAmount} ${symbol}`}
+            ? `${baseTokenAmount} ${nativeSymbol} ≈ ${quoteTokenAmount} ${tokenSymbol}`
+            : `${baseTokenAmount} ${tokenSymbol} ≈ ${quoteTokenAmount} ${nativeSymbol}`}
         </span>
         <span>
           {t('balance')}: {balance}

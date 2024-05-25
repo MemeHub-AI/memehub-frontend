@@ -1,10 +1,11 @@
 import React, { type ComponentProps, useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Address, formatEther } from 'viem'
+import { Address, isAddress } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
+import { isEmpty } from 'lodash'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -23,8 +24,7 @@ enum Tab {
   Sell = 'sell',
 }
 
-export const TradeTab = (props: ComponentProps<'div'>) => {
-  const { className } = props
+export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(String(Tab.Buy))
   const [value, setValue] = useState('0')
@@ -33,91 +33,105 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
     [tab]
   )
   const { query } = useRouter()
-  const tokenAddress = query.address as Address
-  const { isConnected } = useAccount()
 
-  const { isTrading, buy, sell, checkTrade } = useTrade()
+  const { isConnected } = useAccount()
+  const { isTrading, buy, sell } = useTrade()
   const { ethBalance, tokenBalance } = useTradeInfo()
   const { setConnectOpen } = useWalletStore()
 
-  const symbol = 'ETH'
+  const token = (query.address || '') as Address
+  const nativeSymbol = 'ETH'
 
   const onBuy = async () => {
-    const { totalAmount, currentAmount } = await checkTrade(tokenAddress)
-    const total = formatEther(totalAmount)
-    const current = formatEther(currentAmount)
-
-    if (value + current > total) {
-      const currentTotal = BigNumber(total).minus(current).toString()
-      setValue(currentTotal)
-      toast.info(
-        t('trade.limit').replace('{}', currentTotal).replace('{}', t('buy'))
-      )
+    // Overflow current eth balance.
+    if (BigNumber(value).gt(ethBalance)) {
+      toast.error(t('balance.illegality'))
+      setValue(ethBalance)
       return
     }
+    const max = await buy(value)
 
-    if (BigNumber(value).lt(0)) {
-      toast.error(t('trade.is-zero'))
+    // Internal buy & overflow current max value.
+    if (max) {
+      setValue(max)
+      toast.error(t('trade.limit').replace('{}', max).replace('{}', t('buy')))
       return
     }
-
-    buy(value, tokenAddress)
   }
 
   const onSell = async () => {
+    // Overflow current token balance.
     if (BigNumber(value).gt(tokenBalance)) {
       toast.error(t('balance.illegality'))
       return
     }
 
-    sell(value, tokenAddress)
-  }
-
-  const setPercent = async (value: string) => {
-    const percent = BigNumber(value)
-      .multipliedBy(tokenBalance)
-      .div(100)
-      .toString()
-
-    setValue(Number(percent).toFixed(3))
+    sell(value)
   }
 
   const onTrade = () => {
+    // Wallet is not connect.
     if (!isConnected) {
       setConnectOpen(true)
       return
     }
+
+    // Token address is invalid.
+    if (isEmpty(token) || !isAddress(token)) {
+      toast.error(t('trade.token.invalid'))
+      return
+    }
+
     isBuy ? onBuy() : onSell()
   }
 
   return (
-    <TradeProvider value={{ isBuy, isSell, symbol, ethBalance, tokenBalance }}>
+    <TradeProvider
+      value={{ isBuy, isSell, nativeSymbol, ethBalance, tokenBalance }}
+    >
       <Card className={cn('p-3 grid gap-4 rounded-lg', className)}>
         <Tabs className="w-full" value={tab} onValueChange={setTab}>
           <TabsList className="grid grid-cols-2 h-11 mb-6">
-            <TabsTrigger className="h-full" value={Tab.Buy}>
+            <TabsTrigger
+              className="h-full"
+              value={Tab.Buy}
+              disabled={isTrading}
+            >
               {t('buy')}
             </TabsTrigger>
-            <TabsTrigger className="h-full" value={Tab.Sell}>
+            <TabsTrigger
+              className="h-full"
+              value={Tab.Sell}
+              disabled={isTrading}
+            >
               {t('sell')}
             </TabsTrigger>
           </TabsList>
 
           {/* Slippage button */}
-          <SlippageButton />
+          <SlippageButton disabled={isTrading} />
 
           <div className="flex flex-col my-6">
             {/* Input */}
             <TradeInput
               value={value}
               onChange={({ target }) => setValue(target.value)}
+              disabled={isTrading}
             />
 
             {/* Items button */}
             <TradeItems
+              disabled={isTrading}
               onResetClick={setValue}
-              onBuyItemClick={setValue}
-              onSellItemClick={setPercent}
+              onBuyItemClick={(value) => {
+                setValue(BigNumber(value).gt(ethBalance) ? ethBalance : value)
+              }}
+              onSellItemClick={(value: string) => {
+                const percent = BigNumber(value)
+                  .multipliedBy(tokenBalance)
+                  .div(100)
+                setValue(percent.toFixed(3))
+              }}
             />
           </div>
 
@@ -125,9 +139,9 @@ export const TradeTab = (props: ComponentProps<'div'>) => {
           <Button
             className="w-full"
             onClick={onTrade}
-            disabled={isTrading || Number(value) <= 0}
+            disabled={isTrading || BigNumber(value).lte(0)}
           >
-            {t('trade')}
+            {isTrading ? t('trading') : t('trade')}
           </Button>
         </Tabs>
       </Card>

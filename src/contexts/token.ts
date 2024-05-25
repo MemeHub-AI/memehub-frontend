@@ -10,10 +10,10 @@ import type { TokenListItem } from '@/api/token/types'
 import { ERR } from '@/errors'
 
 interface Value {
-  total: string
-  current: string
-  refetchInfo: Function
   tokenInfo: TokenListItem | undefined
+  totalToken: string
+  currentToken: string
+  refetchInfo: Function
 }
 
 const TokenContext = createContext<Value | null>(null)

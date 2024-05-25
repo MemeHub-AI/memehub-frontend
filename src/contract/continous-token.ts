@@ -1,5 +1,3 @@
-import { continounsTokenAddress as continousTokenAddress } from './address'
-
 export const continousTokenAbi = [
   {
     inputs: [
@@ -857,8 +855,3 @@ export const continousTokenAbi = [
     type: 'receive',
   },
 ] as const
-
-export const continosTokenConfig = {
-  abi: continousTokenAbi,
-  address: continousTokenAddress,
-} as const

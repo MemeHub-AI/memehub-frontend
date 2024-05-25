@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Button } from '@/components/ui/button'
@@ -8,20 +8,20 @@ const buyItems = ['0.001', '0.01', '1']
 
 const sellItems = ['10', '25', '75', '100']
 
-interface Props {
+interface Props extends ComponentProps<'button'> {
   onBuyItemClick?: (value: string) => void
   onSellItemClick?: (value: string) => void
   onResetClick?: (value: '') => void
 }
 
 export const TradeItems = (props: Props) => {
-  const { onBuyItemClick, onSellItemClick, onResetClick } = props
+  const { disabled, onBuyItemClick, onSellItemClick, onResetClick } = props
   const { t } = useTranslation()
-  const { isBuy, symbol } = useTradeContext()
+  const { isBuy, nativeSymbol } = useTradeContext()
 
   return (
     <div className="flex gap-2 mt-3">
-      <Button size="xs" onClick={() => onResetClick?.('')}>
+      <Button size="xs" onClick={() => onResetClick?.('')} disabled={disabled}>
         {t('reset')}
       </Button>
       {(isBuy ? buyItems : sellItems).map((value, i) => (
@@ -31,8 +31,9 @@ export const TradeItems = (props: Props) => {
           onClick={() => {
             isBuy ? onBuyItemClick?.(value) : onSellItemClick?.(value)
           }}
+          disabled={disabled}
         >
-          {value} {isBuy ? symbol : '%'}
+          {value} {isBuy ? nativeSymbol : '%'}
         </Button>
       ))}
     </div>

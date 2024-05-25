@@ -93,7 +93,7 @@
   "hot-opportunity": "Hot opportunity",
   "chains": "Chains",
   "bonding-curve.token": " When the market value reaches {}, the bonding curve will automatically add all tokens to the liquidity pool and then burn them. ",
-  "submit.success": "Submit success, please wait a moment...",
+  "submit.success": "Trade submitted success, please wait a moment...",
   "submit.error": "Submit error:",
   "deploying": "Deploying...",
   "user-rejected": "You have declined this operation",
@@ -165,5 +165,11 @@
   "upload.large": "The uploaded image is too large, max size is",
   "slippage.title": "Set max slippage",
   "slippage.description": "Set max slippage for you trade",
-  "nomore": "No more"
+  "nomore": "No more",
+  "trade.token.invalid": "Token address is invalid",
+  "trade.account.invalid": "Account address is invalid",
+  "traed.cancel": "Cancel trading",
+  "trade.amount.invalid": "Amount is invalid",
+  "trading": "Trading...",
+  "tx.confirm": "Wai"
 }

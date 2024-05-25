@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useTradeContext } from '@/contexts/trade'
 
-export const SlippageButton = () => {
+export const SlippageButton = ({ disabled }: ComponentProps<'button'>) => {
   const { t } = useTranslation()
   const [slippage, setSlippage] = useState('5')
   const {} = useTradeContext()
@@ -41,7 +41,7 @@ export const SlippageButton = () => {
         onConfirm={onConfirm}
         triggerProps={{ asChild: true }}
       >
-        <Button size="xs">
+        <Button size="xs" disabled={disabled}>
           {t('set-max-slippage')}({slippage}%)
         </Button>
       </AlertDialog>

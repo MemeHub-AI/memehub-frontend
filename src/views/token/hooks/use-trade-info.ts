@@ -45,7 +45,7 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'calculateContinuousBurnReturn',
-      args: [parseEther(BigNumber(eth).toFixed())],
+      args: [parseEther(eth)],
     }).catch((e) => {
       console.error('[getSellTokenAmount Error]:', e)
       return BigInt(0)

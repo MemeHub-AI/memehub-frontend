@@ -1,16 +1,18 @@
-import { toast } from 'sonner'
+import { BigNumber } from 'bignumber.js'
+import { parseEther } from 'viem'
 
-// Fullname: toast contract error.
-// Excludes user rejected error.
-export const toastCE = (err: string | unknown) => {
-  const e = String(err)
-  if (e.toLowerCase().includes('user rejected')) return
-  toast.error(e)
-}
+import { SERVICE_FEE } from '@/config/trade'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
   const e = String(err).toLowerCase()
 
   return e.includes('user rejected') || e.includes('user denied')
+}
+
+// Add service fee when trade.
+export const addServiceFee = (amount: string) => {
+  // total = amount + (amount * SERVICE_FEE)
+  const total = BigNumber(amount).multipliedBy(SERVICE_FEE).plus(amount)
+  return parseEther(total.toFixed())
 }
