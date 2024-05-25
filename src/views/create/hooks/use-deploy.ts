@@ -5,8 +5,8 @@ import { first } from 'lodash'
 import type { Address } from 'viem'
 import type { TokenNewReq } from '@/api/token/types'
 
-import { factoryConfig } from './../../../contract/factory'
-import { useCreateToken } from './use-token'
+import { factoryContract } from './../../../contract/factory'
+import { useCreateToken } from './use-create-token'
 import { ApiCode } from '@/api/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 
@@ -53,7 +53,7 @@ export const useDeploy = () => {
 
     return writeContract(
       {
-        ...factoryConfig,
+        ...factoryContract,
         functionName: 'deploy',
         args: [
           reserveRatio,
