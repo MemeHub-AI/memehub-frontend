@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { BigNumber } from 'bignumber.js'
 
 import { Header } from '../header'
 import { Footer } from '../footer'
@@ -19,6 +20,8 @@ import { useTranslation } from 'react-i18next'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
+
+BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_DOWN })
 
 export const AppLayout = ({ children }: ComponentProps<'div'>) => {
   const { isNotMounted } = useMounted(onMounted)
