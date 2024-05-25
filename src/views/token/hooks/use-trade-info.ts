@@ -2,6 +2,7 @@ import { useAccount, useBalance, useReadContract } from 'wagmi'
 import { readContract, readContracts } from '@wagmi/core'
 import { Address, formatEther, parseEther } from 'viem'
 import { useRouter } from 'next/router'
+import { BigNumber } from 'bignumber.js'
 
 import { wagmiConfig } from '@/config/wagmi'
 import { continousTokenAbi } from '@/contract/continous-token'
@@ -11,6 +12,7 @@ export const useTradeInfo = () => {
   const { query } = useRouter()
   const tokenAddress = query.address as Address
 
+  // Query native & token balance.
   const { data: ethBalances } = useBalance({ address })
   const { data: tokenBalances } = useReadContract({
     abi: continousTokenAbi,
@@ -29,6 +31,9 @@ export const useTradeInfo = () => {
       address,
       functionName: 'calculateContinuousMintReturn',
       args: [parseEther(eth)],
+    }).catch((e) => {
+      console.error('[getBuyTokenAmount Error]:', e)
+      return BigInt(0)
     })
 
     return data
@@ -40,7 +45,10 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'calculateContinuousBurnReturn',
-      args: [parseEther(eth)],
+      args: [parseEther(BigNumber(eth).toFixed())],
+    }).catch((e) => {
+      console.error('[getSellTokenAmount Error]:', e)
+      return BigInt(0)
     })
 
     return data
@@ -53,6 +61,9 @@ export const useTradeInfo = () => {
       address,
       functionName: 'fundCostByContinuous',
       args: [parseEther(eth)],
+    }).catch((e) => {
+      console.error('[getBuyTokenEthAmount Error]:', e)
+      return BigInt(0)
     })
 
     return data
@@ -64,6 +75,9 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'getPrice',
+    }).catch((e) => {
+      console.error('[getPrice Error]:', e)
+      return BigInt(0)
     })
 
     return data
@@ -73,14 +87,18 @@ export const useTradeInfo = () => {
   const getTokenAmounts = async (address: Address) => {
     const zero = BigInt(0)
 
-    return readContracts(wagmiConfig, {
-      contracts: [
-        { abi: continousTokenAbi, address, functionName: 'ETH_AMOUNT' },
-        { abi: continousTokenAbi, address, functionName: 'raiseEthAmount' },
-      ],
-    })
-      .then(([t, c]) => [t.result || zero, c.result || zero])
-      .catch(() => [zero, zero])
+    try {
+      const [t, c] = await readContracts(wagmiConfig, {
+        contracts: [
+          { abi: continousTokenAbi, address, functionName: 'ETH_AMOUNT' },
+          { abi: continousTokenAbi, address, functionName: 'raiseEthAmount' },
+        ],
+      })
+      return [t.result || zero, c.result || zero]
+    } catch (e) {
+      console.error('[getTokenAmounts Error]:', e)
+      return [zero, zero]
+    }
   }
 
   // Get avaiable to buy of token amount.
@@ -89,9 +107,30 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'CAN_MINI',
+    }).catch((e) => {
+      console.error('[getAvailableTokenAmount Error]:', e)
+      return BigInt(0)
     })
 
     return formatEther(data)
+  }
+
+  // Check if the amount exceeds the current max available.
+  const checkForOverflow = async (amount: string) => {
+    const [totalAmount, currentAmount] = await getTokenAmounts(
+      tokenAddress
+    ).catch((e) => {
+      console.error('[checkForOverflow Error]:', e)
+      return [BigInt(0), BigInt(0)]
+    })
+    const total = formatEther(totalAmount)
+    const current = formatEther(currentAmount)
+    const currentMax = BigNumber(total).minus(current)
+
+    return {
+      currentMax: currentMax.toString(),
+      isOverflow: BigNumber(amount).gt(currentMax),
+    }
   }
 
   return {
@@ -103,5 +142,6 @@ export const useTradeInfo = () => {
     getPrice,
     getTokenAmounts,
     getAvailableTokenAmount,
+    checkForOverflow,
   }
 }
