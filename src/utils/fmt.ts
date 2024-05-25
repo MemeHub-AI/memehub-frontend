@@ -1,3 +1,6 @@
+import { BigNumber } from 'bignumber.js'
+import { isEmpty } from 'lodash'
+
 interface FmtAddrOptions {
   len?: number
   separator?: string
@@ -24,5 +27,14 @@ export const fmt = {
 
     const result = toFixed ? percent?.toFixed(toFixed) : percent
     return `${result}%`
+  },
+  toAnchor(value?: string | number) {
+    const val = (value?.toString() || '').trim()
+
+    if (isEmpty(val)) return '#'
+    return `#${val}`
+  },
+  tradeFixed(n: BigNumber) {
+    return n.toFixed(n.lt(1) ? 6 : 2)
   },
 }

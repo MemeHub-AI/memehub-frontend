@@ -1,33 +1,26 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import FollowCard from './follow-card'
-import { FollowType } from './follow-tab'
-
-const cards = [
-  {
-    name: 'limtime1',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    address: 'asdjawodjioasjdioawjiodjawiodjiaw',
-  },
-  {
-    name: 'limtime2',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    address: 'asdjawodjioasjdioawjiodjawiodjiaw',
-  },
-  {
-    name: 'limtime3',
-    avatar: 'https://i.pravatar.cc/150?img=1',
-    address: 'asdjawodjioasjdioawjiodjawiodjiaw',
-  },
-]
+import { FollowCard, FollowCardSkeleton } from './follow-card'
+import { useAccountContext } from '@/contexts/account'
+import { CustomSuspense } from '@/components/custom-suspense'
 
 export const FollowersCards = () => {
+  const { t } = useTranslation()
+  const { userInfo, isPending } = useAccountContext()
+  const { followers = [] } = userInfo ?? {}
+
   return (
-    <div className="flex flex-col gap-2">
-      {cards.map((c, i) => (
-        <FollowCard type={FollowType.Followers} card={c} key={i} />
+    <CustomSuspense
+      className="flex flex-col gap-2"
+      isPending={isPending}
+      fallback={<FollowCardSkeleton />}
+      nullback={<p className="text-zinc-500">{t('follow.no-followers')}</p>}
+    >
+      {followers.map((f, i) => (
+        <FollowCard card={f} key={i} />
       ))}
-    </div>
+    </CustomSuspense>
   )
 }
 

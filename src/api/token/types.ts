@@ -1,15 +1,3 @@
-export interface TokenListReq {
-  page: string
-  size: string
-}
-
-export interface TokenListRes {
-  count: string
-  next: null
-  previous: null
-  results: TokenListItem[]
-}
-
 export interface TokenListItem {
   id: string
   address: string
@@ -25,7 +13,11 @@ export interface TokenListItem {
   replies: string
   last_reply: null
   create_time: null
-  creator_name: string
+  creator: {
+    id: number
+    name: string
+    logo: string
+  }
 }
 
 export interface TokenNewReq {
@@ -33,9 +25,11 @@ export interface TokenNewReq {
   ticker: string
   desc: string
   image: string
-  twitter_url: string
-  telegram_url: string
-  website: string
+  hash: string
+  chain_id: string
+  twitter_url?: string
+  telegram_url?: string
+  website?: string
 }
 
 export interface TokenNewRes {
@@ -63,7 +57,7 @@ export interface TokenCommentListRes {
   }
   coin: number
   img: string
-  related_comments: string[]
+  related_comments: number[]
   created_at: string
   likes_count: number
   is_liked: boolean

@@ -1,4 +1,4 @@
-import { factoryAddress } from './address'
+import { factoryAddress } from '.'
 
 export const factoryAbi = [
   {
@@ -197,7 +197,7 @@ export const factoryAbi = [
   },
 ] as const
 
-export const factoryConfig = {
+export const factoryContract = {
   abi: factoryAbi,
   address: factoryAddress,
 } as const

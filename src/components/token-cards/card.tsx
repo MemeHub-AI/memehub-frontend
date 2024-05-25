@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { Address, formatEther } from 'viem'
+import { BigNumber } from 'bignumber.js'
 
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
@@ -10,7 +11,6 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { TokenListItem } from '@/api/token/types'
 import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
-import BigNumber from 'bignumber.js'
 
 interface Props extends ComponentProps<'div'> {
   card: TokenListItem
@@ -19,17 +19,20 @@ interface Props extends ComponentProps<'div'> {
 export const TokenCard = ({ card, className }: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
-  const { getTotalCurrent } = useTradeInfo(card.address as Address)
+  const { getTokenAmounts } = useTradeInfo()
   const [percent, setPercent] = useState('0')
 
+  // Init percent progress.
   useEffect(() => {
-    getTotalCurrent(true).then(({ totalAmount, currentAmount }) => {
-      const total = formatEther(totalAmount)
-      const current = formatEther(currentAmount)
+    getTokenAmounts(card.address as Address).then(
+      ([totalAmount, currentAmount]) => {
+        const total = formatEther(totalAmount)
+        const current = formatEther(currentAmount)
 
-      if (total === '0' || current === '0') return
-      setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(3))
-    })
+        if (total === '0' || current === '0') return
+        setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(3))
+      }
+    )
   }, [])
 
   return (
@@ -39,16 +42,16 @@ export const TokenCard = ({ card, className }: Props) => {
         className
       )}
       hover="border"
-      onClick={() =>
+      onClick={() => {
         router.push({
-          pathname: `${Routes.Token}/${card.address}`,
-          query: { id: card.id },
+          pathname: `${Routes.Token}/${card.id}`,
+          query: { address: card.address },
         })
-      }
+      }}
     >
       <img src={card.image} alt="img" className="h-32 w-32 object-cover" />
       <img
-        src="https://scrollscan.com/images/svg/brands/main.svg"
+        src="/images/scroll.svg"
         alt="chain"
         className="absolute right-2 top-2 w-5"
       />
@@ -58,11 +61,11 @@ export const TokenCard = ({ card, className }: Props) => {
             {card.name} {card.ticker && `(${card.ticker})`}
           </CardTitle>
           <Link
-            href={`${Routes.Account}/${card.address}`}
+            href={`${Routes.Account}/${card.creator.id}`}
             className="text-zinc-500 text-xs mt-0.5 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
-            {t('creator')}: {card.creator_name}
+            {t('creator')}: {card.creator.name}
           </Link>
           <p className="text-zinc-500 text-sm break-all line-clamp-4">
             {card.desc}

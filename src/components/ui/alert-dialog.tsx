@@ -1,13 +1,14 @@
 import * as React from 'react'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
+import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
-import { useTranslation } from 'react-i18next'
 
 interface Props extends AlertDialogPrimitive.AlertDialogProps {
   title: React.ReactNode
   description?: React.ReactNode
+  content?: React.ReactNode
   triggerProps?: AlertDialogPrimitive.DialogTriggerProps
   footerClass?: string
   onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
@@ -22,6 +23,7 @@ const AlertDialog = React.forwardRef<
     children,
     title,
     description,
+    content,
     onCancel,
     onConfirm,
     triggerProps,
@@ -42,21 +44,22 @@ const AlertDialog = React.forwardRef<
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
+        {content}
         <AlertDialogFooter
-          className={cn('max-sm:flex max-sm:flex-row', footerClass)}
+          className={cn(
+            'sm:justify-start max-sm:flex max-sm:flex-row max-sm:gap-4',
+            footerClass
+          )}
         >
+          <AlertDialogAction onClick={onConfirm} className="max-sm:flex-1">
+            {t('confirm')}
+          </AlertDialogAction>
           <AlertDialogCancel
             onClick={onCancel}
             className="max-sm:mt-0 max-sm:flex-1"
           >
             {t('cancel')}
           </AlertDialogCancel>
-          <AlertDialogAction
-            onClick={onConfirm}
-            className="max-sm:flex-1 max-sm:ml-3"
-          >
-            {t('confirm')}
-          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialogPrimitive.Root>

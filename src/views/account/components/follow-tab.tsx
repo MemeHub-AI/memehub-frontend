@@ -13,6 +13,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
+import { useAccountContext } from '@/contexts/account'
 
 export enum FollowType {
   Followers = 'followers',
@@ -25,14 +26,16 @@ export const FollowTab = () => {
 
   if (isMobile) return <FollowMobile />
 
+  const { userInfo } = useAccountContext()
+
   return (
-    <Tabs defaultValue={FollowType.Followers}>
+    <Tabs defaultValue={FollowType.Following}>
       <TabsList className="w-full">
-        <TabsTrigger value={FollowType.Followers} className="w-full">
-          {t('followers')}(3)
-        </TabsTrigger>
         <TabsTrigger value={FollowType.Following} className="w-full">
-          {t('following')}(3)
+          {t('following')}({userInfo?.following.length || 0})
+        </TabsTrigger>
+        <TabsTrigger value={FollowType.Followers} className="w-full">
+          {t('followers')}({userInfo?.followers.length || 0})
         </TabsTrigger>
       </TabsList>
 
@@ -49,6 +52,7 @@ export const FollowTab = () => {
 const FollowMobile = () => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(FollowType.Followers)
+  const { userInfo } = useAccountContext()
 
   const isFollowers = tab === FollowType.Followers
 
@@ -61,7 +65,7 @@ const FollowMobile = () => {
             size="sm"
             onClick={() => setTab(FollowType.Followers)}
           >
-            {t('followers')}(3)
+            {t('followers')}({userInfo?.followers.length || 0})
           </Button>
         </DialogTrigger>
         <DialogTrigger asChild>
@@ -70,7 +74,7 @@ const FollowMobile = () => {
             size="sm"
             onClick={() => setTab(FollowType.Following)}
           >
-            {t('following')}(3)
+            {t('following')}({userInfo?.following.length || 0})
           </Button>
         </DialogTrigger>
       </div>

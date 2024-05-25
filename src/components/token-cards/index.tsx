@@ -12,26 +12,38 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Order } from '@/utils/types'
-import { useTokens } from '@/hooks/use-tokens'
 import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
+import { TokenListItem } from '@/api/token/types'
+import { useChainConfig } from '@/hooks/use-chain-config'
 import { Routes } from '@/routes'
+import { useScrollLoad } from '@/hooks/use-scroll-load'
 
-const chains = [
-  {
-    id: 1,
-    name: 'Scroll',
-  },
-  {
-    id: 1,
-    name: 'Ethereum',
-    disabled: true,
-  },
-]
+interface Props extends ComponentProps<'div'> {
+  cards: TokenListItem[]
+  total: number
+  isLoading: boolean
+  isPending?: boolean
+  onFetchNext?: () => void
+}
 
-export const TokenCards = ({ className }: ComponentProps<'div'>) => {
+export const TokenCards = (props: Props) => {
+  const {
+    className,
+    cards,
+    total,
+    isLoading,
+    isPending = false,
+    onFetchNext,
+  } = props
   const { t } = useTranslation()
-  const { tokens, isFetching } = useTokens()
+  const { chains } = useChainConfig()
+  // TODO: Encapsulate a component to handling scroll load.
+  const { noMore } = useScrollLoad({
+    onFetchNext,
+    hasMore: cards.length < total,
+  })
+
   const sortItems = [
     {
       label: t('market.sort.asc'),
@@ -56,8 +68,8 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
   }
 
   return (
-    <>
-      <div className="flex items-center gap-4 max-sm:justify-between">
+    <div className={cn(className)}>
+      <div className="flex items-center gap-4 max-sm:justify-between ">
         <Select onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <SelectValue placeholder={t('chains')} />
@@ -87,13 +99,13 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
           </SelectContent>
         </Select> */}
       </div>
+
       <CustomSuspense
         className={cn(
           'grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1',
-          'max-sm:gap-2',
-          className
+          'max-sm:gap-2 '
         )}
-        isPending={isFetching}
+        isPending={isLoading}
         fallback={<CardSkeleton />}
         nullback={
           <div className="text-zinc-500">
@@ -105,11 +117,17 @@ export const TokenCards = ({ className }: ComponentProps<'div'>) => {
           </div>
         }
       >
-        {tokens.map((t, i) => (
+        {cards.map((t, i) => (
           <TokenCard key={i} card={t} />
         ))}
+        {isPending && (
+          <p className="text-center text-zinc-500 col-span-2">{t('loading')}</p>
+        )}
+        {noMore && (
+          <p className="text-center text-zinc-500 col-span-2">{t('nomore')}</p>
+        )}
       </CustomSuspense>
-    </>
+    </div>
   )
 }
 

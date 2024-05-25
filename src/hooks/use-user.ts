@@ -1,35 +1,92 @@
 import { useMutation } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
-import type { NewUserReq } from '@/api/user/types'
+import type { UserMyInfoRes } from '@/api/user/types'
 
-import { fmt } from '@/utils/fmt'
 import { userApi } from '@/api/user'
 import { useStorage } from './use-storage'
 import { useUserStore } from '@/stores/use-user-store'
 
-export const useUser = () => {
-  const {} = useUserStore()
+interface Options {
+  onUpdateSuccess?: (data: UserMyInfoRes) => void
+  onFollowSuccess?: (data: UserMyInfoRes) => void
+}
+
+export const useUser = (options?: Options) => {
+  const { onUpdateSuccess, onFollowSuccess } = options || {}
+  const { t } = useTranslation()
+  const { setUserInfo } = useUserStore()
   const { setToken } = useStorage()
-  const { isPending, mutateAsync } = useMutation({
-    mutationKey: [userApi.new.name],
-    mutationFn: userApi.new,
+
+  // Login/register a user.
+  const { isPending: isLoggingIn, mutateAsync: login } = useMutation({
+    mutationKey: [userApi.login.name],
+    mutationFn: userApi.login,
+    onMutate: () => toast.loading(t('user.login.loading')),
+    onSettled: (_, __, ___, id) => toast.dismiss(id),
+    onError: () => toast.error(t('user.login.failed')),
+    onSuccess({ data }) {
+      if (!data) return
+      setToken(data.token)
+      setUserInfo(data.user)
+      toast.success(t('user.login.success'))
+    },
   })
 
-  const login = async (
-    params: Pick<NewUserReq, 'wallet_address' | 'chain_id' | 'sign'>
-  ) => {
-    const { data } = await mutateAsync({
-      name: fmt.addr(params.wallet_address),
-      logo: 'https://storage.memehub.ai/avater.png',
-      description: 'A Meme boy/girl',
-      ...params,
-    })
+  // Update user info.
+  const { isPending: isUpdating, mutateAsync: update } = useMutation({
+    mutationKey: [userApi.updateInfo.name],
+    mutationFn: userApi.updateInfo,
+    onMutate: () => toast.loading(t('user.update.loading')),
+    onSettled: (_, __, ___, id) => toast.dismiss(id),
+    onError: () => toast.error(t('user.update.failed')),
+    onSuccess: ({ data }) => {
+      if (!data) return
+      setUserInfo(data)
+      onUpdateSuccess?.(data)
+      toast.success(t('user.update.success'))
+    },
+  })
 
-    setToken(data.token)
-  }
+  // Follow a user.
+  const { isPending: isFollowing, mutateAsync: follow } = useMutation({
+    mutationKey: [userApi.follow.name],
+    mutationFn: userApi.follow,
+    onMutate: () => toast.loading(t('user.follow.loading')),
+    onSettled: (_, __, ___, id) => toast.dismiss(id),
+    onError: () => toast.error(t('user.follow.failed')),
+    onSuccess: ({ data }) => {
+      if (!data) return
+      setUserInfo(data)
+      onFollowSuccess?.(data)
+      toast.success(t('user.follow.success'))
+    },
+  })
+
+  // Unfollow a user.
+  const { isPending: isUnfollowing, mutateAsync: unfollow } = useMutation({
+    mutationKey: [userApi.unfollow.name],
+    mutationFn: userApi.unfollow,
+    onMutate: () => toast.loading(t('user.unfollow.loading')),
+    onSettled: (_, __, ___, id) => toast.dismiss(id),
+    onError: () => toast.error(t('user.unfollow.failed')),
+    onSuccess: ({ data }) => {
+      if (!data) return
+      setUserInfo(data)
+      onFollowSuccess?.(data)
+      toast.success(t('user.unfollow.success'))
+    },
+  })
 
   return {
-    isPending,
+    isLoggingIn,
+    isUpdating,
+    isFollowing,
+    isUnfollowing,
     login,
+    update,
+    follow,
+    unfollow,
   }
 }

@@ -1,13 +1,20 @@
 import { create } from 'zustand'
 
-interface UserStore {
-  token: string | null
+import type { UserMyInfoRes } from '@/api/user/types'
 
-  setToken: (token: string) => void
+interface UserStore {
+  userInfo: UserMyInfoRes | null
+
+  setUserInfo: (userInfo: UserMyInfoRes) => void
+  isFollowed: (id: string) => boolean
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({
-  token: null,
+  userInfo: null,
 
-  setToken: (token) => set({ token }),
+  setUserInfo: (userInfo) => set({ userInfo }),
+  isFollowed: (id) => {
+    const follow = get().userInfo?.following.find((f) => f.id === Number(id))
+    return !!follow
+  },
 }))

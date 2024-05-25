@@ -7,28 +7,24 @@ export const useSign = () => {
   const { t } = useTranslation()
   const [isSigned, setIsSigned] = useState(false)
   const { address, connector } = useAccount()
-  const { signMessageAsync } = useSignMessage()
 
+  const { signMessageAsync } = useSignMessage({
+    mutation: {
+      onMutate: () => toast.loading(t('sign.loading')),
+      onSettled: (_, __, ___, id) => toast.dismiss(id),
+      onError: () => toast.error(t('sign.failed')),
+      onSuccess: () => {
+        setIsSigned(true)
+        toast.success(t('sign.success'))
+      },
+    },
+  })
   const signAsync = async () => {
-    const id = toast.loading(t('sign.loading'))
-
     return signMessageAsync({
       account: address,
       connector,
       message: `Signin at ${Date.now()}`,
     })
-      .then((res) => {
-        toast.success(t('sign.success'))
-        setIsSigned(true)
-        return res
-      })
-      .catch((e) => {
-        toast.error(t('sign.failed'))
-        throw new Error(e)
-      })
-      .finally(() => {
-        toast.dismiss(id)
-      })
   }
 
   return {

@@ -1,128 +1,103 @@
-import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
-import { toast } from 'sonner'
-import { Address, formatEther, parseEther } from 'viem'
-import { readContract } from '@wagmi/core'
+import { useState } from 'react'
+import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
+import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
-import { continousTokenAbi } from '@/contract/continous-token'
-import { wagmiConfig } from '@/config/wagmi'
-import { toastNoReject } from '@/utils/contract'
+import type { Address } from 'viem'
+
+import { useInternalTrade } from './use-internal-trade'
+import { useUniswapV2 } from './use-uniswap-v2'
+import { useTradeInfo } from './use-trade-info'
+import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useTokenContext } from '@/contexts/token'
 
 export const useTrade = () => {
   const { t } = useTranslation()
+  const [isInternalTrade, setIsInternalTrade] = useState(true)
+  const { query } = useRouter()
+  const token = (query.address || '') as Address
   const { refetchInfo } = useTokenContext()
+
+  const { checkForOverflow } = useTradeInfo()
   const {
-    data: hash,
-    isPending,
-    writeContractAsync,
-    reset,
-  } = useWriteContract({
-    mutation: {
-      onMutate: () => toast.loading(t('trade.loading')),
-      onSuccess: () => {
-        toast.dismiss()
-        toast.info(t('submit.success'))
-      },
-      onError: (e) => {
-        toast.dismiss()
-        toastNoReject(e)
-      },
+    internalHash,
+    isInternalTrading,
+    internalBuy,
+    internalSell,
+    resetInternalTrade,
+  } = useInternalTrade()
+  const {
+    uniswapHash,
+    isUniswapTrading,
+    uniswapBuy,
+    uniswapSell,
+    resetUniswapTrade,
+  } = useUniswapV2()
+
+  // Waiting results for contract interaction.
+  const { isLoading } = useWaitForTx({
+    hash: isInternalTrade ? internalHash : uniswapHash,
+    onLoading: () => toast.loading(t('tx.waiting')),
+    onSuccess: () => toast.success(t('trade.success')),
+    onError: () => toast.error(t('trade.failed')),
+    onFillay: () => {
+      resetInternalTrade()
+      refetchInfo()
+      toast.dismiss()
     },
   })
 
-  const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
-    hash,
-  })
+  // Check trade type. internal trade or dex trade.
+  const checkForTrade = async (amount: string) => {
+    const { currentMax, isOverflow } = await checkForOverflow(amount)
+    const isInternal = !BigNumber(currentMax).eq(0)
 
-  if (isSuccess) {
-    toast.success(t('trade.success'))
-  }
-
-  if (isError) {
-    toast.error(t('trade.failed'))
-  }
-
-  if (isSuccess || isError) {
-    reset()
-    refetchInfo()
-  }
-
-  const checkTrade = async (address: Address) => {
-    const result = { totalAmount: BigInt(0), currentAmount: BigInt(0) }
-    const id = toast.loading(t('trade.checking'))
-
-    try {
-      const totalAmount = await readContract(wagmiConfig, {
-        abi: continousTokenAbi,
-        address,
-        functionName: 'ETH_AMOUNT',
-      })
-      const currentAmount = await readContract(wagmiConfig, {
-        abi: continousTokenAbi,
-        address,
-        functionName: 'raiseEthAmount',
-      })
-      result.totalAmount = totalAmount
-      result.currentAmount = currentAmount
-      return result
-    } catch (error) {
-      return result
-    } finally {
-      toast.dismiss(id)
+    return {
+      isInternal,
+      isOverflow,
+      currentMax,
     }
   }
 
-  const canMintAmount = async (address: Address) => {
-    try {
-      const amount = await readContract(wagmiConfig, {
-        abi: continousTokenAbi,
-        address,
-        functionName: 'CAN_MINI',
-      })
-      return formatEther(amount)
-    } catch (error) {}
+  const buy = async (amount: string) => {
+    const { currentMax, isInternal, isOverflow } = await checkForTrade(amount)
+
+    setIsInternalTrade(isInternal)
+
+    // Internal buy but overflow current max value.
+    if (isInternal && isOverflow) return currentMax
+
+    // Internal buy.
+    if (isInternal) return internalBuy(amount, token)
+
+    // DEX buy.
+    uniswapBuy(amount, token)
   }
 
-  const buy = async (amount: string, address: Address) => {
-    const total = BigNumber(amount).multipliedBy(0.01).plus(amount)
-    const value = parseEther(total.toFormat())
+  const sell = async (amount: string) => {
+    const { isInternal } = await checkForTrade(amount)
 
-    try {
-      await writeContractAsync({
-        abi: continousTokenAbi,
-        address,
-        functionName: 'mint',
-        args: [parseEther(amount.toString())],
-        value,
-      })
-    } catch (e) {
-      console.log('buy error:')
-      console.error(e)
-      toastNoReject(e)
-    }
+    setIsInternalTrade(isInternal)
+
+    // Internal sell.
+    if (isInternal) return internalSell(amount, token)
+
+    // DEX sell.
+    uniswapSell(amount, token)
   }
 
-  const sell = async (amount: string, address: Address) => {
-    try {
-      await writeContractAsync({
-        abi: continousTokenAbi,
-        address,
-        functionName: 'burn',
-        args: [parseEther(amount.toString())],
-      })
-    } catch (e) {
-      toastNoReject(e)
-    }
+  const resetTrade = () => {
+    resetInternalTrade()
+    resetUniswapTrade()
   }
 
   return {
-    tradeHash: hash,
-    isTrading: isPending || isLoading,
+    tradeHash: isInternalTrade ? internalHash : uniswapHash,
+    isTrading: isInternalTrading || isUniswapTrading || isLoading,
+    checkForTrade,
     buy,
     sell,
-    reset,
-    checkTrade,
+    resetTrade,
   }
 }

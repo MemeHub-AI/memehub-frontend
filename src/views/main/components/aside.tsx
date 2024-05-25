@@ -3,24 +3,19 @@ import { useTranslation } from 'react-i18next'
 
 const cards = [
   {
-    logo: '/images/news-person.png',
-    content:
-      'Trump expressed support for cryptocurrency, leading to a surge in popularity for Trump-themed MEME coins.',
+    logo: '/images/trump.jpeg',
+    content: '特朗普表示支持加密货币，Trump概念MEME币大火。',
   },
   {
-    logo: '/images/news-compute.png',
-    content: 'OpenAI公司推出GPT-40， AI概念MEME大火',
+    logo: '/images/ai.jpg',
+    content: 'OpenAI公司推出GPT-4o， AI概念MEME大火',
   },
   {
-    logo: '/images/news-sea.png',
+    logo: '/images/gamestop.avif',
     content: 'GME股票大涨，带动相关 MEME币大涨',
   },
   {
-    logo: '/images/news-rose.png',
-    content: 'Blast发币，MEME币掀起新的狂潮',
-  },
-  {
-    logo: '/images/news-cat.png',
+    logo: '/images/cat.jpg',
     content: '猫咪类MEME大火',
   },
 ]

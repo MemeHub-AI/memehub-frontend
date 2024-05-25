@@ -9,6 +9,7 @@ interface Props extends TooltipPrimitive.TooltipProps {
   tip: React.ReactNode
   children: React.ReactNode
   triggerProps?: Omit<TooltipPrimitive.TooltipTriggerProps, 'children'>
+  className?: string
 }
 
 const Tooltip = ({
@@ -16,13 +17,14 @@ const Tooltip = ({
   children,
   delayDuration = 300,
   triggerProps,
+  className,
   ...props
 }: Props) => {
   return (
     <TooltipProvider>
       <TooltipPrimitive.Root delayDuration={delayDuration} {...props}>
         <TooltipTrigger {...triggerProps}>{children}</TooltipTrigger>
-        <TooltipContent>{tip}</TooltipContent>
+        <TooltipContent className={className}>{tip}</TooltipContent>
       </TooltipPrimitive.Root>
     </TooltipProvider>
   )

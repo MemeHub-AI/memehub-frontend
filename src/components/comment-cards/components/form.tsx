@@ -1,15 +1,17 @@
-import React, { type ComponentProps } from 'react'
+import React, { useMemo, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImageIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash'
 import { toast } from 'sonner'
+import { nanoid } from 'nanoid'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { createField, useFields } from '@/hooks/use-fields'
 import { FormTextareaField } from '@/components/form-field'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { useUploadImage } from '@/hooks/use-upload-image'
+import { ImageUpload } from '@/components/image-upload'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   onComment?: (content: string, mentions: [], image?: string) => void
@@ -21,23 +23,27 @@ export const CommentForm = (props: Props) => {
   const { fields, updateField } = useFields({
     comment: createField({}),
   })
+  const { url, file, onChangeUpload, clearFile } = useUploadImage()
+  // Generate unique id.
+  const inputId = useMemo(nanoid, [])
+  const textareaId = useMemo(nanoid, [])
 
   const onChange = ({
     target,
   }: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    updateField(target.id as keyof typeof fields, { value: target.value })
+    updateField('comment', { value: target.value })
   }
 
   const onSubmit = () => {
     const comment = fields.comment.value.trim()
 
     if (isEmpty(comment)) {
-      toast.error(t('comment.empty'))
-      return
+      return toast.error(t('comment.empty'))
     }
-    // TODO: implementation iamge url.
-    onComment?.(comment, [], '')
+
+    onComment?.(comment, [], url)
     updateField('comment', { value: '' })
+    clearFile()
   }
 
   return (
@@ -49,7 +55,7 @@ export const CommentForm = (props: Props) => {
       }}
     >
       <FormTextareaField
-        id="comment"
+        id={textareaId}
         label={t('comment.new')}
         placeholder={t('comment-placeholder')}
         value={fields.comment.value}
@@ -59,10 +65,15 @@ export const CommentForm = (props: Props) => {
 
       <div className="flex items-center gap-2">
         <Button className="px-10">{t('comment')}</Button>
-        <Label htmlFor="comment-img" variant="icon">
+        <Label htmlFor={inputId} variant="icon">
           <ImageIcon className="cursor-pointer" />
         </Label>
-        <Input type="file" id="comment-img" className="hidden" />
+        {file && <p>{file?.name}</p>}
+        <ImageUpload
+          id={inputId}
+          onChange={onChangeUpload}
+          className="hidden"
+        />
       </div>
     </form>
   )

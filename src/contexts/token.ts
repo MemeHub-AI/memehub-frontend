@@ -1,26 +1,33 @@
-import { createContext, createElement, useContext, type ReactNode } from 'react'
+import {
+  type ProviderProps,
+  createContext,
+  createElement,
+  useContext,
+} from 'react'
 
 import type { TokenListItem } from '@/api/token/types'
 
-interface ContextValue {
-  total: string
-  current: string
-  refetchInfo: Function
+import { ERR } from '@/errors'
+
+interface Value {
   tokenInfo: TokenListItem | undefined
+  totalToken: string
+  currentToken: string
+  refetchInfo: Function
 }
 
-const TokenContext = createContext<ContextValue | null>(null)
+const TokenContext = createContext<Value | null>(null)
 
-export const TokenProvider = ({
-  children,
-  ...value
-}: { children: ReactNode } & ContextValue) => {
+export const TokenProvider = ({ children, value }: ProviderProps<Value>) => {
   return createElement(TokenContext.Provider, { value }, children)
 }
 
 export const useTokenContext = () => {
   const context = useContext(TokenContext)
 
-  if (!context) throw new Error('`TokenProvider` not found')
+  if (!context) {
+    throw ERR.notFound(TokenProvider.name)
+  }
+
   return context
 }
