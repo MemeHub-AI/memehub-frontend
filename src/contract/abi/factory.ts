@@ -1,5 +1,3 @@
-import { factoryAddress } from '.'
-
 export const factoryAbi = [
   {
     inputs: [],
@@ -196,8 +194,3 @@ export const factoryAbi = [
     type: 'receive',
   },
 ] as const
-
-export const factoryContract = {
-  abi: factoryAbi,
-  address: factoryAddress,
-} as const

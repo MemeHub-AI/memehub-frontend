@@ -4,7 +4,7 @@ import { Address, isAddress, parseEther } from 'viem'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
-import { continousTokenAbi } from '@/contract/continous-token'
+import { continousTokenAbi } from '@/contract/abi/continous-token'
 import { addServiceFee } from '@/utils/contract'
 import { customToast } from '@/utils/toast'
 

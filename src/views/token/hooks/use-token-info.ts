@@ -3,7 +3,7 @@ import { useReadContracts } from 'wagmi'
 import { formatEther, type Address } from 'viem'
 import { useQuery } from '@tanstack/react-query'
 
-import { continousTokenAbi } from '@/contract/continous-token'
+import { continousTokenAbi } from '@/contract/abi/continous-token'
 import { tokenApi } from '@/api/token'
 
 export const useTokenInfo = () => {

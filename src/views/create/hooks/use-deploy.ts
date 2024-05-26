@@ -5,10 +5,11 @@ import { first } from 'lodash'
 import type { Address } from 'viem'
 import type { TokenNewReq } from '@/api/token/types'
 
-import { factoryContract } from './../../../contract/factory'
+import { factoryAbi } from '../../../contract/abi/factory'
 import { useCreateToken } from './use-create-token'
 import { ApiCode } from '@/api/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
+import { factoryAddress } from '@/contract/address'
 
 const deployFee = 2000671350000000
 const deploySymbol = 'ETH'
@@ -53,7 +54,8 @@ export const useDeploy = () => {
 
     return writeContract(
       {
-        ...factoryContract,
+        abi: factoryAbi,
+        address: factoryAddress.scroll,
         functionName: 'deploy',
         args: [
           reserveRatio,

@@ -4,8 +4,9 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
-import { uniswapV2Contract } from './../../../contract/uniswap-v2'
+import { uniswapV2Abi } from '../../../contract/abi/uniswap-v2'
 import { customToast } from '@/utils/toast'
+import { uniswapV2Address } from '@/contract/address'
 
 const ETH_ADDRESS = '0x5300000000000000000000000000000000000004'
 
@@ -53,7 +54,8 @@ export const useUniswapV2 = () => {
 
     console.log('uniswap buy', amount, token)
     writeContract({
-      ...uniswapV2Contract,
+      abi: uniswapV2Abi,
+      address: uniswapV2Address,
       functionName: 'swapExactETHForTokens',
       args: [BigInt(0), [ETH_ADDRESS, token], address!, BigInt(Date.now())],
       value: parseEther(amount),
@@ -66,7 +68,8 @@ export const useUniswapV2 = () => {
 
     console.log('uniswap sell', amount, token)
     writeContract({
-      ...uniswapV2Contract,
+      abi: uniswapV2Abi,
+      address: uniswapV2Address,
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),

@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
 
 import { wagmiConfig } from '@/config/wagmi'
-import { continousTokenAbi } from '@/contract/continous-token'
+import { continousTokenAbi } from '@/contract/abi/continous-token'
 
 export const useTradeInfo = () => {
   const { address } = useAccount()

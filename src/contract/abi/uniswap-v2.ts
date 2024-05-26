@@ -1,5 +1,3 @@
-import { uniswapV2Address } from '.'
-
 export const uniswapV2Abi = [
   {
     inputs: [
@@ -356,8 +354,3 @@ export const uniswapV2Abi = [
   },
   { stateMutability: 'payable', type: 'receive' },
 ] as const
-
-export const uniswapV2Contract = {
-  abi: uniswapV2Abi,
-  address: uniswapV2Address,
-} as const
