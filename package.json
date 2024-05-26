@@ -43,6 +43,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-responsive": "^10.0.0",
     "react-use": "^17.5.0",
+    "react-use-websocket": "^4.8.1",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
