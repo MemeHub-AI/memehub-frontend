@@ -1,13 +1,11 @@
 import React, { ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/router'
 
 import type { Nav } from './'
 
 import { Button } from '../ui/button'
 import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
-import { Routes } from '@/routes'
 import { LangSelect } from '../lang-select'
 import { Input } from '../input'
 import { SocialLinks } from '../social-links'
@@ -21,7 +19,6 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderDesktop = (props: Props) => {
   const { navs, onNavClick } = props
   const { t } = useTranslation()
-  const router = useRouter()
 
   const [value, setValue] = useState('')
   const onSearch = () => {

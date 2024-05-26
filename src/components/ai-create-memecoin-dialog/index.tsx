@@ -2,16 +2,16 @@ import { t } from 'i18next'
 import React from 'react'
 import { Button } from '../ui/button'
 import { Dialog } from '../ui/dialog'
-import { CreateTokenResult } from '@/api/token/types'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
+import { AIMemeInfo } from '@/api/ai/type'
 
 interface Props {
   show?: boolean
   hidden?: () => void
   loading?: boolean
   isRandom?: boolean
-  data?: CreateTokenResult
+  data?: AIMemeInfo
 }
 
 export const AICreateMemecoinDialog = (props: Props) => {
@@ -33,7 +33,7 @@ export const AICreateMemecoinDialog = (props: Props) => {
           </div>
           <div>
             <img
-              src="/images/1.png"
+              src="/images/ai-loding.webp"
               alt="BabyPEPE"
               className="w-[95%] object-cover mx-auto my-4 rounded-md"
             />

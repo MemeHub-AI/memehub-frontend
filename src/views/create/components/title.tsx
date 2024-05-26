@@ -17,7 +17,7 @@ export const Title = ({
   return (
     <h2
       className={cn(
-        'font-bold text-3xl my-8 relative max-sm:w-full max-sm:my-4 max-sm:text-2xl',
+        'font-bold text-xl my-5 relative max-sm:w-full max-sm:my-4 max-sm:text-2xl',
         className
       )}
     >

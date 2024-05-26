@@ -32,7 +32,7 @@ enum Type {
 }
 
 const rows = Array.from({ length: 10 }).map(() => ({
-  avatar: '/images/meme.png',
+  avatar: '/images/logo.png',
   name: 'L1en',
   type: Math.random() > 0.4 ? Type.Sell : Type.Buy,
   amount: '123',

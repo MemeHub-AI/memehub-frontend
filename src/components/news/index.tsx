@@ -11,11 +11,11 @@ export const NewsCard = ({ news, onMeme }: Props) => {
   const { t } = useTranslation()
 
   return (
-    <div className="flex gap-2 transition-all cursor-pointer">
+    <div className="flex gap-2 transition-all cursor-pointer p-2 bg-slate-50 rounded-sm hover:bg-slate-100">
       <img
         src={news.image.imageUrl}
         alt="logo"
-        className="w-24 h-24 object-cover rounded"
+        className="w-20 h-20 object-cover rounded"
       />
       <div className="flex flex-col justify-between items-start">
         <p

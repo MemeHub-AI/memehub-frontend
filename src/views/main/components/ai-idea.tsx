@@ -1,34 +1,46 @@
-import { tokenApi } from '@/api/token'
+import { aiApi } from '@/api/ai'
+import { AIMemeInfo } from '@/api/ai/type'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import Input from '@/components/input'
 import { Button } from '@/components/ui/button'
-import { Dialog } from '@/components/ui/dialog'
+import clsx from 'clsx'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WiStars } from 'react-icons/wi'
+import { toast } from 'sonner'
 
-export const AIIdea = () => {
+export const AIIdea = ({ className }: { className?: string }) => {
   const { t } = useTranslation()
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
   const [isRandom, setIsRandom] = useState(false)
-  const [data, setData] = useState<any>()
+  const [data, setData] = useState<AIMemeInfo>()
 
   const onGenerate = async () => {
     setShow(true)
     setLoading(true)
-    const { data } = await tokenApi.generateInfo()
+    const { data } = await aiApi.getMemeInfo()
     setLoading(false)
-    setData(data)
+    setData(data!)
   }
 
   const onRoundGenerate = async () => {
     setShow(true)
     setLoading(true)
     setIsRandom(true)
-    const { data } = await tokenApi.generateInfo()
-    setLoading(false)
-    setData(data)
+    try {
+      toast.loading(t('creating.meme.info'))
+      const { data } = await aiApi.getMemeInfo()
+      const { data: memeImage } = await aiApi.getMemeImage(data)
+      data!.image = memeImage?.[0]
+      setData(data!)
+    } catch (e) {
+      toast.error(t('creating.meme.info.error'))
+      setShow(false)
+    } finally {
+      setLoading(false)
+      toast.dismiss()
+    }
   }
 
   const hidden = () => {
@@ -37,19 +49,24 @@ export const AIIdea = () => {
   }
 
   return (
-    <div className="mt-8 flex items-center bg-slate-100 rounded-sm p-5 my-5 max-sm:p-3 max-sm:flex-col max-sm:mt-2">
+    <div
+      className={clsx(
+        'mt-8 flex items-center bg-slate-100 rounded-sm py-5 px-7 my-5 max-md:w-full max-md:p-3 max-md:flex-col max-md:items-start max-md:mt-2',
+        className
+      )}
+    >
       <div className="flex items-center">
         <img
-          src="https://s3.ap-east-1.amazonaws.com/storage.memehub.ai/pepe-ad9f3a5d0ceb9ca1c171603bb53d9708.avif"
+          src="/images/ai.png"
           alt=""
-          className="w-[70px] h-[70px] rounded-sm mr-4"
+          className="w-[60px] h-[60px] rounded-sm mr-5"
         />
         <div>{t('ai.generate.bio')}</div>
       </div>
-      <div className="flex items-center max-sm:mt-4">
+      <div className="flex items-center max-md:mt-4">
         <Input
           placeholder={t('input.you.idea')}
-          className="max-w-[180px] ml-4 max-sm:ml-0"
+          className="max-w-[180px] ml-4 max-md:ml-0"
           endIcon={
             <div>
               <Button

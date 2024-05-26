@@ -27,5 +27,11 @@ export const useStorage = (useSession = false) => {
 
     getToken: () => get('token'),
     setToken: (v: string) => set('token', v),
+
+    getArea: () => get('area'),
+    setArea: (v: string) => set('area', v),
+
+    getChain: () => get('chain') || '534352',
+    setChain: (v: string) => set('chain', v),
   }
 }

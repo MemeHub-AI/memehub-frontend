@@ -147,8 +147,8 @@
 }
 
 .tab-item {
-  padding: 10px 20px;
-  border-radius: 16px;
+  padding: 8px 10px;
+  border-radius: 12px;
   margin: 20px 0;
   cursor: pointer;
 }
