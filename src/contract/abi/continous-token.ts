@@ -23,7 +23,7 @@ export const continousTokenAbi = [
       },
       {
         internalType: 'address',
-        name: 'router',
+        name: '_router',
         type: 'address',
       },
     ],
@@ -61,6 +61,31 @@ export const continousTokenAbi = [
       {
         indexed: true,
         internalType: 'address',
+        name: 'lpAddress',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'ethAmount',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'tokenAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubAddLiquidity',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
         name: '_address',
         type: 'address',
       },
@@ -77,7 +102,7 @@ export const continousTokenAbi = [
         type: 'uint256',
       },
     ],
-    name: 'ContinuousBurn',
+    name: 'MemeHubContinuousBurn',
     type: 'event',
   },
   {
@@ -102,7 +127,7 @@ export const continousTokenAbi = [
         type: 'uint256',
       },
     ],
-    name: 'ContinuousMint',
+    name: 'MemeHubContinuousMint',
     type: 'event',
   },
   {
@@ -839,6 +864,19 @@ export const continousTokenAbi = [
   },
   {
     inputs: [],
+    name: 'uniswapV2Pair',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'uniswapV2Router',
     outputs: [
       {
@@ -848,6 +886,24 @@ export const continousTokenAbi = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address payable',
+        name: '_to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'withdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
