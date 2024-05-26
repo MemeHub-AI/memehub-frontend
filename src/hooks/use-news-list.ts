@@ -10,10 +10,11 @@ import { useAIMemeInfo } from './use-ai-meme-info'
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 
 interface Options {
-  formData: ReturnType<typeof useCreateTokenForm>
+  formData?: ReturnType<typeof useCreateTokenForm>
 }
 
-export const useNewsList = ({ formData }: Options) => {
+export const useNewsList = (options?: Options) => {
+  const { formData } = options || {}
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
 
@@ -40,20 +41,22 @@ export const useNewsList = ({ formData }: Options) => {
         )
         return
       }
-      getAIMemeInfo(
-        news.title.query,
-        news.articles[0].snippet,
-        (data) => {
-          formData.form.setValue(formData.formFields.fullname, data?.name)
-          formData.form.setValue(
-            formData.formFields.description,
-            data?.description
-          )
-        },
-        (data) => {
-          formData.form.setValue(formData.formFields.logo, data?.[0])
-        }
-      )
+      if (formData) {
+        getAIMemeInfo(
+          news.title.query,
+          news.articles[0].snippet,
+          (data) => {
+            formData.form.setValue(formData.formFields.fullname, data?.name)
+            formData.form.setValue(
+              formData.formFields.description,
+              data?.description
+            )
+          },
+          (data) => {
+            formData.form.setValue(formData.formFields.logo, data?.[0])
+          }
+        )
+      }
     } catch (error) {
       console.error(error)
     } finally {
