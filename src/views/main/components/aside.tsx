@@ -1,11 +1,11 @@
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { NewsCard } from '@/components/news'
 import { NewsSkeleton } from '@/components/news/skeleton'
-
 import { useNewsList } from '@/hooks/use-news-list'
-import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 export const HotNewsAside = () => {
   const { t } = useTranslation()
