@@ -210,6 +210,10 @@
   "meme.it": "Meme it!",
   "no.data": "No data",
   "next.moonshot": "💡 Next Moonshot",
-  "hot.opportunity": "🔥Hot Opportunity",
-  "area": "Area"
+  "area": "Area",
+  "fields.required": "Require",
+  "creating.meme.info": "A Meme is being generated",
+  "creating.meme.info.error": "AI failed to generate Meme information",
+  "get.chain.error": "Unable to get platform supported chain",
+  "creating.meme.logo.error": "The AI failed to generate the Memel logo"
 }

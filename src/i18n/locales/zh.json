@@ -206,6 +206,10 @@
   "meme.it": "生成Meme币",
   "no.data": "无数据",
   "next.moonshot": "💡 下一个登月计划",
-  "hot.opportunity": "🔥热门机会",
-  "area": "地区"
+  "area": "地区",
+  "fields.required": "该内容不能为空",
+  "creating.meme.info": "正在生成Meme信息",
+  "creating.meme.info.error": "AI生成Meme信息失败",
+  "get.chain.error": "无法获取平台支持的链",
+  "creating.meme.logo.error": "AI生成Meme logo失败"
 }

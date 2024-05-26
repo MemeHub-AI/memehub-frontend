@@ -1,8 +1,7 @@
 import { api } from '..'
 
 import type { ApiResponse, Pagination } from '../types'
-
-import { CountryData, NewsData } from './types'
+import type { CountryData, NewsData } from './types'
 
 export const newsApi = {
   async getNews() {

@@ -16,11 +16,11 @@ import {
 import { Order } from '@/utils/types'
 import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
+import { useScrollLoad } from '@/hooks/use-scroll-load'
+import { Routes } from '@/routes'
 import { TokenListItem } from '@/api/token/types'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useStorage } from '@/hooks/use-storage'
-import { Routes } from '@/routes'
-import { useScrollLoad } from '@/hooks/use-scroll-load'
 
 interface Props extends ComponentProps<'div'> {
   cards: UserListRes[UserListType.CoinsCreated][]
@@ -40,8 +40,6 @@ export const TokenCards = (props: Props) => {
     onFetchNext,
   } = props
   const { t } = useTranslation()
-  const { chains } = useWalletStore()
-  const { getChain, setChain } = useStorage()
   // TODO: Encapsulate a component to handling scroll load.
   const { noMore } = useScrollLoad({
     onFetchNext,
@@ -66,6 +64,8 @@ export const TokenCards = (props: Props) => {
       order: Order.Desc,
     },
   ]
+  const { chains } = useWalletStore()
+  const { getChain, setChain } = useStorage()
 
   const onChange = (chainId: string) => {
     setChain(chainId)
