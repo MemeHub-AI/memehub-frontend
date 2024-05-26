@@ -1,5 +1,6 @@
 import { utilTime } from '@/utils/time'
-import { api, ApiResponse } from '..'
+import { api } from '..'
+import { ApiResponse } from '../types'
 import { ChainData } from './type'
 
 export const chainApi = {
