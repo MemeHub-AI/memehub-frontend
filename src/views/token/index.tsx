@@ -18,14 +18,7 @@ export const TokenPage = () => {
   const { tokenInfo, totalToken, currentToken, refetchInfo } = useTokenInfo()
 
   return (
-    <TokenProvider
-      value={{
-        tokenInfo,
-        totalToken,
-        currentToken,
-        refetchInfo,
-      }}
-    >
+    <TokenProvider value={{ tokenInfo, totalToken, currentToken, refetchInfo }}>
       <main className="px-4 max-sm:px-3 pt-4 max-w-main mx-auto min-h-main">
         <Button className="mb-3 self-start" onClick={router.back}>
           {t('back')}
@@ -42,7 +35,7 @@ export const TokenPage = () => {
           {!isMobile && (
             <div className="w-aside">
               <TradeTab />
-              {/* <HoldersRank className="mt-4" /> */}
+              <HoldersRank className="mt-4" />
             </div>
           )}
         </div>

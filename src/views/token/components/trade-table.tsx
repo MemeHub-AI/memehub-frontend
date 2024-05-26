@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 import dayjs from 'dayjs'
+import { ArrowLeftRight } from 'lucide-react'
 
 import {
   Table,
@@ -14,38 +15,26 @@ import {
 } from '@/components/ui/table'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
-import { Tooltip } from '@/components/ui/tooltip'
 import { Avatar } from '@/components/ui/avatar'
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination'
-
-enum Type {
-  Buy,
-  Sell,
-}
-
-const rows = Array.from({ length: 10 }).map(() => ({
-  avatar: '/images/logo.png',
-  name: 'L1en',
-  type: Math.random() > 0.4 ? Type.Sell : Type.Buy,
-  amount: '123',
-  symbol: 'ETH',
-  date: '2024/01/01 12:00',
-  tx: '6WAPjM1VEEKnotkq6TGTgHywKdJLrLmuEWaDARX7SfzK9rrzmjxXfsGXjevMSJLxQHiuZHbW7LvjEuNKBvWvrBj',
-  explorer:
-    'https://scrollscan.com/token/0x5300000000000000000000000000000000000004',
-}))
+import { Pagination } from '@/components/ui/pagination'
+import { useTradeRecord } from '../hooks/use-trade-record'
+import { TradeType } from '@/api/websocket/types'
 
 export const TradeTable = () => {
   const { t } = useTranslation()
-  const ths = [t('account'), t('type'), t('amount'), t('date'), t('tx.hash')]
+  const [showAge, setShowAge] = useState(true)
+  const ths = [
+    t('account'),
+    t('type'),
+    t('amount'),
+    t('volume'),
+    showAge ? t('age') : t('date'),
+    t('tx.hash'),
+  ]
+  const { tradeRecords } = useTradeRecord()
+  const [page, setPage] = useState(1)
+  const pageIdx = page - 1
+  const perPage = 10
 
   return (
     <Table>
@@ -53,74 +42,67 @@ export const TradeTable = () => {
         <TableRow>
           {ths.map((t, i) => (
             <TableHead key={i} className={cn(i === 0 && 'w-[100px]')}>
-              {t}
+              {/* Date field */}
+              {i === ths.length - 2 ? (
+                <div
+                  className="flex items-center gap-1 cursor-pointer hover:text-black"
+                  onClick={() => setShowAge(!showAge)}
+                >
+                  <span>{t}</span>
+                  <ArrowLeftRight size={12} />
+                </div>
+              ) : (
+                t
+              )}
             </TableHead>
           ))}
         </TableRow>
       </TableHeader>
       <TableBody>
-        {rows.map((r, i) => {
-          const isBuy = r.type === Type.Buy
-          return (
-            <TableRow key={i}>
-              <TableCell
-                className="font-bold inline-flex items-center gap-1 cursor-pointer hover:underline my-2"
-                onClick={() => {}}
-              >
-                <Avatar src={r.avatar} size={24} />
-                <span>{r.name}</span>
-              </TableCell>
-              <TableCell
-                className={cn(isBuy ? 'text-green-500' : 'text-red-500')}
-              >
-                {isBuy ? t('buy') : t('sell')}
-              </TableCell>
-              <TableCell className="max-sm:text-xs">
-                {r.amount} {r.symbol}
-              </TableCell>
-              <TableCell className="max-sm:text-xs">
-                <Tooltip tip={dayjs(r.date).fromNow()}>{r.date}</Tooltip>
-              </TableCell>
-              <TableCell className="max-sm:text-xs">
-                <Link
-                  href={r.explorer}
-                  target="_blank"
-                  className="hover:underline"
+        {tradeRecords
+          .slice(pageIdx * perPage, pageIdx * perPage + perPage)
+          .map((r, i) => {
+            const isBuy = r.type === TradeType.Buy
+            return (
+              <TableRow key={i}>
+                <TableCell
+                  className="font-bold inline-flex items-center gap-1 cursor-pointer hover:underline my-2"
+                  onClick={() => {}}
                 >
-                  {fmt.addr(r.tx)}
-                </Link>
-              </TableCell>
-            </TableRow>
-          )
-        })}
+                  <Avatar src={r.account} size={24} />
+                  <span>{r.account.slice(-4)}</span>
+                </TableCell>
+                <TableCell
+                  className={cn(isBuy ? 'text-green-500' : 'text-red-500')}
+                >
+                  {isBuy ? t('buy') : t('sell')}
+                </TableCell>
+                <TableCell className="max-sm:text-xs">
+                  {fmt.tradeFixed(r.quote_amount)} {r.quote_symbol}
+                </TableCell>
+                <TableCell className="max-sm:text-xs">
+                  {fmt.tradeFixed(r.base_amount)} {r.base_symbol}
+                </TableCell>
+                <TableCell className="max-sm:text-xs">
+                  {showAge ? dayjs(r.create_time).fromNow() : r.create_time}
+                </TableCell>
+                <TableCell className="max-sm:text-xs">
+                  <Link
+                    href={r.hash_url}
+                    target="_blank"
+                    className="hover:underline"
+                  >
+                    {fmt.addr(r.hash)}
+                  </Link>
+                </TableCell>
+              </TableRow>
+            )
+          })}
       </TableBody>
       <TableFooter className="bg-transparent">
         <TableRow className="hover:bg-transparent">
           <TableCell colSpan={ths.length}>
-            <Pagination>
-              <PaginationContent>
-                <PaginationItem>
-                  <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#" isActive>
-                    1
-                  </PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">2</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationLink href="#">10</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                  <PaginationNext href="#" />
-                </PaginationItem>
-              </PaginationContent>
-            </Pagination>
+            <Pagination total={tradeRecords.length} onPageChange={setPage} />
           </TableCell>
         </TableRow>
       </TableFooter>

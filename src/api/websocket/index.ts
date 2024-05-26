@@ -3,7 +3,7 @@ import { WSMessageBase } from './types'
 const baseURL = process.env.NEXT_PUBLIC_WS_URL
 
 export const wsApiURL = {
-  tradeLog: baseURL + '/chat/trade_log',
+  tradeLogs: baseURL + '/chat/trade_log',
   tokenInfo: baseURL + '/chat/coin_info',
   tradeRecord: baseURL + '/chat/trade_record',
 }

@@ -10,6 +10,7 @@ import { LangSelect } from '../lang-select'
 import { Input } from '../input'
 import { SocialLinks } from '../social-links'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import { TradeLogs } from '../trade-logs'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -27,8 +28,11 @@ export const HeaderDesktop = (props: Props) => {
 
   return (
     <>
-      <Logo showMeme />
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-4">
+        <Logo showMeme />
+        <TradeLogs />
+      </div>
+      <div className="flex items-center">
         <nav className="flex items-center gap-3">
           <ul className="flex items-center gap-3">
             {navs.map((n, i) => (

@@ -34,7 +34,14 @@ export const fmt = {
     if (isEmpty(val)) return '#'
     return `#${val}`
   },
-  tradeFixed(n: BigNumber) {
+  tradeFixed(n: BigNumber | number) {
+    n = typeof n === 'number' ? BigNumber(n) : n
     return n.toFixed(n.lt(1) ? 6 : 2)
+  },
+  percent: (value: string | number | undefined, fixed = 2) => {
+    if (!value) return '0%'
+
+    const percent = BigNumber(value).multipliedBy(100).toFixed(fixed)
+    return fmt.progress(Number(percent))
   },
 }

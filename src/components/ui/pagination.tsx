@@ -8,16 +8,88 @@ import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
-import { ButtonProps, buttonVariants } from '@/components/ui/button'
+import { Button, ButtonProps, buttonVariants } from '@/components/ui/button'
+import { useWatch } from '@/hooks/use-watch'
+import { usePagination } from '@/hooks/use-pagination'
 
-const Pagination = ({ className, ...props }: React.ComponentProps<'nav'>) => (
-  <nav
-    role="navigation"
-    aria-label="pagination"
-    className={cn('mx-auto flex w-full justify-center', className)}
-    {...props}
-  />
-)
+interface Props extends React.ComponentProps<'nav'> {
+  total: number
+  defaultPage?: number
+  itemCount?: number
+  onPageChange?: (page: number) => void
+}
+
+const Pagination = (props: Props) => {
+  const {
+    className,
+    total = 2,
+    defaultPage = 1,
+    itemCount = 5,
+    onPageChange,
+    ...restProps
+  } = props
+  const {} = usePagination()
+
+  return (
+    <nav
+      role="navigation"
+      aria-label="pagination"
+      className={cn('mx-auto flex w-full justify-center', className)}
+      {...restProps}
+    >
+      {/* <PaginationContent>
+        {total !== 1 && (
+          <PaginationItem>
+            <Button
+              variant="ghost"
+              onClick={() => setPage((p) => p - 1)}
+              disabled={isFirstPage}
+            >
+              <ChevronLeftIcon className="h-4 w-4" />
+            </Button>
+          </PaginationItem>
+        )}
+        {items.map((_, i) => {
+          const isActive = page === i + 1
+          return (
+            <PaginationItem key={i}>
+              <Button
+                variant={isActive ? 'outline' : 'ghost'}
+                className={cn('border', !isActive && 'border-transparent')}
+                onClick={() => setPage(i + 1)}
+              >
+                {i + 1}
+              </Button>
+            </PaginationItem>
+          )
+        })}
+        {total >= ELLIPSIS_THROWTTLE && (
+          <PaginationItem>
+            <PaginationEllipsis />
+          </PaginationItem>
+        )}
+        {
+          <PaginationItem>
+            <Button variant="ghost" onClick={() => setPage((p) => p + 1)}>
+              {lastItem}
+            </Button>
+          </PaginationItem>
+        }
+        {total !== 1 && (
+          <PaginationItem>
+            <Button
+              variant="ghost"
+              onClick={() => setPage((p) => p + 1)}
+              disabled={isLastPage}
+            >
+              <ChevronRightIcon className="h-4 w-4" />
+            </Button>
+          </PaginationItem>
+        )}
+      </PaginationContent> */}
+    </nav>
+  )
+}
 Pagination.displayName = 'Pagination'
 
 const PaginationContent = React.forwardRef<

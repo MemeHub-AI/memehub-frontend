@@ -19,7 +19,7 @@ export const CommentTradeTab = (props: ComponentProps<'div'>) => {
     useComments()
 
   return (
-    <Tabs defaultValue={Tab.Comments} className={cn('mt-4', className)}>
+    <Tabs defaultValue={Tab.Trades} className={cn('mt-4', className)}>
       <TabsList>
         <TabsTrigger value={Tab.Comments}>{t('comments')}</TabsTrigger>
         <TabsTrigger value={Tab.Trades}>{t('trades')}</TabsTrigger>

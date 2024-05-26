@@ -152,7 +152,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
           {/* Trade button */}
           <Button
-            className="w-full"
+            isFullWidth
+            className="!w-full"
             onClick={onTrade}
             disabled={isTrading || BigNumber(value).lte(0)}
           >

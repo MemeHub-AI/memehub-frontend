@@ -15,19 +15,26 @@ export enum TradeType {
   Sell = 'sell',
 }
 
+export interface WSTradeLogMessage {
+  create_info: CreateInfoLog[]
+  trade_info: TradeInfoLog[]
+}
+
+export interface CreateInfoLog {}
+
+export interface TradeInfoLog {}
+
 export interface WSTradeRecordMessage {
-  records: {
-    account: string
-    base_amount: number
-    base_symbol: string
-    chain: string
-    create_time: string
-    hash: string
-    hash_url: string
-    quote_amount: number
-    quote_symbol: string
-    type: TradeType
-  }[]
+  account: string
+  base_amount: number
+  base_symbol: string
+  chain: string
+  create_time: string
+  hash: string
+  hash_url: string
+  quote_amount: number
+  quote_symbol: string
+  type: TradeType
 }
 
 export interface WSTradeInfoMessage {

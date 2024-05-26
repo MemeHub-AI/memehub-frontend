@@ -195,5 +195,10 @@
   "traed.cancel": "Cancel trading",
   "trade.amount.invalid": "Amount is invalid",
   "trading": "Trading...",
-  "tx.confirm": "Wai"
+  "tx.confirm": "Wai",
+  "volume": "Volume",
+  "age": "Age",
+  "bonding-curve": "Bonding Curve",
+  "sold": "Sold",
+  "bought": "Bought"
 }
