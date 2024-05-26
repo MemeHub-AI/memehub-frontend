@@ -44,7 +44,7 @@ export const useDeploy = () => {
         const { data, code, message } = await create({ ...params, hash })
 
         if (code !== ApiCode.Success) throw new Error(message)
-        setTokenId(data.coin_id)
+        setTokenId(data?.coin_id!)
       } catch (error) {
         setBackendErr(error)
       }

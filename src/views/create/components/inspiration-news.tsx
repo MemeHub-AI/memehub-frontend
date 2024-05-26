@@ -14,20 +14,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { useStorage } from '@/hooks/use-storage'
 
-export const InspirationNews = ({ className }: ComponentProps<'div'>) => {
+interface Props extends ComponentProps<'div'> {
+  newsListData: ReturnType<typeof useNewsList>
+}
+
+export const InspirationNews = ({ className, newsListData }: Props) => {
   const { t } = useTranslation()
-  const router = useRouter()
   const [selectTab, setSelectTab] = useState(0)
+  const { getArea, setArea } = useStorage()
 
-  const { newsList, handleClick, isFetching } = useNewsList()
+  const { isFetching, newsList, countryList, handleClick } = newsListData
 
-  const tabs = [t('next.moonshot'), t('hot.opportunity')]
+  const tabs = [t('next.moonshot'), t('hot-opportunity')]
 
-  const areas = ['美国', '中国']
-
-  const onChange = () => {
-    console.log('change')
+  const onChange = (value: string) => {
+    setArea(value)
   }
 
   const onChangeTab = (idx: number) => {
@@ -42,9 +45,9 @@ export const InspirationNews = ({ className }: ComponentProps<'div'>) => {
             <div
               key={i}
               className={clsx(
-                'tab-item',
+                'tab-item text-nowrap',
                 selectTab === i ? 'active' : '',
-                i !== 0 ? '!ml-6' : ''
+                i !== 0 ? '!ml-4' : ''
               )}
               onClick={() => onChangeTab(i)}
             >
@@ -53,18 +56,20 @@ export const InspirationNews = ({ className }: ComponentProps<'div'>) => {
           )
         })}
       </div>
-      <Select onValueChange={onChange}>
-        <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
-          <SelectValue placeholder={t('area')} />
-        </SelectTrigger>
-        <SelectContent>
-          {areas.map((name, i) => (
-            <SelectItem key={i} value={String(i)}>
-              {name}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+      {selectTab === 0 ? (
+        <Select defaultValue={getArea() || 'US'} onValueChange={onChange}>
+          <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
+            <SelectValue placeholder={t('area')} />
+          </SelectTrigger>
+          <SelectContent>
+            {countryList?.map((country, i) => (
+              <SelectItem key={i} value={country.short_name}>
+                {country.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ) : null}
       <CustomSuspense
         isPending={isFetching}
         list={newsList}

@@ -11,6 +11,10 @@ import { useLang } from '@/hooks/use-lang'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { Toaster } from '@/components/ui/sonner'
 import { BackToTop } from '../back-to-top'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { chainApi } from '@/api/chain'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -19,9 +23,23 @@ dayjs.extend(relativeTime)
 export const AppLayout = ({ children }: ComponentProps<'div'>) => {
   const { isNotMounted } = useMounted(onMounted)
   const { initLang } = useLang()
+  const { setChains } = useWalletStore()
+
+  const { t } = useTranslation()
+
+  const initChains = async () => {
+    try {
+      const { data } = await chainApi.getChain()
+      setChains(data!)
+    } catch (error) {
+      toast.error(t('get.chain.error'))
+    }
+  }
 
   function onMounted() {
     initLang()
+
+    initChains()
   }
 
   // Auto login if `token` is already exists.

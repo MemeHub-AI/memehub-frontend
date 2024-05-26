@@ -16,7 +16,8 @@ import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { Routes } from '@/routes'
 import { TokenListItem } from '@/api/token/types'
-import { useChainConfig } from '@/hooks/use-chain-config'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { useStorage } from '@/hooks/use-storage'
 
 interface Props extends ComponentProps<'div'> {
   cards: (TokenListItem | undefined)[]
@@ -25,41 +26,30 @@ interface Props extends ComponentProps<'div'> {
 
 export const TokenCards = ({ className, cards, isPending }: Props) => {
   const { t } = useTranslation()
-  const { chains } = useChainConfig()
-  const sortItems = [
-    {
-      label: t('market.sort.asc'),
-      order: Order.Asc,
-    },
-    {
-      label: t('market.sort.desc'),
-      order: Order.Desc,
-    },
-    {
-      label: t('comments.sort.asc'),
-      order: Order.Asc,
-    },
-    {
-      label: t('comments.sort.desc'),
-      order: Order.Desc,
-    },
-  ]
+  const { chains } = useWalletStore()
+  const { getChain, setChain } = useStorage()
 
-  const onChange = (idx: string) => {
-    const item = sortItems[Number(idx)]
+  const onChange = (chainId: string) => {
+    setChain(chainId)
   }
+
+  const defaultChain = getChain()
 
   return (
     <>
       <div className="flex items-center gap-4 max-sm:justify-between">
-        <Select onValueChange={onChange}>
+        <Select onValueChange={onChange} defaultValue={defaultChain}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <SelectValue placeholder={t('chains')} />
           </SelectTrigger>
           <SelectContent>
-            {chains.map((c, i) => (
-              <SelectItem key={i} value={String(i)} disabled={c.disabled}>
-                {c.name}
+            {chains?.map((chain, i) => (
+              <SelectItem
+                key={i}
+                value={chain.id || defaultChain}
+                disabled={chain.disabled || false}
+              >
+                {chain.name}
               </SelectItem>
             ))}
           </SelectContent>

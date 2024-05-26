@@ -25,7 +25,7 @@ export const Input = (props: InputProps) => {
       className={cn(
         'flex items-center border-2 rounded-md w-full border-black',
         'focus-within:border-black focus-within:shadow group',
-        'focus:shadow-[0_0_5px_3px_#ED8181!important]',
+        'focus:shadow-[0_0_5px_3px_#A4C9EC!important]',
         className
       )}
       style={{
@@ -40,7 +40,7 @@ export const Input = (props: InputProps) => {
         disableFocusBorder
         value={props.value}
         onChange={props.onChange}
-        onFocus={() => setBoxShadow('0 0 5px 3px #ED8181')}
+        onFocus={() => setBoxShadow('0 0 5px 3px #A4C9EC')}
         onBlur={() => setBoxShadow('')}
       />
       {endIcon ? endIcon : null}

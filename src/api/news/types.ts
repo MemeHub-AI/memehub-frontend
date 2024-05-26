@@ -24,3 +24,9 @@ export interface Title {
   query: string
   exploreLink: string
 }
+
+export interface CountryData {
+  id: number
+  name: string
+  short_name: string
+}

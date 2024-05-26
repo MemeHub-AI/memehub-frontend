@@ -50,7 +50,13 @@ export const TokenCard = ({ card, className }: Props) => {
         })
       }}
     >
-      <img src={card?.image} alt="img" className="h-32 w-32 object-cover" />
+      <img
+        src={card?.image || '/images/logo.png'}
+        alt="img"
+        className="flex-shrink-0 h-32 w-32 object-cover"
+        width={128}
+        height={128}
+      />
       <img
         src="/images/scroll.svg"
         alt="chain"
