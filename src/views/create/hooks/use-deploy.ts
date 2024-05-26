@@ -10,18 +10,19 @@ import { useCreateToken } from './use-create-token'
 import { ApiCode } from '@/api/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { factoryAddress } from '@/contract/address'
-
-const deployFee = 2000671350000000
-const deploySymbol = 'ETH'
-
-const reserveRatio = BigInt(800000)
-const reserveTokenAddress = '0x5300000000000000000000000000000000000004'
-const router = '0x9B3336186a38E1b6c21955d112dbb0343Ee061eE'
+import { useDeployConfig } from './use-deploy-config'
 
 export const useDeploy = () => {
   const [backendErr, setBackendErr] = useState<unknown>(null)
   const [tokenId, setTokenId] = useState(-1)
   const { create } = useCreateToken()
+  const {
+    deployFee,
+    deploySymbol,
+    reserveRatio,
+    nativeTokenAddress,
+    routerAddress,
+  } = useDeployConfig()
 
   const {
     data: hash,
@@ -59,10 +60,10 @@ export const useDeploy = () => {
         functionName: 'deploy',
         args: [
           reserveRatio,
-          reserveTokenAddress,
+          nativeTokenAddress.scroll,
           params.name,
           params.ticker,
-          router,
+          routerAddress.scroll,
         ],
         value: BigInt(deployFee),
       },
