@@ -21,7 +21,6 @@ import { Routes } from '@/routes'
 import { TokenListItem } from '@/api/token/types'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useStorage } from '@/hooks/use-storage'
-import { useChainConfig } from '@/hooks/use-chain-config'
 
 interface Props extends ComponentProps<'div'> {
   cards: UserListRes[UserListType.CoinsCreated][]
@@ -111,7 +110,6 @@ export const TokenCards = (props: Props) => {
       )}
 
       <CustomSuspense
-        list={cards}
         className={cn(
           'grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1',
           'max-sm:gap-2 '

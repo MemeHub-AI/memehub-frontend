@@ -72,8 +72,8 @@ export const InspirationNews = ({ className, newsListData }: Props) => {
       ) : null}
       <CustomSuspense
         isPending={isFetching}
-        list={newsList}
         fallback={<NewsSkeleton />}
+        nullback={t('no.data')}
         className="flex flex-col gap-6 h-[calc(100vh-260px)] overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip"
       >
         <div className="flex flex-col gap-3">

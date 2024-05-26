@@ -42,6 +42,7 @@ export const useComments = (enableFetchComments = true) => {
         .map((p) => p.data.results)
         .filter(Boolean)
         .flat() || []
+
     if (!commentData || isEmpty(commentList)) return
 
     setComments(commentList as TokenCommentListRes[])

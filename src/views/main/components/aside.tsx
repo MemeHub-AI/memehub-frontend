@@ -21,13 +21,12 @@ export const HotNewsAside = () => {
       <CustomSuspense
         isPending={isFetching}
         fallback={<NewsSkeleton />}
-        list={newsList}
+        nullback={<>{t('no.data')}</>}
+        className="flex flex-col gap-3 pr-5"
       >
-        <div className="flex flex-col gap-3 pr-5">
-          {newsList?.map((news, i) => (
-            <NewsCard news={news!} key={i} onMeme={() => handleClick(news)} />
-          ))}
-        </div>
+        {newsList?.map((news, i) => (
+          <NewsCard news={news!} key={i} onMeme={() => handleClick(news)} />
+        ))}
       </CustomSuspense>
       <AICreateMemecoinDialog
         data={data}
