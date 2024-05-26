@@ -192,5 +192,8 @@
   "trade.amount.invalid": "Amount is invalid",
   "trading": "Trading...",
   "tx.confirm": "Wai",
-  "chain-error": "Please switch to correct chain before"
+  "chain-error": "Please switch to correct chain before",
+  "approve.error": "Approve failed, please try again",
+  "approving": "Token is approving...",
+  "approve.success": "Approve successful!"
 }

@@ -189,5 +189,8 @@
   "traed.cancel": "取消交易",
   "trade.amount.invalid": "金额无效",
   "trading": "交易中...",
-  "chain-error": "请先切换到正确的链"
+  "chain-error": "请先切换到正确的链",
+  "approve.error": "授权失败，请重试",
+  "approving": "正在授权代币...",
+  "approve.success": "授权成功！"
 }

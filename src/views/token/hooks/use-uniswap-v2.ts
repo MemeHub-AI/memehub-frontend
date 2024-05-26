@@ -7,12 +7,14 @@ import { isEmpty } from 'lodash'
 import { uniswapV2Abi } from '../../../contract/abi/uniswap-v2'
 import { customToast } from '@/utils/toast'
 import { uniswapV2Address } from '@/contract/address'
-
-const ETH_ADDRESS = '0x5300000000000000000000000000000000000004'
+import { useDeployConfig } from '@/views/create/hooks/use-deploy-config'
+import { useApprove } from '@/hooks/use-approve'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
   const { address } = useAccount()
+  const { routerAddress, nativeTokenAddress } = useDeployConfig()
+  const { isApproving, checkForApproval } = useApprove()
 
   const {
     data: hash,
@@ -57,12 +59,24 @@ export const useUniswapV2 = () => {
       abi: uniswapV2Abi,
       address: uniswapV2Address,
       functionName: 'swapExactETHForTokens',
-      args: [BigInt(0), [ETH_ADDRESS, token], address!, BigInt(Date.now())],
+      args: [
+        BigInt(0),
+        [nativeTokenAddress.scroll, token],
+        address!,
+        BigInt(Date.now()),
+      ],
       value: parseEther(amount),
     })
   }
 
-  const uniswapSell = (amount: string, token: Address) => {
+  const uniswapSell = async (amount: string, token: Address) => {
+    const isApproved = await checkForApproval(
+      token,
+      routerAddress.scroll,
+      amount
+    )
+    if (!isApproved) return
+
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
@@ -74,7 +88,7 @@ export const useUniswapV2 = () => {
       args: [
         parseEther(amount),
         BigInt(0),
-        [token, ETH_ADDRESS],
+        [token, nativeTokenAddress.scroll],
         address!,
         BigInt(Date.now()),
       ],
@@ -83,7 +97,7 @@ export const useUniswapV2 = () => {
 
   return {
     uniswapHash: hash,
-    isUniswapTrading,
+    isUniswapTrading: isUniswapTrading || isApproving,
     uniswapBuy,
     uniswapSell,
     resetUniswapTrade,
