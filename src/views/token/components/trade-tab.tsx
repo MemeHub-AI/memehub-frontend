@@ -4,7 +4,7 @@ import { Address, isAddress } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
+import { useAccount, useSwitchChain } from 'wagmi'
 import { isEmpty } from 'lodash'
 
 import { Card } from '@/components/ui/card'
@@ -18,23 +18,23 @@ import { SlippageButton } from './slippage-button'
 import { TradeProvider } from '@/contexts/trade'
 import { TradeItems } from './trade-items'
 import { TradeInput } from './trade-input'
+import { TradeType } from '@/api/websocket/types'
 
-enum Tab {
-  Buy = 'buy',
-  Sell = 'sell',
-}
+// TODO: should be dynamic chain.
+const SCROLL_CHAIN = 534352
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const [tab, setTab] = useState(String(Tab.Buy))
+  const [tab, setTab] = useState(String(TradeType.Buy))
   const [value, setValue] = useState('0')
   const [isBuy, isSell] = useMemo(
-    () => [tab === Tab.Buy, tab === Tab.Sell],
+    () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
   )
   const { query } = useRouter()
 
-  const { isConnected } = useAccount()
+  const { switchChainAsync } = useSwitchChain()
+  const { isConnected, chain, chainId } = useAccount()
   const { isTrading, buy, sell } = useTrade()
   const { ethBalance, tokenBalance } = useTradeInfo()
   const { setConnectOpen } = useWalletStore()
@@ -69,7 +69,18 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     sell(value)
   }
 
-  const onTrade = () => {
+  const checkForChain = async () => {
+    if (chainId === SCROLL_CHAIN) return true
+    try {
+      await switchChainAsync({ chainId: SCROLL_CHAIN })
+      return true
+    } catch (error) {
+      toast.error(t('chain-error'))
+      return false
+    }
+  }
+
+  const onTrade = async () => {
     // Wallet is not connect.
     if (!isConnected) {
       setConnectOpen(true)
@@ -81,6 +92,10 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       toast.error(t('trade.token.invalid'))
       return
     }
+
+    // Chain is not correct.
+    const isValidChain = await checkForChain()
+    if (!isValidChain) return
 
     isBuy ? onBuy() : onSell()
   }
@@ -94,14 +109,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <TabsList className="grid grid-cols-2 h-11 mb-6">
             <TabsTrigger
               className="h-full"
-              value={Tab.Buy}
+              value={TradeType.Buy}
               disabled={isTrading}
             >
               {t('buy')}
             </TabsTrigger>
             <TabsTrigger
               className="h-full"
-              value={Tab.Sell}
+              value={TradeType.Sell}
               disabled={isTrading}
             >
               {t('sell')}

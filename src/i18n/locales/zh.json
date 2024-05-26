@@ -188,5 +188,6 @@
   "trade.account.invalid": "账户地址无效",
   "traed.cancel": "取消交易",
   "trade.amount.invalid": "金额无效",
-  "trading": "交易中..."
+  "trading": "交易中...",
+  "chain-error": "请先切换到正确的链"
 }

@@ -191,5 +191,6 @@
   "traed.cancel": "Cancel trading",
   "trade.amount.invalid": "Amount is invalid",
   "trading": "Trading...",
-  "tx.confirm": "Wai"
+  "tx.confirm": "Wai",
+  "chain-error": "Please switch to correct chain before"
 }
