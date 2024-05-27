@@ -212,5 +212,8 @@
   "create.ai.poster": "AI genterage",
   "onsubmit.createing.warning": "AI is making disclosure of information",
   "meme.logo": "Meme Logo",
-  "need.base.info.warning": "The name and introduction need to be perfected"
+  "need.base.info.warning": "The name and introduction need to be perfected",
+  "process": "",
+  "progress": "Progress",
+  "swatch.chain": "Need to switch to $1 chain"
 }

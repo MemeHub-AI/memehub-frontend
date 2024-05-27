@@ -9,6 +9,8 @@ import { useUploadImage } from '@/hooks/use-upload-image'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
+import { useStorage } from '@/hooks/use-storage'
+import { toast } from 'sonner'
 
 export const formFields = {
   fullname: 'fullname',
@@ -17,7 +19,7 @@ export const formFields = {
   twitter: 'twitter',
   telegram: 'telegram',
   website: 'website',
-  chainId: 'chainId',
+  chainName: 'chainName',
   logo: 'logo',
   poster: 'poster',
 }
@@ -29,6 +31,7 @@ export const useCreateTokenForm = (
   const { isConnected, chainId } = useAccount()
   const { query } = useRouter()
   const { switchChain } = useSwitchChain()
+  const { getChain } = useStorage()
 
   const { setConnectOpen, chains, loadingChains } = useWalletStore()
   const { url, onChangeUpload } = useUploadImage()
@@ -47,7 +50,7 @@ export const useCreateTokenForm = (
     [formFields.twitter]: z.string().optional(),
     [formFields.telegram]: z.string().optional(),
     [formFields.website]: z.string().optional(),
-    [formFields.chainId]: z.string().refine(validateInput, require),
+    [formFields.chainName]: z.string().refine(validateInput, require),
     [formFields.logo]: z.string().refine(validateInput, require),
     [formFields.poster]: z.array(z.string()).optional(),
   })
@@ -61,7 +64,7 @@ export const useCreateTokenForm = (
       [formFields.twitter]: '',
       [formFields.telegram]: '',
       [formFields.website]: '',
-      [formFields.chainId]: '1',
+      [formFields.chainName]: '',
       [formFields.logo]: '',
       [formFields.poster]: [],
     },
@@ -73,16 +76,22 @@ export const useCreateTokenForm = (
     if (!isValid) return
     if (!isConnected) return setConnectOpen(true)
     if (isDeploying) return
-    if (values.chainId !== `${chainId}`) {
-      switchChain({ chainId: Number(values.chainId) })
+    const vChainId = Number(chains.find((c) => c.name === values.chainName)?.id)
+    if (vChainId !== chainId) {
+      toast.error(t('swatch.chain').replace('$1', values.chainName! as string))
+      switchChain({
+        chainId: vChainId,
+      })
+      return
     }
+    debugger
 
     deploy({
       name: values.fullname! as string,
       ticker: values.symbol! as string,
       desc: values.description! as string,
-      image: url,
-      chain_id: `${values.chainId}`,
+      image: values.logo! as string,
+      chain_id: values.chainName as string,
       // Optional.
       twitter_url: values.twitter as string,
       telegram_url: values.telegram as string,
@@ -91,11 +100,13 @@ export const useCreateTokenForm = (
   }
 
   return {
+    url,
     form,
     formFields,
     formSchema,
     chains,
     loadingChains: loadingChains,
     onSubmit,
+    onChangeUpload,
   }
 }

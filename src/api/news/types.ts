@@ -33,6 +33,9 @@ export interface Title {
 
 export interface CountryData {
   id: number
-  name: string
+  name: {
+    en: string
+    zh: string
+  }
   short_name: string
 }
