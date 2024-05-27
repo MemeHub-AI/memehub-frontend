@@ -1,4 +1,4 @@
-import React, { useEffect, type ComponentProps } from 'react'
+import React, { useEffect, useRef, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
@@ -20,7 +20,6 @@ interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
 
 export const Main = (props: Props) => {
   const { className, aIMemeInfo } = props
-  const { query } = useRouter()
   const { t } = useTranslation()
   const {
     getAIMemeInfo,
@@ -28,13 +27,6 @@ export const Main = (props: Props) => {
     isLoadingMemeInfo,
     isLoadingMemePoster,
   } = aIMemeInfo
-
-  useEffect(() => {
-    if (!query?.title || !formFields.fullname || isLoadingMemeInfo) {
-      return
-    }
-    getAIMemeInfo(query.title! as string)
-  }, [query])
 
   return (
     <div

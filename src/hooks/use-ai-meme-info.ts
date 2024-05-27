@@ -1,7 +1,8 @@
 import { formFields } from './../views/create/hooks/use-form'
 import { aiApi } from '@/api/ai'
 import { AIMemeInfo } from '@/api/ai/type'
-import { useState } from 'react'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { useEffect, useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -78,7 +79,7 @@ export const useAIMemeInfo = (options?: Options) => {
           }
         })
         .catch(() => {
-          toast.error(t('creating.meme.logo.error'))
+          // toast.error(t('creating.meme.logo.error'))
         })
         .finally(() => {
           setIsLoadingMemeImg(false)
@@ -96,7 +97,7 @@ export const useAIMemeInfo = (options?: Options) => {
           form?.setValue(formFields.poster, [...data.poster1, ...data.poster2])
         })
         .catch(() => {
-          toast.error(t('creating.meme.poster.error'))
+          // toast.error(t('creating.meme.poster.error'))
         })
         .finally(() => {
           setIsLoadingMemePoster(false)
