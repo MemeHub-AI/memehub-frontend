@@ -204,7 +204,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             </div>
             <FormField
               control={form.control}
-              name="type"
+              name={formFields.chainId}
               render={({ field }) => (
                 <FormItem className="mt-0">
                   <FormLabel className="mt-0">

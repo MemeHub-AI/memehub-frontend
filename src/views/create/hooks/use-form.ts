@@ -28,7 +28,7 @@ export const useCreateTokenForm = (
   const { t } = useTranslation()
   const { isConnected, chainId } = useAccount()
   const { query } = useRouter()
-  const { switchChainAsync } = useSwitchChain()
+  const { switchChain } = useSwitchChain()
 
   const { setConnectOpen, chains, loadingChains } = useWalletStore()
   const { url, onChangeUpload } = useUploadImage()
@@ -73,8 +73,8 @@ export const useCreateTokenForm = (
     if (!isValid) return
     if (!isConnected) return setConnectOpen(true)
     if (isDeploying) return
-    if (typeof values.chainId !== `${chainId}`) {
-      switchChainAsync({ chainId: Number(values.chainId) })
+    if (values.chainId !== `${chainId}`) {
+      switchChain({ chainId: Number(values.chainId) })
     }
 
     deploy({
