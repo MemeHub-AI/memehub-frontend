@@ -22,15 +22,15 @@ export const tokenApi = {
       body: req,
     })
   },
-  update(id: string | number, req: TokenUpdateReq) {
-    return api.PATCH<null>(`/api/v1/coin/coins/${id}/`, { body: req })
+  update(addr: string, req: TokenUpdateReq) {
+    return api.PATCH<null>(`/api/v1/coin/coins/${addr}/`, { body: req })
   },
-  details(id: string | number) {
-    return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${id}/`)
+  details(addr: string) {
+    return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${addr}/`)
   },
-  commentList(id: string, req: PaginationParams) {
+  commentList(addr: string, req: PaginationParams) {
     return api.GET<ApiResponse<Pagination<TokenCommentListRes>>>(
-      `/api/v1/coin/comments/${id}/` + qs.stringify(req)
+      `/api/v1/coin/comments/${addr}/` + qs.stringify(req)
     )
   },
   addComment(req: TokenAddCommentReq) {
@@ -41,14 +41,14 @@ export const tokenApi = {
       }
     )
   },
-  like(id: string) {
+  like(addr: string) {
     return api.POST<ApiResponse<TokenCommentListRes>>(
-      `/api/v1/coin/like/${id}/`
+      `/api/v1/coin/like/${addr}/`
     )
   },
-  unlike(id: string) {
+  unlike(addr: string) {
     return api.DELETE<ApiResponse<TokenCommentListRes>>(
-      `/api/v1/coin/like/${id}/`
+      `/api/v1/coin/like/${addr}/`
     )
   },
 }

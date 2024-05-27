@@ -26,7 +26,7 @@ export const useUserList = (type: UserListType) => {
     [UserListType.Following]: { total: 0, list: [] },
   })
   const { query } = useRouter()
-  const id = (query.id || '') as string
+  const tokenAddr = (query.address || '') as string
 
   const {
     data = { list: [], total: 0 },
@@ -34,10 +34,10 @@ export const useUserList = (type: UserListType) => {
     isFetching,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: [userApi.list.name, id, type],
+    queryKey: [userApi.list.name, tokenAddr, type],
     queryFn: ({ pageParam }) => {
-      if (isEmpty(id)) return Promise.reject()
-      return userApi.list(id, {
+      if (isEmpty(tokenAddr)) return Promise.reject()
+      return userApi.list(tokenAddr, {
         type,
         page: pageParam,
         page_size: 25,

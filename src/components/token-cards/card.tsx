@@ -44,12 +44,7 @@ export const TokenCard = ({ card, className }: Props) => {
       )}
       isShadow
       hover="border"
-      onClick={() => {
-        router.push({
-          pathname: `${Routes.Token}/${card?.id}`,
-          query: { address: card?.address },
-        })
-      }}
+      onClick={() => router.push(`${Routes.Token}/${card.address}`)}
     >
       <img
         src={card?.image || '/images/logo.png'}
@@ -69,7 +64,7 @@ export const TokenCard = ({ card, className }: Props) => {
             {card?.name} {card?.ticker && `(${card?.ticker})`}
           </CardTitle>
           <Link
-            href={`${Routes.Account}/${card?.creator.id}`}
+            href={`${Routes.Account}/${card?.creator.wallet_address}`}
             className="text-zinc-500 text-xs mt-0.5 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >

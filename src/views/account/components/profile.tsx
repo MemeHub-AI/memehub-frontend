@@ -39,8 +39,8 @@ export const Profile = (props: ComponentProps<'div'>) => {
   const { userInfo, isOtherUser, refetchUserInfo } = useAccountContext()
   const { isFollowed } = useUserStore()
   const { isFollowing, isUnfollowing, follow, unfollow, update } = useUser()
-  const queryId = query.id as string
-  const isFollow = isFollowed(queryId)
+  const tokenAddr = (query.address || '') as string
+  const isFollow = isFollowed(tokenAddr)
 
   const { onChangeUpload } = useUploadImage({
     onSuccess: (url) => update({ logo: url }).then(() => refetchUserInfo()),
@@ -114,7 +114,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
             containerClass="!absolute right-4 top-2"
             // className="absolute right-4 top-2"
             disabled={isFollowing || isUnfollowing}
-            onClick={() => (isFollow ? unfollow(queryId) : follow(queryId))}
+            onClick={() => (isFollow ? unfollow(tokenAddr) : follow(tokenAddr))}
           >
             {isFollow ? <MinusIcon /> : <PlusIcon />}
           </Button>

@@ -22,7 +22,7 @@ export const useComment = (options?: Options) => {
   const { mutateAsync: addComment } = useMutation({
     mutationKey: [tokenApi.addComment.name],
     mutationFn: (req: Omit<TokenAddCommentReq, 'coin'>) => {
-      return tokenApi.addComment({ coin: query.id as string, ...req })
+      return tokenApi.addComment({ coin: query.address as string, ...req })
     },
     onMutate: () => toast.loading(t('comment.loading')),
     onError: () => toast.error(t('comment.failed')),

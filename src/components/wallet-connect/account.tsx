@@ -27,7 +27,7 @@ export const WalletAccount = () => {
           if (!userInfo) {
             return toast.error(t('user.not-found'))
           }
-          router.push(`${Routes.Account}/${userInfo?.id}`)
+          router.push(`${Routes.Account}/${userInfo?.wallet_address}`)
         }}
       />
       {!isMobile && <WalletDisconnector />}

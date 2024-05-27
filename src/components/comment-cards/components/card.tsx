@@ -6,8 +6,6 @@ import { isEmpty } from 'lodash'
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import dayjs from 'dayjs'
 
-import type { TokenCommentListRes } from '@/api/token/types'
-
 import { Routes } from '@/routes'
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components//ui/avatar'
@@ -32,8 +30,9 @@ export const CommentCard = (props: Props) => {
   const { c, readonly, isActive, onLike, onUnlike, onReply, onAnchorClick } =
     props
   const { t } = useTranslation()
-  const router = useRouter()
+  const { query, ...router } = useRouter()
   const [open, setOpen] = useState(false)
+  const tokenAddr = (query.address || '') as string
 
   return (
     <Card
@@ -48,7 +47,9 @@ export const CommentCard = (props: Props) => {
       {/* User profile */}
       <div
         className="flex items-center gap-2 group transition-all w-fit"
-        onClick={() => router.push(`${Routes.Account}/${c.user.id}`)}
+        onClick={() => {
+          router.push(`${Routes.Account}/${c.user.wallet_address}`)
+        }}
       >
         <Avatar
           src={c.user.logo}
@@ -120,12 +121,12 @@ export const CommentCard = (props: Props) => {
           {c.is_liked ? (
             <HeartFilledIcon
               className="text-red-600 group-hover:stroke-black"
-              onClick={() => onUnlike?.(c.id.toString())}
+              onClick={() => onUnlike?.(tokenAddr)}
             />
           ) : (
             <HeartIcon
               className="text-zinc-400 group-hover:stroke-black"
-              onClick={() => onLike?.(c.id.toString())}
+              onClick={() => onLike?.(tokenAddr)}
             />
           )}
           <span className="text-sm mb-[0.5px]">{c.likes_count}</span>
@@ -134,7 +135,7 @@ export const CommentCard = (props: Props) => {
           <Button
             size="xs"
             variant="outline"
-            onClick={() => onReply?.(c.id.toString())}
+            onClick={() => onReply?.(tokenAddr)}
           >
             {t('replay')}
           </Button>

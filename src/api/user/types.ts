@@ -77,16 +77,22 @@ export interface UserListRes {
   [UserListType.Following]: UserFollow
 }
 
+interface User {
+  id: number
+  name: string
+  logo: string
+  description: string
+  wallet_address: string
+  like_count: number
+  mention_count: number
+}
+
 export interface UserCoinsCreated {
   id: number
   image: string
   address: string
   ticker: string
-  creator: {
-    id: number
-    name: string
-    logo: string
-  }
+  creator: User
   name: string
   desc: string
   market_cap: number
@@ -101,11 +107,7 @@ export interface UserCoinsCreated {
 export interface UserReplies {
   id: number
   content: string
-  user: {
-    id: number
-    name: string
-    logo: string
-  }
+  user: User
   coin: number
   img: string
   related_comments: number[]
@@ -117,11 +119,7 @@ export interface UserReplies {
 export interface UserNotification {
   id: number
   content: string
-  user: {
-    id: number
-    name: string
-    logo: string
-  }
+  user: User
   coin: number
   img: string
   related_comments: number[]

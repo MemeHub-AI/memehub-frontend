@@ -18,15 +18,15 @@ export const userApi = {
       body: req,
     })
   },
-  getInfo(id: string) {
-    return api.GET<ApiResponse<UserInfoRes>>(`/api/v1/user/users/${id}/`)
+  getInfo(addr: string) {
+    return api.GET<ApiResponse<UserInfoRes>>(`/api/v1/user/users/${addr}/`)
   },
   getInfoFromToken() {
     return api.GET<ApiResponse<UserInfoRes>>('/api/v1/user/users/')
   },
-  list<T extends UserListType>(id: string, req: UserListReq) {
+  list<T extends UserListType>(addr: string, req: UserListReq) {
     return api.GET<ApiResponse<Pagination<UserListRes[T]>>>(
-      `/api/v1/user/infolist/${id}/${qs.stringify(req)}`
+      `/api/v1/user/infolist/${addr}/${qs.stringify(req)}`
     )
   },
   updateInfo(req: UserUpdateReq) {
@@ -34,14 +34,14 @@ export const userApi = {
       body: req,
     })
   },
-  follow(id: string) {
+  follow(addr: string) {
     return api.POST<ApiResponse<UserInfoRes>>(
-      `/api/v1/user/users/${id}/followers/`
+      `/api/v1/user/users/${addr}/followers/`
     )
   },
-  unfollow(id: string) {
+  unfollow(addr: string) {
     return api.DELETE<ApiResponse<UserInfoRes>>(
-      `/api/v1/user/users/${id}/followers/`
+      `/api/v1/user/users/${addr}/followers/`
     )
   },
 }

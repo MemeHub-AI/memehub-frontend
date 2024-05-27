@@ -17,10 +17,12 @@ export const useComments = (enableFetchComments = true) => {
     fetchNextPage,
   } = useInfiniteQuery({
     enabled: enableFetchComments,
-    queryKey: [tokenApi.commentList.name, query.id],
+    queryKey: [tokenApi.commentList.name, query.address],
     queryFn: ({ pageParam }) => {
-      if (!query.id) return Promise.reject()
-      return tokenApi.commentList(query.id as string, {
+      const tokenAddr = (query.address || '') as string
+
+      if (!isEmpty(tokenAddr)) return Promise.reject()
+      return tokenApi.commentList(tokenAddr, {
         page: pageParam,
         page_size: 25,
       })

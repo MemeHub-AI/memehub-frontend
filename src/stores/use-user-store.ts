@@ -1,11 +1,11 @@
 import { create } from 'zustand'
 
-import type { UserMyInfoRes } from '@/api/user/types'
+import type { UserInfoRes } from '@/api/user/types'
 
 interface UserStore {
-  userInfo: UserMyInfoRes | null
+  userInfo: UserInfoRes | null
 
-  setUserInfo: (userInfo: UserMyInfoRes) => void
+  setUserInfo: (userInfo: UserInfoRes) => void
   isFollowed: (id: string) => boolean
 }
 

@@ -68,7 +68,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
           <p>{t('deploy.submit.success.desc')}</p>
-          <p>
+          {/* <p>
             {t('deploy.submit.success.view-hash')}:{' '}
             <Link
               href={`https://scrollscan.com/tx/${deployHash}`}
@@ -77,7 +77,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
             >
               {t('view')}
             </Link>
-          </p>
+          </p> */}
         </DialogDescription>
       </Dialog>
     )
@@ -117,19 +117,19 @@ export const CreateTokenStatusDialog = (props: Props) => {
             </Link>
             <Link
               className="text-blue-600 hover:underline"
-              href={`${Routes.Token}/${tokenId}?address=${deployedAddress}`}
+              href={`${Routes.Token}/${deployedAddress}`}
               onClick={resetDeploy}
             >
               {t('deploy.success.view-details')}
             </Link>
-            <Link
+            {/* <Link
               className="text-blue-600 hover:underline"
               href={`https://scrollscan.com/tx/${deployHash}?id=${tokenId}`}
               target="_blank"
               onClick={resetDeploy}
             >
               {t('deploy.success.view-hash')}
-            </Link>
+            </Link> */}
           </div>
         }
       />

@@ -2,15 +2,15 @@ import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import type { UserMyInfoRes } from '@/api/user/types'
+import type { UserInfoRes } from '@/api/user/types'
 
 import { userApi } from '@/api/user'
 import { useStorage } from './use-storage'
 import { useUserStore } from '@/stores/use-user-store'
 
 interface Options {
-  onUpdateSuccess?: (data: UserMyInfoRes) => void
-  onFollowSuccess?: (data: UserMyInfoRes) => void
+  onUpdateSuccess?: (data: UserInfoRes) => void
+  onFollowSuccess?: (data: UserInfoRes) => void
 }
 
 export const useUser = (options?: Options) => {

@@ -50,7 +50,7 @@ const MentionCard = ({ c }: { c: UserListRes[UserListType.Notifications] }) => {
       <div className="flex flex-col">
         <div className="flex items-center gap-1 flex-wrap">
           <Link
-            href={`${Routes.Account}/${c.user?.id}`}
+            href={`${Routes.Account}/${c.user.wallet_address}`}
             className="font-bold text-black hover:underline"
           >
             {c.user?.name}

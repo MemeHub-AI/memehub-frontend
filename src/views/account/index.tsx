@@ -10,7 +10,7 @@ import { AccountProvider } from '@/contexts/account'
 
 export const AccountPage = () => {
   const { query } = useRouter()
-  const queryId = query.id as string
+  const tokenAddr = (query.address || '') as string
   const {
     userInfo,
     otherUserInfo,
@@ -18,9 +18,9 @@ export const AccountPage = () => {
     isFetchingUserInfo,
     refetchUserInfo,
     refetchOtherUserInfo,
-  } = useUserInfo(queryId)
-  const currenUserId = String(userInfo?.id || '')
-  const isOtherUser = queryId !== currenUserId
+  } = useUserInfo(tokenAddr)
+  const currenUserAddr = String(userInfo?.wallet_address || '')
+  const isOtherUser = tokenAddr !== currenUserAddr
 
   return (
     <AccountProvider

@@ -6,7 +6,7 @@ import { userApi } from '@/api/user'
 import { useStorage } from './use-storage'
 import { useUserStore } from '@/stores/use-user-store'
 
-export const useUserInfo = (id?: string) => {
+export const useUserInfo = (addr?: string) => {
   const { setUserInfo } = useUserStore()
   const { getToken } = useStorage()
   const token = getToken() || ''
@@ -17,10 +17,10 @@ export const useUserInfo = (id?: string) => {
     isFetching: isFetchingOtherUserInfo,
     refetch: refetchOtherUserInfo,
   } = useQuery({
-    queryKey: [userApi.getInfo.name, id],
+    queryKey: [userApi.getInfo.name, addr],
     queryFn: () => {
-      if (!id || isEmpty(id)) return Promise.reject()
-      return userApi.getInfo(id)
+      if (!addr || isEmpty(addr)) return Promise.reject()
+      return userApi.getInfo(addr)
     },
   })
 

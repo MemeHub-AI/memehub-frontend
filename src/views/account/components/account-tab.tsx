@@ -9,6 +9,7 @@ import { CommentCards } from '@/components/comment-cards'
 import { TokenCards } from '@/components/token-cards'
 import { useUserList } from '../hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
+import { Routes } from '@/routes'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
@@ -48,8 +49,8 @@ export const AccountTab = () => {
       value={tab}
       onValueChange={(value) => {
         router.push({
-          pathname: router.pathname,
-          query: { id: query.id, tab: value },
+          pathname: `${Routes.Account}/${query.address}`,
+          query: { tab: value },
         })
       }}
     >

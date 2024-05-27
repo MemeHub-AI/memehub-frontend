@@ -14,9 +14,9 @@ export const useCreateToken = () => {
   // Update already created token. used for create error or interrupted.
   const { mutateAsync: update } = useMutation({
     mutationKey: [tokenApi.update.name],
-    mutationFn: (params: TokenUpdateReq & { id: string }) => {
-      const { id, ...req } = params
-      return tokenApi.update(id, req)
+    mutationFn: (params: TokenUpdateReq & { addr: string }) => {
+      const { addr, ...req } = params
+      return tokenApi.update(addr, req)
     },
   })
 

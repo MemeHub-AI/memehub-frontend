@@ -19,7 +19,7 @@ interface Props extends ComponentProps<'div'> {
 
 export const FollowCard = ({ card }: Props) => {
   const { t } = useTranslation()
-  const router = useRouter()
+  const { query, ...router } = useRouter()
   const { isFollowed } = useUserStore()
   const { follow, unfollow } = useUser({
     onFollowSuccess: () => refetchUserInfo(),
@@ -50,8 +50,8 @@ export const FollowCard = ({ card }: Props) => {
         variant="outline"
         onClick={(e) => {
           e.stopPropagation()
-          const id = card.id.toString()
-          isFollow ? unfollow(id) : follow(id)
+          const addr = (query.address || '') as string
+          isFollow ? unfollow(addr) : follow(addr)
         }}
       >
         {isFollow ? `- ${t('unfollow')}` : `+ ${t('follow')}`}

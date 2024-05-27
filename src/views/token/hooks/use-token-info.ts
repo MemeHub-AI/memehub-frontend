@@ -8,33 +8,32 @@ import { tokenApi } from '@/api/token'
 
 export const useTokenInfo = () => {
   const { query } = useRouter()
-  const token = (query.address || '') as Address
-  const id = (query.id || '') as string
+  const tokenAddr = (query.address || '') as Address
 
   // Query token amounts.
   const { data = [], refetch: refetchInfo } = useReadContracts({
     contracts: [
       {
         abi: continousTokenAbi,
-        address: token,
+        address: tokenAddr,
         functionName: 'ETH_AMOUNT',
       },
       {
         abi: continousTokenAbi,
-        address: token,
+        address: tokenAddr,
         functionName: 'raiseEthAmount',
       },
     ],
-    query: { enabled: !!token },
+    query: { enabled: !!tokenAddr },
   })
   const weiTotal = data[0]?.result || BigInt(0)
   const weiCurrent = data[1]?.result || BigInt(0)
 
   // Query token details from api.
   const { data: { data: tokenInfo } = {} } = useQuery({
-    enabled: !!id,
-    queryKey: [tokenApi.details.name, id],
-    queryFn: () => tokenApi.details(id),
+    enabled: !!tokenAddr,
+    queryKey: [tokenApi.details.name, tokenAddr],
+    queryFn: () => tokenApi.details(tokenAddr),
   })
 
   return {
