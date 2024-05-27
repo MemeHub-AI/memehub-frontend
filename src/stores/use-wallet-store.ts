@@ -14,7 +14,7 @@ export const useWalletStore = create<WalletStore>((set, get) => ({
   loadingChains: true,
   chains: [],
   setChains: (chains) => {
-    set({ chains, loadingChains: false })
+    set({ chains: chains.filter((c) => c.is_supported), loadingChains: false })
   },
   setConnectOpen: (open) => set({ connectOpen: open }),
 }))

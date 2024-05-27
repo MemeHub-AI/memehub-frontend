@@ -22,7 +22,6 @@ const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
   const { classname, margin } = utilStyle.handleMargin(className)
-  console.log(classname)
 
   return (
     <div className={clsx('relative w-max translate-x-[4px]', margin)}>

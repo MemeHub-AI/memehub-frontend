@@ -50,6 +50,10 @@ export interface ButtonProps
   isShadow?: boolean
   isReverse?: boolean
   containerClass?: string
+  offset?: {
+    x: number
+    y: number
+  }
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -66,6 +70,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       frontTextColor,
       backBgc,
       containerClass,
+      offset,
       ...props
     },
     ref
@@ -86,6 +91,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           isFullWidth ? 'w-full' : 'w-max',
           containerClass
         )}
+        style={{
+          transform: `translate(${offset?.x || 0}px, ${offset?.y || 0}px)`,
+        }}
       >
         <Comp
           ref={ref}

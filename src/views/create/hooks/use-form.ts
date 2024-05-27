@@ -3,18 +3,14 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import { useAccount } from 'wagmi'
+import { useAccount, useSwitchChain } from 'wagmi'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUploadImage } from '@/hooks/use-upload-image'
-import { useQuery } from '@tanstack/react-query'
-import { chainApi } from '@/api/chain'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { aiApi } from '@/api/ai'
+import { useEffect } from 'react'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 
-const formFields = {
+export const formFields = {
   fullname: 'fullname',
   symbol: 'symbol',
   description: 'description',
@@ -23,16 +19,16 @@ const formFields = {
   website: 'website',
   chainId: 'chainId',
   logo: 'logo',
+  poster: 'poster',
 }
 
 export const useCreateTokenForm = (
   useDeployResult: ReturnType<typeof useDeploy>
 ) => {
   const { t } = useTranslation()
-  const { isConnected } = useAccount()
+  const { isConnected, chainId } = useAccount()
   const { query } = useRouter()
-
-  const { getAIMemeInfo, isLoadingMemeImg, isLoadingMemeInfo } = useAIMemeInfo()
+  const { switchChainAsync } = useSwitchChain()
 
   const { setConnectOpen, chains, loadingChains } = useWalletStore()
   const { url, onChangeUpload } = useUploadImage()
@@ -53,6 +49,7 @@ export const useCreateTokenForm = (
     [formFields.website]: z.string().optional(),
     [formFields.chainId]: z.string().refine(validateInput, require),
     [formFields.logo]: z.string().refine(validateInput, require),
+    [formFields.poster]: z.array(z.string()).optional(),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -66,6 +63,7 @@ export const useCreateTokenForm = (
       [formFields.website]: '',
       [formFields.chainId]: '1',
       [formFields.logo]: '',
+      [formFields.poster]: [],
     },
   })
 
@@ -75,43 +73,29 @@ export const useCreateTokenForm = (
     if (!isValid) return
     if (!isConnected) return setConnectOpen(true)
     if (isDeploying) return
-    if (typeof values.chainId !== 'number') return
+    if (typeof values.chainId !== `${chainId}`) {
+      switchChainAsync({ chainId: Number(values.chainId) })
+    }
 
     deploy({
-      name: values.name!,
-      ticker: values.symbol!,
-      desc: values.description!,
+      name: values.fullname! as string,
+      ticker: values.symbol! as string,
+      desc: values.description! as string,
       image: url,
       chain_id: `${values.chainId}`,
       // Optional.
-      twitter_url: values.twitter,
-      telegram_url: values.telegram,
-      website: values.website,
+      twitter_url: values.twitter as string,
+      telegram_url: values.telegram as string,
+      website: values.website as string,
     })
   }
-
-  useEffect(() => {
-    if (!query) return
-    getAIMemeInfo(
-      (query.title || '') as string,
-      (query.description || '') as string,
-      (data) => {
-        form.setValue(formFields.fullname, data?.name!)
-        form.setValue(formFields.description, data?.description)
-      },
-      (data) => {
-        form.setValue(formFields.logo, data?.[0])
-      }
-    )
-  }, [])
 
   return {
     form,
     formFields,
+    formSchema,
     chains,
     loadingChains: loadingChains,
-    isLoadingMemeInfo,
-    isLoadingMemeImg,
     onSubmit,
   }
 }

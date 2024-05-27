@@ -1,13 +1,15 @@
 import { http, createConfig, fallback, unstable_connector } from 'wagmi'
 import { injected } from 'wagmi/connectors'
-import { scroll, scrollSepolia } from 'wagmi/chains'
+import { scroll, scrollSepolia, mainnet, bsc } from 'wagmi/chains'
 import { first } from 'lodash'
 
 const prod = createConfig({
-  chains: [scroll],
+  chains: [scroll, mainnet, bsc],
   connectors: [injected()],
   transports: {
     [scroll.id]: fallback([http(), unstable_connector(injected)]),
+    [mainnet.id]: fallback([http(), unstable_connector(injected)]),
+    [bsc.id]: fallback([http(), unstable_connector(injected)]),
   },
   ssr: true,
 })

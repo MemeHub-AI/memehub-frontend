@@ -169,7 +169,7 @@
   "approve.error": "Approve failed, please try again",
   "approving": "Token is approving...",
   "approve.success": "Approve successful!",
-  "ai.generate": "Random generation",
+  "ai.generate": "AI Generation",
   "ai.generate.bio": "Gonna create an explosive memecoin about",
   "input.you.idea": "input your idea",
   "coinfirm": "Confirm",
@@ -202,5 +202,15 @@
   "sold": "Sold",
   "bought": "Bought",
   "created": "Created",
-  "at": "At "
+  "at": "At ",
+  "creating.meme.poster.error": "The AI failed to generate the Meme poster",
+  "click.upload": "Click me upload",
+  "ai.createing.logo": "AI is cooking the logo",
+  "poster": "",
+  "ai.poster": "Meme Poster",
+  "ai.poster.tip": "AI is cooking promotion poster",
+  "create.ai.poster": "AI genterage",
+  "onsubmit.createing.warning": "AI is making disclosure of information",
+  "meme.logo": "Meme Logo",
+  "need.base.info.warning": "The name and introduction need to be perfected"
 }

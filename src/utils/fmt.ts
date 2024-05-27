@@ -44,4 +44,8 @@ export const fmt = {
     const percent = BigNumber(value).multipliedBy(100).toFixed(fixed)
     return fmt.progress(Number(percent))
   },
+  firstUpperCase(s?: string) {
+    if (!s) return ''
+    return s.replace(s[0], s[0].toUpperCase())
+  },
 }
