@@ -55,15 +55,16 @@ export const useDatafeed = () => {
 
         onResult(bars, { noData: isEmpty(bars) })
       },
-      subscribeBars(symbolInfo, resolution, onTick, uid, onRest) {
-        setSub(uid, onRest)
-        onUpdate((data) => {
-          console.log('update', data)
+      subscribeBars(_, resolution, onTick, uid, onRest) {
+        // setSub(uid, onRest)
+        onUpdate(({ data }) => {
+          const bars = toBars(data)
+          console.log('update', bars)
+          bars.forEach(onTick)
         })
       },
       unsubscribeBars(uid) {
-        // unsubscribe
-        getSub(uid)?.()
+        // getSub(uid)?.()
       },
     } as IBasicDataFeed
   }

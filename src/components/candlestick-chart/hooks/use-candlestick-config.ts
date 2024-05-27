@@ -22,6 +22,7 @@ const chartConfig: TVChartOptions = {
     'header_undo_redo',
     'header_settings',
     'header_screenshot',
+    'header_fullscreen_button',
     // Legend
     // 'legend_widget',
     // 'edit_buttons_in_legend',
