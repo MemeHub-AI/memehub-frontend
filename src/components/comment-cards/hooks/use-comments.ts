@@ -41,7 +41,7 @@ export const useComments = (enableFetchComments = true) => {
   useEffect(() => {
     const commentList =
       commentData?.pages
-        .map((p) => p.data.results)
+        .map((p) => p.data?.results)
         .filter(Boolean)
         .flat() || []
 
@@ -51,7 +51,7 @@ export const useComments = (enableFetchComments = true) => {
   }, [commentData])
 
   return {
-    total: commentData?.pages[0].data.count || 0,
+    total: commentData?.pages[0].data?.count || 0,
     comments,
     isLoading,
     isFetching,
