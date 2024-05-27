@@ -1,3 +1,5 @@
+import { TokenListItem } from '../token/types'
+
 export interface WSMessageBase<T = null> {
   type: string
   message: string
@@ -20,17 +22,19 @@ export interface WSTradeLogMessage {
   trade_info: TradeInfoLog[]
 }
 
-export interface CreateInfoLog {
-  wallet_address: string
-  symbol: string
-  create_time: string
-}
+export interface CreateInfoLog extends TokenListItem {}
 
 export interface TradeInfoLog {
+  user_id: number
+  logo: string
+  name: string
   wallet_address: string
   quote_amount: string
+  quote_address: string
   quote_symbol: string
   base_symbol: string
+  base_address: string
+  chain_logo: string
   type: TradeType
 }
 

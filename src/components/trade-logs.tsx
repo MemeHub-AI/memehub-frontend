@@ -6,7 +6,6 @@ import dayjs from 'dayjs'
 import { useTradeLogs } from '@/hooks/use-trade-logs'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
-import { fmt } from '@/utils/fmt'
 import { TradeType } from '@/api/websocket/types'
 
 export const TradeLogs = () => {
@@ -18,24 +17,24 @@ export const TradeLogs = () => {
       {lastTrade && (
         <Tag
           flash={isLatest}
-          userLabel={fmt.addr(lastTrade.wallet_address)}
+          userLabel={lastTrade.name}
           userAddr={lastTrade.wallet_address}
           text={(lastTrade.type === TradeType.Buy
             ? t('bought')
             : t('sold')
           ).toLowerCase()}
           tokenLabel={lastTrade.quote_symbol}
-          tokenAddr={lastTrade.quote_amount}
+          tokenAddr={lastTrade.quote_address}
         />
       )}
       {lastCreate && (
         <Tag
           flash={isLatest}
-          userLabel={lastCreate.wallet_address}
-          userAddr={lastCreate.wallet_address}
+          userLabel={lastCreate.creator.name}
+          userAddr={lastCreate.creator.wallet_address}
           text={t('created').toLowerCase()}
-          tokenLabel={lastCreate.symbol}
-          tokenAddr={lastCreate.symbol}
+          tokenLabel={lastCreate.ticker}
+          tokenAddr={lastCreate.address}
           suffix={`${t('at').toLowerCase()}${dayjs(
             lastCreate.create_time
           ).fromNow()}`}
