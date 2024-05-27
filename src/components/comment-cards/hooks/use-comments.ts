@@ -21,7 +21,7 @@ export const useComments = (enableFetchComments = true) => {
     queryFn: ({ pageParam }) => {
       const tokenAddr = (query.address || '') as string
 
-      if (!isEmpty(tokenAddr)) return Promise.reject()
+      if (isEmpty(tokenAddr)) return Promise.reject()
       return tokenApi.commentList(tokenAddr, {
         page: pageParam,
         page_size: 25,
