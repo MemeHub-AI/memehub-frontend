@@ -111,7 +111,8 @@ export const Profile = (props: ComponentProps<'div'>) => {
           <Button
             size="icon"
             variant="outline"
-            className="absolute right-4 top-2"
+            containerClass="!absolute right-4 top-2"
+            // className="absolute right-4 top-2"
             disabled={isFollowing || isUnfollowing}
             onClick={() => (isFollow ? unfollow(queryId) : follow(queryId))}
           >
@@ -122,7 +123,8 @@ export const Profile = (props: ComponentProps<'div'>) => {
             <Button
               size="icon"
               variant="outline"
-              className="absolute right-4 top-2"
+              containerClass="!absolute right-4 top-2"
+              // className="absolute right-4 top-2"
             >
               <Pencil2Icon />
             </Button>

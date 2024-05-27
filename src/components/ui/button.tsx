@@ -49,6 +49,7 @@ export interface ButtonProps
   isFullWidth?: boolean
   isShadow?: boolean
   isReverse?: boolean
+  containerClass?: string
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -64,6 +65,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       frontBgc,
       frontTextColor,
       backBgc,
+      containerClass,
       ...props
     },
     ref
@@ -81,7 +83,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={clsx(
           'relative  max-h-max h-min',
           margin,
-          isFullWidth ? 'w-full' : 'w-max'
+          isFullWidth ? 'w-full' : 'w-max',
+          containerClass
         )}
       >
         <Comp
