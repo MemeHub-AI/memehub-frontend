@@ -197,5 +197,7 @@
   "age": "Age",
   "bonding-curve": "联合曲线",
   "sold": "出售",
-  "bought": "购买"
+  "bought": "购买",
+  "created": "已创建",
+  "at": "在"
 }

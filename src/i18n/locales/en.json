@@ -200,5 +200,7 @@
   "age": "Age",
   "bonding-curve": "Bonding Curve",
   "sold": "Sold",
-  "bought": "Bought"
+  "bought": "Bought",
+  "created": "Created",
+  "at": "At "
 }

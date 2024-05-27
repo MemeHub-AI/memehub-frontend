@@ -16,24 +16,23 @@ export const useTradeLogs = () => {
   const [lastTrade, setLastTrade] = useState<TradeInfoLog>()
   const [lastCreate, setLastCreate] = useState<CreateInfoLog>()
 
-  const { lastJsonMessage, sendJsonMessage } = useWebSocket<
-    WSMessageBase<WSTradeLogMessage>
-  >(wsApiURL.tradeLogs, {
-    heartbeat,
-    onOpen: () => {
-      sendJsonMessage({ type: 'message', data: null })
-    },
-  })
+  const { lastJsonMessage, sendJsonMessage } =
+    useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(wsApiURL.tradeLogs, {
+      heartbeat,
+      onOpen: () => {
+        sendJsonMessage({ type: 'message', data: null })
+      },
+    })
 
-  // useEffect(() => {
-  //   if (!isSuccessMessage(lastJsonMessage)) return
-  //   const { trade_info, create_info } = lastJsonMessage.data
+  useEffect(() => {
+    if (!lastJsonMessage) return
+    if (!isSuccessMessage(lastJsonMessage)) return
+    const { trade_info, create_info } = lastJsonMessage.data
 
-  //   console.log('trade log', trade_info, create_info)
-  //   setIsLatest(true)
-  //   setLastTrade(last(trade_info))
-  //   setLastCreate(last(create_info))
-  // }, [lastJsonMessage])
+    setIsLatest(true)
+    setLastTrade(last(trade_info))
+    setLastCreate(last(create_info))
+  }, [lastJsonMessage])
 
   useEffect(() => {
     if (isLatest) {

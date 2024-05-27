@@ -1,7 +1,7 @@
 export interface WSMessageBase<T = null> {
   type: string
   message: string
-  data: T | null
+  data: T
 }
 
 export enum WSMessageType {
@@ -20,9 +20,19 @@ export interface WSTradeLogMessage {
   trade_info: TradeInfoLog[]
 }
 
-export interface CreateInfoLog {}
+export interface CreateInfoLog {
+  wallet_address: string
+  symbol: string
+  create_time: string
+}
 
-export interface TradeInfoLog {}
+export interface TradeInfoLog {
+  wallet_address: string
+  quote_amount: string
+  quote_symbol: string
+  base_symbol: string
+  type: TradeType
+}
 
 export interface WSTradeRecordMessage {
   chain: string

@@ -19,10 +19,13 @@ export const heartbeat = {
   interval: 5_000,
 }
 
-export const isSuccessMessage = <T = null>(str?: string) => {
-  if (!str || isEmpty(str)) return false
+export const isSuccessMessage = <T = null>(
+  value?: string | WSMessageBase<T>
+) => {
+  if (!value || isEmpty(value)) return false
 
-  const message = JSON.parse(str) as WSMessageBase<T>
+  const message =
+    typeof value === 'string' ? (JSON.parse(value) as WSMessageBase<T>) : value
   return (
     message.type === 'message' &&
     message.message === 'success' &&
