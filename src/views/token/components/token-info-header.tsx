@@ -51,9 +51,9 @@ export const TokenInfoHeader = () => {
           indicatorClass="bg-blue-600"
           labelClass="text-white"
           value={Number(percent)}
-          label={percent}
+          label={Number.isNaN(Number(percent)) ? '0' : percent}
         />
-        <div className="text-zinc-400 text-xs mt-1">
+        <div className="text-zinc-400 text-xs mt-1 text-end">
           {t('bonding-curve.token').replace('{}', `${marketMax} ${symbol}`)}
         </div>
       </div>

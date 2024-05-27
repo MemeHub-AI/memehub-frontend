@@ -1,7 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const baseWidth = {
-  main: '1140px',
+  main: '1280px',
   aside: '320px',
 }
 
