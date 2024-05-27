@@ -19,7 +19,7 @@ interface Props {
 export const AIIdea = (props: Props) => {
   const { className, isLoadingMemeInfo, getAIMemeInfo } = props
   const { t } = useTranslation()
-  const [show, setShow] = useState(false)
+  const [show, setShow] = useState(isLoadingMemeInfo)
   const [loading, setLoading] = useState(false)
   const [isRandom, setIsRandom] = useState(false)
   const [data, setData] = useState<AIMemeInfo>()
@@ -39,13 +39,17 @@ export const AIIdea = (props: Props) => {
   }
 
   const onConfirm = async () => {
-    await getAIMemeInfo?.(value)
+    if (!isRandom) {
+      await getAIMemeInfo?.(value)
+    } else {
+      await getAIMemeInfo?.('')
+    }
     hidden()
   }
 
   const onRoundGenerate = async () => {
     setShow(true)
-    setLoading(true)
+    setLoading(false)
     setIsRandom(true)
   }
 

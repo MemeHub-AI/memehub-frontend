@@ -7,6 +7,7 @@ import { Routes } from '@/routes'
 import { AIMemeInfo } from '@/api/ai/type'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 interface Props {
   show?: boolean
@@ -24,11 +25,13 @@ export const AICreateMemecoinDialog = (props: Props) => {
 
   const confirm = () => {
     if (!pathname.startsWith(Routes.Create)) {
-      return push(
-        `${Routes.Create}?title=${encodeURIComponent(
-          data?.name!
-        )}&description=${data?.description || ''}`
-      )
+      const aimemeInfoStore = useAimemeInfoStore.getState()
+      aimemeInfoStore.setInfo({
+        name: data?.name,
+        image: data?.image,
+        description: data?.description,
+      })
+      return push(Routes.Create)
     }
     onConfirm()
   }

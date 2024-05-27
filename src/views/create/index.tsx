@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { Main } from './components/main'
 import { InspirationNews } from './components/aside'
@@ -7,13 +7,26 @@ import { useDeploy } from './hooks/use-deploy'
 import { useCreateTokenForm } from './hooks/use-form'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
+import { useRouter } from 'next/router'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 export const CreatePage = () => {
   const deployResult = useDeploy()
   const formData = useCreateTokenForm(deployResult)
-  const newsListData = useNewsList({ formData })
-
   const aIMemeInfo = useAIMemeInfo({ form: formData.form })
+  const newsListData = useNewsList({
+    formData,
+  })
+  const aimemeInfoStore = useAimemeInfoStore.getState()
+  const isFirst = useRef(true)
+
+  useEffect(() => {
+    if (aimemeInfoStore.info?.name && isFirst.current) {
+      isFirst.current = false
+      newsListData.setShow(true)
+      aIMemeInfo.getAIMemeInfo(aimemeInfoStore.info?.name)
+    }
+  }, [])
 
   return (
     <main className="min-h-main flex justify-center mx-auto max-md:flex-col max-md:items-center max-sm:gap-8">

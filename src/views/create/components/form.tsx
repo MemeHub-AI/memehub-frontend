@@ -37,9 +37,15 @@ interface Props {
 export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
   const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } = props
   const { deployFee, deploySymbol, isDeploying } = props.deployResult
-  const { form, chains, formSchema, formFields, onSubmit } = props.formData
-
-  const { url, onChangeUpload } = useUploadImage()
+  const {
+    url,
+    form,
+    chains,
+    formSchema,
+    formFields,
+    onSubmit,
+    onChangeUpload,
+  } = props.formData
 
   const [handLoadingPoster, setHandLoadingPoster] = useState(false)
 
@@ -204,13 +210,13 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             </div>
             <FormField
               control={form.control}
-              name={formFields.chainId}
+              name={formFields.chainName}
               render={({ field }) => (
                 <FormItem className="mt-0">
                   <FormLabel className="mt-0">
                     *
                     {fmt.firstUpperCase(
-                      chains.find((c) => c.id === field.value)?.name
+                      chains.find((c) => c.name === field.value)?.name
                     )}{' '}
                     {t('chain')}
                   </FormLabel>
@@ -218,7 +224,9 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                     {chains ? (
                       <div>
                         <RadioGroup
-                          onValueChange={field.onChange}
+                          onValueChange={(v: string) => {
+                            form.setValue(formFields.chainName, v)
+                          }}
                           defaultValue={field.value}
                           className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap  max-sm:w-max"
                         >
@@ -227,14 +235,14 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                               key={i}
                               className={clsx(
                                 'block p-1 min-w-[35px]',
-                                c.id === field.value! ? 'bg-black' : '',
+                                c.name === field.value! ? 'bg-black' : '',
                                 i !== chains.length - 1
                                   ? 'border-r-2 border-black'
                                   : ''
                               )}
                             >
                               <FormControl>
-                                <RadioGroupItem value={`${c.id}`}>
+                                <RadioGroupItem value={c.name}>
                                   <img
                                     src={c.logo}
                                     alt={c.name}
@@ -287,18 +295,20 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                     {loadingPoster ? (
                       <img src="/images/poster-loading.png" alt="loading" />
                     ) : !!field.value?.length ? (
-                      <div className="flex gap-3">
+                      <div className="flex gap-3 max-md:overflow-x-auto">
                         {(field.value as string[])?.map((item, i) => {
                           return (
-                            <img
-                              src={item}
-                              className={clsx(
-                                'object-cover rounded-md',
-                                i < 2
-                                  ? 'w-[153px] h-[153px]'
-                                  : 'w-[256px] h-[153px]'
-                              )}
-                            />
+                            <a href={item} download target="_blank">
+                              <img
+                                src={item}
+                                className={clsx(
+                                  'object-cover rounded-md',
+                                  i < 2
+                                    ? 'w-[153px] h-[153px]'
+                                    : 'w-[256px] h-[153px]'
+                                )}
+                              />
+                            </a>
                           )
                         })}
                       </div>
@@ -323,8 +333,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                   <FormLabel>{t('twitter-x')}</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t('twitter-x.placeholder')}
                       {...field}
+                      placeholder={t('twitter-x.placeholder')}
                     />
                   </FormControl>
                   <FormMessage />
