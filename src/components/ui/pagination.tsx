@@ -9,13 +9,10 @@ import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
 import { Button, ButtonProps, buttonVariants } from '@/components/ui/button'
-import { useWatch } from '@/hooks/use-watch'
-import { usePagination } from '@/hooks/use-pagination'
 
 interface Props extends React.ComponentProps<'nav'> {
   total: number
   defaultPage?: number
-  itemCount?: number
   onPageChange?: (page: number) => void
 }
 
@@ -24,11 +21,14 @@ const Pagination = (props: Props) => {
     className,
     total = 2,
     defaultPage = 1,
-    itemCount = 5,
     onPageChange,
     ...restProps
   } = props
-  const {} = usePagination()
+  const [page, setPage] = React.useState(defaultPage)
+
+  React.useEffect(() => {
+    onPageChange?.(page)
+  }, [page])
 
   return (
     <nav
@@ -37,19 +37,19 @@ const Pagination = (props: Props) => {
       className={cn('mx-auto flex w-full justify-center', className)}
       {...restProps}
     >
-      {/* <PaginationContent>
+      <PaginationContent>
         {total !== 1 && (
           <PaginationItem>
             <Button
               variant="ghost"
               onClick={() => setPage((p) => p - 1)}
-              disabled={isFirstPage}
+              // disabled={isFirstPage}
             >
               <ChevronLeftIcon className="h-4 w-4" />
             </Button>
           </PaginationItem>
         )}
-        {items.map((_, i) => {
+        {Array.from({ length: total }).map((_, i) => {
           const isActive = page === i + 1
           return (
             <PaginationItem key={i}>
@@ -63,30 +63,30 @@ const Pagination = (props: Props) => {
             </PaginationItem>
           )
         })}
-        {total >= ELLIPSIS_THROWTTLE && (
+        {/* {total >= 5 && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
-        )}
-        {
+        )} */}
+        {/* {
           <PaginationItem>
             <Button variant="ghost" onClick={() => setPage((p) => p + 1)}>
               {lastItem}
             </Button>
           </PaginationItem>
-        }
+        } */}
         {total !== 1 && (
           <PaginationItem>
             <Button
               variant="ghost"
               onClick={() => setPage((p) => p + 1)}
-              disabled={isLastPage}
+              // disabled={isLastPage}
             >
               <ChevronRightIcon className="h-4 w-4" />
             </Button>
           </PaginationItem>
         )}
-      </PaginationContent> */}
+      </PaginationContent>
     </nav>
   )
 }

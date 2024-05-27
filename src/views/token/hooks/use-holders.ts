@@ -24,11 +24,11 @@ export const useHolders = () => {
     },
   })
 
-  useEffect(() => {
-    if (isSuccessMessage(lastJsonMessage)) {
-      setHolderInfo(lastJsonMessage.data)
-    }
-  }, [lastJsonMessage])
+  // useEffect(() => {
+  //   if (isSuccessMessage(lastJsonMessage)) {
+  //     setHolderInfo(lastJsonMessage.data)
+  //   }
+  // }, [lastJsonMessage])
 
   return {
     holderInfo,

@@ -1,3 +1,5 @@
+import { isEmpty } from 'lodash'
+
 import { WSMessageBase } from './types'
 
 const baseURL = process.env.NEXT_PUBLIC_WS_URL
@@ -17,7 +19,13 @@ export const heartbeat = {
   interval: 5_000,
 }
 
-export const isSuccessMessage = <T extends WSMessageBase<any>>(message?: T) => {
-  if (!message) return false
-  return message.type === 'message' && message.message === 'success'
+export const isSuccessMessage = <T = null>(str?: string) => {
+  if (!str || isEmpty(str)) return false
+
+  const message = JSON.parse(str) as WSMessageBase<T>
+  return (
+    message.type === 'message' &&
+    message.message === 'success' &&
+    message.data !== null
+  )
 }

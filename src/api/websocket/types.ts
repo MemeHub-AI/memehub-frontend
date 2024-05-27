@@ -25,16 +25,21 @@ export interface CreateInfoLog {}
 export interface TradeInfoLog {}
 
 export interface WSTradeRecordMessage {
-  account: string
-  base_amount: number
-  base_symbol: string
   chain: string
+  account: {
+    id: number
+    logo: string
+    name: string
+    wallet_address: string
+  }
+  type: TradeType
+  quote_symbol: string
+  quote_amount: number
+  base_symbol: string
+  base_amount: number
   create_time: string
   hash: string
   hash_url: string
-  quote_amount: number
-  quote_symbol: string
-  type: TradeType
 }
 
 export interface WSTradeInfoMessage {

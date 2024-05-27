@@ -25,15 +25,15 @@ export const useTradeLogs = () => {
     },
   })
 
-  useEffect(() => {
-    if (!isSuccessMessage(lastJsonMessage)) return
-    const { trade_info, create_info } = lastJsonMessage.data
+  // useEffect(() => {
+  //   if (!isSuccessMessage(lastJsonMessage)) return
+  //   const { trade_info, create_info } = lastJsonMessage.data
 
-    console.log('trade log', trade_info, create_info)
-    setIsLatest(true)
-    setLastTrade(last(trade_info))
-    setLastCreate(last(create_info))
-  }, [lastJsonMessage])
+  //   console.log('trade log', trade_info, create_info)
+  //   setIsLatest(true)
+  //   setLastTrade(last(trade_info))
+  //   setLastCreate(last(create_info))
+  // }, [lastJsonMessage])
 
   useEffect(() => {
     if (isLatest) {
