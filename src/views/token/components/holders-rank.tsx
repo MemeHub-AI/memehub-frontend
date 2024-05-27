@@ -10,7 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { holderInfo } = useHolders()
+  const { holders } = useHolders()
 
   return (
     <>
@@ -19,10 +19,10 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
         <CustomSuspense
           container="ul"
           className="flex flex-col gap-1"
-          isPending={!holderInfo}
+          isPending={!holders}
           fallback={<HolderRankSkeleton />}
         >
-          {holderInfo?.holders?.map((r, i) => (
+          {holders?.map((r, i) => (
             <li key={i} className="flex items-center justify-between">
               <div className="hover:text-blue-600 transition-all cursor-pointer">
                 {i + 1}.{' '}

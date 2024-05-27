@@ -1,7 +1,7 @@
 export interface WSMessageBase<T = null> {
   type: string
   message: string
-  data: T
+  data: T | null
 }
 
 export enum WSMessageType {
