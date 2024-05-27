@@ -38,11 +38,9 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </div>
         <div
           className="text-xs text-gray-400 mt-1 break-all line-clamp-[9] cursor-pointer"
-          onClick={() =>
-            setDetails(<p className="p-8"> {tokenInfo?.desc.repeat(100)}</p>)
-          }
+          onClick={() => setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)}
         >
-          {tokenInfo?.desc.repeat(100)}
+          {tokenInfo?.desc}
         </div>
       </div>
     </div>
