@@ -23,7 +23,7 @@ import { useWalletStore } from '@/stores/use-wallet-store'
 import { useStorage } from '@/hooks/use-storage'
 
 interface Props extends ComponentProps<'div'> {
-  cards: UserListRes[UserListType.CoinsCreated][]
+  cards?: TokenListItem[]
   total: number
   isLoading: boolean
   isPending?: boolean
@@ -33,7 +33,7 @@ interface Props extends ComponentProps<'div'> {
 export const TokenCards = (props: Props) => {
   const {
     className,
-    cards,
+    cards = [],
     total,
     isLoading,
     isPending = false,
@@ -84,7 +84,7 @@ export const TokenCards = (props: Props) => {
             </SelectTrigger>
             <SelectContent>
               {chains.map((c, i) => (
-                <SelectItem key={i} value={String(i)} disabled={c.disabled}>
+                <SelectItem key={i} value={String(i)}>
                   {c.name}
                 </SelectItem>
               ))}

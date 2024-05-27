@@ -1,4 +1,4 @@
-import React, { useState, type ComponentProps } from 'react'
+import React, { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -15,19 +15,48 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useStorage } from '@/hooks/use-storage'
+import { abortController, useAIMemeInfo } from '@/hooks/use-ai-meme-info'
+import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
+import { useCreateTokenForm } from '../hooks/use-form'
 
 interface Props extends ComponentProps<'div'> {
   newsListData: ReturnType<typeof useNewsList>
+  aIMemeInfo: ReturnType<typeof useAIMemeInfo>
 }
 
-export const InspirationNews = ({ className, newsListData }: Props) => {
+export const InspirationNews = ({
+  className,
+  newsListData,
+  aIMemeInfo,
+}: Props) => {
   const { t } = useTranslation()
   const [selectTab, setSelectTab] = useState(0)
   const { getArea, setArea } = useStorage()
+  const {
+    getAIMemeInfo,
+    isLoadingMemeImg,
+    isLoadingMemeInfo,
+    isLoadingMemePoster,
+  } = aIMemeInfo
 
-  const { isFetching, newsList, countryList, handleClick } = newsListData
+  const {
+    isFetching,
+    newsList,
+    countryList,
+    show,
+    memeit,
+    setShow,
+    handleClick,
+  } = newsListData
 
   const tabs = [t('next.moonshot'), t('hot-opportunity')]
+
+  const hidden = () => {
+    setShow(false)
+    // abortController.memeImageSign.abort()
+    // abortController.memeInfoSign.abort()
+    // abortController.memePosterSign.abort()
+  }
 
   const onChange = (value: string) => {
     setArea(value)
@@ -35,6 +64,11 @@ export const InspirationNews = ({ className, newsListData }: Props) => {
 
   const onChangeTab = (idx: number) => {
     setSelectTab(idx)
+  }
+
+  const onConfirm = async () => {
+    await getAIMemeInfo(newsListData.memeit?.title.query!)
+    hidden()
   }
 
   return (
@@ -57,13 +91,13 @@ export const InspirationNews = ({ className, newsListData }: Props) => {
         })}
       </div>
       {selectTab === 0 ? (
-        <Select defaultValue={getArea() || 'US'} onValueChange={onChange}>
+        <Select defaultValue={getArea()} onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <SelectValue placeholder={t('area')} />
           </SelectTrigger>
           <SelectContent>
             {countryList?.map((country, i) => (
-              <SelectItem key={i} value={country.short_name}>
+              <SelectItem key={i} value={`${country.id}`}>
                 {country.name}
               </SelectItem>
             ))}
@@ -82,6 +116,18 @@ export const InspirationNews = ({ className, newsListData }: Props) => {
           ))}
         </div>
       </CustomSuspense>
+
+      <AICreateMemecoinDialog
+        show={show}
+        loading={isLoadingMemeInfo}
+        data={{
+          name: memeit?.title.query,
+          image: memeit?.articles[0].image.imageUrl,
+          description: memeit?.articles[0].snippet,
+        }}
+        hidden={hidden}
+        onConfirm={onConfirm}
+      ></AICreateMemecoinDialog>
     </div>
   )
 }

@@ -1,3 +1,9 @@
+export interface NewsQuery {
+  country: number
+  page?: number
+  page_size?: number
+}
+
 export interface NewsData {
   title: Title
   image: Image

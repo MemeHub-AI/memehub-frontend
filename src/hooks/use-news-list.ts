@@ -3,11 +3,12 @@ import { AIMemeInfo } from '@/api/ai/type'
 import { newsApi } from '@/api/news'
 import { NewsData } from '@/api/news/types'
 import { Routes } from '@/routes'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useAIMemeInfo } from './use-ai-meme-info'
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
+import { useStorage } from './use-storage'
 
 interface Options {
   formData?: ReturnType<typeof useCreateTokenForm>
@@ -17,10 +18,13 @@ export const useNewsList = (options?: Options) => {
   const { formData } = options || {}
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [memeit, setMemeit] = useState<NewsData>()
+
+  const { getArea } = useStorage()
 
   const { isLoadingMemeImg, isLoadingMemeInfo, getAIMemeInfo } = useAIMemeInfo()
 
-  const { push, query, pathname } = useRouter()
+  const { push, pathname } = useRouter()
 
   const { data: country, isLoading } = useQuery({
     queryKey: [newsApi.getCountry.name],
@@ -31,31 +35,19 @@ export const useNewsList = (options?: Options) => {
     setShow(false)
   }
 
-  const handleClick = async (news: NewsData) => {
+  const onConfirmCreate = () => {
     try {
+      if (!memeit) return
       if (!pathname.startsWith(Routes.Create)) {
         push(
           `${Routes.Create}?title=${encodeURIComponent(
-            news.title.query
+            memeit.title.query
           )}&description=`
         )
         return
       }
       if (formData) {
-        getAIMemeInfo(
-          news.title.query,
-          news.articles[0].snippet,
-          (data) => {
-            formData.form.setValue(formData.formFields.fullname, data?.name)
-            formData.form.setValue(
-              formData.formFields.description,
-              data?.description
-            )
-          },
-          (data) => {
-            formData.form.setValue(formData.formFields.logo, data?.[0])
-          }
-        )
+        getAIMemeInfo(memeit.title.query!)
       }
     } catch (error) {
       console.error(error)
@@ -64,22 +56,41 @@ export const useNewsList = (options?: Options) => {
     }
   }
 
-  const { data: news, isFetching } = useQuery({
+  const handleClick = async (news?: NewsData) => {
+    setShow(true)
+    setMemeit(news)
+    console.log(news)
+  }
+
+  const { data: newsData, isFetching } = useInfiniteQuery({
     queryKey: [newsApi.getNews.name],
-    queryFn: () => {
-      return newsApi.getNews()
+    initialPageParam: 1,
+    queryFn: async ({ pageParam }) => {
+      const { data } = await newsApi.getNews({
+        country: +getArea(),
+        page: pageParam,
+      })
+      return data
     },
+    getNextPageParam: (_, _1, page) => page + 1,
+    select: (data) => ({
+      total: data.pages[0].count,
+      newsList: data.pages.flatMap((p) => p.results).filter(Boolean),
+    }),
   })
 
   return {
     show,
     loading,
+    memeit,
     loadingCountry: isLoading,
-    newsList: news?.data?.results,
+    newsList: newsData?.newsList,
     countryList: country?.data,
     isFetching,
     handleClick,
+    onConfirmCreate,
     hidden,
+    setShow,
     isLoadingMemeImg,
     isLoadingMemeInfo,
   }

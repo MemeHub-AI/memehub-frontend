@@ -1,6 +1,7 @@
 export interface AIMemeInfo {
-  name: string
-  description: string
+  name?: string
+  description?: string
+  symbol?: string
   image?: string
 }
 
@@ -9,3 +10,13 @@ export interface AIMemeInfoQuery {
 }
 
 export interface AIMemeImageQuery extends AIMemeInfo {}
+
+export interface AIMemePosterQuery extends AIMemeInfo {
+  name?: string
+  description?: string
+}
+
+export interface AIEMemePosterData {
+  poster1: string[]
+  poster2: string[]
+}

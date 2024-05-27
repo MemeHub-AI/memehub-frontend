@@ -10,7 +10,7 @@ import { useNewsList } from '@/hooks/use-news-list'
 export const HotNewsAside = () => {
   const { t } = useTranslation()
 
-  const { data, handleClick, hidden, isFetching, show, loading, newsList } =
+  const { memeit, handleClick, hidden, isFetching, show, loading, newsList } =
     useNewsList()
 
   return (
@@ -29,10 +29,15 @@ export const HotNewsAside = () => {
         ))}
       </CustomSuspense>
       <AICreateMemecoinDialog
-        data={data}
+        data={{
+          name: memeit?.title.query,
+          image: memeit?.articles[0].image.imageUrl,
+          description: memeit?.articles[0].snippet,
+        }}
         show={show}
         loading={loading}
         hidden={hidden}
+        onConfirm={() => {}}
       />
     </aside>
   )

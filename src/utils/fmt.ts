@@ -37,4 +37,8 @@ export const fmt = {
   tradeFixed(n: BigNumber) {
     return n.toFixed(n.lt(1) ? 6 : 2)
   },
+  firstUpperCase(s?: string) {
+    if (!s) return ''
+    return s.replace(s[0], s[0].toUpperCase())
+  },
 }

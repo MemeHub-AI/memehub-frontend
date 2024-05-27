@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { tokenApi } from '@/api/token'
+import { TokenListItem } from '@/api/token/types'
 
 export const useTokens = () => {
   const { data, isLoading, isFetching, fetchNextPage } = useInfiniteQuery({
@@ -15,7 +16,9 @@ export const useTokens = () => {
     getNextPageParam: (_, __, page) => page + 1,
     select: (data) => ({
       totalToken: data.pages[0].data.count,
-      tokens: data.pages.flatMap((p) => p.data.results).filter(Boolean),
+      tokens: data.pages
+        .flatMap((p) => p.data.results)
+        .filter(Boolean) as TokenListItem[],
     }),
   })
 

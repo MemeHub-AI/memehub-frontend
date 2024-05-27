@@ -3,49 +3,59 @@ import { AIMemeInfo } from '@/api/ai/type'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import Input from '@/components/input'
 import { Button } from '@/components/ui/button'
+import { abortController } from '@/hooks/use-ai-meme-info'
 import clsx from 'clsx'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WiStars } from 'react-icons/wi'
 import { toast } from 'sonner'
 
-export const AIIdea = ({ className }: { className?: string }) => {
+interface Props {
+  className?: string
+  isLoadingMemeInfo?: boolean
+  getAIMemeInfo?: (title: string) => any
+}
+
+export const AIIdea = (props: Props) => {
+  const { className, isLoadingMemeInfo, getAIMemeInfo } = props
   const { t } = useTranslation()
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
   const [isRandom, setIsRandom] = useState(false)
   const [data, setData] = useState<AIMemeInfo>()
+  const [value, setValue] = useState('')
 
   const onGenerate = async () => {
+    if (!value) {
+      return toast.error(t('input.you.idea'))
+    }
+
     setShow(true)
-    setLoading(true)
-    const { data } = await aiApi.getMemeInfo()
+    setIsRandom(false)
     setLoading(false)
-    setData(data!)
+    setData({
+      name: value,
+    })
+  }
+
+  const onConfirm = async () => {
+    await getAIMemeInfo?.(value)
+    hidden()
   }
 
   const onRoundGenerate = async () => {
     setShow(true)
     setLoading(true)
     setIsRandom(true)
-    try {
-      toast.loading(t('creating.meme.info'))
-      const { data } = await aiApi.getMemeInfo()
-      const { data: memeImage } = await aiApi.getMemeImage(data)
-      data!.image = memeImage?.[0]
-      setData(data!)
-    } catch (e) {
-      toast.error(t('creating.meme.info.error'))
-      setShow(false)
-    } finally {
-      setLoading(false)
-      toast.dismiss()
-    }
   }
 
   const hidden = () => {
     setShow(false)
     setIsRandom(false)
+
+    // abortController.memeImageSign.abort()
+    // abortController.memeInfoSign.abort()
+    // abortController.memePosterSign.abort()
   }
 
   return (
@@ -67,28 +77,30 @@ export const AIIdea = ({ className }: { className?: string }) => {
         <Input
           placeholder={t('input.you.idea')}
           className="max-w-[180px] ml-4 max-md:ml-0"
+          onChange={({ target }) => setValue(target.value)}
           endIcon={
             <div>
               <Button
                 size={'icon'}
                 className="flex justify-center rounded-none bg-black"
-                onClick={onGenerate}
+                onClick={onRoundGenerate}
               >
                 <WiStars size={26}></WiStars>
               </Button>
             </div>
           }
         ></Input>
-        <Button isShadow onClick={onRoundGenerate} className="ml-5">
+        <Button isShadow onClick={onGenerate} className="ml-5">
           {t('ai.generate')}
         </Button>
       </div>
       <AICreateMemecoinDialog
-        data={data}
-        hidden={hidden}
-        isRandom={isRandom}
-        loading={loading}
         show={show}
+        data={data}
+        loading={loading || isLoadingMemeInfo}
+        isRandom={isRandom}
+        hidden={hidden}
+        onConfirm={onConfirm}
       />
     </div>
   )

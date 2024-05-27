@@ -1,11 +1,14 @@
+import { qs } from '@/hooks/use-fetch'
 import { api } from '..'
 
 import type { ApiResponse, Pagination } from '../types'
-import type { CountryData, NewsData } from './types'
+import type { CountryData, NewsData, NewsQuery } from './types'
 
 export const newsApi = {
-  async getNews() {
-    return api.GET<ApiResponse<Pagination<NewsData>>>('/api/v1/news/')
+  async getNews(query: NewsQuery) {
+    return api.GET<ApiResponse<Pagination<NewsData>>>(
+      '/api/v1/news/' + qs.stringify(query)
+    )
   },
   async getCountry() {
     return api.GET<ApiResponse<CountryData[]>>('/api/v1/country/')

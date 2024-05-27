@@ -12,11 +12,12 @@ interface InputProps
   endIcon?: React.ReactNode
   value?: string | number | readonly string[] | undefined
   disableFocusBorder?: boolean
+  inputClassName?: string
   onChange?: React.ChangeEventHandler<HTMLInputElement>
 }
 
 export const Input = (props: InputProps) => {
-  const { className, startIcon, endIcon, ...p } = props
+  const { className, startIcon, endIcon, inputClassName, ...p } = props
   const [boxShadow, setBoxShadow] = useState('')
   const hasIcon = props.startIcon || props.endIcon
 
@@ -35,7 +36,7 @@ export const Input = (props: InputProps) => {
       {startIcon ? startIcon : null}
       <Inp
         {...p}
-        className={clsx('pl-2')}
+        className={clsx('pl-2', inputClassName)}
         border={hasIcon ? 'none' : 'default'}
         disableFocusBorder
         value={props.value}
