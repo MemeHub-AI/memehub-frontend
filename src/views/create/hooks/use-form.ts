@@ -76,9 +76,12 @@ export const useCreateTokenForm = (
     if (!isValid) return
     if (!isConnected) return setConnectOpen(true)
     if (isDeploying) return
-    if (values.chainName !== `${chainId}`) {
+    const vChainId = Number(chains.find((c) => c.name === values.chainName)?.id)
+    if (vChainId !== chainId) {
       toast.error(t('swatch.chain').replace('$1', values.chainName! as string))
-      switchChain({ chainId: Number(values.chainName) })
+      switchChain({
+        chainId: vChainId,
+      })
       return
     }
 
