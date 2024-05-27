@@ -17,10 +17,10 @@ export const FormInputField = forwardRef<
       id={restProps.id}
       render={
         <Input
+          ref={ref}
           className={cn(error && 'border-red-600')}
           disableFocusBorder={!!error}
           {...restProps}
-          ref={ref}
         />
       }
     />

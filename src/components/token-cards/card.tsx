@@ -49,37 +49,39 @@ export const TokenCard = ({ card, className }: Props) => {
       <img
         src={card?.image || '/images/logo.png'}
         alt="img"
-        className="flex-shrink-0 h-32 w-32 object-cover"
-        width={128}
-        height={128}
+        className="flex-shrink-0 h-40 w-40 object-cover"
+        width={160}
+        height={160}
       />
       <img
         src="/images/scroll.svg"
         alt="chain"
         className="absolute right-2 top-2 w-5"
       />
-      <div className="self-start py-2 pr-2 h-full w-full flex flex-col justify-between">
-        <div>
-          <CardTitle className="pt-2">
+      <div className="py-2 pr-2 w-full flex flex-col justify-between">
+        <div className="h-full">
+          <CardTitle className="pt-0 text-lg">
             {card?.name} {card?.ticker && `(${card?.ticker})`}
           </CardTitle>
-          <Link
+          {/* <Link
             href={`${Routes.Account}/${card?.creator.wallet_address}`}
             className="text-zinc-500 text-xs mt-0.5 hover:underline"
             onClick={(e) => e.stopPropagation()}
           >
             {t('creator')}: {card?.creator.name}
-          </Link>
-          <p className="text-zinc-500 text-sm break-all line-clamp-4">
+          </Link> */}
+          <p className="text-zinc-500 text-sm break-all line-clamp-3">
             {card?.desc}
           </p>
         </div>
-        <Progress
-          className="h-4 self-end w-full mt-1"
-          indicatorClass="bg-green-500"
-          value={Number(percent)}
-          label={percent}
-        />
+        <div>
+          <Progress
+            className="h-4 self-end w-full mt-1"
+            indicatorClass="bg-green-500"
+            value={Number(percent)}
+            label={percent}
+          />
+        </div>
       </div>
     </Card>
   )

@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { useAIMemeInfo } from './use-ai-meme-info'
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { useStorage } from './use-storage'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 interface Options {
   formData?: ReturnType<typeof useCreateTokenForm>
@@ -39,12 +40,12 @@ export const useNewsList = (options?: Options) => {
     try {
       if (!memeit) return
       if (!pathname.startsWith(Routes.Create)) {
-        push(
-          `${Routes.Create}?title=${encodeURIComponent(
-            memeit.title.query
-          )}&description=`
-        )
-        return
+        const aimemeInfoStore = useAimemeInfoStore.getState()
+        aimemeInfoStore.setInfo({
+          name: memeit.title.query,
+          description: memeit.title.query,
+        })
+        return push(Routes.Create)
       }
       if (formData) {
         getAIMemeInfo(memeit.title.query!)
@@ -59,7 +60,6 @@ export const useNewsList = (options?: Options) => {
   const handleClick = async (news?: NewsData) => {
     setShow(true)
     setMemeit(news)
-    console.log(news)
   }
 
   const { data: newsData, isFetching } = useInfiniteQuery({

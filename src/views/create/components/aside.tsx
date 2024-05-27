@@ -18,6 +18,7 @@ import { useStorage } from '@/hooks/use-storage'
 import { abortController, useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useCreateTokenForm } from '../hooks/use-form'
+import { utilLang } from '@/utils/lang'
 
 interface Props extends ComponentProps<'div'> {
   newsListData: ReturnType<typeof useNewsList>
@@ -98,7 +99,7 @@ export const InspirationNews = ({
           <SelectContent>
             {countryList?.map((country, i) => (
               <SelectItem key={i} value={`${country.id}`}>
-                {country.name}
+                {utilLang.getContent(country.name)}
               </SelectItem>
             ))}
           </SelectContent>

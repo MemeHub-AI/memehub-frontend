@@ -208,5 +208,7 @@
   "create.ai.poster": "AI生成",
   "onsubmit.createing.warning": "AI正在制作Meme信息",
   "meme.logo": "代币头像",
-  "need.base.info.warning": "需要完善名字和代币的描述"
+  "need.base.info.warning": "需要完善名字和代币的描述",
+  "progress": "进度",
+  "swatch.chain": "需要切换到$1链"
 }

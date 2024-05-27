@@ -58,7 +58,7 @@ export const HeaderDesktop = (props: Props) => {
           onChange={({ target }) => setValue(target.value)}
         />
         <SocialLinks className="ml-3" />
-        <LangSelect className="flex-shrink-0" />
+        <LangSelect className="flex-shrink-0 mx-3" />
         {/* <Button
           className="max-sm:mx-1.5"
           onClick={() => router.push(Routes.Create)}
