@@ -40,9 +40,19 @@ export const useCandlestickParse = () => {
     })
   }
 
+  const priceToPricescale = (p: number) => {
+    const decimal = p.toString().split('.')[1]
+    const len = decimal?.length ?? 0
+
+    if (len <= 2) return 100
+
+    return Number('1'.padEnd(len + 1, '0'))
+  }
+
   return {
     toTradingViewInterval,
     parseTradingViewInterval,
     toBars,
+    priceToPricescale,
   }
 }

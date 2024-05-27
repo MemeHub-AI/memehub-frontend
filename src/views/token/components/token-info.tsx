@@ -1,66 +1,48 @@
-import React, { type ComponentProps } from 'react'
-import { useTranslation } from 'react-i18next'
-import BigNumber from 'bignumber.js'
+import React, { useState, type ComponentProps, type ReactNode } from 'react'
 
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
-import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
+import { Dialog } from '@/components/ui/dialog'
 import { useTokenContext } from '@/contexts/token'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
-  const { t } = useTranslation()
-  const { currentToken, totalToken, tokenInfo } = useTokenContext()
-  const percent = BigNumber(currentToken)
-    .div(totalToken)
-    .multipliedBy(100)
-    .toFixed(3)
-  const marketMax = BigNumber(totalToken).toFixed(3)
-  const symbol = 'ETH'
+  const { tokenInfo } = useTokenContext()
+  const [details, setDetails] = useState<ReactNode>(null)
 
   return (
-    <div className={cn('mt-4', className)}>
-      {/* Token intro */}
-      <div className="flex gap-2 items-start">
-        <Dialog>
-          <DialogTrigger asChild>
-            <img
-              src={tokenInfo?.image}
-              alt="logo"
-              className="w-40 h-40  object-cover rounded cursor-pointer"
-            />
-          </DialogTrigger>
-          <DialogContent className="p-0" showClose={false}>
+    <div className={cn('flex gap-3 items-start mt-4', className)}>
+      <Dialog
+        open={!!details}
+        onOpenChange={() => setDetails(null)}
+        contentProps={{ className: 'p-0 break-all' }}
+      >
+        {details}
+      </Dialog>
+
+      <img
+        src={tokenInfo?.image}
+        alt="logo"
+        className="w-40 h-40 object-cover rounded cursor-pointer"
+        onClick={() => {
+          setDetails(
             <img
               src={tokenInfo?.image}
               alt="logo"
               className="w-full object-contain"
             />
-          </DialogContent>
-        </Dialog>
-        <div>
-          <div className="font-bold leading-none">
-            {tokenInfo?.name}({tokenInfo?.ticker})
-          </div>
-          <div className="text-xs text-gray-400 mt-1">{tokenInfo?.desc}</div>
+          )
+        }}
+      />
+      <div>
+        <div className="font-bold leading-none">
+          {tokenInfo?.name}({tokenInfo?.ticker})
+        </div>
+        <div
+          className="text-xs text-gray-400 mt-1 break-all line-clamp-[9] cursor-pointer"
+          onClick={() => setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)}
+        >
+          {tokenInfo?.desc}
         </div>
       </div>
-
-      {/* Bonding curve progress */}
-      <div className="my-3">
-        <div className="text-sm mb-1">{t('progress.bonding-curve')}:</div>
-        <Progress
-          className="h-5"
-          indicatorClass="bg-blue-600"
-          labelClass="text-white"
-          value={Number(percent)}
-          label={percent}
-        />
-        <div className="text-zinc-400 text-xs mt-1">
-          {t('bonding-curve.token').replace('{}', `${marketMax} ${symbol}`)}
-        </div>
-      </div>
-
-      {/* <HoldersRank /> */}
     </div>
   )
 }
