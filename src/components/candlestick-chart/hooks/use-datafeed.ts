@@ -1,4 +1,4 @@
-import { isEmpty } from 'lodash'
+import { isEmpty, last } from 'lodash'
 
 import type {
   IBasicDataFeed,
@@ -13,10 +13,11 @@ import { useCandlestickParse } from './use-candlestick-parse'
 
 export const useDatafeed = () => {
   const { readyConfig, symbolInfoConfig } = useDatafeedConfig()
-  const { setSub, getSub } = useDatafeedCache()
+  const cache = useDatafeedCache()
   const { listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket()
-  const { parseTradingViewInterval, toBars } = useCandlestickParse()
+  const { parseTradingViewInterval, toBars, priceToPricescale } =
+    useCandlestickParse()
 
   const createDatafeed = (options: CandlestickOptions) => {
     const { symbol, interval, tokenAddr } = options
@@ -24,23 +25,37 @@ export const useDatafeed = () => {
     return {
       onReady: (callback) => setTimeout(() => callback(readyConfig)),
       searchSymbols(_, __, ___, ____) {},
-      resolveSymbol(symbolName, onResolve, onError, extension) {
+      async resolveSymbol(symbolName, onResolve, onError, extension) {
+        const { data } = await listenAsync({
+          interval,
+          token_address: tokenAddr,
+        })
+        const bars = toBars(data)
         const symbolInfo: LibrarySymbolInfo = {
           ...symbolInfoConfig,
           name: symbolName,
           full_name: symbolName,
           description: symbolName,
+          pricescale: priceToPricescale(Number(last(bars)?.open)),
         }
 
+        cache.setBars(bars)
         onResolve(symbolInfo)
       },
       async getBars(symbolInfo, resolution, period, onResult, onError) {
         if (period.firstDataRequest) {
+          const cachedBars = cache.getBars()
+          if (cachedBars && !isEmpty(cachedBars)) {
+            onResult(cachedBars, { noData: false })
+            return
+          }
+
           const { data } = await listenAsync({
             interval: parseTradingViewInterval(resolution),
             token_address: tokenAddr,
           })
           const bars = toBars(data)
+
           onResult(bars, { noData: isEmpty(data) })
           return
         }
@@ -56,7 +71,7 @@ export const useDatafeed = () => {
         onResult(bars, { noData: isEmpty(bars) })
       },
       subscribeBars(_, resolution, onTick, uid, onRest) {
-        // setSub(uid, onRest)
+        // cache.setSub(uid, onRest)
         onUpdate(({ data }) => {
           const bars = toBars(data)
           console.log('update', bars)
@@ -64,7 +79,7 @@ export const useDatafeed = () => {
         })
       },
       unsubscribeBars(uid) {
-        // getSub(uid)?.()
+        // cache.getSub(uid)?.()
       },
     } as IBasicDataFeed
   }
