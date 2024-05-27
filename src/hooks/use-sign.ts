@@ -19,11 +19,12 @@ export const useSign = () => {
       },
     },
   })
-  const signAsync = async () => {
+
+  const signAsync = async (salt = '') => {
     return signMessageAsync({
       account: address,
       connector,
-      message: `Signin at ${Date.now()}`,
+      message: `Signin at ${salt}`,
     })
   }
 

@@ -8,6 +8,7 @@ export interface UserLoginReq {
   wallet_address: string
   chain_id: string
   sign: string
+  timestamp: string
 }
 
 export interface UserLoginRes {

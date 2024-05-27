@@ -26,13 +26,15 @@ export const useWallet = () => {
     try {
       const { accounts, chainId } = await connectAsync({ connector })
       const address = first(accounts)
-      const message = await signAsync()
+      const timestamp = Date.now().toString()
+      const message = await signAsync(timestamp)
 
       if (!address?.trim()) throw 'No address'
       login({
         wallet_address: address,
         chain_id: chainId.toString(),
         sign: message,
+        timestamp,
       })
     } catch (e) {
       console.error(`[connectWallet error]: ${e}`)
