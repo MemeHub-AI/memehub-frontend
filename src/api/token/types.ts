@@ -22,7 +22,7 @@ export interface TokenNewReq {
   desc: string
   image: string
   hash: string
-  chain_id: string
+  chain: string
   twitter_url?: string
   telegram_url?: string
   website?: string

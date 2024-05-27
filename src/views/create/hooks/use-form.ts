@@ -84,14 +84,13 @@ export const useCreateTokenForm = (
       })
       return
     }
-    debugger
 
     deploy({
       name: values.fullname! as string,
       ticker: values.symbol! as string,
       desc: values.description! as string,
       image: values.logo! as string,
-      chain_id: values.chainName as string,
+      chain: values.chainName as string,
       // Optional.
       twitter_url: values.twitter as string,
       telegram_url: values.telegram as string,

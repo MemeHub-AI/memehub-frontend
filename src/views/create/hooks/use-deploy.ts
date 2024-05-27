@@ -52,7 +52,7 @@ export const useDeploy = () => {
         setBackendErr(error)
       }
     }
-    return
+
     return writeContract(
       {
         abi: factoryAbi,
