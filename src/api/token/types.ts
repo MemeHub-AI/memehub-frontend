@@ -1,4 +1,4 @@
-import type { UserCoinsCreated } from '../user/types'
+import type { UserCoinsCreated, UserInfoRes } from '../user/types'
 
 interface Chain {
   id: number
@@ -46,11 +46,7 @@ export enum TokenUpdateStatus {
 export interface TokenCommentListRes {
   id: number
   content: string
-  user: {
-    id: number
-    name: string
-    logo: string
-  }
+  user: UserInfoRes
   coin: number
   img: string
   related_comments: number[]

@@ -8,6 +8,7 @@ export const wsApiURL = {
   tradeLogs: baseURL + '/chat/trade_log',
   tokenInfo: baseURL + '/chat/coin_info',
   tradeRecord: baseURL + '/chat/trade_record',
+  candlestick: baseURL + '/chat/k_line',
 }
 
 export const heartbeat = {

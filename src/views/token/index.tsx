@@ -10,6 +10,7 @@ import { useResponsive } from '@/hooks/use-responsive'
 import { HoldersRank } from './components/holders-rank'
 import { TokenProvider } from '@/contexts/token'
 import { useTokenInfo } from './hooks/use-token-info'
+import { CandlestickChart } from '@/components/candlestick-chart'
 
 export const TokenPage = () => {
   const { t } = useTranslation()
@@ -27,7 +28,8 @@ export const TokenPage = () => {
           {/* Left */}
           <div className="flex flex-col flex-1">
             {isMobile && <TradeTab />}
-            <TokenInfo className="mt-0" />
+            <CandlestickChart />
+            {/* <TokenInfo className="mt-0" /> */}
             <CommentTradeTab className="my-6 max-sm:mb-0" />
           </div>
 
