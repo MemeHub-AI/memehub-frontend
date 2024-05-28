@@ -21,7 +21,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       <img
         src={tokenInfo?.image}
         alt="logo"
-        className="w-40 h-40 object-cover rounded cursor-pointer"
+        className="w-36 h-36 object-cover rounded cursor-pointer"
         onClick={() => {
           setDetails(
             <img
@@ -32,12 +32,12 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           )
         }}
       />
-      <div>
+      <div className="break-all line-clamp-[9]">
         <div className="font-bold leading-none">
           {tokenInfo?.name}({tokenInfo?.ticker})
         </div>
         <div
-          className="text-xs text-gray-400 mt-1 break-all line-clamp-[9] cursor-pointer"
+          className="text-xs text-gray-400 mt-1 break-all  cursor-pointer"
           onClick={() => setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)}
         >
           {tokenInfo?.desc}
