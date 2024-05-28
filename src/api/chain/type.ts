@@ -3,4 +3,5 @@ export interface ChainData {
   name: string
   logo: string
   is_supported: boolean
+  contract_address: string
 }

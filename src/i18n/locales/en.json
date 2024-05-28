@@ -215,5 +215,6 @@
   "need.base.info.warning": "The name and introduction need to be perfected",
   "process": "",
   "progress": "Progress",
-  "swatch.chain": "Need to switch to $1 chain"
+  "swatch.chain": "Need to switch to $1 chain",
+  "not.supported.chain": "This chain is not supported"
 }

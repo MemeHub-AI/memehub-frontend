@@ -61,6 +61,7 @@ export const InspirationNews = ({
 
   const onChange = (value: string) => {
     setArea(value)
+    newsListData.setArea(+value)
   }
 
   const onChangeTab = (idx: number) => {

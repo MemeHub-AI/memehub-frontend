@@ -17,11 +17,11 @@ interface Options {
 
 export const useNewsList = (options?: Options) => {
   const { formData } = options || {}
+  const { getArea } = useStorage()
   const [show, setShow] = useState(false)
+  const [area, setArea] = useState(+getArea())
   const [loading, setLoading] = useState(false)
   const [memeit, setMemeit] = useState<NewsData>()
-
-  const { getArea } = useStorage()
 
   const { isLoadingMemeImg, isLoadingMemeInfo, getAIMemeInfo } = useAIMemeInfo()
 
@@ -63,11 +63,11 @@ export const useNewsList = (options?: Options) => {
   }
 
   const { data: newsData, isFetching } = useInfiniteQuery({
-    queryKey: [newsApi.getNews.name],
+    queryKey: [newsApi.getNews.name, area],
     initialPageParam: 1,
     queryFn: async ({ pageParam }) => {
       const { data } = await newsApi.getNews({
-        country: +getArea(),
+        country: +area,
         page: pageParam,
       })
       return data
@@ -80,6 +80,7 @@ export const useNewsList = (options?: Options) => {
   })
 
   return {
+    area,
     show,
     loading,
     memeit,
@@ -91,6 +92,7 @@ export const useNewsList = (options?: Options) => {
     onConfirmCreate,
     hidden,
     setShow,
+    setArea,
     isLoadingMemeImg,
     isLoadingMemeInfo,
   }
