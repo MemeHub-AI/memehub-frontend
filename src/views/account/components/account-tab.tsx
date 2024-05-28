@@ -10,10 +10,22 @@ import { TokenCards } from '@/components/token-cards'
 import { useUserList } from '../hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
 import { Routes } from '@/routes'
+import { useAccountContext } from '@/contexts/account'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
+  const { isOtherUser } = useAccountContext()
+  const myAccountTabs = [
+    {
+      label: t('comments'),
+      value: UserListType.Replies,
+    },
+    {
+      label: t('mentions'),
+      value: UserListType.Notifications,
+    },
+  ]
   const tabs = [
     {
       label: t('token.held'),
@@ -23,14 +35,7 @@ export const AccountTab = () => {
       label: t('token.created'),
       value: UserListType.CoinsCreated,
     },
-    {
-      label: t('comments'),
-      value: UserListType.Replies,
-    },
-    {
-      label: t('mentions'),
-      value: UserListType.Notifications,
-    },
+    ...(isOtherUser ? [] : myAccountTabs),
   ]
   const tab = String(query.tab || UserListType.CoinsHeld)
   const {
@@ -83,28 +88,30 @@ export const AccountTab = () => {
         />
       </TabsContent>
 
-      {/* Comments/Replies */}
-      <TabsContent value={UserListType.Replies.toString()}>
-        <CommentCards
-          readonly
-          cards={comments.list}
-          total={comments.total}
-          isLoading={isLoading}
-          isPending={isFetching}
-          onFetchNext={fetchNextPage}
-        />
-      </TabsContent>
-
-      {/* Mentions/Notifications */}
-      <TabsContent value={UserListType.Notifications.toString()}>
-        <MentionCards
-          cards={mentions.list}
-          total={mentions.total}
-          isLoading={isLoading}
-          isPending={isFetching}
-          onFetchNext={fetchNextPage}
-        />
-      </TabsContent>
+      {/* Only self can see. */}
+      {!isOtherUser && (
+        <>
+          <TabsContent value={UserListType.Replies.toString()}>
+            <CommentCards
+              readonly
+              cards={comments.list}
+              total={comments.total}
+              isLoading={isLoading}
+              isPending={isFetching}
+              onFetchNext={fetchNextPage}
+            />
+          </TabsContent>
+          <TabsContent value={UserListType.Notifications.toString()}>
+            <MentionCards
+              cards={mentions.list}
+              total={mentions.total}
+              isLoading={isLoading}
+              isPending={isFetching}
+              onFetchNext={fetchNextPage}
+            />
+          </TabsContent>
+        </>
+      )}
     </Tabs>
   )
 }

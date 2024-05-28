@@ -31,6 +31,7 @@ export interface UserInfoRes {
   wallet_address: string
   like_count: number
   mention_count: number
+  is_follower: boolean
 }
 
 export interface UserMyInfoFollow {
@@ -134,6 +135,7 @@ export interface UserFollow {
   name: string
   logo: string
   follower_count: number
+  user: User
 }
 
 export interface UserCoinsHeld {

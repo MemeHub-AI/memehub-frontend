@@ -9,9 +9,9 @@ import { Avatar } from '@/components/ui/avatar'
 import { fmt } from '@/utils/fmt'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useUserStore } from '@/stores/use-user-store'
 import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
+import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'div'> {
   card: UserFollow
@@ -20,12 +20,10 @@ interface Props extends ComponentProps<'div'> {
 export const FollowCard = ({ card }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
-  const { isFollowed } = useUserStore()
   const { follow, unfollow } = useUser({
     onFollowSuccess: () => refetchUserInfo(),
   })
-  const { refetchUserInfo } = useAccountContext()
-  const isFollow = isFollowed(card.id.toString())
+  const { refetchUserInfo, userInfo } = useAccountContext()
 
   return (
     <Card
@@ -33,10 +31,7 @@ export const FollowCard = ({ card }: Props) => {
       hover="bg"
       shadow="none"
       onClick={() => {
-        router.push({
-          pathname: router.pathname,
-          query: { id: card.id },
-        })
+        router.push(`${Routes.Account}/${card.user.wallet_address}`)
       }}
     >
       <div className="flex items-center gap-2">
@@ -52,10 +47,10 @@ export const FollowCard = ({ card }: Props) => {
         onClick={(e) => {
           e.stopPropagation()
           const addr = (query.address || '') as string
-          isFollow ? unfollow(addr) : follow(addr)
+          userInfo?.is_follower ? unfollow(addr) : follow(addr)
         }}
       >
-        {isFollow ? `- ${t('unfollow')}` : `+ ${t('follow')}`}
+        {userInfo?.is_follower ? `- ${t('unfollow')}` : `+ ${t('follow')}`}
       </Button>
     </Card>
   )

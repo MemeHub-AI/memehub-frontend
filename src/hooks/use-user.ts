@@ -11,10 +11,11 @@ import { useUserStore } from '@/stores/use-user-store'
 interface Options {
   onUpdateSuccess?: (data: UserInfoRes) => void
   onFollowSuccess?: (data: UserInfoRes) => void
+  onFollowFinlly?: () => void
 }
 
 export const useUser = (options?: Options) => {
-  const { onUpdateSuccess, onFollowSuccess } = options || {}
+  const { onUpdateSuccess, onFollowSuccess, onFollowFinlly } = options || {}
   const { t } = useTranslation()
   const { setUserInfo } = useUserStore()
   const { setToken } = useStorage()
@@ -54,7 +55,10 @@ export const useUser = (options?: Options) => {
     mutationKey: [userApi.follow.name],
     mutationFn: userApi.follow,
     onMutate: () => toast.loading(t('user.follow.loading')),
-    onSettled: (_, __, ___, id) => toast.dismiss(id),
+    onSettled: (_, __, ___, id) => {
+      onFollowFinlly?.()
+      return toast.dismiss(id)
+    },
     onError: () => toast.error(t('user.follow.failed')),
     onSuccess: ({ data }) => {
       if (!data) return
@@ -69,7 +73,10 @@ export const useUser = (options?: Options) => {
     mutationKey: [userApi.unfollow.name],
     mutationFn: userApi.unfollow,
     onMutate: () => toast.loading(t('user.unfollow.loading')),
-    onSettled: (_, __, ___, id) => toast.dismiss(id),
+    onSettled: (_, __, ___, id) => {
+      onFollowFinlly?.()
+      return toast.dismiss(id)
+    },
     onError: () => toast.error(t('user.unfollow.failed')),
     onSuccess: ({ data }) => {
       if (!data) return
