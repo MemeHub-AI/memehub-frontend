@@ -3,23 +3,27 @@ import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
-import clsx from 'clsx'
-import { utilStyle } from '@/utils/style'
+import { shadowVariants, ShadowVariantsProps } from '@/styles/variants'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50',
+  cn(
+    'inline-flex items-center justify-center whitespace-nowrap ',
+    'rounded-md text-sm font-medium transition-colors',
+    'focus-visible:outline-none focus-visible:ring-1',
+    'focus-visible:ring-ring disabled:pointer-events-none',
+    'disabled:opacity-50 transition-all'
+  ),
   {
     variants: {
       variant: {
-        default: 'text-primary-foreground shadow text-white bg-black',
+        default:
+          'text-primary-foreground !shadow-offset-border hover:!shadow-none text-white bg-black',
         destructive:
-          'bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 text-white bg-black',
-        outline:
-          'border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground text-black bg-white',
+          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        outline: 'border-2 border-black',
         secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80]',
-        ghost:
-          'hover:bg-accent hover:text-accent-foreground text-white bg-black',
+        ghost: 'border-2 border-transparent hover:border-black',
         link: 'text-primary underline-offset-4 hover:underline text-white bg-black',
       },
       size: {
@@ -33,7 +37,7 @@ const buttonVariants = cva(
       },
     },
     defaultVariants: {
-      variant: 'default',
+      variant: 'outline',
       size: 'default',
     },
   }
@@ -41,78 +45,32 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants>,
+    ShadowVariantsProps {
   asChild?: boolean
-  frontBgc?: string
-  backBgc?: string
-  frontTextColor?: string
-  isFullWidth?: boolean
-  isShadow?: boolean
-  isReverse?: boolean
-  containerClass?: string
-  offset?: {
-    x: number
-    y: number
-  }
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
+  (props, ref) => {
+    const {
       className,
       variant,
       size,
-      isFullWidth = false,
       asChild = false,
-      isShadow,
-      isReverse = false,
-      frontBgc,
-      frontTextColor,
-      backBgc,
-      containerClass,
-      offset,
-      ...props
-    },
-    ref
-  ) => {
+      shadow,
+      ...restProps
+    } = props
     const Comp = asChild ? Slot : 'button'
-    const { classname, margin } = utilStyle.handleMargin(className)
-
-    const handleReverse = () => {
-      if (!isShadow) return ''
-      return isReverse ? 'is-reverse-translate' : 'no-reverse-translate'
-    }
 
     return (
-      <div
-        className={clsx(
-          'relative  max-h-max h-min',
-          margin,
-          isFullWidth ? 'w-full' : 'w-max',
-          containerClass
+      <Comp
+        ref={ref}
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          shadowVariants({ shadow })
         )}
-        style={{
-          transform: `translate(${offset?.x || 0}px, ${offset?.y || 0}px)`,
-        }}
-      >
-        <Comp
-          ref={ref}
-          className={cn(
-            buttonVariants({ variant, size }),
-            isShadow ? 'front-content' : '',
-            `${handleReverse()}`,
-            frontBgc && `${frontBgc} hover:${frontBgc}`,
-            frontTextColor && `${frontTextColor} hover:${frontTextColor}`,
-            ...classname
-          )}
-          {...props}
-        />
-        {isShadow ? (
-          <div
-            className={cn('back-content', `${backBgc} hover:${backBgc}`)}
-          ></div>
-        ) : null}
-      </div>
+        {...restProps}
+      />
     )
   }
 )

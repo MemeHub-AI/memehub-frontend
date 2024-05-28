@@ -23,7 +23,7 @@ export const MentionCards = (props: Props) => {
   const { t } = useTranslation()
   const { noMore } = useScrollLoad({
     onFetchNext,
-    hasMore: total > cards.length,
+    hasMore: cards.length < total,
   })
 
   return (
@@ -31,6 +31,7 @@ export const MentionCards = (props: Props) => {
       className="flex flex-col gap-3 max-sm:gap-2"
       isPending={isLoading}
       fallback={<CardSkeleton />}
+      nullback={<p className="text-zinc-500">{t('mentions.empty')}</p>}
     >
       {cards.map((c, i) => (
         <MentionCard key={i} c={c} />
@@ -45,7 +46,12 @@ const MentionCard = ({ c }: { c: UserListRes[UserListType.Notifications] }) => {
   const { t } = useTranslation()
 
   return (
-    <Card padding="md" className="flex items-center gap-3" hover="bg">
+    <Card
+      padding="md"
+      className="flex items-center gap-3"
+      hover="bg"
+      shadow="none"
+    >
       <ChatBubbleIcon width={20} height={20} />
       <div className="flex flex-col">
         <div className="flex items-center gap-1 flex-wrap">

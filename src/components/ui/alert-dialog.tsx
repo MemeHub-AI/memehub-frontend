@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
+import { shadowVariants } from '@/styles/variants'
 
 interface Props extends AlertDialogPrimitive.AlertDialogProps {
   title: React.ReactNode
@@ -162,7 +163,11 @@ const AlertDialogAction = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AlertDialogPrimitive.Action
     ref={ref}
-    className={cn(buttonVariants(), className)}
+    className={cn(
+      buttonVariants({ variant: 'default' }),
+      shadowVariants(),
+      className
+    )}
     {...props}
   />
 ))
@@ -176,6 +181,7 @@ const AlertDialogCancel = React.forwardRef<
     ref={ref}
     className={cn(
       buttonVariants({ variant: 'outline' }),
+      shadowVariants(),
       'mt-2 sm:mt-0',
       className
     )}

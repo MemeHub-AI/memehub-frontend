@@ -47,35 +47,37 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
 
   return (
     <>
-      <div className="flex items-center border rounded-md focus-within:border-black pr-2">
-        <Input
-          placeholder="0"
-          border="none"
-          disableFocusBorder
-          className="flex-1"
-          type="number"
-          value={value}
-          onChange={(e) => {
-            // Cannot enter less than zero.
-            if (BigNumber(e.target.value).lt(0)) return
-            onChange?.(e)
-          }}
-          disabled={disabled}
-        />
-        <div className={cn('flex items-center', disabled && 'opacity-50')}>
-          <span className="mr-2 text-zinc-600">
-            {isBuy ? nativeSymbol : tokenSymbol}
-          </span>
-          <img
-            loading="lazy"
-            width={20}
-            height={20}
-            className="object-contain"
-            src={isBuy ? '/images/scroll.svg' : tokenInfo?.image}
-          />
-        </div>
-      </div>
-
+      <Input
+        placeholder="0"
+        className="flex-1"
+        type="number"
+        value={value}
+        onChange={(e) => {
+          // Cannot enter less than zero.
+          if (BigNumber(e.target.value).lt(0)) return
+          onChange?.(e)
+        }}
+        disabled={disabled}
+        endIcon={
+          <div
+            className={cn(
+              'flex items-center shrink-0 pr-2',
+              disabled && 'opacity-50'
+            )}
+          >
+            <span className="mr-2 text-zinc-600">
+              {isBuy ? nativeSymbol : tokenSymbol}
+            </span>
+            <img
+              loading="lazy"
+              width={20}
+              height={20}
+              className="object-contain"
+              src={isBuy ? '/images/scroll.svg' : tokenInfo?.image}
+            />
+          </div>
+        }
+      />
       <div className="text-zinc-500 text-xs flex justify-between mt-1 mr-1">
         <span>
           {isBuy

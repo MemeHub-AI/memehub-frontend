@@ -2,8 +2,6 @@ import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
-import type { UserListRes, UserListType } from '@/api/user/types'
-
 import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
 import {
@@ -79,7 +77,7 @@ export const TokenCards = (props: Props) => {
       {total !== 0 && (
         <div className="flex items-center gap-4 max-sm:justify-between ">
           <Select onValueChange={onChange}>
-            <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
+            <SelectTrigger className="mb-4 w-26 max-sm:mb-2">
               <SelectValue placeholder={t('chains')} />
             </SelectTrigger>
             <SelectContent>

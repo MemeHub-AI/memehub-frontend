@@ -104,7 +104,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     <TradeProvider
       value={{ isBuy, isSell, nativeSymbol, ethBalance, tokenBalance }}
     >
-      <Card className={cn('p-3 grid gap-4 rounded-lg', className)}>
+      <Card
+        hover="none"
+        shadow="none"
+        className={cn('p-3 grid gap-4 rounded-lg', className)}
+      >
         <Tabs className="w-full" value={tab} onValueChange={setTab}>
           <TabsList className="grid grid-cols-2 h-11 mb-6">
             <TabsTrigger
@@ -152,7 +156,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
           {/* Trade button */}
           <Button
-            isFullWidth
             className="!w-full"
             onClick={onTrade}
             disabled={isTrading || BigNumber(value).lte(0)}

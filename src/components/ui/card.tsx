@@ -2,12 +2,15 @@ import * as React from 'react'
 import { cva, VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
-import clsx from 'clsx'
+import {
+  shadowBorderVariants,
+  ShadowBorderVariantsProps,
+} from '@/styles/variants'
 
 const cardVariants = cva(
   cn(
-    'rounded-xl bg-card text-card-foreground transition-all',
-    'duration-300 cursor-pointer border shadow'
+    'rounded-lg bg-card text-card-foreground transition-all',
+    'duration-300 cursor-pointer border-2 border-black'
   ),
   {
     variants: {
@@ -20,9 +23,9 @@ const cardVariants = cva(
         xl: 'p-6',
       },
       hover: {
-        none: 'cursor-[unset]',
-        border: 'hover:shadow-bold',
+        none: '',
         bg: 'hover:bg-zinc-100',
+        scale: 'hover:scale-105',
       },
     },
     defaultVariants: {
@@ -34,76 +37,37 @@ const cardVariants = cva(
 
 interface Props
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof cardVariants> {
-  isShadow?: boolean
-  isReverse?: boolean
-  isRandomBackBgc?: boolean
-  frontBgc?: string
-  frontColor?: string
-  backBgc?: string
-}
+    VariantProps<typeof cardVariants>,
+    ShadowBorderVariantsProps {}
 
-const randomColor = [
-  '!bg-[#f5cbb0]',
-  '!bg-[#F0EDA8]',
-  '!bg-[#EFB97F]',
-  '!bg-[#c488c6]',
-  '!bg-[#94CCED]',
-  '!bg-[#8CE192]',
-  '!bg-[#9b97ca]',
-  '!bg-[#838AF2]',
+const colors = [
+  '#f5cbb0',
+  '#F0EDA8',
+  '#EFB97F',
+  '#c488c6',
+  '#94CCED',
+  '#8CE192',
+  '#9b97ca',
+  '#838AF2',
 ]
 
-const Card = React.forwardRef<HTMLDivElement, Props>(
-  (
-    {
-      className,
-      hover,
-      padding,
-      isShadow = false,
-      isReverse = true,
-      isRandomBackBgc = true,
-      frontBgc,
-      frontColor,
-      backBgc = 'bg-black',
-      ...props
-    },
-    ref
-  ) => {
-    const handleReverse = () => {
-      if (!isShadow) return ''
-      return isReverse ? 'is-reverse-translate' : 'no-reverse-translate'
-    }
+const Card = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
+  const { className, hover, padding, shadow, ...restProps } = props
+  const randomIdx = Math.floor(Math.random() * colors.length)
 
-    const randomNumber = Math.floor(Math.random() * 8)
-
-    return (
-      <div className="relative">
-        <div
-          ref={ref}
-          className={cn(
-            cardVariants({ className, padding }),
-            isShadow ? 'front-content card' : '',
-            `${handleReverse()}`,
-            `${frontBgc} hover:${frontBgc}`,
-            `${frontColor} hover:${frontColor}`
-          )}
-          {...props}
-        />
-        {isShadow ? (
-          <div
-            className={clsx(
-              'back-content card',
-              isRandomBackBgc
-                ? `${randomColor[randomNumber]}`
-                : `${backBgc} hover:${backBgc}`
-            )}
-          ></div>
-        ) : null}
-      </div>
-    )
-  }
-)
+  return (
+    <div
+      ref={ref}
+      // @ts-ignore
+      style={{ '--offset-color': shadow !== 'none' ? colors[randomIdx] : null }}
+      className={cn(
+        cardVariants({ hover, padding, className }),
+        shadowBorderVariants({ shadow })
+      )}
+      {...restProps}
+    />
+  )
+})
 
 Card.displayName = 'Card'
 

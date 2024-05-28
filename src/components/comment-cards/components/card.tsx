@@ -43,6 +43,7 @@ export const CommentCard = (props: Props) => {
         isActive && 'bg-zinc-200 hover:bg-zinc-200 animate-pulse'
       )}
       hover="bg"
+      shadow="none"
     >
       {/* User profile */}
       <div

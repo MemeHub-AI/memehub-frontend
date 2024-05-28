@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useWallet } from '@/hooks/use-wallet'
@@ -19,9 +19,6 @@ export const WalletConnector = () => {
   return (
     <>
       <Button
-        isShadow
-        frontTextColor="text-black"
-        frontBgc="bg-white"
         disabled={disabled}
         size={isMobile ? 'sm' : 'default'}
         onClick={() => setConnectOpen(true)}
@@ -33,10 +30,8 @@ export const WalletConnector = () => {
         {/* Exclude `injected` connect */}
         {connectors.slice(1).map((c, i) => (
           <Button
-            variant="secondary"
             key={i}
             size="lg"
-            isFullWidth
             className="flex w-full"
             onClick={() => connectWallet(c)}
           >
