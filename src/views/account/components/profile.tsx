@@ -25,7 +25,6 @@ import { Label } from '@/components/ui/label'
 import { ProfileForm } from './profile-form'
 import { useAccountContext } from '@/contexts/account'
 import { useUser } from '@/hooks/use-user'
-import { useUserStore } from '@/stores/use-user-store'
 import { Dialog } from '@/components/ui/dialog'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
@@ -37,10 +36,10 @@ export const Profile = (props: ComponentProps<'div'>) => {
   const [open, setOpen] = useState(false)
 
   const { userInfo, isOtherUser, refetchUserInfo } = useAccountContext()
-  const { isFollowed } = useUserStore()
-  const { isFollowing, isUnfollowing, follow, unfollow, update } = useUser()
+  const { isFollowing, isUnfollowing, follow, unfollow, update } = useUser({
+    onFollowFinlly: refetchUserInfo,
+  })
   const tokenAddr = (query.address || '') as string
-  const isFollow = isFollowed(tokenAddr)
 
   const { onChangeUpload } = useUploadImage({
     onSuccess: (url) => update({ logo: url }).then(() => refetchUserInfo()),
@@ -113,9 +112,11 @@ export const Profile = (props: ComponentProps<'div'>) => {
             variant="outline"
             className="absolute right-4 top-2"
             disabled={isFollowing || isUnfollowing}
-            onClick={() => (isFollow ? unfollow(tokenAddr) : follow(tokenAddr))}
+            onClick={() =>
+              userInfo?.is_follower ? unfollow(tokenAddr) : follow(tokenAddr)
+            }
           >
-            {isFollow ? <MinusIcon /> : <PlusIcon />}
+            {userInfo?.is_follower ? <MinusIcon /> : <PlusIcon />}
           </Button>
         ) : (
           <ProfileForm>

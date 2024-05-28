@@ -8,12 +8,13 @@ import {
 import type { UserInfoRes } from '@/api/user/types'
 
 import { ERR } from '@/errors'
+import { VoidFn } from '@/utils/types'
 
 interface Value {
   userInfo: UserInfoRes | undefined
   isPending: boolean
   isOtherUser: boolean
-  refetchUserInfo: Function
+  refetchUserInfo: VoidFn
 }
 
 const AccountContext = createContext<Value | null>(null)

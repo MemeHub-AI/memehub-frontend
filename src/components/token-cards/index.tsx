@@ -16,12 +16,12 @@ import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { Routes } from '@/routes'
-import { TokenListItem } from '@/api/token/types'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useStorage } from '@/hooks/use-storage'
+import { UserCoinsCreated } from '@/api/user/types'
 
 interface Props extends ComponentProps<'div'> {
-  cards?: TokenListItem[]
+  cards?: UserCoinsCreated[]
   total: number
   isLoading: boolean
   isPending?: boolean

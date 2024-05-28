@@ -1,5 +1,4 @@
 import { useTranslation } from 'react-i18next'
-import Link from 'next/link'
 
 import { NewsData } from '@/api/news/types'
 import { Button } from '../ui/button'
@@ -26,13 +25,13 @@ export const NewsCard = ({ news, onMeme }: Props) => {
         className="w-20 h-20 object-cover rounded"
       />
       <div className="flex flex-col justify-between items-start">
-        <Link
+        <a
           className="font-bold text-sm hover:text-blue-600"
           href={news.title.exploreLink}
           target="_blank"
         >
           {news?.title.query}
-        </Link>
+        </a>
         <Button
           variant="outline"
           size="sm"
