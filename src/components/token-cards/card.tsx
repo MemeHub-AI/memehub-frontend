@@ -39,11 +39,9 @@ export const TokenCard = ({ card, className }: Props) => {
   return (
     <Card
       className={cn(
-        'flex items-stretch rounded overflow-hidden gap-2 relative',
+        'flex items-stretch overflow-hidden gap-2 relative',
         className
       )}
-      isShadow
-      hover="border"
       onClick={() => router.push(`${Routes.Token}/${card.address}`)}
     >
       <img

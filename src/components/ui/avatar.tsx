@@ -2,9 +2,11 @@ import * as React from 'react'
 import * as AvatarPrimitive from '@radix-ui/react-avatar'
 
 import { cn } from '@/lib/utils'
+import { ShadowVariantsProps, shadowVariants } from '@/styles/variants'
 
 interface Props
-  extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root> {
+  extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>,
+    ShadowVariantsProps {
   src: string
   alt?: string
   size?: number
@@ -15,20 +17,34 @@ interface Props
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   Props
->(({ className, src, fallback, alt, size, fallbackClass, ...props }, ref) => (
-  <AvatarPrimitive.Root
-    ref={ref}
-    className={cn(
-      'relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full',
-      className
-    )}
-    style={{ width: size, height: size }}
-    {...props}
-  >
-    <AvatarImage src={src} alt={alt} />
-    <AvatarFallback className={fallbackClass} children={fallback} />
-  </AvatarPrimitive.Root>
-))
+>((props, ref) => {
+  const {
+    className,
+    src,
+    fallback,
+    alt,
+    size,
+    fallbackClass,
+    shadow = 'none',
+    ...restProps
+  } = props
+
+  return (
+    <AvatarPrimitive.Root
+      ref={ref}
+      className={cn(
+        'relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full',
+        className,
+        shadowVariants({ shadow })
+      )}
+      style={{ width: size, height: size }}
+      {...restProps}
+    >
+      <AvatarImage src={src} alt={alt} />
+      <AvatarFallback className={fallbackClass} children={fallback} />
+    </AvatarPrimitive.Root>
+  )
+})
 Avatar.displayName = AvatarPrimitive.Root.displayName
 
 const AvatarImage = React.forwardRef<

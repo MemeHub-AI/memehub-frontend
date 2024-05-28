@@ -408,14 +408,9 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           {/* Submit button */}
           <div className="flex flex-col items-start space-y-2">
             <Button
-              className="self-center px-10 mt-3 "
-              isShadow
-              frontBgc="!bg-black"
-              backBgc="!bg-white"
-              frontTextColor="!text-white"
+              variant="default"
+              className="self-center px-10 mt-3"
               disabled={isDeploying}
-              type="submit"
-              offset={{ x: 4, y: 0 }}
             >
               {t('create')}
             </Button>

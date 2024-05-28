@@ -27,23 +27,51 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputVariants> {
   disableFocusBorder?: boolean
+  startIcon?: React.ReactNode
+  endIcon?: React.ReactNode
 }
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, disableFocusBorder = false, border, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
+  const {
+    className,
+    disableFocusBorder = false,
+    border,
+    startIcon,
+    endIcon,
+    ...restProps
+  } = props
+
+  if (startIcon || endIcon) {
     return (
-      <input
-        type={type}
+      <div
         className={cn(
-          inputVariants({ className, border }),
-          !disableFocusBorder && 'focus-visible:ring-1 focus-visible:ring-ring'
+          'flex items-center border-2 border-black rounded-md',
+          'focus-within:shadow-[0_0_5px_3px_#A4C9EC] duration-150',
+          className
         )}
-        ref={ref}
-        {...props}
-      />
+      >
+        {startIcon}
+        <input
+          className={cn(inputVariants({ border: 'none' }), 'ml-0')}
+          ref={ref}
+          {...restProps}
+        />
+        {endIcon}
+      </div>
     )
   }
-)
+
+  return (
+    <input
+      className={cn(
+        inputVariants({ className, border }),
+        !disableFocusBorder && 'focus-visible:ring-1 focus-visible:ring-ring'
+      )}
+      ref={ref}
+      {...restProps}
+    />
+  )
+})
 Input.displayName = 'Input'
 
 export { Input }

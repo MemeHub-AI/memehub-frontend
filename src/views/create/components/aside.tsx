@@ -1,12 +1,10 @@
-import React, { useEffect, useState, type ComponentProps } from 'react'
+import React, { useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/router'
 
 import { CustomSuspense } from '@/components/custom-suspense'
 import { NewsCard } from '@/components/news'
 import { useNewsList } from '@/hooks/use-news-list'
 import { NewsSkeleton } from '@/components/news/skeleton'
-import clsx from 'clsx'
 import {
   Select,
   SelectContent,
@@ -15,10 +13,10 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useStorage } from '@/hooks/use-storage'
-import { abortController, useAIMemeInfo } from '@/hooks/use-ai-meme-info'
+import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
-import { useCreateTokenForm } from '../hooks/use-form'
 import { utilLang } from '@/utils/lang'
+import { cn } from '@/lib/utils'
 
 interface Props extends ComponentProps<'div'> {
   newsListData: ReturnType<typeof useNewsList>
@@ -80,10 +78,11 @@ export const InspirationNews = ({
           return (
             <div
               key={i}
-              className={clsx(
-                'tab-item text-nowrap',
-                selectTab === i ? 'active' : '',
-                i !== 0 ? '!ml-4' : ''
+              className={cn(
+                'px-2.5 py-1.5 text-nowrap rounded-xl my-5 cursor-pointer border-2 border-transparent',
+                'hover:border-black',
+                i === 1 && 'ml-3',
+                selectTab == i && 'bg-black text-[#ffe770]'
               )}
               onClick={() => onChangeTab(i)}
             >

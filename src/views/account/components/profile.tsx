@@ -47,7 +47,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
   })
 
   return (
-    <Card className={cn('w-aside', className)} hover="none">
+    <Card className={cn('w-aside', className)} hover="none" shadow="none">
       {/* Zoom in avatar dialog if is other user. */}
       <Dialog
         open={open}
@@ -111,8 +111,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
           <Button
             size="icon"
             variant="outline"
-            containerClass="!absolute right-4 top-2"
-            // className="absolute right-4 top-2"
+            className="absolute right-4 top-2"
             disabled={isFollowing || isUnfollowing}
             onClick={() => (isFollow ? unfollow(tokenAddr) : follow(tokenAddr))}
           >
@@ -123,8 +122,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
             <Button
               size="icon"
               variant="outline"
-              containerClass="!absolute right-4 top-2"
-              // className="absolute right-4 top-2"
+              className="absolute right-4 top-2"
             >
               <Pencil2Icon />
             </Button>

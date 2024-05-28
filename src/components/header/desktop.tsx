@@ -1,5 +1,6 @@
 import React, { ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 
 import type { Nav } from './'
 
@@ -7,9 +8,8 @@ import { Button } from '../ui/button'
 import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
-import { Input } from '../input'
+import { Input } from '@/components/ui/input'
 import { SocialLinks } from '../social-links'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { TradeLogs } from '../trade-logs'
 
 interface Props extends ComponentProps<'div'> {

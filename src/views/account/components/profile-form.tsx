@@ -88,7 +88,7 @@ export const ProfileForm = ({ children }: Props) => {
             onChange={onChange}
           />
           <DialogFooter className="!justify-start max-sm:flex-row max-sm:gap-3">
-            <Button>{t('confirm')}</Button>
+            <Button variant="default">{t('confirm')}</Button>
             <DialogClose ref={closeRef} asChild>
               <Button variant="outline" type="button">
                 {t('cancel')}

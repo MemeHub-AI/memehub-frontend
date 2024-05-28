@@ -23,6 +23,7 @@ export const WalletAccount = () => {
         size={isMobile ? 32 : 36}
         className="rounded-lg cursor-pointer"
         fallbackClass="rounded-lg text-xs"
+        shadow="default"
         onClick={() => {
           if (!userInfo) {
             return toast.error(t('user.not-found'))

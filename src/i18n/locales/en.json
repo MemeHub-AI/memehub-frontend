@@ -216,5 +216,6 @@
   "process": "",
   "progress": "Progress",
   "swatch.chain": "Need to switch to $1 chain",
-  "not.supported.chain": "This chain is not supported"
+  "not.supported.chain": "This chain is not supported",
+  "mentions.empty": "No mentions yet."
 }

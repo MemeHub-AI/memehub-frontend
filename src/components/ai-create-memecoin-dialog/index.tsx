@@ -90,17 +90,10 @@ export const AICreateMemecoinDialog = (props: Props) => {
             </div>
           ) : null}
           <div className="flex gap-10 mt-6 w-max mx-auto">
-            <Button
-              size="lg"
-              isShadow
-              frontBgc="!bg-black"
-              backBgc="!bg-white"
-              frontTextColor="!text-white"
-              onClick={confirm}
-            >
+            <Button variant="default" size="lg" onClick={confirm}>
               {t('coinfirm')}
             </Button>
-            <Button isShadow variant="outline" size="lg" onClick={hidden}>
+            <Button size="lg" onClick={hidden}>
               {t('cancel')}
             </Button>
           </div>

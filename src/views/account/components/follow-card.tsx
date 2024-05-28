@@ -31,6 +31,7 @@ export const FollowCard = ({ card }: Props) => {
     <Card
       className="py-2 px-3 flex items-center justify-between"
       hover="bg"
+      shadow="none"
       onClick={() => {
         router.push({
           pathname: router.pathname,
