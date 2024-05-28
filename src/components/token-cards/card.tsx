@@ -1,7 +1,6 @@
 import React, { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
-import Link from 'next/link'
 import { Address, formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 
@@ -31,7 +30,7 @@ export const TokenCard = ({ card, className }: Props) => {
         const current = formatEther(currentAmount)
 
         if (total === '0' || current === '0') return
-        setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(3))
+        setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(2))
       }
     )
   }, [])
