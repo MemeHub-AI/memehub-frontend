@@ -23,7 +23,6 @@ import { useNewsList } from '@/hooks/use-news-list'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { aiApi } from '@/api/ai'
-import { useUploadImage } from '@/hooks/use-upload-image'
 
 interface Props {
   newsListData: ReturnType<typeof useNewsList>
@@ -242,12 +241,20 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                               )}
                             >
                               <FormControl>
-                                <RadioGroupItem value={c.name}>
+                                <RadioGroupItem
+                                  value={c.name}
+                                  disabled={!c.contract_address}
+                                >
                                   <img
                                     src={c.logo}
                                     alt={c.name}
                                     about={c.name}
-                                    className="w-[27px] h-[27px] block rounded-full overflow-hidden"
+                                    className={clsx(
+                                      'w-[27px] h-[27px] block rounded-full overflow-hidden',
+                                      !c.contract_address
+                                        ? 'opacity-50 cursor-not-allowed'
+                                        : ''
+                                    )}
                                   />
                                 </RadioGroupItem>
                               </FormControl>
@@ -300,6 +307,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                           return (
                             <a
                               href={item}
+                              key={item}
                               download
                               target="_blank"
                               className={clsx('flex-shrink-0')}

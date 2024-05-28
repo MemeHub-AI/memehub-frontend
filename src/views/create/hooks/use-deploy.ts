@@ -11,11 +11,16 @@ import { ApiCode } from '@/api/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { factoryAddress } from '@/contract/address'
 import { useDeployConfig } from './use-deploy-config'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 export const useDeploy = () => {
   const [backendErr, setBackendErr] = useState<unknown>(null)
   const [tokenId, setTokenId] = useState(-1)
+  const { t } = useTranslation()
   const { create } = useCreateToken()
+  const { chains } = useWalletStore()
   const {
     deployFee,
     deploySymbol,
@@ -41,6 +46,15 @@ export const useDeploy = () => {
   const deployedAddress = first(data?.logs)?.address
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
+    debugger
+    const contractAddr = chains.find((c) => c.name === params.chain)
+      ?.contract_address as `0x${string}`
+
+    if (!contractAddr) {
+      toast.error(t('not.supported.chain'))
+      return
+    }
+
     // Submit hash to backend when contract submit success.
     const onSuccess = async (hash: Address) => {
       try {
@@ -56,7 +70,7 @@ export const useDeploy = () => {
     return writeContract(
       {
         abi: factoryAbi,
-        address: factoryAddress.scroll,
+        address: contractAddr,
         functionName: 'deploy',
         args: [
           reserveRatio,

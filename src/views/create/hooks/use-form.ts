@@ -7,8 +7,6 @@ import { useAccount, useSwitchChain } from 'wagmi'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { useStorage } from '@/hooks/use-storage'
 import { toast } from 'sonner'
 

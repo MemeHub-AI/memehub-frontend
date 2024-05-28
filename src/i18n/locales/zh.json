@@ -210,5 +210,6 @@
   "meme.logo": "代币头像",
   "need.base.info.warning": "需要完善名字和代币的描述",
   "progress": "进度",
-  "swatch.chain": "需要切换到$1链"
+  "swatch.chain": "需要切换到$1链",
+  "not.supported.chain": "不支持这条链"
 }
