@@ -30,35 +30,56 @@ const Launchpad = () => {
     current,
     paid,
     max,
+    buyEndTime,
+    isEndBuy,
+    buyStartTime,
+    isNotStart,
     isBuy,
     isClaim,
     balance,
     loading,
-    buyLoading,
-    claimLoading,
     claimAmountOneBNB,
     valueClaimAmount,
     paidClaimAmountValue,
     isBalanceInsufficient,
     setValue,
     onBuy,
+    onClick,
     onChange,
     onMax,
     onClaim,
     handleButtonText,
+    handleButtonDisabled,
   } = useLaunchpad()
 
   const hadnleBuyAndClaim = () => {
-    if (!info?.isBuyActive && !info?.isClaimActive) {
-      return <Fragment></Fragment>
+    if (isNotStart) {
+      return (
+        <Fragment>
+          <div className="text-center mb-2">{t('not.start')}</div>
+          <Countdown time={buyStartTime} className="mb-5"></Countdown>
+        </Fragment>
+      )
+    }
+
+    if (info?.isFailed) {
+      return (
+        <div className="text-center mb-6 text-red-500">
+          {t('presale.failed')}
+        </div>
+      )
     }
 
     if (info?.isClaimActive) {
       return (
         <Fragment>
-          <div>
-            你一共参与了{paid}BNB可获得
-            {BigNumber(paidClaimAmountValue).toFormat()}Trump
+          <div className="mt-1">
+            {t('participated')}{' '}
+            <span className="text-orange-500">{paid}BNB</span>{' '}
+            {t('participated.to')}{' '}
+            <span className="text-orange-500">
+              {BigNumber(valueClaimAmount).toFormat()}Trump
+            </span>
           </div>
         </Fragment>
       )
@@ -112,67 +133,79 @@ const Launchpad = () => {
             ) : null}
           </>
         )}
-        <div className={clsx('text-sm text-gray-500', +value ? '' : 'mt-1')}>
-          {t('participartion.in')}
-          <span className="text-orange-500">{paid}BNB</span>
-          {t('available')}
-          <span className="text-orange-500">
-            {BigNumber(paidClaimAmountValue).toFormat()}Trump
-          </span>
-        </div>
+        {paid !== 0 ? (
+          <div className={clsx('text-sm text-gray-500', +value ? '' : 'mt-1')}>
+            {t('participartion.in')}
+            <span className="text-orange-500">{paid}BNB</span>
+            {t('available')}
+            <span className="text-orange-500">
+              {BigNumber(paidClaimAmountValue).toFormat()}Trump
+            </span>
+          </div>
+        ) : null}
       </Fragment>
     )
   }
 
   return (
-    <main className="min-h-main px-8 pb-3">
+    <main className="px-8 pb-3 max-sm:px-4">
       <div className="my-6 flex items-center">
         <Button onClick={back}>{t('back')}</Button>
+        <h1 className="ml-5 text-2xl font-bold">Launchpad Trump</h1>
       </div>
-      <Card className="w-[450px] px-5">
-        <div className="text-center text-2xl mt-5 mb-3">Trump🔥</div>
+      <div className="flex max-sm:w-full">
+        <HotNewsAside></HotNewsAside>
+        <div className="ml-5 max-sm:ml-0  max-sm:w-full">
+          <Card className="w-[450px] max-sm:w-full px-5">
+            <div className="text-center text-2xl mt-5 mb-3">Trump🔥</div>
 
-        <div className="mb-2 text-center">{t('close.presale')}</div>
-        <Countdown time={'2024/5/30 23:00:00'} className="mb-5"></Countdown>
-        {hadnleBuyAndClaim()}
-        <Button
-          className="my-5 px-20 py-5"
-          isFullWidth
-          onClick={onBuy}
-          disabled={
-            buyLoading ||
-            loading ||
-            claimLoading ||
-            (paid === 0 && info?.isClaimActive) ||
-            (max === 0 && info?.isBuyActive) ||
-            isBalanceInsufficient
-          }
-        >
-          {handleButtonText()}
-        </Button>
-      </Card>
-      <Card className="w-[450px] mt-5 py-3 px-5">
-        <div className="flex justify-between">
-          <span>{t('rate')}</span>
-          <span>1BNB = {BigNumber(claimAmountOneBNB).toFormat()}Trump</span>
-        </div>
-        <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
-        <div className="flex justify-between">
-          <span>{t('ca')}</span>
-          <CopyToClipboard
-            text={info?.token ?? zeroAddress}
-            onCopy={() => {
-              toast.success(t('copy.success'))
-            }}
-          >
-            <div className="flex items-center cursor-pointer text-primary">
-              {fmt.addr(info?.token ?? zeroAddress)}
-              <IoCopyOutline className="ml-1"></IoCopyOutline>
+            {!isEndBuy ? (
+              <Fragment>
+                <div className="mb-2 text-center">{t('close.presale')}</div>
+                <Countdown time={buyEndTime} className="mb-5"></Countdown>
+              </Fragment>
+            ) : null}
+            {hadnleBuyAndClaim()}
+            {isNotStart || info?.isFailed ? null : (
+              <Button
+                className="my-5 px-20 py-5"
+                isFullWidth
+                onClick={onClick}
+                disabled={handleButtonDisabled()}
+              >
+                {handleButtonText()}
+              </Button>
+            )}
+          </Card>
+          <Card className="w-[450px] max-sm:w-full mt-5 py-3 px-5">
+            <div className="flex justify-between">
+              <span>{t('rate')}</span>
+              <span>1BNB = {BigNumber(claimAmountOneBNB).toFormat()}Trump</span>
             </div>
-          </CopyToClipboard>
+            <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
+            <div className="flex justify-between">
+              <span>{t('ca')}</span>
+              <CopyToClipboard
+                text={info?.token ?? zeroAddress}
+                onCopy={() => {
+                  toast.success(t('copy.success'))
+                }}
+              >
+                <div className="flex items-center cursor-pointer text-primary">
+                  {fmt.addr(info?.token ?? zeroAddress)}
+                  <IoCopyOutline className="ml-1"></IoCopyOutline>
+                </div>
+              </CopyToClipboard>
+            </div>
+            <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
+            <div className="flex justify-between">
+              <span>{t('total.supply')}</span>
+              <span>{t('1b')}</span>
+            </div>
+            {/* <div className="!my-2 h-[1px] w-full bg-slate-100"></div> */}
+          </Card>
         </div>
-        {/* <div className="!my-2 h-[1px] w-full bg-slate-100"></div> */}
-      </Card>
+      </div>
     </main>
   )
 }

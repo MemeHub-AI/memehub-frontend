@@ -17,6 +17,9 @@ import {
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
+const buyEndTime = '2024/5/30 23:00:00'
+const buyStartTime = '2024/5/28 23:00:00'
+
 export const useLaunchpad = () => {
   const [value, setValue] = useState('')
   const [buyLoading, setBuyLoading] = useState(false)
@@ -135,24 +138,16 @@ export const useLaunchpad = () => {
   })
 
   // 等待购买
-  const {
-    isLoading: buying,
-    isSuccess: buySuccess,
-    isError: isBuyError,
-    error: buyError,
-  } = useWaitForTransactionReceipt({
-    hash: buyHash,
-  })
+  const { isLoading: buying, isSuccess: buySuccess } =
+    useWaitForTransactionReceipt({
+      hash: buyHash,
+    })
 
   // 等待领取
-  const {
-    isLoading: claiming,
-    isSuccess: claimSuccess,
-    isError: isClaimError,
-    error: claimError,
-  } = useWaitForTransactionReceipt({
-    hash: claimHash,
-  })
+  const { isLoading: claiming, isSuccess: claimSuccess } =
+    useWaitForTransactionReceipt({
+      hash: claimHash,
+    })
 
   if (isError || isLoadingError) {
     toast.error(error?.message)
@@ -171,6 +166,10 @@ export const useLaunchpad = () => {
     toast.success(t('claim.success'))
     resetClaimStatus()
   }
+
+  const loading = infoLoading || isBuyLoading || isClaimLoading || paidLoading
+  const isBuying = buyLoading || buying
+  const isClaiming = claimLoading || claiming
 
   // 如果只差0.0001就满了，但是最小参与量应该也是0.0001
   // 否则就是按照合约最小参与单位来计算
@@ -272,7 +271,7 @@ export const useLaunchpad = () => {
     // 剩余差额小于了最小参与量，那他的参与量就不能再大于差额了，只能参与和差额一样的量
     if (diff < min) {
       if (v !== diff) {
-        return diff
+        return setValue(`${diff}`)
       }
     } else {
       // 按照最大最小值的限定参与
@@ -287,7 +286,7 @@ export const useLaunchpad = () => {
   }
 
   const onMax = () => {
-    setValue(`${max}`)
+    setValue(`${Math.min(max, diff)}`)
   }
 
   const onChange = (value: string) => {
@@ -314,24 +313,49 @@ export const useLaunchpad = () => {
     return info?.isClaimActive ? t('claim') : t('buy')
   }
 
+  const handleButtonDisabled = () => {
+    if (loading) {
+      return true
+    }
+
+    if (buyLoading) {
+      return true
+    }
+
+    if (claimLoading) {
+      return true
+    }
+
+    if (isBalanceInsufficient) {
+      return true
+    }
+
+    if (max === 0 && info?.isBuyActive) {
+      return true
+    }
+
+    if (paid === 0 && info?.isClaimActive) {
+      return true
+    }
+
+    return false
+  }
+
+  const onClick = () => {
+    if (info?.isBuyActive) {
+      onBuy()
+    } else if (info?.isClaimActive) {
+      onClaim()
+    }
+  }
+
   return {
+    buyStartTime,
+    buyEndTime,
     value,
     info,
-    // info: {
-    //   isBuyActive: false,
-    //   isWhite: false,
-    //   isFailed: false,
-    //   isClaimActive: true,
-    //   totalGatherBnb: 100,
-    //   totalPaidBnb: 100,
-    //   minBnb: 10,
-    //   maxBnb: 100,
-    //   claimAmount: 2,
-    //   whiteClaimAmount: 4,
-    //   inviteCondition: 1,
-    //   token: '0x75ed254466eb2a2aae421b759c82e75f72fd497d',
-    //   nft: '0x75ed254466eb2A2AAE421b759c82E75F72Fd497d',
-    // },
+    isNotStart: new Date() < new Date(buyStartTime),
+    isEndBuy: new Date() > new Date(buyEndTime) || !info?.isBuyActive,
     minBnb,
     maxBnb,
     total,
@@ -340,19 +364,21 @@ export const useLaunchpad = () => {
     paid,
     isBuy,
     isClaim,
-    loading: infoLoading || isBuyLoading || isClaimLoading || paidLoading,
-    buyLoading: buyLoading || buying,
-    claimLoading: claimLoading || claiming,
+    loading,
+    isBuying,
+    isClaiming,
     claimAmountOneBNB,
     valueClaimAmount,
     paidClaimAmountValue,
     balance,
     isBalanceInsufficient,
+    onClick,
     setValue,
     onBuy,
     onChange,
     onMax,
     onClaim,
     handleButtonText,
+    handleButtonDisabled,
   }
 }

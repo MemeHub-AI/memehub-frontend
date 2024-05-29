@@ -237,5 +237,11 @@
   "available": " to get ",
   "buy.success": "Purchase success",
   "claim.success": "Successful claim",
-  "wait.claim": "Wait to claim the token"
+  "wait.claim": "Wait to claim the token",
+  "participated": "You have participated in total of",
+  "participated.to": "and can obtain",
+  "not.start": "Be opened soon",
+  "presale.failed": "Presale failure",
+  "total.supply": "Total Supply",
+  "1b": "1,000,000,000"
 }
