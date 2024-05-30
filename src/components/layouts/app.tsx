@@ -4,6 +4,8 @@ import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { BigNumber } from 'bignumber.js'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import { Header } from '../header'
 import { Footer } from '../footer'
@@ -14,8 +16,6 @@ import { Toaster } from '@/components/ui/sonner'
 import { BackToTop } from '../back-to-top'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { chainApi } from '@/api/chain'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)

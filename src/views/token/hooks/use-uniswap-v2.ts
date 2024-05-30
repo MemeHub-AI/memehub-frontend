@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash'
 
 import { uniswapV2Abi } from '../../../contract/abi/uniswap-v2'
 import { customToast } from '@/utils/toast'
-import { uniswapV2Address } from '@/contract/address'
+import { ca } from '@/contract/address'
 import { useDeployConfig } from '@/views/create/hooks/use-deploy-config'
 import { useApprove } from '@/hooks/use-approve'
 
@@ -57,7 +57,7 @@ export const useUniswapV2 = () => {
     console.log('uniswap buy', amount, token)
     writeContract({
       abi: uniswapV2Abi,
-      address: uniswapV2Address,
+      address: ca.uniswapV2,
       functionName: 'swapExactETHForTokens',
       args: [
         BigInt(0),
@@ -83,7 +83,7 @@ export const useUniswapV2 = () => {
     console.log('uniswap sell', amount, token)
     writeContract({
       abi: uniswapV2Abi,
-      address: uniswapV2Address,
+      address: ca.uniswapV2,
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),

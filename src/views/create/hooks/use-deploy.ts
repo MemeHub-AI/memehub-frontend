@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useWriteContract } from 'wagmi'
 import { first } from 'lodash'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import type { Address } from 'viem'
 import type { TokenNewReq } from '@/api/token/types'
@@ -9,11 +11,8 @@ import { factoryAbi } from '../../../contract/abi/factory'
 import { useCreateToken } from './use-create-token'
 import { ApiCode } from '@/api/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { factoryAddress } from '@/contract/address'
 import { useDeployConfig } from './use-deploy-config'
 import { useWalletStore } from '@/stores/use-wallet-store'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 
 export const useDeploy = () => {
   const [backendErr, setBackendErr] = useState<unknown>(null)
@@ -46,7 +45,6 @@ export const useDeploy = () => {
   const deployedAddress = first(data?.logs)?.address
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
-    debugger
     const contractAddr = chains.find((c) => c.name === params.chain)
       ?.contract_address as `0x${string}`
 
