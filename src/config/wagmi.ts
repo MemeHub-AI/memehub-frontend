@@ -1,6 +1,13 @@
 import { http, createConfig, fallback, unstable_connector } from 'wagmi'
 import { injected } from 'wagmi/connectors'
-import { scroll, scrollSepolia, mainnet, bsc, bscTestnet } from 'wagmi/chains'
+import {
+  scroll,
+  scrollSepolia,
+  mainnet,
+  bsc,
+  bscTestnet,
+  opBNBTestnet,
+} from 'wagmi/chains'
 import { first } from 'lodash'
 
 // const prod = createConfig({
@@ -16,10 +23,12 @@ import { first } from 'lodash'
 // })
 
 const dev = createConfig({
-  chains: [bscTestnet],
+  chains: [scrollSepolia, bscTestnet, opBNBTestnet],
   connectors: [injected()],
   transports: {
+    [scrollSepolia.id]: fallback([http(), unstable_connector(injected)]),
     [bscTestnet.id]: fallback([http(), unstable_connector(injected)]),
+    [opBNBTestnet.id]: fallback([http(), unstable_connector(injected)]),
   },
   ssr: true,
 })

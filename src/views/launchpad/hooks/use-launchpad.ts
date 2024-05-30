@@ -31,7 +31,6 @@ export const useLaunchpad = () => {
   const { data: balance } = useBalance({ address })
   const walletStore = useWalletStore()
 
-  //  IDO 信息
   const {
     data: info,
     isLoading: infoLoading,
@@ -47,7 +46,6 @@ export const useLaunchpad = () => {
     },
   })
 
-  //  是否是白名单
   const { data: isWhite, isLoading: isWhiteLoading } = useReadContract({
     address: idoAddress,
     abi: idoAbi,
@@ -58,7 +56,6 @@ export const useLaunchpad = () => {
     },
   })
 
-  //  是否是购买
   const { data: isBuy, isLoading: isBuyLoading } = useReadContract({
     address: idoAddress,
     abi: idoAbi,
@@ -69,7 +66,6 @@ export const useLaunchpad = () => {
     },
   })
 
-  // 是否已领取
   const { data: isClaim, isLoading: isClaimLoading } = useReadContract({
     address: idoAddress,
     abi: idoAbi,
@@ -80,7 +76,6 @@ export const useLaunchpad = () => {
     },
   })
 
-  //  已购买量
   const { data: paidBNB, isLoading: paidLoading } = useReadContract({
     address: idoAddress,
     abi: idoAbi,
@@ -93,7 +88,6 @@ export const useLaunchpad = () => {
 
   const paid = +formatEther(BigInt(paidBNB || 0))
 
-  //  购买代币
   const {
     writeContractAsync: buyAmount,
     data: buyHash,
@@ -102,23 +96,19 @@ export const useLaunchpad = () => {
     mutation: {
       onMutate: () => {
         toast.loading(t('buying'))
-        console.log('购买中...')
         setBuyLoading(true)
       },
       onSuccess: () => {
         setBuyLoading(false)
-        console.log('购买成功...')
       },
       onError: () => {
         toast.dismiss()
         setBuyLoading(false)
-        console.log('购买失败...')
         resetBuyStatus()
       },
     },
   })
 
-  //  领取
   const {
     writeContractAsync: claim,
     data: claimHash,
@@ -127,8 +117,6 @@ export const useLaunchpad = () => {
     mutation: {
       onMutate: () => {
         toast.loading(t('claiming'))
-        console.log('领取中...')
-
         setClaimLoading(true)
       },
       onSuccess: (hash) => {
@@ -142,13 +130,11 @@ export const useLaunchpad = () => {
     },
   })
 
-  // 等待购买
   const { isLoading: buying, isSuccess: buySuccess } =
     useWaitForTransactionReceipt({
       hash: buyHash,
     })
 
-  // 等待领取
   const { isLoading: claiming, isSuccess: claimSuccess } =
     useWaitForTransactionReceipt({
       hash: claimHash,
@@ -163,14 +149,9 @@ export const useLaunchpad = () => {
   const isBuying = buyLoading || buying
   const isClaiming = claimLoading || claiming
 
-  // 如果只差0.0001就满了，但是最小参与量应该也是0.0001
-  // 否则就是按照合约最小参与单位来计算
-
-  // 最大最小参与量
   const minBnb = +formatEther(BigInt(info?.minBnb || 0))
   const maxBnb = +formatEther(BigInt(info?.maxBnb || 0))
 
-  // 池子总量  当前量  差额
   const total = +formatEther(BigInt(info?.totalGatherBnb || 0))
   const current = +formatEther(BigInt(info?.totalPaidBnb || 0))
   const diff = BigNumber(total).minus(current).toNumber()
@@ -179,10 +160,8 @@ export const useLaunchpad = () => {
 
   const claimAmount = isWhite ? info?.whiteClaimAmount : info?.claimAmount
 
-  // 最小 BNB 购买量 对应的 可领取代币量
   const minClaimAmount = +formatEther(BigInt(claimAmount || 0))
 
-  // 一个BNB可获得的数量
   const claimAmountOneBNBOnWitelist = +BigNumber(1)
     .div(minBnb)
     .multipliedBy(+formatEther(BigInt(info?.whiteClaimAmount || 0)))
@@ -192,13 +171,11 @@ export const useLaunchpad = () => {
     .multipliedBy(+formatEther(BigInt(info?.claimAmount || 0)))
     .toFixed(2)
 
-  // 输入BNB对应的领取代币数量
   const valueClaimAmount = +BigNumber(+value)
     .div(minBnb)
     .multipliedBy(minClaimAmount)
     .toFixed(2)
 
-  // 等待领取的代币数量
   const paidClaimAmountValue = +BigNumber(paid)
     .div(minBnb)
     .multipliedBy(minClaimAmount)
@@ -258,13 +235,11 @@ export const useLaunchpad = () => {
       maxBnb
     )
 
-    // 剩余差额小于了最小参与量，那他的参与量就不能再大于差额了，只能参与和差额一样的量
     if (diff < min) {
       if (v !== diff) {
         return setValue(`${diff}`)
       }
     } else {
-      // 按照最大最小值的限定参与
       if (v < min) {
         return setValue(`${min}`)
       } else if (v > max) {
@@ -372,7 +347,6 @@ export const useLaunchpad = () => {
 
   useEffect(() => {
     if (isError || isLoadingError) {
-      console.log('失败...')
       toast.dismiss()
       toast.error(error?.message)
       resetBuyStatus()
@@ -381,7 +355,6 @@ export const useLaunchpad = () => {
     }
 
     if (buySuccess) {
-      console.log('buySuccess 购买成功...')
       toast.dismiss()
       toast.success(t('buy.success'))
       resetBuyStatus()
