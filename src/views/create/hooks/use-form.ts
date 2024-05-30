@@ -77,9 +77,7 @@ export const useCreateTokenForm = (
     const vChainId = Number(chains.find((c) => c.name === values.chainName)?.id)
     if (vChainId !== chainId) {
       toast.error(t('swatch.chain').replace('$1', values.chainName! as string))
-      switchChain({
-        chainId: vChainId,
-      })
+      switchChain({ chainId: vChainId })
       return
     }
 
