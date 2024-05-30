@@ -148,7 +148,7 @@ const Launchpad = () => {
             <Input
               value={value}
               type="number"
-              onChange={({ target }) => onChange(target.value)}
+              onBlur={({ target }) => onChange(target.value)}
               endIcon={
                 <div
                   className="text-orange-500 text-nowrap cursor-pointer mx-3"

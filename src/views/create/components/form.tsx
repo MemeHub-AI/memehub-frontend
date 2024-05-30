@@ -49,7 +49,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
     onChangeUpload,
   } = props.formData
 
-  const [showPoster, setShowPoster] = useState(true)
+  const [showPoster, setShowPoster] = useState(false)
   const [index, setIndex] = useState(0)
   const [handLoadingPoster, setHandLoadingPoster] = useState(false)
 
