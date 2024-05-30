@@ -19,9 +19,7 @@ import { TradeProvider } from '@/contexts/trade'
 import { TradeItems } from './trade-items'
 import { TradeInput } from './trade-input'
 import { TradeType } from '@/api/websocket/types'
-
-// TODO: should be dynamic chain.
-const SCROLL_CHAIN = 534352
+import { useTokenContext } from '@/contexts/token'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -34,10 +32,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { query } = useRouter()
 
   const { switchChainAsync } = useSwitchChain()
-  const { isConnected, chain, chainId } = useAccount()
+  const { isConnected, chainId } = useAccount()
   const { isTrading, buy, sell } = useTrade()
   const { ethBalance, tokenBalance } = useTradeInfo()
   const { setConnectOpen } = useWalletStore()
+  const { tokenInfo } = useTokenContext()
 
   const token = (query.address || '') as Address
   const nativeSymbol = 'ETH'
@@ -70,9 +69,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   }
 
   const checkForChain = async () => {
-    if (chainId === SCROLL_CHAIN) return true
+    if (!chainId || !tokenInfo?.chain.id) return false
+
+    const tokenChainId = Number(tokenInfo?.chain.id)
+    if (chainId === tokenChainId) return true
+
     try {
-      await switchChainAsync({ chainId: SCROLL_CHAIN })
+      await switchChainAsync({ chainId: tokenChainId })
       return true
     } catch (error) {
       toast.error(t('chain-error'))
