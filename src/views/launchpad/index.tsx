@@ -38,8 +38,8 @@ const Launchpad = () => {
     isWhite,
     isEndWhitelist,
     isConnected,
-    witelistEndTime,
-    claimAmountOneBNBOnWitelist,
+    whitelistEndTime,
+    claimAmountOneBNBOnwhitelist,
     claimAmountOneBNB,
     valueClaimAmount,
     paidClaimAmountValue,
@@ -47,6 +47,7 @@ const Launchpad = () => {
     onChange,
     onMax,
     onClaim,
+    setValue,
     handleButtonText,
     handleButtonDisabled,
   } = useLaunchpad()
@@ -147,6 +148,7 @@ const Launchpad = () => {
             <Input
               value={value}
               type="number"
+              onChange={({ target }) => setValue(target.value)}
               onBlur={({ target }) => onChange(target.value)}
               endIcon={
                 <div
@@ -190,8 +192,8 @@ const Launchpad = () => {
     if (info?.isWhite && !isEndWhitelist) {
       return (
         <Fragment>
-          <div className="mb-2 text-center">{t('witelist.close.presale')}</div>
-          <Countdown time={witelistEndTime} className="mb-5"></Countdown>
+          <div className="mb-2 text-center">{t('whitelist.close.presale')}</div>
+          <Countdown time={whitelistEndTime} className="mb-5"></Countdown>
         </Fragment>
       )
     }
@@ -274,9 +276,9 @@ const Launchpad = () => {
             </div>
             <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
             <div className="flex justify-between">
-              <span>{t('rate.witelist')}</span>
+              <span>{t('rate.whitelist')}</span>
               <span>
-                1BNB = {BigNumber(claimAmountOneBNBOnWitelist).toFormat()}Trump
+                1BNB = {BigNumber(claimAmountOneBNBOnwhitelist).toFormat()}Trump
               </span>
             </div>
             <div className="!my-2 h-[1px] w-full bg-slate-100"></div>

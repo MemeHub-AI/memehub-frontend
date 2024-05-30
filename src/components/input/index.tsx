@@ -43,8 +43,14 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
           disableFocusBorder
           value={props.value}
           onChange={props.onChange}
-          onFocus={() => setBoxShadow('0 0 5px 3px #A4C9EC')}
-          onBlur={() => setBoxShadow('')}
+          onFocus={(e) => {
+            setBoxShadow('0 0 5px 3px #A4C9EC')
+            p.onFocus && p.onFocus(e)
+          }}
+          onBlur={(e) => {
+            setBoxShadow('')
+            p.onBlur && p.onBlur(e)
+          }}
         />
         {endIcon ? endIcon : null}
       </div>

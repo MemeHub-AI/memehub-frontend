@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 
 const buyEndTime = '2024/6/3 23:00:00'
 const buyStartTime = '2024/5/28 23:00:00'
-const witelistEndTime = '2024/6/2 23:00:00'
+const whitelistEndTime = '2024/6/2 23:00:00'
 
 export const useLaunchpad = () => {
   const [value, setValue] = useState('')
@@ -166,7 +166,7 @@ export const useLaunchpad = () => {
 
   const minClaimAmount = +formatEther(BigInt(claimAmount || 0))
 
-  const claimAmountOneBNBOnWitelist = +BigNumber(1)
+  const claimAmountOneBNBOnwhitelist = +BigNumber(1)
     .div(minBnb)
     .multipliedBy(+formatEther(BigInt(info?.whiteClaimAmount || 0)))
     .toFixed(2)
@@ -374,13 +374,13 @@ export const useLaunchpad = () => {
 
   return {
     isWhite,
-    witelistEndTime,
+    whitelistEndTime,
     buyStartTime,
     buyEndTime,
     isConnected,
     value,
     info,
-    isEndWhitelist: new Date() > new Date(witelistEndTime),
+    isEndWhitelist: new Date() > new Date(whitelistEndTime),
     isNotStart: new Date() < new Date(buyStartTime),
     isEndBuy: new Date() > new Date(buyEndTime) || !info?.isBuyActive,
     minBnb,
@@ -395,7 +395,7 @@ export const useLaunchpad = () => {
     isBuying,
     isClaiming,
     claimAmountOneBNB,
-    claimAmountOneBNBOnWitelist,
+    claimAmountOneBNBOnwhitelist,
     valueClaimAmount,
     paidClaimAmountValue,
     balance,
