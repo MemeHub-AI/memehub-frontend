@@ -6,4 +6,8 @@ export const factoryAddress = {
   opBsc: '0xC60B0Fc8Ada34C056c7DE59044de8Db12508877e',
 } as const
 
+export const idoAddress = '0x1778EDfF5DBD9a64Fa54D237F828F317DB884056'
+
 // prod
+
+export const zeroAddress = '0x0000000000000000000000000000000000000000'
