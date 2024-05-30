@@ -38,6 +38,10 @@ const Launchpad = () => {
     isClaim,
     balance,
     loading,
+    isWhite,
+    isConnected,
+    witelistEndTime,
+    claimAmountOneBNBOnWitelist,
     claimAmountOneBNB,
     valueClaimAmount,
     paidClaimAmountValue,
@@ -143,28 +147,44 @@ const Launchpad = () => {
             </span>
           </div>
         ) : null}
+        {isConnected && !isWhite && info?.isWhite ? (
+          <div className="text-sm text-red-500 mt-1">{t('not.eligible')}</div>
+        ) : null}
       </Fragment>
     )
+  }
+
+  const handleTime = () => {
+    if (!isEndBuy) {
+      return (
+        <Fragment>
+          <div className="mb-2 text-center">{t('close.presale')}</div>
+          <Countdown time={buyEndTime} className="mb-5"></Countdown>
+        </Fragment>
+      )
+    }
+
+    if (info?.isWhite) {
+      return (
+        <Fragment>
+          <div className="mb-2 text-center">{t('witelist.close.presale')}</div>
+          <Countdown time={witelistEndTime} className="mb-5"></Countdown>
+        </Fragment>
+      )
+    }
   }
 
   return (
     <main className="px-8 pb-3 max-sm:px-4">
       <div className="my-6 flex items-center">
-        <Button onClick={back}>{t('back')}</Button>
-        <h1 className="ml-5 text-2xl font-bold">Launchpad Trump</h1>
+        <h1 className="text-2xl font-bold">Launchpad Trump</h1>
       </div>
       <div className="flex max-sm:w-full">
         <HotNewsAside></HotNewsAside>
         <div className="ml-5 max-sm:ml-0  max-sm:w-full">
           <Card className="w-[450px] max-sm:w-full px-5">
             <div className="text-center text-2xl mt-5 mb-3">Trump🔥</div>
-
-            {!isEndBuy ? (
-              <Fragment>
-                <div className="mb-2 text-center">{t('close.presale')}</div>
-                <Countdown time={buyEndTime} className="mb-5"></Countdown>
-              </Fragment>
-            ) : null}
+            {handleTime()}
             {hadnleBuyAndClaim()}
             {isNotStart || info?.isFailed ? null : (
               <Button
@@ -179,11 +199,6 @@ const Launchpad = () => {
           </Card>
           <Card className="w-[450px] max-sm:w-full mt-5 py-3 px-5">
             <div className="flex justify-between">
-              <span>{t('rate')}</span>
-              <span>1BNB = {BigNumber(claimAmountOneBNB).toFormat()}Trump</span>
-            </div>
-            <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
-            <div className="flex justify-between">
               <span>{t('ca')}</span>
               <CopyToClipboard
                 text={info?.token ?? zeroAddress}
@@ -196,6 +211,18 @@ const Launchpad = () => {
                   <IoCopyOutline className="ml-1"></IoCopyOutline>
                 </div>
               </CopyToClipboard>
+            </div>
+            <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
+            <div className="flex justify-between">
+              <span>{t('rate')}</span>
+              <span>1BNB = {BigNumber(claimAmountOneBNB).toFormat()}Trump</span>
+            </div>
+            <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
+            <div className="flex justify-between">
+              <span>{t('rate.witelist')}</span>
+              <span>
+                1BNB = {BigNumber(claimAmountOneBNBOnWitelist).toFormat()}Trump
+              </span>
             </div>
             <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
             <div className="flex justify-between">

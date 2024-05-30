@@ -3,7 +3,7 @@ import { idoAbi } from '@/contract/abi/ido'
 import { idoAddress } from '@/contract/address'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import BigNumber from 'bignumber.js'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatEther, parseEther, zeroAddress } from 'viem'
 import { bscTestnet } from 'viem/chains'
 import {
@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next'
 
 const buyEndTime = '2024/5/30 23:00:00'
 const buyStartTime = '2024/5/28 23:00:00'
+const witelistEndTime = '2024/6/2 23:00:00'
 
 export const useLaunchpad = () => {
   const [value, setValue] = useState('')
@@ -43,7 +44,7 @@ export const useLaunchpad = () => {
     abi: idoAbi,
     functionName: 'getInfo',
     query: {
-      refetchInterval: 10_000,
+      refetchInterval: 5_000,
     },
   })
 
@@ -54,7 +55,7 @@ export const useLaunchpad = () => {
     functionName: 'isWhite',
     args: [address!],
     query: {
-      refetchInterval: 10_000,
+      refetchInterval: 5_000,
     },
   })
 
@@ -65,7 +66,7 @@ export const useLaunchpad = () => {
     functionName: 'isBuy',
     args: [address!],
     query: {
-      refetchInterval: 10_000,
+      refetchInterval: 5_000,
     },
   })
 
@@ -76,7 +77,7 @@ export const useLaunchpad = () => {
     functionName: 'isClaim',
     args: [address!],
     query: {
-      refetchInterval: 10_000,
+      refetchInterval: 5_000,
     },
   })
 
@@ -87,7 +88,7 @@ export const useLaunchpad = () => {
     functionName: 'paidBnb',
     args: [address!],
     query: {
-      refetchInterval: 10_000,
+      refetchInterval: 5_000,
     },
   })
 
@@ -101,15 +102,18 @@ export const useLaunchpad = () => {
   } = useWriteContract({
     mutation: {
       onMutate: () => {
-        setBuyLoading(true)
         toast.loading(t('buying'))
+        console.log('购买中...')
+        setBuyLoading(true)
       },
       onSuccess: () => {
         setBuyLoading(false)
-        resetBuyStatus()
+        console.log('购买成功...')
       },
       onError: () => {
+        toast.dismiss()
         setBuyLoading(false)
+        console.log('购买失败...')
         resetBuyStatus()
       },
     },
@@ -124,13 +128,15 @@ export const useLaunchpad = () => {
     mutation: {
       onMutate: () => {
         toast.loading(t('claiming'))
+        console.log('领取中...')
+
         setClaimLoading(true)
       },
       onSuccess: (hash) => {
         setClaimLoading(false)
-        resetClaimStatus()
       },
       onError: () => {
+        toast.dismiss()
         setClaimLoading(false)
         resetClaimStatus()
       },
@@ -149,25 +155,12 @@ export const useLaunchpad = () => {
       hash: claimHash,
     })
 
-  if (isError || isLoadingError) {
-    toast.error(error?.message)
-    resetBuyStatus()
-    resetClaimStatus()
-  }
-
-  if (buySuccess) {
-    toast.dismiss()
-    toast.success(t('buy.success'))
-    resetBuyStatus()
-  }
-
-  if (claimSuccess) {
-    toast.dismiss()
-    toast.success(t('claim.success'))
-    resetClaimStatus()
-  }
-
-  const loading = infoLoading || isBuyLoading || isClaimLoading || paidLoading
+  const loading =
+    infoLoading ||
+    isBuyLoading ||
+    isClaimLoading ||
+    paidLoading ||
+    isWhiteLoading
   const isBuying = buyLoading || buying
   const isClaiming = claimLoading || claiming
 
@@ -185,13 +178,19 @@ export const useLaunchpad = () => {
   const isBalanceInsufficient =
     +formatEther(BigInt(balance?.value || 0)) < minBnb
 
+  const claimAmount = isWhite ? info?.whiteClaimAmount : info?.claimAmount
+
   // 最小 BNB 购买量 对应的 可领取代币量
-  const minClaimAmount = +formatEther(BigInt(info?.claimAmount || 0))
+  const minClaimAmount = +formatEther(BigInt(claimAmount || 0))
 
   // 一个BNB可获得的数量
+  const claimAmountOneBNBOnWitelist = +BigNumber(1)
+    .div(minBnb)
+    .multipliedBy(+formatEther(BigInt(info?.whiteClaimAmount || 0)))
+    .toFixed(2)
   const claimAmountOneBNB = +BigNumber(1)
     .div(minBnb)
-    .multipliedBy(minClaimAmount)
+    .multipliedBy(+formatEther(BigInt(info?.claimAmount || 0)))
     .toFixed(2)
 
   // 输入BNB对应的领取代币数量
@@ -224,7 +223,7 @@ export const useLaunchpad = () => {
     }
 
     try {
-      const data = await buyAmount({
+      await buyAmount({
         address: idoAddress,
         abi: idoAbi,
         functionName: 'buyAmount',
@@ -232,10 +231,6 @@ export const useLaunchpad = () => {
         value: parseEther(value),
         chainId: bscTestnet.id,
       })
-
-      if (data) {
-        toast.success(t('buy.success'))
-      }
     } catch (e: any) {
       toast.error(e?.message)
     }
@@ -246,16 +241,12 @@ export const useLaunchpad = () => {
       return walletStore.setConnectOpen(true)
     }
     try {
-      const data = await claim({
+      await claim({
         address: idoAddress,
         abi: idoAbi,
         functionName: 'claim',
         chainId: bscTestnet.id,
       })
-
-      if (data) {
-        toast.success(t('claim.success'))
-      }
     } catch (e: any) {
       toast.error(e?.message)
     }
@@ -278,15 +269,26 @@ export const useLaunchpad = () => {
       if (v < min) {
         return setValue(`${min}`)
       } else if (v > max) {
-        return setValue(`${max}`)
+        return onMax()
       }
     }
 
-    setValue(`${v}`)
+    const residue = BigNumber(maxBnb).minus(paid).toNumber()
+
+    if (v > residue) {
+      setValue(`${residue}`)
+    } else {
+      setValue(`${v}`)
+    }
   }
 
   const onMax = () => {
-    setValue(`${Math.min(max, diff)}`)
+    const residue = BigNumber(maxBnb).minus(paid).toNumber()
+    if (residue > diff) {
+      return setValue(`${diff}`)
+    } else {
+      setValue(`${residue}`)
+    }
   }
 
   const onChange = (value: string) => {
@@ -295,6 +297,10 @@ export const useLaunchpad = () => {
   }
 
   const handleButtonText = () => {
+    if (!isConnected) {
+      return t('connect.wallet')
+    }
+
     if (buyLoading) {
       return t('buying')
     }
@@ -314,15 +320,31 @@ export const useLaunchpad = () => {
   }
 
   const handleButtonDisabled = () => {
+    if (!isConnected) {
+      return false
+    }
+
+    if (!isWhite && info?.isWhite) {
+      return true
+    }
+
+    if (
+      !value.trim() ||
+      +value === 0 ||
+      value > formatEther(balance?.value || BigInt(0))
+    ) {
+      return true
+    }
+
     if (loading) {
       return true
     }
 
-    if (buyLoading) {
+    if (isBuying) {
       return true
     }
 
-    if (claimLoading) {
+    if (isClaiming) {
       return true
     }
 
@@ -349,9 +371,37 @@ export const useLaunchpad = () => {
     }
   }
 
+  useEffect(() => {
+    if (isError || isLoadingError) {
+      console.log('失败...')
+      toast.dismiss()
+      toast.error(error?.message)
+      resetBuyStatus()
+      resetClaimStatus()
+      return
+    }
+
+    if (buySuccess) {
+      console.log('buySuccess 购买成功...')
+      toast.dismiss()
+      toast.success(t('buy.success'))
+      resetBuyStatus()
+      return
+    }
+
+    if (claimSuccess) {
+      toast.dismiss()
+      toast.success(t('claim.success'))
+      resetClaimStatus()
+    }
+  }, [isError, isLoadingError, buySuccess, claimSuccess])
+
   return {
+    isWhite,
+    witelistEndTime,
     buyStartTime,
     buyEndTime,
+    isConnected,
     value,
     info,
     isNotStart: new Date() < new Date(buyStartTime),
@@ -368,6 +418,7 @@ export const useLaunchpad = () => {
     isBuying,
     isClaiming,
     claimAmountOneBNB,
+    claimAmountOneBNBOnWitelist,
     valueClaimAmount,
     paidClaimAmountValue,
     balance,
