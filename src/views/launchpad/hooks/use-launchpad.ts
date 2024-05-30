@@ -380,6 +380,7 @@ export const useLaunchpad = () => {
     isConnected,
     value,
     info,
+    isEndWhitelist: new Date() > new Date(witelistEndTime),
     isNotStart: new Date() < new Date(buyStartTime),
     isEndBuy: new Date() > new Date(buyEndTime) || !info?.isBuyActive,
     minBnb,

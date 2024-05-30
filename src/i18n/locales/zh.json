@@ -241,5 +241,9 @@
   "connect.wallet": "连接钱包",
   "not.eligible": "你不在白名单中没有资格参与",
   "witelist.close.presale": "距离白名单结束",
-  "rate.witelist": "汇率(白名单)"
+  "rate.witelist": "汇率(白名单)",
+  "download": "下载",
+  "purchase.number": "",
+  "purchase.number.min": "最少参与 ",
+  "purchase.number.max": "最多参与 "
 }

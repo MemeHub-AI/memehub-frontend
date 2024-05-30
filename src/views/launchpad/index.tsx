@@ -17,10 +17,12 @@ import { formatEther, zeroAddress } from 'viem'
 import { Fragment } from 'react'
 import BigNumber from 'bignumber.js'
 import clsx from 'clsx'
+import { useAccount } from 'wagmi'
 
 const Launchpad = () => {
   const { t } = useTranslation()
   const { back } = useRouter()
+  const { address } = useAccount()
   const {
     value,
     info,
@@ -34,20 +36,14 @@ const Launchpad = () => {
     isEndBuy,
     buyStartTime,
     isNotStart,
-    isBuy,
-    isClaim,
-    balance,
-    loading,
     isWhite,
+    isEndWhitelist,
     isConnected,
     witelistEndTime,
     claimAmountOneBNBOnWitelist,
     claimAmountOneBNB,
     valueClaimAmount,
     paidClaimAmountValue,
-    isBalanceInsufficient,
-    setValue,
-    onBuy,
     onClick,
     onChange,
     onMax,
@@ -57,6 +53,33 @@ const Launchpad = () => {
   } = useLaunchpad()
 
   const hadnleBuyAndClaim = () => {
+    if (info?.isWhite && !isWhite) {
+      return (
+        <Fragment>
+          <Progress
+            value={(current / total) * 100}
+            className="!rounded-xl !h-[10px] mb-1"
+          />
+          <div className="mb-4 flex justify-between text-sm">
+            <span>{current}BNB</span>
+            <span>{total}BNB</span>
+          </div>
+
+          {/* Minimum Participation $1 BNB, Maximum Participation $2 BNB */}
+          {/* 最少参与$1BNB，最多参与$2BNB */}
+          <div className="mt-1">
+            {t('purchase.number.min')}
+            <span className="text-orange-500">{minBnb}BNB</span>
+          </div>
+          <div className="mt-1">
+            {t('purchase.number.max')}
+            <span className="text-orange-500">{maxBnb}BNB</span>
+          </div>
+          <div className="text-sm text-red-500 my-5">{t('not.eligible')}</div>
+        </Fragment>
+      )
+    }
+
     if (isNotStart) {
       return (
         <Fragment>
@@ -155,6 +178,15 @@ const Launchpad = () => {
   }
 
   const handleTime = () => {
+    if (info?.isWhite && !isEndWhitelist) {
+      return (
+        <Fragment>
+          <div className="mb-2 text-center">{t('witelist.close.presale')}</div>
+          <Countdown time={witelistEndTime} className="mb-5"></Countdown>
+        </Fragment>
+      )
+    }
+
     if (!isEndBuy) {
       return (
         <Fragment>
@@ -163,15 +195,27 @@ const Launchpad = () => {
         </Fragment>
       )
     }
+  }
 
-    if (info?.isWhite) {
-      return (
-        <Fragment>
-          <div className="mb-2 text-center">{t('witelist.close.presale')}</div>
-          <Countdown time={witelistEndTime} className="mb-5"></Countdown>
-        </Fragment>
-      )
+  const handleShowButton = () => {
+    if (isNotStart || info?.isFailed) {
+      return <></>
     }
+
+    if (info?.isWhite && !isWhite) {
+      return <></>
+    }
+
+    return (
+      <Button
+        variant="default"
+        className="my-5 px-20 py-5"
+        onClick={onClick}
+        disabled={handleButtonDisabled()}
+      >
+        {handleButtonText()}
+      </Button>
+    )
   }
 
   return (
@@ -183,23 +227,17 @@ const Launchpad = () => {
         <HotNewsAside></HotNewsAside>
         <div className="ml-5 max-sm:ml-0  max-sm:w-full">
           <Card
-            className="w-[450px] max-sm:w-full px-5"
+            className="relative w-[450px] max-sm:w-full px-5"
             shadow={'none'}
             hover={'none'}
           >
+            <div className="absolute top-2 right-2 px-2 bg-slate-200 rounded-md">
+              {fmt.addr(address)}
+            </div>
             <div className="text-center text-2xl mt-5 mb-3">Trump🔥</div>
             {handleTime()}
             {hadnleBuyAndClaim()}
-            {isNotStart || info?.isFailed ? null : (
-              <Button
-                variant="default"
-                className="my-5 px-20 py-5"
-                onClick={onClick}
-                disabled={handleButtonDisabled()}
-              >
-                {handleButtonText()}
-              </Button>
-            )}
+            {handleShowButton()}
           </Card>
           <Card
             className="w-[450px] max-sm:w-full mt-5 py-3 px-5"

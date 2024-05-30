@@ -247,5 +247,9 @@
   "connect.wallet": "Connect wallet",
   "not.eligible": "You're not on the whitelist",
   "witelist.close.presale": "End of whitelist",
-  "rate.witelist": "Rate(Witelist)"
+  "rate.witelist": "Rate(Whitelist)",
+  "download": "Download",
+  "purchase.number": "",
+  "purchase.number.min": "Minimum Participation ",
+  "purchase.number.max": "Maximum Participation "
 }
