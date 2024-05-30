@@ -1,11 +1,11 @@
 import { cva, VariantProps } from 'class-variance-authority'
 
-export const shadowVariants = cva('transition-all border-2 border-black', {
+export const shadowVariants = cva('transition-all ', {
   variants: {
     shadow: {
       none: '',
       default:
-        'shadow-offset hover:shadow-none hover:translate-x-offset hover:translate-y-offset',
+        'border-2 border-black shadow-offset hover:shadow-none hover:translate-x-offset hover:translate-y-offset',
     },
   },
   defaultVariants: {
@@ -15,21 +15,18 @@ export const shadowVariants = cva('transition-all border-2 border-black', {
 
 export type ShadowVariantsProps = VariantProps<typeof shadowVariants>
 
-export const shadowBorderVariants = cva(
-  'transition-all border-2 border-black',
-  {
-    variants: {
-      shadow: {
-        none: '',
-        default:
-          'hover:shadow-offset-border hover:-translate-x-offset hover:-translate-y-offset',
-      },
+export const shadowBorderVariants = cva('transition-all ', {
+  variants: {
+    shadow: {
+      none: '',
+      default:
+        'border-2 border-black hover:shadow-offset-border hover:-translate-x-offset hover:-translate-y-offset',
     },
-    defaultVariants: {
-      shadow: 'default',
-    },
-  }
-)
+  },
+  defaultVariants: {
+    shadow: 'default',
+  },
+})
 
 export type ShadowBorderVariantsProps = VariantProps<
   typeof shadowBorderVariants
