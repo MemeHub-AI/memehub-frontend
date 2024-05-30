@@ -254,5 +254,6 @@
   "chain.empty": "Cannot find native token or router address",
   "trade.buy": "Buy",
   "trade.sell": "Sell",
-  "all": "All"
+  "all": "All",
+  "addr.empty": "Cannot find contract address"
 }
