@@ -20,7 +20,7 @@ export const useWallet = () => {
   const { disconnectAsync } = useDisconnect()
   const { switchChainAsync } = useSwitchChain()
   const { signAsync } = useSign()
-  const { login } = useUser()
+  const { login, logout } = useUser()
 
   const connectWallet = async (connector: (typeof connectors)[number]) => {
     try {
@@ -46,6 +46,7 @@ export const useWallet = () => {
     console.log('disconnect')
     try {
       await disconnectAsync()
+      logout()
     } catch (e) {
       console.error(`[disconnectWallet error] : ${e}`)
     }
