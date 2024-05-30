@@ -10,7 +10,7 @@ type TVChartOptions = Omit<
 >
 
 const chartConfig: TVChartOptions = {
-  library_path: 'charting_library/',
+  library_path: '/charting_library/',
   disabled_features: [
     // Header
     // 'header_widget',
