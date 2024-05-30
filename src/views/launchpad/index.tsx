@@ -213,7 +213,7 @@ const Launchpad = () => {
       return <></>
     }
 
-    if (info?.isWhite && !isWhite) {
+    if ((info?.isWhite && !isWhite) || !isConnected) {
       return <></>
     }
 
