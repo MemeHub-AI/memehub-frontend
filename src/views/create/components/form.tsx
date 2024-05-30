@@ -439,10 +439,10 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           </div>
 
           {/* Submit button */}
-          <div className="flex flex-col items-start space-y-2 max-w-[500px]">
+          <div className="flex flex-col items-start gap-3 max-w-[500px]">
             <Button
               variant="default"
-              className="self-center px-10 mt-3"
+              className="px-10 mt-3"
               disabled={isDeploying}
             >
               {t('create')}
