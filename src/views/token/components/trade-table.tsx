@@ -78,7 +78,7 @@ export const TradeTable = () => {
               <TableCell
                 className={cn(isBuy ? 'text-green-500' : 'text-red-500')}
               >
-                {isBuy ? t('buy') : t('sell')}
+                {isBuy ? t('trade.buy') : t('trade.sell')}
               </TableCell>
               <TableCell className="max-sm:text-xs">
                 {fmt.tradeFixed(r.quote_amount)} {r.quote_symbol}

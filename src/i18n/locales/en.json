@@ -40,7 +40,6 @@
   "comments.sort.desc": "Comments DESC",
   "sort-by": "Sort by",
   "buy": "Buy Token",
-  "sell": "Sell",
   "switch-to": "Switch to",
   "set-max-slippage": "Slippage",
   "trade": "Trade",
@@ -252,5 +251,7 @@
   "purchase.number.min": "Minimum Participation ",
   "purchase.number.max": "Maximum Participation ",
   "rate.witelist": "Rate(Witelist)",
-  "chain.empty": "Cannot find native token or router address"
+  "chain.empty": "Cannot find native token or router address",
+  "trade.buy": "Buy",
+  "trade.sell": "Sell"
 }
