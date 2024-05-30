@@ -44,6 +44,7 @@ export const useLaunchpad = () => {
     query: {
       refetchInterval: 5_000,
     },
+    chainId: bscTestnet.id,
   })
 
   const { data: isWhite, isLoading: isWhiteLoading } = useReadContract({
@@ -54,6 +55,7 @@ export const useLaunchpad = () => {
     query: {
       refetchInterval: 5_000,
     },
+    chainId: bscTestnet.id,
   })
 
   const { data: isBuy, isLoading: isBuyLoading } = useReadContract({
@@ -64,6 +66,7 @@ export const useLaunchpad = () => {
     query: {
       refetchInterval: 5_000,
     },
+    chainId: bscTestnet.id,
   })
 
   const { data: isClaim, isLoading: isClaimLoading } = useReadContract({
@@ -84,6 +87,7 @@ export const useLaunchpad = () => {
     query: {
       refetchInterval: 5_000,
     },
+    chainId: bscTestnet.id,
   })
 
   const paid = +formatEther(BigInt(paidBNB || 0))
