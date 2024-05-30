@@ -231,7 +231,7 @@
   "claim": "Claim Token",
   "insufficient.balance": "Insufficient Balance",
   "copy.success": "Copy successfully",
-  "not.involved": "",
+  "not.involved": "The purchase phase is over, but you did not participate in the purchase",
   "participartion.in": "You have participated in ",
   "available": " to get ",
   "buy.success": "Purchase success",

@@ -291,7 +291,10 @@ export const useLaunchpad = () => {
       return t('insufficient.balance')
     }
 
-    if (max === 0 && info?.isBuyActive) {
+    if (
+      (max === 0 && info?.isBuyActive) ||
+      (info?.totalGatherBnb === info?.totalPaidBnb && !info?.isClaimActive)
+    ) {
       return t('wait.claim')
     }
 

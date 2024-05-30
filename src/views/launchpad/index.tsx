@@ -20,7 +20,6 @@ import { useAccount } from 'wagmi'
 
 const Launchpad = () => {
   const { t } = useTranslation()
-  const { back } = useRouter()
   const { address } = useAccount()
   const {
     value,
@@ -107,7 +106,15 @@ const Launchpad = () => {
       )
     }
 
-    if (info?.isClaimActive) {
+    if (info?.isClaimActive || info?.totalGatherBnb === info?.totalPaidBnb) {
+      if (paid === 0) {
+        return (
+          <>
+            <div className="mt-1 mb-5 text-red-500">{t('not.involved')}</div>
+          </>
+        )
+      }
+
       return (
         <Fragment>
           <div className="mt-1">
@@ -115,7 +122,7 @@ const Launchpad = () => {
             <span className="text-orange-500">{paid}BNB</span>{' '}
             {t('participated.to')}{' '}
             <span className="text-orange-500">
-              {BigNumber(valueClaimAmount).toFormat()}Trump
+              {BigNumber(paidClaimAmountValue).toFormat()}Trump
             </span>
           </div>
         </Fragment>
@@ -214,6 +221,13 @@ const Launchpad = () => {
     }
 
     if ((info?.isWhite && !isWhite) || !isConnected) {
+      return <></>
+    }
+
+    if (
+      (info?.isClaimActive || info?.totalPaidBnb === info?.totalGatherBnb) &&
+      paid === 0
+    ) {
       return <></>
     }
 
