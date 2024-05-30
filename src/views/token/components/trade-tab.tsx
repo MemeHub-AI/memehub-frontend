@@ -123,7 +123,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               value={TradeType.Sell}
               disabled={isTrading}
             >
-              {t('sell')}
+              {t('trade.sell')}
             </TabsTrigger>
           </TabsList>
 

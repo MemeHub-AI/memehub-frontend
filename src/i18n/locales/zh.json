@@ -100,7 +100,6 @@
   "view.details": "查看详情",
   "trade.limit": "目前只有 {} 可供 {} ",
   "buy": "购买代币",
-  "sell": "出售",
   "trade.loading": "交易中...",
   "trade.success": "交易成功！",
   "trade.failed": "交易失败",
@@ -242,5 +241,7 @@
   "not.eligible": "你不在白名单中没有资格参与",
   "witelist.close.presale": "距离白名单结束",
   "rate.witelist": "汇率(白名单)",
-  "chain.empty": "找不到原生代币或路由地址"
+  "chain.empty": "找不到原生代币或路由地址",
+  "trade.buy": "买",
+  "trade.sell": "出售"
 }
