@@ -282,6 +282,7 @@ export const useLaunchpad = () => {
     if (buyLoading) {
       return t('buying')
     }
+
     if (claimLoading) {
       return t('claiming')
     }
@@ -342,10 +343,10 @@ export const useLaunchpad = () => {
   }
 
   const onClick = () => {
-    if (info?.isBuyActive) {
-      onBuy()
-    } else if (info?.isClaimActive) {
+    if (info?.isClaimActive) {
       onClaim()
+    } else if (info?.isBuyActive) {
+      onBuy()
     }
   }
 
