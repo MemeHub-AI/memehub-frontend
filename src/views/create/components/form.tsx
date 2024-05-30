@@ -445,7 +445,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
         </form>
       </Form>
       <Dialog open={showPoster} onOpenChange={() => setShowPoster(false)}>
-        <div className="flex flex-col px-5">
+        <div className="flex flex-col px-5 mt-5">
           <div className="absolute top-[50%] translate-y-[-50%] left-2 cursor-pointer">
             <FaChevronLeft size={26} onClick={onLeft}></FaChevronLeft>
           </div>
@@ -455,9 +455,23 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           <img
             src={form.getValues(formFields.poster)?.[index] as string}
             alt="Poster"
-            className="w-full rounded-md"
+            className="w-full rounded-md mb-4 select-none"
           />
-          <div
+          <div className="flex justify-center">
+            {(form.getValues(formFields.poster) as string[])?.map((item, i) => {
+              return (
+                <div
+                  key={item}
+                  className={clsx(
+                    'w-[10px] h-[10px] mx-2 rounded-full cursor-pointer',
+                    i === index ? 'bg-black' : 'bg-gray-300'
+                  )}
+                  onClick={() => setIndex(i)}
+                ></div>
+              )
+            })}
+          </div>
+          {/* <div
             className="mt-5  flex justify-center cursor-pointer"
             onClick={() =>
               img.download(
@@ -466,7 +480,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             }
           >
             <Button>{t('download')}</Button>
-          </div>
+          </div> */}
         </div>
       </Dialog>
     </>
