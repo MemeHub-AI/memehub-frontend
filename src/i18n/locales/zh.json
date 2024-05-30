@@ -247,5 +247,6 @@
   "purchase.number.max": "最多参与 ",
   "chain.empty": "找不到原生代币或路由地址",
   "trade.buy": "买",
-  "trade.sell": "出售"
+  "trade.sell": "出售",
+  "all": "所有"
 }

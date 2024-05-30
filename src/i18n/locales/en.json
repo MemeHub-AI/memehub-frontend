@@ -253,5 +253,6 @@
   "rate.witelist": "Rate(Witelist)",
   "chain.empty": "Cannot find native token or router address",
   "trade.buy": "Buy",
-  "trade.sell": "Sell"
+  "trade.sell": "Sell",
+  "all": "All"
 }
