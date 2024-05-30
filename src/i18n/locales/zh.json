@@ -245,5 +245,6 @@
   "download": "下载",
   "purchase.number": "",
   "purchase.number.min": "最少参与 ",
-  "purchase.number.max": "最多参与 "
+  "purchase.number.max": "最多参与 ",
+  "chain.empty": "找不到原生代币或路由地址"
 }

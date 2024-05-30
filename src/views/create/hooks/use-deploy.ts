@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useWriteContract } from 'wagmi'
+import { useAccount, useWriteContract } from 'wagmi'
 import { first } from 'lodash'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -13,20 +13,16 @@ import { ApiCode } from '@/api/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useDeployConfig } from './use-deploy-config'
 import { useWalletStore } from '@/stores/use-wallet-store'
+import { ca } from '@/contract/address'
 
 export const useDeploy = () => {
   const [backendErr, setBackendErr] = useState<unknown>(null)
   const [tokenId, setTokenId] = useState(-1)
   const { t } = useTranslation()
+  const { chainId } = useAccount()
   const { create } = useCreateToken()
   const { chains } = useWalletStore()
-  const {
-    deployFee,
-    deploySymbol,
-    reserveRatio,
-    nativeTokenAddress,
-    routerAddress,
-  } = useDeployConfig()
+  const { deployFee, deploySymbol, reserveRatio } = useDeployConfig()
 
   const {
     data: hash,
@@ -53,6 +49,15 @@ export const useDeploy = () => {
       return
     }
 
+    const id = chainId as keyof typeof ca.nativeToken
+    const nativeTokenAddr = ca.nativeToken[id]
+    const routerAddr = ca.routerAddress[id]
+
+    if (!nativeTokenAddr || routerAddr) {
+      toast.error(t('chain.empty'))
+      return
+    }
+
     // Submit hash to backend when contract submit success.
     const onSuccess = async (hash: Address) => {
       try {
@@ -72,10 +77,10 @@ export const useDeploy = () => {
         functionName: 'deploy',
         args: [
           reserveRatio,
-          nativeTokenAddress.scroll,
+          nativeTokenAddr,
           params.name,
           params.ticker,
-          routerAddress.scroll,
+          routerAddr,
         ],
         value: BigInt(deployFee),
       },

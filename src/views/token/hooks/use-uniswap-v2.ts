@@ -7,14 +7,14 @@ import { isEmpty } from 'lodash'
 import { uniswapV2Abi } from '../../../contract/abi/uniswap-v2'
 import { customToast } from '@/utils/toast'
 import { ca } from '@/contract/address'
-import { useDeployConfig } from '@/views/create/hooks/use-deploy-config'
 import { useApprove } from '@/hooks/use-approve'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
-  const { address } = useAccount()
-  const { routerAddress, nativeTokenAddress } = useDeployConfig()
+  const { address, chainId } = useAccount()
   const { isApproving, checkForApproval } = useApprove()
+
+  const nativeTokenAddr = ca.nativeToken[chainId as keyof typeof ca.nativeToken]
 
   const {
     data: hash,
@@ -54,27 +54,26 @@ export const useUniswapV2 = () => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
+    if (!nativeTokenAddr) {
+      return toast.error(t('chain.empty'))
+    }
+
     console.log('uniswap buy', amount, token)
     writeContract({
       abi: uniswapV2Abi,
       address: ca.uniswapV2,
       functionName: 'swapExactETHForTokens',
-      args: [
-        BigInt(0),
-        [nativeTokenAddress.scroll, token],
-        address!,
-        BigInt(Date.now()),
-      ],
+      args: [BigInt(0), [nativeTokenAddr, token], address!, BigInt(Date.now())],
       value: parseEther(amount),
     })
   }
 
   const uniswapSell = async (amount: string, token: Address) => {
-    const isApproved = await checkForApproval(
-      token,
-      routerAddress.scroll,
-      amount
-    )
+    if (!nativeTokenAddr) {
+      return toast.error(t('chain.empty'))
+    }
+
+    const isApproved = await checkForApproval(token, nativeTokenAddr, amount)
     if (!isApproved) return
 
     const isValid = checkForTrade(amount, token)
@@ -88,7 +87,7 @@ export const useUniswapV2 = () => {
       args: [
         parseEther(amount),
         BigInt(0),
-        [token, nativeTokenAddress.scroll],
+        [token, nativeTokenAddr],
         address!,
         BigInt(Date.now()),
       ],
