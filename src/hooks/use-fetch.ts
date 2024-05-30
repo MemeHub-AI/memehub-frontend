@@ -6,9 +6,9 @@ export enum CommonHeaders {
 }
 
 export enum ContentType {
-  Text = 'text/plain',
-  Json = 'application/json',
-  FormData = 'multipart/form-data',
+  Text = 'text/plain;',
+  Json = 'application/json;',
+  FormData = 'multipart/form-data;',
 }
 
 export interface FetcherOptions extends Omit<RequestInit, 'body'> {
@@ -33,12 +33,17 @@ export const useFetch = (baseURL: string) => {
   const initHeaders = ({ requireAuth = true, headers }: FetcherOptions) => {
     const newHeaders = new Headers(headers)
 
-    // Default content type if not.
+    // Content-Type header.
     if (!newHeaders.has(CommonHeaders.ContentType)) {
       newHeaders.set(CommonHeaders.ContentType, ContentType.Json)
     }
 
-    // Add token.
+    // Delete form-data content-type.
+    if (newHeaders.get(CommonHeaders.ContentType) === ContentType.FormData) {
+      newHeaders.delete(CommonHeaders.ContentType)
+    }
+
+    // Auth header.
     if (requireAuth && getToken()?.trim()) {
       newHeaders.set(CommonHeaders.Authorization, `Bearer ${getToken()}`)
     }
@@ -54,7 +59,7 @@ export const useFetch = (baseURL: string) => {
     const contentType = response.headers.get('content-type')
 
     // Extract json.
-    const isJson = contentType?.includes(ContentType.Json)
+    const isJson = ContentType.Json.includes(contentType ?? '')
     if (isJson && toJson) return (await response.json()) as T
 
     // More process...
