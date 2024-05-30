@@ -1,5 +1,6 @@
-import { ChainData } from '@/api/chain/type'
 import { create } from 'zustand'
+
+import { ChainData } from '@/api/chain/type'
 
 interface WalletStore {
   connectOpen: boolean

@@ -1,15 +1,14 @@
-import React, { useEffect, useRef, type ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { Title } from './title'
 import { AIIdea } from '@/views/main/components/ai-idea'
 import { CreateTokenForm } from './form'
-import { formFields, useCreateTokenForm } from '../hooks/use-form'
+import { useCreateTokenForm } from '../hooks/use-form'
 import { useDeploy } from '../hooks/use-deploy'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
-import { useRouter } from 'next/router'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   formData: ReturnType<typeof useCreateTokenForm>

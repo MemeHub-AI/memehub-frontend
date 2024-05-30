@@ -1,6 +1,11 @@
 import React, { forwardRef, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { formatEther } from 'viem'
+import { z } from 'zod'
+import { toast } from 'sonner'
+import { useSwitchChain } from 'wagmi'
 
+import { aiApi } from '@/api/ai'
 import { useCreateTokenForm } from '../hooks/use-form'
 import {
   Form,
@@ -11,18 +16,13 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import Input from '@/components/input'
+import { Input } from '@/components/input'
 import { cn } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
-import { formatEther } from 'viem'
 import { useDeploy } from '../hooks/use-deploy'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import clsx from 'clsx'
 import { fmt } from '@/utils/fmt'
 import { useNewsList } from '@/hooks/use-news-list'
-import { z } from 'zod'
-import { toast } from 'sonner'
-import { aiApi } from '@/api/ai'
 
 interface Props {
   newsListData: ReturnType<typeof useNewsList>
@@ -45,6 +45,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
     onSubmit,
     onChangeUpload,
   } = props.formData
+  const { switchChain } = useSwitchChain()
 
   const [handLoadingPoster, setHandLoadingPoster] = useState(false)
 
@@ -99,8 +100,10 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             'flex flex-col space-y-3 w-[500px] max-sm:w-full max-sm:space-y-2'
           )}
         >
+          {/* Loog/name/chain/symbol */}
           <div className="flex gap-5 justify-between max-sm:flex-col max-sm:gap-1">
             <div className="flex justify-between flex-1">
+              {/* Logo */}
               <FormField
                 control={form.control}
                 name={formFields.logo}
@@ -108,7 +111,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                   <FormItem>
                     <FormControl>
                       <div
-                        className={clsx(
+                        className={cn(
                           'relative flex',
                           'border-2 border-black rounded-md overflow-hidden',
                           'w-[150px] h-[150px]'
@@ -124,7 +127,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                           </div>
                         ) : (
                           <div
-                            className={clsx(
+                            className={cn(
                               'absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2',
                               !field.value && !isLoadingMemeImg
                                 ? 'justify-center'
@@ -168,6 +171,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                 )}
               />
 
+              {/* name/symbol */}
               <div className="w-full flex flex-col ml-5 items-center justify-between">
                 <FormField
                   control={form.control}
@@ -207,6 +211,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                 />
               </div>
             </div>
+
+            {/* chain */}
             <FormField
               control={form.control}
               name={formFields.chainName}
@@ -221,47 +227,49 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                   </FormLabel>
                   <FormControl>
                     {chains ? (
-                      <div>
-                        <RadioGroup
-                          onValueChange={(v: string) => {
-                            form.setValue(formFields.chainName, v)
-                          }}
-                          defaultValue={field.value}
-                          className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap  max-sm:w-max"
-                        >
-                          {chains?.map((c, i) => (
-                            <FormItem
-                              key={i}
-                              className={clsx(
-                                'block p-1 min-w-[35px]',
-                                c.name === field.value! ? 'bg-black' : '',
-                                i !== chains.length - 1
-                                  ? 'border-r-2 border-black'
-                                  : ''
-                              )}
-                            >
-                              <FormControl>
-                                <RadioGroupItem
-                                  value={c.name}
-                                  disabled={!c.contract_address}
-                                >
-                                  <img
-                                    src={c.logo}
-                                    alt={c.name}
-                                    about={c.name}
-                                    className={clsx(
-                                      'w-[27px] h-[27px] block rounded-full overflow-hidden',
-                                      !c.contract_address
-                                        ? 'opacity-50 cursor-not-allowed'
-                                        : ''
-                                    )}
-                                  />
-                                </RadioGroupItem>
-                              </FormControl>
-                            </FormItem>
-                          ))}
-                        </RadioGroup>
-                      </div>
+                      <RadioGroup
+                        onValueChange={(v: string) => {
+                          form.setValue(formFields.chainName, v)
+                        }}
+                        defaultValue={field.value}
+                        className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap  max-sm:w-max"
+                      >
+                        {chains?.map((c, i) => (
+                          <FormItem
+                            key={i}
+                            title={c.name}
+                            className={cn(
+                              'block p-1 min-w-[35px]',
+                              c.name === field.value! ? 'bg-black' : '',
+                              i !== chains.length - 1
+                                ? 'border-r-2 border-black'
+                                : ''
+                            )}
+                          >
+                            <FormControl>
+                              <RadioGroupItem
+                                value={c.name}
+                                disabled={!c.contract_address}
+                                onClick={() => {
+                                  switchChain({ chainId: Number(c.id) })
+                                }}
+                              >
+                                <img
+                                  src={c.logo}
+                                  alt={c.name}
+                                  about={c.name}
+                                  className={cn(
+                                    'w-[27px] h-[27px] block rounded-full overflow-hidden',
+                                    !c.contract_address
+                                      ? 'opacity-50 cursor-not-allowed'
+                                      : ''
+                                  )}
+                                />
+                              </RadioGroupItem>
+                            </FormControl>
+                          </FormItem>
+                        ))}
+                      </RadioGroup>
                     ) : (
                       <div>{t('loading')}</div>
                     )}
@@ -271,6 +279,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
               )}
             />
           </div>
+
+          {/* Description */}
           <FormField
             control={form.control}
             name={formFields.description}
@@ -289,13 +299,14 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             )}
           />
 
+          {/* Poster */}
           <FormField
             control={form.control}
             name={formFields.poster}
             render={({ field }) => {
               return (
                 <FormItem>
-                  <FormLabel>
+                  <FormLabel className="mr-2">
                     {loadingPoster ? t('ai.poster.tip') : t('ai.poster')}
                   </FormLabel>
                   <FormControl>
@@ -310,11 +321,11 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                               key={item}
                               download
                               target="_blank"
-                              className={clsx('flex-shrink-0')}
+                              className={cn('flex-shrink-0')}
                             >
                               <img
                                 src={item}
-                                className={clsx(
+                                className={cn(
                                   'object-cover rounded-md',
                                   i < 2
                                     ? 'w-[133px] h-[153px]'
@@ -337,6 +348,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             }}
           />
 
+          {/* Twitter & telegram */}
           <div className="flex justify-between">
             <FormField
               control={form.control}
@@ -368,6 +380,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
               )}
             />
           </div>
+
+          {/* Website */}
           <div className="flex justify-between">
             <FormField
               control={form.control}
