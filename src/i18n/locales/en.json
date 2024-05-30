@@ -255,5 +255,6 @@
   "trade.buy": "Buy",
   "trade.sell": "Sell",
   "all": "All",
-  "addr.empty": "Cannot find contract address"
+  "addr.empty": "Cannot find contract address",
+  "claimed": "Claimed"
 }

@@ -287,6 +287,10 @@ export const useLaunchpad = () => {
       return t('claiming')
     }
 
+    if (isClaim) {
+      return t('claimed')
+    }
+
     if (isBalanceInsufficient) {
       return t('insufficient.balance')
     }
@@ -327,6 +331,10 @@ export const useLaunchpad = () => {
     }
 
     if (isClaiming) {
+      return true
+    }
+
+    if (isClaim) {
       return true
     }
 
