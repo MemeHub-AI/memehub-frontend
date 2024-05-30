@@ -73,7 +73,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
               width={20}
               height={20}
               className="object-contain"
-              src={isBuy ? '/images/scroll.svg' : tokenInfo?.image}
+              src={isBuy ? tokenInfo?.chain.logo : tokenInfo?.image}
             />
           </div>
         }

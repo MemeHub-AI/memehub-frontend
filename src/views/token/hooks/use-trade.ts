@@ -34,10 +34,11 @@ export const useTrade = () => {
     uniswapSell,
     resetUniswapTrade,
   } = useUniswapV2()
+  const hash = isInternalTrade ? internalHash : uniswapHash
 
   // Waiting results for contract interaction.
   const { isLoading } = useWaitForTx({
-    hash: isInternalTrade ? internalHash : uniswapHash,
+    hash,
     onLoading: () => toast.loading(t('tx.waiting')),
     onSuccess: () => toast.success(t('trade.success')),
     onError: () => toast.error(t('trade.failed')),
@@ -93,7 +94,7 @@ export const useTrade = () => {
   }
 
   return {
-    tradeHash: isInternalTrade ? internalHash : uniswapHash,
+    tradeHash: hash,
     isTrading: isInternalTrading || isUniswapTrading || isLoading,
     checkForTrade,
     buy,

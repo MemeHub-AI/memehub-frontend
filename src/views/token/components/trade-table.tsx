@@ -87,7 +87,9 @@ export const TradeTable = () => {
                 {fmt.tradeFixed(r.base_amount)} {r.base_symbol}
               </TableCell>
               <TableCell className="max-sm:text-xs">
-                {showAge ? dayjs(r.create_time).fromNow() : r.create_time}
+                {showAge
+                  ? dayjs.unix(+r.create_time).fromNow()
+                  : dayjs.unix(+r.create_time).format('YYYY-MM-DD HH:mm:ss')}
               </TableCell>
               <TableCell className="max-sm:text-xs">
                 <Link
