@@ -53,7 +53,7 @@ const Launchpad = () => {
   } = useLaunchpad()
 
   const hadnleBuyAndClaim = () => {
-    if (info?.isWhite && !isWhite) {
+    if ((info?.isWhite && !isWhite) || !isConnected) {
       return (
         <Fragment>
           <Progress
@@ -75,7 +75,17 @@ const Launchpad = () => {
             {t('purchase.number.max')}
             <span className="text-orange-500">{maxBnb}BNB</span>
           </div>
-          <div className="text-sm text-red-500 my-5">{t('not.eligible')}</div>
+          {isConnected ? (
+            <div className="text-sm text-red-500 my-5">{t('not.eligible')}</div>
+          ) : (
+            <Button
+              variant="default"
+              className="my-5 px-20 py-5"
+              onClick={onClick}
+            >
+              {t('connect.wallet')}
+            </Button>
+          )}
         </Fragment>
       )
     }

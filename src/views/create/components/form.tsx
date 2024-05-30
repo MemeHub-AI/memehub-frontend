@@ -24,9 +24,6 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { aiApi } from '@/api/ai'
 import { Dialog } from '@/components/ui/dialog'
-import { DialogContent, DialogOverlay } from '@radix-ui/react-dialog'
-import { LuDownload } from 'react-icons/lu'
-import { img } from '@/utils/img'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 const Zmage = React.lazy(() => import('react-zmage'))
