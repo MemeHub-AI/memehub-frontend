@@ -41,20 +41,25 @@ export const useDeploy = () => {
   const deployedAddress = first(data?.logs)?.address
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
-    const contractAddr = chains.find((c) => c.name === params.chain)
-      ?.contract_address as `0x${string}`
+    // const contractAddr = chains.find((c) => c.name === params.chain)
+    //   ?.contract_address as `0x${string}`
 
-    if (!contractAddr) {
-      toast.error(t('not.supported.chain'))
-      return
-    }
+    // if (!contractAddr) {
+    //   toast.error(t('not.supported.chain'))
+    //   return
+    // }
 
     const id = chainId as keyof typeof ca.nativeToken
     const nativeTokenAddr = ca.nativeToken[id]
     const routerAddr = ca.routerAddress[id]
-
-    if (!nativeTokenAddr || routerAddr) {
+    if (!nativeTokenAddr || !routerAddr) {
       toast.error(t('chain.empty'))
+      return
+    }
+
+    const address = ca.factory[chainId as keyof typeof ca.factory]
+    if (!address) {
+      toast.error(t('addr.empty'))
       return
     }
 
@@ -73,7 +78,7 @@ export const useDeploy = () => {
     return writeContract(
       {
         abi: factoryAbi,
-        address: contractAddr,
+        address,
         functionName: 'deploy',
         args: [
           reserveRatio,

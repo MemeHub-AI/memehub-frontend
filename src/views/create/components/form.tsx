@@ -96,13 +96,11 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(beforeSubmit)}
-          className={cn(
-            'flex flex-col space-y-3 w-[500px] max-sm:w-full max-sm:space-y-2'
-          )}
+          className="flex flex-col space-y-3 max-sm:w-full max-sm:space-y-2"
         >
           {/* Loog/name/chain/symbol */}
-          <div className="flex gap-5 justify-between max-sm:flex-col max-sm:gap-1">
-            <div className="flex justify-between flex-1">
+          <div className="flex gap-5  max-sm:flex-col max-sm:gap-1">
+            <div className="flex">
               {/* Logo */}
               <FormField
                 control={form.control}
@@ -172,7 +170,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
               />
 
               {/* name/symbol */}
-              <div className="w-full flex flex-col ml-5 items-center justify-between">
+              <div className=" flex flex-col ml-5 items-center justify-between max-w-[200px]">
                 <FormField
                   control={form.control}
                   name={formFields.fullname}
@@ -249,7 +247,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                             <FormControl>
                               <RadioGroupItem
                                 value={c.name}
-                                disabled={!c.contract_address}
+                                disabled={!c.is_supported}
                                 onClick={() => {
                                   switchChain({ chainId: Number(c.id) })
                                 }}
@@ -260,7 +258,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                                   about={c.name}
                                   className={cn(
                                     'w-[27px] h-[27px] block rounded-full overflow-hidden',
-                                    !c.contract_address
+                                    !c.is_supported
                                       ? 'opacity-50 cursor-not-allowed'
                                       : ''
                                   )}
@@ -285,7 +283,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             control={form.control}
             name={formFields.description}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="max-w-[500px]">
                 <FormLabel>*{t('description.placeholder')}</FormLabel>
                 <FormControl>
                   <Textarea
@@ -349,7 +347,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           />
 
           {/* Twitter & telegram */}
-          <div className="flex justify-between">
+          <div className="flex justify-between max-w-[500px]">
             <FormField
               control={form.control}
               name={formFields.twitter}
@@ -382,7 +380,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           </div>
 
           {/* Website */}
-          <div className="flex justify-between">
+          <div className="flex justify-between max-w-[500px]">
             <FormField
               control={form.control}
               name={formFields.website}
@@ -420,7 +418,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           </div>
 
           {/* Submit button */}
-          <div className="flex flex-col items-start space-y-2">
+          <div className="flex flex-col items-start space-y-2 max-w-[500px]">
             <Button
               variant="default"
               className="self-center px-10 mt-3"
