@@ -1,6 +1,7 @@
-import React, { type ComponentProps } from 'react'
+import React, { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
+import router from 'next/router'
 
 import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
@@ -20,8 +21,6 @@ import { useWalletStore } from '@/stores/use-wallet-store'
 import { useStorage } from '@/hooks/use-storage'
 import { UserCoinsCreated } from '@/api/user/types'
 import { Card, CardTitle } from '../ui/card'
-import router from 'next/router'
-import { Progress } from '../ui/progress'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -43,6 +42,7 @@ export const TokenCards = (props: Props) => {
   const { t } = useTranslation()
 
   const { chains } = useWalletStore()
+  const [filteredCards, setFilteredCards] = useState(cards)
   const { getChain, setChain } = useStorage()
   // TODO: Encapsulate a component to handling scroll load.
   const { noMore } = useScrollLoad({
@@ -70,10 +70,17 @@ export const TokenCards = (props: Props) => {
   ]
 
   const onChange = (chainId: string) => {
-    setChain(chainId)
+    if (chainId === 'all') {
+      setFilteredCards(cards)
+      return
+    }
+
+    setFilteredCards((cards) => cards.filter((c) => c.chain.id === chainId))
   }
 
-  const defaultChain = getChain()
+  useEffect(() => {
+    setFilteredCards(cards)
+  }, [cards])
 
   return (
     <div className={cn(className)}>
@@ -84,8 +91,9 @@ export const TokenCards = (props: Props) => {
               <SelectValue placeholder={t('chains')} />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">{t('all')}</SelectItem>
               {chains.map((c, i) => (
-                <SelectItem key={i} value={String(i)}>
+                <SelectItem key={i} value={c.id}>
                   {c.name}
                 </SelectItem>
               ))}
@@ -171,7 +179,7 @@ export const TokenCards = (props: Props) => {
                 </div>
               </div>
             </Card>
-            {cards.map((t, i) => (
+            {filteredCards.map((t, i) => (
               <TokenCard key={i} card={t} />
             ))}
           </>

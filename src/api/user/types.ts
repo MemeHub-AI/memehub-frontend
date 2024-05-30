@@ -89,6 +89,12 @@ interface User {
   mention_count: number
 }
 
+interface Chain {
+  id: string
+  name: string
+  logo: string
+}
+
 export interface UserCoinsCreated {
   id: number
   image: string
@@ -99,12 +105,7 @@ export interface UserCoinsCreated {
   desc: string
   market_cap: number
   total_replies: number
-  chain: {
-    code: number
-    message: string
-    data: null
-    logo: string
-  }
+  chain: Chain
 }
 
 export interface UserReplies {
