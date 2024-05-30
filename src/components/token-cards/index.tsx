@@ -19,6 +19,9 @@ import { Routes } from '@/routes'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useStorage } from '@/hooks/use-storage'
 import { UserCoinsCreated } from '@/api/user/types'
+import { Card, CardTitle } from '../ui/card'
+import router from 'next/router'
+import { Progress } from '../ui/progress'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -124,9 +127,55 @@ export const TokenCards = (props: Props) => {
           </div>
         }
       >
-        {cards.map((t, i) => (
-          <TokenCard key={i} card={t} />
-        ))}
+        {cards.length ? (
+          <>
+            <Card
+              className={cn(
+                'flex items-stretch rounded overflow-hidden gap-2 relative'
+              )}
+              onClick={() => router.push(`${Routes.Launchpad}/trump`)}
+            >
+              <img
+                src={'https://storage.memehub.ai/memeai/txt2img-890848816.png'}
+                alt="img"
+                className="flex-shrink-0 h-40 w-40 object-cover"
+                width={160}
+                height={160}
+              />
+              <img
+                src={'/images/bsc.svg'}
+                alt="chain"
+                className="absolute right-2 top-2 w-5"
+              />
+              <div className="py-2 pr-2 w-full flex flex-col justify-between">
+                <div className="h-full">
+                  <CardTitle className="pt-0 text-lg">Trump</CardTitle>
+                  {/* <Link
+            href={`${Routes.Account}/${card?.creator.wallet_address}`}
+            className="text-zinc-500 text-xs mt-0.5 hover:underline"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {t('creator')}: {card?.creator.name}
+          </Link> */}
+                  <p className="text-zinc-500 text-sm break-all line-clamp-3">
+                    Laugh out loud with TrumpLOL! A hilarious and entertaining
+                    collection of Trump's most outrageous moments. Get ready to
+                    burst into laughter and share the joy with friends. Let
+                    TrumpLOL bring some humor into your life today!
+                  </p>
+                </div>
+                <div>
+                  <div className="w-max px-4 py-2 leading-none bg-red-500 text-white rounded-full">
+                    Launchpad
+                  </div>
+                </div>
+              </div>
+            </Card>
+            {cards.map((t, i) => (
+              <TokenCard key={i} card={t} />
+            ))}
+          </>
+        ) : null}
         {isPending && (
           <p className="text-center text-zinc-500 col-span-2">{t('loading')}</p>
         )}

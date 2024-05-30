@@ -182,14 +182,18 @@ const Launchpad = () => {
       <div className="flex max-sm:w-full">
         <HotNewsAside></HotNewsAside>
         <div className="ml-5 max-sm:ml-0  max-sm:w-full">
-          <Card className="w-[450px] max-sm:w-full px-5">
+          <Card
+            className="w-[450px] max-sm:w-full px-5"
+            shadow={'none'}
+            hover={'none'}
+          >
             <div className="text-center text-2xl mt-5 mb-3">Trump🔥</div>
             {handleTime()}
             {hadnleBuyAndClaim()}
             {isNotStart || info?.isFailed ? null : (
               <Button
+                variant="default"
                 className="my-5 px-20 py-5"
-                isFullWidth
                 onClick={onClick}
                 disabled={handleButtonDisabled()}
               >
@@ -197,7 +201,11 @@ const Launchpad = () => {
               </Button>
             )}
           </Card>
-          <Card className="w-[450px] max-sm:w-full mt-5 py-3 px-5">
+          <Card
+            className="w-[450px] max-sm:w-full mt-5 py-3 px-5"
+            shadow={'none'}
+            hover={'none'}
+          >
             <div className="flex justify-between">
               <span>{t('ca')}</span>
               <CopyToClipboard

@@ -223,7 +223,7 @@
   "participate": "Participate",
   "participate.to": "to get",
   "max": "MAX",
-  "rate": "Exchange Rate",
+  "rate": "Rate",
   "ca": "Contract Address",
   "total.contributors": "Total Contributors",
   "close.presale": "Close of presale",
@@ -247,5 +247,5 @@
   "connect.wallet": "Connect wallet",
   "not.eligible": "You're not on the whitelist",
   "witelist.close.presale": "End of whitelist",
-  "rate.witelist": "Exchange Rate(Witelist)"
+  "rate.witelist": "Rate(Witelist)"
 }

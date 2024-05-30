@@ -103,6 +103,7 @@ export interface UserCoinsCreated {
     code: number
     message: string
     data: null
+    logo: string
   }
 }
 

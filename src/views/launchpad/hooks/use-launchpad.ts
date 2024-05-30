@@ -1,4 +1,3 @@
-import { wagmiConfig } from '@/config/wagmi'
 import { idoAbi } from '@/contract/abi/ido'
 import { idoAddress } from '@/contract/address'
 import { useWalletStore } from '@/stores/use-wallet-store'
@@ -17,7 +16,7 @@ import {
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
-const buyEndTime = '2024/5/30 23:00:00'
+const buyEndTime = '2024/6/3 23:00:00'
 const buyStartTime = '2024/5/28 23:00:00'
 const witelistEndTime = '2024/6/2 23:00:00'
 
