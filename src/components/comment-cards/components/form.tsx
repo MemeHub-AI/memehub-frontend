@@ -12,6 +12,7 @@ import { FormTextareaField } from '@/components/form-field'
 import { Label } from '@/components/ui/label'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
+import { shadowVariants } from '@/styles/variants'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   onComment?: (content: string, mentions: [], image?: string) => void
@@ -65,7 +66,11 @@ export const CommentForm = (props: Props) => {
 
       <div className="flex items-center gap-2">
         <Button className="px-10">{t('comment')}</Button>
-        <Label htmlFor={inputId} variant="icon">
+        <Label
+          htmlFor={inputId}
+          variant="icon"
+          className={cn(shadowVariants(), 'shadow')}
+        >
           <ImageIcon className="cursor-pointer" />
         </Label>
         {file && <p>{file?.name}</p>}

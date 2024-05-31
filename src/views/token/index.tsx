@@ -1,6 +1,4 @@
 import React from 'react'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
 
 import { TradeTab } from './components/trade-tab'
 import { TokenInfo } from './components/token-info'
@@ -11,10 +9,9 @@ import { TokenProvider } from '@/contexts/token'
 import { useTokenInfo } from './hooks/use-token-info'
 import { CandlestickChart } from '@/components/candlestick-chart'
 import { TokenInfoHeader } from './components/token-info-header'
+import { BondingCurveProgress } from './components/bonding-curve-progress'
 
 export const TokenPage = () => {
-  const { t } = useTranslation()
-  const { query, ...router } = useRouter()
   const { isMobile } = useResponsive()
   const { tokenInfo, totalToken, currentToken, refetchInfo } = useTokenInfo()
 
@@ -30,7 +27,8 @@ export const TokenPage = () => {
           <div className="flex flex-col flex-1">
             {isMobile && <TradeTab />}
             <CandlestickChart />
-            <CommentTradeTab className="my-6 max-sm:mb-0" />
+            <BondingCurveProgress />
+            <CommentTradeTab />
           </div>
 
           {/* Right */}
@@ -38,7 +36,7 @@ export const TokenPage = () => {
             <div className="w-aside">
               <TradeTab />
               <TokenInfo />
-              <HoldersRank className="mt-4" />
+              <HoldersRank />
             </div>
           )}
         </div>

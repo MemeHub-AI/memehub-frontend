@@ -5,7 +5,5 @@ export enum Routes {
 
   Account = '/account',
 
-  Token = '/token',
-
   Launchpad = '/launchpad',
 }

@@ -37,7 +37,7 @@ export const Main = (props: Props) => {
       <Title className="w-fit max-sm:mt-10">{t('create.new')}</Title>
 
       <AIIdea
-        className="mt-5"
+        className="mt-5 w-fit"
         getAIMemeInfo={getAIMemeInfo}
         isLoadingMemeInfo={isLoadingMemeInfo}
       ></AIIdea>

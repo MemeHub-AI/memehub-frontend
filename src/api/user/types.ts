@@ -93,6 +93,12 @@ interface Chain {
   id: string
   name: string
   logo: string
+  native: {
+    decimals: number
+    name: string
+    symbol: string
+  }
+  explorer: string
 }
 
 export interface UserCoinsCreated {
@@ -143,10 +149,6 @@ export interface UserFollow {
 export interface UserCoinsHeld {
   id: number
   amount: number
-  coin: {
-    id: number
-    name: string
-    ticker: string
-    logo: string
-  }
+  coin: UserCoinsCreated
+  chain: Chain
 }

@@ -18,6 +18,9 @@ interface Props extends ComponentProps<'div'> {
   isPending?: boolean
   readonly?: boolean
   onFetchNext?: () => void
+  onAddSuccess?: () => void
+  onLikeSuccess?: () => void
+  onUnlikeSuccess?: () => void
 }
 
 export const CommentCards = (props: Props) => {
@@ -28,11 +31,18 @@ export const CommentCards = (props: Props) => {
     isPending = false,
     readonly = false,
     onFetchNext,
+    onAddSuccess,
+    onLikeSuccess,
+    onUnlikeSuccess,
   } = props
   const { t } = useTranslation()
   const [replyId, setReplyId] = useState('')
   const [lastAnchor, setLastAnchor] = useState(-1)
-  const { addComment, likeComment, unlikeComment } = useComment()
+  const { addComment, likeComment, unlikeComment } = useComment({
+    onAddSuccess,
+    onLikeSuccess,
+    onUnlikeSuccess,
+  })
   const { noMore } = useScrollLoad({
     onFetchNext,
     hasMore: cards.length < total,

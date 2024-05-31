@@ -1,42 +1,73 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
+import { BigNumber } from 'bignumber.js'
 
-import type { TokenListItem } from '@/api/token/types'
+import type { UserCoinsHeld } from '@/api/user/types'
 
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
-import { useAccountContext } from '@/contexts/account'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Routes } from '@/routes'
+import { useScrollLoad } from '@/hooks/use-scroll-load'
 
-export const TokenHeldCards = () => {
+interface Props {
+  cards: UserCoinsHeld[]
+  total: number
+  isLoading: boolean
+  isPending?: boolean
+  onFetchNext?: () => void
+}
+
+export const TokenHeldCards = (props: Props) => {
+  const { cards, total, isLoading, isPending, onFetchNext } = props
   const { t } = useTranslation()
-  const { userInfo, isPending } = useAccountContext()
+  const { noMore } = useScrollLoad({
+    hasMore: total > cards.length,
+    onFetchNext,
+  })
 
   return (
     <CustomSuspense
-      isPending={isPending}
+      isPending={isLoading}
       fallback={<CardSkeleton />}
       nullback={<p className="text-zinc-500">{t('token.no-token')}</p>}
       className="grid grid-cols-3 gap-3 xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-2"
     >
-      {userInfo?.coins_held?.map((c, i) => (
+      {cards?.map((c, i) => (
         <HeldCard c={c} key={i} />
       ))}
+      {isPending && (
+        <p className="text-zinc-500 text-center col-span-3">{t('loading')}</p>
+      )}
+      {noMore && (
+        <p className="text-zinc-500 text-center col-span-3">{t('nomore')}</p>
+      )}
     </CustomSuspense>
   )
 }
 
-const HeldCard = ({ c }: { c: TokenListItem }) => {
+const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
+  const router = useRouter()
+
   return (
-    <Card padding="md" hover="bg">
+    <Card
+      padding="md"
+      hover="bg"
+      onClick={() =>
+        router.push(`${Routes.Main}/${c.chain.name}/${c.coin.address}`)
+      }
+    >
       <div className="flex items-center gap-2">
-        <Avatar src={c.image} fallback={c.name.slice(-4)} />
+        <Avatar src={c.coin.image} fallback={c.coin.ticker.charAt(0)} />
         <div className="flex flex-col justify-between">
           <p className="font-bold">
-            {c.name}({c.ticker})
+            {c.coin.name}({c.coin.ticker})
           </p>
-          <p className="text-zinc-500 text-sm">{c.desc}</p>
+          <p className="text-zinc-500 text-sm">
+            {BigNumber(c.amount).toFixed(2)} {c.coin.ticker}
+          </p>
         </div>
       </div>
     </Card>

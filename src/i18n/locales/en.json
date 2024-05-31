@@ -29,7 +29,7 @@
   "create": "Create",
   "deploy.fee": "Deploy fee",
   "field.empty": "This field cannot be empty",
-  "search.placeholder": "Enter keywords to search for tokens",
+  "search.placeholder": "Search for tokens...",
   "token.create": "Create token",
   "creator": "Creator",
   "market-cap": "Market cap",
@@ -258,5 +258,10 @@
   "addr.empty": "Cannot find contract address",
   "claimed": "Claimed",
   "launchpad": "Launchpad",
-  "launchpad.trump": "Trump Laumchpad"
+  "launchpad.trump": "Trump Laumchpad",
+  "click-to-copy": "Click to copy",
+  "copy-success": "Copy successful!",
+  "copy-failed": "Copy failed",
+  "login-before": "Please login before",
+  "searching": "Searching..."
 }

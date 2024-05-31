@@ -8,6 +8,7 @@ import { Routes } from '@/routes'
 import { useDeploy } from '../hooks/use-deploy'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { isUserReject } from '@/utils/contract'
+import { useAccount } from 'wagmi'
 
 interface Props extends ReturnType<typeof useDeploy> {}
 
@@ -24,6 +25,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
     resetDeploy,
   } = props
   const { t } = useTranslation()
+  const { chain } = useAccount()
 
   // Submiting, create start.
   if (isSubmitting) {
@@ -117,7 +119,8 @@ export const CreateTokenStatusDialog = (props: Props) => {
             </Link>
             <Link
               className="text-blue-600 hover:underline"
-              href={`${Routes.Token}/${deployedAddress}`}
+              // TODO: should be deployed chain.
+              href={`${Routes.Main}/${chain?.name}/${deployedAddress}`}
               onClick={resetDeploy}
             >
               {t('deploy.success.view-details')}

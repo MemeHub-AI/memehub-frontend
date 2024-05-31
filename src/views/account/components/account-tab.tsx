@@ -73,7 +73,13 @@ export const AccountTab = () => {
 
       {/* Token held */}
       <TabsContent value={UserListType.CoinsHeld.toString()}>
-        <TokenHeldCards />
+        <TokenHeldCards
+          cards={tokenHeld.list}
+          total={tokenHeld.total}
+          isLoading={isLoading}
+          isPending={isFetching}
+          onFetchNext={fetchNextPage}
+        />
       </TabsContent>
 
       {/* Token created */}
