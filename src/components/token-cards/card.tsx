@@ -45,6 +45,7 @@ export const TokenCard = ({ card, className }: Props) => {
         router.push(`${Routes.Main}/${card.chain.name}/${card.address}`)
       }}
     >
+      {/* Token logo */}
       <img
         src={card?.image || '/images/logo.png'}
         alt="img"
@@ -52,8 +53,9 @@ export const TokenCard = ({ card, className }: Props) => {
         width={160}
         height={160}
       />
+      {/* Chain logo */}
       <img
-        src="/images/scroll.svg"
+        src={card.chain.logo}
         alt="chain"
         className="absolute right-2 top-2 w-5"
       />
