@@ -261,5 +261,6 @@
   "launchpad.trump": "Trump Laumchpad",
   "click-to-copy": "Click to copy",
   "copy-success": "Copy successful!",
-  "copy-failed": "Copy failed"
+  "copy-failed": "Copy failed",
+  "login-before": "Please login before"
 }

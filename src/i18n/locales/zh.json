@@ -257,5 +257,6 @@
   "trade": "交易",
   "click-to-copy": "点击复制",
   "copy-success": "复制成功！",
-  "copy-failed": "复制失败"
+  "copy-failed": "复制失败",
+  "login-before": "请先登录"
 }
