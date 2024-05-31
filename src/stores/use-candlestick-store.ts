@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-import type { IChartingLibraryWidget } from '../../public/charting_library/charting_library'
+import type { IChartingLibraryWidget } from '../../public/js/charting_library/charting_library'
 
 interface CandlestickStore {
   chart: IChartingLibraryWidget | null

@@ -2,7 +2,7 @@ import {
   DatafeedConfiguration,
   LibrarySymbolInfo,
   ResolutionString,
-} from '../../../../public/charting_library/charting_library'
+} from '../../../../public/js/charting_library/charting_library'
 
 const readyConfig: DatafeedConfiguration = {
   supported_resolutions: [
