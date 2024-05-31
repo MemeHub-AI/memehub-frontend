@@ -29,7 +29,7 @@
   "create": "Create",
   "deploy.fee": "Deploy fee",
   "field.empty": "This field cannot be empty",
-  "search.placeholder": "Enter keywords to search for tokens",
+  "search.placeholder": "Search for tokens...",
   "token.create": "Create token",
   "creator": "Creator",
   "market-cap": "Market cap",
@@ -262,5 +262,6 @@
   "click-to-copy": "Click to copy",
   "copy-success": "Copy successful!",
   "copy-failed": "Copy failed",
-  "login-before": "Please login before"
+  "login-before": "Please login before",
+  "searching": "Searching..."
 }

@@ -12,7 +12,7 @@ import type {
 import { ApiResponse, Pagination, PaginationParams } from '../types'
 
 export const tokenApi = {
-  list(req: PaginationParams) {
+  list(req: PaginationParams & { token?: string }) {
     return api.GET<ApiResponse<Pagination<TokenListItem>>>(
       '/api/v1/coin/coinslist/' + qs.stringify(req)
     )
