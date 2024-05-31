@@ -119,7 +119,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               value={TradeType.Buy}
               disabled={isTrading}
             >
-              {t('buy')}
+              {t('trade.buy')}
             </TabsTrigger>
             <TabsTrigger
               className="h-full"
