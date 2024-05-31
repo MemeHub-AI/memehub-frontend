@@ -9,6 +9,8 @@ import {
   scroll,
 } from '@wagmi/core/chains'
 
+import { dotenv } from '@/utils/env'
+
 export const idoAddress = '0x1778EDfF5DBD9a64Fa54D237F828F317DB884056'
 
 export const zeroAddress = '0x0000000000000000000000000000000000000000'
@@ -63,4 +65,4 @@ const dev = {
   routerAddress,
 } as const
 
-export const ca = process.env.NODE_ENV === 'production' ? prod : dev
+export const ca = dotenv.isProd ? prod : dev

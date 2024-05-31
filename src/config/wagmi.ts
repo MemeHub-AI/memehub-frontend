@@ -11,6 +11,8 @@ import {
   scrollSepolia,
 } from 'wagmi/chains'
 
+import { dotenv } from '@/utils/env'
+
 const prod = createConfig({
   chains: [mainnet, bsc, opBNB, scroll],
   connectors: [injected()],
@@ -42,4 +44,4 @@ const dev = createConfig({
   ssr: true,
 })
 
-export const wagmiConfig = dev
+export const wagmiConfig = dotenv.isProd ? prod : dev
