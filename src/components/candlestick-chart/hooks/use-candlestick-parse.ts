@@ -1,4 +1,4 @@
-import type { Bar } from '../../../../public/charting_library/charting_library'
+import type { Bar } from '../../../../public/js/charting_library/charting_library'
 
 type BarItem = {
   timestamp: number

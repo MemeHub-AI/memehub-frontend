@@ -3,7 +3,7 @@ import { isEmpty, last } from 'lodash'
 import type {
   IBasicDataFeed,
   LibrarySymbolInfo,
-} from '../../../../public/charting_library/charting_library'
+} from '../../../../public/js/charting_library/charting_library'
 import type { CandlestickOptions } from './use-candlestick'
 
 import { useDatafeedConfig } from './use-datafeed-config'

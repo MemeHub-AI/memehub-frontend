@@ -11,6 +11,8 @@ import {
   scrollSepolia,
 } from 'wagmi/chains'
 
+import { dotenv } from '@/utils/env'
+
 const prod = createConfig({
   chains: [mainnet, bsc, opBNB, scroll],
   connectors: [injected()],
@@ -28,7 +30,12 @@ const dev = createConfig({
   connectors: [injected()],
   transports: {
     [sepolia.id]: fallback([http(), unstable_connector(injected)]),
-    [bscTestnet.id]: fallback([http(), unstable_connector(injected)]),
+    [bscTestnet.id]: fallback([
+      http(
+        'https://greatest-broken-tab.bsc-testnet.quiknode.pro/0ce6bb713784c756397169ec4fc2fa6f7eaa9608'
+      ),
+      unstable_connector(injected),
+    ]),
     [opBNBTestnet.id]: fallback([http(), unstable_connector(injected)]),
     [scrollSepolia.id]: fallback([http(), unstable_connector(injected)]),
     // includes mainnet.
@@ -37,4 +44,4 @@ const dev = createConfig({
   ssr: true,
 })
 
-export const wagmiConfig = process.env.NODE_ENV === 'production' ? prod : dev
+export const wagmiConfig = dotenv.isProd ? prod : dev

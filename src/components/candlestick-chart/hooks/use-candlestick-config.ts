@@ -2,15 +2,15 @@ import {
   ChartingLibraryWidgetOptions,
   ResolutionString,
   TradingTerminalWidgetOptions,
-} from '../../../../public/charting_library/charting_library'
+} from '../../../../public/js/charting_library/charting_library'
 
 type TVChartOptions = Omit<
   ChartingLibraryWidgetOptions | TradingTerminalWidgetOptions,
   'container' | 'datafeed' | 'interval' | 'localets' | 'locale'
 >
 
-const chartConfig: TVChartOptions = {
-  library_path: '/charting_library/',
+export const chartConfig: TVChartOptions = {
+  library_path: 'js/charting_library/',
   disabled_features: [
     // Header
     // 'header_widget',

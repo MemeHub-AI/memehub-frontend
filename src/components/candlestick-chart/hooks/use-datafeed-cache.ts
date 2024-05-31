@@ -1,4 +1,4 @@
-import { Bar } from './../../../../public/charting_library/charting_library'
+import { Bar } from '../../../../public/js/charting_library/charting_library'
 import { VoidFn } from '@/utils/types'
 
 const cache: Record<string, any | undefined> = {}

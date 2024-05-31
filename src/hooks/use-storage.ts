@@ -34,5 +34,8 @@ export const useStorage = (useSession = false) => {
 
     getChain: () => get('chain') || '534352',
     setChain: (v: string) => set('chain', v),
+
+    getCommentTradeTab: () => get('comment_trade_tab'),
+    setCommentTradeTab: (v: string) => set('comment_trade_tab', v),
   }
 }

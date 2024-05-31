@@ -3,7 +3,7 @@ import {
   LanguageCode,
   ResolutionString,
   widget,
-} from '../../../../public/charting_library/charting_library'
+} from '../../../../public/js/charting_library/charting_library'
 import { useDatafeed } from './use-datafeed'
 import { useCandlestickStore } from '@/stores/use-candlestick-store'
 import { useCandlestickParse } from './use-candlestick-parse'
@@ -38,7 +38,7 @@ export const useCandlestick = () => {
         datafeed: createDatafeed(options),
         locale: i18n.language as LanguageCode,
         autosize: true,
-        timezone: 'Etc/UTC',
+        timezone: i18n.language === 'zh' ? 'Asia/Shanghai' : 'Etc/UTC',
       })
 
       chart.onChartReady(() => setChart(chart))

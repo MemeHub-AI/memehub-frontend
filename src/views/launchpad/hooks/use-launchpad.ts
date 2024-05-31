@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 
 const buyEndTime = '2024/6/3 23:00:00'
 const buyStartTime = '2024/5/28 23:00:00'
-const witelistEndTime = '2024/6/2 23:00:00'
+const whitelistEndTime = '2024/6/2 23:00:00'
 
 export const useLaunchpad = () => {
   const [value, setValue] = useState('')
@@ -162,11 +162,13 @@ export const useLaunchpad = () => {
   const isBalanceInsufficient =
     +formatEther(BigInt(balance?.value || 0)) < minBnb
 
+  console.log(info)
+
   const claimAmount = isWhite ? info?.whiteClaimAmount : info?.claimAmount
 
   const minClaimAmount = +formatEther(BigInt(claimAmount || 0))
 
-  const claimAmountOneBNBOnWitelist = +BigNumber(1)
+  const claimAmountOneBNBOnwhitelist = +BigNumber(1)
     .div(minBnb)
     .multipliedBy(+formatEther(BigInt(info?.whiteClaimAmount || 0)))
     .toFixed(2)
@@ -188,10 +190,6 @@ export const useLaunchpad = () => {
   const max = Math.min(BigNumber(maxBnb).minus(paid).toNumber(), minBnb)
 
   const onBuy = async () => {
-    if (!isConnected) {
-      return walletStore.setConnectOpen(true)
-    }
-
     if (chainId !== bscTestnet.id) {
       try {
         toast.loading('Switching to BSC Testnet')
@@ -217,9 +215,6 @@ export const useLaunchpad = () => {
   }
 
   const onClaim = async () => {
-    if (!isConnected) {
-      return walletStore.setConnectOpen(true)
-    }
     try {
       await claim({
         address: idoAddress,
@@ -282,15 +277,23 @@ export const useLaunchpad = () => {
     if (buyLoading) {
       return t('buying')
     }
+
     if (claimLoading) {
       return t('claiming')
     }
 
-    if (isBalanceInsufficient) {
+    if (isClaim) {
+      return t('claimed')
+    }
+
+    if (info?.isBuyActive && isBalanceInsufficient) {
       return t('insufficient.balance')
     }
 
-    if (max === 0 && info?.isBuyActive) {
+    if (
+      (max === 0 && info?.isBuyActive) ||
+      (info?.totalGatherBnb === info?.totalPaidBnb && !info?.isClaimActive)
+    ) {
       return t('wait.claim')
     }
 
@@ -307,9 +310,10 @@ export const useLaunchpad = () => {
     }
 
     if (
-      !value.trim() ||
-      +value === 0 ||
-      value > formatEther(balance?.value || BigInt(0))
+      info?.isBuyActive &&
+      (!value.trim() ||
+        +value === 0 ||
+        value > formatEther(balance?.value || BigInt(0)))
     ) {
       return true
     }
@@ -326,7 +330,11 @@ export const useLaunchpad = () => {
       return true
     }
 
-    if (isBalanceInsufficient) {
+    if (isClaim) {
+      return true
+    }
+
+    if (info?.isBuyActive && isBalanceInsufficient) {
       return true
     }
 
@@ -342,10 +350,14 @@ export const useLaunchpad = () => {
   }
 
   const onClick = () => {
-    if (info?.isBuyActive) {
-      onBuy()
-    } else if (info?.isClaimActive) {
+    if (!isConnected) {
+      return walletStore.setConnectOpen(true)
+    }
+
+    if (info?.isClaimActive) {
       onClaim()
+    } else if (info?.isBuyActive) {
+      onBuy()
     }
   }
 
@@ -374,12 +386,13 @@ export const useLaunchpad = () => {
 
   return {
     isWhite,
-    witelistEndTime,
+    whitelistEndTime,
     buyStartTime,
     buyEndTime,
     isConnected,
     value,
     info,
+    isEndWhitelist: new Date() > new Date(whitelistEndTime),
     isNotStart: new Date() < new Date(buyStartTime),
     isEndBuy: new Date() > new Date(buyEndTime) || !info?.isBuyActive,
     minBnb,
@@ -394,7 +407,7 @@ export const useLaunchpad = () => {
     isBuying,
     isClaiming,
     claimAmountOneBNB,
-    claimAmountOneBNBOnWitelist,
+    claimAmountOneBNBOnwhitelist,
     valueClaimAmount,
     paidClaimAmountValue,
     balance,

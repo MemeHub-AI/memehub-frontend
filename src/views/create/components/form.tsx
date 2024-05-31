@@ -23,7 +23,10 @@ import { useDeploy } from '../hooks/use-deploy'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { fmt } from '@/utils/fmt'
 import { useNewsList } from '@/hooks/use-news-list'
+import { Dialog } from '@/components/ui/dialog'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
+const Zmage = React.lazy(() => import('react-zmage'))
 interface Props {
   newsListData: ReturnType<typeof useNewsList>
   formData: ReturnType<typeof useCreateTokenForm>
@@ -47,12 +50,30 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
   } = props.formData
   const { switchChain } = useSwitchChain()
 
+  const [showPoster, setShowPoster] = useState(false)
+  const [index, setIndex] = useState(0)
   const [handLoadingPoster, setHandLoadingPoster] = useState(false)
 
   const { t } = useTranslation()
 
   const fee = Number(formatEther(BigInt(deployFee))).toFixed(3)
   const symbol = deploySymbol
+
+  const onRight = () => {
+    const limit = Number(form.getValues(formFields.poster)?.length)
+    setIndex((index) => {
+      if (index === limit - 1) return 0
+      return index + 1
+    })
+  }
+
+  const onLeft = () => {
+    const limit = Number(form.getValues(formFields.poster)?.length)
+    setIndex((index) => {
+      if (index === 0) return limit - 1
+      return index - 1
+    })
+  }
 
   const beforeSubmit = (values: z.infer<typeof formSchema>) => {
     if (isLoadingMemeInfo || isLoadingMemeImg) {
@@ -314,30 +335,30 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                       <div className="flex gap-3 w-max max-md:w-[99%] max-md:overflow-x-auto">
                         {(field.value as string[])?.map((item, i) => {
                           return (
-                            <a
-                              href={item}
+                            <div
                               key={item}
-                              download
-                              target="_blank"
-                              className={cn('flex-shrink-0')}
+                              className={cn(
+                                'flex-shrink-0 rounded-md overflow-hidden cursor-pointer',
+                                i < 2
+                                  ? 'w-[133px] h-[153px]'
+                                  : 'w-[233px] h-[153px]'
+                              )}
+                              onClick={() => {
+                                setShowPoster(true)
+                                setIndex(i)
+                              }}
                             >
-                              <img
-                                src={item}
-                                className={cn(
-                                  'object-cover rounded-md',
-                                  i < 2
-                                    ? 'w-[133px] h-[153px]'
-                                    : 'w-[233px] h-[153px]'
-                                )}
-                              />
-                            </a>
+                              <img src={item} alt="poster" />
+                            </div>
                           )
                         })}
                       </div>
                     ) : (
-                      <Button onClick={getAIMemePoster}>
-                        {t('create.ai.poster')}
-                      </Button>
+                      <div>
+                        <Button onClick={getAIMemePoster}>
+                          {t('create.ai.poster')}
+                        </Button>
+                      </div>
                     )}
                   </FormControl>
                   <FormMessage />
@@ -418,10 +439,10 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           </div>
 
           {/* Submit button */}
-          <div className="flex flex-col items-start space-y-2 max-w-[500px]">
+          <div className="flex flex-col items-start gap-3 max-w-[500px]">
             <Button
               variant="default"
-              className="self-center px-10 mt-3"
+              className="px-10 mt-3"
               disabled={isDeploying}
             >
               {t('create')}
@@ -432,6 +453,45 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           </div>
         </form>
       </Form>
+      <Dialog open={showPoster} onOpenChange={() => setShowPoster(false)}>
+        <div className="flex flex-col px-5 mt-5">
+          <div className="absolute top-[50%] translate-y-[-50%] left-2 cursor-pointer">
+            <FaChevronLeft size={26} onClick={onLeft}></FaChevronLeft>
+          </div>
+          <div className="absolute top-[50%] translate-y-[-50%] right-2 cursor-pointer">
+            <FaChevronRight size={26} onClick={onRight}></FaChevronRight>
+          </div>
+          <img
+            src={form.getValues(formFields.poster)?.[index] as string}
+            alt="Poster"
+            className="w-full rounded-md mb-4 select-none"
+          />
+          <div className="flex justify-center">
+            {(form.getValues(formFields.poster) as string[])?.map((item, i) => {
+              return (
+                <div
+                  key={item}
+                  className={cn(
+                    'w-[10px] h-[10px] mx-2 rounded-full cursor-pointer',
+                    i === index ? 'bg-black' : 'bg-gray-300'
+                  )}
+                  onClick={() => setIndex(i)}
+                ></div>
+              )
+            })}
+          </div>
+          {/* <div
+            className="mt-5  flex justify-center cursor-pointer"
+            onClick={() =>
+              img.download(
+                'https://storage.memehub.ai/memeai/txt2img-3581588184.png'
+              )
+            }
+          >
+            <Button>{t('download')}</Button>
+          </div> */}
+        </div>
+      </Dialog>
     </>
   )
 })

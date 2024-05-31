@@ -16,10 +16,11 @@ import { formatEther, zeroAddress } from 'viem'
 import { Fragment } from 'react'
 import BigNumber from 'bignumber.js'
 import clsx from 'clsx'
+import { useAccount } from 'wagmi'
 
 const Launchpad = () => {
   const { t } = useTranslation()
-  const { back } = useRouter()
+  const { address } = useAccount()
   const {
     value,
     info,
@@ -33,29 +34,62 @@ const Launchpad = () => {
     isEndBuy,
     buyStartTime,
     isNotStart,
-    isBuy,
-    isClaim,
-    balance,
-    loading,
     isWhite,
+    isEndWhitelist,
     isConnected,
-    witelistEndTime,
-    claimAmountOneBNBOnWitelist,
+    whitelistEndTime,
+    claimAmountOneBNBOnwhitelist,
     claimAmountOneBNB,
     valueClaimAmount,
     paidClaimAmountValue,
-    isBalanceInsufficient,
-    setValue,
-    onBuy,
+    isClaim,
     onClick,
     onChange,
     onMax,
     onClaim,
+    setValue,
     handleButtonText,
     handleButtonDisabled,
   } = useLaunchpad()
 
   const hadnleBuyAndClaim = () => {
+    if ((info?.isWhite && !isWhite) || !isConnected) {
+      return (
+        <Fragment>
+          <Progress
+            value={(current / total) * 100}
+            className="!rounded-xl !h-[10px] mb-1"
+          />
+          <div className="mb-4 flex justify-between text-sm">
+            <span>{current}BNB</span>
+            <span>{total}BNB</span>
+          </div>
+
+          {/* Minimum Participation $1 BNB, Maximum Participation $2 BNB */}
+          {/* 最少参与$1BNB，最多参与$2BNB */}
+          <div className="mt-1">
+            {t('purchase.number.min')}
+            <span className="text-orange-500">{minBnb}BNB</span>
+          </div>
+          <div className="mt-1">
+            {t('purchase.number.max')}
+            <span className="text-orange-500">{maxBnb}BNB</span>
+          </div>
+          {isConnected ? (
+            <div className="text-sm text-red-500 my-5">{t('not.eligible')}</div>
+          ) : (
+            <Button
+              variant="default"
+              className="my-5 px-20 py-5"
+              onClick={onClick}
+            >
+              {t('connect.wallet')}
+            </Button>
+          )}
+        </Fragment>
+      )
+    }
+
     if (isNotStart) {
       return (
         <Fragment>
@@ -73,7 +107,15 @@ const Launchpad = () => {
       )
     }
 
-    if (info?.isClaimActive) {
+    if (info?.isClaimActive || info?.totalGatherBnb === info?.totalPaidBnb) {
+      if (paid === 0) {
+        return (
+          <>
+            <div className="mt-1 mb-5 text-red-500">{t('not.involved')}</div>
+          </>
+        )
+      }
+
       return (
         <Fragment>
           <div className="mt-1">
@@ -81,7 +123,7 @@ const Launchpad = () => {
             <span className="text-orange-500">{paid}BNB</span>{' '}
             {t('participated.to')}{' '}
             <span className="text-orange-500">
-              {BigNumber(valueClaimAmount).toFormat()}Trump
+              {BigNumber(paidClaimAmountValue).toFormat()}Trump
             </span>
           </div>
         </Fragment>
@@ -114,7 +156,8 @@ const Launchpad = () => {
             <Input
               value={value}
               type="number"
-              onChange={({ target }) => onChange(target.value)}
+              onChange={({ target }) => setValue(target.value)}
+              onBlur={({ target }) => onChange(target.value)}
               endIcon={
                 <div
                   className="text-orange-500 text-nowrap cursor-pointer mx-3"
@@ -154,6 +197,15 @@ const Launchpad = () => {
   }
 
   const handleTime = () => {
+    if (info?.isWhite && !isEndWhitelist) {
+      return (
+        <Fragment>
+          <div className="mb-2 text-center">{t('whitelist.close.presale')}</div>
+          <Countdown time={whitelistEndTime} className="mb-5"></Countdown>
+        </Fragment>
+      )
+    }
+
     if (!isEndBuy) {
       return (
         <Fragment>
@@ -162,43 +214,56 @@ const Launchpad = () => {
         </Fragment>
       )
     }
+  }
 
-    if (info?.isWhite) {
-      return (
-        <Fragment>
-          <div className="mb-2 text-center">{t('witelist.close.presale')}</div>
-          <Countdown time={witelistEndTime} className="mb-5"></Countdown>
-        </Fragment>
-      )
+  const handleShowButton = () => {
+    if (isNotStart || info?.isFailed) {
+      return <></>
     }
+
+    if ((info?.isWhite && !isWhite) || !isConnected) {
+      return <></>
+    }
+
+    if (
+      (info?.isClaimActive || info?.totalPaidBnb === info?.totalGatherBnb) &&
+      paid === 0
+    ) {
+      return <></>
+    }
+
+    return (
+      <Button
+        variant="default"
+        className="my-5 px-20 py-5"
+        onClick={onClick}
+        disabled={handleButtonDisabled()}
+      >
+        {handleButtonText()}
+      </Button>
+    )
   }
 
   return (
     <main className="px-8 pb-3 max-sm:px-4">
       <div className="my-6 flex items-center">
-        <h1 className="text-2xl font-bold">Launchpad Trump</h1>
+        <h1 className="text-2xl font-bold">{t('launchpad.trump')}</h1>
       </div>
       <div className="flex max-sm:w-full">
         <HotNewsAside></HotNewsAside>
         <div className="ml-5 max-sm:ml-0  max-sm:w-full">
           <Card
-            className="w-[450px] max-sm:w-full px-5"
+            className="relative w-[450px] max-sm:w-full px-5"
             shadow={'none'}
             hover={'none'}
           >
+            <div className="absolute top-2 right-2 px-2 bg-slate-200 rounded-md">
+              {fmt.addr(address)}
+            </div>
             <div className="text-center text-2xl mt-5 mb-3">Trump🔥</div>
             {handleTime()}
             {hadnleBuyAndClaim()}
-            {isNotStart || info?.isFailed ? null : (
-              <Button
-                variant="default"
-                className="my-5 px-20 py-5"
-                onClick={onClick}
-                disabled={handleButtonDisabled()}
-              >
-                {handleButtonText()}
-              </Button>
-            )}
+            {handleShowButton()}
           </Card>
           <Card
             className="w-[450px] max-sm:w-full mt-5 py-3 px-5"
@@ -226,9 +291,9 @@ const Launchpad = () => {
             </div>
             <div className="!my-2 h-[1px] w-full bg-slate-100"></div>
             <div className="flex justify-between">
-              <span>{t('rate.witelist')}</span>
+              <span>{t('rate.whitelist')}</span>
               <span>
-                1BNB = {BigNumber(claimAmountOneBNBOnWitelist).toFormat()}Trump
+                1BNB = {BigNumber(claimAmountOneBNBOnwhitelist).toFormat()}Trump
               </span>
             </div>
             <div className="!my-2 h-[1px] w-full bg-slate-100"></div>

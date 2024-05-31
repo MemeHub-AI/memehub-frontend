@@ -7,7 +7,6 @@ import { useDeploy } from './hooks/use-deploy'
 import { useCreateTokenForm } from './hooks/use-form'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
-import { useRouter } from 'next/router'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 export const CreatePage = () => {
