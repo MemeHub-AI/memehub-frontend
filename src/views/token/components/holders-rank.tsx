@@ -14,7 +14,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
 
   return (
     <>
-      <h3 className={cn('font-bold mb-1', className)}>{t('holders')}</h3>
+      <h3 className={cn('font-bold my-2', className)}>{t('holders')}</h3>
       <div className="text-sm text-zinc-500">
         <CustomSuspense
           container="ul"

@@ -23,7 +23,7 @@ export const CommentTradeTab = (props: ComponentProps<'div'>) => {
   return (
     <Tabs
       defaultValue={getCommentTradeTab() || Tab.Comments}
-      className={cn('mt-4', className)}
+      className={cn(className)}
       onValueChange={(value) => setCommentTradeTab(value)}
     >
       <TabsList>

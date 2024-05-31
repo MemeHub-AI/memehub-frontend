@@ -39,7 +39,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { tokenInfo } = useTokenContext()
 
   const token = (query.address || '') as Address
-  const nativeSymbol = 'ETH'
+  const nativeSymbol = tokenInfo?.chain.native.symbol || ''
 
   const onBuy = async () => {
     // Overflow current eth balance.

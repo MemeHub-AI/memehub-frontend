@@ -258,5 +258,8 @@
   "addr.empty": "Cannot find contract address",
   "claimed": "Claimed",
   "launchpad": "Launchpad",
-  "launchpad.trump": "Trump Laumchpad"
+  "launchpad.trump": "Trump Laumchpad",
+  "click-to-copy": "Click to copy",
+  "copy-success": "Copy successful!",
+  "copy-failed": "Copy failed"
 }
