@@ -136,7 +136,7 @@ export const CommentCard = (props: Props) => {
           <Button
             size="xs"
             variant="outline"
-            onClick={() => onReply?.(tokenAddr)}
+            onClick={() => onReply?.(c.id.toString())}
           >
             {t('replay')}
           </Button>
