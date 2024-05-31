@@ -38,7 +38,7 @@ export const useCandlestick = () => {
         datafeed: createDatafeed(options),
         locale: i18n.language as LanguageCode,
         autosize: true,
-        timezone: 'Etc/UTC',
+        timezone: i18n.language === 'zh' ? 'Asia/Shanghai' : 'Etc/UTC',
       })
 
       chart.onChartReady(() => setChart(chart))
