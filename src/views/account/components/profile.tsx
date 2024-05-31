@@ -110,7 +110,8 @@ export const Profile = (props: ComponentProps<'div'>) => {
           <Button
             size="icon"
             variant="outline"
-            className="absolute right-4 top-2"
+            shadow="none"
+            className="absolute right-4 top-2 hover:bg-zinc-200"
             disabled={isFollowing || isUnfollowing}
             onClick={() =>
               userInfo?.is_follower ? unfollow(tokenAddr) : follow(tokenAddr)
@@ -123,7 +124,8 @@ export const Profile = (props: ComponentProps<'div'>) => {
             <Button
               size="icon"
               variant="outline"
-              className="absolute right-4 top-2"
+              shadow="none"
+              className="absolute right-4 top-2 hover:bg-zinc-200"
             >
               <Pencil2Icon />
             </Button>
