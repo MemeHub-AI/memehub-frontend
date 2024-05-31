@@ -41,7 +41,9 @@ export const TokenCard = ({ card, className }: Props) => {
         'flex items-stretch overflow-hidden gap-2 relative',
         className
       )}
-      onClick={() => router.push(`${Routes.Token}/${card.address}`)}
+      onClick={() => {
+        router.push(`${Routes.Main}/${card.chain.name}/${card.address}`)
+      }}
     >
       <img
         src={card?.image || '/images/logo.png'}
