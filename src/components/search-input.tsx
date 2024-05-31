@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
+import { useDebounce } from 'react-use'
 
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
 import { tokenApi } from '@/api/token'
-import TokenCard from './token-cards/card'
-import { useDebounce } from 'react-use'
+import { TokenCard } from './token-cards/card'
 
 export const SearchInput = () => {
   const { t } = useTranslation()
@@ -34,7 +34,7 @@ export const SearchInput = () => {
 
   return (
     <>
-      <Popover open={!isEmpty(tokens)} onOpenChange={reset}>
+      <Popover open={!isEmpty(tokens) || isPending} onOpenChange={reset}>
         <PopoverAnchor>
           <Input
             value={value}
