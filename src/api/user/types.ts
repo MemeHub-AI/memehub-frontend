@@ -93,6 +93,12 @@ interface Chain {
   id: string
   name: string
   logo: string
+  native: {
+    decimals: number
+    name: string
+    symbol: string
+  }
+  explorer: string
 }
 
 export interface UserCoinsCreated {
