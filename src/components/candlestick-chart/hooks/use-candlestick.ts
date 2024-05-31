@@ -39,7 +39,6 @@ export const useCandlestick = () => {
         locale: i18n.language as LanguageCode,
         autosize: true,
         timezone: 'Etc/UTC',
-        library_path: 'js/charting_library/',
       })
 
       chart.onChartReady(() => setChart(chart))
