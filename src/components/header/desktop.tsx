@@ -11,6 +11,8 @@ import { LangSelect } from '../lang-select'
 import { Input } from '@/components/ui/input'
 import { SocialLinks } from '../social-links'
 import { TradeLogs } from '../trade-logs'
+import { Routes } from '@/routes'
+import { useRouter } from 'next/router'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -20,6 +22,7 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderDesktop = (props: Props) => {
   const { navs, onNavClick } = props
   const { t } = useTranslation()
+  const router = useRouter()
 
   const [value, setValue] = useState('')
   const onSearch = () => {
@@ -57,6 +60,9 @@ export const HeaderDesktop = (props: Props) => {
           }
           onChange={({ target }) => setValue(target.value)}
         />
+        <Button onClick={() => router.push(Routes.Create)} className="ml-3">
+          {t('create.token')}
+        </Button>
         <SocialLinks className="ml-3" />
         <LangSelect className="flex-shrink-0 mx-3" />
         {/* <Button

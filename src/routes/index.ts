@@ -8,4 +8,6 @@ export enum Routes {
   Token = '/token',
 
   Launchpad = '/launchpad',
+
+  Idea = '/idea',
 }

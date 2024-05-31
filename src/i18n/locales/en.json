@@ -258,5 +258,16 @@
   "addr.empty": "Cannot find contract address",
   "claimed": "Claimed",
   "launchpad": "Launchpad",
-  "launchpad.trump": "Trump Laumchpad"
+  "launchpad.trump": "Trump Laumchpad",
+  "tx.record": "Transaction record",
+  "create.token": "Create Token",
+  "random.meme": "Random MemeCoin",
+  "download.img": "Download Image",
+  "no.opponent": "No Opponent  ",
+  "cream.puff": "$1 cream puff",
+  "in.memehub": "The geniuses inside Memehub",
+  "live.in.up": "Live it Up",
+  "create.new.token": "Create New",
+  "take,lead": "Take the Lead",
+  "more...": "More..."
 }

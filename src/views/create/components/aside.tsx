@@ -17,19 +17,23 @@ import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
+import { Pagination } from '@/components/ui/pagination'
 
 interface Props extends ComponentProps<'div'> {
   newsListData: ReturnType<typeof useNewsList>
   aIMemeInfo: ReturnType<typeof useAIMemeInfo>
+  tab: number
+  setTab: (tab: number) => void
 }
 
 export const InspirationNews = ({
   className,
   newsListData,
   aIMemeInfo,
+  tab: tabIdx,
+  setTab,
 }: Props) => {
   const { t } = useTranslation()
-  const [selectTab, setSelectTab] = useState(0)
   const { getArea, setArea } = useStorage()
   const {
     getAIMemeInfo,
@@ -44,6 +48,8 @@ export const InspirationNews = ({
     countryList,
     show,
     memeit,
+    fetchNextPage,
+    fetchPreviousPage,
     setShow,
     handleClick,
   } = newsListData
@@ -52,9 +58,6 @@ export const InspirationNews = ({
 
   const hidden = () => {
     setShow(false)
-    // abortController.memeImageSign.abort()
-    // abortController.memeInfoSign.abort()
-    // abortController.memePosterSign.abort()
   }
 
   const onChange = (value: string) => {
@@ -63,11 +66,11 @@ export const InspirationNews = ({
   }
 
   const onChangeTab = (idx: number) => {
-    setSelectTab(idx)
+    setTab(idx)
   }
 
   const onConfirm = async () => {
-    await getAIMemeInfo(newsListData.memeit?.title.query!)
+    await getAIMemeInfo(newsListData.memeit?.title!)
     hidden()
   }
 
@@ -82,7 +85,7 @@ export const InspirationNews = ({
                 'px-2.5 py-1.5 text-nowrap rounded-xl my-5 cursor-pointer border-2 border-transparent',
                 'hover:border-black',
                 i === 1 && 'ml-3',
-                selectTab == i && 'bg-black text-[#ffe770]'
+                tabIdx == i && 'bg-black text-[#ffe770]'
               )}
               onClick={() => onChangeTab(i)}
             >
@@ -91,7 +94,7 @@ export const InspirationNews = ({
           )
         })}
       </div>
-      {selectTab === 0 ? (
+      {tabIdx === 0 ? (
         <Select defaultValue={getArea()} onValueChange={onChange}>
           <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
             <SelectValue placeholder={t('area')} />
@@ -116,15 +119,19 @@ export const InspirationNews = ({
             <NewsCard news={news!} key={i} onMeme={() => handleClick(news)} />
           ))}
         </div>
+        {/* <Pagination
+          total={tradeRecords.length}
+          onPageChange={() => fetch({})}
+        ></Pagination> */}
       </CustomSuspense>
 
       <AICreateMemecoinDialog
         show={show}
         loading={isLoadingMemeInfo}
         data={{
-          name: memeit?.title.query,
-          image: memeit?.articles[0].image.imageUrl,
-          description: memeit?.articles[0].snippet,
+          name: memeit?.title,
+          image: memeit?.image,
+          description: memeit?.content,
         }}
         hidden={hidden}
         onConfirm={onConfirm}

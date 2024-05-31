@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { TokenCards } from '@/components/token-cards'
-import { HotNewsAside } from './components/aside'
+import { HotNewsAside } from '../../components/aside'
 import { useTokens } from '@/hooks/use-tokens'
 import { AIIdea } from './components/ai-idea'
 

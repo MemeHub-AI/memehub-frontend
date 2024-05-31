@@ -1,7 +1,5 @@
-import { aiApi } from '@/api/ai'
-import { AIMemeInfo } from '@/api/ai/type'
 import { newsApi } from '@/api/news'
-import { NewsData } from '@/api/news/types'
+import { MemeInfoDialogData, NewsData } from '@/api/news/types'
 import { Routes } from '@/routes'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
@@ -13,15 +11,16 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 interface Options {
   formData?: ReturnType<typeof useCreateTokenForm>
+  isOpportunity?: boolean
 }
 
 export const useNewsList = (options?: Options) => {
-  const { formData } = options || {}
+  const { formData, isOpportunity = false } = options || {}
   const { getArea } = useStorage()
   const [show, setShow] = useState(false)
   const [area, setArea] = useState(+getArea())
   const [loading, setLoading] = useState(false)
-  const [memeit, setMemeit] = useState<NewsData>()
+  const [memeit, setMemeit] = useState<MemeInfoDialogData>()
 
   const { isLoadingMemeImg, isLoadingMemeInfo, getAIMemeInfo } = useAIMemeInfo()
 
@@ -42,13 +41,13 @@ export const useNewsList = (options?: Options) => {
       if (!pathname.startsWith(Routes.Create)) {
         const aimemeInfoStore = useAimemeInfoStore.getState()
         aimemeInfoStore.setInfo({
-          name: memeit.title.query,
-          description: memeit.title.query,
+          name: memeit.title,
+          description: memeit.title,
         })
         return push(Routes.Create)
       }
       if (formData) {
-        getAIMemeInfo(memeit.title.query!)
+        getAIMemeInfo(memeit.title!)
       }
     } catch (error) {
       console.error(error)
@@ -57,20 +56,55 @@ export const useNewsList = (options?: Options) => {
     }
   }
 
-  const handleClick = async (news?: NewsData) => {
+  const handleClick = async (info?: MemeInfoDialogData) => {
     setShow(true)
-    setMemeit(news)
+    setMemeit(info)
   }
 
-  const { data: newsData, isFetching } = useInfiniteQuery({
-    queryKey: [newsApi.getNews.name, area],
+  const {
+    data: newsData,
+    isLoading: isFetching,
+    fetchNextPage,
+    fetchPreviousPage,
+  } = useInfiniteQuery({
+    queryKey: [newsApi.getNews.name, area, isOpportunity],
     initialPageParam: 1,
+    refetchInterval: 10_000,
     queryFn: async ({ pageParam }) => {
+      if (isOpportunity) {
+        const { data } = await newsApi.getOpportunity({
+          page: pageParam,
+          page_size: 7,
+        })
+
+        console.log(data)
+
+        return {
+          count: data.count,
+          results: data.results?.map((item) => ({
+            id: item.id,
+            title: item?.title,
+            link: '',
+            content: item.content,
+            image: item.image,
+          })),
+        }
+      }
+
       const { data } = await newsApi.getNews({
         country: +area,
         page: pageParam,
       })
-      return data
+      return {
+        count: data.count,
+        results: data.results?.map((item) => ({
+          id: item?.id,
+          title: item.title.query,
+          link: item.title.exploreLink,
+          content: item.articles[0].snippet,
+          image: item.articles[0].image.imageUrl,
+        })),
+      }
     },
     getNextPageParam: (_, _1, page) => page + 1,
     select: (data) => ({
@@ -84,16 +118,18 @@ export const useNewsList = (options?: Options) => {
     show,
     loading,
     memeit,
+    isFetching,
+    isLoadingMemeImg,
+    isLoadingMemeInfo,
     loadingCountry: isLoading,
     newsList: newsData?.newsList,
     countryList: country?.data,
-    isFetching,
     handleClick,
     onConfirmCreate,
     hidden,
     setShow,
     setArea,
-    isLoadingMemeImg,
-    isLoadingMemeInfo,
+    fetchNextPage,
+    fetchPreviousPage,
   }
 }

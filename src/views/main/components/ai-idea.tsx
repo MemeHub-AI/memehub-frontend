@@ -55,10 +55,6 @@ export const AIIdea = (props: Props) => {
   const hidden = () => {
     setShow(false)
     setIsRandom(false)
-
-    // abortController.memeImageSign.abort()
-    // abortController.memeInfoSign.abort()
-    // abortController.memePosterSign.abort()
   }
 
   return (

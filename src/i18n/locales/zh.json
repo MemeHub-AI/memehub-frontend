@@ -253,5 +253,16 @@
   "not.involved": "购买阶段已经结束，但你没有参与购买",
   "claimed": "已领取",
   "launchpad": "发射台",
-  "launchpad.trump": "Trump 发射台"
+  "launchpad.trump": "Trump 发射台",
+  "tx.record": "交易记录",
+  "create.token": "创建代币",
+  "random.meme": "创建随机 Meme 代币",
+  "download.img": "下载图片",
+  "no.opponent": "没有竞争者",
+  "cream.puff": "有$1个软蛋",
+  "in.memehub": "Memehub内的天才们",
+  "live.in.up": "尽情享受",
+  "create.new.token": "新建代币",
+  "take,lead": "发行首个",
+  "more...": "查看更多"
 }
