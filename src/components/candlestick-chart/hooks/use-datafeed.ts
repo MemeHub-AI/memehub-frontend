@@ -40,6 +40,7 @@ export const useDatafeed = () => {
         }
 
         cache.setBars(bars)
+        cache.setLatBar(last(bars))
         onResolve(symbolInfo)
       },
       async getBars(symbolInfo, resolution, period, onResult, onError) {
@@ -74,12 +75,23 @@ export const useDatafeed = () => {
         // cache.setSub(uid, onRest)
         onUpdate(({ data }) => {
           const bars = toBars(data)
-          console.log('update', bars)
+          const latestTime = last(bars)?.time || 0
+          const lastTime = cache.getLastBar()?.time || 0
+
+          console.log(
+            'Chart update:',
+            '\n',
+            `latest time: ${latestTime}`,
+            '\n',
+            `last time: ${lastTime}`
+          )
+
+          if (latestTime <= lastTime) return
           bars.forEach(onTick)
         })
       },
       unsubscribeBars(uid) {
-        // cache.getSub(uid)?.()
+        cache.getSub(uid)?.()
       },
     } as IBasicDataFeed
   }
