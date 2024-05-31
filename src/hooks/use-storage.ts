@@ -37,5 +37,8 @@ export const useStorage = (useSession = false) => {
 
     getCommentTradeTab: () => get('comment_trade_tab'),
     setCommentTradeTab: (v: string) => set('comment_trade_tab', v),
+
+    getTableShowAge: () => get('show_age'),
+    setTableShowAge: (v: string) => set('show_age', v),
   }
 }

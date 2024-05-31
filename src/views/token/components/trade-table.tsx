@@ -20,10 +20,14 @@ import { Avatar } from '@/components/ui/avatar'
 import { useTradeRecord } from '../hooks/use-trade-record'
 import { TradeType } from '@/api/websocket/types'
 import { Routes } from '@/routes'
+import { useStorage } from '@/hooks/use-storage'
+import { strToBool } from '@/utils/convert'
 
 export const TradeTable = () => {
   const { t } = useTranslation()
-  const [showAge, setShowAge] = useState(true)
+  const { getTableShowAge, setTableShowAge } = useStorage()
+
+  const [showAge, setShowAge] = useState(strToBool(getTableShowAge()))
   const router = useRouter()
   const ths = [
     t('account'),
@@ -45,7 +49,10 @@ export const TradeTable = () => {
               {i === ths.length - 2 ? (
                 <div
                   className="flex items-center gap-1 cursor-pointer hover:text-black"
-                  onClick={() => setShowAge(!showAge)}
+                  onClick={() => {
+                    setShowAge(!showAge)
+                    setTableShowAge(String(!showAge))
+                  }}
                 >
                   <span>{t}</span>
                   <ArrowLeftRight size={12} />

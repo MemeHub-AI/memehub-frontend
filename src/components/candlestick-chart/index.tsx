@@ -29,7 +29,7 @@ export const CandlestickChart = memo(() => {
   return (
     <div
       ref={chartRef}
-      className="min-h-[600px] border rounded overflow-hidden"
+      className="min-h-[560px] border rounded overflow-hidden"
     ></div>
   )
 })

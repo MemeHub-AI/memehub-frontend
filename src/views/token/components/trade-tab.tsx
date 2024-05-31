@@ -131,7 +131,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           </TabsList>
 
           {/* Slippage button */}
-          <SlippageButton disabled={isTrading} />
+          {/* <SlippageButton disabled={isTrading} /> */}
 
           <div className="flex flex-col my-6">
             {/* Input */}
