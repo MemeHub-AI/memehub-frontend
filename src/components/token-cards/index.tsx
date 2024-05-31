@@ -173,8 +173,8 @@ export const TokenCards = (props: Props) => {
                   </p>
                 </div>
                 <div>
-                  <div className="w-max px-4 py-2 leading-none bg-red-500 text-white rounded-full">
-                    Launchpad
+                  <div className="w-max px-4 py-2 leading-none bg-red-500 text-white rounded-full text-sm">
+                    {t('launchpad')}
                   </div>
                 </div>
               </div>

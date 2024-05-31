@@ -42,6 +42,7 @@ const Launchpad = () => {
     claimAmountOneBNB,
     valueClaimAmount,
     paidClaimAmountValue,
+    isClaim,
     onClick,
     onChange,
     onMax,
@@ -246,7 +247,7 @@ const Launchpad = () => {
   return (
     <main className="px-8 pb-3 max-sm:px-4">
       <div className="my-6 flex items-center">
-        <h1 className="text-2xl font-bold">Launchpad Trump</h1>
+        <h1 className="text-2xl font-bold">{t('launchpad.trump')}</h1>
       </div>
       <div className="flex max-sm:w-full">
         <HotNewsAside></HotNewsAside>

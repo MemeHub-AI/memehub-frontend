@@ -251,5 +251,7 @@
   "all": "所有",
   "addr.empty": "找不到合约地址",
   "not.involved": "购买阶段已经结束，但你没有参与购买",
-  "claimed": "已领取"
+  "claimed": "已领取",
+  "launchpad": "发射台",
+  "launchpad.trump": "Trump 发射台"
 }

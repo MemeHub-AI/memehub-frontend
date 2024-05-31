@@ -256,5 +256,7 @@
   "trade.sell": "Sell",
   "all": "All",
   "addr.empty": "Cannot find contract address",
-  "claimed": "Claimed"
+  "claimed": "Claimed",
+  "launchpad": "Launchpad",
+  "launchpad.trump": "Trump Laumchpad"
 }

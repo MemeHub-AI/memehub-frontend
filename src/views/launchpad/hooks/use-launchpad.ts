@@ -162,6 +162,8 @@ export const useLaunchpad = () => {
   const isBalanceInsufficient =
     +formatEther(BigInt(balance?.value || 0)) < minBnb
 
+  console.log(info)
+
   const claimAmount = isWhite ? info?.whiteClaimAmount : info?.claimAmount
 
   const minClaimAmount = +formatEther(BigInt(claimAmount || 0))
@@ -188,10 +190,6 @@ export const useLaunchpad = () => {
   const max = Math.min(BigNumber(maxBnb).minus(paid).toNumber(), minBnb)
 
   const onBuy = async () => {
-    if (!isConnected) {
-      return walletStore.setConnectOpen(true)
-    }
-
     if (chainId !== bscTestnet.id) {
       try {
         toast.loading('Switching to BSC Testnet')
@@ -217,9 +215,6 @@ export const useLaunchpad = () => {
   }
 
   const onClaim = async () => {
-    if (!isConnected) {
-      return walletStore.setConnectOpen(true)
-    }
     try {
       await claim({
         address: idoAddress,
@@ -291,7 +286,7 @@ export const useLaunchpad = () => {
       return t('claimed')
     }
 
-    if (isBalanceInsufficient) {
+    if (info?.isBuyActive && isBalanceInsufficient) {
       return t('insufficient.balance')
     }
 
@@ -315,9 +310,10 @@ export const useLaunchpad = () => {
     }
 
     if (
-      !value.trim() ||
-      +value === 0 ||
-      value > formatEther(balance?.value || BigInt(0))
+      info?.isBuyActive &&
+      (!value.trim() ||
+        +value === 0 ||
+        value > formatEther(balance?.value || BigInt(0)))
     ) {
       return true
     }
@@ -338,7 +334,7 @@ export const useLaunchpad = () => {
       return true
     }
 
-    if (isBalanceInsufficient) {
+    if (info?.isBuyActive && isBalanceInsufficient) {
       return true
     }
 
@@ -354,6 +350,10 @@ export const useLaunchpad = () => {
   }
 
   const onClick = () => {
+    if (!isConnected) {
+      return walletStore.setConnectOpen(true)
+    }
+
     if (info?.isClaimActive) {
       onClaim()
     } else if (info?.isBuyActive) {
