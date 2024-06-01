@@ -22,6 +22,7 @@ import { TradeType } from '@/api/websocket/types'
 import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'
+import { isEmpty } from 'lodash'
 
 export const TradeTable = () => {
   const { t } = useTranslation()
@@ -110,6 +111,16 @@ export const TradeTable = () => {
             </TableRow>
           )
         })}
+        {isEmpty(tradeRecords) && (
+          <tr>
+            <td
+              colSpan={ths.length}
+              className="text-zinc-400 text-center py-[4.45rem]"
+            >
+              {t('no.trade')}
+            </td>
+          </tr>
+        )}
       </TableBody>
       <TableFooter className="bg-transparent">
         <TableRow className="hover:bg-transparent">

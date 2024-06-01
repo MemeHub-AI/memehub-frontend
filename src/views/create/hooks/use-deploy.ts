@@ -1,26 +1,21 @@
-import { useState } from 'react'
 import { useAccount, useWriteContract } from 'wagmi'
 import { first } from 'lodash'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
-import type { Address } from 'viem'
 import type { TokenNewReq } from '@/api/token/types'
 
 import { factoryAbi } from '../../../contract/abi/factory'
 import { useCreateToken } from './use-create-token'
-import { ApiCode } from '@/api/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useDeployConfig } from './use-deploy-config'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { ca } from '@/contract/address'
 
 export const useDeploy = () => {
-  const [backendErr, setBackendErr] = useState<unknown>(null)
-  const [tokenId, setTokenId] = useState(-1)
   const { t } = useTranslation()
   const { chainId } = useAccount()
-  const { create } = useCreateToken()
+  const { createTokenData, createTokenError, create } = useCreateToken()
   const { chains } = useWalletStore()
   const { deployFee, deploySymbol, reserveRatio } = useDeployConfig()
 
@@ -63,18 +58,6 @@ export const useDeploy = () => {
       return
     }
 
-    // Submit hash to backend when contract submit success.
-    const onSuccess = async (hash: Address) => {
-      try {
-        const { data, code, message } = await create({ ...params, hash })
-
-        if (code !== ApiCode.Success) throw new Error(message)
-        setTokenId(data?.coin_id!)
-      } catch (error) {
-        setBackendErr(error)
-      }
-    }
-
     return writeContract(
       {
         abi: factoryAbi,
@@ -89,13 +72,15 @@ export const useDeploy = () => {
         ],
         value: BigInt(deployFee),
       },
-      { onSuccess }
+      {
+        // Submit hash to backend when contract submit success.
+        onSuccess: (hash) => create({ ...params, hash }),
+      }
     )
   }
 
   return {
     data,
-    tokenId,
     deployedAddress,
     deployFee,
     deploySymbol,
@@ -107,7 +92,8 @@ export const useDeploy = () => {
     isDeployError: isError,
     submitError,
     confirmError,
-    backendErr,
+    createTokenError,
+    createTokenData,
     deploy,
     resetDeploy: reset,
   }

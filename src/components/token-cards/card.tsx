@@ -10,6 +10,7 @@ import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
+import { fmt } from '@/utils/fmt'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -50,7 +51,8 @@ export const TokenCard = (props: Props) => {
         className
       )}
       onClick={(e) => {
-        router.push(`${Routes.Main}/${card.chain.name}/${card.address}`)
+        const href = fmt.toHref(Routes.Main, card.chain.name, card.address)
+        router.push(href)
         onClick?.(e)
       }}
       {...restProps}

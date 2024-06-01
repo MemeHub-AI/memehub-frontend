@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { isEmpty } from 'lodash'
+import { first, isEmpty } from 'lodash'
 
 interface FmtAddrOptions {
   len?: number
@@ -47,5 +47,14 @@ export const fmt = {
   firstUpperCase(s?: string) {
     if (!s) return ''
     return s.replace(s[0], s[0].toUpperCase())
+  },
+  toHref(...args: string[]) {
+    // Adapt ends with '/' for the first arg.
+    const firstStr = first(args) || ''
+    if (firstStr.endsWith('/')) {
+      args.splice(0, 1, firstStr.slice(0, -1))
+    }
+
+    return args.join('/')
   },
 }

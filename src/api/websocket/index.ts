@@ -8,7 +8,7 @@ export const wsApiURL = {
   tradeLogs: baseURL + '/chat/trade_log',
   tokenInfo: baseURL + '/chat/coin_info',
   tradeRecord: baseURL + '/chat/trade_record',
-  candlestick: baseURL + '/chat/k_line',
+  chart: baseURL + '/chat/k_line',
 }
 
 export const heartbeat = {
@@ -29,6 +29,20 @@ export const isSuccessMessage = <T = null>(
     typeof value === 'string' ? (JSON.parse(value) as WSMessageBase<T>) : value
   return (
     message.type === 'message' &&
+    message.message === 'success' &&
+    message.data !== null
+  )
+}
+
+export const isUpdateMessage = <T = null>(
+  value?: string | WSMessageBase<T>
+) => {
+  if (!value || isEmpty(value)) return false
+
+  const message =
+    typeof value === 'string' ? (JSON.parse(value) as WSMessageBase<T>) : value
+  return (
+    message.type === 'update' &&
     message.message === 'success' &&
     message.data !== null
   )

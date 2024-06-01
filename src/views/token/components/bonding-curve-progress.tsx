@@ -14,6 +14,9 @@ export const BondingCurveProgress = () => {
     .toFixed(3)
   const marketMax = BigNumber(totalToken).toFixed(3)
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
+  const threshold = BigNumber(marketMax).lte(0)
+    ? t('threshold')
+    : ` ${marketMax} ${nativeSymbol} `
 
   return (
     <div className="my-3 flex-1">
@@ -25,7 +28,7 @@ export const BondingCurveProgress = () => {
         label={Number.isNaN(Number(percent)) ? '0' : percent}
       />
       <div className="text-zinc-400 text-xs mt-2">
-        {t('bonding-curve.token').replace('{}', `${marketMax} ${nativeSymbol}`)}
+        {t('bonding-curve.token').replace('{}', threshold)}
       </div>
     </div>
   )

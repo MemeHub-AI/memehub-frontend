@@ -51,7 +51,7 @@ const dev = {
     // testnet
     [sepolia.id]: '',
     [bscTestnet.id]: '0x5d562bC8Ae3bA73d57AaBE2312a65aFEcb743edd',
-    [opBNBTestnet.id]: '',
+    [opBNBTestnet.id]: '0xc41e4eD93523A589721372BE819aB24D48E9E4B9',
     [scrollSepolia.id]: '',
 
     // mainnet

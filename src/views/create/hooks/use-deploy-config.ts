@@ -1,6 +1,6 @@
 import { useAccount } from 'wagmi'
 
-const deployFee = 2000671350000000 // 0.00200067135 ETH
+const deployFee = 2000671350000000 // 0.00200067135 native token
 
 const reserveRatio = BigInt(800000)
 

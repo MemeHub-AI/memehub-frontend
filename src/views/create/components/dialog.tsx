@@ -8,15 +8,16 @@ import { Routes } from '@/routes'
 import { useDeploy } from '../hooks/use-deploy'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { isUserReject } from '@/utils/contract'
-import { useAccount } from 'wagmi'
+import { fmt } from '@/utils/fmt'
 
 interface Props extends ReturnType<typeof useDeploy> {}
 
 export const CreateTokenStatusDialog = (props: Props) => {
   const {
-    deployedAddress,
-    tokenId,
-    deployHash,
+    deployedAddress = '',
+    createTokenData,
+    createTokenError,
+    deployHash = '',
     isSubmitting,
     isConfirming,
     isDeploySuccess,
@@ -25,7 +26,8 @@ export const CreateTokenStatusDialog = (props: Props) => {
     resetDeploy,
   } = props
   const { t } = useTranslation()
-  const { chain } = useAccount()
+  const { name: chainName = '', explorer_tx = '' } =
+    createTokenData?.chain || {}
 
   // Submiting, create start.
   if (isSubmitting) {
@@ -70,16 +72,16 @@ export const CreateTokenStatusDialog = (props: Props) => {
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
           <p>{t('deploy.submit.success.desc')}</p>
-          {/* <p>
+          <p>
             {t('deploy.submit.success.view-hash')}:{' '}
             <Link
-              href={`https://scrollscan.com/tx/${deployHash}`}
+              href={fmt.toHref(explorer_tx, deployHash)}
               className="text-blue-600 hover:underline"
               target="_blank"
             >
               {t('view')}
             </Link>
-          </p> */}
+          </p>
         </DialogDescription>
       </Dialog>
     )
@@ -119,20 +121,19 @@ export const CreateTokenStatusDialog = (props: Props) => {
             </Link>
             <Link
               className="text-blue-600 hover:underline"
-              // TODO: should be deployed chain.
-              href={`${Routes.Main}/${chain?.name}/${deployedAddress}`}
+              href={fmt.toHref(Routes.Main, chainName, deployedAddress)}
               onClick={resetDeploy}
             >
               {t('deploy.success.view-details')}
             </Link>
-            {/* <Link
+            <Link
               className="text-blue-600 hover:underline"
-              href={`https://scrollscan.com/tx/${deployHash}?id=${tokenId}`}
+              href={fmt.toHref(explorer_tx, deployHash)}
               target="_blank"
               onClick={resetDeploy}
             >
               {t('deploy.success.view-hash')}
-            </Link> */}
+            </Link>
           </div>
         }
       />

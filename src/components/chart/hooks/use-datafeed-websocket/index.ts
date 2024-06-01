@@ -2,12 +2,12 @@ import { useRef } from 'react'
 import { isEmpty } from 'lodash'
 
 import type {
-  CandlestickBar,
-  CandlestickEmitEvents,
-  CandlestickEmitHistory,
-  CandlestickEmitListen,
-  CandlestickEventBase,
-  CandlestickOnEvents,
+  DatafeedBar,
+  DatafeedEmitEvents,
+  DatafeedEmitHistory,
+  DatafeedEmitListen,
+  DatafeedEventBase,
+  DatafeedOnEvents,
 } from './types'
 
 import { wsApiURL } from '@/api/websocket'
@@ -20,7 +20,7 @@ const HEARTBEAT_MESSAGE = JSON.stringify({
 })
 
 export const useDatafeedWebsocket = () => {
-  const emitter = useEmitter<CandlestickOnEvents, CandlestickEmitEvents>()
+  const emitter = useEmitter<DatafeedOnEvents, DatafeedEmitEvents>()
   const wsRef = useRef<WebSocket>()
   const timerRef = useRef<number>()
 
@@ -50,7 +50,7 @@ export const useDatafeedWebsocket = () => {
   // Connect websocket.
   const connect = () => {
     return new Promise((resolve, reject) => {
-      wsRef.current = new WebSocket(wsApiURL.candlestick)
+      wsRef.current = new WebSocket(wsApiURL.chart)
       wsRef.current.addEventListener('open', (data) => {
         onOpen()
         resolve(data)
@@ -79,8 +79,8 @@ export const useDatafeedWebsocket = () => {
   }
 
   // Get init data.
-  const listenAsync = (data: CandlestickEmitListen) => {
-    return withPromise<CandlestickEventBase<'listen', CandlestickBar[]>>(
+  const listenAsync = (data: DatafeedEmitListen) => {
+    return withPromise<DatafeedEventBase<'listen', DatafeedBar[]>>(
       async (resolve, reject) => {
         emitter.on('listen', (v) => v.data && resolve(v))
         sendMessage({ type: 'listen', data })
@@ -89,8 +89,8 @@ export const useDatafeedWebsocket = () => {
   }
 
   // Get history data.
-  const historyAsync = (data: CandlestickEmitHistory) => {
-    return withPromise<CandlestickEventBase<'history', CandlestickBar[]>>(
+  const historyAsync = (data: DatafeedEmitHistory) => {
+    return withPromise<DatafeedEventBase<'history', DatafeedBar[]>>(
       async (resolve, reject) => {
         emitter.on('history', (v) => v.data && resolve(v))
         sendMessage({ type: 'history', data })
@@ -100,7 +100,7 @@ export const useDatafeedWebsocket = () => {
 
   // Listen update data
   const onUpdate = (
-    fn: (data: CandlestickEventBase<'update', CandlestickBar[]>) => void
+    fn: (data: DatafeedEventBase<'update', DatafeedBar[]>) => void
   ) => {
     emitter.on('update', (value) => {
       if (!value.data || isEmpty(value.data)) return

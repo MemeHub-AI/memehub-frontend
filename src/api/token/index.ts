@@ -18,12 +18,14 @@ export const tokenApi = {
     )
   },
   create(req: TokenNewReq) {
-    return api.POST<ApiResponse<TokenNewRes>>('/api/v1/coin/coins/', {
+    return api.POST<ApiResponse<TokenListItem>>('/api/v1/coin/coins/', {
       body: req,
     })
   },
   update(addr: string, req: TokenUpdateReq) {
-    return api.PATCH<null>(`/api/v1/coin/coins/${addr}/`, { body: req })
+    return api.PATCH<ApiResponse<null>>(`/api/v1/coin/coins/${addr}/`, {
+      body: req,
+    })
   },
   details(addr: string) {
     return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${addr}/`)

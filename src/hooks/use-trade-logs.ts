@@ -9,7 +9,12 @@ import type {
   WSTradeLogMessage,
 } from '@/api/websocket/types'
 
-import { heartbeat, isSuccessMessage, wsApiURL } from '@/api/websocket'
+import {
+  heartbeat,
+  isSuccessMessage,
+  isUpdateMessage,
+  wsApiURL,
+} from '@/api/websocket'
 
 export const useTradeLogs = () => {
   const [isLatest, setIsLatest] = useState(false)
@@ -25,8 +30,14 @@ export const useTradeLogs = () => {
     })
 
   useEffect(() => {
-    if (!lastJsonMessage) return
-    if (!isSuccessMessage(lastJsonMessage)) return
+    // No message/not a success message/not an update message, return it.
+    if (
+      !lastJsonMessage ||
+      !isSuccessMessage(lastJsonMessage) ||
+      !isUpdateMessage(lastJsonMessage)
+    ) {
+      return
+    }
     const { trade_info, create_info } = lastJsonMessage.data
 
     setIsLatest(true)

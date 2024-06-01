@@ -5,27 +5,24 @@ import {
   widget,
 } from '../../../../public/js/charting_library/charting_library'
 import { useDatafeed } from './use-datafeed'
-import { useCandlestickStore } from '@/stores/use-candlestick-store'
-import { useCandlestickParse } from './use-candlestick-parse'
-import { useCandlestickConfig } from './use-candlestick-config'
+import { useChartStore } from '@/stores/use-chart-store'
+import { useChartParse } from './use-chart-parse'
+import { useChartConfig } from './use-chart-config'
 
-export interface CandlestickOptions {
+export interface ChartOptions {
   symbol: string
   interval: string
   tokenAddr: string
 }
 
-export const useCandlestick = () => {
+export const useChart = () => {
   const { i18n } = useTranslation()
-  const { chart, setChart } = useCandlestickStore()
+  const { chart, setChart } = useChartStore()
   const { createDatafeed, removeDatafeed } = useDatafeed()
-  const { toTradingViewInterval } = useCandlestickParse()
-  const { chartConfig } = useCandlestickConfig()
+  const { toTVInterval } = useChartParse()
+  const { chartConfig } = useChartConfig()
 
-  const createChart = (
-    container: HTMLDivElement,
-    options: CandlestickOptions
-  ) => {
+  const createChart = (container: HTMLDivElement, options: ChartOptions) => {
     const { symbol, interval } = options || {}
 
     // setChartEl(container) // Error: Maximum update depth exceeded
@@ -34,7 +31,7 @@ export const useCandlestick = () => {
         ...chartConfig,
         container,
         symbol,
-        interval: toTradingViewInterval(interval) as ResolutionString,
+        interval: toTVInterval(interval) as ResolutionString,
         datafeed: createDatafeed(options),
         locale: i18n.language as LanguageCode,
         autosize: true,

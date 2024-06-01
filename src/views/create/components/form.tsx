@@ -447,9 +447,11 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             >
               {t('create')}
             </Button>
-            <p className="text-zinc-400 text-xs">
-              {t('deploy.fee')}: {fee} {symbol}
-            </p>
+            {symbol && (
+              <p className="text-zinc-400 text-xs">
+                {t('deploy.fee')}: {fee} {symbol}
+              </p>
+            )}
           </div>
         </form>
       </Form>

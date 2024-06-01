@@ -2,7 +2,7 @@ import { create } from 'zustand'
 
 import type { IChartingLibraryWidget } from '../../public/js/charting_library/charting_library'
 
-interface CandlestickStore {
+interface ChartStore {
   chart: IChartingLibraryWidget | null
   chartEl: HTMLDivElement | null
 
@@ -10,7 +10,7 @@ interface CandlestickStore {
   setChartEl: (chartEl: HTMLDivElement) => void
 }
 
-export const useCandlestickStore = create<CandlestickStore>((set, get) => ({
+export const useChartStore = create<ChartStore>((set, get) => ({
   chart: null,
   chartEl: null,
 

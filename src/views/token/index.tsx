@@ -7,7 +7,7 @@ import { useResponsive } from '@/hooks/use-responsive'
 import { HoldersRank } from './components/holders-rank'
 import { TokenProvider } from '@/contexts/token'
 import { useTokenInfo } from './hooks/use-token-info'
-import { CandlestickChart } from '@/components/candlestick-chart'
+import { Chart } from '@/components/chart'
 import { TokenInfoHeader } from './components/token-info-header'
 import { BondingCurveProgress } from './components/bonding-curve-progress'
 
@@ -26,7 +26,7 @@ export const TokenPage = () => {
           {/* Left */}
           <div className="flex flex-col flex-1">
             {isMobile && <TradeTab />}
-            <CandlestickChart />
+            <Chart />
             <BondingCurveProgress />
             <CommentTradeTab />
           </div>
