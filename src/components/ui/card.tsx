@@ -10,7 +10,7 @@ import {
 const cardVariants = cva(
   cn(
     'rounded-lg bg-card text-card-foreground transition-all',
-    'duration-300 cursor-pointer border-2 border-black'
+    'duration-300  border-2 border-black'
   ),
   {
     variants: {
@@ -24,12 +24,13 @@ const cardVariants = cva(
       },
       hover: {
         none: 'cursor-default',
-        bg: 'hover:bg-zinc-100',
-        scale: 'hover:scale-105',
+        pointer: 'cursor-pointer',
+        bg: 'hover:bg-zinc-100 cursor-pointer',
+        scale: 'hover:scale-105 cursor-pointer',
       },
     },
     defaultVariants: {
-      hover: 'none',
+      hover: 'pointer',
       padding: 'none',
     },
   }
