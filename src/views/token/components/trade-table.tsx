@@ -4,6 +4,7 @@ import Link from 'next/link'
 import dayjs from 'dayjs'
 import { ArrowLeftRight } from 'lucide-react'
 import { useRouter } from 'next/router'
+import { isEmpty } from 'lodash'
 
 import {
   Table,
@@ -22,7 +23,6 @@ import { TradeType } from '@/api/websocket/types'
 import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'
-import { isEmpty } from 'lodash'
 
 export const TradeTable = () => {
   const { t } = useTranslation()
@@ -84,7 +84,7 @@ export const TradeTable = () => {
                   size={24}
                   fallback={r.account.name.charAt(0)}
                 />
-                <span>{r.account.name.slice(-4)}</span>
+                <span className="max-w-20 truncate">{r.account.name}</span>
               </TableCell>
               <TableCell
                 className={cn(isBuy ? 'text-green-500' : 'text-red-500')}
@@ -97,7 +97,7 @@ export const TradeTable = () => {
               <TableCell className="max-sm:text-xs">
                 {fmt.tradeFixed(r.base_amount)} {r.base_symbol}
               </TableCell>
-              <TableCell className="max-sm:text-xs">
+              <TableCell className="max-sm:text-xs w-40">
                 {showAge
                   ? dayjs.unix(+r.create_time).fromNow()
                   : dayjs.unix(+r.create_time).format('YYYY-MM-DD HH:mm:ss')}
