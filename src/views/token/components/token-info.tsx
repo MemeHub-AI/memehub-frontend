@@ -48,10 +48,10 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             {tokenInfo?.name}({tokenInfo?.ticker})
           </div>
           <div
-            className="text-xs text-gray-400 mt-1 break-all  cursor-pointer"
-            onClick={() =>
+            className="text-xs text-gray-400 mt-1 break-all cursor-pointer"
+            onClick={() => {
               setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)
-            }
+            }}
           >
             {tokenInfo?.desc}
           </div>
@@ -74,7 +74,9 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             <Button
               variant="ghost"
               size="icon"
+              shadow="none"
               onClick={() => open(tokenInfo.twitter_url)}
+              title="twitter"
             >
               <Twitter />
             </Button>
@@ -83,7 +85,9 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             <Button
               variant="ghost"
               size="icon"
+              shadow="none"
               onClick={() => open(tokenInfo?.telegram_url)}
+              title="telegram"
             >
               <FaTelegramPlane size={24} />
             </Button>
@@ -92,7 +96,9 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             <Button
               variant="ghost"
               size="icon"
+              shadow="none"
               onClick={() => open(tokenInfo?.website)}
+              title="website"
             >
               <RiGlobalLine size={24} />
             </Button>
