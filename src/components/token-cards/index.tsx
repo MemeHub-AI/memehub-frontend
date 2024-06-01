@@ -158,13 +158,6 @@ export const TokenCards = (props: Props) => {
               <div className="py-2 pr-2 w-full flex flex-col justify-between">
                 <div className="h-full">
                   <CardTitle className="pt-0 text-lg">Trump</CardTitle>
-                  {/* <Link
-            href={`${Routes.Account}/${card?.creator.wallet_address}`}
-            className="text-zinc-500 text-xs mt-0.5 hover:underline"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {t('creator')}: {card?.creator.name}
-          </Link> */}
                   <p className="text-zinc-500 text-sm break-all line-clamp-3">
                     Laugh out loud with TrumpLOL! A hilarious and entertaining
                     collection of Trump's most outrageous moments. Get ready to
@@ -199,16 +192,18 @@ const CardSkeleton = () => {
   return (
     <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1 max-sm:gap-2 ">
       {Array.from({ length: 4 }).map((_, i) => (
-        <div className="border rounded flex gap-2 relative" key={i}>
-          <Skeleton className="w-32 h-32 flex-shrink-0" />
-          <div className="w-full my-2 flex flex-col gap-2 mr-2">
-            <Skeleton className="w-1/2 h-4" />
-            <Skeleton className="w-1/3 h-3" />
-            <Skeleton className="w-[70%] h-3" />
-            <Skeleton className="w-1/2 h-3" />
-            <Skeleton className="w-full h-5 rounded-full mt-2" />
+        <div className="border-2 rounded flex gap-2 relative" key={i}>
+          <Skeleton className="w-40 h-40 flex-shrink-0 rounded-none" />
+          <div className="w-full my-2 flex flex-col justify-between gap-2 mr-2">
+            <div className="flex flex-col gap-2">
+              <Skeleton className="w-1/2 h-6 mt-1" />
+              <Skeleton className="w-full h-4" />
+              <Skeleton className="w-full h-4" />
+              <Skeleton className="w-1/2 h-4" />
+            </div>
+            <Skeleton className="w-full h-5 rounded-full" />
           </div>
-          <Skeleton className="w-8 h-8 absolute right-2 top-2" />
+          <Skeleton className="w-6 h-6 rounded-full absolute right-2 top-2" />
         </div>
       ))}
     </div>

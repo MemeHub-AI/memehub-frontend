@@ -96,7 +96,7 @@ export const useDatafeed = () => {
             `last time: ${lastTime}`
           )
 
-          if (latestTime <= lastTime) return
+          if (latestTime < lastTime) return
           bars.forEach(onTick)
         })
       },

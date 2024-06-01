@@ -44,8 +44,8 @@ export const useDeploy = () => {
     //   return
     // }
 
-    const id = chainId as keyof typeof ca.nativeToken
-    const nativeTokenAddr = ca.nativeToken[id]
+    const id = chainId as keyof typeof ca.reserveToken
+    const nativeTokenAddr = ca.reserveToken[id]
     const routerAddr = ca.routerAddress[id]
     if (!nativeTokenAddr || !routerAddr) {
       toast.error(t('chain.empty'))

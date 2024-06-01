@@ -14,7 +14,8 @@ export const useUniswapV2 = () => {
   const { address, chainId } = useAccount()
   const { isApproving, checkForApproval } = useApprove()
 
-  const nativeTokenAddr = ca.nativeToken[chainId as keyof typeof ca.nativeToken]
+  const nativeTokenAddr =
+    ca.reserveToken[chainId as keyof typeof ca.reserveToken]
 
   const {
     data: hash,
@@ -23,11 +24,7 @@ export const useUniswapV2 = () => {
     reset: resetUniswapTrade,
   } = useWriteContract({
     mutation: {
-      onMutate: () => {
-        return toast.loading(t('trade.loading'), {
-          action: { label: t('cancel'), onClick: () => resetUniswapTrade() },
-        })
-      },
+      onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
       onError: customToast.errorContract,
       onSuccess: () => toast.success(t('submit.success')),

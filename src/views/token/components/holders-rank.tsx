@@ -25,14 +25,18 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
         >
           {holders?.map((r, i) => (
             <li key={i} className="flex items-center justify-between">
-              <div className="hover:text-blue-600 transition-all cursor-pointer">
+              <p>
                 {i + 1}.{' '}
-                <Link href={r.scan_url} target="_blank">
+                <Link
+                  href={r.scan_url}
+                  target="_blank"
+                  className="hover:text-black hover:underline transition-all cursor-pointer"
+                >
                   {fmt.addr(r.address)}
                 </Link>
                 {/* {r.isBondingCurve && ` 💰 (${t('bonding-curve')})`} */}
                 {/* {r.isDev && ` 🧑‍💻 (${t('dev')})`} */}
-              </div>
+              </p>
               <span>{fmt.percent(r.percentage)}</span>
             </li>
           ))}

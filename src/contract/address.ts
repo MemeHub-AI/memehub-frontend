@@ -16,7 +16,7 @@ export const idoAddress = '0x1778EDfF5DBD9a64Fa54D237F828F317DB884056'
 export const zeroAddress = '0x0000000000000000000000000000000000000000'
 
 // used for deploy & trade
-const nativeToken = {
+const reserveToken = {
   [bscTestnet.id]: '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
   [opBNBTestnet.id]: '0x4200000000000000000000000000000000000006',
 
@@ -42,7 +42,7 @@ const prod = {
     [scroll.id]: '0x35Ce38AC48Dd3c7Bf6bd14dE8e81128d76E11885',
   },
   uniswapV2: '0x9B3336186a38E1b6c21955d112dbb0343Ee061eE',
-  nativeToken,
+  reserveToken,
   routerAddress,
 } as const
 
@@ -61,7 +61,7 @@ const dev = {
     [scroll.id]: '0x34EeA145539327499A00B499F05b6e8eD3FdCbdc',
   },
   uniswapV2: '0x9B3336186a38E1b6c21955d112dbb0343Ee061eE',
-  nativeToken,
+  reserveToken,
   routerAddress,
 } as const
 
