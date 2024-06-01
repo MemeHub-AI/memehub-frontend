@@ -39,7 +39,7 @@ export const chartConfig: TVChartOptions = {
     'main_series_scale_menu', // bottom right setting button.
     'items_favoriting',
     'show_object_tree',
-    'create_volume_indicator_by_default',
+    // 'create_volume_indicator_by_default',
   ],
   enabled_features: [
     'pre_post_market_sessions',
