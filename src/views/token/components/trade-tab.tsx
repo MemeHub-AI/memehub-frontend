@@ -42,7 +42,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
 
   const onBuy = async () => {
-    // Overflow current eth balance.
+    // Overflow current wallet balance.
     if (BigNumber(value).gt(ethBalance)) {
       toast.error(t('balance.illegality'))
       setValue(ethBalance)

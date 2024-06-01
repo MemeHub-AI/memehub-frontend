@@ -24,13 +24,13 @@ export const useTradeInfo = () => {
   const ethBalance = formatEther(ethBalances?.value || BigInt(0))
   const tokenBalance = formatEther(tokenBalances || BigInt(0))
 
-  // Get buy token amount from eth.
-  const getBuyTokenAmount = async (address: Address, eth: string) => {
+  // Get buy token amount from native token.
+  const getBuyTokenAmount = async (address: Address, nativeToken: string) => {
     const data = await readContract(wagmiConfig, {
       abi: continousTokenAbi,
       address,
       functionName: 'calculateContinuousMintReturn',
-      args: [parseEther(eth)],
+      args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getBuyTokenAmount Error]:', e)
       return BigInt(0)
@@ -39,13 +39,13 @@ export const useTradeInfo = () => {
     return data
   }
 
-  // Get sell token amount from eth
-  const getSellTokenAmount = async (address: Address, eth: string) => {
+  // Get sell token amount from native token.
+  const getSellTokenAmount = async (address: Address, nativeToken: string) => {
     const data = await readContract(wagmiConfig, {
       abi: continousTokenAbi,
       address,
       functionName: 'calculateContinuousBurnReturn',
-      args: [parseEther(eth)],
+      args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getSellTokenAmount Error]:', e)
       return BigInt(0)
@@ -54,13 +54,16 @@ export const useTradeInfo = () => {
     return data
   }
 
-  // Get buy token required eth amount.
-  const getBuyTokenEthAmount = async (address: Address, eth: string) => {
+  // Get buy token required native token amount.
+  const getBuyTokenEthAmount = async (
+    address: Address,
+    nativeToken: string
+  ) => {
     const data = await readContract(wagmiConfig, {
       abi: continousTokenAbi,
       address,
       functionName: 'fundCostByContinuous',
-      args: [parseEther(eth)],
+      args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getBuyTokenEthAmount Error]:', e)
       return BigInt(0)
