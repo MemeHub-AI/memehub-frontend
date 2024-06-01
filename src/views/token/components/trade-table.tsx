@@ -41,9 +41,9 @@ export const TradeTable = () => {
   const { tradeRecords } = useTradeRecord()
 
   return (
-    <Table>
+    <Table containerClass="border-2 border-black rounded-md">
       <TableHeader>
-        <TableRow>
+        <TableRow className="!border-b-2 border-b-black">
           {ths.map((t, i) => (
             <TableHead key={i} className={cn(i === 0 && 'w-[100px]')}>
               {/* Date field */}
@@ -69,7 +69,10 @@ export const TradeTable = () => {
         {tradeRecords.map((r, i) => {
           const isBuy = r.type === TradeType.Buy
           return (
-            <TableRow key={i}>
+            <TableRow
+              key={i}
+              className="border-b-black !border-b-2 last:!border-b-0"
+            >
               <TableCell
                 className="font-bold inline-flex items-center gap-1 cursor-pointer hover:underline my-2"
                 onClick={() => {
@@ -122,13 +125,13 @@ export const TradeTable = () => {
           </tr>
         )}
       </TableBody>
-      <TableFooter className="bg-transparent">
+      {/* <TableFooter className="bg-transparent">
         <TableRow className="hover:bg-transparent">
-          <TableCell colSpan={ths.length}>
-            {/* <Pagination total={tradeRecords.length} onPageChange={setPage} /> */}
+          <TableCell colSpan={ths.length} className="p-0">
+            <Pagination total={tradeRecords.length} onPageChange={setPage} />
           </TableCell>
         </TableRow>
-      </TableFooter>
+      </TableFooter> */}
     </Table>
   )
 }
