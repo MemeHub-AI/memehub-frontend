@@ -72,7 +72,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
               loading="lazy"
               width={20}
               height={20}
-              className="object-contain"
+              className="object-contain rounded"
               src={isBuy ? tokenInfo?.chain.logo : tokenInfo?.image}
             />
           </div>
