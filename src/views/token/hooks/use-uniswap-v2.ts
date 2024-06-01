@@ -14,7 +14,8 @@ export const useUniswapV2 = () => {
   const { address, chainId } = useAccount()
   const { isApproving, checkForApproval } = useApprove()
 
-  const nativeTokenAddr = ca.nativeToken[chainId as keyof typeof ca.nativeToken]
+  const nativeTokenAddr =
+    ca.reserveToken[chainId as keyof typeof ca.reserveToken]
 
   const {
     data: hash,
