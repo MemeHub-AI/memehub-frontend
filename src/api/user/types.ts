@@ -99,6 +99,7 @@ interface Chain {
     symbol: string
   }
   explorer: string
+  explorer_tx: string
 }
 
 export interface UserCoinsCreated {
