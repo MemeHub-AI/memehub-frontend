@@ -20,7 +20,7 @@ export const useChart = () => {
   const { chart, setChart } = useChartStore()
   const { createDatafeed, removeDatafeed } = useDatafeed()
   const { toTVInterval } = useChartParse()
-  const { chartConfig } = useChartConfig()
+  const { chartConfig, chartOverrides } = useChartConfig()
 
   const createChart = (container: HTMLDivElement, options: ChartOptions) => {
     const { symbol, interval } = options || {}
@@ -38,7 +38,10 @@ export const useChart = () => {
         timezone: i18n.language === 'zh' ? 'Asia/Shanghai' : 'Etc/UTC',
       })
 
-      chart.onChartReady(() => setChart(chart))
+      chart.onChartReady(() => {
+        setChart(chart)
+        chart.applyOverrides(chartOverrides)
+      })
     } catch (error) {
       console.error('[createChart Erorr]:', error)
     }

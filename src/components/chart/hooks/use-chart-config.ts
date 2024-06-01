@@ -1,4 +1,5 @@
 import {
+  ChartPropertiesOverrides,
   ChartingLibraryWidgetOptions,
   ResolutionString,
   TradingTerminalWidgetOptions,
@@ -9,7 +10,7 @@ type TVChartOptions = Omit<
   'container' | 'datafeed' | 'interval' | 'localets' | 'locale'
 >
 
-export const chartConfig: TVChartOptions = {
+const chartConfig: TVChartOptions = {
   library_path: 'js/charting_library/',
   disabled_features: [
     // Header
@@ -111,8 +112,14 @@ export const chartConfig: TVChartOptions = {
   },
 }
 
+const chartOverrides: Partial<ChartPropertiesOverrides> = {
+  'paneProperties.vertGridProperties.color': 'rgba(255,255,255,0)',
+  'paneProperties.horzGridProperties.color': 'rgba(255,255,255,0)',
+}
+
 export const useChartConfig = () => {
   return {
     chartConfig,
+    chartOverrides,
   }
 }

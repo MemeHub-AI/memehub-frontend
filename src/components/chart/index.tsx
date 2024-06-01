@@ -35,7 +35,7 @@ export const Chart = memo(() => {
   return (
     <div
       ref={chartRef}
-      className="min-h-[560px] border rounded overflow-hidden"
+      className="min-h-[560px] border-2 border-black rounded overflow-hidden"
     ></div>
   )
 })
