@@ -10,7 +10,6 @@ import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
 import { tokenApi } from '@/api/token'
 import { TokenCard } from './token-cards/card'
 
-// TODO: add shadow
 export const SearchInput = () => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
@@ -38,6 +37,7 @@ export const SearchInput = () => {
       <Popover open={!isEmpty(tokens) || isPending} onOpenChange={reset}>
         <PopoverAnchor>
           <Input
+            className="shadow-offset"
             value={value}
             onChange={({ target }) => setValue(target.value)}
             placeholder={t('search.placeholder')}
