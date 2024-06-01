@@ -259,5 +259,7 @@
   "copy-success": "复制成功！",
   "copy-failed": "复制失败",
   "login-before": "请先登录",
-  "threshold": "阈值"
+  "threshold": "阈值",
+  "no.trade": "还没有交易",
+  "no.holders": "还没有持有者"
 }

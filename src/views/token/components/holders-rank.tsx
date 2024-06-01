@@ -21,6 +21,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
           className="flex flex-col gap-1"
           isPending={!holders}
           fallback={<HolderRankSkeleton />}
+          nullback={<p>{t('no.holders')}</p>}
         >
           {holders?.map((r, i) => (
             <li key={i} className="flex items-center justify-between">

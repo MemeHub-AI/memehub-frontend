@@ -264,5 +264,7 @@
   "copy-failed": "Copy failed",
   "login-before": "Please login before",
   "searching": "Searching...",
-  "threshold": "threshold"
+  "threshold": "threshold",
+  "no.trade": "No trade yet",
+  "no.holders": "No holders yet"
 }
