@@ -4,7 +4,7 @@ import { Address, formatEther, parseEther } from 'viem'
 import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
 
-import { wagmiConfig } from '@/config/wagmi'
+import { SupportedChainId, wagmiConfig } from '@/config/wagmi'
 import { continousTokenAbi } from '@/contract/abi/continous-token'
 
 export const useTradeInfo = () => {
@@ -87,14 +87,27 @@ export const useTradeInfo = () => {
   }
 
   // Get token amounts, used for calc percent.
-  const getTokenAmounts = async (address: Address) => {
+  const getTokenAmounts = async (
+    address: Address,
+    chainId?: SupportedChainId
+  ) => {
     const zero = BigInt(0)
 
     try {
       const [t, c] = await readContracts(wagmiConfig, {
         contracts: [
-          { abi: continousTokenAbi, address, functionName: 'ETH_AMOUNT' },
-          { abi: continousTokenAbi, address, functionName: 'raiseEthAmount' },
+          {
+            abi: continousTokenAbi,
+            address,
+            chainId,
+            functionName: 'ETH_AMOUNT',
+          },
+          {
+            abi: continousTokenAbi,
+            address,
+            chainId,
+            functionName: 'raiseEthAmount',
+          },
         ],
       })
       return [t.result || zero, c.result || zero]
