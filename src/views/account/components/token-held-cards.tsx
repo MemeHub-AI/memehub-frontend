@@ -11,6 +11,7 @@ import { CustomSuspense } from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Routes } from '@/routes'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
+import { fmt } from '@/utils/fmt'
 
 interface Props {
   cards: UserCoinsHeld[]
@@ -55,9 +56,10 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
     <Card
       padding="md"
       hover="bg"
-      onClick={() =>
-        router.push(`${Routes.Main}/${c.chain.name}/${c.coin.address}`)
-      }
+      onClick={() => {
+        const href = fmt.toHref(Routes.Main, c.chain.name, c.coin.address)
+        router.push(href)
+      }}
     >
       <div className="flex items-center gap-2">
         <Avatar src={c.coin.image} fallback={c.coin.ticker.charAt(0)} />

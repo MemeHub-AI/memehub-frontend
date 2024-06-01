@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { TradeType } from '@/api/websocket/types'
 import { useAccount } from 'wagmi'
+import { fmt } from '@/utils/fmt'
 
 export const TradeLogs = () => {
   const { t } = useTranslation()
@@ -85,7 +86,7 @@ const Tag = (props: Props) => {
       <span>{text}</span>
       <Link
         // TODO: should be dynamic chain
-        href={`${Routes.Main}/${chain?.name}/${tokenAddr}`}
+        href={fmt.toHref(Routes.Main, chain?.name || '', tokenAddr)}
         className="hover:underline hover:text-blue-600"
       >
         {tokenLabel}
