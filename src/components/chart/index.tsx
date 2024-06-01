@@ -2,14 +2,14 @@ import React, { useEffect, useRef, memo } from 'react'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 
-import { useCandlestick } from './hooks/use-candlestick'
+import { useChart } from './hooks/use-chart'
 import { useTokenContext } from '@/contexts/token'
 
-export const CandlestickChart = memo(() => {
+export const Chart = memo(() => {
   const chartRef = useRef<HTMLDivElement>(null)
   const { query } = useRouter()
   const { tokenInfo } = useTokenContext()
-  const { createChart, removeChart } = useCandlestick()
+  const { createChart, removeChart } = useChart()
 
   useEffect(() => {
     const tokenAddr = (query.address || '') as string
@@ -34,4 +34,4 @@ export const CandlestickChart = memo(() => {
   )
 })
 
-export default CandlestickChart
+export default Chart

@@ -4,12 +4,12 @@ import type {
   IBasicDataFeed,
   LibrarySymbolInfo,
 } from '../../../../public/js/charting_library/charting_library'
-import type { CandlestickOptions } from './use-candlestick'
+import type { ChartOptions } from './use-chart'
 
 import { useDatafeedConfig } from './use-datafeed-config'
 import { useDatafeedCache } from './use-datafeed-cache'
-import { useDatafeedWebsocket } from './use-candlestick-websocket'
-import { useCandlestickParse } from './use-candlestick-parse'
+import { useDatafeedWebsocket } from './use-datafeed-websocket'
+import { useChartParse } from './use-chart-parse'
 
 export const useDatafeed = () => {
   const { readyConfig, symbolInfoConfig } = useDatafeedConfig()
@@ -17,9 +17,9 @@ export const useDatafeed = () => {
   const { listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket()
   const { parseTradingViewInterval, toBars, priceToPricescale } =
-    useCandlestickParse()
+    useChartParse()
 
-  const createDatafeed = (options: CandlestickOptions) => {
+  const createDatafeed = (options: ChartOptions) => {
     const { symbol, interval, tokenAddr } = options
 
     return {

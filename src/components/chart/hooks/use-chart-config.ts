@@ -111,7 +111,7 @@ export const chartConfig: TVChartOptions = {
   },
 }
 
-export const useCandlestickConfig = () => {
+export const useChartConfig = () => {
   return {
     chartConfig,
   }

@@ -10,7 +10,7 @@ type BarItem = {
   [k: string]: any
 }
 
-export const useCandlestickParse = () => {
+export const useChartParse = () => {
   const toTradingViewInterval = (interval?: string) => {
     if (!interval || !interval.trim()) return '1'
     // TradingView's `minutes` do not have `m`
