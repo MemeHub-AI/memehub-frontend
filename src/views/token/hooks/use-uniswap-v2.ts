@@ -23,11 +23,7 @@ export const useUniswapV2 = () => {
     reset: resetUniswapTrade,
   } = useWriteContract({
     mutation: {
-      onMutate: () => {
-        return toast.loading(t('trade.loading'), {
-          action: { label: t('cancel'), onClick: () => resetUniswapTrade() },
-        })
-      },
+      onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
       onError: customToast.errorContract,
       onSuccess: () => toast.success(t('submit.success')),
