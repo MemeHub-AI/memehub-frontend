@@ -24,16 +24,14 @@ export const useTradeLogs = () => {
   const { lastJsonMessage, sendJsonMessage } =
     useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(wsApiURL.tradeLogs, {
       heartbeat,
-      onOpen: () => {
-        sendJsonMessage({ type: 'message', data: null })
-      },
+      onOpen: () => sendJsonMessage({ type: 'message', data: null }),
     })
 
   useEffect(() => {
-    // No message/not a success message/not an update message, return it.
+    if (!lastJsonMessage) return
+    // Not a success or update message, return it.
     if (
-      !lastJsonMessage ||
-      !isSuccessMessage(lastJsonMessage) ||
+      !isSuccessMessage(lastJsonMessage) &&
       !isUpdateMessage(lastJsonMessage)
     ) {
       return
@@ -47,7 +45,7 @@ export const useTradeLogs = () => {
 
   useEffect(() => {
     if (isLatest) {
-      setTimeout(() => setIsLatest(false), 2_000)
+      setTimeout(() => setIsLatest(false), 5_000)
     }
   }, [isLatest])
 

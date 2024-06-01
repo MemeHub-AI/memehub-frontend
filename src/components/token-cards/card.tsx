@@ -11,6 +11,7 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
 import { fmt } from '@/utils/fmt'
+import { SupportedChainId } from '@/config/wagmi'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -33,15 +34,16 @@ export const TokenCard = (props: Props) => {
 
   // Init percent progress.
   useEffect(() => {
-    getTokenAmounts(card?.address as Address).then(
-      ([totalAmount, currentAmount]) => {
-        const total = formatEther(totalAmount)
-        const current = formatEther(currentAmount)
+    getTokenAmounts(
+      card?.address as Address,
+      Number(card.chain.id) as SupportedChainId
+    ).then(([totalAmount, currentAmount]) => {
+      const total = formatEther(totalAmount)
+      const current = formatEther(currentAmount)
 
-        if (total === '0' || current === '0') return
-        setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(2))
-      }
-    )
+      if (total === '0' || current === '0') return
+      setPercent(BigNumber(current).div(total).multipliedBy(100).toFixed(2))
+    })
   }, [])
 
   return (

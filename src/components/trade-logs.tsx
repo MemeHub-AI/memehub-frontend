@@ -1,98 +1,129 @@
 import React, { ComponentProps, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import Link from 'next/link'
-import dayjs from 'dayjs'
+import { lowerCase } from 'lodash'
+import { useRouter } from 'next/router'
 
 import { useTradeLogs } from '@/hooks/use-trade-logs'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { TradeType } from '@/api/websocket/types'
-import { useAccount } from 'wagmi'
 import { fmt } from '@/utils/fmt'
+import { Avatar } from './ui/avatar'
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from '@/components/ui/hover-card'
+import { Button } from './ui/button'
+import { CirclePing } from './circle-ping'
 
 export const TradeLogs = () => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { isLatest, lastTrade, lastCreate } = useTradeLogs()
 
   return (
     <div className="flex items-center gap-2">
       {lastTrade && (
-        <Tag
-          flash={isLatest}
-          userLabel={lastTrade.name}
-          userAddr={lastTrade.wallet_address}
-          text={(lastTrade.type === TradeType.Buy
-            ? t('bought')
-            : t('sold')
-          ).toLowerCase()}
-          tokenLabel={lastTrade.quote_symbol}
-          tokenAddr={lastTrade.quote_address}
-        />
+        <LogCard isPing={isLatest} trigger={t('log.trade')}>
+          <div
+            className="flex items-center gap-1 cursor-pointer"
+            onClick={() => {
+              const href = fmt.toHref(Routes.Account, lastTrade.wallet_address)
+              router.push(href)
+            }}
+          >
+            <Avatar src={lastTrade.logo} size={24} />
+            <span className="font-bold hover:underline">{lastTrade.name}</span>
+          </div>
+          <div className="mx-1">
+            {lowerCase(
+              lastTrade.type === TradeType.Buy ? t('bought') : t('sold')
+            )}
+          </div>
+          <div
+            className="flex items-center gap-1 cursor-pointer"
+            onClick={() => {
+              const href = fmt.toHref(
+                Routes.Main,
+                lastTrade.chain_name,
+                lastTrade.base_address
+              )
+              router.push(href)
+            }}
+          >
+            <Avatar src={lastTrade.coin_logo} size={24} />
+            <span className="font-bold hover:underline">
+              {lastTrade.base_symbol}
+            </span>
+          </div>
+        </LogCard>
       )}
       {lastCreate && (
-        <Tag
-          flash={isLatest}
-          userLabel={lastCreate.creator.name}
-          userAddr={lastCreate.creator.wallet_address}
-          text={t('created').toLowerCase()}
-          tokenLabel={lastCreate.ticker}
-          tokenAddr={lastCreate.address}
-          suffix={`${t('at').toLowerCase()}${dayjs(
-            lastCreate.create_time
-          ).fromNow()}`}
-        />
+        <LogCard isPing={isLatest} trigger={t('log.create')}>
+          <div
+            className="flex items-center gap-1 cursor-pointer"
+            onClick={() => {
+              const href = fmt.toHref(
+                Routes.Account,
+                lastCreate.creator.wallet_address
+              )
+              router.push(href)
+            }}
+          >
+            <Avatar src={lastCreate.creator.logo} size={24} />
+            <span className="font-bold hover:underline">
+              {lastCreate.creator.name}
+            </span>
+          </div>
+          <div className="mx-1">{t('log.created')}</div>
+          <div
+            className="flex items-center gap-1 cursor-pointer"
+            onClick={() => {
+              const href = fmt.toHref(
+                Routes.Main,
+                lastCreate.chain.name,
+                lastCreate.address
+              )
+              router.push(href)
+            }}
+          >
+            <Avatar src={lastCreate.image} size={24} />
+            <span className="font-bold hover:underline">
+              {lastCreate.ticker}
+            </span>
+          </div>
+        </LogCard>
       )}
     </div>
   )
 }
 
-interface Props extends ComponentProps<'div'> {
-  userLabel: string
-  userAddr: string
-  text: ReactNode
-  tokenLabel: string
-  tokenAddr: string
-  flash: boolean
-  suffix?: ReactNode
+interface TagProps extends ComponentProps<typeof HoverCardContent> {
+  isPing: boolean
+  trigger: ReactNode
 }
 
-const Tag = (props: Props) => {
-  const {
-    className,
-    userLabel,
-    userAddr,
-    text,
-    tokenLabel,
-    tokenAddr,
-    flash,
-    suffix,
-  } = props
-  const { chain } = useAccount()
+const LogCard = (props: TagProps) => {
+  const { isPing, trigger, className, children } = props
 
   return (
-    <div
-      className={cn(
-        'px-3 py-1.5 border rounded flex items-center gap-1',
-        flash && 'animate-flash',
-        className
-      )}
-    >
-      <Link
-        href={`${Routes.Account}/${userAddr}`}
-        className="hover:underline hover:text-blue-600"
+    <HoverCard openDelay={0} closeDelay={100} open>
+      <HoverCardTrigger asChild>
+        <Button variant="outline" shadow="none" className="relative">
+          {trigger}
+          {isPing && <CirclePing />}
+        </Button>
+      </HoverCardTrigger>
+      <HoverCardContent
+        className={cn(
+          'px-3 py-3 border-2 border-black rounded-md flex items-center gap-1 w-[unset]',
+          className
+        )}
       >
-        {userLabel}
-      </Link>
-      <span>{text}</span>
-      <Link
-        // TODO: should be dynamic chain
-        href={fmt.toHref(Routes.Main, chain?.name || '', tokenAddr)}
-        className="hover:underline hover:text-blue-600"
-      >
-        {tokenLabel}
-      </Link>
-      {suffix}
-    </div>
+        {children}
+      </HoverCardContent>
+    </HoverCard>
   )
 }
 

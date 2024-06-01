@@ -266,5 +266,8 @@
   "searching": "Searching...",
   "threshold": "threshold",
   "no.trade": "No trade yet",
-  "no.holders": "No holders yet"
+  "no.holders": "No holders yet",
+  "log.trade": "Latest trade",
+  "log.create": "Latest create",
+  "log.created": "created"
 }

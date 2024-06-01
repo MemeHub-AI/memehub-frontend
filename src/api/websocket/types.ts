@@ -31,10 +31,15 @@ export interface TradeInfoLog {
   wallet_address: string
   quote_amount: string
   quote_address: string
-  quote_symbol: string
+  quote_symbol?: string
+  quoto_symbol: string
   base_symbol: string
   base_address: string
+  coin_logo: string
+  chain_id: string
+  chain_name: string
   chain_logo: string
+  explorer: string
   type: TradeType
 }
 
