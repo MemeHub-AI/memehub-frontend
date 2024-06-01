@@ -1,4 +1,4 @@
-import React, { useRef, type ComponentProps } from 'react'
+import React, { useEffect, useRef, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
@@ -24,6 +24,7 @@ interface Props extends RequirePick<ComponentProps<'div'>, 'children'> {}
 export const ProfileForm = ({ children }: Props) => {
   const { t } = useTranslation()
   const closeRef = useRef<HTMLButtonElement>(null)
+  const { userInfo, refetchUserInfo } = useAccountContext()
   const { fields, fieldsKeys, updateField, validateFields } = useFields({
     name: createField({
       isRequired: true,
@@ -32,7 +33,6 @@ export const ProfileForm = ({ children }: Props) => {
     bio: createField({}),
   })
   const { update } = useUser()
-  const { refetchUserInfo } = useAccountContext()
 
   const onChange = ({
     target,
@@ -56,6 +56,13 @@ export const ProfileForm = ({ children }: Props) => {
     updateField('bio', { value: '' })
     closeRef.current?.click()
   }
+
+  useEffect(() => {
+    if (!userInfo) return
+
+    updateField('name', { value: userInfo.name })
+    updateField('bio', { value: userInfo.description })
+  }, [userInfo])
 
   return (
     <Dialog>
