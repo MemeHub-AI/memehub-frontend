@@ -32,7 +32,7 @@ export const CommentTradeTab = (props: ComponentProps<'div'>) => {
       className={cn(className)}
       onValueChange={(value) => setCommentTradeTab(value)}
     >
-      <TabsList>
+      <TabsList className="rounded-md">
         <TabsTrigger value={Tab.Comments}>{t('comments')}</TabsTrigger>
         <TabsTrigger value={Tab.Trades}>{t('trades')}</TabsTrigger>
       </TabsList>
