@@ -132,16 +132,16 @@ export const Profile = (props: ComponentProps<'div'>) => {
           </ProfileForm>
         )}
       </CardHeader>
-      {/* <CardContent className="py-0 px-4"></CardContent> */}
+
       <CardFooter className="p-4 pt-0 flex justify-between">
         <div className="flex items-center gap-1 text-zinc-500 text-sm">
-          {t('account.total-likes')}:
+          <span className="cursor-default">{t('account.total-likes')}:</span>
           <span className="inline-flex items-center gap-1 text-red-500">
             {userInfo?.like_count || 0} <HeartFilledIcon />
           </span>
         </div>
-        <div className="flex items-center gap-1 text-sm text-zinc-500 cursor-pointer">
-          {t('account.total-mentions')}:
+        <div className="flex items-center gap-1 text-sm text-zinc-500">
+          <span>{t('account.total-mentions')}:</span>
           <span className="inline-flex items-center gap-1 text-black">
             {userInfo?.mention_count || 0} <EnvelopeClosedIcon />
           </span>
