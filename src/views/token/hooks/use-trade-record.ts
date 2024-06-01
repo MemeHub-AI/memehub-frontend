@@ -3,7 +3,12 @@ import useWebSocket from 'react-use-websocket'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 
-import { heartbeat, isSuccessMessage, wsApiURL } from '@/api/websocket'
+import {
+  heartbeat,
+  isSuccessMessage,
+  isUpdateMessage,
+  wsApiURL,
+} from '@/api/websocket'
 import { WSMessageBase, WSTradeRecordMessage } from '@/api/websocket/types'
 
 export const useTradeRecord = () => {
@@ -23,7 +28,7 @@ export const useTradeRecord = () => {
         data: { token_address },
       })
     },
-    filter: (message) => isSuccessMessage(message.data),
+    filter: ({ data }) => isSuccessMessage(data) || isUpdateMessage(data),
   })
 
   useEffect(() => {

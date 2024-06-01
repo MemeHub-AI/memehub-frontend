@@ -33,3 +33,17 @@ export const isSuccessMessage = <T = null>(
     message.data !== null
   )
 }
+
+export const isUpdateMessage = <T = null>(
+  value?: string | WSMessageBase<T>
+) => {
+  if (!value || isEmpty(value)) return false
+
+  const message =
+    typeof value === 'string' ? (JSON.parse(value) as WSMessageBase<T>) : value
+  return (
+    message.type === 'update' &&
+    message.message === 'success' &&
+    message.data !== null
+  )
+}
