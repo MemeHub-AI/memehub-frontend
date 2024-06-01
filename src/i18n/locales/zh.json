@@ -261,5 +261,8 @@
   "login-before": "请先登录",
   "threshold": "阈值",
   "no.trade": "还没有交易",
-  "no.holders": "还没有持有者"
+  "no.holders": "还没有持有者",
+  "log.trade": "最新交易",
+  "log.create": "最新代币",
+  "log.created": "创建了"
 }

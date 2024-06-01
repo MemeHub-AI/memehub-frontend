@@ -6,7 +6,6 @@ const reserveRatio = BigInt(800000)
 
 export const useDeployConfig = () => {
   const { chain } = useAccount()
-  // TODO: maybe we need backend symbol?
   const deploySymbol = chain?.nativeCurrency.symbol
 
   return {

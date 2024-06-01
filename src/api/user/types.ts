@@ -1,4 +1,3 @@
-import type { TokenCommentListRes, TokenListItem } from '../token/types'
 import type { PaginationParams } from '../types'
 
 export interface UserLoginReq {

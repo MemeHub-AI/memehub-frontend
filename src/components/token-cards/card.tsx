@@ -32,6 +32,7 @@ export const TokenCard = (props: Props) => {
   const [percent, setPercent] = useState('0')
 
   // Init percent progress.
+  // TODO: fix progress missing
   useEffect(() => {
     getTokenAmounts(card?.address as Address).then(
       ([totalAmount, currentAmount]) => {
