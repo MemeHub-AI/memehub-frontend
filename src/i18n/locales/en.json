@@ -263,5 +263,6 @@
   "copy-success": "Copy successful!",
   "copy-failed": "Copy failed",
   "login-before": "Please login before",
-  "searching": "Searching..."
+  "searching": "Searching...",
+  "threshold": "threshold"
 }
