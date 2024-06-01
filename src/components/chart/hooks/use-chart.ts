@@ -19,7 +19,7 @@ export const useChart = () => {
   const { i18n } = useTranslation()
   const { chart, setChart } = useChartStore()
   const { createDatafeed, removeDatafeed } = useDatafeed()
-  const { toTradingViewInterval } = useChartParse()
+  const { toTVInterval } = useChartParse()
   const { chartConfig } = useChartConfig()
 
   const createChart = (container: HTMLDivElement, options: ChartOptions) => {
@@ -31,7 +31,7 @@ export const useChart = () => {
         ...chartConfig,
         container,
         symbol,
-        interval: toTradingViewInterval(interval) as ResolutionString,
+        interval: toTVInterval(interval) as ResolutionString,
         datafeed: createDatafeed(options),
         locale: i18n.language as LanguageCode,
         autosize: true,
