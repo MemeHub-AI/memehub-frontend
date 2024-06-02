@@ -35,6 +35,7 @@ export const useTrade = () => {
     resetUniswapTrade,
   } = useUniswapV2()
   const hash = isInternalTrade ? internalHash : uniswapHash
+  const isSubmitting = isInternalTrading || isUniswapTrading
 
   // Waiting results for contract interaction.
   const { isLoading } = useWaitForTx({
@@ -48,6 +49,7 @@ export const useTrade = () => {
       toast.dismiss()
     },
   })
+  const isTrading = isInternalTrading || isUniswapTrading || isLoading
 
   // Check trade type. internal trade or dex trade.
   const checkForTrade = async (amount: string) => {
@@ -95,7 +97,8 @@ export const useTrade = () => {
 
   return {
     tradeHash: hash,
-    isTrading: isInternalTrading || isUniswapTrading || isLoading,
+    isSubmitting,
+    isTrading,
     checkForTrade,
     buy,
     sell,
