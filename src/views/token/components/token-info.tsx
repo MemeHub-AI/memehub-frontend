@@ -1,6 +1,6 @@
 import React, { useState, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Copy, Twitter } from 'lucide-react'
+import { Copy, Twitter, Check } from 'lucide-react'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { RiGlobalLine } from 'react-icons/ri'
 
@@ -14,7 +14,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [details, setDetails] = useState<ReactNode>(null)
   const { tokenInfo } = useTokenContext()
-  const { copy } = useClipboard()
+  const { isCopied, copy } = useClipboard()
   const hasLink =
     tokenInfo?.twitter_url || tokenInfo?.telegram_url || tokenInfo?.website
 
@@ -64,7 +64,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         <span>{t('ca')}:</span>
         <div className="w-full flex items-center">
           <span className="truncate">{tokenInfo?.address || ''}</span>
-          <Copy size={16} />
+          {isCopied ? <Check size={16} /> : <Copy size={16} />}
         </div>
       </div>
 

@@ -33,8 +33,8 @@ export const TradeTable = () => {
   const ths = [
     t('account'),
     t('type'),
-    t('amount'),
     t('volume'),
+    t('amount'),
     showAge ? t('age') : t('date'),
     t('tx.hash'),
   ]
@@ -45,7 +45,7 @@ export const TradeTable = () => {
       <TableHeader>
         <TableRow className="!border-b-2 border-b-black">
           {ths.map((t, i) => (
-            <TableHead key={i} className={cn(i === 0 && 'w-[100px]')}>
+            <TableHead key={i} className={cn(i === 0 && 'w-[100px]', 'px-3')}>
               {/* Date field */}
               {i === ths.length - 2 ? (
                 <div
@@ -74,7 +74,7 @@ export const TradeTable = () => {
               className="border-b-black !border-b-2 last:!border-b-0"
             >
               <TableCell
-                className="font-bold inline-flex items-center gap-1 cursor-pointer hover:underline my-2"
+                className="font-bold inline-flex items-center gap-1 cursor-pointer hover:underline my-2 px-3"
                 onClick={() => {
                   router.push(`${Routes.Account}/${r.account.wallet_address}`)
                 }}
@@ -92,10 +92,10 @@ export const TradeTable = () => {
                 {isBuy ? t('trade.buy') : t('trade.sell')}
               </TableCell>
               <TableCell className="max-sm:text-xs">
-                {fmt.tradeFixed(r.quote_amount)} {r.quote_symbol}
+                {fmt.tradeFixed(r.base_amount)} {r.base_symbol}
               </TableCell>
               <TableCell className="max-sm:text-xs">
-                {fmt.tradeFixed(r.base_amount)} {r.base_symbol}
+                {fmt.tradeFixed(r.quote_amount)} {r.quote_symbol}
               </TableCell>
               <TableCell className="max-sm:text-xs w-40">
                 {showAge

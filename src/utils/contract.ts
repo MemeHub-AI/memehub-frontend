@@ -1,8 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { parseEther } from 'viem'
 
-import { SERVICE_FEE } from '@/config/trade'
-
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
   const e = String(err).toLowerCase()
@@ -10,9 +8,14 @@ export const isUserReject = (err: string | unknown) => {
   return e.includes('user rejected') || e.includes('user denied')
 }
 
+const SERVICE_FEE = 1.01 // 1%
+
 // Add service fee when trade.
 export const addServiceFee = (amount: string) => {
-  // total = amount + (amount * SERVICE_FEE)
-  const total = BigNumber(amount).multipliedBy(SERVICE_FEE).plus(amount)
-  return parseEther(total.toFixed())
+  const amountBigint = parseEther(amount)
+  const total = BigNumber(amountBigint.toString())
+    .multipliedBy(SERVICE_FEE)
+    .toFixed(0)
+
+  return BigInt(total)
 }
