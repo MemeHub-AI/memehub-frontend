@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import HotNewsAside from '../main/components/aside'
+import HotNewsAside from '../../components/aside'
 import { ArrowLeftIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
@@ -246,12 +246,14 @@ const Launchpad = () => {
 
   return (
     <main className="px-8 pb-3 max-sm:px-4">
-      <div className="my-6 flex items-center">
-        <h1 className="text-2xl font-bold">{t('launchpad.trump')}</h1>
-      </div>
       <div className="flex max-sm:w-full">
         <HotNewsAside></HotNewsAside>
         <div className="ml-5 max-sm:ml-0  max-sm:w-full">
+          <div className="mt-3 mb-4 flex items-center leading-none">
+            <h1 className="text-xl font-bold text-orange-500">
+              {t('launchpad.trump')}
+            </h1>
+          </div>
           <Card
             className="relative w-[450px] max-sm:w-full px-5"
             shadow={'none'}

@@ -33,7 +33,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
-  const { isTrading, buy, sell } = useTrade()
+  const { isSubmitting, buy, sell } = useTrade()
   const { ethBalance, tokenBalance } = useTradeInfo()
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
@@ -117,14 +117,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             <TabsTrigger
               className="h-full"
               value={TradeType.Buy}
-              disabled={isTrading}
+              disabled={isSubmitting}
             >
               {t('trade.buy')}
             </TabsTrigger>
             <TabsTrigger
               className="h-full"
               value={TradeType.Sell}
-              disabled={isTrading}
+              disabled={isSubmitting}
             >
               {t('trade.sell')}
             </TabsTrigger>
@@ -138,12 +138,12 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             <TradeInput
               value={value}
               onChange={({ target }) => setValue(target.value)}
-              disabled={isTrading}
+              disabled={isSubmitting}
             />
 
             {/* Items button */}
             <TradeItems
-              disabled={isTrading}
+              disabled={isSubmitting}
               onResetClick={setValue}
               onBuyItemClick={(value) => {
                 setValue(BigNumber(value).gt(ethBalance) ? ethBalance : value)
@@ -161,9 +161,9 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <Button
             className="!w-full"
             onClick={onTrade}
-            disabled={isTrading || BigNumber(value).lte(0)}
+            disabled={isSubmitting || BigNumber(value).lte(0)}
           >
-            {isTrading ? t('trading') : t('trade')}
+            {isSubmitting ? t('trading') : t('trade')}
           </Button>
         </Tabs>
       </Card>

@@ -10,8 +10,8 @@ import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
 import { SocialLinks } from '../social-links'
 import { TradeLogs } from '../trade-logs'
-import { SearchInput } from '../search-input'
 import { Routes } from '@/routes'
+import { SearchInput } from '../search-input'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]

@@ -65,7 +65,7 @@ export const TokenCards = (props: Props) => {
       <CustomSuspense
         className={cn(
           'grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1',
-          'max-sm:gap-2 '
+          'max-sm:gap-2'
         )}
         isPending={isLoading}
         fallback={<CardSkeleton />}
@@ -83,7 +83,8 @@ export const TokenCards = (props: Props) => {
           <>
             <Card
               className={cn(
-                'flex items-stretch rounded overflow-hidden gap-2 relative'
+                'flex items-stretch rounded overflow-hidden gap-2 relative',
+                'max-sm:mt-1'
               )}
               onClick={() => router.push(`${Routes.Launchpad}/trump`)}
             >

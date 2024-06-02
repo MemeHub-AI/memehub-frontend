@@ -22,7 +22,7 @@ export const TokenPage = () => {
         <TokenInfoHeader />
 
         {/* Body */}
-        <div className="flex space-x-4 max-sm:flex-col max-sm:space-x-0 mt-4">
+        <div className="flex space-x-4 max-sm:flex-col max-sm:space-x-0 mt-4 max-sm:mt-3">
           {/* Left */}
           <div className="flex flex-col flex-1">
             {isMobile && <TradeTab />}

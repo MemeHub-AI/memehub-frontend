@@ -24,7 +24,7 @@ export const Header = () => {
       className={cn(
         'min-h-header flex justify-between items-center px-6 relative',
         'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3',
-        'border-b border-zinc-200',
+        'border-b-2 border-black',
         y !== 0 && 'shadow-lg'
       )}
     >

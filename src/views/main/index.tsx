@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { TokenCards } from '@/components/token-cards'
-import { HotNewsAside } from './components/aside'
+import { HotNewsAside } from '../../components/aside'
 import { useTokens } from '@/hooks/use-tokens'
 import { AIIdea } from './components/ai-idea'
 
@@ -13,7 +13,7 @@ export const MainPage = () => {
     <main className="min-h-main px-6 pb-3 flex max-sm:px-3 max-sm:pt-0 gap-6">
       <HotNewsAside />
       <div className="flex-1 max-sm:mt-2">
-        <AIIdea />
+        <AIIdea className="max-sm:mb-3" />
         <TokenCards
           className="flex-1 max-sm:mt-2 flex flex-col"
           cards={tokens}
