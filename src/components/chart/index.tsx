@@ -6,6 +6,7 @@ import { useChart } from './hooks/use-chart'
 import { useTokenContext } from '@/contexts/token'
 import { useChartStore } from '@/stores/use-chart-store'
 import { useStorage } from '@/hooks/use-storage'
+import { cn } from '@/lib/utils'
 
 export const Chart = memo(() => {
   const chartRef = useRef<HTMLDivElement>(null)
@@ -35,7 +36,10 @@ export const Chart = memo(() => {
   return (
     <div
       ref={chartRef}
-      className="min-h-[560px] border-2 border-black rounded-md overflow-hidden"
+      className={cn(
+        'min-h-[560px] border-2 border-black rounded-md',
+        'overflow-hidden max-sm:mt-3 max-sm:h-[60vh]'
+      )}
     ></div>
   )
 })
