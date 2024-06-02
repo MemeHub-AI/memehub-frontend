@@ -9,14 +9,12 @@ import { factoryAbi } from '../../../contract/abi/factory'
 import { useCreateToken } from './use-create-token'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useDeployConfig } from './use-deploy-config'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { ca } from '@/contract/address'
 
 export const useDeploy = () => {
   const { t } = useTranslation()
   const { chainId } = useAccount()
   const { createTokenData, createTokenError, create } = useCreateToken()
-  const { chains } = useWalletStore()
   const { deployFee, deploySymbol, reserveRatio } = useDeployConfig()
 
   const {

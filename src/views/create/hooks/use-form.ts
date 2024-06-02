@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next'
 import { useAccount, useSwitchChain } from 'wagmi'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUploadImage } from '@/hooks/use-upload-image'
-import { useRouter } from 'next/router'
-import { useStorage } from '@/hooks/use-storage'
 import { toast } from 'sonner'
+
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const formFields = {
   fullname: 'fullname',
@@ -27,11 +27,10 @@ export const useCreateTokenForm = (
 ) => {
   const { t } = useTranslation()
   const { isConnected, chainId } = useAccount()
-  const { query } = useRouter()
   const { switchChain } = useSwitchChain()
-  const { getChain } = useStorage()
 
-  const { setConnectOpen, chains, loadingChains } = useWalletStore()
+  const { setConnectOpen } = useWalletStore()
+  const { chains, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
   const { deploy, isDeploying } = useDeployResult
 
