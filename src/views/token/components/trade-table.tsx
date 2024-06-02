@@ -23,9 +23,10 @@ import { TradeType } from '@/api/websocket/types'
 import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'
+import { utilLang } from '@/utils/lang'
 
 export const TradeTable = () => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { getTableShowAge, setTableShowAge } = useStorage()
 
   const [showAge, setShowAge] = useState(strToBool(getTableShowAge()))
@@ -39,6 +40,13 @@ export const TradeTable = () => {
     t('tx.hash'),
   ]
   const { tradeRecords } = useTradeRecord()
+
+  const formatFromTz = (ts: number) => {
+    const date = dayjs.unix(ts)
+    return utilLang.isEn(i18n)
+      ? date.utc().format('YYYY-MM-DD HH:mm:ss')
+      : date.format('YYYY-MM-DD HH:mm:ss')
+  }
 
   return (
     <Table containerClass="border-2 border-black rounded-md">
@@ -100,7 +108,7 @@ export const TradeTable = () => {
               <TableCell className="max-sm:text-xs w-48">
                 {showAge
                   ? dayjs.unix(+r.create_time).fromNow()
-                  : dayjs.unix(+r.create_time).format('YYYY-MM-DD HH:mm:ss')}
+                  : formatFromTz(+r.create_time)}
               </TableCell>
               <TableCell className="max-sm:text-xs">
                 <Link

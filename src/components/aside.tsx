@@ -16,7 +16,7 @@ export const HotNewsAside = () => {
     useNewsList({ isOpportunity: true })
 
   return (
-    <aside className="w-aside max-sm:hidden border-r pt-3">
+    <aside className="w-aside max-sm:hidden border-r-2 border-black pt-3">
       <h2 className="text-red-500 text-xl font-bold mb-4">
         {t('hot-opportunity')}
       </h2>

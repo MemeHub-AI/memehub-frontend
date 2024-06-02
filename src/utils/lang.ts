@@ -1,3 +1,5 @@
+import i18next from 'i18next'
+
 import { useStorage } from '@/hooks/use-storage'
 
 export const utilLang = {
@@ -20,4 +22,5 @@ export const utilLang = {
 
     return ''
   },
+  isEn: (i18n = i18next) => i18n.language === 'en',
 }
