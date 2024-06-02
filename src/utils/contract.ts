@@ -14,5 +14,7 @@ export const isUserReject = (err: string | unknown) => {
 export const addServiceFee = (amount: string) => {
   // total = amount + (amount * SERVICE_FEE)
   const total = BigNumber(amount).multipliedBy(SERVICE_FEE).plus(amount)
-  return parseEther(total.toFixed())
+  const result = parseEther(total.toFixed())
+
+  return result
 }
