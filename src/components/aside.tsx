@@ -34,7 +34,7 @@ export const HotNewsAside = () => {
               handleClick(news)
             }}
             onClick={() => {
-              push(`${Routes.Idea}/${news?.title}`)
+              push(`${Routes.Idea}/${news?.id}`)
             }}
           />
         ))}

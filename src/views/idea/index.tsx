@@ -11,12 +11,16 @@ import { IdeaData } from '@/api/idea/type'
 import CustomSuspense from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CreatedUser } from './components/created-user'
+import { useRouter } from 'next/router'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
   const { width } = useWindowSize()
+  const router = useRouter()
+  const newsId = router.query.id as string
+
   const { data: result, isLoading } = useInfiniteQuery({
-    queryKey: [ideaApi.getIdea.name],
+    queryKey: [ideaApi.getIdea.name, newsId],
     queryFn: ({ pageParam }) => {
       return ideaApi.getIdea({ page: pageParam })
     },

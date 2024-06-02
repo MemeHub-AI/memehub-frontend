@@ -8,6 +8,7 @@ import { useAIMemeInfo } from './use-ai-meme-info'
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { useStorage } from './use-storage'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { defaultImg } from '@/config/link'
 
 interface Options {
   formData?: ReturnType<typeof useCreateTokenForm>
@@ -16,6 +17,7 @@ interface Options {
 
 export const useNewsList = (options?: Options) => {
   const { formData, isOpportunity = false } = options || {}
+
   const { getArea } = useStorage()
   const [show, setShow] = useState(false)
   const [area, setArea] = useState(+getArea())
@@ -77,41 +79,63 @@ export const useNewsList = (options?: Options) => {
           page_size: 7,
         })
 
-        console.log(data)
-
         return {
           count: data.count,
           results: data.results?.map((item) => ({
             id: item.id,
             title: item?.title,
             link: '',
-            content: item.content,
-            image: item.image,
+            content: item?.content,
+            image: item?.image,
           })),
         }
       }
+
+      console.log('loading')
 
       const { data } = await newsApi.getNews({
         country: +area,
         page: pageParam,
       })
+
+      try {
+        console.log('end', data, data?.results)
+
+        console.log(
+          data?.results?.map((item) => ({
+            id: item?.id,
+            title: item?.title?.query,
+            link: item?.title?.exploreLink,
+            content: item?.articles?.[0]?.snippet,
+            image: item?.articles?.[0]?.image?.imageUrl,
+          }))
+        )
+      } catch (error) {
+        console.log(error)
+      }
       return {
-        count: data.count,
-        results: data.results?.map((item) => ({
+        count: data?.count,
+        results: data?.results?.map((item) => ({
           id: item?.id,
-          title: item.title.query,
-          link: item.title.exploreLink,
-          content: item.articles[0].snippet,
-          image: item.articles[0].image.imageUrl,
+          title: item?.title?.query,
+          link: item?.title?.exploreLink,
+          content: item?.articles?.[0]?.snippet,
+          image: item?.articles?.[0]?.image?.imageUrl || defaultImg,
         })),
       }
     },
     getNextPageParam: (_, _1, page) => page + 1,
-    select: (data) => ({
-      total: data.pages[0].count,
-      newsList: data.pages.flatMap((p) => p.results).filter(Boolean),
-    }),
+    select: (data) => {
+      console.log(data)
+
+      return {
+        total: data.pages[0].count,
+        newsList: data.pages.flatMap((p) => p.results).filter(Boolean),
+      }
+    },
   })
+
+  console.log(newsData)
 
   return {
     area,

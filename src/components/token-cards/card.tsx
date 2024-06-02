@@ -12,6 +12,7 @@ import { Progress } from '../ui/progress'
 import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
 import { fmt } from '@/utils/fmt'
 import { SupportedChainId } from '@/config/wagmi'
+import { defaultImg } from '@/config/link'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -61,7 +62,7 @@ export const TokenCard = (props: Props) => {
     >
       {/* Token logo */}
       <img
-        src={card?.image || '/images/logo.png'}
+        src={card?.image || defaultImg}
         alt="img"
         className={cn('flex-shrink-0 object-cover')}
         width={imageSize}
