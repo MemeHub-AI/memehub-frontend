@@ -14,8 +14,8 @@ import { useLang } from '@/hooks/use-lang'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { Toaster } from '@/components/ui/sonner'
 import { BackToTop } from '../back-to-top'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { chainApi } from '@/api/chain'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -26,7 +26,7 @@ BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_DOWN })
 export const AppLayout = ({ children }: ComponentProps<'div'>) => {
   const { isNotMounted } = useMounted(onMounted)
   const { initLang } = useLang()
-  const { setChains } = useWalletStore()
+  const { setChains } = useChainsStore()
 
   const { t } = useTranslation()
 
@@ -41,7 +41,6 @@ export const AppLayout = ({ children }: ComponentProps<'div'>) => {
 
   function onMounted() {
     initLang()
-
     initChains()
   }
 

@@ -44,7 +44,11 @@ export const useFetch = (baseURL: string) => {
     }
 
     // Auth header.
-    if (requireAuth && getToken()?.trim()) {
+    if (
+      requireAuth &&
+      getToken()?.trim() &&
+      !newHeaders.get(CommonHeaders.Authorization)
+    ) {
       newHeaders.set(CommonHeaders.Authorization, `Bearer ${getToken()}`)
     }
 

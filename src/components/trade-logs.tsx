@@ -108,7 +108,7 @@ const LogCard = (props: TagProps) => {
   const { isPing, trigger, className, children } = props
 
   return (
-    <HoverCard openDelay={0} closeDelay={100} open>
+    <HoverCard openDelay={0} closeDelay={100}>
       <HoverCardTrigger asChild>
         <Button variant="outline" shadow="none" className="relative">
           {trigger}

@@ -18,7 +18,7 @@ export const useDatafeed = () => {
   const cache = useDatafeedCache()
   const { listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket()
-  const { parseTVInterval, toBars, priceToPricescale } = useChartParse()
+  const { parseTVInterval, formatBars, priceToPricescale } = useChartParse()
   const { query } = useRouter()
   const chain = (query.chain || '') as string
   const addr = (query.address || '') as string
@@ -35,7 +35,7 @@ export const useDatafeed = () => {
           interval,
           token_address: tokenAddr,
         })
-        const bars = toBars(data)
+        const bars = formatBars(data)
         const symbolInfo: LibrarySymbolInfo = {
           ...symbolInfoConfig,
           name: symbolName,
@@ -45,7 +45,7 @@ export const useDatafeed = () => {
         }
 
         cache.setBars(bars)
-        cache.setLatBar(last(bars))
+        cache.setLastBar(last(bars))
         onResolve(symbolInfo)
       },
       async getBars(symbolInfo, resolution, period, onResult, onError) {
@@ -64,8 +64,8 @@ export const useDatafeed = () => {
             interval,
             token_address: tokenAddr,
           })
-          const bars = toBars(data)
-
+          const bars = formatBars(data)
+          !isEmpty(bars) && cache.setLastBar(last(bars))
           setInterval(chain, addr, interval)
           onResult(bars, { noData: isEmpty(data) })
           return
@@ -77,31 +77,33 @@ export const useDatafeed = () => {
           start: period.from,
           limit: period.countBack,
         })
-        const bars = toBars(data)
+        const bars = formatBars(data)
 
+        !isEmpty(bars) && cache.setLastBar(last(bars))
         onResult(bars, { noData: isEmpty(bars) })
       },
       subscribeBars(_, resolution, onTick, uid, onRest) {
-        // cache.setSub(uid, onRest)
+        cache.setSub(uid, onRest)
+
+        console.log('sub', uid)
         onUpdate(({ data }) => {
-          const bars = toBars(data)
-          const latestTime = last(bars)?.time || 0
-          const lastTime = cache.getLastBar()?.time || 0
+          const bars = formatBars(data)
 
-          console.log(
-            'Chart update:',
-            '\n',
-            `latest time: ${latestTime}`,
-            '\n',
-            `last time: ${lastTime}`
-          )
+          bars.forEach((bar) => {
+            const lastTime = cache.getLastBar()?.time || 0
+            if (bar.time < lastTime) return
 
-          if (latestTime < lastTime) return
-          bars.forEach(onTick)
+            onTick(bar)
+            cache.setLastBar(bar)
+            console.clear()
+            console.log('update', bars)
+          })
         })
       },
       unsubscribeBars(uid) {
+        console.log('unsub', uid)
         cache.getSub(uid)?.()
+        cache.removeSub(uid)
       },
     } as IBasicDataFeed
   }
