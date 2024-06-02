@@ -1,10 +1,10 @@
+import React from 'react'
+import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 
 import { MemeInfoDialogData } from '@/api/news/types'
 import { Button } from '../ui/button'
 import { cn } from '@/lib/utils'
-import React from 'react'
-import clsx from 'clsx'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   news: MemeInfoDialogData
@@ -19,7 +19,7 @@ export const NewsCard = ({ news, onMeme, onClick }: Props) => {
     <div
       className={cn(
         'flex gap-2 transition-all p-2 cursor-pointer',
-        'border-2 border-black rounded-lg hover:bg-zinc-100'
+        'rounded-md hover:bg-zinc-100'
       )}
       onClick={onClick}
     >

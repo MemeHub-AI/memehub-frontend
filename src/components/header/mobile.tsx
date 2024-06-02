@@ -13,6 +13,7 @@ import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
 import { WalletConnect } from '../wallet-connect'
 import { WalletDisconnector } from '../wallet-connect/disconnector'
+import { SearchInput } from '../search-input'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -34,10 +35,16 @@ export const HeaderMobile = (props: Props) => {
             <Button size="icon-sm">
               <HamburgerMenuIcon />
             </Button>
-            <Logo showMeme />
+            {/* <Logo showMeme /> */}
           </div>
         </SheetTrigger>
-        <SheetContent showClose={false} side="left" className="pt-4 px-3">
+        <SearchInput className="h-8 ml-3 mr-1" />
+        <SheetContent
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          showClose={false}
+          side="left"
+          className="pt-4 px-3"
+        >
           <div className="flex items-center gap-2">
             <Logo showMeme />
             <LangSelect className="ml-3 h-7" />

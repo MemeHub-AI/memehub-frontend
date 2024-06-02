@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useMutation } from '@tanstack/react-query'
@@ -9,8 +9,9 @@ import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
 import { tokenApi } from '@/api/token'
 import { TokenCard } from './token-cards/card'
+import { cn } from '@/lib/utils'
 
-export const SearchInput = () => {
+export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
 
@@ -37,7 +38,7 @@ export const SearchInput = () => {
       <Popover open={!isEmpty(tokens) || isPending} onOpenChange={reset}>
         <PopoverAnchor>
           <Input
-            className="shadow-offset"
+            className={cn('shadow-offset', className)}
             value={value}
             onChange={({ target }) => setValue(target.value)}
             placeholder={t('search.placeholder')}

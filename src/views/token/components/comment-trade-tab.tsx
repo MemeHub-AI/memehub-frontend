@@ -36,7 +36,7 @@ export const CommentTradeTab = (props: ComponentProps<'div'>) => {
         <TabsTrigger value={Tab.Comments}>{t('comments')}</TabsTrigger>
         <TabsTrigger value={Tab.Trades}>{t('trades')}</TabsTrigger>
       </TabsList>
-      <TabsContent value={Tab.Comments} className="mt-4 max-sm:mt-2">
+      <TabsContent value={Tab.Comments} className="mt-2 max-sm:mt-2">
         <CommentCards
           cards={comments}
           total={total}

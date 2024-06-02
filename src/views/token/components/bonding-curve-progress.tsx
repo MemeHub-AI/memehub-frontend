@@ -11,7 +11,7 @@ export const BondingCurveProgress = () => {
   const percent = BigNumber(currentToken)
     .div(totalToken)
     .multipliedBy(100)
-    .toFixed(3)
+    .toFixed(2)
   const marketMax = BigNumber(totalToken).toFixed(3)
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const threshold = BigNumber(marketMax).lte(0)

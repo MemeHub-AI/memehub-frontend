@@ -57,12 +57,12 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           </div>
         </div>
       </div>
-      <div
-        className="text-sm text-zinc-500 flex flex-col items-start mt-2 cursor-pointer"
-        onClick={() => copy(tokenInfo?.address || '')}
-      >
-        <span>{t('ca')}:</span>
-        <div className="w-full flex items-center">
+      <div className="text-sm text-zinc-500 flex flex-col items-start mt-2 ">
+        <h3 className="font-bold text-base text-black">{t('ca')}:</h3>
+        <div
+          className="w-full flex items-center cursor-pointer"
+          onClick={() => copy(tokenInfo?.address || '')}
+        >
           <span className="truncate">{tokenInfo?.address || ''}</span>
           {isCopied ? <Check size={16} /> : <Copy size={16} />}
         </div>

@@ -55,10 +55,17 @@ export const useDatafeedWebsocket = () => {
     return new Promise((resolve, reject) => {
       wsRef.current = new WebSocket(wsApiURL.chart)
       wsRef.current.addEventListener('open', (data) => {
+        console.log('ws open', data)
         onOpen()
         resolve(data)
       })
-      wsRef.current.addEventListener('error', reject)
+      wsRef.current.addEventListener('close', (e) => {
+        console.log('ws close', e)
+      })
+      wsRef.current.addEventListener('error', (e) => {
+        console.log('ws error', e)
+        reject()
+      })
       wsRef.current.addEventListener('message', onMessage)
     })
   }
