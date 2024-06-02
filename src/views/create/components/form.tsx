@@ -482,16 +482,14 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
               )
             })}
           </div>
-          {/* <div
+          <div
             className="mt-5  flex justify-center cursor-pointer"
             onClick={() =>
-              img.download(
-                'https://storage.memehub.ai/memeai/txt2img-3581588184.png'
-              )
+              open((form.getValues(formFields.poster) as string[])[index])
             }
           >
             <Button>{t('download')}</Button>
-          </div> */}
+          </div>
         </div>
       </Dialog>
     </>

@@ -85,11 +85,11 @@ export const AICreateMemecoinDialog = (props: Props) => {
               <img
                 src={data?.image}
                 alt={data?.name}
-                className="w-[150px] h-[150px] mx-auto my-4 rounded-md"
+                className="w-[150px] h-[150px] object-cover mx-auto my-4 rounded-md"
               />
             </div>
           ) : null}
-          <div className="flex gap-10 mt-6 w-max mx-auto">
+          <div className="flex gap-10 mt-6 w-max mx-auto max-sm:mt-0">
             <Button variant="default" size="lg" onClick={confirm}>
               {t('coinfirm')}
             </Button>

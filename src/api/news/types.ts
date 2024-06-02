@@ -1,16 +1,18 @@
 export interface NewsQuery {
-  country: number
+  country?: number
   page?: number
   page_size?: number
 }
 
 export interface NewsData {
+  id: number
   title: Title
   image: Image
   articles: Article[]
 }
 
 export interface Article {
+  id: number
   title: string
   timeAgo: string
   source: string
@@ -38,4 +40,22 @@ export interface CountryData {
     zh: string
   }
   short_name: string
+}
+
+export interface OpportunityData {
+  id: number
+  title: string
+  content: string
+  image: string
+  rank: number
+  created_at: string
+  updated_at: string
+}
+
+export interface MemeInfoDialogData {
+  id: number
+  title: string
+  content: string
+  image: string
+  link: string
 }

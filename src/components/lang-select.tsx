@@ -23,7 +23,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
           <Languages size={20} />
         </Button>
       </HoverCardTrigger>
-      <HoverCardContent className="w-fit py-[6px] px-1">
+      <HoverCardContent className="w-fit py-[6px] px-1 mt-1">
         {langs.map(([code, { name }], i) => (
           <div
             key={i}

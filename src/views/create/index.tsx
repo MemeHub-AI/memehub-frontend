@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Main } from './components/main'
 import { InspirationNews } from './components/aside'
@@ -11,10 +11,12 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 export const CreatePage = () => {
   const deployResult = useDeploy()
+  const [tab, setTab] = useState(0)
   const formData = useCreateTokenForm(deployResult)
   const aIMemeInfo = useAIMemeInfo({ form: formData.form })
   const newsListData = useNewsList({
     formData,
+    isOpportunity: tab === 1,
   })
   const aimemeInfoStore = useAimemeInfoStore.getState()
   const isFirst = useRef(true)
@@ -33,6 +35,8 @@ export const CreatePage = () => {
         className="ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full"
         newsListData={newsListData}
         aIMemeInfo={aIMemeInfo}
+        tab={tab}
+        setTab={setTab}
       />
       <Main
         newsListData={newsListData}
