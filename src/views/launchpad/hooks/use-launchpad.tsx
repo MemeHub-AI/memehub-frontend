@@ -4,7 +4,6 @@ import { useWalletStore } from '@/stores/use-wallet-store'
 import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
 import { formatEther, parseEther, zeroAddress } from 'viem'
-import { bscTestnet } from 'viem/chains'
 import {
   useAccount,
   useBalance,
@@ -15,6 +14,9 @@ import {
 } from 'wagmi'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
+import { bscTestnet } from 'viem/chains'
+
+const launchpadChain = bscTestnet
 
 const buyEndTime = '2024/6/3 23:00:00'
 const buyStartTime = '2024/5/28 23:00:00'
@@ -44,7 +46,7 @@ export const useLaunchpad = () => {
     query: {
       refetchInterval: 5_000,
     },
-    chainId: bscTestnet.id,
+    chainId: launchpadChain.id,
   })
 
   const { data: isWhite, isLoading: isWhiteLoading } = useReadContract({
@@ -55,7 +57,7 @@ export const useLaunchpad = () => {
     query: {
       refetchInterval: 5_000,
     },
-    chainId: bscTestnet.id,
+    chainId: launchpadChain.id,
   })
 
   const { data: isBuy, isLoading: isBuyLoading } = useReadContract({
@@ -66,7 +68,7 @@ export const useLaunchpad = () => {
     query: {
       refetchInterval: 5_000,
     },
-    chainId: bscTestnet.id,
+    chainId: launchpadChain.id,
   })
 
   const { data: isClaim, isLoading: isClaimLoading } = useReadContract({
@@ -87,7 +89,7 @@ export const useLaunchpad = () => {
     query: {
       refetchInterval: 5_000,
     },
-    chainId: bscTestnet.id,
+    chainId: launchpadChain.id,
   })
 
   const paid = +formatEther(BigInt(paidBNB || 0))
@@ -162,8 +164,6 @@ export const useLaunchpad = () => {
   const isBalanceInsufficient =
     +formatEther(BigInt(balance?.value || 0)) < minBnb
 
-  console.log(info)
-
   const claimAmount = isWhite ? info?.whiteClaimAmount : info?.claimAmount
 
   const minClaimAmount = +formatEther(BigInt(claimAmount || 0))
@@ -190,10 +190,10 @@ export const useLaunchpad = () => {
   const max = Math.min(BigNumber(maxBnb).minus(paid).toNumber(), minBnb)
 
   const onBuy = async () => {
-    if (chainId !== bscTestnet.id) {
+    if (chainId !== launchpadChain.id) {
       try {
         toast.loading('Switching to BSC Testnet')
-        await switchChainAsync({ chainId: bscTestnet.id })
+        await switchChainAsync({ chainId: launchpadChain.id })
       } finally {
         toast.dismiss()
       }
@@ -207,7 +207,7 @@ export const useLaunchpad = () => {
         functionName: 'buyAmount',
         args: [zeroAddress],
         value: parseEther(value),
-        chainId: bscTestnet.id,
+        chainId: launchpadChain.id,
       })
     } catch (e: any) {
       toast.error(e?.message)
@@ -220,7 +220,7 @@ export const useLaunchpad = () => {
         address: idoAddress,
         abi: idoAbi,
         functionName: 'claim',
-        chainId: bscTestnet.id,
+        chainId: launchpadChain.id,
       })
     } catch (e: any) {
       toast.error(e?.message)
@@ -372,14 +372,36 @@ export const useLaunchpad = () => {
 
     if (buySuccess) {
       toast.dismiss()
-      toast.success(t('buy.success'))
+      toast.success(
+        <>
+          {t('buy.success')},{' '}
+          <a
+            href={`${bscTestnet.blockExplorers.default}/tx/${buyHash}`}
+            target="_blank"
+            style={{ color: 'blue' }}
+          >
+            {t('tx.record')}
+          </a>
+        </>
+      )
       resetBuyStatus()
       return
     }
 
     if (claimSuccess) {
       toast.dismiss()
-      toast.success(t('claim.success'))
+      toast.success(
+        <>
+          {t('claim.success')},{' '}
+          <a
+            href={`${bscTestnet.blockExplorers.default}/tx/${claimHash}`}
+            target="_blank"
+            style={{ color: 'blue' }}
+          >
+            {t('tx.record')}
+          </a>
+        </>
+      )
       resetClaimStatus()
     }
   }, [isError, isLoadingError, buySuccess, claimSuccess])

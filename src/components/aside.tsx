@@ -3,15 +3,17 @@ import { useTranslation } from 'react-i18next'
 
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { CustomSuspense } from '@/components/custom-suspense'
-import { NewsCard } from '@/components/news'
 import { NewsSkeleton } from '@/components/news/skeleton'
 import { useNewsList } from '@/hooks/use-news-list'
+import { NewsCard } from '@/components/news'
+import { useRouter } from 'next/router'
+import { Routes } from '@/routes'
 
 export const HotNewsAside = () => {
   const { t } = useTranslation()
-
+  const { push } = useRouter()
   const { memeit, handleClick, hidden, isFetching, show, loading, newsList } =
-    useNewsList()
+    useNewsList({ isOpportunity: true })
 
   return (
     <aside className="w-aside max-sm:hidden border-r pt-3">
@@ -25,14 +27,23 @@ export const HotNewsAside = () => {
         className="flex flex-col gap-3 pr-5"
       >
         {newsList?.map((news, i) => (
-          <NewsCard news={news!} key={i} onMeme={() => handleClick(news)} />
+          <NewsCard
+            key={i}
+            news={news!}
+            onMeme={() => {
+              handleClick(news)
+            }}
+            onClick={() => {
+              push(`${Routes.Idea}/${news?.title}`)
+            }}
+          />
         ))}
       </CustomSuspense>
       <AICreateMemecoinDialog
         data={{
-          name: memeit?.title.query,
-          image: memeit?.articles[0].image.imageUrl,
-          description: memeit?.articles[0].snippet,
+          name: memeit?.title,
+          image: memeit?.image,
+          description: memeit?.content,
         }}
         show={show}
         loading={loading}

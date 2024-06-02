@@ -86,7 +86,7 @@ export const TokenCards = (props: Props) => {
     <div className={cn(className)}>
       {total !== 0 && (
         <div className="flex items-center gap-4 max-sm:justify-between ">
-          <Select onValueChange={onChange}>
+          <Select defaultValue={getChain()} onValueChange={onChange}>
             <SelectTrigger className="mb-4 w-26 max-sm:mb-2">
               <SelectValue placeholder={t('chains')} />
             </SelectTrigger>

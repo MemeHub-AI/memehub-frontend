@@ -259,6 +259,17 @@
   "claimed": "Claimed",
   "launchpad": "Launchpad",
   "launchpad.trump": "Trump Laumchpad",
+  "tx.record": "Transaction record",
+  "create.token": "Create Token",
+  "random.meme": "Random MemeCoin",
+  "download.img": "Download Image",
+  "no.opponent": "No Opponent  ",
+  "cream.puff": "$1 cream puff",
+  "in.memehub": "The geniuses inside Memehub",
+  "live.in.up": "Live it Up",
+  "create.new.token": "Create New",
+  "take,lead": "Take the Lead",
+  "more...": "More...",
   "click-to-copy": "Click to copy",
   "copy-success": "Copy successful!",
   "copy-failed": "Copy failed",
@@ -269,5 +280,7 @@
   "no.holders": "No holders yet",
   "log.trade": "Latest trade",
   "log.create": "Latest create",
-  "log.created": "created"
+  "log.created": "created",
+  "liquidity": "Liquidity:",
+  "aget": "Aget"
 }
