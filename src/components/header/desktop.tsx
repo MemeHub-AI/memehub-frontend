@@ -11,9 +11,7 @@ import { LangSelect } from '../lang-select'
 import { SocialLinks } from '../social-links'
 import { TradeLogs } from '../trade-logs'
 import { Routes } from '@/routes'
-import { useRouter } from 'next/router'
 import { SearchInput } from '../search-input'
-import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
