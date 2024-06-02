@@ -18,6 +18,8 @@ import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
 import { Pagination } from '@/components/ui/pagination'
+import { Routes } from '@/routes'
+import { useRouter } from 'next/router'
 
 interface Props extends ComponentProps<'div'> {
   newsListData: ReturnType<typeof useNewsList>
@@ -35,6 +37,8 @@ export const InspirationNews = ({
 }: Props) => {
   const { t } = useTranslation()
   const { getArea, setArea } = useStorage()
+  const { push } = useRouter()
+
   const {
     getAIMemeInfo,
     isLoadingMemeImg,
@@ -116,7 +120,16 @@ export const InspirationNews = ({
       >
         <div className="flex flex-col gap-3">
           {newsList?.map((news, i) => (
-            <NewsCard news={news!} key={i} onMeme={() => handleClick(news)} />
+            <NewsCard
+              news={news!}
+              key={i}
+              onClick={() => {
+                push(`${Routes.Idea}/${news?.id}`)
+              }}
+              onMeme={() => {
+                handleClick(news)
+              }}
+            />
           ))}
         </div>
         {/* <Pagination
