@@ -1,6 +1,6 @@
 import { useWriteContract } from 'wagmi'
 import { toast } from 'sonner'
-import { Address, isAddress, parseEther } from 'viem'
+import { type Address, isAddress, parseEther } from 'viem'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 

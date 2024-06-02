@@ -144,6 +144,8 @@ export const useTradeInfo = () => {
     const currentMax = BigNumber(total).minus(current)
 
     return {
+      total,
+      current,
       currentMax: currentMax.toString(),
       isOverflow: BigNumber(amount).gt(currentMax),
     }
