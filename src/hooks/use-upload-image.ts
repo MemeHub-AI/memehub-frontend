@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
 import { otherApi } from '@/api/other'
+import { useStorage } from './use-storage'
 
 interface Options {
   onSuccess?: (url: string) => void
@@ -18,6 +19,7 @@ export const useUploadImage = (options?: Options) => {
   const { onSuccess, onError, onFinally } = options || {}
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
+  const { getToken } = useStorage()
 
   const clearFile = () => setFile(null)
 
@@ -41,6 +43,13 @@ export const useUploadImage = (options?: Options) => {
   })
 
   const onChangeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Cannot to upload image if not logged in.
+    if (!getToken()) {
+      e.preventDefault()
+      toast.error(t('login-before'))
+      return
+    }
+
     const file = first(e.target.files)!
     const formData = new FormData()
     const kbSize = file.size / 1024

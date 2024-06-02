@@ -122,12 +122,12 @@ export const CommentCard = (props: Props) => {
           {c.is_liked ? (
             <HeartFilledIcon
               className="text-red-600 group-hover:stroke-black"
-              onClick={() => onUnlike?.(tokenAddr)}
+              onClick={() => onUnlike?.(c.id.toString())}
             />
           ) : (
             <HeartIcon
               className="text-zinc-400 group-hover:stroke-black"
-              onClick={() => onLike?.(tokenAddr)}
+              onClick={() => onLike?.(c.id.toString())}
             />
           )}
           <span className="text-sm mb-[0.5px]">{c.likes_count}</span>
@@ -136,7 +136,7 @@ export const CommentCard = (props: Props) => {
           <Button
             size="xs"
             variant="outline"
-            onClick={() => onReply?.(tokenAddr)}
+            onClick={() => onReply?.(c.id.toString())}
           >
             {t('replay')}
           </Button>

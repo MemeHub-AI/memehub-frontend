@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { CommentCards } from '@/components/comment-cards'
 import { TradeTable } from './trade-table'
 import { useComments } from '@/components/comment-cards/hooks/use-comments'
+import { useStorage } from '@/hooks/use-storage'
 
 enum Tab {
   Comments = 'comments',
@@ -15,11 +16,22 @@ enum Tab {
 export const CommentTradeTab = (props: ComponentProps<'div'>) => {
   const { className } = props
   const { t } = useTranslation()
-  const { comments, total, isLoading, isFetching, fetchNextPage } =
-    useComments()
+  const { getCommentTradeTab, setCommentTradeTab } = useStorage()
+  const {
+    comments,
+    total,
+    isLoading,
+    isFetching,
+    refetchComments,
+    fetchNextPage,
+  } = useComments()
 
   return (
-    <Tabs defaultValue={Tab.Comments} className={cn('mt-4', className)}>
+    <Tabs
+      defaultValue={getCommentTradeTab() || Tab.Comments}
+      className={cn(className)}
+      onValueChange={(value) => setCommentTradeTab(value)}
+    >
       <TabsList>
         <TabsTrigger value={Tab.Comments}>{t('comments')}</TabsTrigger>
         <TabsTrigger value={Tab.Trades}>{t('trades')}</TabsTrigger>
@@ -31,6 +43,9 @@ export const CommentTradeTab = (props: ComponentProps<'div'>) => {
           isLoading={isLoading}
           isPending={isFetching}
           onFetchNext={fetchNextPage}
+          onAddSuccess={refetchComments}
+          onLikeSuccess={refetchComments}
+          onUnlikeSuccess={refetchComments}
         />
       </TabsContent>
       <TabsContent value={Tab.Trades} className="max-sm:mt-1">

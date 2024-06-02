@@ -85,7 +85,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
             : `${baseTokenAmount} ${tokenSymbol} ≈ ${quoteTokenAmount} ${nativeSymbol}`}
         </span>
         <span>
-          {t('balance')}: {balance}
+          {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
         </span>
       </div>
     </>

@@ -32,10 +32,12 @@ export const useCandlestickParse = () => {
   }
 
   const toBars = (list: BarItem[]) => {
-    return list.filter(Boolean).map((item) => {
+    return list.filter(Boolean).map((bar) => {
+      const barTimeLen = bar.timestamp.toString().length
+      const time = barTimeLen !== 13 ? bar.timestamp * 1000 : bar.timestamp
       return {
-        ...item,
-        time: item.timestamp * 1000,
+        ...bar,
+        time: Math.floor(time),
       } as Bar
     })
   }

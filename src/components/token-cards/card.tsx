@@ -1,5 +1,4 @@
 import React, { useEffect, useState, type ComponentProps } from 'react'
-import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { Address, formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
@@ -12,12 +11,21 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
 
-interface Props extends ComponentProps<'div'> {
+interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
+  imageSize?: number
+  descClass?: string
 }
 
-export const TokenCard = ({ card, className }: Props) => {
-  const { t } = useTranslation()
+export const TokenCard = (props: Props) => {
+  const {
+    card,
+    className,
+    imageSize = 160,
+    descClass,
+    onClick,
+    ...restProps
+  } = props
   const router = useRouter()
   const { getTokenAmounts } = useTradeInfo()
   const [percent, setPercent] = useState('0')
@@ -41,17 +49,23 @@ export const TokenCard = ({ card, className }: Props) => {
         'flex items-stretch overflow-hidden gap-2 relative',
         className
       )}
-      onClick={() => router.push(`${Routes.Token}/${card.address}`)}
+      onClick={(e) => {
+        router.push(`${Routes.Main}/${card.chain.name}/${card.address}`)
+        onClick?.(e)
+      }}
+      {...restProps}
     >
+      {/* Token logo */}
       <img
         src={card?.image || '/images/logo.png'}
         alt="img"
-        className="flex-shrink-0 h-40 w-40 object-cover"
-        width={160}
-        height={160}
+        className={cn('flex-shrink-0 object-cover')}
+        width={imageSize}
+        height={imageSize}
       />
+      {/* Chain logo */}
       <img
-        src="/images/scroll.svg"
+        src={card.chain.logo}
         alt="chain"
         className="absolute right-2 top-2 w-5"
       />
@@ -60,14 +74,12 @@ export const TokenCard = ({ card, className }: Props) => {
           <CardTitle className="pt-0 text-lg">
             {card?.name} {card?.ticker && `(${card?.ticker})`}
           </CardTitle>
-          {/* <Link
-            href={`${Routes.Account}/${card?.creator.wallet_address}`}
-            className="text-zinc-500 text-xs mt-0.5 hover:underline"
-            onClick={(e) => e.stopPropagation()}
+          <p
+            className={cn(
+              'text-zinc-500 text-sm break-all line-clamp-3',
+              descClass
+            )}
           >
-            {t('creator')}: {card?.creator.name}
-          </Link> */}
-          <p className="text-zinc-500 text-sm break-all line-clamp-3">
             {card?.desc}
           </p>
         </div>

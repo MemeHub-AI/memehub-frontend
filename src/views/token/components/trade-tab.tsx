@@ -39,7 +39,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { tokenInfo } = useTokenContext()
 
   const token = (query.address || '') as Address
-  const nativeSymbol = 'ETH'
+  const nativeSymbol = tokenInfo?.chain.native.symbol || ''
 
   const onBuy = async () => {
     // Overflow current eth balance.
@@ -119,7 +119,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               value={TradeType.Buy}
               disabled={isTrading}
             >
-              {t('buy')}
+              {t('trade.buy')}
             </TabsTrigger>
             <TabsTrigger
               className="h-full"
@@ -131,7 +131,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           </TabsList>
 
           {/* Slippage button */}
-          <SlippageButton disabled={isTrading} />
+          {/* <SlippageButton disabled={isTrading} /> */}
 
           <div className="flex flex-col my-6">
             {/* Input */}

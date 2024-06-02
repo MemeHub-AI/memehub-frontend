@@ -1,6 +1,4 @@
-import React, { ComponentProps, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
+import React, { type ComponentProps } from 'react'
 
 import type { Nav } from './'
 
@@ -8,11 +6,12 @@ import { Button } from '../ui/button'
 import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
-import { Input } from '@/components/ui/input'
+
 import { SocialLinks } from '../social-links'
 import { TradeLogs } from '../trade-logs'
 import { Routes } from '@/routes'
 import { useRouter } from 'next/router'
+import { SearchInput } from '../search-input'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -21,13 +20,6 @@ interface Props extends ComponentProps<'div'> {
 
 export const HeaderDesktop = (props: Props) => {
   const { navs, onNavClick } = props
-  const { t } = useTranslation()
-  const router = useRouter()
-
-  const [value, setValue] = useState('')
-  const onSearch = () => {
-    console.log('searching...')
-  }
 
   return (
     <>
@@ -47,22 +39,7 @@ export const HeaderDesktop = (props: Props) => {
             ))}
           </ul>
         </nav>
-        <Input
-          value={value}
-          placeholder={t('search.placeholder')}
-          startIcon={
-            <MagnifyingGlassIcon
-              width={18}
-              height={18}
-              className="cursor-pointer ml-2"
-              onClick={onSearch}
-            />
-          }
-          onChange={({ target }) => setValue(target.value)}
-        />
-        <Button onClick={() => router.push(Routes.Create)} className="ml-3">
-          {t('create.token')}
-        </Button>
+        <SearchInput />
         <SocialLinks className="ml-3" />
         <LangSelect className="flex-shrink-0 mx-3" />
         {/* <Button

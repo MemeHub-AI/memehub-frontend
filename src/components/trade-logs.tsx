@@ -7,6 +7,7 @@ import { useTradeLogs } from '@/hooks/use-trade-logs'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { TradeType } from '@/api/websocket/types'
+import { useAccount } from 'wagmi'
 
 export const TradeLogs = () => {
   const { t } = useTranslation()
@@ -65,6 +66,7 @@ const Tag = (props: Props) => {
     flash,
     suffix,
   } = props
+  const { chain } = useAccount()
 
   return (
     <div
@@ -82,7 +84,8 @@ const Tag = (props: Props) => {
       </Link>
       <span>{text}</span>
       <Link
-        href={`${Routes.Token}/${tokenAddr}`}
+        // TODO: should be dynamic chain
+        href={`${Routes.Main}/${chain?.name}/${tokenAddr}`}
         className="hover:underline hover:text-blue-600"
       >
         {tokenLabel}

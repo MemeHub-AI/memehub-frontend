@@ -68,11 +68,9 @@ export const useDatafeedWebsocket = () => {
 
   // Wrap promise & auto connect.
   const withPromise = async <T>(
-    executor: (resolve: (value: T) => void, reject: () => void) => void,
-    debugCaller: string
+    executor: (resolve: (value: T) => void, reject: () => void) => void
   ) => {
     return new Promise<T>(async (resolve, reject) => {
-      console.log('withPromise caller:', debugCaller)
       if (wsRef.current?.readyState !== WebSocket.OPEN) {
         await connect()
       }
@@ -86,8 +84,7 @@ export const useDatafeedWebsocket = () => {
       async (resolve, reject) => {
         emitter.on('listen', (v) => v.data && resolve(v))
         sendMessage({ type: 'listen', data })
-      },
-      listenAsync.name
+      }
     )
   }
 
@@ -97,8 +94,7 @@ export const useDatafeedWebsocket = () => {
       async (resolve, reject) => {
         emitter.on('history', (v) => v.data && resolve(v))
         sendMessage({ type: 'history', data })
-      },
-      historyAsync.name
+      }
     )
   }
 

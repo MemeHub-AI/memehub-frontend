@@ -29,7 +29,7 @@
   "create": "创建",
   "deploy.fee": "部署费用",
   "field.empty": "此字段不能为空",
-  "search.placeholder": "输入关键词搜索代币",
+  "search.placeholder": "搜索代币...",
   "token.create": "创建代币",
   "creator": "创建者",
   "market-cap": "市值",
@@ -264,5 +264,11 @@
   "live.in.up": "尽情享受",
   "create.new.token": "新建代币",
   "take,lead": "发行首个",
-  "more...": "查看更多"
+  "more...": "查看更多",
+  "trade": "交易",
+  "click-to-copy": "点击复制",
+  "copy-success": "复制成功！",
+  "copy-failed": "复制失败",
+  "login-before": "请先登录",
+  "liquidity": "流动性: "
 }

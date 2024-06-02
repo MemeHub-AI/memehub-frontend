@@ -10,6 +10,7 @@ import { ideaApi } from '@/api/idea'
 import { IdeaData } from '@/api/idea/type'
 import CustomSuspense from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
+import { CreatedUser } from './components/created-user'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -76,7 +77,7 @@ const IdeaPage = () => {
           nullback={<div>{t('no.data')}</div>}
           isPending={isLoading}
         >
-          <div className="flex gap-5">
+          <div className="flex gap-4">
             {waterfallList?.map((cols, i) => {
               return (
                 <div
@@ -89,7 +90,7 @@ const IdeaPage = () => {
                     return (
                       <div
                         key={item.id}
-                        className="mb-2 border-black rounded-lg border-2 py-2 max-sm:py-3"
+                        className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
                       >
                         <div className="px-2 max-sm:px-3 text-lg">
                           {item.title}
@@ -98,35 +99,10 @@ const IdeaPage = () => {
                           {item.description}
                         </div>
 
-                        <ChainInfo></ChainInfo>
+                        <ChainInfo data={item} />
 
                         <div className="border-t my-2"></div>
-                        <div className="px-2 max-sm:px-3">
-                          <span className="text-gray-500">
-                            {t('in.memehub')}
-                          </span>
-                          <div className="mt-2 mb-1">
-                            {item.paltform.map((user) => {
-                              return (
-                                <div className=" mt-2 flex justify-between items-center ">
-                                  <div className="flex items-center">
-                                    <img
-                                      src={user.logo}
-                                      alt="Logo"
-                                      className="w-[25px] h-[25px] object-cover rounded-md mr-2"
-                                    />
-                                    <span>{user.name}</span>
-                                  </div>
-                                  <div className="">
-                                    <span className="text-sm text-blue-600 cursor-pointer">
-                                      {t('live.in.up')}
-                                    </span>
-                                  </div>
-                                </div>
-                              )
-                            })}
-                          </div>
-                        </div>
+                        <CreatedUser data={item} />
                       </div>
                     )
                   })}
