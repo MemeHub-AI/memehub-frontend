@@ -43,7 +43,7 @@ export const CreatePage = () => {
         deployResult={deployResult}
         formData={formData}
         aIMemeInfo={aIMemeInfo}
-        className="flex-1 ml-10 pl-10 max-md:order-1  border-l max-md:border-l-0 max-md:ml-0 max-md:pl-0"
+        className="flex-1 ml-10 pl-10 max-md:order-1 border-l-2 border-black max-md:border-l-0 max-md:ml-0 max-md:pl-0"
       />
 
       {/* All status dialog during create. */}
