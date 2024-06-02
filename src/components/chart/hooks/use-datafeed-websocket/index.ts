@@ -13,11 +13,13 @@ import type {
 import { wsApiURL } from '@/api/websocket'
 import { useEmitter } from '@/hooks/use-emitter'
 
-const HEARTBEAT_MESSAGE = JSON.stringify({
+const heartbetaMessage = {
   type: 'heartbeat',
   message: 'ping',
   data: null,
-})
+}
+
+const heartbeatFreq = 10 // unit is seconds
 
 export const useDatafeedWebsocket = () => {
   const emitter = useEmitter<DatafeedOnEvents, DatafeedEmitEvents>()
@@ -26,10 +28,10 @@ export const useDatafeedWebsocket = () => {
 
   // Keep heartbeat.
   const onOpen = () => {
-    wsRef.current?.send(HEARTBEAT_MESSAGE)
+    sendMessage(heartbetaMessage)
     timerRef.current = window.setInterval(() => {
-      wsRef.current?.send(HEARTBEAT_MESSAGE)
-    }, 10_000)
+      sendMessage(heartbetaMessage)
+    }, heartbeatFreq * 1000)
   }
 
   // Emit listened events.
@@ -44,6 +46,7 @@ export const useDatafeedWebsocket = () => {
 
   // Send message to server side.
   const sendMessage = <T>(data: T) => {
+    if (wsRef.current?.readyState !== WebSocket.OPEN) return
     wsRef.current?.send(JSON.stringify(data))
   }
 
