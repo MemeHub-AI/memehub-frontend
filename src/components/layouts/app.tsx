@@ -1,7 +1,9 @@
-import React, { type ComponentProps } from 'react'
+import React, { useEffect, type ComponentProps } from 'react'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
+import dayjsZh from 'dayjs/locale/zh-cn'
+import dayjsEn from 'dayjs/locale/en'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { BigNumber } from 'bignumber.js'
 import { toast } from 'sonner'
@@ -20,15 +22,17 @@ import { useChainsStore } from '@/stores/use-chains-store'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
+dayjs.locale(dayjsZh)
+dayjs.locale(dayjsEn)
 
 BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_DOWN })
 
 export const AppLayout = ({ children }: ComponentProps<'div'>) => {
-  const { isNotMounted } = useMounted(onMounted)
+  const { isNotMounted } = useMounted()
   const { initLang } = useLang()
   const { setChains } = useChainsStore()
 
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const initChains = async () => {
     try {
@@ -39,10 +43,14 @@ export const AppLayout = ({ children }: ComponentProps<'div'>) => {
     }
   }
 
-  function onMounted() {
+  useEffect(() => {
     initLang()
     initChains()
-  }
+  }, [])
+
+  useEffect(() => {
+    dayjs.locale(i18n.language === 'zh' ? dayjsZh : dayjsEn)
+  }, [i18n.language])
 
   // Auto login if `token` is already exists.
   useUserInfo()
