@@ -55,7 +55,7 @@ export const AppLayout = ({ children }: ComponentProps<'div'>) => {
       <Header />
       {children}
       <Footer />
-      <Toaster />
+      <Toaster theme="light" richColors />
       <BackToTop />
     </>
   )
