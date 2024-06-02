@@ -12,12 +12,16 @@ import CustomSuspense from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CreatedUser } from './components/created-user'
 import { useRouter } from 'next/router'
+import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
+import { useState } from 'react'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
   const { width } = useWindowSize()
   const router = useRouter()
   const newsId = router.query.id as string
+  const [show, setShow] = useState(false)
 
   const { data: result, isLoading } = useInfiniteQuery({
     queryKey: [ideaApi.getIdea.name, newsId],
@@ -49,6 +53,14 @@ const IdeaPage = () => {
     }
   })
 
+  const onClick = () => {
+    setShow(true)
+  }
+
+  const onConfirm = () => {
+    setShow(false)
+  }
+
   return (
     <main className="min-h-main px-2 pb-3 flex max-sm:px-3 max-sm:pt-0 gap-6">
       <HotNewsAside />
@@ -67,7 +79,7 @@ const IdeaPage = () => {
               </div>
             </div>
           </div>
-          <Button className="max-md:mt-4">
+          <Button className="max-md:mt-4" onClick={onClick}>
             <BsStars className="mr-1"></BsStars>
             {t('random.meme')}
           </Button>
@@ -116,6 +128,11 @@ const IdeaPage = () => {
           </div>
         </CustomSuspense>
       </div>
+      <AICreateMemecoinDialog
+        show={show}
+        isRandom
+        onConfirm={onConfirm}
+      ></AICreateMemecoinDialog>
     </main>
   )
 }
