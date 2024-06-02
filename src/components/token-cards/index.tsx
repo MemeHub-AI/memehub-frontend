@@ -5,22 +5,14 @@ import router from 'next/router'
 
 import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Order } from '@/utils/types'
 import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { Routes } from '@/routes'
-import { useWalletStore } from '@/stores/use-wallet-store'
-import { useStorage } from '@/hooks/use-storage'
 import { UserCoinsCreated } from '@/api/user/types'
 import { Card, CardTitle } from '../ui/card'
+import { TokenChainSelect } from './chain-select'
+import { TokenSortSelect } from './sort-select'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -40,34 +32,13 @@ export const TokenCards = (props: Props) => {
     onFetchNext,
   } = props
   const { t } = useTranslation()
-
-  const { chains } = useWalletStore()
   const [filteredCards, setFilteredCards] = useState(cards)
-  const { getChain, setChain } = useStorage()
+
   // TODO: Encapsulate a component to handling scroll load.
   const { noMore } = useScrollLoad({
     onFetchNext,
     hasMore: cards.length < total,
   })
-
-  const sortItems = [
-    {
-      label: t('market.sort.asc'),
-      order: Order.Asc,
-    },
-    {
-      label: t('market.sort.desc'),
-      order: Order.Desc,
-    },
-    {
-      label: t('comments.sort.asc'),
-      order: Order.Asc,
-    },
-    {
-      label: t('comments.sort.desc'),
-      order: Order.Desc,
-    },
-  ]
 
   const onChange = (chainId: string) => {
     if (chainId === 'all') {
@@ -86,35 +57,8 @@ export const TokenCards = (props: Props) => {
     <div className={cn(className)}>
       {total !== 0 && (
         <div className="flex items-center gap-4 max-sm:justify-between ">
-          <Select onValueChange={onChange}>
-            <SelectTrigger className="mb-4 w-26 max-sm:mb-2">
-              <SelectValue placeholder={t('chains')} />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">{t('all')}</SelectItem>
-              {chains.map((c, i) => (
-                <SelectItem key={i} value={c.id}>
-                  {c.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-
-          {/* <Select defaultValue={String(0)} onValueChange={onChange}>
-          <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
-            <div>
-              <span>{t('sort-by')}: </span>
-              <SelectValue />
-            </div>
-          </SelectTrigger>
-          <SelectContent>
-            {sortItems.map((s, i) => (
-              <SelectItem key={i} value={String(i)}>
-                {s.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select> */}
+          <TokenChainSelect onValueChange={onChange} />
+          {/* <TokenSortSelect /> */}
         </div>
       )}
 
