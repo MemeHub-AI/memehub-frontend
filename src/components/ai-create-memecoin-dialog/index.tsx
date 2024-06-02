@@ -27,9 +27,9 @@ export const AICreateMemecoinDialog = (props: Props) => {
     if (!pathname.startsWith(Routes.Create)) {
       const aimemeInfoStore = useAimemeInfoStore.getState()
       aimemeInfoStore.setInfo({
-        name: data?.name,
-        image: data?.image,
-        description: data?.description,
+        name: isRandom ? '' : data?.name,
+        image: isRandom ? '' : data?.image,
+        description: isRandom ? '' : data?.description,
       })
       return push(Routes.Create)
     }
@@ -105,6 +105,7 @@ export const AICreateMemecoinDialog = (props: Props) => {
   if (!data?.name && !isRandom && !loading) {
     return <></>
   }
+
   return (
     <Dialog open={show} onOpenChange={hidden}>
       {handleDialogContent()}

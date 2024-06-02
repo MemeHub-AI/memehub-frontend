@@ -81,7 +81,7 @@ export const TokenCards = (props: Props) => {
       >
         {cards.length ? (
           <>
-            <Card
+            {/* <Card
               className={cn(
                 'flex items-stretch rounded overflow-hidden gap-2 relative',
                 'max-sm:mt-1'
@@ -116,7 +116,7 @@ export const TokenCards = (props: Props) => {
                   </div>
                 </div>
               </div>
-            </Card>
+            </Card> */}
             {filteredCards.map((t, i) => (
               <TokenCard key={i} card={t} />
             ))}

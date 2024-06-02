@@ -18,14 +18,14 @@ export const CreatePage = () => {
     formData,
     isOpportunity: tab === 1,
   })
-  const aimemeInfoStore = useAimemeInfoStore.getState()
+  const aimemeInfoStore = useAimemeInfoStore()
   const isFirst = useRef(true)
 
   useEffect(() => {
-    if (aimemeInfoStore.info?.name && isFirst.current) {
+    if (aimemeInfoStore.info?.name !== undefined && isFirst.current) {
       isFirst.current = false
       newsListData.setShow(true)
-      aIMemeInfo.getAIMemeInfo(aimemeInfoStore.info?.name)
+      aIMemeInfo.getAIMemeInfo(aimemeInfoStore.info?.name || '')
     }
   }, [])
 
