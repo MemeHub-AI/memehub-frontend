@@ -10,6 +10,7 @@ import { ERR } from '@/errors'
 interface Value {
   isBuy: boolean
   isSell: boolean
+  isTraded: boolean
   nativeSymbol: string
   ethBalance: string
   tokenBalance: string

@@ -38,7 +38,7 @@ export const useTrade = () => {
   const isSubmitting = isInternalTrading || isUniswapTrading
 
   // Waiting results for contract interaction.
-  const { isLoading } = useWaitForTx({
+  const { isLoading, isFetched: isTraded } = useWaitForTx({
     hash,
     onLoading: () => toast.loading(t('tx.waiting')),
     onSuccess: () => toast.success(t('trade.success')),
@@ -99,6 +99,7 @@ export const useTrade = () => {
     tradeHash: hash,
     isSubmitting,
     isTrading,
+    isTraded,
     checkForTrade,
     buy,
     sell,

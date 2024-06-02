@@ -1,4 +1,4 @@
-import React, { type ComponentProps, useState, useMemo } from 'react'
+import React, { type ComponentProps, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Address, isAddress } from 'viem'
 import { toast } from 'sonner'
@@ -33,8 +33,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
-  const { isSubmitting, buy, sell } = useTrade()
-  const { ethBalance, tokenBalance } = useTradeInfo()
+  const { isSubmitting, isTraded, buy, sell } = useTrade()
+  const {
+    ethBalance,
+    tokenBalance,
+    refetchNativeBalance,
+    refetchTokenBalance,
+  } = useTradeInfo()
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
 
@@ -103,9 +108,24 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     isBuy ? onBuy() : onSell()
   }
 
+  // Refresh balance when trade completed.
+  useEffect(() => {
+    if (!isTraded) return
+
+    refetchNativeBalance()
+    refetchTokenBalance()
+  }, [isTraded])
+
   return (
     <TradeProvider
-      value={{ isBuy, isSell, nativeSymbol, ethBalance, tokenBalance }}
+      value={{
+        isBuy,
+        isSell,
+        isTraded,
+        nativeSymbol,
+        ethBalance,
+        tokenBalance,
+      }}
     >
       <Card
         hover="none"
