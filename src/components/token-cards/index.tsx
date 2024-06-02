@@ -75,7 +75,7 @@ export const TokenCards = (props: Props) => {
       return
     }
 
-    setFilteredCards((cards) => cards.filter((c) => c.chain.id === chainId))
+    setFilteredCards(cards.filter((c) => c.chain.id === chainId))
   }
 
   useEffect(() => {
