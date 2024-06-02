@@ -31,13 +31,14 @@ export const useChartParse = () => {
     return tvInterval.toLowerCase()
   }
 
-  const toBars = (list: BarItem[]) => {
+  const formatBars = (list: BarItem[]) => {
     return list.filter(Boolean).map((bar) => {
       const barTimeLen = bar.timestamp.toString().length
       const time = barTimeLen !== 13 ? bar.timestamp * 1000 : bar.timestamp
       return {
         ...bar,
         time: Math.floor(time),
+        volume: Number(bar.volume),
       } as Bar
     })
   }
@@ -54,7 +55,7 @@ export const useChartParse = () => {
   return {
     toTVInterval,
     parseTVInterval,
-    toBars,
+    formatBars,
     priceToPricescale,
   }
 }

@@ -38,7 +38,7 @@ const symbolInfoConfig: LibrarySymbolInfo = {
   has_empty_bars: true,
   has_intraday: true,
   visible_plots_set: 'ohlcv',
-  volume_precision: 0,
+  volume_precision: 18,
   currency_code: 'PEPE',
 }
 
