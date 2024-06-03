@@ -119,16 +119,16 @@ const IdeaPage = () => {
   }, [y])
 
   return (
-    <main className="min-h-main px-2 pb-3 flex max-sm:px-3 max-sm:pt-0 gap-6 max-sm:flex-col">
+    <main className="min-h-main pb-3 flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col">
       <OpportunityMoonshot
-        className="max-sm:hidden max-sm:!px-0"
+        className="max-sm:!hidden max-sm:!px-0"
         newsListData={newsListData}
         isDialogLoading={false}
         onConfirmDialog={() => {}}
         tab={tab}
         setTab={setTab}
       />
-      <div className="max-w-[1185px] max-sm:pr-0 pr-4 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
+      <div className="max-w-[1185px]  max-sm:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <div className="flex">
             <img

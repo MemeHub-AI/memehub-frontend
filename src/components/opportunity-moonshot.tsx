@@ -75,82 +75,88 @@ export const OpportunityMoonshot = ({
   return (
     <div
       className={clsx(
-        'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full h-[83vh]',
+        'mr-10 pr-10 border-r-2 border-black h-[100vh] max-sm:mr-0 max-sm:pr-0  max-sm:h-min max-sm:border-0',
         className
       )}
     >
-      <div className="flex items-start">
-        {tabs.map((tab, i) => {
-          return (
-            <div
-              key={i}
-              className={cn(
-                'px-2.5 py-1.5 text-nowrap rounded-xl my-5 cursor-pointer border-2 border-transparent',
-                'hover:border-black',
-                i === 1 && 'ml-3',
-                tabIdx == i && 'bg-black text-[#ffe770]'
-              )}
-              onClick={() => onChangeTab(i)}
-            >
-              {tab}
-            </div>
-          )
-        })}
-      </div>
-      {tabIdx === 0 ? (
-        <Select defaultValue={getArea()} onValueChange={onChange}>
-          <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
-            <SelectValue placeholder={t('area')} />
-          </SelectTrigger>
-          <SelectContent>
-            {countryList?.map((country, i) => (
-              <SelectItem key={i} value={`${country.id}`}>
-                {utilLang.getContent(country.name)}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ) : null}
-      <CustomSuspense
-        isPending={isFetching}
-        fallback={<NewsSkeleton />}
-        nullback={t('no.data')}
+      <div
         className={clsx(
-          'flex flex-col gap-6 h-[calc(100vh-260px)] overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip',
-          listClassName
+          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full h-[83vh] '
         )}
       >
-        <div className="flex flex-col gap-3">
-          {newsList?.map((news, i) => (
-            <NewsCard
-              news={news!}
-              key={i}
-              onClick={() => {
-                push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
-              }}
-              onMeme={() => {
-                handleClick(news)
-              }}
-            />
-          ))}
+        <div className="flex items-start">
+          {tabs.map((tab, i) => {
+            return (
+              <div
+                key={i}
+                className={cn(
+                  'px-2.5 py-1.5 text-nowrap rounded-xl my-5 cursor-pointer border-2 border-transparent',
+                  'hover:border-black',
+                  i === 1 && 'ml-3',
+                  tabIdx == i && 'bg-black text-[#ffe770]'
+                )}
+                onClick={() => onChangeTab(i)}
+              >
+                {tab}
+              </div>
+            )
+          })}
         </div>
-        {/* <Pagination
+        {tabIdx === 0 ? (
+          <Select defaultValue={getArea()} onValueChange={onChange}>
+            <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
+              <SelectValue placeholder={t('area')} />
+            </SelectTrigger>
+            <SelectContent>
+              {countryList?.map((country, i) => (
+                <SelectItem key={i} value={`${country.id}`}>
+                  {utilLang.getContent(country.name)}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        ) : null}
+        <CustomSuspense
+          isPending={isFetching}
+          fallback={<NewsSkeleton />}
+          nullback={t('no.data')}
+          className={clsx(
+            'flex flex-col gap-6 h-[calc(100vh-260px)] overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip',
+            listClassName
+          )}
+        >
+          <div className="flex flex-col gap-3">
+            {newsList?.map((news, i) => (
+              <NewsCard
+                news={news!}
+                key={i}
+                onClick={() => {
+                  push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
+                }}
+                onMeme={() => {
+                  handleClick(news)
+                }}
+              />
+            ))}
+          </div>
+          {/* <Pagination
           total={tradeRecords.length}
           onPageChange={() => fetch({})}
         ></Pagination> */}
-      </CustomSuspense>
+        </CustomSuspense>
 
-      <AICreateMemecoinDialog
-        show={show}
-        loading={isDialogLoading}
-        data={{
-          name: memeit?.title,
-          image: memeit?.image,
-          description: memeit?.content,
-        }}
-        hidden={hidden}
-        onConfirm={onConfirm}
-      ></AICreateMemecoinDialog>
+        <AICreateMemecoinDialog
+          show={show}
+          loading={isDialogLoading}
+          data={{
+            name: memeit?.title,
+            image: memeit?.image,
+            description: memeit?.content,
+          }}
+          hidden={hidden}
+          onConfirm={onConfirm}
+        ></AICreateMemecoinDialog>
+      </div>
     </div>
   )
 }
