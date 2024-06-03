@@ -39,12 +39,7 @@ export const InspirationNews = ({
   const { getArea, setArea } = useStorage()
   const { push } = useRouter()
 
-  const {
-    getAIMemeInfo,
-    isLoadingMemeImg,
-    isLoadingMemeInfo,
-    isLoadingMemePoster,
-  } = aIMemeInfo
+  const { getAIMemeInfo, isLoadingMemeInfo } = aIMemeInfo
 
   const {
     isFetching,
@@ -52,8 +47,6 @@ export const InspirationNews = ({
     countryList,
     show,
     memeit,
-    fetchNextPage,
-    fetchPreviousPage,
     setShow,
     handleClick,
   } = newsListData
@@ -124,7 +117,7 @@ export const InspirationNews = ({
               news={news!}
               key={i}
               onClick={() => {
-                push(`${Routes.Idea}/${news?.id}`)
+                push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
               }}
               onMeme={() => {
                 handleClick(news)

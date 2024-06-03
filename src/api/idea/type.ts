@@ -1,4 +1,5 @@
 export interface IdeaQuery {
+  type: string
   page?: number
   pageSize?: number
 }

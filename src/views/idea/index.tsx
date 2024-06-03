@@ -2,34 +2,47 @@ import { Button } from '@/components/ui/button'
 import HotNewsAside from '../../components/aside'
 import { useTranslation } from 'react-i18next'
 import { BsStars } from 'react-icons/bs'
-import { Avatar } from '@/components/ui/avatar'
-import { useScroll, useWindowSize } from 'react-use'
-import { ChainInfo } from './components/chain-info'
+import { useWindowSize } from 'react-use'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { ideaApi } from '@/api/idea'
-import { IdeaBasicInfo, IdeaDataList } from '@/api/idea/type'
+import { IdeaDataList } from '@/api/idea/type'
 import CustomSuspense from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CreatedUser } from './components/created-user'
 import { useRouter } from 'next/router'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
-import { useRef, useState } from 'react'
-import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { memo, useState } from 'react'
 import { defaultImg } from '@/config/link'
+import { Routes } from '@/routes'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import clsx from 'clsx'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
   const { width } = useWindowSize()
   const router = useRouter()
+  const type = router.query.type as string
   const newsId = router.query.id as string
   const [show, setShow] = useState(false)
+  const { push } = useRouter()
+  const { setFormInfo } = useAimemeInfoStore()
+
+  const onCreateNow = (item: IdeaDataList) => {
+    push(`${Routes.Create}`)
+    setFormInfo({
+      name: item?.name,
+      symbol: item?.name,
+      description: item?.description,
+    })
+  }
 
   const { data: basicInfoData } = useQuery({
-    queryKey: [ideaApi.getIdeaInfo.name, newsId],
+    queryKey: [ideaApi.getIdeaInfo.name, newsId, type],
     queryFn: () => {
-      if (newsId == undefined) throw new Error('newsId is undefined')
+      if (newsId == undefined || type === undefined)
+        throw new Error('newsId is undefined')
 
-      return ideaApi.getIdeaInfo(newsId)
+      return ideaApi.getIdeaInfo(newsId, { type })
     },
   })
 
@@ -42,11 +55,12 @@ const IdeaPage = () => {
     fetchNextPage,
     isFetchNextPageError,
   } = useInfiniteQuery({
-    queryKey: [ideaApi.getIdeaList.name, newsId],
+    queryKey: [ideaApi.getIdeaList.name, newsId, type],
     queryFn: ({ pageParam }) => {
-      if (newsId == undefined) throw new Error('newsId is undefined')
+      if (newsId == undefined || type === undefined)
+        throw new Error('newsId is undefined')
 
-      return ideaApi.getIdeaList(newsId, { page: pageParam })
+      return ideaApi.getIdeaList(newsId, { page: pageParam, type })
     },
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
@@ -117,43 +131,48 @@ const IdeaPage = () => {
             {t('random.meme')}
           </Button>
         </div>
-        <div className="my-5">{t('go.bold.man')} </div>
+        {waterfallList.length ? (
+          <div className="my-5">{t('go.bold.man')} </div>
+        ) : null}
 
         <CustomSuspense
           fallback={<WaterSkeleton></WaterSkeleton>}
-          nullback={<div>{t('no.data')}</div>}
+          nullback={<div className="mt-5">{t('no.idea')}</div>}
           isPending={isLoading}
+          className="flex gap-4"
         >
-          <div className="flex gap-4">
-            {waterfallList?.map((cols, i) => {
-              return (
-                <div
-                  key={i}
-                  className="flex-1 w-[280px] max-w-[280px] max-sm:w-full max-sm:max-w-full"
-                >
-                  {cols?.map((item) => {
-                    return (
-                      <div
-                        key={item.id}
-                        className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
-                      >
-                        <div className="px-2 max-sm:px-3 text-lg">
-                          {item.name}
-                        </div>
-                        <div className="mt-2 px-2 max-sm:px-3 min-h-[50px] text-sm">
-                          {item.description}
-                        </div>
-
-                        {/* <ChainInfo data={item} /> */}
-
-                        <CreatedUser data={item} />
+          {waterfallList?.map((cols, i) => {
+            return (
+              <div
+                key={i}
+                className="flex-1 w-[280px] max-w-[280px] max-sm:w-full max-sm:max-w-full"
+              >
+                {cols?.map((item) => {
+                  return (
+                    <div
+                      key={item.id}
+                      className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
+                    >
+                      <div className="flex justify-between items-center px-2 max-sm:px-3 text-lg">
+                        <span>{item.name}</span>
+                        <span
+                          className="text-base cursor-pointer text-blue-500"
+                          onClick={() => onCreateNow(item)}
+                        >
+                          {t('create.now')}
+                        </span>
                       </div>
-                    )
-                  })}
-                </div>
-              )
-            })}
-          </div>
+                      <Desc description={item.description}></Desc>
+
+                      {/* <ChainInfo data={item} /> */}
+
+                      <CreatedUser data={item} />
+                    </div>
+                  )
+                })}
+              </div>
+            )
+          })}
         </CustomSuspense>
         {isFetching && !isLoading ? (
           <div className="text-center my-5">{t('loading')}</div>
@@ -161,13 +180,41 @@ const IdeaPage = () => {
       </div>
       <AICreateMemecoinDialog
         show={show}
-        isRandom
+        data={{
+          name: basicInfo?.title,
+          image: basicInfo?.logo,
+          description: basicInfo?.description,
+        }}
         onConfirm={onConfirm}
         hidden={() => setShow(false)}
       ></AICreateMemecoinDialog>
     </main>
   )
 }
+
+const Desc = memo(({ description }: { description: string }) => {
+  const [show, setShow] = useState(false)
+  const randomInt = Math.floor(Math.random() * 4) + 3
+
+  return (
+    <>
+      <div
+        className={clsx(
+          'mt-2 px-2 max-sm:px-3 min-h-[50px] text-sm cursor-pointer',
+          show ? '' : 'line-clamp-' + randomInt
+        )}
+        onClick={() => setShow(!show)}
+      >
+        {description}
+        <span className="line-clamp-3 "></span>
+        <span className="line-clamp-4 "></span>
+        <span className="line-clamp-5 "></span>
+        <span className="line-clamp-6 "></span>
+        <span className="line-clamp-7 "></span>
+      </div>
+    </>
+  )
+})
 
 const WaterSkeleton = () => {
   return (
