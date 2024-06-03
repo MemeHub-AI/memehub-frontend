@@ -5,35 +5,38 @@ import type {
   IBasicDataFeed,
   LibrarySymbolInfo,
 } from '../../../../public/js/charting_library/charting_library'
-import type { ChartOptions } from './use-chart'
 
 import { useDatafeedConfig } from './use-datafeed-config'
 import { useDatafeedCache } from './use-datafeed-cache'
 import { useDatafeedWebsocket } from './use-datafeed-websocket'
-import { useChartParse } from './use-chart-parse'
+import { useChartUtils } from './use-chart-utils'
 import { useStorage } from '@/hooks/use-storage'
 
 export const useDatafeed = () => {
-  const { readyConfig, symbolInfoConfig } = useDatafeedConfig()
-  const cache = useDatafeedCache()
-  const { listenAsync, historyAsync, onUpdate, onClosed, disconenct } =
-    useDatafeedWebsocket()
-  const { parseTVInterval, formatBars, priceToPricescale } = useChartParse()
   const { query } = useRouter()
   const chain = (query.chain || '') as string
   const addr = (query.address || '') as string
+
   const { getInterval, setInterval } = useStorage()
+  const interval = getInterval(chain, addr) || '1m'
+  const { readyConfig, symbolInfoConfig } = useDatafeedConfig()
+  const cache = useDatafeedCache()
+  const { listenAsync, historyAsync, onUpdate, disconenct } =
+    useDatafeedWebsocket({
+      onReconnect: () => {
+        listenAsync({ interval, token_address: addr })
+      },
+    })
+  const { formatInterval, formatBars, formatPricescale } = useChartUtils()
 
-  const createDatafeed = (options: ChartOptions) => {
-    const { symbol, interval, tokenAddr } = options
-
+  const createDatafeed = () => {
     return {
       onReady: (callback) => setTimeout(() => callback(readyConfig)),
       searchSymbols(_, __, ___, ____) {},
       async resolveSymbol(symbolName, onResolve, onError, extension) {
         const { data } = await listenAsync({
           interval,
-          token_address: tokenAddr,
+          token_address: addr,
         })
         const bars = formatBars(data)
         const symbolInfo: LibrarySymbolInfo = {
@@ -41,7 +44,7 @@ export const useDatafeed = () => {
           name: symbolName,
           full_name: symbolName,
           description: symbolName,
-          pricescale: priceToPricescale(Number(last(bars)?.open)),
+          pricescale: formatPricescale(Number(last(bars)?.open)),
         }
 
         cache.setBars(bars)
@@ -49,7 +52,7 @@ export const useDatafeed = () => {
         onResolve(symbolInfo)
       },
       async getBars(symbolInfo, resolution, period, onResult, onError) {
-        const interval = parseTVInterval(resolution)
+        const interval = formatInterval(resolution)
 
         if (period.firstDataRequest) {
           const cachedBars = cache.getBars() || []
@@ -62,7 +65,7 @@ export const useDatafeed = () => {
 
           const { data } = await listenAsync({
             interval,
-            token_address: tokenAddr,
+            token_address: addr,
           })
           const bars = formatBars(data)
           !isEmpty(bars) && cache.setLastBar(last(bars))
@@ -73,7 +76,7 @@ export const useDatafeed = () => {
 
         const { data } = await historyAsync({
           interval,
-          token_address: tokenAddr,
+          token_address: addr,
           start: period.from,
           limit: period.countBack,
         })
@@ -96,10 +99,6 @@ export const useDatafeed = () => {
             console.clear()
             console.log('update', bars)
           })
-        })
-        // Relisten on reconnect.
-        onClosed(() => {
-          listenAsync({ interval, token_address: tokenAddr })
         })
       },
       unsubscribeBars(uid) {
