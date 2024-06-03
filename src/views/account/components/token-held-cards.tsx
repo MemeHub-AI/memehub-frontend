@@ -34,7 +34,7 @@ export const TokenHeldCards = (props: Props) => {
       isPending={isLoading}
       fallback={<CardSkeleton />}
       nullback={<p className="text-zinc-500">{t('token.no-token')}</p>}
-      className="grid grid-cols-3 gap-3 xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-2"
+      className="grid grid-cols-3 gap-3 2xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-2"
     >
       {cards?.map((c, i) => (
         <HeldCard c={c} key={i} />
@@ -78,7 +78,7 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
 
 const CardSkeleton = () => {
   return (
-    <div className="grid grid-cols-3 gap-3 xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-2">
+    <div className="grid grid-cols-3 gap-3 2xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-2">
       {Array.from({ length: 3 }).map((_, i) => (
         <Card className="flex gap-2" padding="md" key={i}>
           <Skeleton className="w-10 h-10 rounded-full" />
