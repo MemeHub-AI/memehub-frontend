@@ -23,7 +23,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const tokenSymbol = tokenInfo?.ticker || ''
   const baseTokenAmount = fmt.tradeFixed(BigNumber(String(value || 0)))
   const tokenAddr = tokenInfo?.address as Address
-  const balance = BigNumber(isBuy ? ethBalance : tokenBalance).toFixed(2)
+  const balance = fmt.decimals(isBuy ? ethBalance : tokenBalance)
 
   const calcBuyTokenAmount = () => {
     getBuyTokenAmount(tokenAddr, value as string).then((weiAmount) => {
