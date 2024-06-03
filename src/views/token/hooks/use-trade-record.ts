@@ -29,6 +29,7 @@ export const useTradeRecord = () => {
       })
     },
     filter: ({ data }) => isSuccessMessage(data) || isUpdateMessage(data),
+    shouldReconnect: () => true,
   })
 
   useEffect(() => {

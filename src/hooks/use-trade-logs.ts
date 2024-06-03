@@ -25,6 +25,7 @@ export const useTradeLogs = () => {
     useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(wsApiURL.tradeLogs, {
       heartbeat,
       onOpen: () => sendJsonMessage({ type: 'message', data: null }),
+      shouldReconnect: () => true,
     })
 
   useEffect(() => {
