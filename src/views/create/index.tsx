@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 import { Main } from './components/main'
-import { InspirationNews } from './components/aside'
 import { CreateTokenStatusDialog } from './components/dialog'
 import { useDeploy } from './hooks/use-deploy'
 import { useCreateTokenForm } from './hooks/use-form'

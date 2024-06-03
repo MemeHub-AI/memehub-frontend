@@ -127,6 +127,7 @@ export const useNewsList = (options?: Options) => {
     loadingCountry: isLoading,
     newsList: newsData?.newsList,
     countryList: country?.data,
+    getAIMemeInfo,
     handleClick,
     onConfirmCreate,
     hidden,

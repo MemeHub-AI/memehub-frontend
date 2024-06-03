@@ -181,13 +181,9 @@ export const OpportunityMoonshot = ({
 }
 
 export const MobileQpportunityMoonshot = ({
-  className,
-  listClassName,
   newsListData,
   tab: tabIdx,
-  isDialogLoading,
   setTab,
-  onConfirmDialog,
   children,
 }: Props) => {
   return (
