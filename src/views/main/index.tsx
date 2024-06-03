@@ -4,10 +4,13 @@ import { TokenCards } from '@/components/token-cards'
 import { HotNewsAside } from '../../components/aside'
 import { useTokens } from '@/hooks/use-tokens'
 import { AIIdea } from './components/ai-idea'
+import { useTradeLogs } from '@/hooks/use-trade-logs'
 
 export const MainPage = () => {
   const { tokens, totalToken, isLoading, isFetching, fetchNextPage } =
     useTokens()
+
+  useTradeLogs()
 
   return (
     <main className="min-h-main px-6 pb-3 flex max-sm:px-3 max-sm:pt-0 gap-6">
