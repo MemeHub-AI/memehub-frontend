@@ -1,5 +1,4 @@
 import { useAccount, useWriteContract } from 'wagmi'
-import { first } from 'lodash'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
@@ -11,10 +10,13 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useDeployConfig } from './use-deploy-config'
 import { ca } from '@/contract/address'
 
+let cacheParams: Omit<TokenNewReq, 'hash'>
+
 export const useDeploy = () => {
   const { t } = useTranslation()
   const { chainId } = useAccount()
-  const { createTokenData, createTokenError, create } = useCreateToken()
+  const { createTokenData, createTokenError, isCreatingToken, create } =
+    useCreateToken()
   const { deployFee, deploySymbol, reserveRatio } = useDeployConfig()
 
   const {
@@ -31,9 +33,9 @@ export const useDeploy = () => {
     isLoading,
     isError,
   } = useWaitForTx({ hash })
-  const deployedAddress = first(data?.logs)?.address
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
+    cacheParams = params
     // const contractAddr = chains.find((c) => c.name === params.chain)
     //   ?.contract_address as `0x${string}`
 
@@ -77,15 +79,24 @@ export const useDeploy = () => {
     )
   }
 
+  const retryCreate = () => {
+    if (!cacheParams || !hash) {
+      toast.error(t('cannot-retry'))
+      return
+    }
+
+    create({ ...cacheParams, hash })
+  }
+
   return {
     data,
-    deployedAddress,
     deployFee,
     deploySymbol,
     deployHash: hash,
-    isDeploying: isPending || isLoading,
+    isDeploying: isPending || isLoading || isCreatingToken,
     isSubmitting: isPending,
     isConfirming: isLoading,
+    isCreatingToken,
     isDeploySuccess: isSuccess,
     isDeployError: isError,
     submitError,
@@ -94,5 +105,6 @@ export const useDeploy = () => {
     createTokenData,
     deploy,
     resetDeploy: reset,
+    retryCreate,
   }
 }

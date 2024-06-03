@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -20,10 +20,10 @@ interface Props extends ComponentProps<'div'> {
 export const FollowCard = ({ card }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
-  const { follow, unfollow } = useUser({
-    onFollowSuccess: () => refetchUserInfo(),
-  })
   const { refetchUserInfo, userInfo } = useAccountContext()
+  const { follow, unfollow } = useUser({
+    onFollowSuccess: refetchUserInfo,
+  })
 
   return (
     <Card
@@ -31,11 +31,12 @@ export const FollowCard = ({ card }: Props) => {
       hover="bg"
       shadow="none"
       onClick={() => {
-        router.push(`${Routes.Account}/${card.user.wallet_address}`)
+        const href = fmt.toHref(Routes.Account, card.user.wallet_address)
+        router.push(href)
       }}
     >
       <div className="flex items-center gap-2">
-        <Avatar src={card.logo} fallback={card.name.slice(-4)} />
+        <Avatar src={card.logo} fallback={card.name[0]} />
         <div className="flex flex-col">
           <p className="font-bold">{card.name}</p>
           <p className="text-zinc-500 text-sm">{fmt.addr(card.name)}</p>

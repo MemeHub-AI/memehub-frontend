@@ -20,7 +20,7 @@ export const TokenPage = () => {
       <main
         className={cn(
           'px-4 max-sm:px-3 pt-6 max-w-main mx-auto min-h-main',
-          'flex space-x-4 max-sm:flex-col max-sm:space-x-0'
+          'flex space-x-4 max-sm:flex-col max-sm:space-x-0 pb-4'
         )}
       >
         {/* Left */}
