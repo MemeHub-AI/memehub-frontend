@@ -1,6 +1,7 @@
 import { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
+import { BigNumber } from 'bignumber.js'
 
 import { useTokenContext } from '@/contexts/token'
 import { Routes } from '@/routes'
@@ -22,10 +23,8 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
       )}
     >
       <span className="flex items-center gap-4">
-        {t('market-cap')}: ${marketCap}
-        {/* <p>
-            {t('virtual-liquidity')}: ${virtualLiquidity}
-          </p> */}
+        {t('market-cap')}: ${fmt.tradeFixed(BigNumber(marketCap))}
+        {/* <p>{t('virtual-liquidity')}: ${virtualLiquidity}</p> */}
       </span>
       <div className="flex items-center gap-1">
         <div className="mr-1">{t('creator')}:</div>
