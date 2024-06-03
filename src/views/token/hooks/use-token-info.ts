@@ -9,6 +9,7 @@ import { tokenApi } from '@/api/token'
 export const useTokenInfo = () => {
   const { query } = useRouter()
   const tokenAddr = (query.address || '') as Address
+  const chainId = Number(query.chain_id || 0)
 
   // Query token amounts.
   const { data = [], refetch: refetchInfo } = useReadContracts({
@@ -16,11 +17,13 @@ export const useTokenInfo = () => {
       {
         abi: continousTokenAbi,
         address: tokenAddr,
+        chainId,
         functionName: 'ETH_AMOUNT',
       },
       {
         abi: continousTokenAbi,
         address: tokenAddr,
+        chainId,
         functionName: 'raiseEthAmount',
       },
     ],
