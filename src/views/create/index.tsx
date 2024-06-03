@@ -9,6 +9,7 @@ import { useNewsList } from '@/hooks/use-news-list'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
+import { CreateTokenContext } from './context'
 
 export const CreatePage = () => {
   const deployResult = useDeploy()
@@ -41,27 +42,35 @@ export const CreatePage = () => {
   }, [])
 
   return (
-    <main className="min-h-main flex justify-center mx-auto max-md:flex-col max-md:items-center max-sm:gap-8">
-      <OpportunityMoonshot
-        newsListData={newsListData}
-        isDialogLoading={aiMemeInfo.isLoadingMemeInfo}
-        onConfirmDialog={() =>
-          aiMemeInfo.getAIMemeInfo(newsListData.memeit?.title || '')
-        }
-        tab={tab}
-        setTab={setTab}
-      />
-      <Main
-        newsListData={newsListData}
-        deployResult={deployResult}
-        formData={formData}
-        aiMemeInfo={aiMemeInfo}
-        className="flex-1  max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0"
-      />
+    <CreateTokenContext.Provider
+      value={{
+        formData,
+        deployResult,
+        newsListData,
+        aiMemeInfo,
+      }}
+    >
+      <main className="min-h-main flex justify-center mx-auto max-md:flex-col max-md:items-center max-sm:gap-8">
+        <OpportunityMoonshot
+          className="max-sm:!hidden"
+          newsListData={newsListData}
+          isDialogLoading={aiMemeInfo.isLoadingMemeInfo}
+          onConfirmDialog={() =>
+            aiMemeInfo.getAIMemeInfo(newsListData.memeit?.title || '')
+          }
+          tab={tab}
+          setTab={setTab}
+        />
+        <Main
+          className="flex-1  max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0"
+          tab={tab}
+          setTab={setTab}
+        />
 
-      {/* All status dialog during create. */}
-      <CreateTokenStatusDialog {...deployResult} />
-    </main>
+        {/* All status dialog during create. */}
+        <CreateTokenStatusDialog {...deployResult} />
+      </main>
+    </CreateTokenContext.Provider>
   )
 }
 

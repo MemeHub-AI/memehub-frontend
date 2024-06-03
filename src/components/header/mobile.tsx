@@ -74,7 +74,7 @@ export const HeaderMobile = (props: Props) => {
       </Sheet>
 
       <div className="flex items-center">
-        {isConnected && (
+        {isConnected && router.pathname !== Routes.Create && (
           <Button
             className="mx-3 max-sm:mx-1.5"
             onClick={() => router.push(Routes.Create)}

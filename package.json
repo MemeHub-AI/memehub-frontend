@@ -49,7 +49,6 @@
     "react-responsive": "^10.0.0",
     "react-use": "^17.5.0",
     "react-use-websocket": "^4.8.1",
-    "react-zmage": "^0.8.5-beta.37",
     "shadcn-ui": "^0.8.0",
     "sonner": "^1.4.41",
     "tailwind-merge": "^2.3.0",

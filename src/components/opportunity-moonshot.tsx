@@ -19,12 +19,17 @@ import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { useRouter } from 'next/router'
 import clsx from 'clsx'
+import { Button } from './ui/button'
+import { Pagination } from './ui/pagination'
+import { t } from 'i18next'
+import { BsStars } from 'react-icons/bs'
+import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
 
 interface Props extends ComponentProps<'div'> {
-  newsListData: ReturnType<typeof useNewsList>
+  newsListData?: ReturnType<typeof useNewsList>
   tab: number
   listClassName?: string
-  isDialogLoading: boolean
+  isDialogLoading?: boolean
   setTab: (tab: number) => void
   onConfirmDialog: () => void
 }
@@ -45,22 +50,31 @@ export const OpportunityMoonshot = ({
   const {
     isFetching,
     newsList,
+    loadingCountry,
     countryList,
     show,
     memeit,
     setShow,
     handleClick,
-  } = newsListData
+    fetchPreviousPage,
+    fetchNextPage,
+  } = newsListData || {}
 
-  const tabs = [t('next.moonshot'), t('hot-opportunity')]
+  if (countryList) {
+    const usIdx = countryList?.findIndex((country) => country.id === 24) || 0
+    const country = countryList.splice(usIdx, 1)?.[0]
+    if (country) countryList?.unshift(country)
+  }
+
+  const tabs = [t('next.moonshot'), t('take.wave')]
 
   const hidden = () => {
-    setShow(false)
+    setShow?.(false)
   }
 
   const onChange = (value: string) => {
     setArea(value)
-    newsListData.setArea(+value)
+    newsListData?.setArea(+value)
   }
 
   const onChangeTab = (idx: number) => {
@@ -106,9 +120,15 @@ export const OpportunityMoonshot = ({
         </div>
         {tabIdx === 0 ? (
           <Select defaultValue={getArea()} onValueChange={onChange}>
-            <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
-              <SelectValue placeholder={t('area')} />
-            </SelectTrigger>
+            {loadingCountry ? (
+              <Button className="mb-4 w-[inheirt] max-sm:mb-2">
+                {t('loading.country')}
+              </Button>
+            ) : (
+              <SelectTrigger className="mb-4 w-[inheirt] max-sm:mb-2">
+                <SelectValue placeholder={t('area')} />
+              </SelectTrigger>
+            )}
             <SelectContent>
               {countryList?.map((country, i) => (
                 <SelectItem key={i} value={`${country.id}`}>
@@ -137,15 +157,11 @@ export const OpportunityMoonshot = ({
                   push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
                 }}
                 onMeme={() => {
-                  handleClick(news)
+                  handleClick?.(news)
                 }}
               />
             ))}
           </div>
-          {/* <Pagination
-          total={tradeRecords.length}
-          onPageChange={() => fetch({})}
-        ></Pagination> */}
         </CustomSuspense>
 
         <AICreateMemecoinDialog
@@ -161,5 +177,36 @@ export const OpportunityMoonshot = ({
         ></AICreateMemecoinDialog>
       </div>
     </div>
+  )
+}
+
+export const MobileQpportunityMoonshot = ({
+  className,
+  listClassName,
+  newsListData,
+  tab: tabIdx,
+  isDialogLoading,
+  setTab,
+  onConfirmDialog,
+  children,
+}: Props) => {
+  return (
+    <Drawer>
+      <DrawerTrigger>{children}</DrawerTrigger>
+      <DrawerContent>
+        <OpportunityMoonshot
+          className="relative"
+          listClassName={clsx(
+            '!overflow-y-auto',
+            tabIdx == 0 ? 'max-sm:h-[65vh]' : 'max-sm:h-[70vh]'
+          )}
+          newsListData={newsListData}
+          isDialogLoading={false}
+          onConfirmDialog={() => {}}
+          tab={tabIdx}
+          setTab={setTab}
+        />
+      </DrawerContent>
+    </Drawer>
   )
 }

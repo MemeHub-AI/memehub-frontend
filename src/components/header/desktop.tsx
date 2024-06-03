@@ -44,13 +44,14 @@ export const HeaderDesktop = (props: Props) => {
         <SearchInput />
         <SocialLinks className="ml-3" />
         <LangSelect className="flex-shrink-0 mx-3" />
-        <Button
-          className="max-sm:mx-1.5 mr-3"
-          onClick={() => router.push(Routes.Create)}
-          disabled={router.pathname === Routes.Create}
-        >
-          {t('token.create')}
-        </Button>
+        {router.pathname !== Routes.Create ? (
+          <Button
+            className="max-sm:mx-1.5 mr-3"
+            onClick={() => router.push(Routes.Create)}
+          >
+            {t('token.create')}
+          </Button>
+        ) : null}
         <WalletConnect />
       </div>
     </>

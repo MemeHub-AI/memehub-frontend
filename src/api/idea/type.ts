@@ -26,6 +26,6 @@ export interface IdeaRes {
 export interface IdeaBasicInfo {
   id: number
   title: string
-  description: string
+  content: string
   logo: string
 }

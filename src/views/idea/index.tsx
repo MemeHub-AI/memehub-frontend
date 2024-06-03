@@ -14,7 +14,10 @@ import { defaultImg } from '@/config/link'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import clsx from 'clsx'
-import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
+import {
+  MobileQpportunityMoonshot,
+  OpportunityMoonshot,
+} from '@/components/opportunity-moonshot'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useTranslation } from 'react-i18next'
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
@@ -140,7 +143,7 @@ const IdeaPage = () => {
             />
             <div className=" ml-3">
               <div className="text-xl text">{basicInfo?.title}</div>
-              <div className="mt-2 text-gray-500">{basicInfo?.description}</div>
+              <Content content={basicInfo?.content}></Content>
             </div>
           </div>
           <div className="flex max-md:mt-4">
@@ -148,29 +151,20 @@ const IdeaPage = () => {
               <BsStars className="mr-1"></BsStars>
               {t('random.meme')}
             </Button>
-            <Drawer>
-              <DrawerTrigger>
-                <div className="sm:hidden ml-4">
-                  <Button className="bg-white text-2xl" size={'icon'}>
-                    💡
-                  </Button>
-                </div>
-              </DrawerTrigger>
-              <DrawerContent>
-                <OpportunityMoonshot
-                  className="relative"
-                  listClassName={clsx(
-                    '!overflow-y-auto',
-                    tab == 0 ? 'max-sm:h-[65vh]' : 'max-sm:h-[70vh]'
-                  )}
-                  newsListData={newsListData}
-                  isDialogLoading={false}
-                  onConfirmDialog={() => {}}
-                  tab={tab}
-                  setTab={setTab}
-                />
-              </DrawerContent>
-            </Drawer>
+            <MobileQpportunityMoonshot
+              className="max-sm:!hidden max-sm:!px-0 "
+              newsListData={newsListData}
+              isDialogLoading={false}
+              onConfirmDialog={() => {}}
+              tab={tab}
+              setTab={setTab}
+            >
+              <div className="sm:hidden ml-4">
+                <Button className="bg-white text-2xl" size={'icon'}>
+                  💡
+                </Button>
+              </div>
+            </MobileQpportunityMoonshot>
           </div>
         </div>
         {waterfallList.length ? (
@@ -185,20 +179,17 @@ const IdeaPage = () => {
         >
           {waterfallList?.map((cols, i) => {
             return (
-              <div
-                key={i}
-                className="flex-1 w-[280px] max-w-[280px] max-sm:w-full max-sm:max-w-full"
-              >
+              <div key={i} className="flex-1 max-sm:w-full max-sm:max-w-full">
                 {cols?.map((item) => {
                   return (
                     <div
                       key={item.id}
                       className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
                     >
-                      <div className="flex justify-between items-center px-2 max-sm:px-3 text-lg">
+                      <div className="flex justify-between items-start px-2 max-sm:px-3 text-lg">
                         <span>{item.name}</span>
                         <span
-                          className="text-base cursor-pointer text-blue-500"
+                          className="text-base cursor-pointer text-blue-500 text-nowrap"
                           onClick={() => onCreateNow(item)}
                         >
                           {t('create.now')}
@@ -225,7 +216,7 @@ const IdeaPage = () => {
         data={{
           name: basicInfo?.title,
           image: basicInfo?.logo,
-          description: basicInfo?.description,
+          description: basicInfo?.content,
         }}
         onConfirm={onConfirm}
         hidden={() => setShow(false)}
@@ -233,6 +224,21 @@ const IdeaPage = () => {
     </main>
   )
 }
+
+const Content = memo(({ content }: { content?: string }) => {
+  const [show, setShow] = useState(false)
+  return (
+    <div
+      className={clsx(
+        'mt-2 text-gray-500 max-w-[90%] cursor-pointer',
+        show ? '' : 'line-clamp-3'
+      )}
+      onClick={() => setShow(!show)}
+    >
+      {content}
+    </div>
+  )
+})
 
 const Desc = memo(({ description }: { description: string }) => {
   const [show, setShow] = useState(false)

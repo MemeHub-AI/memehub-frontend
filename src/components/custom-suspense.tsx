@@ -2,7 +2,7 @@ import React, { type ComponentProps, createElement } from 'react'
 import { isEmpty } from 'lodash'
 
 interface Props extends ComponentProps<'div'> {
-  isPending: boolean
+  isPending?: boolean
   fallback: React.ReactNode
   nullback?: React.ReactNode
   container?: keyof React.ReactDOM | 'fragment'

@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useState } from 'react'
+import React, { forwardRef, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatEther } from 'viem'
 import { z } from 'zod'
@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { useSwitchChain } from 'wagmi'
 
 import { aiApi } from '@/api/ai'
-import { useCreateTokenForm } from '../hooks/use-form'
+import { CreateTokenContext } from '../context'
 import {
   Form,
   FormControl,
@@ -19,35 +19,21 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/input'
 import { cn } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
-import { useDeploy } from '../hooks/use-deploy'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { fmt } from '@/utils/fmt'
-import { useNewsList } from '@/hooks/use-news-list'
 import { Dialog } from '@/components/ui/dialog'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
-const Zmage = React.lazy(() => import('react-zmage'))
-interface Props {
-  newsListData: ReturnType<typeof useNewsList>
-  formData: ReturnType<typeof useCreateTokenForm>
-  deployResult: ReturnType<typeof useDeploy>
-  isLoadingMemeInfo: boolean
-  isLoadingMemeImg: boolean
-  isLoadingMemePoster: boolean
-}
+export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
+  const { deployResult, formData, aiMemeInfo, newsListData } =
+    useContext(CreateTokenContext)
 
-export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
-  const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } = props
-  const { deployFee, deploySymbol, isDeploying } = props.deployResult
-  const {
-    url,
-    form,
-    chains,
-    formSchema,
-    formFields,
-    onSubmit,
-    onChangeUpload,
-  } = props.formData
+  const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } =
+    aiMemeInfo || {}
+
+  const { deployFee, deploySymbol, isDeploying } = deployResult || {}
+  const { url, form, chains, formFields, onSubmit, onChangeUpload } =
+    formData! || {}
   const { switchChain } = useSwitchChain()
 
   const [showPoster, setShowPoster] = useState(false)
@@ -56,11 +42,11 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
 
   const { t } = useTranslation()
 
-  const fee = Number(formatEther(BigInt(deployFee))).toFixed(3)
+  const fee = Number(formatEther(BigInt(deployFee!))).toFixed(3)
   const symbol = deploySymbol
 
   const onRight = () => {
-    const limit = Number(form.getValues(formFields.poster)?.length)
+    const limit = Number(form?.getValues(formFields?.poster!)?.length)
     setIndex((index) => {
       if (index === limit - 1) return 0
       return index + 1
@@ -68,26 +54,26 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
   }
 
   const onLeft = () => {
-    const limit = Number(form.getValues(formFields.poster)?.length)
+    const limit = Number(form?.getValues(formFields?.poster!)?.length)
     setIndex((index) => {
       if (index === 0) return limit - 1
       return index - 1
     })
   }
 
-  const beforeSubmit = (values: z.infer<typeof formSchema>) => {
+  const beforeSubmit = (values: any) => {
     if (isLoadingMemeInfo || isLoadingMemeImg) {
       toast.warning(t('onsubmit.createing.warning'))
       return
     }
-    onSubmit(values)
+    onSubmit!(values!)
   }
 
   const getAIMemePoster = async (e: any) => {
     e.preventDefault()
 
-    const fullname = form.getValues(formFields.fullname) as string
-    const description = form.getValues(formFields.description) as string
+    const fullname = form?.getValues(formFields?.fullname!) as string
+    const description = form?.getValues(formFields?.description!) as string
     if (!fullname || !description) {
       return toast.warning(t('need.base.info.warning'))
     }
@@ -97,7 +83,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
         name: fullname,
         description,
       })
-      form.setValue(formFields.poster, [...data.poster1, ...data.poster2])
+      form?.setValue(formFields!.poster!, [...data.poster1, ...data.poster2])
     } catch {
     } finally {
       setHandLoadingPoster(false)
@@ -108,7 +94,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
 
   useEffect(() => {
     if (url) {
-      form.setValue(formFields.logo, url)
+      form?.setValue(formFields!.logo!, url)
     }
   }, [url])
 
@@ -116,7 +102,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
     <>
       <Form {...form}>
         <form
-          onSubmit={form.handleSubmit(beforeSubmit)}
+          onSubmit={form?.handleSubmit(beforeSubmit)}
           className="flex flex-col space-y-3 max-sm:w-full max-sm:space-y-2"
         >
           {/* Loog/name/chain/symbol */}
@@ -124,8 +110,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             <div className="flex">
               {/* Logo */}
               <FormField
-                control={form.control}
-                name={formFields.logo}
+                control={form?.control}
+                name={formFields?.logo!}
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
@@ -193,8 +179,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
               {/* name/symbol */}
               <div className="flex flex-col ml-5 items-center justify-between flex-1">
                 <FormField
-                  control={form.control}
-                  name={formFields.fullname}
+                  control={form?.control}
+                  name={formFields?.fullname!}
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="mt-0">*{t('fullname')}</FormLabel>
@@ -211,8 +197,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                   )}
                 />
                 <FormField
-                  control={form.control}
-                  name={formFields.symbol}
+                  control={form?.control}
+                  name={formFields?.symbol!}
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel>*{t('symbol')}</FormLabel>
@@ -233,14 +219,14 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
 
             {/* chain */}
             <FormField
-              control={form.control}
-              name={formFields.chainName}
+              control={form?.control}
+              name={formFields?.chainName!}
               render={({ field }) => (
                 <FormItem className="mt-0">
                   <FormLabel className="mt-0">
                     *
                     {fmt.firstUpperCase(
-                      chains.find((c) => c.name === field.value)?.name
+                      chains?.find((c) => c.name === field.value)?.name
                     )}{' '}
                     {t('chain')}
                   </FormLabel>
@@ -248,7 +234,7 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
                     {chains ? (
                       <RadioGroup
                         onValueChange={(v: string) => {
-                          form.setValue(formFields.chainName, v)
+                          form?.setValue(formFields?.chainName!, v)
                         }}
                         defaultValue={field.value}
                         className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap  max-sm:w-max"
@@ -301,8 +287,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
 
           {/* Description */}
           <FormField
-            control={form.control}
-            name={formFields.description}
+            control={form?.control}
+            name={formFields?.description!}
             render={({ field }) => (
               <FormItem className="max-w-[500px]">
                 <FormLabel>*{t('description.placeholder')}</FormLabel>
@@ -320,8 +306,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
 
           {/* Poster */}
           <FormField
-            control={form.control}
-            name={formFields.poster}
+            control={form?.control}
+            name={formFields?.poster!}
             render={({ field }) => {
               return (
                 <FormItem>
@@ -370,8 +356,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           {/* Twitter & telegram */}
           <div className="flex justify-between max-w-[500px]">
             <FormField
-              control={form.control}
-              name={formFields.twitter}
+              control={form?.control}
+              name={formFields?.twitter!}
               render={({ field }) => (
                 <FormItem className="flex-1 mr-4">
                   <FormLabel>{t('twitter-x')}</FormLabel>
@@ -386,8 +372,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
               )}
             />
             <FormField
-              control={form.control}
-              name={formFields.telegram}
+              control={form?.control}
+              name={formFields?.telegram!}
               render={({ field }) => (
                 <FormItem className="flex-1">
                   <FormLabel>{t('telegram')}</FormLabel>
@@ -403,8 +389,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
           {/* Website */}
           <div className="flex justify-between max-w-[500px]">
             <FormField
-              control={form.control}
-              name={formFields.website}
+              control={form?.control}
+              name={formFields?.website!}
               render={({ field }) => (
                 <FormItem className="flex-1 mr-4">
                   <FormLabel>{t('website')}</FormLabel>
@@ -420,8 +406,8 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
               )}
             />
             <FormField
-              control={form.control}
-              name={formFields.website}
+              control={form?.control}
+              name={formFields?.website!}
               render={({ field }) => (
                 <FormItem className="flex-1 opacity-0">
                   <FormLabel>{t('website')}</FormLabel>
@@ -464,28 +450,30 @@ export const CreateTokenForm = forwardRef<{}, Props>((props, ref) => {
             <FaChevronRight size={26} onClick={onRight}></FaChevronRight>
           </div>
           <img
-            src={form.getValues(formFields.poster)?.[index] as string}
+            src={form?.getValues(formFields?.poster!)?.[index] as string}
             alt="Poster"
             className="w-full rounded-md mb-4 select-none"
           />
           <div className="flex justify-center">
-            {(form.getValues(formFields.poster) as string[])?.map((item, i) => {
-              return (
-                <div
-                  key={item}
-                  className={cn(
-                    'w-[10px] h-[10px] mx-2 rounded-full cursor-pointer',
-                    i === index ? 'bg-black' : 'bg-gray-300'
-                  )}
-                  onClick={() => setIndex(i)}
-                ></div>
-              )
-            })}
+            {(form?.getValues(formFields?.poster!) as string[])?.map(
+              (item, i) => {
+                return (
+                  <div
+                    key={item}
+                    className={cn(
+                      'w-[10px] h-[10px] mx-2 rounded-full cursor-pointer',
+                      i === index ? 'bg-black' : 'bg-gray-300'
+                    )}
+                    onClick={() => setIndex(i)}
+                  ></div>
+                )
+              }
+            )}
           </div>
           <div
             className="mt-5  flex justify-center cursor-pointer"
             onClick={() =>
-              open((form.getValues(formFields.poster) as string[])[index])
+              open((form?.getValues(formFields?.poster!) as string[])[index])
             }
           >
             <Button>{t('download')}</Button>
