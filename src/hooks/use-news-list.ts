@@ -91,28 +91,11 @@ export const useNewsList = (options?: Options) => {
         }
       }
 
-      console.log('loading')
-
       const { data } = await newsApi.getNews({
         country: +area,
         page: pageParam,
       })
 
-      try {
-        console.log('end', data, data?.results)
-
-        console.log(
-          data?.results?.map((item) => ({
-            id: item?.id,
-            title: item?.title?.query,
-            link: item?.title?.exploreLink,
-            content: item?.articles?.[0]?.snippet,
-            image: item?.articles?.[0]?.image?.imageUrl,
-          }))
-        )
-      } catch (error) {
-        console.log(error)
-      }
       return {
         count: data?.count,
         results: data?.results?.map((item) => ({
@@ -134,8 +117,6 @@ export const useNewsList = (options?: Options) => {
       }
     },
   })
-
-  console.log(newsData)
 
   return {
     area,

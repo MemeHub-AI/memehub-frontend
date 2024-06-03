@@ -30,8 +30,12 @@ export const HotNewsAside = () => {
           <NewsCard
             key={i}
             news={news!}
-            onMeme={() => handleClick(news)}
-            onClick={() => push(`${Routes.Idea}/${news?.id}`)}
+            onMeme={() => {
+              handleClick(news)
+            }}
+            onClick={() => {
+              push(`${Routes.Idea}/${news?.id}?type=2`)
+            }}
           />
         ))}
       </CustomSuspense>

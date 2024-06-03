@@ -1,11 +1,11 @@
-import { IdeaData } from '@/api/idea/type'
+import { IdeaDataList } from '@/api/idea/type'
 import { Avatar } from '@/components/ui/avatar'
 import { Dialog, DialogTitle } from '@/components/ui/dialog'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 interface Props {
-  data: IdeaData
+  data: IdeaDataList
 }
 
 interface Puff {
@@ -77,7 +77,7 @@ export const ChainInfo = ({ data }: Props) => {
     return list.map((chain, i) => {
       return (
         <div key={i} className="flex justify-between">
-          <div className="w-full flex justify-between items-center mb-2">
+          <div className="w-full flex justify-between items-center mt-2">
             <div className="flex items-center">
               <Avatar
                 src={chain.chain.logo}
@@ -116,7 +116,7 @@ export const ChainInfo = ({ data }: Props) => {
       {chainList(chains.slice(0, 4))}
       {chains.length > 4 ? (
         <div
-          className="text-gray-500 text-sm text-center cursor-pointer"
+          className="text-gray-500 text-sm text-center cursor-pointer  mt-2"
           onClick={() => {
             setShowMore(true)
           }}
@@ -130,7 +130,7 @@ export const ChainInfo = ({ data }: Props) => {
         onOpenChange={() => setShowMore(false)}
         contentProps={{ className: 'max-w-[350px]' }}
       >
-        <DialogTitle>{data.title}</DialogTitle>
+        <DialogTitle>{data.name}</DialogTitle>
         <div>{chainList(chains)}</div>
       </Dialog>
 
@@ -139,7 +139,7 @@ export const ChainInfo = ({ data }: Props) => {
         onOpenChange={() => setShowPuff(false)}
         contentProps={{}}
       >
-        <DialogTitle>{data.title}</DialogTitle>
+        <DialogTitle>{data.name}</DialogTitle>
         <div className="flex items-center">
           <img
             src={chainInfo.chain.logo}

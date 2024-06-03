@@ -22,10 +22,20 @@ export const CreatePage = () => {
   const isFirst = useRef(true)
 
   useEffect(() => {
+    if (aimemeInfoStore.formInfo?.name !== undefined && isFirst.current) {
+      isFirst.current = false
+      newsListData.setShow(true)
+      aIMemeInfo.getAIMemeImg()
+      aimemeInfoStore.setFormInfo(undefined)
+    }
+  }, [])
+
+  useEffect(() => {
     if (aimemeInfoStore.info?.name !== undefined && isFirst.current) {
       isFirst.current = false
       newsListData.setShow(true)
       aIMemeInfo.getAIMemeInfo(aimemeInfoStore.info?.name || '')
+      aimemeInfoStore.setInfo(undefined)
     }
   }, [])
 

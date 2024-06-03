@@ -9,6 +9,7 @@ import { useUploadImage } from '@/hooks/use-upload-image'
 import { toast } from 'sonner'
 
 import { useChainsStore } from '@/stores/use-chains-store'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 export const formFields = {
   fullname: 'fullname',
@@ -29,6 +30,7 @@ export const useCreateTokenForm = (
   const { isConnected, chainId } = useAccount()
   const { switchChain } = useSwitchChain()
 
+  const { formInfo } = useAimemeInfoStore()
   const { setConnectOpen } = useWalletStore()
   const { chains, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
@@ -55,9 +57,9 @@ export const useCreateTokenForm = (
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      [formFields.fullname]: '',
-      [formFields.symbol]: '',
-      [formFields.description]: '',
+      [formFields.fullname]: formInfo?.name || '',
+      [formFields.symbol]: formInfo?.symbol || '',
+      [formFields.description]: formInfo?.description || '',
       [formFields.twitter]: '',
       [formFields.telegram]: '',
       [formFields.website]: '',

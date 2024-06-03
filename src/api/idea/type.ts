@@ -1,21 +1,31 @@
 export interface IdeaQuery {
+  type: string
   page?: number
   pageSize?: number
 }
 
-export interface IdeaData {
+export interface IdeaDataList {
   id: number
-  title: string
+  name: string
   description: string
-  paltform: IdeaPaltform[]
+  tokens: IdeaTokens[]
 }
 
-export interface IdeaPaltform {
-  logo: string
+export interface IdeaTokens {
+  id: number
   name: string
+  ticker: string
+  logo: string
 }
 
 export interface IdeaRes {
-  list: IdeaData[]
+  list: IdeaDataList[]
   total: number
+}
+
+export interface IdeaBasicInfo {
+  id: number
+  title: string
+  description: string
+  logo: string
 }
