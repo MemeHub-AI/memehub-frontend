@@ -33,7 +33,9 @@ const IdeaPage = () => {
   const { y } = useWindowScroll()
   const [] = useState(0)
 
-  const newsListData = useNewsList()
+  const newsListData = useNewsList({
+    isOpportunity: tab === 1,
+  })
 
   const onCreateNow = (item: IdeaDataList) => {
     push(`${Routes.Create}`)
@@ -119,9 +121,9 @@ const IdeaPage = () => {
   }, [y])
 
   return (
-    <main className="min-h-main pb-3 flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col">
+    <main className="min-h-main flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col">
       <OpportunityMoonshot
-        className="max-sm:!hidden max-sm:!px-0"
+        className="max-sm:!hidden max-sm:!px-0 "
         newsListData={newsListData}
         isDialogLoading={false}
         onConfirmDialog={() => {}}

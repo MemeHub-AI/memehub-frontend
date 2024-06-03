@@ -75,13 +75,15 @@ export const OpportunityMoonshot = ({
   return (
     <div
       className={clsx(
-        'mr-10 pr-10 border-r-2 border-black h-[100vh] max-sm:mr-0 max-sm:pr-0  max-sm:h-min max-sm:border-0',
+        'mr-10 pr-10 border-r-2 border-black min-h-[100vh] max-sm:mr-0 max-sm:pr-0  max-sm:h-min max-sm:border-0',
         className
       )}
     >
+      <div className="hidden h-[98vh]"></div>
       <div
         className={clsx(
-          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full h-[83vh] '
+          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full',
+          tabIdx === 1 ? 'h-[90vh]' : 'h-[92vh]'
         )}
       >
         <div className="flex items-start">
@@ -121,7 +123,8 @@ export const OpportunityMoonshot = ({
           fallback={<NewsSkeleton />}
           nullback={t('no.data')}
           className={clsx(
-            'flex flex-col gap-6 h-[calc(100vh-260px)] overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip',
+            'flex flex-col gap-6  overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip',
+            tabIdx === 1 ? 'h-[calc(100vh-160px)]' : 'h-[calc(100vh-210px)]',
             listClassName
           )}
         >
