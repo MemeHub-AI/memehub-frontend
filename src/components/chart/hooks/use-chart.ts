@@ -6,7 +6,7 @@ import {
 } from '../../../../public/js/charting_library/charting_library'
 import { useDatafeed } from './use-datafeed'
 import { useChartStore } from '@/stores/use-chart-store'
-import { useChartParse } from './use-chart-parse'
+import { useChartUtils } from './use-chart-utils'
 import { useChartConfig } from './use-chart-config'
 
 export interface ChartOptions {
@@ -19,7 +19,7 @@ export const useChart = () => {
   const { i18n } = useTranslation()
   const { chart, setChart } = useChartStore()
   const { createDatafeed, removeDatafeed } = useDatafeed()
-  const { toTVInterval } = useChartParse()
+  const { parseInterval } = useChartUtils()
   const { chartConfig, chartOverrides } = useChartConfig()
 
   const createChart = (container: HTMLDivElement, options: ChartOptions) => {
@@ -31,8 +31,8 @@ export const useChart = () => {
         ...chartConfig,
         container,
         symbol,
-        interval: toTVInterval(interval) as ResolutionString,
-        datafeed: createDatafeed(options),
+        interval: parseInterval(interval) as ResolutionString,
+        datafeed: createDatafeed(),
         locale: i18n.language as LanguageCode,
         autosize: true,
         timezone: i18n.language === 'zh' ? 'Asia/Shanghai' : 'Etc/UTC',

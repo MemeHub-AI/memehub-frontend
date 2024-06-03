@@ -57,4 +57,25 @@ export const fmt = {
 
     return args.join('/')
   },
+  decimals(value?: number | string, fixed = 2) {
+    if (!value) return 0
+    if (BigNumber(value).gt(1)) {
+      return BigNumber(value).toFixed(fixed)
+    }
+
+    const decimalIndex = value.toString().indexOf('.')
+    if (decimalIndex !== -1) {
+      const decimalPart = value.toString().slice(decimalIndex + 1)
+      const zeroLen = decimalPart.match(/^0*/)?.[0].length ?? 0
+      const lastNumbers = decimalPart.replace(/^0+/, '')
+      const slicedLastNum = lastNumbers.slice(0, fixed)
+      const result = `0.0{${zeroLen}}${slicedLastNum}`
+
+      if (zeroLen < 2) return `0.${slicedLastNum}`
+
+      return result
+    } else {
+      return BigNumber(value).toFixed()
+    }
+  },
 }

@@ -1,6 +1,9 @@
+import { useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
+
+import type { WSMessageBase, WSTradeInfoMessage } from '@/api/websocket/types'
 
 import {
   heartbeat,
@@ -8,10 +11,11 @@ import {
   isUpdateMessage,
   wsApiURL,
 } from '@/api/websocket'
-import { WSMessageBase, WSTradeInfoMessage } from '@/api/websocket/types'
+import { useHoldersStore } from '@/stores/use-holders-store'
 
 export const useHolders = () => {
   const { query } = useRouter()
+  const { setHolders, setMarketCap } = useHoldersStore()
 
   const { lastJsonMessage, sendJsonMessage } =
     useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(wsApiURL.tokenInfo, {
@@ -28,7 +32,16 @@ export const useHolders = () => {
       shouldReconnect: () => true,
     })
 
+  const marketCap = lastJsonMessage?.data?.market_cap || 0
+  const holders = lastJsonMessage?.data?.holders.slice(0, 10) || []
+
+  useEffect(() => {
+    setMarketCap(marketCap)
+    setHolders(holders)
+  }, [lastJsonMessage])
+
   return {
-    holders: lastJsonMessage?.data?.holders.slice(0, 10),
+    marketCap,
+    holders,
   }
 }

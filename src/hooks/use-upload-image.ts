@@ -38,7 +38,7 @@ export const useUploadImage = (options?: Options) => {
     },
     onSuccess: ({ data }) => {
       toast.success(t('upload.success'))
-      onSuccess?.(data.image_url)
+      onSuccess?.(data?.image_url)
     },
   })
 
@@ -65,7 +65,7 @@ export const useUploadImage = (options?: Options) => {
   }
 
   return {
-    url: data?.data.image_url ?? '',
+    url: data?.data?.image_url ?? '',
     file,
     onChangeUpload,
     clearFile,

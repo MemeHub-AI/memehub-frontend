@@ -9,7 +9,6 @@ import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
 import { SocialLinks } from '../social-links'
-import { TradeLogs } from '../trade-logs'
 import { Routes } from '@/routes'
 import { SearchInput } from '../search-input'
 
@@ -27,7 +26,6 @@ export const HeaderDesktop = (props: Props) => {
     <>
       <div className="flex items-center gap-4">
         <Logo showMeme />
-        <TradeLogs />
       </div>
       <div className="flex items-center">
         <nav className="flex items-center gap-3">

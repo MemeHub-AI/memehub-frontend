@@ -9,6 +9,7 @@ import { Dialog } from '@/components/ui/dialog'
 import { useTokenContext } from '@/contexts/token'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { Button } from '@/components/ui/button'
+import BondingCurveProgress from './bonding-curve-progress'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -57,6 +58,10 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           </div>
         </div>
       </div>
+
+      <BondingCurveProgress />
+
+      {/* Contract address */}
       <div className="text-sm text-zinc-500 flex flex-col items-start mt-2 ">
         <h3 className="font-bold text-base text-black">{t('ca')}:</h3>
         <div
@@ -68,6 +73,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </div>
       </div>
 
+      {/* Twitter/telegram/website */}
       {hasLink && (
         <div className="flex justify-between items-center mt-3">
           {tokenInfo?.twitter_url && (

@@ -172,7 +172,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
                 const percent = BigNumber(value)
                   .multipliedBy(tokenBalance)
                   .div(100)
-                setValue(percent.toFixed(3))
+                setValue(percent.toFixed())
               }}
             />
           </div>

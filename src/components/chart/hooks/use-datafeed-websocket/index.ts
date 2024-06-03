@@ -65,6 +65,7 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
       })
       wsRef.current.addEventListener('close', (e) => {
         console.log('chart ws close', e)
+        onReconnect?.(e)
       })
       wsRef.current.addEventListener('error', reject)
       wsRef.current.addEventListener('message', onMessage)
@@ -119,16 +120,11 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
     })
   }
 
-  const onClosed = (fn: (e: CloseEvent) => void) => {
-    wsRef.current?.addEventListener('close', fn)
-  }
-
   return {
     connect,
     disconenct,
     listenAsync,
     historyAsync,
     onUpdate,
-    onClosed,
   }
 }

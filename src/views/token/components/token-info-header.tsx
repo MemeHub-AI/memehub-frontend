@@ -1,45 +1,51 @@
+import { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
+import { BigNumber } from 'bignumber.js'
 
-import { Button } from '@/components/ui/button'
 import { useTokenContext } from '@/contexts/token'
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
+import { useHoldersStore } from '@/stores/use-holders-store'
+import { cn } from '@/lib/utils'
 
-export const TokenInfoHeader = () => {
+export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const router = useRouter()
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
+  const { marketCap } = useHoldersStore()
 
   return (
-    <>
-      <div className="flex items-center gap-4">
-        <Button onClick={router.back}>{t('back')}</Button>
-
-        <div
-          className="flex items-center gap-2"
+    <div
+      className={cn(
+        'flex items-center justify-between gap-4 px-1 text-sm',
+        className
+      )}
+    >
+      <span className="flex items-center gap-4">
+        {t('market-cap')}: ${fmt.tradeFixed(BigNumber(marketCap))}
+        {/* <p>{t('virtual-liquidity')}: ${virtualLiquidity}</p> */}
+      </span>
+      <div className="flex items-center gap-1">
+        <div className="mr-1">{t('creator')}:</div>
+        <img
+          src={tokenInfo?.creator.logo || ''}
+          className="h-5 w-5 rounded-md"
+        />
+        <span
+          className="hover:underline cursor-pointer"
           onClick={() => {
-            router.push(
-              `${Routes.Account}/${tokenInfo?.creator.wallet_address}`
+            const href = fmt.toHref(
+              Routes.Account,
+              tokenInfo?.creator.wallet_address || ''
             )
+            router.push(href)
           }}
         >
-          <img
-            src={tokenInfo?.creator.logo}
-            alt="avatar"
-            className="rounded w-9 h-9 cursor-pointer"
-          />
-          <div className="flex flex-col">
-            <span className="hover:underline cursor-pointer">
-              {tokenInfo?.creator.name}
-            </span>
-            <span className="text-sm text-zinc-500">
-              {fmt.addr(tokenInfo?.creator.wallet_address)}
-            </span>
-          </div>
-        </div>
+          {tokenInfo?.creator.name}
+        </span>
       </div>
-    </>
+    </div>
   )
 }
 

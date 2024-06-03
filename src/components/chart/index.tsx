@@ -37,8 +37,8 @@ export const Chart = memo(() => {
     <div
       ref={chartRef}
       className={cn(
-        'min-h-[560px] border-2 border-black rounded-md',
-        'overflow-hidden max-sm:mt-3 max-sm:h-[60vh]'
+        'min-h-[415px] border-2 border-black rounded-md',
+        'overflow-hidden max-sm:mt-3 max-sm:h-[20vh]'
       )}
     ></div>
   )

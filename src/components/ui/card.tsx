@@ -8,10 +8,7 @@ import {
 } from '@/styles/variants'
 
 const cardVariants = cva(
-  cn(
-    'rounded-lg bg-card text-card-foreground transition-all',
-    'duration-300  border-2 border-black'
-  ),
+  cn('rounded-lg bg-card text-card-foreground transition-all', 'duration-300'),
   {
     variants: {
       padding: {
@@ -28,10 +25,15 @@ const cardVariants = cva(
         bg: 'hover:bg-zinc-100 cursor-pointer',
         scale: 'hover:scale-105 cursor-pointer',
       },
+      border: {
+        none: '',
+        default: 'border-2 border-black',
+      },
     },
     defaultVariants: {
       hover: 'pointer',
       padding: 'none',
+      border: 'default',
     },
   }
 )
@@ -53,7 +55,7 @@ const colors = [
 ]
 
 const Card = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
-  const { className, hover, padding, shadow, ...restProps } = props
+  const { className, hover, padding, shadow, border, ...restProps } = props
   const randomIdx = Math.floor(Math.random() * colors.length)
 
   return (
@@ -62,7 +64,7 @@ const Card = React.forwardRef<HTMLDivElement, Props>((props, ref) => {
       // @ts-ignore
       style={{ '--offset-color': shadow !== 'none' ? colors[randomIdx] : null }}
       className={cn(
-        cardVariants({ hover, padding, className }),
+        cardVariants({ hover, padding, border, className }),
         shadowBorderVariants({ shadow })
       )}
       {...restProps}

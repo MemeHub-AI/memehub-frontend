@@ -10,8 +10,9 @@ type BarItem = {
   [k: string]: any
 }
 
-export const useChartParse = () => {
-  const toTVInterval = (interval?: string) => {
+export const useChartUtils = () => {
+  /** `1m` => `1` */
+  const parseInterval = (interval?: string) => {
     if (!interval || !interval.trim()) return '1'
     // TradingView's `minutes` do not have `m`
     if (interval.endsWith('m')) return interval.replace('m', '')
@@ -21,7 +22,8 @@ export const useChartParse = () => {
     return interval
   }
 
-  const parseTVInterval = (tvInterval?: string) => {
+  /** `1` => `1m` */
+  const formatInterval = (tvInterval?: string) => {
     if (!tvInterval || !tvInterval.trim()) return '1m'
     const num = Number(tvInterval)
     if (num < 60) return `${tvInterval}m`
@@ -43,8 +45,8 @@ export const useChartParse = () => {
     })
   }
 
-  const priceToPricescale = (p: number) => {
-    const decimal = p.toString().split('.')[1]
+  const formatPricescale = (price: number) => {
+    const decimal = price.toString().split('.')[1]
     const len = decimal?.length ?? 0
 
     if (len <= 2) return 100
@@ -53,9 +55,9 @@ export const useChartParse = () => {
   }
 
   return {
-    toTVInterval,
-    parseTVInterval,
+    parseInterval,
+    formatInterval,
     formatBars,
-    priceToPricescale,
+    formatPricescale,
   }
 }

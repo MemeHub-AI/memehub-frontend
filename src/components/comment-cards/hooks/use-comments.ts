@@ -18,6 +18,7 @@ export const useComments = (enableFetchComments = true) => {
   } = useInfiniteQuery({
     enabled: enableFetchComments,
     queryKey: [tokenApi.commentList.name, query.address],
+    refetchOnWindowFocus: false,
     queryFn: ({ pageParam }) => {
       const tokenAddr = (query.address || '') as string
 
@@ -35,6 +36,10 @@ export const useComments = (enableFetchComments = true) => {
   })
   // Update a single comment, not the refresh list. so we need this state.
   const [comments, setComments] = useState<TokenCommentListRes[]>([])
+
+  const addComment = (data: (typeof comments)[number]) => {
+    setComments((old) => [data, ...old])
+  }
 
   const updateComment = (data: (typeof comments)[number]) => {
     setComments((old) => old.map((c) => (c.id === data.id ? data : c)))
@@ -60,5 +65,7 @@ export const useComments = (enableFetchComments = true) => {
     isFetching,
     refetchComments,
     fetchNextPage,
+    addComment,
+    updateComment,
   }
 }

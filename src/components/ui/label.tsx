@@ -26,11 +26,16 @@ const labelVariants = cva(
 const Label = React.forwardRef<
   React.ElementRef<typeof LabelPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root> &
-    VariantProps<typeof labelVariants>
->(({ className, variant, ...props }, ref) => (
+    VariantProps<typeof labelVariants> & { disabled?: boolean }
+>(({ className, variant, disabled, onClick, ...props }, ref) => (
   <LabelPrimitive.Root
     ref={ref}
-    className={cn(labelVariants({ variant }), className)}
+    className={cn(
+      disabled && 'opacity-50',
+      labelVariants({ variant }),
+      className
+    )}
+    onClick={disabled ? undefined : onClick}
     {...props}
   />
 ))
