@@ -55,8 +55,15 @@ export const TokenCards = (props: Props) => {
 
   return (
     <div className={cn(className)}>
-      {total !== 0 && (
-        <div className="flex items-center gap-4 max-sm:justify-between ">
+      {isLoading ? (
+        <Skeleton className="h-9 w-24 mb-4" />
+      ) : (
+        <div
+          className={cn(
+            'flex items-center gap-4 max-sm:justify-between mb-4',
+            total <= 1 && 'hidden'
+          )}
+        >
           <TokenChainSelect onValueChange={onChange} />
           {/* <TokenSortSelect /> */}
         </div>

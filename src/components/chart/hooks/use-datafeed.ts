@@ -16,7 +16,7 @@ import { useStorage } from '@/hooks/use-storage'
 export const useDatafeed = () => {
   const { readyConfig, symbolInfoConfig } = useDatafeedConfig()
   const cache = useDatafeedCache()
-  const { listenAsync, historyAsync, onUpdate, disconenct } =
+  const { listenAsync, historyAsync, onUpdate, onClosed, disconenct } =
     useDatafeedWebsocket()
   const { parseTVInterval, formatBars, priceToPricescale } = useChartParse()
   const { query } = useRouter()
@@ -83,9 +83,7 @@ export const useDatafeed = () => {
         onResult(bars, { noData: isEmpty(bars) })
       },
       subscribeBars(_, resolution, onTick, uid, onRest) {
-        cache.setSub(uid, onRest)
-
-        console.log('sub', uid)
+        console.log('subscribe', uid)
         onUpdate(({ data }) => {
           const bars = formatBars(data)
 
@@ -99,16 +97,19 @@ export const useDatafeed = () => {
             console.log('update', bars)
           })
         })
+        // Relisten on reconnect.
+        onClosed(() => {
+          listenAsync({ interval, token_address: tokenAddr })
+        })
       },
       unsubscribeBars(uid) {
-        console.log('unsub', uid)
-        cache.getSub(uid)?.()
-        cache.removeSub(uid)
+        console.log('unsubscribe', uid)
       },
     } as IBasicDataFeed
   }
 
   const removeDatafeed = () => {
+    console.log('remove datafeed')
     disconenct()
   }
 

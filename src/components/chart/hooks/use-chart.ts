@@ -48,7 +48,6 @@ export const useChart = () => {
   }
 
   const removeChart = () => {
-    console.log('remove')
     removeDatafeed()
     chart?.remove()
   }

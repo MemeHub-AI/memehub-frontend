@@ -21,7 +21,11 @@ const heartbetaMessage = {
 
 const heartbeatFreq = 10 // unit is seconds
 
-export const useDatafeedWebsocket = () => {
+interface Options {
+  onReconnect?: (e: Event) => void
+}
+
+export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
   const emitter = useEmitter<DatafeedOnEvents, DatafeedEmitEvents>()
   const wsRef = useRef<WebSocket>()
   const timerRef = useRef<number>()
@@ -52,20 +56,17 @@ export const useDatafeedWebsocket = () => {
 
   // Connect websocket.
   const connect = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise<Event>((resolve, reject) => {
       wsRef.current = new WebSocket(wsApiURL.chart)
-      wsRef.current.addEventListener('open', (data) => {
-        console.log('ws open', data)
+      wsRef.current.addEventListener('open', (e) => {
+        console.log('chart ws open', e)
         onOpen()
-        resolve(data)
+        resolve(e)
       })
       wsRef.current.addEventListener('close', (e) => {
-        console.log('ws close', e)
+        console.log('chart ws close', e)
       })
-      wsRef.current.addEventListener('error', (e) => {
-        console.log('ws error', e)
-        reject()
-      })
+      wsRef.current.addEventListener('error', reject)
       wsRef.current.addEventListener('message', onMessage)
     })
   }
@@ -118,11 +119,16 @@ export const useDatafeedWebsocket = () => {
     })
   }
 
+  const onClosed = (fn: (e: CloseEvent) => void) => {
+    wsRef.current?.addEventListener('close', fn)
+  }
+
   return {
     connect,
     disconenct,
     listenAsync,
     historyAsync,
     onUpdate,
+    onClosed,
   }
 }

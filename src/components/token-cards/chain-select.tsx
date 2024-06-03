@@ -18,7 +18,7 @@ export const TokenChainSelect = (props: ComponentProps<typeof Select>) => {
 
   return (
     <Select onValueChange={onValueChange} {...restProps}>
-      <SelectTrigger className="mb-4 w-26 max-sm:mb-2">
+      <SelectTrigger className="w-26 max-sm:mb-2">
         <SelectValue placeholder={t('chains')} />
       </SelectTrigger>
       <SelectContent>

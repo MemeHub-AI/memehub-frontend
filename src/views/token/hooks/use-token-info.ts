@@ -5,10 +5,14 @@ import { useQuery } from '@tanstack/react-query'
 
 import { continousTokenAbi } from '@/contract/abi/continous-token'
 import { tokenApi } from '@/api/token'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const useTokenInfo = () => {
+  const { findChain } = useChainsStore()
   const { query } = useRouter()
+  const chainName = (query.chain || '') as string
   const tokenAddr = (query.address || '') as Address
+  const chain = findChain(chainName)
 
   // Query token amounts.
   const { data = [], refetch: refetchInfo } = useReadContracts({
@@ -16,11 +20,13 @@ export const useTokenInfo = () => {
       {
         abi: continousTokenAbi,
         address: tokenAddr,
+        chainId: Number(chain?.id),
         functionName: 'ETH_AMOUNT',
       },
       {
         abi: continousTokenAbi,
         address: tokenAddr,
+        chainId: Number(chain?.id),
         functionName: 'raiseEthAmount',
       },
     ],

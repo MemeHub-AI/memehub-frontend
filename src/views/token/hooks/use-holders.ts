@@ -25,6 +25,7 @@ export const useHolders = () => {
         })
       },
       filter: ({ data }) => isSuccessMessage(data) || isUpdateMessage(data),
+      shouldReconnect: () => true,
     })
 
   return {
