@@ -6,39 +6,17 @@ import { useDeploy } from './hooks/use-deploy'
 import { useCreateTokenForm } from './hooks/use-form'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
-import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { CreateTokenContext } from './context'
+import { AICreateMemecoinDialogLoading } from '@/components/ai-create-memecoin-dialog/loading'
 
 export const CreatePage = () => {
   const deployResult = useDeploy()
   const [tab, setTab] = useState(0)
   const formData = useCreateTokenForm(deployResult)
+
   const aiMemeInfo = useAIMemeInfo({ form: formData.form })
-  const newsListData = useNewsList({
-    formData,
-    isOpportunity: tab === 1,
-  })
-  const aimemeInfoStore = useAimemeInfoStore()
-  const isFirst = useRef(true)
-
-  useEffect(() => {
-    if (aimemeInfoStore.formInfo?.name !== undefined && isFirst.current) {
-      isFirst.current = false
-      newsListData.setShow(true)
-      aiMemeInfo.getAIMemeImg()
-      aimemeInfoStore.setFormInfo(undefined)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (aimemeInfoStore.info?.name !== undefined && isFirst.current) {
-      isFirst.current = false
-      newsListData.setShow(true)
-      aiMemeInfo.getAIMemeInfo(aimemeInfoStore.info?.name || '')
-      aimemeInfoStore.setInfo(undefined)
-    }
-  }, [])
+  const newsListData = useNewsList()
 
   return (
     <CreateTokenContext.Provider
@@ -69,6 +47,9 @@ export const CreatePage = () => {
         {/* All status dialog during create. */}
         <CreateTokenStatusDialog {...deployResult} />
       </main>
+      <AICreateMemecoinDialogLoading
+        formHook={formData}
+      ></AICreateMemecoinDialogLoading>
     </CreateTokenContext.Provider>
   )
 }

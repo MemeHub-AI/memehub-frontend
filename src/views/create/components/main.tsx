@@ -1,12 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { Title } from './title'
-import { AIIdea } from '@/views/main/components/ai-idea'
-import { CreateTokenForm } from './form'
+import { AIIdeaBar } from '@/components/ai-idea'
+import { CreateTokenForm } from './form/form'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { CreateTokenContext } from '../context'
+import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
+import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
 
 interface Props {
   className?: string
@@ -21,6 +23,15 @@ export const Main = (props: Props) => {
   const { newsListData, aiMemeInfo, formData, deployResult } =
     useContext(CreateTokenContext)
 
+  const {
+    show,
+    isRandom,
+    value,
+    onInputGen,
+    onRandomGen,
+    onCancel,
+    onConfirm,
+  } = useGenAIIdea()
   return (
     <div
       className={cn(
@@ -29,22 +40,31 @@ export const Main = (props: Props) => {
       )}
     >
       <Title className="w-fit max-sm:mt-3">{t('create.new')}</Title>
-      <MobileQpportunityMoonshot
-        newsListData={newsListData}
-        isDialogLoading={aiMemeInfo?.isLoadingMemeInfo}
-        onConfirmDialog={() =>
-          aiMemeInfo?.getAIMemeInfo(newsListData?.memeit?.title || '')
-        }
-        tab={tab}
-        setTab={setTab}
-      ></MobileQpportunityMoonshot>
-      {`${newsListData?.isLoadingMemeInfo}`}
-      <AIIdea
-        className="mt-5 w-fit"
-        getAIMemeInfo={newsListData?.getAIMemeInfo}
-        isLoadingMemeInfo={newsListData?.isLoadingMemeInfo}
-      ></AIIdea>
+      <div className="sm:hidden">
+        <MobileQpportunityMoonshot
+          newsListData={newsListData}
+          isDialogLoading={aiMemeInfo?.isLoadingMemeInfo}
+          onConfirmDialog={() =>
+            aiMemeInfo?.getAIMemeInfo(newsListData?.memeit?.title || '')
+          }
+          tab={tab}
+          setTab={setTab}
+        ></MobileQpportunityMoonshot>
+      </div>
 
+      <AIIdeaBar
+        className="mt-5 w-fit"
+        onInputGen={onInputGen}
+        onRandomGen={onRandomGen}
+      ></AIIdeaBar>
+
+      <AICreateMemecoinDialog
+        show={show}
+        data={{ name: value }}
+        isRandom={isRandom}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+      />
       {/* All input/textarea */}
       <CreateTokenForm />
     </div>

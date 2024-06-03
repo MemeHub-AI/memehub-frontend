@@ -1,30 +1,25 @@
 import { newsApi } from '@/api/news'
-import { MemeInfoDialogData, NewsData } from '@/api/news/types'
+import { MemeInfoDialogData } from '@/api/news/types'
 import { Routes } from '@/routes'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
-import { useAIMemeInfo } from './use-ai-meme-info'
-import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { useStorage } from './use-storage'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { defaultImg } from '@/config/link'
 
 interface Options {
-  formData?: ReturnType<typeof useCreateTokenForm>
   isOpportunity?: boolean
 }
 
 export const useNewsList = (options?: Options) => {
-  const { formData, isOpportunity = false } = options || {}
+  const { isOpportunity = false } = options || {}
 
   const { getArea } = useStorage()
   const [show, setShow] = useState(false)
   const [area, setArea] = useState(+getArea())
   const [loading, setLoading] = useState(false)
   const [memeit, setMemeit] = useState<MemeInfoDialogData>()
-
-  const { isLoadingMemeImg, isLoadingMemeInfo, getAIMemeInfo } = useAIMemeInfo()
 
   const { push, pathname } = useRouter()
 
@@ -47,9 +42,6 @@ export const useNewsList = (options?: Options) => {
           description: memeit.title,
         })
         return push(Routes.Create)
-      }
-      if (formData) {
-        getAIMemeInfo(memeit.title!)
       }
     } catch (error) {
       console.error(error)
@@ -122,12 +114,9 @@ export const useNewsList = (options?: Options) => {
     loading,
     memeit,
     isFetching,
-    isLoadingMemeImg,
-    isLoadingMemeInfo,
     loadingCountry: isLoading,
     newsList: newsData?.newsList,
     countryList: country?.data,
-    getAIMemeInfo,
     handleClick,
     onConfirmCreate,
     hidden,

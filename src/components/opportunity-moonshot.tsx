@@ -20,9 +20,6 @@ import { Routes } from '@/routes'
 import { useRouter } from 'next/router'
 import clsx from 'clsx'
 import { Button } from './ui/button'
-import { Pagination } from './ui/pagination'
-import { t } from 'i18next'
-import { BsStars } from 'react-icons/bs'
 import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
 
 interface Props extends ComponentProps<'div'> {

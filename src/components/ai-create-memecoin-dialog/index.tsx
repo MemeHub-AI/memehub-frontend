@@ -9,15 +9,14 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 interface Props {
   show?: boolean
-  hidden?: () => void
-  loading?: boolean
   isRandom?: boolean
   data?: AIMemeInfo
+  onCancel: () => void
   onConfirm: () => any
 }
 
 export const AICreateMemecoinDialog = (props: Props) => {
-  const { show, hidden, loading, isRandom, data, onConfirm } = props
+  const { show, onCancel, isRandom, data, onConfirm } = props
 
   const { push, pathname } = useRouter()
 
@@ -35,77 +34,53 @@ export const AICreateMemecoinDialog = (props: Props) => {
   }
 
   const handleDialogContent = () => {
-    if (loading) {
-      return (
-        <React.Fragment>
-          <div className="mt-4 text-center">
-            <h1 className="text-xl text-center">{t('ai.creating')}</h1>
-            <h1 className="text-xl text-center">{t('wait')}</h1>
-          </div>
+    return (
+      <React.Fragment>
+        <div className="mt-4 mx-auto max-sm:w-full">
+          {isRandom ? (
+            <div className="w-max max-w-[380px] max-sm:max-w-full">
+              <h1 className="text-xl text-wrap">
+                {t('create.random.memecoin.with.ai')}
+              </h1>
+              <h1 className="text-xl text-wrap">
+                {t('create,random.memecoin.with.ai.1').replace(
+                  '$1',
+                  data?.name!
+                )}
+              </h1>
+            </div>
+          ) : (
+            <>
+              <h1 className="text-xl">{t('create.memecoin.with.ai')}</h1>
+              <h1 className="text-xl">
+                {t('create.memecoin.with.ai.1').replace('$1', data?.name!)}
+              </h1>
+            </>
+          )}
+        </div>
+        {data?.image ? (
           <div>
             <img
-              src="/images/ai-loding.webp"
-              alt="BabyPEPE"
-              className="w-[95%] object-cover mx-auto my-4 rounded-md"
+              src={data?.image}
+              alt={data?.name}
+              className="w-[150px] h-[150px] object-cover mx-auto my-4 rounded-md"
             />
           </div>
-        </React.Fragment>
-      )
-    }
-
-    if (show) {
-      return (
-        <React.Fragment>
-          <div className="mt-4 mx-auto max-sm:w-full">
-            {isRandom ? (
-              <div className="w-max max-w-[380px] max-sm:max-w-full">
-                <h1 className="text-xl text-wrap">
-                  {t('create.random.memecoin.with.ai')}
-                </h1>
-                <h1 className="text-xl text-wrap">
-                  {t('create,random.memecoin.with.ai.1').replace(
-                    '$1',
-                    data?.name!
-                  )}
-                </h1>
-              </div>
-            ) : (
-              <>
-                <h1 className="text-xl">{t('create.memecoin.with.ai')}</h1>
-                <h1 className="text-xl">
-                  {t('create.memecoin.with.ai.1').replace('$1', data?.name!)}
-                </h1>
-              </>
-            )}
-          </div>
-          {data?.image ? (
-            <div>
-              <img
-                src={data?.image}
-                alt={data?.name}
-                className="w-[150px] h-[150px] object-cover mx-auto my-4 rounded-md"
-              />
-            </div>
-          ) : null}
-          <div className="flex gap-10 mt-6 w-max mx-auto max-sm:mt-0">
-            <Button variant="default" size="lg" onClick={confirm}>
-              {t('coinfirm')}
-            </Button>
-            <Button size="lg" onClick={hidden}>
-              {t('cancel')}
-            </Button>
-          </div>
-        </React.Fragment>
-      )
-    }
-  }
-
-  if (!data?.name && !isRandom && !loading) {
-    return <></>
+        ) : null}
+        <div className="flex gap-10 mt-6 w-max mx-auto max-sm:mt-0">
+          <Button variant="default" size="lg" onClick={confirm}>
+            {t('coinfirm')}
+          </Button>
+          <Button size="lg" onClick={onCancel}>
+            {t('cancel')}
+          </Button>
+        </div>
+      </React.Fragment>
+    )
   }
 
   return (
-    <Dialog open={show} onOpenChange={hidden}>
+    <Dialog open={show} onOpenChange={onCancel}>
       {handleDialogContent()}
     </Dialog>
   )

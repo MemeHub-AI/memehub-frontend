@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import { useTranslation } from 'react-i18next'
 
 import { MemeInfoDialogData } from '@/api/news/types'
-import { Button } from '../ui/button'
 import { cn } from '@/lib/utils'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -28,7 +27,7 @@ export const NewsCard = ({ news, onMeme, onClick }: Props) => {
         alt="logo"
         className="w-[100px] h-[100px] flex-shrink-0 object-cover rounded"
       />
-      <div className="flex-1 overflow-hidden flex flex-col justify-between items-start">
+      <div className="flex-1 overflow-hidden flex flex-col items-start">
         <div
           className={clsx(
             'font-bold leading-4 text-sm ',
@@ -40,25 +39,13 @@ export const NewsCard = ({ news, onMeme, onClick }: Props) => {
         {news.title.length < 31 ? (
           <p
             className={clsx(
-              'text-sm leading-4 text-gray-500',
+              'mt-5 text-sm leading-4 text-gray-500',
               news.title.length <= 12 ? 'line-clamp-2' : 'truncate w-[99%]'
             )}
           >
             {news?.content}
           </p>
         ) : null}
-        <Button
-          variant="outline"
-          size="sm"
-          className="border-2 border-black"
-          shadow="none"
-          onClick={(e) => {
-            e.stopPropagation()
-            onMeme()
-          }}
-        >
-          {t('meme.it')}
-        </Button>
       </div>
     </div>
   )

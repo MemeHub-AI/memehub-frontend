@@ -11,50 +11,21 @@ import { Button } from '@/components/ui/button'
 
 interface Props {
   className?: string
-  isLoadingMemeInfo?: boolean
-  getAIMemeInfo?: (title: string) => any
+  onInputGen: (value: string) => void
+  onRandomGen: () => void
 }
 
-export const AIIdea = (props: Props) => {
-  const { className, isLoadingMemeInfo, getAIMemeInfo } = props
+export const AIIdeaBar = (props: Props) => {
+  const { className, onInputGen, onRandomGen } = props
   const { t } = useTranslation()
-  const [show, setShow] = useState(isLoadingMemeInfo)
-  const [loading, setLoading] = useState(false)
-  const [isRandom, setIsRandom] = useState(false)
-  const [data, setData] = useState<AIMemeInfo>()
   const [value, setValue] = useState('')
 
-  const onGenerate = async () => {
-    if (!value) {
-      return toast.error(t('input.you.idea'))
+  const onGen = () => {
+    if (value.trim() === '') {
+      toast.error(t('input.you.idea'))
+      return
     }
-
-    setShow(true)
-    setIsRandom(false)
-    setLoading(false)
-    setData({
-      name: value,
-    })
-  }
-
-  const onConfirm = async () => {
-    if (!isRandom) {
-      await getAIMemeInfo?.(value)
-    } else {
-      await getAIMemeInfo?.('')
-    }
-    hidden()
-  }
-
-  const onRoundGenerate = async () => {
-    setShow(true)
-    setLoading(false)
-    setIsRandom(true)
-  }
-
-  const hidden = () => {
-    setShow(false)
-    setIsRandom(false)
+    onInputGen(value)
   }
 
   return (
@@ -80,24 +51,16 @@ export const AIIdea = (props: Props) => {
           endIcon={
             <div
               className="bg-black text-white flex items-center px-1.5 cursor-pointer"
-              onClick={onRoundGenerate}
+              onClick={onRandomGen}
             >
               <WiStars size={26} />
             </div>
           }
         />
-        <Button onClick={onGenerate} className="ml-5">
+        <Button onClick={onGen} className="ml-5">
           {t('ai.generate')}
         </Button>
       </div>
-      <AICreateMemecoinDialog
-        show={show}
-        data={data}
-        loading={loading || isLoadingMemeInfo}
-        isRandom={isRandom}
-        hidden={hidden}
-        onConfirm={onConfirm}
-      />
     </div>
   )
 }

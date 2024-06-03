@@ -1,19 +1,9 @@
 import { formFields } from './../views/create/hooks/use-form'
 import { aiApi } from '@/api/ai'
-import { AIMemeInfo } from '@/api/ai/type'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-
-interface Params {
-  title: string
-  description: string
-  onCreatedInfo?: (data?: AIMemeInfo) => any
-  onCreatedImg?: (imgs?: string[]) => any
-  onCreatedPoster?: (imgs?: string[]) => any
-}
 
 export const abortController = {
   memeInfoSign: new AbortController(),
@@ -35,7 +25,6 @@ interface Options {
 
 export const useAIMemeInfo = (options?: Options) => {
   const { form } = options || {}
-  const { t } = useTranslation()
   const [isLoadingMemeInfo, setIsLoadingMemeInfo] = useState(false)
   const [isLoadingMemeImg, setIsLoadingMemeImg] = useState(false)
   const [isLoadingMemePoster, setIsLoadingMemePoster] = useState(false)
@@ -100,6 +89,7 @@ export const useAIMemeInfo = (options?: Options) => {
       setIsLoadingMemeInfo(false)
     }
   }
+
   const getAIMemeInfo = async (title: string) => {
     setIsLoadingMemeInfo(true)
     setIsLoadingMemeImg(true)
@@ -120,6 +110,7 @@ export const useAIMemeInfo = (options?: Options) => {
         },
         abortController.memeInfoSign.signal
       )
+
       setIsLoadingMemeInfo(false)
       form?.setValue(formFields.fullname, data.name)
       form?.setValue(formFields.symbol, data.symbol)

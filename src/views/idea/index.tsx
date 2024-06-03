@@ -20,7 +20,6 @@ import {
 } from '@/components/opportunity-moonshot'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useTranslation } from 'react-i18next'
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -34,7 +33,6 @@ const IdeaPage = () => {
 
   const { width } = useWindowSize()
   const { y } = useWindowScroll()
-  const [] = useState(0)
 
   const newsListData = useNewsList({
     isOpportunity: tab === 1,
@@ -52,8 +50,9 @@ const IdeaPage = () => {
   const { data: basicInfoData } = useQuery({
     queryKey: [ideaApi.getIdeaInfo.name, newsId, type],
     queryFn: () => {
-      if (newsId == undefined || type === undefined)
+      if (newsId == undefined || type === undefined) {
         throw new Error('newsId is undefined')
+      }
 
       return ideaApi.getIdeaInfo(newsId, { type })
     },
@@ -62,42 +61,44 @@ const IdeaPage = () => {
   const basicInfo = basicInfoData?.data
 
   const {
-    data: result,
+    data: waterfallList,
     isLoading,
     isFetching,
-    fetchNextPage,
     isFetchNextPageError,
+    fetchNextPage,
   } = useInfiniteQuery({
     queryKey: [ideaApi.getIdeaList.name, newsId, type],
     queryFn: ({ pageParam }) => {
-      if (newsId == undefined || type === undefined)
+      if (newsId == undefined || type === undefined) {
         throw new Error('newsId is undefined')
+      }
 
       return ideaApi.getIdeaList(newsId, { page: pageParam, type })
     },
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
     select: (data) => {
+      const list = data.pages.flatMap((p) => p?.data.results)
+      let count = 0
+      const limit = width > 1590 ? 4 : width > 1250 ? 3 : width > 600 ? 2 : 1
+      const waterfallList = list?.length
+        ? new Array<IdeaDataList[]>(limit)
+            .fill([])
+            .map(() => [] as IdeaDataList[])
+        : []
+
+      list?.forEach((item) => {
+        waterfallList[count].push(item!)
+        if (++count === limit) {
+          return (count = 0)
+        }
+      })
+
       return {
-        list: data.pages.flatMap((p) => p?.data.results),
+        list: waterfallList,
         total: data?.pages?.[0]?.data.count,
       }
     },
-  })
-
-  let count = 0
-  const limit = width > 1590 ? 4 : width > 1250 ? 3 : width > 600 ? 2 : 1
-  const data = result?.list
-
-  const waterfallList = data?.length
-    ? new Array<IdeaDataList[]>(limit).fill([]).map(() => [] as IdeaDataList[])
-    : []
-
-  data?.forEach((item) => {
-    waterfallList[count].push(item!)
-    if (++count === limit) {
-      return (count = 0)
-    }
   })
 
   const onClick = () => {
@@ -141,7 +142,7 @@ const IdeaPage = () => {
               alt="Logo"
               className="w-[100px] h-[100px] object-cover rounded-sm"
             />
-            <div className=" ml-3">
+            <div className="ml-3">
               <div className="text-xl text">{basicInfo?.title}</div>
               <Content content={basicInfo?.content}></Content>
             </div>
@@ -167,7 +168,7 @@ const IdeaPage = () => {
             </MobileQpportunityMoonshot>
           </div>
         </div>
-        {waterfallList.length ? (
+        {waterfallList?.list.length ? (
           <div className="my-5">{t('go.bold.man')} </div>
         ) : null}
 
@@ -177,7 +178,7 @@ const IdeaPage = () => {
           isPending={isLoading}
           className="flex gap-4"
         >
-          {waterfallList?.map((cols, i) => {
+          {waterfallList?.list?.map((cols, i) => {
             return (
               <div key={i} className="flex-1 max-sm:w-full max-sm:max-w-full">
                 {cols?.map((item) => {
@@ -230,7 +231,7 @@ const Content = memo(({ content }: { content?: string }) => {
   return (
     <div
       className={clsx(
-        'mt-2 text-gray-500 max-w-[90%] cursor-pointer',
+        'mt-2 text-gray-500 max-w-[90%] cursor-pointer leading-[23px]',
         show ? '' : 'line-clamp-3'
       )}
       onClick={() => setShow(!show)}

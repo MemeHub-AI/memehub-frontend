@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { useSwitchChain } from 'wagmi'
 
 import { aiApi } from '@/api/ai'
-import { CreateTokenContext } from '../context'
+import { CreateTokenContext } from '../../context'
 import {
   Form,
   FormControl,
@@ -23,24 +23,24 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { fmt } from '@/utils/fmt'
 import { Dialog } from '@/components/ui/dialog'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { FormLogo } from './logo'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
-  const { deployResult, formData, aiMemeInfo, newsListData } =
-    useContext(CreateTokenContext)
-
-  const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } =
-    aiMemeInfo || {}
-
-  const { deployFee, deploySymbol, isDeploying } = deployResult || {}
-  const { url, form, chains, formFields, onSubmit, onChangeUpload } =
-    formData! || {}
+  const { t } = useTranslation()
+  const { deployResult, formData, aiMemeInfo } = useContext(CreateTokenContext)
   const { switchChain } = useSwitchChain()
-
   const [showPoster, setShowPoster] = useState(false)
   const [index, setIndex] = useState(0)
   const [handLoadingPoster, setHandLoadingPoster] = useState(false)
 
-  const { t } = useTranslation()
+  const { loadingLogo, loadingPoster: loadingPoster1 } = useAimemeInfoStore()
+
+  const { url, form, chains, formFields, onSubmit } = formData
+  const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } =
+    aiMemeInfo
+
+  const { deployFee, deploySymbol, isDeploying } = deployResult || {}
 
   const fee = Number(formatEther(BigInt(deployFee!))).toFixed(3)
   const symbol = deploySymbol
@@ -109,72 +109,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           <div className="flex gap-5 max-sm:flex-col max-sm:gap-1">
             <div className="flex">
               {/* Logo */}
-              <FormField
-                control={form?.control}
-                name={formFields?.logo!}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormControl>
-                      <div
-                        className={cn(
-                          'relative flex',
-                          'border-2 border-black rounded-md overflow-hidden',
-                          'w-[150px] h-[150px]'
-                        )}
-                      >
-                        {!isLoadingMemeImg && field.value ? (
-                          <div>
-                            <img
-                              src={field.value as string}
-                              alt="logo"
-                              className="absolute top-0 left-0 w-full h-full object-cover"
-                            />
-                          </div>
-                        ) : (
-                          <div
-                            className={cn(
-                              'absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2',
-                              !field.value && !isLoadingMemeImg
-                                ? 'justify-center'
-                                : ''
-                            )}
-                          >
-                            {!isLoadingMemeImg ? (
-                              <div className=" text-center">
-                                <div className="mb-4 text-gray-400">
-                                  {t('meme.logo')}
-                                </div>
-                                <span>{t('click.upload')}</span>
-                              </div>
-                            ) : (
-                              <>
-                                <img
-                                  src="/images/logo-loading.png"
-                                  alt="logo"
-                                  className="w-[60%] h-[60%] object-cover"
-                                />
-                                <div className="mt-2 px-3 text-sm text-center">
-                                  {t('ai.createing.logo')}
-                                </div>
-                              </>
-                            )}
-                          </div>
-                        )}
-                        <Input
-                          placeholder={t('logo.placeholder')}
-                          type="file"
-                          {...field}
-                          value={''}
-                          className="h-full opacity-0"
-                          inputClassName="h-full w-full absolute top-0 left-0 cursor-pointer z-10"
-                          onChange={onChangeUpload}
-                        />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <FormLogo formData={formData}></FormLogo>
 
               {/* name/symbol */}
               <div className="flex flex-col ml-5 items-center justify-between flex-1">

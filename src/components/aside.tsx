@@ -12,7 +12,7 @@ import { Routes } from '@/routes'
 export const HotNewsAside = () => {
   const { t } = useTranslation()
   const { push } = useRouter()
-  const { memeit, handleClick, hidden, isFetching, show, loading, newsList } =
+  const { memeit, handleClick, hidden, isFetching, show, newsList } =
     useNewsList({ isOpportunity: true })
 
   return (
@@ -46,8 +46,7 @@ export const HotNewsAside = () => {
           description: memeit?.content,
         }}
         show={show}
-        loading={loading}
-        hidden={hidden}
+        onCancel={hidden}
         onConfirm={() => {}}
       />
     </aside>
