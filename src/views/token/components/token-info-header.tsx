@@ -22,10 +22,14 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         className
       )}
     >
-      <span className="flex items-center gap-4">
-        {t('market-cap')}: ${fmt.tradeFixed(BigNumber(marketCap))}
-        {/* <p>{t('virtual-liquidity')}: ${virtualLiquidity}</p> */}
-      </span>
+      <div className="flex items-center gap-3">
+        <span className="font-bold">
+          {tokenInfo?.name}({tokenInfo?.ticker})
+        </span>
+        <span>
+          {t('market-cap')}: ${fmt.tradeFixed(BigNumber(marketCap))}
+        </span>
+      </div>
       <div className="flex items-center gap-1">
         <div className="mr-1">{t('creator')}:</div>
         <img
