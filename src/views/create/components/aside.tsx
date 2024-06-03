@@ -1,4 +1,4 @@
-import React, { useState, type ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CustomSuspense } from '@/components/custom-suspense'
@@ -17,13 +17,12 @@ import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
-import { Pagination } from '@/components/ui/pagination'
 import { Routes } from '@/routes'
 import { useRouter } from 'next/router'
 
 interface Props extends ComponentProps<'div'> {
   newsListData: ReturnType<typeof useNewsList>
-  aIMemeInfo: ReturnType<typeof useAIMemeInfo>
+  aiMemeInfo: ReturnType<typeof useAIMemeInfo>
   tab: number
   setTab: (tab: number) => void
 }
@@ -31,7 +30,7 @@ interface Props extends ComponentProps<'div'> {
 export const InspirationNews = ({
   className,
   newsListData,
-  aIMemeInfo,
+  aiMemeInfo,
   tab: tabIdx,
   setTab,
 }: Props) => {
@@ -39,7 +38,7 @@ export const InspirationNews = ({
   const { getArea, setArea } = useStorage()
   const { push } = useRouter()
 
-  const { getAIMemeInfo, isLoadingMemeInfo } = aIMemeInfo
+  const { getAIMemeInfo, isLoadingMemeInfo } = aiMemeInfo
 
   const {
     isFetching,

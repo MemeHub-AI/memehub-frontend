@@ -14,18 +14,18 @@ interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   formData: ReturnType<typeof useCreateTokenForm>
   deployResult: ReturnType<typeof useDeploy>
   newsListData: ReturnType<typeof useNewsList>
-  aIMemeInfo: ReturnType<typeof useAIMemeInfo>
+  aiMemeInfo: ReturnType<typeof useAIMemeInfo>
 }
 
 export const Main = (props: Props) => {
-  const { className, aIMemeInfo } = props
+  const { className, aiMemeInfo } = props
   const { t } = useTranslation()
   const {
     getAIMemeInfo,
     isLoadingMemeImg,
     isLoadingMemeInfo,
     isLoadingMemePoster,
-  } = aIMemeInfo
+  } = aiMemeInfo
 
   return (
     <div
