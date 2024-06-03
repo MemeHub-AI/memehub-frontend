@@ -5,8 +5,6 @@ import { Dialog } from '../ui/dialog'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import { AIMemeInfo } from '@/api/ai/type'
-import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
-import { Params } from 'next/dist/shared/lib/router/utils/route-matcher'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 interface Props {

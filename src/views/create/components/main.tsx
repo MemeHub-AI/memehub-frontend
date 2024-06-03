@@ -38,9 +38,10 @@ export const Main = (props: Props) => {
         tab={tab}
         setTab={setTab}
       ></MobileQpportunityMoonshot>
+      {`${newsListData?.isLoadingMemeInfo}`}
       <AIIdea
         className="mt-5 w-fit"
-        getAIMemeInfo={aiMemeInfo?.getAIMemeInfo}
+        getAIMemeInfo={newsListData?.getAIMemeInfo}
         isLoadingMemeInfo={newsListData?.isLoadingMemeInfo}
       ></AIIdea>
 
