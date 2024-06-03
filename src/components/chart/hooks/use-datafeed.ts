@@ -96,8 +96,6 @@ export const useDatafeed = () => {
 
             onTick(bar)
             cache.setLastBar(bar)
-            console.clear()
-            console.log('update', bars)
           })
         })
       },
