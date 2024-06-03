@@ -291,5 +291,11 @@
   "hidden": "Hidden",
   "virtual-liquidity": "Virtual liquidity",
   "loading.country": "Loading area...",
-  "take.wave": "🔥Take the wave"
+  "take.wave": "🔥Take the wave",
+  "deploy.backend.error": "Submit to server error",
+  "deploy.backend.error.desc": "Your token has been successfully created, but there were some issues when submitting the information to the server. You can provide additional information later, or ",
+  "retry": "Retry",
+  "cannot-retry": "I'm sorry, unable to find the parameter or hash to retry, please provide additional information later.",
+  "deploy.backend.submitting": "Submit information",
+  "deploy.backend.submitting.desc": "Submitting information, please wait..."
 }

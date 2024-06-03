@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { CircleAlert } from 'lucide-react'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
@@ -14,20 +15,31 @@ interface Props extends ReturnType<typeof useDeploy> {}
 
 export const CreateTokenStatusDialog = (props: Props) => {
   const {
-    deployedAddress = '',
     createTokenData,
     createTokenError,
     deployHash = '',
     isSubmitting,
     isConfirming,
     isDeploySuccess,
+    isCreatingToken,
     submitError,
     confirmError,
     resetDeploy,
+    retryCreate,
   } = props
   const { t } = useTranslation()
   const { name: chainName = '', explorer_tx = '' } =
     createTokenData?.chain || {}
+  const deployedAddr = createTokenData?.address || ''
+
+  const withIcon = (children: ReactNode) => {
+    return (
+      <div className="flex items-center gap-2 text-red-500">
+        <CircleAlert size={18} />
+        {children}
+      </div>
+    )
+  }
 
   // Submiting, create start.
   if (isSubmitting) {
@@ -50,7 +62,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
     return (
       <AlertDialog
         open={!!submitError}
-        title={t('deploy.submit.error') + ':'}
+        title={withIcon(t('deploy.submit.error') + ':')}
         description={
           <p className="break-all line-clamp-3">{submitError?.message}</p>
         }
@@ -92,9 +104,46 @@ export const CreateTokenStatusDialog = (props: Props) => {
     return (
       <AlertDialog
         open={!!confirmError}
-        title={t('deploy.confirm.error') + ':'}
+        title={withIcon(t('deploy.confirm.error') + ':')}
         description={
           <p className="break-all line-clamp-3">{confirmError?.message}</p>
+        }
+        onCancel={resetDeploy}
+        onConfirm={resetDeploy}
+      />
+    )
+  }
+
+  if (isCreatingToken) {
+    return (
+      <AlertDialog
+        open={isCreatingToken}
+        title={t('deploy.backend.submitting')}
+        description={t('deploy.backend.submitting.desc')}
+        onCancel={resetDeploy}
+        onConfirm={resetDeploy}
+      />
+    )
+  }
+
+  // Submit to backend error.
+  if (createTokenError) {
+    return (
+      <AlertDialog
+        open={!!createTokenError}
+        title={withIcon(t('deploy.backend.error') + ':')}
+        description={
+          <div>
+            <p className="break-all line-clamp-3">
+              {t('deploy.backend.error.desc')}
+              <span
+                className="text-blue-600 cursor-pointer hover:underline"
+                onClick={retryCreate}
+              >
+                {t('retry')}
+              </span>
+            </p>
+          </div>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -121,7 +170,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
             </Link>
             <Link
               className="text-blue-600 hover:underline"
-              href={fmt.toHref(Routes.Main, chainName, deployedAddress)}
+              href={fmt.toHref(Routes.Main, chainName, deployedAddr)}
               onClick={resetDeploy}
             >
               {t('deploy.success.view-details')}
