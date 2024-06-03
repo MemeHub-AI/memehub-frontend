@@ -20,7 +20,16 @@ export const FollowTab = () => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(UserListType.Following)
   const { isMobile } = useResponsive()
-  const { followers, following, isLoading, isFetching } = useUserList(tab)
+  const {
+    followers,
+    isLoading: isLoadingFollowers,
+    isFetching: isFetchingFollowers,
+  } = useUserList(UserListType.Followers)
+  const {
+    following,
+    isLoading: isLoadingFollowing,
+    isFetching: isFetchingFollowing,
+  } = useUserList(UserListType.Following)
 
   // Mobile tabs.
   if (isMobile) {
@@ -58,15 +67,15 @@ export const FollowTab = () => {
             <FollowersCards
               cards={followers.list}
               total={following.total}
-              isLoading={isLoading}
-              isPending={isFetching}
+              isLoading={isLoadingFollowers}
+              isPending={isFetchingFollowers}
             />
           ) : (
             <FollowingCards
               cards={following.list}
               total={followers.total}
-              isLoading={isLoading}
-              isPending={isFetching}
+              isLoading={isLoadingFollowing}
+              isPending={isFetchingFollowing}
             />
           )}
         </DialogContent>
@@ -95,16 +104,16 @@ export const FollowTab = () => {
         <FollowersCards
           cards={followers.list}
           total={followers.total}
-          isLoading={isLoading}
-          isPending={isFetching}
+          isLoading={isLoadingFollowers}
+          isPending={isFetchingFollowers}
         />
       </TabsContent>
       <TabsContent value={UserListType.Following.toString()}>
         <FollowingCards
           cards={following.list}
           total={following.total}
-          isLoading={isLoading}
-          isPending={isFetching}
+          isLoading={isLoadingFollowing}
+          isPending={isFetchingFollowing}
         />
       </TabsContent>
     </Tabs>
