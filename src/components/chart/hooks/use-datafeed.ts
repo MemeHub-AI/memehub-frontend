@@ -85,7 +85,6 @@ export const useDatafeed = () => {
       subscribeBars(_, resolution, onTick, uid, onRest) {
         cache.setSub(uid, onRest)
 
-        console.log('sub', uid)
         onUpdate(({ data }) => {
           const bars = formatBars(data)
 

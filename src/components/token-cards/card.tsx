@@ -13,7 +13,6 @@ import { useTradeInfo } from '@/views/token/hooks/use-trade-info'
 import { fmt } from '@/utils/fmt'
 import { SupportedChainId } from '@/config/wagmi'
 import { defaultImg } from '@/config/link'
-import { qs } from '@/hooks/use-fetch'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -56,7 +55,7 @@ export const TokenCard = (props: Props) => {
       )}
       onClick={(e) => {
         const href = fmt.toHref(Routes.Main, card.chain.name, card.address)
-        router.push(href + qs.stringify({ chain_id: card.chain.id }))
+        router.push(href)
         onClick?.(e)
       }}
       {...restProps}
