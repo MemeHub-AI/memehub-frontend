@@ -35,7 +35,6 @@ const symbolInfoConfig: LibrarySymbolInfo = {
   has_weekly_and_monthly: true,
   has_seconds: true,
   has_ticks: true,
-  has_empty_bars: true,
   has_intraday: true,
   visible_plots_set: 'ohlcv',
   volume_precision: 18,
