@@ -1,8 +1,6 @@
 import { Button } from '@/components/ui/button'
-import HotNewsAside from '../../components/aside'
-import { useTranslation } from 'react-i18next'
 import { BsStars } from 'react-icons/bs'
-import { useWindowSize } from 'react-use'
+import { useWindowScroll, useWindowSize } from 'react-use'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { ideaApi } from '@/api/idea'
 import { IdeaDataList } from '@/api/idea/type'
@@ -11,25 +9,35 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { CreatedUser } from './components/created-user'
 import { useRouter } from 'next/router'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
-import { memo, useState } from 'react'
+import { memo, useEffect, useState } from 'react'
 import { defaultImg } from '@/config/link'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import clsx from 'clsx'
+import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
+import { useNewsList } from '@/hooks/use-news-list'
+import { useTranslation } from 'react-i18next'
+import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
-  const { width } = useWindowSize()
   const router = useRouter()
   const type = router.query.type as string
   const newsId = router.query.id as string
   const [show, setShow] = useState(false)
   const { push } = useRouter()
-  const { setFormInfo } = useAimemeInfoStore()
+  const aiMemeInfo = useAimemeInfoStore()
+  const [tab, setTab] = useState(0)
+
+  const { width } = useWindowSize()
+  const { y } = useWindowScroll()
+  const [] = useState(0)
+
+  const newsListData = useNewsList()
 
   const onCreateNow = (item: IdeaDataList) => {
     push(`${Routes.Create}`)
-    setFormInfo({
+    aiMemeInfo.setFormInfo({
       name: item?.name,
       symbol: item?.name,
       description: item?.description,
@@ -73,7 +81,7 @@ const IdeaPage = () => {
   })
 
   let count = 0
-  const limit = width > 1360 ? 4 : width > 1200 ? 3 : width > 600 ? 2 : 1
+  const limit = width > 1590 ? 4 : width > 1250 ? 3 : width > 600 ? 2 : 1
   const data = result?.list
 
   const waterfallList = data?.length
@@ -95,7 +103,7 @@ const IdeaPage = () => {
     setShow(false)
   }
 
-  window.onscroll = (e) => {
+  useEffect(() => {
     // 检查是否滚动到底部
     if (
       window.innerHeight +
@@ -108,11 +116,18 @@ const IdeaPage = () => {
       // 加载下一页的数据
       fetchNextPage()
     }
-  }
+  }, [y])
 
   return (
-    <main className="min-h-main px-2 pb-3 flex max-sm:px-3 max-sm:pt-0 gap-6">
-      <HotNewsAside />
+    <main className="min-h-main px-2 pb-3 flex max-sm:px-3 max-sm:pt-0 gap-6 max-sm:flex-col">
+      <OpportunityMoonshot
+        className="max-sm:hidden max-sm:!px-0"
+        newsListData={newsListData}
+        isDialogLoading={false}
+        onConfirmDialog={() => {}}
+        tab={tab}
+        setTab={setTab}
+      />
       <div className="max-w-[1185px] max-sm:pr-0 pr-4 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <div className="flex">
@@ -126,10 +141,35 @@ const IdeaPage = () => {
               <div className="mt-2 text-gray-500">{basicInfo?.description}</div>
             </div>
           </div>
-          <Button className="max-md:mt-4" onClick={onClick}>
-            <BsStars className="mr-1"></BsStars>
-            {t('random.meme')}
-          </Button>
+          <div className="flex max-md:mt-4">
+            <Button onClick={onClick}>
+              <BsStars className="mr-1"></BsStars>
+              {t('random.meme')}
+            </Button>
+            <Drawer>
+              <DrawerTrigger>
+                <div className="sm:hidden ml-4">
+                  <Button className="bg-white text-2xl" size={'icon'}>
+                    💡
+                  </Button>
+                </div>
+              </DrawerTrigger>
+              <DrawerContent>
+                <OpportunityMoonshot
+                  className="relative"
+                  listClassName={clsx(
+                    '!overflow-y-auto',
+                    tab == 0 ? 'max-sm:h-[65vh]' : 'max-sm:h-[70vh]'
+                  )}
+                  newsListData={newsListData}
+                  isDialogLoading={false}
+                  onConfirmDialog={() => {}}
+                  tab={tab}
+                  setTab={setTab}
+                />
+              </DrawerContent>
+            </Drawer>
+          </div>
         </div>
         {waterfallList.length ? (
           <div className="my-5">{t('go.bold.man')} </div>

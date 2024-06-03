@@ -109,8 +109,6 @@ export const useNewsList = (options?: Options) => {
     },
     getNextPageParam: (_, _1, page) => page + 1,
     select: (data) => {
-      console.log(data)
-
       return {
         total: data.pages[0].count,
         newsList: data.pages.flatMap((p) => p.results).filter(Boolean),

@@ -8,12 +8,13 @@ import { useCreateTokenForm } from './hooks/use-form'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
 
 export const CreatePage = () => {
   const deployResult = useDeploy()
   const [tab, setTab] = useState(0)
   const formData = useCreateTokenForm(deployResult)
-  const aIMemeInfo = useAIMemeInfo({ form: formData.form })
+  const aiMemeInfo = useAIMemeInfo({ form: formData.form })
   const newsListData = useNewsList({
     formData,
     isOpportunity: tab === 1,
@@ -25,7 +26,7 @@ export const CreatePage = () => {
     if (aimemeInfoStore.formInfo?.name !== undefined && isFirst.current) {
       isFirst.current = false
       newsListData.setShow(true)
-      aIMemeInfo.getAIMemeImg()
+      aiMemeInfo.getAIMemeImg()
       aimemeInfoStore.setFormInfo(undefined)
     }
   }, [])
@@ -34,17 +35,19 @@ export const CreatePage = () => {
     if (aimemeInfoStore.info?.name !== undefined && isFirst.current) {
       isFirst.current = false
       newsListData.setShow(true)
-      aIMemeInfo.getAIMemeInfo(aimemeInfoStore.info?.name || '')
+      aiMemeInfo.getAIMemeInfo(aimemeInfoStore.info?.name || '')
       aimemeInfoStore.setInfo(undefined)
     }
   }, [])
 
   return (
     <main className="min-h-main flex justify-center mx-auto max-md:flex-col max-md:items-center max-sm:gap-8">
-      <InspirationNews
-        className="ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full"
+      <OpportunityMoonshot
         newsListData={newsListData}
-        aIMemeInfo={aIMemeInfo}
+        isDialogLoading={aiMemeInfo.isLoadingMemeInfo}
+        onConfirmDialog={() =>
+          aiMemeInfo.getAIMemeInfo(newsListData.memeit?.title || '')
+        }
         tab={tab}
         setTab={setTab}
       />
@@ -52,7 +55,7 @@ export const CreatePage = () => {
         newsListData={newsListData}
         deployResult={deployResult}
         formData={formData}
-        aIMemeInfo={aIMemeInfo}
+        aiMemeInfo={aiMemeInfo}
         className="flex-1 ml-10 pl-10 max-md:order-1 border-l-2 border-black max-md:border-l-0 max-md:ml-0 max-md:pl-0"
       />
 

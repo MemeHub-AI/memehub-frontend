@@ -13,32 +13,34 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useStorage } from '@/hooks/use-storage'
-import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { useRouter } from 'next/router'
+import clsx from 'clsx'
 
 interface Props extends ComponentProps<'div'> {
   newsListData: ReturnType<typeof useNewsList>
-  aiMemeInfo: ReturnType<typeof useAIMemeInfo>
   tab: number
+  listClassName?: string
+  isDialogLoading: boolean
   setTab: (tab: number) => void
+  onConfirmDialog: () => void
 }
 
-export const InspirationNews = ({
+export const OpportunityMoonshot = ({
   className,
+  listClassName,
   newsListData,
-  aiMemeInfo,
   tab: tabIdx,
+  isDialogLoading,
   setTab,
+  onConfirmDialog,
 }: Props) => {
   const { t } = useTranslation()
   const { getArea, setArea } = useStorage()
   const { push } = useRouter()
-
-  const { getAIMemeInfo, isLoadingMemeInfo } = aiMemeInfo
 
   const {
     isFetching,
@@ -66,12 +68,17 @@ export const InspirationNews = ({
   }
 
   const onConfirm = async () => {
-    await getAIMemeInfo(newsListData.memeit?.title!)
+    onConfirmDialog()
     hidden()
   }
 
   return (
-    <div className={className}>
+    <div
+      className={clsx(
+        'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full h-[83vh]',
+        className
+      )}
+    >
       <div className="flex items-start">
         {tabs.map((tab, i) => {
           return (
@@ -108,7 +115,10 @@ export const InspirationNews = ({
         isPending={isFetching}
         fallback={<NewsSkeleton />}
         nullback={t('no.data')}
-        className="flex flex-col gap-6 h-[calc(100vh-260px)] overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip"
+        className={clsx(
+          'flex flex-col gap-6 h-[calc(100vh-260px)] overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip',
+          listClassName
+        )}
       >
         <div className="flex flex-col gap-3">
           {newsList?.map((news, i) => (
@@ -132,7 +142,7 @@ export const InspirationNews = ({
 
       <AICreateMemecoinDialog
         show={show}
-        loading={isLoadingMemeInfo}
+        loading={isDialogLoading}
         data={{
           name: memeit?.title,
           image: memeit?.image,
