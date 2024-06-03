@@ -64,7 +64,7 @@ export const TokenCards = (props: Props) => {
 
       <CustomSuspense
         className={cn(
-          'grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1',
+          'grid grid-cols-2 gap-4 2xl:grid-cols-3 max-sm:grid-cols-1',
           'max-sm:gap-2'
         )}
         isPending={isLoading}
@@ -81,42 +81,6 @@ export const TokenCards = (props: Props) => {
       >
         {cards.length ? (
           <>
-            {/* <Card
-              className={cn(
-                'flex items-stretch rounded overflow-hidden gap-2 relative',
-                'max-sm:mt-1'
-              )}
-              onClick={() => router.push(`${Routes.Launchpad}/trump`)}
-            >
-              <img
-                src={'https://storage.memehub.ai/memeai/txt2img-890848816.png'}
-                alt="img"
-                className="flex-shrink-0 h-40 w-40 object-cover"
-                width={160}
-                height={160}
-              />
-              <img
-                src={'/images/bsc.svg'}
-                alt="chain"
-                className="absolute right-2 top-2 w-5"
-              />
-              <div className="py-2 pr-2 w-full flex flex-col justify-between">
-                <div className="h-full">
-                  <CardTitle className="pt-0 text-lg">Trump</CardTitle>
-                  <p className="text-zinc-500 text-sm break-all line-clamp-3">
-                    Laugh out loud with TrumpLOL! A hilarious and entertaining
-                    collection of Trump's most outrageous moments. Get ready to
-                    burst into laughter and share the joy with friends. Let
-                    TrumpLOL bring some humor into your life today!
-                  </p>
-                </div>
-                <div>
-                  <div className="w-max px-4 py-2 leading-none bg-red-500 text-white rounded-full text-sm">
-                    {t('launchpad')}
-                  </div>
-                </div>
-              </div>
-            </Card> */}
             {filteredCards.map((t, i) => (
               <TokenCard key={i} card={t} />
             ))}
@@ -135,7 +99,7 @@ export const TokenCards = (props: Props) => {
 
 const CardSkeleton = () => {
   return (
-    <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1 max-sm:gap-2 ">
+    <div className="grid grid-cols-2 gap-4 2xl:grid-cols-3 max-sm:grid-cols-1 max-sm:gap-2 ">
       {Array.from({ length: 4 }).map((_, i) => (
         <div className="border-2 rounded flex gap-2 relative" key={i}>
           <Skeleton className="w-40 h-40 flex-shrink-0 rounded-none" />
