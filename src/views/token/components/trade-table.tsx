@@ -34,8 +34,8 @@ export const TradeTable = () => {
   const ths = [
     t('account'),
     t('type'),
-    t('volume'),
     t('amount'),
+    t('volume'),
     showAge ? t('age') : t('date'),
     t('tx.hash'),
   ]
