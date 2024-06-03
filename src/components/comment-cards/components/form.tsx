@@ -15,11 +15,12 @@ import { ImageUpload } from '@/components/image-upload'
 import { shadowVariants } from '@/styles/variants'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
+  isCommenting?: boolean
   onComment?: (content: string, mentions: [], image?: string) => void
 }
 
 export const CommentForm = (props: Props) => {
-  const { className, onComment } = props
+  const { className, isCommenting, onComment } = props
   const { t } = useTranslation()
   const { fields, updateField } = useFields({
     comment: createField({}),
@@ -62,14 +63,18 @@ export const CommentForm = (props: Props) => {
         value={fields.comment.value}
         onChange={onChange}
         rows={4}
+        disabled={isCommenting}
       />
 
       <div className="flex items-center gap-2">
-        <Button className="px-10">{t('comment')}</Button>
+        <Button className="px-10" disabled={isCommenting}>
+          {t('comment')}
+        </Button>
         <Label
           htmlFor={inputId}
           variant="icon"
           className={cn(shadowVariants(), 'shadow')}
+          disabled={isCommenting}
         >
           <ImageIcon className="cursor-pointer" />
         </Label>

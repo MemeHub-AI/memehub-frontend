@@ -13,8 +13,7 @@ enum Tab {
   Trades = 'trades',
 }
 
-export const CommentTradeTab = (props: ComponentProps<'div'>) => {
-  const { className } = props
+export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { getCommentTradeTab, setCommentTradeTab } = useStorage()
   const {
@@ -22,8 +21,9 @@ export const CommentTradeTab = (props: ComponentProps<'div'>) => {
     total,
     isLoading,
     isFetching,
-    refetchComments,
     fetchNextPage,
+    addComment,
+    updateComment,
   } = useComments()
 
   return (
@@ -43,9 +43,9 @@ export const CommentTradeTab = (props: ComponentProps<'div'>) => {
           isLoading={isLoading}
           isPending={isFetching}
           onFetchNext={fetchNextPage}
-          onAddSuccess={refetchComments}
-          onLikeSuccess={refetchComments}
-          onUnlikeSuccess={refetchComments}
+          onCommentSuccess={addComment}
+          onLikeSuccess={updateComment}
+          onUnlikeSuccess={updateComment}
         />
       </TabsContent>
       <TabsContent value={Tab.Trades} className="max-sm:mt-1">

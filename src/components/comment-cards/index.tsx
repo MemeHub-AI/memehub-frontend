@@ -2,6 +2,9 @@ import React, { type ComponentProps, useState, useEffect } from 'react'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
+import type { UserListRes, UserListType } from '@/api/user/types'
+import type { TokenCommentListRes } from '@/api/token/types'
+
 import { CommentCard } from './components/card'
 import { CommentForm } from './components/form'
 import { Dialog } from '@/components/ui/dialog'
@@ -9,7 +12,6 @@ import { CustomSuspense } from '../custom-suspense'
 import { Skeleton } from '../ui/skeleton'
 import { useComment } from './hooks/use-comment'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
-import { UserListRes, UserListType } from '@/api/user/types'
 
 interface Props extends ComponentProps<'div'> {
   cards: UserListRes[UserListType.Replies][]
@@ -18,9 +20,9 @@ interface Props extends ComponentProps<'div'> {
   isPending?: boolean
   readonly?: boolean
   onFetchNext?: () => void
-  onAddSuccess?: () => void
-  onLikeSuccess?: () => void
-  onUnlikeSuccess?: () => void
+  onCommentSuccess?: (data: TokenCommentListRes) => void
+  onLikeSuccess?: (data: TokenCommentListRes) => void
+  onUnlikeSuccess?: (data: TokenCommentListRes) => void
 }
 
 export const CommentCards = (props: Props) => {
@@ -31,15 +33,22 @@ export const CommentCards = (props: Props) => {
     isPending = false,
     readonly = false,
     onFetchNext,
-    onAddSuccess,
+    onCommentSuccess,
     onLikeSuccess,
     onUnlikeSuccess,
   } = props
   const { t } = useTranslation()
   const [replyId, setReplyId] = useState('')
   const [lastAnchor, setLastAnchor] = useState(-1)
-  const { addComment, likeComment, unlikeComment } = useComment({
-    onAddSuccess,
+  const {
+    isCommenting,
+    isLiking,
+    isUnliking,
+    addComment,
+    likeComment,
+    unlikeComment,
+  } = useComment({
+    onCommentSuccess,
     onLikeSuccess,
     onUnlikeSuccess,
   })
@@ -70,27 +79,34 @@ export const CommentCards = (props: Props) => {
         // Close the dialog if `false`.
         onOpenChange={(value) => !value && setReplyId('')}
       >
-        <CommentForm onComment={onComment} />
+        <CommentForm isCommenting={isCommenting} onComment={onComment} />
       </Dialog>
 
       {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
       <CustomSuspense
-        className="flex flex-col gap-2"
+        className="flex flex-col w-[30rem]"
         isPending={isLoading}
         fallback={<CardSkeleton />}
         nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}
       >
-        {cards.map((c) => (
-          <CommentCard
-            key={c.id}
-            c={c}
-            readonly={readonly}
-            isActive={c.id === lastAnchor}
-            onLike={likeComment}
-            onUnlike={unlikeComment}
-            onReply={(id) => setReplyId(id)}
-            onAnchorClick={setLastAnchor}
-          />
+        {cards.map((c, i) => (
+          <>
+            <CommentCard
+              key={c.id}
+              c={c}
+              readonly={readonly}
+              isActive={c.id === lastAnchor}
+              isLiking={isLiking}
+              isUnliking={isUnliking}
+              onLike={likeComment}
+              onUnlike={unlikeComment}
+              onReply={(id) => setReplyId(id)}
+              onAnchorClick={setLastAnchor}
+            />
+            {i !== cards.length - 1 && (
+              <hr className="border-t-2 border-black" />
+            )}
+          </>
         ))}
         {isPending && (
           <p className="text-zinc-500 text-center">{t('loading')}</p>
