@@ -6,7 +6,6 @@ import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import { AppLayout } from '@/components/layouts/app'
 import { AppProviders } from '@/components/app-providers'
-import 'react-zmage/lib/zmage.css'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation()
