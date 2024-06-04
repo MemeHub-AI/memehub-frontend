@@ -293,5 +293,6 @@
   "deploy.backend.submitting.desc": "正在提交信息，请稍后...",
   "create.info.error": "生成MEME信息失败",
   "trade.balance.zero": "您当前没有余额",
-  "view.profile": "查看个人信息"
+  "view.profile": "查看个人信息",
+  "token.detail": "代币详情"
 }

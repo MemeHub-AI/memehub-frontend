@@ -183,14 +183,20 @@ export const TokenInfo = ({ ideaData }: Props) => {
           {showTokens.chainData.token?.map((token, i) => {
             return (
               <div key={i} className="mt-0">
-                <div className="text-blue-600 font-bold">{token.symbol}</div>
+                <div
+                  className="text-blue-600 font-bold cursor-pointer hover:underline"
+                  onClick={() => open(`${token.url}`)}
+                >
+                  {token.name}
+                  {token.symbol ? `(${token.symbol})` : ''}
+                </div>
                 <div className="flex items-center gap-4">
                   <span>
                     24H {t('volume')}: ${fmt.tradeFixed(token['24H_Volume'])}
                   </span>
                   {token.publish_at && (
                     <span>
-                      {t('aget')}: {token.publish_at}
+                      {t('age')}: {token.publish_at}
                     </span>
                   )}
                 </div>
