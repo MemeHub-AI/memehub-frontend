@@ -16,7 +16,7 @@ export const CreatePage = () => {
   const formData = useCreateTokenForm(deployResult)
 
   const aiMemeInfo = useAIMemeInfo({ form: formData.form })
-  const newsListData = useNewsList()
+  const newsListData = useNewsList({ isOpportunity: tab === 1 })
 
   return (
     <CreateTokenContext.Provider

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { TokenCards } from '@/components/token-cards'
 import { HotNewsAside } from '../../components/aside'
@@ -7,10 +7,17 @@ import { AIIdeaBar } from '@/components/ai-idea'
 import { useTradeLogs } from '@/hooks/use-trade-logs'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
+import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
+import { useNewsList } from '@/hooks/use-news-list'
 
 export const MainPage = () => {
+  const [tab, setTab] = useState(1)
+
   const { tokens, totalToken, isLoading, isFetching, fetchNextPage } =
     useTokens()
+  const newsListData = useNewsList({
+    isOpportunity: tab === 1,
+  })
 
   const {
     isRandom,
@@ -24,7 +31,14 @@ export const MainPage = () => {
 
   return (
     <main className="min-h-main px-6 flex max-sm:px-3 max-sm:pt-0 gap-6">
-      <HotNewsAside />
+      {/* <HotNewsAside /> */}
+      <OpportunityMoonshot
+        className="max-sm:!hidden"
+        newsListData={newsListData}
+        onConfirmDialog={() => {}}
+        tab={tab}
+        setTab={setTab}
+      />
       <div className="flex-1 max-sm:mt-2">
         <AIIdeaBar
           className="max-sm:mb-3"

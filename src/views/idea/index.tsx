@@ -30,7 +30,7 @@ const IdeaPage = () => {
   const { push } = useRouter()
   const { setLoadingInfoDialog, setInfo, setFormInfo, setLoadingImg } =
     useAimemeInfoStore()
-  const [tab, setTab] = useState(0)
+  const [tab, setTab] = useState(1)
 
   const { width } = useWindowSize()
   const { y } = useWindowScroll()
