@@ -11,7 +11,6 @@ import { useTradeContext } from '@/contexts/trade'
 export const SlippageButton = ({ disabled }: ComponentProps<'button'>) => {
   const { t } = useTranslation()
   const [slippage, setSlippage] = useState('5')
-  const {} = useTradeContext()
 
   const onConfirm = () => {
     if (isEmpty(slippage) || BigNumber(slippage).lt(0)) {

@@ -12,7 +12,7 @@ interface Value {
   isSell: boolean
   isTraded: boolean
   nativeSymbol: string
-  ethBalance: string
+  nativeBalance: string
   tokenBalance: string
 }
 

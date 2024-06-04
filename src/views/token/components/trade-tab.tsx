@@ -35,7 +35,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { isConnected, chainId } = useAccount()
   const { isSubmitting, isTraded, buy, sell } = useTrade()
   const {
-    ethBalance,
+    nativeBalance,
     tokenBalance,
     refetchNativeBalance,
     refetchTokenBalance,
@@ -48,9 +48,9 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const onBuy = async () => {
     // Overflow current wallet balance.
-    if (BigNumber(value).gt(ethBalance)) {
+    if (BigNumber(value).gt(nativeBalance)) {
       toast.error(t('balance.illegality'))
-      setValue(ethBalance)
+      setValue(nativeBalance)
       return
     }
     const max = await buy(value)
@@ -123,7 +123,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         isSell,
         isTraded,
         nativeSymbol,
-        ethBalance,
+        nativeBalance,
         tokenBalance,
       }}
     >
@@ -166,9 +166,21 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               disabled={isSubmitting}
               onResetClick={setValue}
               onBuyItemClick={(value) => {
-                setValue(BigNumber(value).gt(ethBalance) ? ethBalance : value)
+                if (BigNumber(nativeBalance).lte(0)) {
+                  toast.warning(t('trade.balance.zero'))
+                  return
+                }
+                if (BigNumber(value).gt(nativeBalance)) {
+                  setValue(nativeBalance)
+                  return
+                }
+                setValue(value)
               }}
               onSellItemClick={(value: string) => {
+                if (BigNumber(tokenBalance).lte(0)) {
+                  toast.warning(t('trade.balance.zero'))
+                  return
+                }
                 const percent = BigNumber(value)
                   .multipliedBy(tokenBalance)
                   .div(100)
@@ -181,7 +193,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <Button
             className="!w-full"
             onClick={onTrade}
-            disabled={isSubmitting || BigNumber(value).lte(0)}
+            disabled={isSubmitting || !value || BigNumber(value).lte(0)}
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
