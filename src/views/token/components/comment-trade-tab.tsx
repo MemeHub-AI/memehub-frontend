@@ -29,7 +29,7 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
   return (
     <Tabs
       defaultValue={getCommentTradeTab() || Tab.Comments}
-      className={cn(className)}
+      className={cn('mt-3', className)}
       onValueChange={(value) => setCommentTradeTab(value)}
     >
       <TabsList className="rounded-md">

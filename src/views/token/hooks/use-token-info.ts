@@ -15,7 +15,12 @@ export const useTokenInfo = () => {
   const chain = findChain(chainName)
 
   // Query token amounts.
-  const { data = [], refetch: refetchInfo } = useReadContracts({
+  const {
+    data = [],
+    refetch: refetchInfo,
+    isLoading: isLoadingProgress,
+    isFetching: isFetchingProgress,
+  } = useReadContracts({
     contracts: [
       {
         abi: continousTokenAbi,
@@ -36,7 +41,11 @@ export const useTokenInfo = () => {
   const weiCurrent = data[1]?.result || BigInt(0)
 
   // Query token details from api.
-  const { data: { data: tokenInfo } = {} } = useQuery({
+  const {
+    data: { data: tokenInfo } = {},
+    isLoading: isLoadingTokenInfo,
+    isFetching: isFetchingTokenInfo,
+  } = useQuery({
     enabled: !!tokenAddr,
     queryKey: [tokenApi.details.name, tokenAddr],
     queryFn: () => tokenApi.details(tokenAddr),
@@ -46,6 +55,10 @@ export const useTokenInfo = () => {
     tokenInfo,
     totalToken: formatEther(weiTotal),
     currentToken: formatEther(weiCurrent),
+    isLoadingProgress,
+    isFetchingProgress,
+    isLoadingTokenInfo,
+    isFetchingTokenInfo,
     refetchInfo,
   }
 }

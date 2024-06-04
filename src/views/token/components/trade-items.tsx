@@ -5,6 +5,9 @@ import { useAccount } from 'wagmi'
 import { Button } from '@/components/ui/button'
 import { useTradeContext } from '@/contexts/trade'
 import { useWalletStore } from '@/stores/use-wallet-store'
+import { useTokenContext } from '@/contexts/token'
+import CustomSuspense from '@/components/custom-suspense'
+import { Skeleton } from '@/components/ui/skeleton'
 
 const buyItems = ['0.001', '0.01', '1']
 
@@ -19,9 +22,21 @@ interface Props extends ComponentProps<'button'> {
 export const TradeItems = (props: Props) => {
   const { disabled, onBuyItemClick, onSellItemClick, onResetClick } = props
   const { t } = useTranslation()
+  const { isLoadingTokenInfo } = useTokenContext()
   const { isBuy, nativeSymbol } = useTradeContext()
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
+
+  if (isLoadingTokenInfo) {
+    return (
+      <div className="flex gap-2 mt-3">
+        <Skeleton className="w-16 h-6" />
+        <Skeleton className="w-16 h-6" />
+        <Skeleton className="w-16 h-6" />
+        <Skeleton className="w-16 h-6" />
+      </div>
+    )
+  }
 
   return (
     <div className="flex gap-2 mt-3">
