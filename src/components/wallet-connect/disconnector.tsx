@@ -5,7 +5,6 @@ import { ExitIcon } from '@radix-ui/react-icons'
 import { Button, type ButtonProps } from '../ui/button'
 import { useWallet } from '@/hooks/use-wallet'
 import { useResponsive } from '@/hooks/use-responsive'
-import { Tooltip } from '../ui/tooltip'
 import { AlertDialog } from '../ui/alert-dialog'
 
 interface Props extends ButtonProps {
@@ -23,20 +22,17 @@ export const WalletDisconnector = (props: Props) => {
 
   return (
     <>
-      <Tooltip
-        tip={t('wallet.disconnect.intro')}
-        triggerProps={{ asChild: true }}
+      <Button
+        variant="destructive"
+        size={isMobile ? 'icon-sm' : 'default'}
+        onClick={() => setOpen(true)}
+        className="gap-2"
+        {...restProps}
       >
-        <Button
-          variant="destructive"
-          size={isMobile ? 'icon-sm' : 'icon'}
-          onClick={() => setOpen(true)}
-          {...restProps}
-        >
-          {children}
-          <ExitIcon />
-        </Button>
-      </Tooltip>
+        {children}
+        <ExitIcon />
+        {t('disconnect')}
+      </Button>
       <AlertDialog
         open={open}
         onOpenChange={setOpen}

@@ -17,7 +17,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
   const { setLang } = useLang()
 
   return (
-    <HoverCard openDelay={0} closeDelay={100}>
+    <HoverCard openDelay={100}>
       <HoverCardTrigger className="p-0">
         <Button size="icon" className={cn(className)}>
           <Languages size={20} />

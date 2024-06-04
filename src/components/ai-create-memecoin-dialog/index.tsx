@@ -8,7 +8,7 @@ import { AIMemeInfo } from '@/api/ai/type'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 interface Props {
-  show?: boolean
+  show: boolean
   isRandom?: boolean
   data?: AIMemeInfo
   onCancel: () => void
@@ -16,22 +16,7 @@ interface Props {
 }
 
 export const AICreateMemecoinDialog = (props: Props) => {
-  const { show, onCancel, isRandom, data, onConfirm } = props
-
-  const { push, pathname } = useRouter()
-
-  const confirm = () => {
-    if (!pathname.startsWith(Routes.Create)) {
-      const aimemeInfoStore = useAimemeInfoStore.getState()
-      aimemeInfoStore.setInfo({
-        name: isRandom ? '' : data?.name,
-        image: isRandom ? '' : data?.image,
-        description: isRandom ? '' : data?.description,
-      })
-      return push(Routes.Create)
-    }
-    onConfirm()
-  }
+  const { show, isRandom, data, onConfirm, onCancel } = props
 
   const handleDialogContent = () => {
     return (
@@ -68,7 +53,7 @@ export const AICreateMemecoinDialog = (props: Props) => {
           </div>
         ) : null}
         <div className="flex gap-10 mt-6 w-max mx-auto max-sm:mt-0">
-          <Button variant="default" size="lg" onClick={confirm}>
+          <Button variant="default" size="lg" onClick={onConfirm}>
             {t('coinfirm')}
           </Button>
           <Button size="lg" onClick={onCancel}>

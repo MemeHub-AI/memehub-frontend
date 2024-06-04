@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useStorage } from '@/hooks/use-storage'
-import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
@@ -27,6 +26,7 @@ interface Props extends ComponentProps<'div'> {
   tab: number
   listClassName?: string
   isDialogLoading?: boolean
+  containerClass?: string
   setTab: (tab: number) => void
   onConfirmDialog: () => void
 }
@@ -36,7 +36,7 @@ export const OpportunityMoonshot = ({
   listClassName,
   newsListData,
   tab: tabIdx,
-  isDialogLoading,
+  containerClass,
   setTab,
   onConfirmDialog,
 }: Props) => {
@@ -65,10 +65,6 @@ export const OpportunityMoonshot = ({
 
   const tabs = [t('next.moonshot'), t('take.wave')]
 
-  const hidden = () => {
-    setShow?.(false)
-  }
-
   const onChange = (value: string) => {
     setArea(value)
     newsListData?.setArea(+value)
@@ -76,11 +72,6 @@ export const OpportunityMoonshot = ({
 
   const onChangeTab = (idx: number) => {
     setTab(idx)
-  }
-
-  const onConfirm = async () => {
-    onConfirmDialog()
-    hidden()
   }
 
   return (
@@ -94,7 +85,8 @@ export const OpportunityMoonshot = ({
       <div
         className={clsx(
           'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full',
-          tabIdx === 1 ? 'h-[90vh]' : 'h-[92vh]'
+          tabIdx === 1 ? 'h-[90vh]' : 'h-[92vh]',
+          containerClass
         )}
       >
         <div className="flex items-start">
@@ -160,18 +152,6 @@ export const OpportunityMoonshot = ({
             ))}
           </div>
         </CustomSuspense>
-
-        <AICreateMemecoinDialog
-          show={show}
-          loading={isDialogLoading}
-          data={{
-            name: memeit?.title,
-            image: memeit?.image,
-            description: memeit?.content,
-          }}
-          hidden={hidden}
-          onConfirm={onConfirm}
-        ></AICreateMemecoinDialog>
       </div>
     </div>
   )

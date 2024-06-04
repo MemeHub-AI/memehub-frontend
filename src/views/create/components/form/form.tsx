@@ -90,7 +90,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
     }
   }
 
-  const loadingPoster = isLoadingMemePoster || handLoadingPoster
+  const loadingPoster = loadingPoster1
 
   useEffect(() => {
     if (url) {

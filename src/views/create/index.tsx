@@ -16,7 +16,7 @@ export const CreatePage = () => {
   const formData = useCreateTokenForm(deployResult)
 
   const aiMemeInfo = useAIMemeInfo({ form: formData.form })
-  const newsListData = useNewsList()
+  const newsListData = useNewsList({ isOpportunity: tab === 1 })
 
   return (
     <CreateTokenContext.Provider
@@ -39,7 +39,7 @@ export const CreatePage = () => {
           setTab={setTab}
         />
         <Main
-          className="flex-1  max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0"
+          className="flex-1 pb-5 max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0"
           tab={tab}
           setTab={setTab}
         />

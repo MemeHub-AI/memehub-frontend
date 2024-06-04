@@ -28,8 +28,9 @@ const IdeaPage = () => {
   const newsId = router.query.id as string
   const [show, setShow] = useState(false)
   const { push } = useRouter()
-  const aiMemeInfo = useAimemeInfoStore()
-  const [tab, setTab] = useState(0)
+  const { setLoadingInfoDialog, setInfo, setFormInfo, setLoadingImg } =
+    useAimemeInfoStore()
+  const [tab, setTab] = useState(1)
 
   const { width } = useWindowSize()
   const { y } = useWindowScroll()
@@ -40,11 +41,12 @@ const IdeaPage = () => {
 
   const onCreateNow = (item: IdeaDataList) => {
     push(`${Routes.Create}`)
-    aiMemeInfo.setFormInfo({
+    setFormInfo({
       name: item?.name,
       symbol: item?.name,
       description: item?.description,
     })
+    setLoadingImg(true)
   }
 
   const { data: basicInfoData } = useQuery({
@@ -101,11 +103,24 @@ const IdeaPage = () => {
     },
   })
 
-  const onClick = () => {
+  const onRandomCreate = () => {
     setShow(true)
   }
 
+  const memeInfo = {
+    name: basicInfo?.title,
+    image: basicInfo?.logo,
+    description: basicInfo?.content,
+  }
+
   const onConfirm = () => {
+    setShow(false)
+    push(Routes.Create)
+    setInfo(memeInfo)
+    setLoadingInfoDialog(true)
+  }
+
+  const onCancel = () => {
     setShow(false)
   }
 
@@ -148,7 +163,7 @@ const IdeaPage = () => {
             </div>
           </div>
           <div className="flex max-md:mt-4">
-            <Button onClick={onClick}>
+            <Button onClick={onRandomCreate}>
               <BsStars className="mr-1"></BsStars>
               {t('random.meme')}
             </Button>
@@ -214,13 +229,9 @@ const IdeaPage = () => {
       </div>
       <AICreateMemecoinDialog
         show={show}
-        data={{
-          name: basicInfo?.title,
-          image: basicInfo?.logo,
-          description: basicInfo?.content,
-        }}
+        data={memeInfo}
         onConfirm={onConfirm}
-        hidden={() => setShow(false)}
+        onCancel={onCancel}
       ></AICreateMemecoinDialog>
     </main>
   )
@@ -286,4 +297,5 @@ const WaterSkeleton = () => {
     </div>
   )
 }
+
 export default IdeaPage

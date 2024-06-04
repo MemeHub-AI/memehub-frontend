@@ -151,7 +151,7 @@
   "deploy.submit.title": "准备创建中...",
   "deploy.submit.description": "请等待您的钱包打开, 然后点击确认按钮确认创建",
   "deploy.submit.error": "提交发生错误",
-  "deploy.submit.success": "提交成功！",
+  "deploy.submit.success": "提交完成，等待区块确认",
   "deploy.submit.success.desc": "您的交易已成功提交。\n正在等待区块确认中...",
   "deploy.submit.success.view-hash": "您也可以在区块链浏览器上查看",
   "view": "查看",
@@ -291,5 +291,7 @@
   "cannot-retry": "很遗憾，无法找到参数或哈希导致无法重试，请后续补充",
   "deploy.backend.submitting": "提交信息",
   "deploy.backend.submitting.desc": "正在提交信息，请稍后...",
-  "trade.balance.zero": "您当前没有余额"
+  "create.info.error": "生成MEME信息失败",
+  "trade.balance.zero": "您当前没有余额",
+  "view.profile": "查看个人信息"
 }
