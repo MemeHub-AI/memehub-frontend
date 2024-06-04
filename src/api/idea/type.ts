@@ -1,3 +1,5 @@
+import { Chain } from '../user/types'
+
 export interface IdeaQuery {
   type: string
   page?: number
@@ -18,6 +20,8 @@ export interface IdeaTokens {
   name: string
   ticker: string
   logo: string
+  address: string
+  chain: Chain
 }
 
 export interface IdeaRes {

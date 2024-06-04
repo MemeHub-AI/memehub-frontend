@@ -20,7 +20,7 @@ import {
 } from '@/components/opportunity-moonshot'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useTranslation } from 'react-i18next'
-import { ChainInfo, TokenInfo } from './components/token-info'
+import { TokenInfo } from './components/token-info'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
