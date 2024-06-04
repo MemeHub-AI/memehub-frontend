@@ -14,12 +14,10 @@ export const useTradeInfo = () => {
 
   // Query native & token balance.
   const {
-    data: ethBalances,
+    data: nativeBalances,
     isFetching: isFetchingNativeBalance,
     refetch: refetchNativeBalance,
-  } = useBalance({
-    address,
-  })
+  } = useBalance({ address })
   const {
     data: tokenBalances,
     isFetching: isFetchingTokenBalance,
@@ -31,7 +29,7 @@ export const useTradeInfo = () => {
     args: [address!],
     query: { enabled: !!address },
   })
-  const ethBalance = formatEther(ethBalances?.value || BigInt(0))
+  const nativeBalance = formatEther(nativeBalances?.value || BigInt(0))
   const tokenBalance = formatEther(tokenBalances || BigInt(0))
 
   // Get buy token amount from native token.
@@ -162,7 +160,7 @@ export const useTradeInfo = () => {
   }
 
   return {
-    ethBalance,
+    nativeBalance,
     tokenBalance,
     isFetchingBalance: isFetchingNativeBalance || isFetchingTokenBalance,
     getBuyTokenAmount,

@@ -298,5 +298,6 @@
   "cannot-retry": "I'm sorry, unable to find the parameter or hash to retry, please provide additional information later.",
   "deploy.backend.submitting": "Submit information",
   "deploy.backend.submitting.desc": "Submitting information, please wait...",
-  "create.info.error": "Failed to generate MEME information"
+  "create.info.error": "Failed to generate MEME information",
+  "trade.balance.zero": "You currently have no balance"
 }
