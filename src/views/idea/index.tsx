@@ -140,7 +140,7 @@ const IdeaPage = () => {
   }, [y])
 
   return (
-    <main className="min-h-main flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col">
+    <main className="min-h-main flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
       <OpportunityMoonshot
         className="max-sm:!hidden max-sm:!px-0 "
         newsListData={newsListData}
