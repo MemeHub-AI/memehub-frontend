@@ -15,11 +15,8 @@ import {
 } from '@/components/opportunity-moonshot'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useTranslation } from 'react-i18next'
-<<<<<<< HEAD
 import { WaterList } from './components/water-list'
-=======
-import { ChainInfo, TokenInfo } from './components/token-info'
->>>>>>> 0ff6e91 (fix: Create Now)
+import { TokenInfo } from './components/token-info'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -29,14 +26,7 @@ const IdeaPage = () => {
   const [show, setShow] = useState(false)
   const { push } = useRouter()
   const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
-<<<<<<< HEAD
   const [tab, setTab] = useState(+type - 1)
-=======
-  const [tab, setTab] = useState(1)
-
-  // const { width } = useWindowSize()
-  const { y } = useWindowScroll()
->>>>>>> 0ff6e91 (fix: Create Now)
 
   const newsListData = useNewsList({
     isOpportunity: tab === 1,
@@ -126,41 +116,7 @@ const IdeaPage = () => {
             </MobileQpportunityMoonshot>
           </div>
         </div>
-<<<<<<< HEAD
         <WaterList newsId={newsId} type={type}></WaterList>
-=======
-        {waterfallList?.list.length ? (
-          <div className="my-5">{t('go.bold.man')} </div>
-        ) : null}
-
-        <CustomSuspense
-          fallback={<WaterSkeleton></WaterSkeleton>}
-          nullback={<div className="mt-5">{t('no.idea')}</div>}
-          isPending={isLoading}
-          className="columns-1 md:columns-2 xl:columns-3 gap-4 space-y-4 pb-6"
-        >
-          {waterfallList?.list?.map((item, i) => {
-            return (
-              <div
-                key={i}
-                className="flex-1 max-sm:w-full max-sm:max-w-full break-inside-avoid"
-              >
-                <div
-                  key={item?.id}
-                  className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
-                >
-                  <TokenInfo ideaData={item} />
-
-                  <CreatedUser ideaData={item} />
-                </div>
-              </div>
-            )
-          })}
-        </CustomSuspense>
-        {isFetching && !isLoading ? (
-          <div className="text-center my-5">{t('loading')}</div>
-        ) : null}
->>>>>>> 0ff6e91 (fix: Create Now)
       </div>
       <AICreateMemecoinDialog
         show={show}
@@ -187,29 +143,4 @@ const Content = memo(({ content }: { content?: string }) => {
   )
 })
 
-<<<<<<< HEAD
-=======
-const WaterSkeleton = () => {
-  return (
-    <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1 max-sm:gap-2">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div className="flex gap-2 relative" key={i}>
-          <div className="w-full my-2 flex flex-col gap-2 mr-2">
-            <Skeleton className="w-1/2 h-4" />
-            <Skeleton className="w-1/3 h-3" />
-            <Skeleton className="w-[70%] h-3" />
-            <Skeleton className="w-1/2 h-4" />
-            <Skeleton className="w-1/3 h-3" />
-            <Skeleton className="w-[70%] h-3" />
-            <Skeleton className="w-1/2 h-3" />
-            <Skeleton className="w-full h-5 rounded-full mt-2" />
-          </div>
-          <Skeleton className="w-8 h-8 absolute right-2 top-2" />
-        </div>
-      ))}
-    </div>
-  )
-}
-
->>>>>>> 0ff6e91 (fix: Create Now)
 export default IdeaPage
