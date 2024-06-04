@@ -80,6 +80,8 @@ export interface OnchainTokensChain {
 }
 
 export interface OnchainTokensItem {
+  name: string
+  url: string
   symbol: string
   '24H_Volume': number
   logo: string
