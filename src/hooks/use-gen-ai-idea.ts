@@ -9,7 +9,14 @@ export const useGenAIIdea = () => {
   const [value, setValue] = useState('')
   const { pathname, push } = useRouter()
 
-  const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
+  const {
+    setLoadingInfoDialog,
+    setInfo,
+    formInfo,
+    setFormInfo,
+    setLoadingImg,
+    setLoadingPoster,
+  } = useAimemeInfoStore()
 
   const onInputGen = (value: string) => {
     setShow(true)
@@ -33,10 +40,23 @@ export const useGenAIIdea = () => {
     setLoadingInfoDialog(true)
   }
 
+  const onIdeaConfirm = (data: typeof formInfo) => {
+    setShow(false)
+    setRandom(false)
+    if (!pathname.startsWith(Routes.Create)) {
+      push(Routes.Create)
+    }
+
+    setFormInfo(data)
+    setLoadingImg(true)
+  }
+
   const onCancel = () => {
     setShow(false)
     setRandom(false)
   }
+
+  const open = () => setShow(true)
 
   return {
     show,
@@ -44,7 +64,9 @@ export const useGenAIIdea = () => {
     isRandom,
     onCancel,
     onConfirm,
+    onIdeaConfirm,
     onInputGen,
     onRandomGen,
+    open,
   }
 }

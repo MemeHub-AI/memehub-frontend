@@ -28,9 +28,9 @@ export const CreateTokenStatusDialog = (props: Props) => {
     retryCreate,
   } = props
   const { t } = useTranslation()
-  const { name: chainName = '', explorer_tx = '' } =
-    createTokenData?.chain || {}
+  const chainName = createTokenData?.chain?.name || ''
   const deployedAddr = createTokenData?.address || ''
+  const explorerUrl = createTokenData?.hash || ''
 
   const withIcon = (children: ReactNode) => {
     return (
@@ -84,16 +84,6 @@ export const CreateTokenStatusDialog = (props: Props) => {
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
           <p>{t('deploy.submit.success.desc')}</p>
-          <p>
-            {t('deploy.submit.success.view-hash')}:{' '}
-            <Link
-              href={fmt.toHref(explorer_tx, deployHash)}
-              className="text-blue-600 hover:underline"
-              target="_blank"
-            >
-              {t('view')}
-            </Link>
-          </p>
         </DialogDescription>
       </Dialog>
     )
@@ -179,7 +169,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
             )}
             <Link
               className="text-blue-600 hover:underline"
-              href={fmt.toHref(explorer_tx, deployHash)}
+              href={explorerUrl}
               target="_blank"
               onClick={resetDeploy}
             >

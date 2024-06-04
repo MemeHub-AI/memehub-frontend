@@ -14,6 +14,7 @@ export interface TokenListItem extends UserCoinsCreated {
   replies: string
   last_reply: null
   create_time: null
+  hash: string
 }
 
 export interface TokenNewReq {
@@ -66,4 +67,21 @@ export interface CreateTokenResult {
   name: string
   description: string
   image: string
+}
+
+export interface OnchainTokensRes {
+  [k: string]: OnchainTokensChain
+}
+
+export interface OnchainTokensChain {
+  logo: string
+  number: number
+  token: OnchainTokensItem[]
+}
+
+export interface OnchainTokensItem {
+  symbol: string
+  '24H_Volume': number
+  logo: string
+  publish_at: string
 }
