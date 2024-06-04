@@ -38,7 +38,7 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
       <Popover open={!isEmpty(tokens) || isPending} onOpenChange={reset}>
         <PopoverAnchor>
           <Input
-            className={cn('shadow-offset', className)}
+            className={cn('shadow-offset h-9', className)}
             value={value}
             onChange={({ target }) => setValue(target.value)}
             placeholder={t('search.placeholder')}
