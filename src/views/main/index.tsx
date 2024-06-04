@@ -34,6 +34,7 @@ export const MainPage = () => {
       {/* <HotNewsAside /> */}
       <OpportunityMoonshot
         className="max-sm:!hidden"
+        containerClass="!ml-0"
         newsListData={newsListData}
         onConfirmDialog={() => {}}
         tab={tab}

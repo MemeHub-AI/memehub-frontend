@@ -26,6 +26,7 @@ interface Props extends ComponentProps<'div'> {
   tab: number
   listClassName?: string
   isDialogLoading?: boolean
+  containerClass?: string
   setTab: (tab: number) => void
   onConfirmDialog: () => void
 }
@@ -35,6 +36,7 @@ export const OpportunityMoonshot = ({
   listClassName,
   newsListData,
   tab: tabIdx,
+  containerClass,
   setTab,
   onConfirmDialog,
 }: Props) => {
@@ -83,7 +85,8 @@ export const OpportunityMoonshot = ({
       <div
         className={clsx(
           'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full',
-          tabIdx === 1 ? 'h-[90vh]' : 'h-[92vh]'
+          tabIdx === 1 ? 'h-[90vh]' : 'h-[92vh]',
+          containerClass
         )}
       >
         <div className="flex items-start">
