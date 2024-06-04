@@ -81,34 +81,11 @@ const IdeaPage = () => {
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
     select: (data) => {
-      console.log('data', data)
       return {
         list: data.pages.flatMap((p) => p.data.results),
         total: data.pages[0]?.data.count,
       }
     },
-    // select: (data) => {
-    //   const list = data.pages.flatMap((p) => p?.data.results)
-    //   let count = 0
-    //   const limit = width > 1590 ? 4 : width > 1250 ? 3 : width > 600 ? 2 : 1
-    //   const waterfallList = list?.length
-    //     ? new Array<IdeaDataList[]>(limit)
-    //         .fill([])
-    //         .map(() => [] as IdeaDataList[])
-    //     : []
-
-    //   list?.forEach((item) => {
-    //     waterfallList[count].push(item!)
-    //     if (++count === limit) {
-    //       return (count = 0)
-    //     }
-    //   })
-
-    //   return {
-    //     list: waterfallList,
-    //     total: data?.pages?.[0]?.data.count,
-    //   }
-    // },
   })
 
   const onRandomCreate = () => {
@@ -217,12 +194,14 @@ const IdeaPage = () => {
                     {item?.name}
                   </div>
 
-                  <div className="flex">
-                    <img
-                      src={item?.logo}
-                      alt="img"
-                      className="w-20 h-20 rounded mx-2"
-                    />
+                  <div className="flex px-2">
+                    {type === '2' && (
+                      <img
+                        src={item?.logo}
+                        alt="img"
+                        className="w-20 h-20 rounded mr-2"
+                      />
+                    )}
                     <Desc description={item?.description ?? ''}></Desc>
                   </div>
 
