@@ -13,10 +13,30 @@ import { cn } from '@/lib/utils'
 
 export const TokenPage = () => {
   const { isMobile } = useResponsive()
-  const { tokenInfo, totalToken, currentToken, refetchInfo } = useTokenInfo()
+  const {
+    tokenInfo,
+    totalToken,
+    currentToken,
+    isLoadingProgress,
+    isLoadingTokenInfo,
+    isFetchingProgress,
+    isFetchingTokenInfo,
+    refetchInfo,
+  } = useTokenInfo()
 
   return (
-    <TokenProvider value={{ tokenInfo, totalToken, currentToken, refetchInfo }}>
+    <TokenProvider
+      value={{
+        tokenInfo,
+        totalToken,
+        currentToken,
+        isLoadingProgress,
+        isLoadingTokenInfo,
+        isFetchingProgress,
+        isFetchingTokenInfo,
+        refetchInfo,
+      }}
+    >
       <main
         className={cn(
           'px-4 max-sm:px-3 pt-6 max-w-main mx-auto min-h-main',
@@ -26,9 +46,9 @@ export const TokenPage = () => {
         {/* Left */}
         <div className="flex flex-col flex-1">
           {isMobile && <TradeTab />}
-          <TokenInfoHeader className="mb-1" />
+          <TokenInfoHeader />
           <Chart />
-          <CommentTradeTab className="mt-3" />
+          <CommentTradeTab />
         </div>
 
         {/* Right */}

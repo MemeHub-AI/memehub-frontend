@@ -8,17 +8,27 @@ import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
 import { useHoldersStore } from '@/stores/use-holders-store'
 import { cn } from '@/lib/utils'
+import { Skeleton } from '@/components/ui/skeleton'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const router = useRouter()
   const { t } = useTranslation()
-  const { tokenInfo } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
   const { marketCap } = useHoldersStore()
+
+  if (isLoadingTokenInfo) {
+    return (
+      <div className="flex items-center justify-between gap-4 px-1 text-sm mb-1">
+        <Skeleton className="w-36 h-5" />
+        <Skeleton className="w-28 h-5" />
+      </div>
+    )
+  }
 
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-4 px-1 text-sm',
+        'flex items-center justify-between gap-4 px-1 text-sm mb-1',
         className
       )}
     >

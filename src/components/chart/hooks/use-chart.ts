@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import {
   LanguageCode,
   ResolutionString,
@@ -17,7 +19,8 @@ export interface ChartOptions {
 
 export const useChart = () => {
   const { i18n } = useTranslation()
-  const { chart, setChart } = useChartStore()
+  const [isCreating, setIsCreating] = useState(true)
+  const { chart, setChart, setChartEl } = useChartStore()
   const { createDatafeed, removeDatafeed } = useDatafeed()
   const { parseInterval } = useChartUtils()
   const { chartConfig, chartOverrides } = useChartConfig()
@@ -25,7 +28,7 @@ export const useChart = () => {
   const createChart = (container: HTMLDivElement, options: ChartOptions) => {
     const { symbol, interval } = options || {}
 
-    // setChartEl(container) // Error: Maximum update depth exceeded
+    setChartEl(container)
     try {
       const chart = new (widget || window.TradingView.widget)({
         ...chartConfig,
@@ -44,6 +47,8 @@ export const useChart = () => {
       })
     } catch (error) {
       console.error('[createChart Erorr]:', error)
+    } finally {
+      setIsCreating(false)
     }
   }
 
@@ -53,6 +58,7 @@ export const useChart = () => {
   }
 
   return {
+    isCreating,
     createChart,
     removeChart,
   }

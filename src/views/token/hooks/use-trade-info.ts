@@ -13,18 +13,24 @@ export const useTradeInfo = () => {
   const tokenAddress = query.address as Address
 
   // Query native & token balance.
-  const { data: ethBalances, refetch: refetchNativeBalance } = useBalance({
+  const {
+    data: ethBalances,
+    isFetching: isFetchingNativeBalance,
+    refetch: refetchNativeBalance,
+  } = useBalance({
     address,
   })
-  const { data: tokenBalances, refetch: refetchTokenBalance } = useReadContract(
-    {
-      abi: continousTokenAbi,
-      address: tokenAddress,
-      functionName: 'balanceOf',
-      args: [address!],
-      query: { enabled: !!address },
-    }
-  )
+  const {
+    data: tokenBalances,
+    isFetching: isFetchingTokenBalance,
+    refetch: refetchTokenBalance,
+  } = useReadContract({
+    abi: continousTokenAbi,
+    address: tokenAddress,
+    functionName: 'balanceOf',
+    args: [address!],
+    query: { enabled: !!address },
+  })
   const ethBalance = formatEther(ethBalances?.value || BigInt(0))
   const tokenBalance = formatEther(tokenBalances || BigInt(0))
 
@@ -158,6 +164,7 @@ export const useTradeInfo = () => {
   return {
     ethBalance,
     tokenBalance,
+    isFetchingBalance: isFetchingNativeBalance || isFetchingTokenBalance,
     getBuyTokenAmount,
     getSellTokenAmount,
     getBuyTokenEthAmount,
