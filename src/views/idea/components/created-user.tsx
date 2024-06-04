@@ -1,13 +1,14 @@
-import { IdeaDataList, IdeaTokens } from '@/api/idea/type'
-import { Dialog, DialogTitle } from '@/components/ui/dialog'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { IdeaDataList, IdeaTokens } from '@/api/idea/type'
+import { Dialog, DialogTitle } from '@/components/ui/dialog'
+
 interface Props {
-  data: IdeaDataList
+  ideaData: IdeaDataList | undefined
 }
 
-export const CreatedUser = ({ data }: Props) => {
+export const CreatedUser = ({ ideaData }: Props) => {
   const { t } = useTranslation()
   const [showMore, setShowMore] = useState(false)
 
@@ -24,7 +25,12 @@ export const CreatedUser = ({ data }: Props) => {
             <span>{user.name}</span>
           </div>
           <div className="">
-            <span className="text-sm text-blue-600 cursor-pointer">
+            <span
+              className="text-sm text-blue-600 cursor-pointer select-none"
+              onClick={() => {
+                console.log('user', user)
+              }}
+            >
               {t('live.in.up')}
             </span>
           </div>
@@ -33,15 +39,17 @@ export const CreatedUser = ({ data }: Props) => {
     })
   }
 
-  if (!data.tokens.length) return null
+  if (!ideaData?.tokens.length) return null
 
   return (
     <>
       <div className="border-t my-2"></div>
       <div className="px-2 max-sm:px-3">
         <span className="text-gray-500">{t('in.memehub')}</span>
-        <div className="mt-2 mb-1">{handleList(data.tokens.slice(0, 4))}</div>
-        {data.tokens.length > 4 ? (
+        <div className="mt-2 mb-1">
+          {handleList(ideaData.tokens.slice(0, 4))}
+        </div>
+        {ideaData.tokens.length > 4 ? (
           <div
             className="text-sm text-gray-500 text-center cursor-pointer"
             onClick={() => setShowMore(true)}
@@ -55,8 +63,8 @@ export const CreatedUser = ({ data }: Props) => {
           onOpenChange={() => setShowMore(false)}
           contentProps={{ className: 'max-w-[350px]' }}
         >
-          <DialogTitle>{data.name}</DialogTitle>
-          <div>{handleList(data.tokens)}</div>
+          <DialogTitle>{ideaData.name}</DialogTitle>
+          <div>{handleList(ideaData.tokens)}</div>
         </Dialog>
       </div>
     </>

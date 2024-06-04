@@ -7,6 +7,8 @@ export interface IdeaQuery {
 export interface IdeaDataList {
   id: number
   name: string
+  symbol: string
+  logo: string
   description: string
   tokens: IdeaTokens[]
 }
