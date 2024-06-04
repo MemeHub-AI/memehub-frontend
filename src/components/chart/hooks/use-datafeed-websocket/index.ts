@@ -12,6 +12,7 @@ import type {
 
 import { wsApiURL } from '@/api/websocket'
 import { useEmitter } from '@/hooks/use-emitter'
+import { useChartStore } from '@/stores/use-chart-store'
 
 const heartbetaMessage = {
   type: 'heartbeat',
@@ -29,6 +30,7 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
   const emitter = useEmitter<DatafeedOnEvents, DatafeedEmitEvents>()
   const wsRef = useRef<WebSocket>()
   const timerRef = useRef<number>()
+  const { chart } = useChartStore()
 
   // Keep heartbeat.
   const onOpen = () => {
@@ -65,7 +67,7 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
       })
       wsRef.current.addEventListener('close', (e) => {
         console.log('chart ws close', e)
-        onReconnect?.(e)
+        chart && onReconnect?.(e) // Reconnect if chart exist.
       })
       wsRef.current.addEventListener('error', reject)
       wsRef.current.addEventListener('message', onMessage)

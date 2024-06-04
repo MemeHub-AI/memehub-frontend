@@ -23,9 +23,7 @@ export const useDatafeed = () => {
   const cache = useDatafeedCache()
   const { listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket({
-      onReconnect: () => {
-        listenAsync({ interval, token_address: addr })
-      },
+      onReconnect: () => listenAsync({ interval, token_address: addr }),
     })
   const { formatInterval, formatBars, formatPricescale } = useChartUtils()
 
