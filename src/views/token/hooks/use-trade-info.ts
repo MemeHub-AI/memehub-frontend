@@ -6,18 +6,20 @@ import { BigNumber } from 'bignumber.js'
 
 import { SupportedChainId, wagmiConfig } from '@/config/wagmi'
 import { continousTokenAbi } from '@/contract/abi/continous-token'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const useTradeInfo = () => {
   const { address } = useAccount()
   const { query } = useRouter()
   const tokenAddress = query.address as Address
+  const { chainId } = useChainInfo()
 
   // Query native & token balance.
   const {
     data: nativeBalances,
     isFetching: isFetchingNativeBalance,
     refetch: refetchNativeBalance,
-  } = useBalance({ address })
+  } = useBalance({ address, chainId })
   const {
     data: tokenBalances,
     isFetching: isFetchingTokenBalance,
@@ -26,6 +28,7 @@ export const useTradeInfo = () => {
     abi: continousTokenAbi,
     address: tokenAddress,
     functionName: 'balanceOf',
+    chainId,
     args: [address!],
     query: { enabled: !!address },
   })
@@ -38,6 +41,7 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'calculateContinuousMintReturn',
+      chainId: chainId as SupportedChainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getBuyTokenAmount Error]:', e)
@@ -53,6 +57,7 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'calculateContinuousBurnReturn',
+      chainId: chainId as SupportedChainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getSellTokenAmount Error]:', e)
@@ -71,6 +76,7 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'fundCostByContinuous',
+      chainId: chainId as SupportedChainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getBuyTokenEthAmount Error]:', e)
@@ -86,6 +92,7 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'getPrice',
+      chainId: chainId as SupportedChainId,
     }).catch((e) => {
       console.error('[getPrice Error]:', e)
       return BigInt(0)
@@ -97,7 +104,7 @@ export const useTradeInfo = () => {
   // Get token amounts, used for calc percent.
   const getTokenAmounts = async (
     address: Address,
-    chainId?: SupportedChainId
+    overrideChainId = chainId as SupportedChainId
   ) => {
     const zero = BigInt(0)
 
@@ -107,13 +114,13 @@ export const useTradeInfo = () => {
           {
             abi: continousTokenAbi,
             address,
-            chainId,
+            chainId: overrideChainId,
             functionName: 'ETH_AMOUNT',
           },
           {
             abi: continousTokenAbi,
             address,
-            chainId,
+            chainId: overrideChainId,
             functionName: 'raiseEthAmount',
           },
         ],
@@ -131,6 +138,7 @@ export const useTradeInfo = () => {
       abi: continousTokenAbi,
       address,
       functionName: 'CAN_MINI',
+      chainId: chainId as SupportedChainId,
     }).catch((e) => {
       console.error('[getAvailableTokenAmount Error]:', e)
       return BigInt(0)
