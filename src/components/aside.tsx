@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { NewsSkeleton } from '@/components/news/skeleton'
 import { useNewsList } from '@/hooks/use-news-list'
@@ -12,8 +11,9 @@ import { Routes } from '@/routes'
 export const HotNewsAside = () => {
   const { t } = useTranslation()
   const { push } = useRouter()
-  const { memeit, handleClick, hidden, isFetching, show, newsList } =
-    useNewsList({ isOpportunity: true })
+  const { handleClick, isFetching, newsList } = useNewsList({
+    isOpportunity: true,
+  })
 
   return (
     <aside className="w-aside max-sm:hidden border-r-2 border-black pt-3">
@@ -39,16 +39,6 @@ export const HotNewsAside = () => {
           />
         ))}
       </CustomSuspense>
-      <AICreateMemecoinDialog
-        data={{
-          name: memeit?.title,
-          image: memeit?.image,
-          description: memeit?.content,
-        }}
-        show={show}
-        onCancel={hidden}
-        onConfirm={() => {}}
-      />
     </aside>
   )
 }

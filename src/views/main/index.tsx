@@ -12,7 +12,15 @@ export const MainPage = () => {
   const { tokens, totalToken, isLoading, isFetching, fetchNextPage } =
     useTokens()
 
-  const { onCancel, onConfirm, onInputGen, onRandomGen } = useGenAIIdea()
+  const {
+    isRandom,
+    show,
+    value,
+    onCancel,
+    onConfirm,
+    onInputGen,
+    onRandomGen,
+  } = useGenAIIdea()
 
   return (
     <main className="min-h-main px-6 flex max-sm:px-3 max-sm:pt-0 gap-6">
@@ -20,12 +28,8 @@ export const MainPage = () => {
       <div className="flex-1 max-sm:mt-2">
         <AIIdeaBar
           className="max-sm:mb-3"
-          onInputGen={function (value: string): void {
-            throw new Error('Function not implemented.')
-          }}
-          onRandomGen={function (): void {
-            throw new Error('Function not implemented.')
-          }}
+          onInputGen={onInputGen}
+          onRandomGen={onRandomGen}
         />
         <TokenCards
           className="flex-1 max-sm:mt-2 flex flex-col pb-4"
@@ -37,12 +41,11 @@ export const MainPage = () => {
         />
 
         <AICreateMemecoinDialog
-          onCancel={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-          onConfirm={function () {
-            throw new Error('Function not implemented.')
-          }}
+          show={show}
+          isRandom={isRandom}
+          data={{ name: value }}
+          onCancel={onCancel}
+          onConfirm={onConfirm}
         />
       </div>
     </main>

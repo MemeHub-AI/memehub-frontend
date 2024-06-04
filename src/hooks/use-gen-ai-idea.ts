@@ -9,7 +9,7 @@ export const useGenAIIdea = () => {
   const [value, setValue] = useState('')
   const { pathname, push } = useRouter()
 
-  const { setLoading, setInfo } = useAimemeInfoStore()
+  const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
 
   const onInputGen = (value: string) => {
     setShow(true)
@@ -25,12 +25,12 @@ export const useGenAIIdea = () => {
   const onConfirm = () => {
     setShow(false)
     setRandom(false)
-    setInfo({ name: value })
-    setLoading(true)
-
     if (!pathname.startsWith(Routes.Create)) {
       push(Routes.Create)
     }
+
+    setInfo({ name: isRandom ? '' : value })
+    setLoadingInfoDialog(true)
   }
 
   const onCancel = () => {

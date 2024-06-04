@@ -290,5 +290,6 @@
   "retry": "重试",
   "cannot-retry": "很遗憾，无法找到参数或哈希导致无法重试，请后续补充",
   "deploy.backend.submitting": "提交信息",
-  "deploy.backend.submitting.desc": "正在提交信息，请稍后..."
+  "deploy.backend.submitting.desc": "正在提交信息，请稍后...",
+  "create.info.error": "生成MEME信息失败"
 }

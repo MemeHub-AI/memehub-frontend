@@ -1,13 +1,11 @@
-import React, { memo, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog } from '../ui/dialog'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useTranslation } from 'react-i18next'
 import { aiApi } from '@/api/ai'
-import { z } from 'zod'
-import { useCreateToken } from '@/views/create/hooks/use-create-token'
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
-import { toast } from 'sonner'
 import { AIMemeInfo } from '@/api/ai/type'
+import { toast } from 'sonner'
 
 interface Props {
   formHook: ReturnType<typeof useCreateTokenForm>
@@ -18,19 +16,31 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
   const {
     formInfo,
     info,
-    loading,
+    loadingInfo,
+    loadingImg,
     loadingLogo,
-    setLoading,
+    loadingPoster,
+    loadingInfoDialog,
+    setLoadingInfo,
+    setLoadingImg,
     setLoadingLogo,
     setLoadingPoster,
+    setLoadingInfoDialog,
   } = useAimemeInfoStore()
 
   const fetchMemeInfo = async () => {
-    const { data } = await aiApi.getMemeInfo({
-      input: info!.name!,
-    })
-    setLoading(false)
-    fetchMemeImage(data)
+    setLoadingInfo(true)
+    try {
+      const { data } = await aiApi.getMemeInfo({
+        input: info!.name!,
+      })
+      fetchMemeImage(data)
+    } catch (e) {
+      toast.error(t('create.info.error'))
+    } finally {
+      setLoadingInfoDialog(false)
+      setLoadingInfo(false)
+    }
   }
 
   const fetchMemeImage = (info?: AIMemeInfo) => {
@@ -44,11 +54,8 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       formHook.form.setValue(formHook.formFields.symbol, info?.name)
     }
 
-    if (formInfo?.description) {
-      formHook.form.setValue(
-        formHook.formFields.description,
-        formInfo?.description
-      )
+    if (info?.description) {
+      formHook.form.setValue(formHook.formFields.description, info?.description)
     }
 
     aiApi
@@ -61,6 +68,9 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       })
       .finally(() => {
         setLoadingLogo(false)
+        if (!loadingPoster) {
+          setLoadingImg(false)
+        }
       })
 
     aiApi
@@ -76,23 +86,29 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       })
       .finally(() => {
         setLoadingPoster(false)
+        if (!loadingLogo) {
+          setLoadingImg(false)
+        }
       })
   }
 
   useEffect(() => {
-    if (loading && info?.name !== undefined) {
+    if (loadingInfoDialog && info?.name !== undefined && !loadingInfo) {
       fetchMemeInfo()
     }
-  }, [info, loading])
+  }, [loadingInfoDialog, loadingInfo])
 
   useEffect(() => {
-    if (loadingLogo) {
+    if (loadingImg) {
       fetchMemeImage()
     }
-  }, [loadingLogo])
+  }, [loadingImg])
 
   return (
-    <Dialog open={loading} onOpenChange={() => setLoading(false)}>
+    <Dialog
+      open={loadingInfoDialog}
+      onOpenChange={() => setLoadingInfoDialog(false)}
+    >
       <div className="mt-4 text-center">
         <h1 className="text-xl text-center">{t('ai.creating')}</h1>
         <h1 className="text-xl text-center">{t('wait')}</h1>

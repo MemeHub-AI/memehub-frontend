@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useStorage } from '@/hooks/use-storage'
-import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
@@ -36,7 +35,6 @@ export const OpportunityMoonshot = ({
   listClassName,
   newsListData,
   tab: tabIdx,
-  isDialogLoading,
   setTab,
   onConfirmDialog,
 }: Props) => {
@@ -65,10 +63,6 @@ export const OpportunityMoonshot = ({
 
   const tabs = [t('next.moonshot'), t('take.wave')]
 
-  const hidden = () => {
-    setShow?.(false)
-  }
-
   const onChange = (value: string) => {
     setArea(value)
     newsListData?.setArea(+value)
@@ -76,11 +70,6 @@ export const OpportunityMoonshot = ({
 
   const onChangeTab = (idx: number) => {
     setTab(idx)
-  }
-
-  const onConfirm = async () => {
-    onConfirmDialog()
-    hidden()
   }
 
   return (
@@ -160,18 +149,6 @@ export const OpportunityMoonshot = ({
             ))}
           </div>
         </CustomSuspense>
-
-        <AICreateMemecoinDialog
-          show={show}
-          loading={isDialogLoading}
-          data={{
-            name: memeit?.title,
-            image: memeit?.image,
-            description: memeit?.content,
-          }}
-          hidden={hidden}
-          onConfirm={onConfirm}
-        ></AICreateMemecoinDialog>
       </div>
     </div>
   )
