@@ -20,7 +20,7 @@ import {
 } from '@/components/opportunity-moonshot'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useTranslation } from 'react-i18next'
-import { ChainInfo } from './components/chain-info'
+import { ChainInfo, TokenInfo } from './components/token-info'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -29,26 +29,15 @@ const IdeaPage = () => {
   const newsId = router.query.id as string
   const [show, setShow] = useState(false)
   const { push } = useRouter()
-  const { setLoadingInfoDialog, setInfo, setFormInfo, setLoadingImg } =
-    useAimemeInfoStore()
+  const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
   const [tab, setTab] = useState(1)
 
-  const { width } = useWindowSize()
+  // const { width } = useWindowSize()
   const { y } = useWindowScroll()
 
   const newsListData = useNewsList({
     isOpportunity: tab === 1,
   })
-
-  const onCreateNow = (item: IdeaDataList) => {
-    push(`${Routes.Create}`)
-    setFormInfo({
-      name: item?.name,
-      symbol: item?.name,
-      description: item?.description,
-    })
-    setLoadingImg(true)
-  }
 
   const { data: basicInfoData } = useQuery({
     queryKey: [ideaApi.getIdeaInfo.name, newsId, type],
@@ -190,22 +179,7 @@ const IdeaPage = () => {
                   key={item?.id}
                   className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
                 >
-                  <div className="flex justify-between items-start px-2 max-sm:px-3 text-lg gap-2 font-bold">
-                    {item?.name}
-                  </div>
-
-                  <div className="flex px-2">
-                    {type === '2' && (
-                      <img
-                        src={item?.logo}
-                        alt="img"
-                        className="w-20 h-20 rounded mr-2"
-                      />
-                    )}
-                    <Desc description={item?.description ?? ''}></Desc>
-                  </div>
-
-                  <ChainInfo ideaData={item} />
+                  <TokenInfo ideaData={item} />
 
                   <CreatedUser ideaData={item} />
                 </div>
@@ -239,30 +213,6 @@ const Content = memo(({ content }: { content?: string }) => {
     >
       {content}
     </div>
-  )
-})
-
-const Desc = memo(({ description }: { description: string }) => {
-  const [show, setShow] = useState(false)
-  const randomInt = Math.floor(Math.random() * 4) + 3
-
-  return (
-    <>
-      <div
-        className={clsx(
-          'max-sm:px-3 min-h-[50px] text-sm cursor-pointer',
-          show ? '' : 'line-clamp-4'
-        )}
-        onClick={() => setShow(!show)}
-      >
-        {description}
-        <span className="line-clamp-3 "></span>
-        <span className="line-clamp-4 "></span>
-        <span className="line-clamp-5 "></span>
-        <span className="line-clamp-6 "></span>
-        <span className="line-clamp-7 "></span>
-      </div>
-    </>
   )
 })
 
