@@ -1,5 +1,7 @@
 import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
+import { clsx } from 'clsx'
 
 import { CustomSuspense } from '@/components/custom-suspense'
 import { NewsCard } from '@/components/news'
@@ -16,8 +18,6 @@ import { useStorage } from '@/hooks/use-storage'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
-import { useRouter } from 'next/router'
-import clsx from 'clsx'
 import { Button } from './ui/button'
 import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
 
@@ -77,7 +77,7 @@ export const OpportunityMoonshot = ({
   return (
     <div
       className={clsx(
-        'mr-10 pr-10 border-r-2 border-black min-h-[100vh] max-sm:mr-0 max-sm:pr-0  max-sm:h-min max-sm:border-0',
+        'pr-2 border-r-2 border-black min-h-[100vh] max-sm:mr-0 max-sm:pr-0  max-sm:h-min max-sm:border-0',
         className
       )}
     >

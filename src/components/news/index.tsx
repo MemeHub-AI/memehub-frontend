@@ -39,8 +39,7 @@ export const NewsCard = ({ news, onMeme, onClick }: Props) => {
         {news.title.length < 31 ? (
           <p
             className={clsx(
-              'mt-5 text-sm leading-4 text-gray-500',
-              news.title.length <= 12 ? 'line-clamp-2' : 'truncate w-[99%]'
+              'mt-5 text-sm leading-4 text-gray-500 line-clamp-4'
             )}
           >
             {news?.content}

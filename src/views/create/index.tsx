@@ -27,7 +27,7 @@ export const CreatePage = () => {
         aiMemeInfo,
       }}
     >
-      <main className="min-h-main flex justify-center mx-auto max-md:flex-col max-md:items-center max-sm:gap-8">
+      <main className="min-h-main flex justify-center gap-6 mx-auto max-md:flex-col max-md:items-center max-sm:gap-8">
         <OpportunityMoonshot
           className="max-sm:!hidden"
           newsListData={newsListData}
