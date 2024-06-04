@@ -90,7 +90,7 @@ export const CommentCards = (props: Props) => {
         nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}
       >
         {cards.map((c, i) => (
-          <>
+          <React.Fragment key={c.id}>
             <CommentCard
               key={c.id}
               c={c}
@@ -106,7 +106,7 @@ export const CommentCards = (props: Props) => {
             {i !== cards.length - 1 && (
               <hr className="border-t-2 border-black" />
             )}
-          </>
+          </React.Fragment>
         ))}
         {isPending && (
           <p className="text-zinc-500 text-center">{t('loading')}</p>
