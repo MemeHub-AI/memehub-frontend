@@ -20,6 +20,7 @@ import {
 } from '@/components/opportunity-moonshot'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useTranslation } from 'react-i18next'
+import { ChainInfo } from './components/chain-info'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -80,27 +81,34 @@ const IdeaPage = () => {
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
     select: (data) => {
-      const list = data.pages.flatMap((p) => p?.data.results)
-      let count = 0
-      const limit = width > 1590 ? 4 : width > 1250 ? 3 : width > 600 ? 2 : 1
-      const waterfallList = list?.length
-        ? new Array<IdeaDataList[]>(limit)
-            .fill([])
-            .map(() => [] as IdeaDataList[])
-        : []
-
-      list?.forEach((item) => {
-        waterfallList[count].push(item!)
-        if (++count === limit) {
-          return (count = 0)
-        }
-      })
-
+      console.log('data', data)
       return {
-        list: waterfallList,
-        total: data?.pages?.[0]?.data.count,
+        list: data.pages.flatMap((p) => p.data.results),
+        total: data.pages[0]?.data.count,
       }
     },
+    // select: (data) => {
+    //   const list = data.pages.flatMap((p) => p?.data.results)
+    //   let count = 0
+    //   const limit = width > 1590 ? 4 : width > 1250 ? 3 : width > 600 ? 2 : 1
+    //   const waterfallList = list?.length
+    //     ? new Array<IdeaDataList[]>(limit)
+    //         .fill([])
+    //         .map(() => [] as IdeaDataList[])
+    //     : []
+
+    //   list?.forEach((item) => {
+    //     waterfallList[count].push(item!)
+    //     if (++count === limit) {
+    //       return (count = 0)
+    //     }
+    //   })
+
+    //   return {
+    //     list: waterfallList,
+    //     total: data?.pages?.[0]?.data.count,
+    //   }
+    // },
   })
 
   const onRandomCreate = () => {
@@ -139,17 +147,19 @@ const IdeaPage = () => {
     }
   }, [y])
 
+  console.log('list', waterfallList?.list)
+
   return (
     <main className="min-h-main flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
       <OpportunityMoonshot
-        className="max-sm:!hidden max-sm:!px-0 "
+        className="max-sm:!hidden max-sm:!px-0"
         newsListData={newsListData}
         isDialogLoading={false}
         onConfirmDialog={() => {}}
         tab={tab}
         setTab={setTab}
       />
-      <div className="max-w-[1185px]  max-sm:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
+      <div className="max-w-[1185px] max-sm:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <div className="flex">
             <img
@@ -191,34 +201,35 @@ const IdeaPage = () => {
           fallback={<WaterSkeleton></WaterSkeleton>}
           nullback={<div className="mt-5">{t('no.idea')}</div>}
           isPending={isLoading}
-          className="flex gap-4"
+          className="columns-1 md:columns-2 xl:columns-3 gap-4 space-y-4 pb-6"
         >
-          {waterfallList?.list?.map((cols, i) => {
+          {waterfallList?.list?.map((item, i) => {
             return (
-              <div key={i} className="flex-1 max-sm:w-full max-sm:max-w-full">
-                {cols?.map((item) => {
-                  return (
-                    <div
-                      key={item.id}
-                      className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
-                    >
-                      <div className="flex justify-between items-start px-2 max-sm:px-3 text-lg">
-                        <span>{item.name}</span>
-                        <span
-                          className="text-base cursor-pointer text-blue-500 text-nowrap"
-                          onClick={() => onCreateNow(item)}
-                        >
-                          {t('create.now')}
-                        </span>
-                      </div>
-                      <Desc description={item.description}></Desc>
+              <div
+                key={i}
+                className="flex-1 max-sm:w-full max-sm:max-w-full break-inside-avoid"
+              >
+                <div
+                  key={item?.id}
+                  className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
+                >
+                  <div className="flex justify-between items-start px-2 max-sm:px-3 text-lg gap-2 font-bold">
+                    {item?.name}
+                  </div>
 
-                      {/* <ChainInfo data={item} /> */}
+                  <div className="flex">
+                    <img
+                      src={item?.logo}
+                      alt="img"
+                      className="w-20 h-20 rounded mx-2"
+                    />
+                    <Desc description={item?.description ?? ''}></Desc>
+                  </div>
 
-                      <CreatedUser data={item} />
-                    </div>
-                  )
-                })}
+                  <ChainInfo ideaData={item} />
+
+                  <CreatedUser ideaData={item} />
+                </div>
               </div>
             )
           })}
@@ -260,8 +271,8 @@ const Desc = memo(({ description }: { description: string }) => {
     <>
       <div
         className={clsx(
-          'mt-2 px-2 max-sm:px-3 min-h-[50px] text-sm cursor-pointer',
-          show ? '' : 'line-clamp-' + randomInt
+          'max-sm:px-3 min-h-[50px] text-sm cursor-pointer',
+          show ? '' : 'line-clamp-4'
         )}
         onClick={() => setShow(!show)}
       >

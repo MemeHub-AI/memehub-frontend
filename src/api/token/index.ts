@@ -8,6 +8,7 @@ import type {
   TokenListItem,
   TokenCommentListRes,
   TokenAddCommentReq,
+  OnchainTokensRes,
 } from './types'
 import { ApiResponse, Pagination, PaginationParams } from '../types'
 
@@ -51,6 +52,11 @@ export const tokenApi = {
   unlike(addr: string) {
     return api.DELETE<ApiResponse<TokenCommentListRes>>(
       `/api/v1/coin/like/${addr}/`
+    )
+  },
+  onchainTokens(keyword: string) {
+    return api.GET<ApiResponse<OnchainTokensRes>>(
+      '/api/v1/news/coinSearch/' + qs.stringify({ keyword })
     )
   },
 }

@@ -1,109 +1,80 @@
+import { useMemo, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+import { nanoid } from 'nanoid'
+import { isEmpty } from 'lodash'
+
 import { IdeaDataList } from '@/api/idea/type'
+import { tokenApi } from '@/api/token'
 import { Avatar } from '@/components/ui/avatar'
 import { Dialog, DialogTitle } from '@/components/ui/dialog'
-import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { OnchainTokensChain, OnchainTokensRes } from '@/api/token/types'
+import { fmt } from '@/utils/fmt'
+import { cn } from '@/lib/utils'
+import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 interface Props {
-  data: IdeaDataList
+  ideaData: IdeaDataList | undefined
 }
 
-interface Puff {
-  logo?: string
-  name: string
-  liquidity24h: string
-  volume: string
-  aget: string
-}
+type ChainTuple = [string, OnchainTokensChain]
 
-interface Chain {
-  chain: {
-    logo: string
-    name: string
-  }
-  logo: string
-  puffList: Puff[]
-}
-
-export const ChainInfo = ({ data }: Props) => {
+export const ChainInfo = ({ ideaData }: Props) => {
   const { t } = useTranslation()
-  const [showMore, setShowMore] = useState(false)
-  const [showPuff, setShowPuff] = useState(false)
-  const [chainInfo, setChainInfo] = useState<Chain>({
-    chain: {
-      logo: 'https://s3.ap-east-1.amazonaws.com/storage.memehub.ai/uploads/12b5ad678cfabc39e1d2c372d788f7c42.avif',
-      name: 'Solana',
-    },
-    logo: 'https://s3.ap-east-1.amazonaws.com/storage.memehub.ai/uploads/12b5ad678cfabc39e1d2c372d788f7c42.avif',
-    puffList: [
-      {
-        name: 'Maga(Trump)',
-        liquidity24h: '$3.5M',
-        volume: '$9.3M',
-        aget: '2mo 27d',
-      },
-      {
-        name: 'Maga(Trump)',
-        liquidity24h: '$3.5M',
-        volume: '$9.3M',
-        aget: '2mo 27d',
-      },
-    ],
+  const [showChains, setShowChains] = useState<OnchainTokensRes>()
+  const [showTokens, setShowTokens] = useState({
+    chainName: '',
+    chainData: {} as OnchainTokensChain,
   })
+  const uniqueKey = useMemo(nanoid, [])
+  const { onIdeaConfirm } = useGenAIIdea()
 
-  const chains = new Array<Chain>(Math.floor(Math.random() * 5) + 1).fill({
-    chain: {
-      logo: 'https://s3.ap-east-1.amazonaws.com/storage.memehub.ai/uploads/12b5ad678cfabc39e1d2c372d788f7c42.avif',
-      name: 'Solana',
-    },
-    logo: 'https://s3.ap-east-1.amazonaws.com/storage.memehub.ai/uploads/12b5ad678cfabc39e1d2c372d788f7c42.avif',
-    puffList: [
-      {
-        name: 'Maga(Trump)',
-        liquidity24h: '$3.5M',
-        volume: '$9.3M',
-        aget: '2mo 27d',
-      },
-      {
-        name: 'Maga(Trump)',
-        liquidity24h: '$3.5M',
-        volume: '$9.3M',
-        aget: '2mo 27d',
-      },
-    ],
+  const { data } = useQuery({
+    enabled: !!ideaData?.symbol,
+    queryKey: [uniqueKey],
+    queryFn: () => tokenApi.onchainTokens(ideaData?.symbol ?? ''),
   })
+  const chains = data?.data || {}
 
-  const chainList = (list: Chain[]) => {
-    return list.map((chain, i) => {
+  const chainList = (chain: ChainTuple[], className?: string) => {
+    return chain.map(([chainName, data], i) => {
       return (
-        <div key={i} className="flex justify-between">
+        <div key={i} className={cn('flex justify-between', className)}>
           <div className="w-full flex justify-between items-center mt-2">
             <div className="flex items-center">
               <Avatar
-                src={chain.chain.logo}
+                src={data.logo || ''}
                 alt="Logo"
                 className="w-[25px] h-[25px] object-cover rounded-full mr-2"
               />
               <div className="">
-                {chain.puffList.length > 0 ? (
+                {!isEmpty(data.token) ? (
                   <span
                     className="text-blue-600 underline cursor-pointer"
-                    onClick={() => {
-                      setShowPuff(true)
-                      setChainInfo(chain)
-                    }}
+                    onClick={() =>
+                      setShowTokens({ chainName, chainData: data })
+                    }
                   >
-                    {t('cream.puff').replace('$1', `${chain.puffList.length}`)}
+                    {t('cream.puff').replace('$1', `${data.token.length}`)}
                   </span>
                 ) : (
                   <span>{t('no.opponent')}</span>
                 )}
               </div>
             </div>
-            <span className="text-blue-600 cursor-pointer">
-              {chain.puffList.length > 0
-                ? t('create.new.token')
-                : t('take,lead')}
+            <span
+              className="text-blue-600 cursor-pointer"
+              onClick={() => {
+                onIdeaConfirm({
+                  name: ideaData?.name,
+                  symbol: ideaData?.symbol,
+                  description: ideaData?.description,
+                  chainName,
+                })
+              }}
+            >
+              {data.token.length > 0 ? t('create.new.token') : t('take,lead')}
             </span>
           </div>
         </div>
@@ -113,56 +84,70 @@ export const ChainInfo = ({ data }: Props) => {
 
   return (
     <div className="px-2  max-sm:px-3">
-      {chainList(chains.slice(0, 4))}
-      {chains.length > 4 ? (
+      {chainList(Object.entries(chains).slice(0, 4))}
+      {Object.entries(chains).length > 4 ? (
         <div
           className="text-gray-500 text-sm text-center cursor-pointer  mt-2"
-          onClick={() => {
-            setShowMore(true)
-          }}
+          onClick={() => setShowChains(chains)}
         >
           {t('more...')}
         </div>
       ) : null}
 
+      {/* All chain dialog */}
       <Dialog
-        open={showMore}
-        onOpenChange={() => setShowMore(false)}
+        open={!!showChains}
+        onOpenChange={() => setShowChains(undefined)}
         contentProps={{ className: 'max-w-[350px]' }}
       >
-        <DialogTitle>{data.name}</DialogTitle>
-        <div>{chainList(chains)}</div>
+        <DialogTitle>{ideaData?.name}</DialogTitle>
+        <img
+          src={ideaData?.logo}
+          alt="logo"
+          className="w-20 h-20 rounded object-cover"
+        />
+        <div>{chainList(Object.entries(chains), 'my-1')}</div>
       </Dialog>
 
+      {/* All token dialog */}
       <Dialog
-        open={showPuff}
-        onOpenChange={() => setShowPuff(false)}
-        contentProps={{}}
+        open={!isEmpty(showTokens.chainName)}
+        onOpenChange={() =>
+          setShowTokens({ chainName: '', chainData: {} as OnchainTokensChain })
+        }
       >
-        <DialogTitle>{data.name}</DialogTitle>
-        <div className="flex items-center">
+        <DialogTitle>{ideaData?.name}</DialogTitle>
+        <div className="flex items-center gap-2">
           <img
-            src={chainInfo.chain.logo}
+            src={showTokens.chainData.logo}
             alt="Logo"
-            className="w-[35px] h-[35px] rounded-full object-cover"
+            className="w-8 h-8 rounded-full object-cover"
           />
-          <span className="mx-2">
-            {t('cream.puff').replace('$1', `${chainInfo.puffList.length}`)}
+          <span className="mx-2 font-bold">
+            {t('cream.puff').replace(
+              '$1',
+              `${showTokens.chainData.token?.length}`
+            )}
           </span>
           <img
-            src={chainInfo.logo}
+            src={ideaData?.logo}
             alt="Logo"
-            className="w-[35px] h-[35px] rounded-sm object-cover"
+            className="w-12 h-12 rounded-sm object-cover"
           />
         </div>
-        {chainInfo.puffList?.map((puff, key) => {
+        {showTokens.chainData.token?.map((token, i) => {
           return (
-            <div key={key} className="mt-0">
-              <div className="text-blue-600">{puff.name}</div>
-              <div className="">
-                {t('liquidity')}
-                {puff.liquidity24h} 24H {t('volume')}: {puff.volume} {t('aget')}
-                : {puff.aget}
+            <div key={i} className="mt-0">
+              <div className="text-blue-600 font-bold">{token.symbol}</div>
+              <div className="flex items-center gap-4">
+                <span>
+                  24H {t('volume')}: ${fmt.tradeFixed(token['24H_Volume'])}
+                </span>
+                {token.publish_at && (
+                  <span>
+                    {t('aget')}: {token.publish_at}
+                  </span>
+                )}
               </div>
             </div>
           )

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { Dialog } from '../ui/dialog'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useTranslation } from 'react-i18next'
@@ -56,6 +56,10 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
     if (info?.description) {
       formHook.form.setValue(formHook.formFields.description, info?.description)
+    }
+
+    if (info?.chainName) {
+      formHook.form.setValue(formHook.formFields.chainName, info?.chainName)
     }
 
     aiApi

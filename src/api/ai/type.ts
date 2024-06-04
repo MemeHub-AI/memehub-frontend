@@ -3,6 +3,7 @@ export interface AIMemeInfo {
   description?: string
   symbol?: string
   image?: string
+  chainName?: string
 }
 
 export interface AIMemeInfoQuery {
