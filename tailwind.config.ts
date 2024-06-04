@@ -6,10 +6,10 @@ const baseWidth = {
 }
 
 const baseHeight = {
-  header: '65px',
-  body: 'calc(100vh - 65px)', // Exclude footer height.
-  main: 'calc(100vh - 65px - 65px)', // Include footer height.
-  footer: '65px',
+  header: '64px',
+  body: 'calc(100vh - 64px)', // Exclude footer height.
+  main: 'calc(100vh - 64px - 64px)', // Include footer height.
+  footer: '64px',
 }
 
 const config = {
