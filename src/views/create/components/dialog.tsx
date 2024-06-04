@@ -168,13 +168,13 @@ export const CreateTokenStatusDialog = (props: Props) => {
             >
               {t('deploy.success.view-list')}
             </Link>
-            <Link
+            {/* <Link
               className="text-blue-600 hover:underline"
               href={fmt.toHref(Routes.Main, chainName, deployedAddr)}
               onClick={resetDeploy}
             >
               {t('deploy.success.view-details')}
-            </Link>
+            </Link> */}
             <Link
               className="text-blue-600 hover:underline"
               href={fmt.toHref(explorer_tx, deployHash)}

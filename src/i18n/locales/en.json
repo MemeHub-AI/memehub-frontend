@@ -152,7 +152,7 @@
   "deploy.submit.title": "Ready to creating...",
   "deploy.submit.description": "Please wait for your wallet to open, then click the confirm button to  confirm create",
   "deploy.submit.error": "Submit ocurred error",
-  "deploy.submit.success": "Submit sucessful!",
+  "deploy.submit.success": "Submission complete, awaiting blockchain confirmation.",
   "deploy.submit.success.desc": "Your transaction has been successfully submitted. Waiting for block confirmation...",
   "deploy.submit.success.view-hash": "You can also check it on the blockchain explorer",
   "view": "View",

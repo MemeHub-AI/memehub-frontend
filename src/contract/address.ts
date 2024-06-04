@@ -39,7 +39,6 @@ const routerAddress = {
 
 const prod = {
   factory: {
-    // only mainnet
     [mainnet.id]: '',
     [bsc.id]: '0x088F3DEb771A6a7608b6FBd5715708F5957F63fD',
     [opBNB.id]: '0x6F42595e0191c9607582c188F309d53DD42A5e87',

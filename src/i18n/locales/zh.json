@@ -151,7 +151,7 @@
   "deploy.submit.title": "准备创建中...",
   "deploy.submit.description": "请等待您的钱包打开, 然后点击确认按钮确认创建",
   "deploy.submit.error": "提交发生错误",
-  "deploy.submit.success": "提交成功！",
+  "deploy.submit.success": "提交完成，等待区块确认",
   "deploy.submit.success.desc": "您的交易已成功提交。\n正在等待区块确认中...",
   "deploy.submit.success.view-hash": "您也可以在区块链浏览器上查看",
   "view": "查看",
