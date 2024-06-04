@@ -48,9 +48,9 @@ export const TokenInfo = ({ ideaData }: Props) => {
   }
 
   const { data } = useQuery({
-    enabled: !!ideaData?.symbol,
+    enabled: !!ideaData?.name,
     queryKey: [uniqueKey],
-    queryFn: () => tokenApi.onchainTokens(ideaData?.symbol ?? ''),
+    queryFn: () => tokenApi.onchainTokens(ideaData?.name ?? ''),
   })
   const chains = data?.data || {}
 
