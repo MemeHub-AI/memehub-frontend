@@ -23,7 +23,7 @@ const buttonVariants = cva(
         outline: 'border-2 border-black',
         secondary:
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80]',
-        ghost: 'border-2 border-transparent hover:border-black',
+        ghost: 'border-transparent hover:bg-zinc-100',
         link: 'text-primary underline-offset-4 hover:underline text-white bg-black',
       },
       size: {

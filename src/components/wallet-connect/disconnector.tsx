@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ExitIcon } from '@radix-ui/react-icons'
 
 import { Button, type ButtonProps } from '../ui/button'
 import { useWallet } from '@/hooks/use-wallet'
 import { useResponsive } from '@/hooks/use-responsive'
 import { AlertDialog } from '../ui/alert-dialog'
+import { LogOut } from 'lucide-react'
 
 interface Props extends ButtonProps {
   onConfirm?: () => void
@@ -23,14 +23,15 @@ export const WalletDisconnector = (props: Props) => {
   return (
     <>
       <Button
-        variant="destructive"
+        variant="ghost"
+        shadow="none"
         size={isMobile ? 'icon-sm' : 'default'}
         onClick={() => setOpen(true)}
-        className="gap-2"
+        className="gap-2 justify-start"
         {...restProps}
       >
         {children}
-        <ExitIcon />
+        <LogOut size={16} className="ml-1 shrink-0" />
         {t('disconnect')}
       </Button>
       <AlertDialog

@@ -32,9 +32,11 @@ export const WalletAccount = () => {
             shadow="default"
           />
         </HoverCardTrigger>
-        <HoverCardContent className="flex flex-col gap-3">
+        <HoverCardContent className="flex flex-col mr-5 p-3 w-40">
           <Button
-            className="w-full gap-2"
+            className="w-full gap-2 justify-start"
+            variant="ghost"
+            shadow="none"
             onClick={() => {
               if (!userInfo) {
                 return toast.error(t('user.not-found'))
@@ -42,7 +44,7 @@ export const WalletAccount = () => {
               router.push(`${Routes.Account}/${userInfo?.wallet_address}`)
             }}
           >
-            <User size={21} />
+            <User size={20} className="shrink-0" />
             {t('view.profile')}
           </Button>
           <SocialLinks className="flex-col" size="default" />
