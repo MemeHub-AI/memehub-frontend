@@ -1,5 +1,4 @@
 import React from 'react'
-import { useWindowScroll } from 'react-use'
 
 import { cn } from '@/lib/utils'
 import { useResponsive } from '@/hooks/use-responsive'
@@ -13,7 +12,6 @@ export interface Nav {
 
 export const Header = () => {
   const { isMobile } = useResponsive()
-  const { y } = useWindowScroll()
 
   const navs: Nav[] = []
 
@@ -24,8 +22,7 @@ export const Header = () => {
       className={cn(
         'min-h-header flex justify-between items-center px-6 relative',
         'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3',
-        'border-b-2 border-black',
-        y !== 0 && 'shadow-lg'
+        'border-b-2 border-black'
       )}
     >
       {isMobile ? (
