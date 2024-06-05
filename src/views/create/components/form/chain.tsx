@@ -1,9 +1,12 @@
+<<<<<<< HEAD
 import { useState } from 'react'
 import { IoIosMore } from 'react-icons/io'
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
 import { useSwitchChain } from 'wagmi'
 
+=======
+>>>>>>> aae1e72 (feat: Optimize AI to generate Meme information)
 import {
   FormControl,
   FormField,
@@ -14,14 +17,26 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useCreateTokenForm } from '../../hooks/use-form'
 import { fmt } from '@/utils/fmt'
+<<<<<<< HEAD
 import { cn } from '@/lib/utils'
+=======
+import { useTranslation } from 'react-i18next'
+import { useSwitchChain } from 'wagmi'
+import { cn } from '@/lib/utils'
+import { IoIosMore } from 'react-icons/io'
+import { useState } from 'react'
+>>>>>>> aae1e72 (feat: Optimize AI to generate Meme information)
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from '@/components/ui/select'
+<<<<<<< HEAD
 import { useChainsStore } from '@/stores/use-chains-store'
+=======
+import clsx from 'clsx'
+>>>>>>> aae1e72 (feat: Optimize AI to generate Meme information)
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -31,7 +46,10 @@ export const FormChain = ({ formData }: Props) => {
   const { switchChain } = useSwitchChain()
   const { t } = useTranslation()
   const [show, setShow] = useState(false)
+<<<<<<< HEAD
   const { findChain } = useChainsStore()
+=======
+>>>>>>> aae1e72 (feat: Optimize AI to generate Meme information)
 
   const isSelect = (v: string) => {
     return chains.findIndex((c) => c.name === v) > 6
