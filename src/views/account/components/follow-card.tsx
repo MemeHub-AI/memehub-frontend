@@ -58,20 +58,16 @@ export const FollowCard = ({ card }: Props) => {
 }
 
 export const FollowCardSkeleton = () => {
-  return (
-    <div className="flex flex-col gap-2">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <Card key={i} padding="md" className="flex gap-2 relative">
-          <Skeleton className="w-10 h-10 rounded-full" />
-          <div className="flex flex-col justify-between">
-            <Skeleton className="w-32 h-4 rounded-full" />
-            <Skeleton className="w-20 h-4 rounded-full" />
-          </div>
-          <Skeleton className="w-14 h-6 absolute right-4 top-1/2 -translate-y-1/2" />
-        </Card>
-      ))}
-    </div>
-  )
+  return Array.from({ length: 3 }).map((_, i) => (
+    <Card key={i} padding="md" className="flex gap-2 relative">
+      <Skeleton className="w-10 h-10 rounded-full" />
+      <div className="flex flex-col justify-between">
+        <Skeleton className="w-32 h-4 rounded-full" />
+        <Skeleton className="w-20 h-4 rounded-full" />
+      </div>
+      <Skeleton className="w-14 h-6 absolute right-4 top-1/2 -translate-y-1/2" />
+    </Card>
+  ))
 }
 
 export default FollowCard

@@ -77,9 +77,9 @@ export const WaterList = ({ newsId, type }: Props) => {
       ) : null}
 
       <CustomSuspense
-        fallback={<WaterSkeleton></WaterSkeleton>}
-        nullback={<div className="mt-5">{t('no.idea')}</div>}
         isPending={isLoading}
+        fallback={<WaterSkeleton />}
+        nullback={<div className="mt-5">{t('no.idea')}</div>}
         className="columns-1 md:columns-2 xl:columns-3 gap-4 space-y-4 pb-6"
       >
         {waterfallList?.list?.map((item, i) => {
@@ -108,23 +108,19 @@ export const WaterList = ({ newsId, type }: Props) => {
 }
 
 const WaterSkeleton = () => {
-  return (
-    <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1 max-sm:gap-2">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <div className="flex gap-2 relative" key={i}>
-          <div className="w-full my-2 flex flex-col gap-2 mr-2">
-            <Skeleton className="w-1/2 h-4" />
-            <Skeleton className="w-1/3 h-3" />
-            <Skeleton className="w-[70%] h-3" />
-            <Skeleton className="w-1/2 h-4" />
-            <Skeleton className="w-1/3 h-3" />
-            <Skeleton className="w-[70%] h-3" />
-            <Skeleton className="w-1/2 h-3" />
-            <Skeleton className="w-full h-5 rounded-full mt-2" />
-          </div>
-          <Skeleton className="w-8 h-8 absolute right-2 top-2" />
-        </div>
-      ))}
+  return Array.from({ length: 3 }).map((_, i) => (
+    <div className="flex gap-2 relative" key={i}>
+      <div className="w-full my-2 flex flex-col gap-2 mr-2">
+        <Skeleton className="w-1/2 h-4" />
+        <Skeleton className="w-1/3 h-3" />
+        <Skeleton className="w-[70%] h-3" />
+        <Skeleton className="w-1/2 h-4" />
+        <Skeleton className="w-1/3 h-3" />
+        <Skeleton className="w-[70%] h-3" />
+        <Skeleton className="w-1/2 h-3" />
+        <Skeleton className="w-full h-5 rounded-full mt-2" />
+      </div>
+      <Skeleton className="w-8 h-8 absolute right-2 top-2" />
     </div>
-  )
+  ))
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
-import { BigNumber } from 'bignumber.js'
 
 import type { UserCoinsHeld } from '@/api/user/types'
 
@@ -77,19 +76,15 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
 }
 
 const CardSkeleton = () => {
-  return (
-    <div className="grid grid-cols-3 gap-3 2xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-2">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <Card className="flex gap-2" padding="md" key={i}>
-          <Skeleton className="w-10 h-10 rounded-full" />
-          <div className="flex flex-col justify-between">
-            <Skeleton className="w-20 h-4" />
-            <Skeleton className="w-14 h-3 rounded-full" />
-          </div>
-        </Card>
-      ))}
-    </div>
-  )
+  return Array.from({ length: 3 }).map((_, i) => (
+    <Card className="flex gap-2" padding="md" key={i}>
+      <Skeleton className="w-10 h-10 rounded-full" />
+      <div className="flex flex-col justify-between">
+        <Skeleton className="w-20 h-4" />
+        <Skeleton className="w-14 h-3 rounded-full" />
+      </div>
+    </Card>
+  ))
 }
 
 export default TokenHeldCards
