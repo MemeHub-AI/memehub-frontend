@@ -22,6 +22,9 @@ export const useWallet = () => {
 
   const connectWallet = async (connector: (typeof connectors)[number]) => {
     try {
+      if (isConnected) {
+        return await signLogin()
+      }
       const { accounts, chainId } = await connectAsync({ connector })
       const curAddress = first(accounts)
       if (!curAddress?.trim()) throw 'No address'
