@@ -6,12 +6,16 @@ import { User } from 'lucide-react'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { WalletDisconnector } from './disconnector'
-import { Avatar } from '../ui/avatar'
+import { Avatar } from '../../ui/avatar'
 import { Routes } from '@/routes'
 import { useUserStore } from '@/stores/use-user-store'
-import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card'
-import { SocialLinks } from '../social-links'
-import { Button } from '../ui/button'
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '../../ui/hover-card'
+import { SocialLinks } from '../../social-links'
+import { Button } from '../../ui/button'
 
 export const WalletAccount = () => {
   const { t } = useTranslation()

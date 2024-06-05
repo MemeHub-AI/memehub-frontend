@@ -301,5 +301,7 @@
   "trade.balance.zero": "You currently have no balance",
   "view.profile": "View profile",
   "klink": "",
-  "token.detail": "Token detail"
+  "token.detail": "Token detail",
+  "login.addr.empty": "Cannot find your wallet address",
+  "login.chain.empty": "Cannot find chain"
 }

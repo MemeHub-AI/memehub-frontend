@@ -1,11 +1,11 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useWallet } from '@/hooks/use-wallet'
+import { useWallet } from '../hooks/use-wallet'
 import { useResponsive } from '@/hooks/use-responsive'
-import { Button } from '../ui/button'
-import { Dialog, DialogTitle } from '../ui/dialog'
-import { Avatar } from '../ui/avatar'
+import { Button } from '../../ui/button'
+import { Dialog, DialogTitle } from '../../ui/dialog'
+import { Avatar } from '../../ui/avatar'
 import { useWalletStore } from '@/stores/use-wallet-store'
 
 export const WalletConnector = () => {
@@ -32,7 +32,9 @@ export const WalletConnector = () => {
           <Button
             key={i}
             size="lg"
-            className="flex w-full"
+            variant="outline"
+            shadow="none"
+            className="flex w-full hover:bg-zinc-100"
             onClick={() => connectWallet(c)}
           >
             <Avatar
