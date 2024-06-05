@@ -73,6 +73,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
   useEffect(() => {
     if (loadingInfoDialog && info?.name !== undefined && !loadingInfo) {
+      debugger
       fetchMemeInfo()
     }
   }, [loadingInfoDialog])

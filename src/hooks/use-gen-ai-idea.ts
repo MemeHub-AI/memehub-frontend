@@ -14,7 +14,6 @@ export const useGenAIIdea = () => {
     setInfo,
     formInfo,
     setFormInfo,
-    setLoadingImg,
     setLoadingLogo,
     setLoadingPoster,
   } = useAimemeInfoStore()

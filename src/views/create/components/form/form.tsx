@@ -15,8 +15,17 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/input'
 import { Textarea } from '@/components/ui/textarea'
+<<<<<<< HEAD
 import { FormLogo } from './logo'
 import { FormChain } from './chain'
+=======
+import { Dialog } from '@/components/ui/dialog'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { FormLogo } from './logo'
+import { FormChain } from './chain'
+import { LuRefreshCcw } from 'react-icons/lu'
+>>>>>>> 148fa4f (feat: Optimize AI to generate Meme information)
 import { PosterForm } from './poster'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
