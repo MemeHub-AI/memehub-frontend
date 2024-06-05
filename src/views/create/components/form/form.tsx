@@ -1,9 +1,8 @@
-import React, { forwardRef, useContext, useEffect, useState } from 'react'
+import React, { forwardRef, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatEther } from 'viem'
 import { toast } from 'sonner'
 
-import { aiApi } from '@/api/ai'
 import { CreateTokenContext } from '../../context'
 import {
   Form,
@@ -15,14 +14,9 @@ import {
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/input'
-import { cn } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
-import { Dialog } from '@/components/ui/dialog'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
-import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { FormLogo } from './logo'
 import { FormChain } from './chain'
-import { LuRefreshCcw } from 'react-icons/lu'
 import { PosterForm } from './poster'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
