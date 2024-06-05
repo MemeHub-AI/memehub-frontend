@@ -37,16 +37,20 @@ export const useDatafeed = () => {
           token_address: addr,
         })
         const bars = formatBars(data)
+        const lastBar = last(bars)
         const symbolInfo: LibrarySymbolInfo = {
           ...symbolInfoConfig,
           name: symbolName,
           full_name: symbolName,
           description: symbolName,
-          pricescale: formatPricescale(Number(last(bars)?.open)),
+          pricescale: formatPricescale(lastBar?.open),
+          // pricescale: 100,
+          // minmov: 1,
         }
 
+        console.log('pricescale', symbolInfo.pricescale)
         cache.setBars(bars)
-        cache.setLastBar(last(bars))
+        cache.setLastBar(lastBar)
         onResolve(symbolInfo)
       },
       async getBars(symbolInfo, resolution, period, onResult, onError) {

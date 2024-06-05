@@ -1,12 +1,12 @@
 import type { Bar } from '../../../../public/js/charting_library/charting_library'
 
-type BarItem = {
+type BarBase = {
   timestamp: number
   open: number
   close: number
   high: number
   low: number
-  volume: number
+  volume?: number
   [k: string]: any
 }
 
@@ -33,7 +33,7 @@ export const useChartUtils = () => {
     return tvInterval.toLowerCase()
   }
 
-  const formatBars = (list: BarItem[]) => {
+  const formatBars = (list: BarBase[]) => {
     return list.filter(Boolean).map((bar) => {
       const barTimeLen = bar.timestamp.toString().length
       const time = barTimeLen !== 13 ? bar.timestamp * 1000 : bar.timestamp
@@ -45,10 +45,11 @@ export const useChartUtils = () => {
     })
   }
 
-  const formatPricescale = (price: number) => {
+  const formatPricescale = (price?: number) => {
+    if (!price) return 100
+
     const decimal = price.toString().split('.')[1]
     const len = decimal?.length ?? 0
-
     if (len <= 2) return 100
 
     return Number('1'.padEnd(len + 1, '0'))

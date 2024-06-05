@@ -54,11 +54,11 @@ export const fmt = {
     return args.join('/')
   },
   decimals(value?: number | string | BigNumber, fixed = 2) {
-    if (!value) return 0
+    if (!value) return '0'
 
     value = value instanceof BigNumber ? value : BigNumber(value)
     if (value.gte(1)) return value.toFixed(fixed)
-    if (value.lte(0)) return 0
+    if (value.lte(0)) return '0'
 
     const decimalIndex = value.toFixed().indexOf('.')
     if (decimalIndex !== -1) {
