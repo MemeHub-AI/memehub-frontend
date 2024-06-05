@@ -35,7 +35,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
   })
   const uniqueKey = useMemo(nanoid, [])
   const { onIdeaConfirm } = useGenAIIdea()
-  const { setFormInfo, setLoadingImg } = useAimemeInfoStore()
+  const { setFormInfo, setLoadingLogo, setLoadingPoster } = useAimemeInfoStore()
 
   const onCreateNow = (item: IdeaDataList) => {
     router.push(`${Routes.Create}`)
@@ -44,7 +44,8 @@ export const TokenInfo = ({ ideaData }: Props) => {
       symbol: item?.name,
       description: item?.description,
     })
-    setLoadingImg(true)
+    setLoadingLogo(true)
+    setLoadingPoster(true)
   }
 
   const { data } = useQuery({

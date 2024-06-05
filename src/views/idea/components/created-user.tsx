@@ -34,9 +34,7 @@ export const CreatedUser = ({ ideaData }: Props) => {
               className="text-sm text-blue-600 cursor-pointer select-none"
               onClick={() => {
                 if (isEmpty(user.chain.name) || isEmpty(user.address)) return
-                router.push(
-                  fmt.toHref(Routes.Main, user.chain.name, user.address)
-                )
+                open(fmt.toHref(Routes.Main, user.chain.name, user.address))
               }}
             >
               {t('live.in.up')}

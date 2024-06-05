@@ -6,6 +6,7 @@ import { aiApi } from '@/api/ai'
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { AIMemeInfo } from '@/api/ai/type'
 import { toast } from 'sonner'
+import { Router } from 'next/router'
 
 interface Props {
   formHook: ReturnType<typeof useCreateTokenForm>
@@ -72,11 +73,24 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
   useEffect(() => {
     if (loadingInfoDialog && info?.name !== undefined && !loadingInfo) {
-      debugger
       fetchMemeInfo()
     }
   }, [loadingInfoDialog])
 
+  useEffect(() => {
+    const cb = () => {
+      memeInfoSign.abort()
+      setLoadingInfoDialog(false)
+      setLoadingInfo(false)
+      setLoadingPoster(false)
+      setLoadingLogo(false)
+    }
+    Router.events.on('routeChangeStart', cb)
+
+    return () => {
+      Router.events.off('routeChangeStart', cb)
+    }
+  }, [])
   return (
     <Dialog
       open={loadingInfoDialog}

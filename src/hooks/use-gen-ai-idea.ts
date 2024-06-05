@@ -15,6 +15,8 @@ export const useGenAIIdea = () => {
     formInfo,
     setFormInfo,
     setLoadingImg,
+    setLoadingLogo,
+    setLoadingPoster,
   } = useAimemeInfoStore()
 
   const onInputGen = (value: string) => {
@@ -47,7 +49,8 @@ export const useGenAIIdea = () => {
     }
 
     setFormInfo(data)
-    setLoadingImg(true)
+    setLoadingLogo(true)
+    setLoadingPoster(true)
   }
 
   const onCancel = () => {
