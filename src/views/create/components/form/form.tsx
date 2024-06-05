@@ -1,9 +1,7 @@
 import React, { forwardRef, useContext, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatEther } from 'viem'
-import { z } from 'zod'
 import { toast } from 'sonner'
-import { useSwitchChain } from 'wagmi'
 
 import { aiApi } from '@/api/ai'
 import { CreateTokenContext } from '../../context'
@@ -19,22 +17,17 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/input'
 import { cn } from '@/lib/utils'
 import { Textarea } from '@/components/ui/textarea'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { fmt } from '@/utils/fmt'
 import { Dialog } from '@/components/ui/dialog'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { FormLogo } from './logo'
+import { FormChain } from './chain'
+import { LuRefreshCcw } from 'react-icons/lu'
+import { PosterForm } from './poster'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
   const { deployResult, formData, aiMemeInfo } = useContext(CreateTokenContext)
-  const { switchChain } = useSwitchChain()
-  const [showPoster, setShowPoster] = useState(false)
-  const [index, setIndex] = useState(0)
-  const [handLoadingPoster, setHandLoadingPoster] = useState(false)
-
-  const { loadingLogo, loadingPoster: loadingPoster1 } = useAimemeInfoStore()
 
   const { url, form, chains, formFields, onSubmit } = formData
   const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } =
@@ -45,22 +38,6 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const fee = Number(formatEther(BigInt(deployFee!))).toFixed(3)
   const symbol = deploySymbol
 
-  const onRight = () => {
-    const limit = Number(form?.getValues(formFields?.poster!)?.length)
-    setIndex((index) => {
-      if (index === limit - 1) return 0
-      return index + 1
-    })
-  }
-
-  const onLeft = () => {
-    const limit = Number(form?.getValues(formFields?.poster!)?.length)
-    setIndex((index) => {
-      if (index === 0) return limit - 1
-      return index - 1
-    })
-  }
-
   const beforeSubmit = (values: any) => {
     if (isLoadingMemeInfo || isLoadingMemeImg) {
       toast.warning(t('onsubmit.createing.warning'))
@@ -68,29 +45,6 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
     }
     onSubmit!(values!)
   }
-
-  const getAIMemePoster = async (e: any) => {
-    e.preventDefault()
-
-    const fullname = form?.getValues(formFields?.fullname!) as string
-    const description = form?.getValues(formFields?.description!) as string
-    if (!fullname || !description) {
-      return toast.warning(t('need.base.info.warning'))
-    }
-    try {
-      setHandLoadingPoster(true)
-      const { data } = await aiApi.getMemePoster({
-        name: fullname,
-        description,
-      })
-      form?.setValue(formFields!.poster!, [...data.poster1, ...data.poster2])
-    } catch {
-    } finally {
-      setHandLoadingPoster(false)
-    }
-  }
-
-  const loadingPoster = loadingPoster1
 
   useEffect(() => {
     if (url) {
@@ -112,7 +66,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
               <FormLogo formData={formData}></FormLogo>
 
               {/* name/symbol */}
-              <div className="flex flex-col ml-5 items-center justify-between flex-1">
+              <div className="h-[150px] flex flex-col ml-5 items-center justify-between flex-1">
                 <FormField
                   control={form?.control}
                   name={formFields?.fullname!}
@@ -153,71 +107,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             </div>
 
             {/* chain */}
-            <FormField
-              control={form?.control}
-              name={formFields?.chainName!}
-              render={({ field }) => (
-                <FormItem className="mt-0">
-                  <FormLabel className="mt-0">
-                    *
-                    {fmt.firstUpperCase(
-                      chains?.find((c) => c.name === field.value)?.name
-                    )}{' '}
-                    {t('chain')}
-                  </FormLabel>
-                  <FormControl>
-                    {chains ? (
-                      <RadioGroup
-                        onValueChange={(v: string) => {
-                          form?.setValue(formFields?.chainName!, v)
-                        }}
-                        defaultValue={field.value}
-                        className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap  max-sm:w-max"
-                      >
-                        {chains?.map((c, i) => (
-                          <FormItem
-                            key={i}
-                            title={c.name}
-                            className={cn(
-                              'block p-1 min-w-[35px]',
-                              c.name === field.value! ? 'bg-black' : '',
-                              i !== chains.length - 1
-                                ? 'border-r-2 border-black'
-                                : ''
-                            )}
-                          >
-                            <FormControl>
-                              <RadioGroupItem
-                                value={c.name}
-                                disabled={!c.is_supported}
-                                onClick={() => {
-                                  switchChain({ chainId: Number(c.id) })
-                                }}
-                              >
-                                <img
-                                  src={c.logo}
-                                  alt={c.name}
-                                  about={c.name}
-                                  className={cn(
-                                    'w-[27px] h-[27px] block rounded-full overflow-hidden',
-                                    !c.is_supported
-                                      ? 'opacity-50 cursor-not-allowed'
-                                      : ''
-                                  )}
-                                />
-                              </RadioGroupItem>
-                            </FormControl>
-                          </FormItem>
-                        ))}
-                      </RadioGroup>
-                    ) : (
-                      <div>{t('loading')}</div>
-                    )}
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FormChain formData={formData}></FormChain>
           </div>
 
           {/* Description */}
@@ -240,53 +130,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           />
 
           {/* Poster */}
-          <FormField
-            control={form?.control}
-            name={formFields?.poster!}
-            render={({ field }) => {
-              return (
-                <FormItem>
-                  <FormLabel className="mr-2">
-                    {loadingPoster ? t('ai.poster.tip') : t('ai.poster')}
-                  </FormLabel>
-                  <FormControl>
-                    {loadingPoster ? (
-                      <img src="/images/poster-loading.png" alt="loading" />
-                    ) : !!field.value?.length ? (
-                      <div className="flex gap-3 w-max max-md:w-[99%] max-md:overflow-x-auto">
-                        {(field.value as string[])?.map((item, i) => {
-                          return (
-                            <div
-                              key={item}
-                              className={cn(
-                                'flex-shrink-0 rounded-md overflow-hidden cursor-pointer',
-                                i < 2
-                                  ? 'w-[133px] h-[153px]'
-                                  : 'w-[233px] h-[153px]'
-                              )}
-                              onClick={() => {
-                                setShowPoster(true)
-                                setIndex(i)
-                              }}
-                            >
-                              <img src={item} alt="poster" />
-                            </div>
-                          )
-                        })}
-                      </div>
-                    ) : (
-                      <div>
-                        <Button onClick={getAIMemePoster}>
-                          {t('create.ai.poster')}
-                        </Button>
-                      </div>
-                    )}
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )
-            }}
-          />
+          <PosterForm formData={formData}></PosterForm>
 
           {/* Twitter & telegram */}
           <div className="flex justify-between max-w-[500px]">
@@ -376,45 +220,6 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           </div>
         </form>
       </Form>
-      <Dialog open={showPoster} onOpenChange={() => setShowPoster(false)}>
-        <div className="flex flex-col px-5 mt-5">
-          <div className="absolute top-[50%] translate-y-[-50%] left-2 cursor-pointer">
-            <FaChevronLeft size={26} onClick={onLeft}></FaChevronLeft>
-          </div>
-          <div className="absolute top-[50%] translate-y-[-50%] right-2 cursor-pointer">
-            <FaChevronRight size={26} onClick={onRight}></FaChevronRight>
-          </div>
-          <img
-            src={form?.getValues(formFields?.poster!)?.[index] as string}
-            alt="Poster"
-            className="w-full rounded-md mb-4 select-none"
-          />
-          <div className="flex justify-center">
-            {(form?.getValues(formFields?.poster!) as string[])?.map(
-              (item, i) => {
-                return (
-                  <div
-                    key={item}
-                    className={cn(
-                      'w-[10px] h-[10px] mx-2 rounded-full cursor-pointer',
-                      i === index ? 'bg-black' : 'bg-gray-300'
-                    )}
-                    onClick={() => setIndex(i)}
-                  ></div>
-                )
-              }
-            )}
-          </div>
-          <div
-            className="mt-5  flex justify-center cursor-pointer"
-            onClick={() =>
-              open((form?.getValues(formFields?.poster!) as string[])[index])
-            }
-          >
-            <Button>{t('download')}</Button>
-          </div>
-        </div>
-      </Dialog>
     </>
   )
 })
