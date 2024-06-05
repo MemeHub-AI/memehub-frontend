@@ -12,7 +12,7 @@ import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
 import { WalletConnect } from '../wallet-connect'
-import { WalletDisconnector } from '../wallet-connect/disconnector'
+import { WalletDisconnector } from '../wallet-connect/components/disconnector'
 import { SearchInput } from '../search-input'
 
 interface Props extends ComponentProps<'div'> {

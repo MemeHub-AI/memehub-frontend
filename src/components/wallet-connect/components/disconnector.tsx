@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { Button, type ButtonProps } from '../ui/button'
-import { useWallet } from '@/hooks/use-wallet'
-import { useResponsive } from '@/hooks/use-responsive'
-import { AlertDialog } from '../ui/alert-dialog'
 import { LogOut } from 'lucide-react'
+
+import { Button, type ButtonProps } from '../../ui/button'
+import { useWallet } from '../hooks/use-wallet'
+import { useResponsive } from '@/hooks/use-responsive'
+import { AlertDialog } from '../../ui/alert-dialog'
 
 interface Props extends ButtonProps {
   onConfirm?: () => void

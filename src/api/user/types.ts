@@ -88,7 +88,7 @@ interface User {
   mention_count: number
 }
 
-interface Chain {
+export interface Chain {
   id: string
   name: string
   logo: string

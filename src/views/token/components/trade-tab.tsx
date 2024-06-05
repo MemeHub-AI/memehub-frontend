@@ -135,14 +135,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         <Tabs className="w-full" value={tab} onValueChange={setTab}>
           <TabsList className="grid grid-cols-2 h-11 mb-6">
             <TabsTrigger
-              className="h-full"
+              className="h-full font-bold"
               value={TradeType.Buy}
               disabled={isSubmitting}
             >
               {t('trade.buy')}
             </TabsTrigger>
             <TabsTrigger
-              className="h-full"
+              className="h-full font-bold"
               value={TradeType.Sell}
               disabled={isSubmitting}
             >
@@ -191,7 +191,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
           {/* Trade button */}
           <Button
-            className="!w-full"
+            className="!w-full font-bold"
             onClick={onTrade}
             disabled={isSubmitting || !value || BigNumber(value).lte(0)}
           >
