@@ -64,11 +64,11 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
       <div className="flex items-center gap-2">
         <Avatar src={c.coin.image} fallback={c.coin.ticker.charAt(0)} />
         <div className="flex flex-col justify-between">
-          <p className="font-bold">
+          <p className="font-bold truncate">
             {c.coin.name}({c.coin.ticker})
           </p>
           <p className="text-zinc-500 text-sm">
-            {BigNumber(c.amount).toFixed(2)} {c.coin.ticker}
+            {fmt.decimals(c.amount)} {c.coin.ticker}
           </p>
         </div>
       </div>
