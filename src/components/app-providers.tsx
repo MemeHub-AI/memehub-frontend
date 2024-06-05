@@ -6,7 +6,7 @@ import { WagmiProvider } from 'wagmi'
 import i18nConfig from '@/i18n'
 import { wagmiConfig } from '@/config/wagmi'
 
-const queryClient = new QueryClient()
+export const queryClient = new QueryClient()
 
 export const AppProviders = ({ children }: ComponentProps<'div'>) => {
   return (

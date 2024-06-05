@@ -125,6 +125,14 @@ export const qs = {
     return withPrefix ? `?${searchParams}` : searchParams.toString()
   },
   parse(query?: string) {
-    if (!query) return {}
+    if (!query) return {} as Record<string, string>
+
+    const removeQuestionMark = query.startsWith('?') ? query.slice(1) : query
+    const result = removeQuestionMark.split('&').reduce((p, q) => {
+      const [key, value] = q.split('=')
+      return (p[key] = value), p
+    }, {} as Record<string, string>)
+
+    return result
   },
 }

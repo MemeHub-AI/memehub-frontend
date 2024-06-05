@@ -1,7 +1,6 @@
 import React, { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
-import router from 'next/router'
 
 import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
@@ -10,9 +9,7 @@ import { CustomSuspense } from '../custom-suspense'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { Routes } from '@/routes'
 import { UserCoinsCreated } from '@/api/user/types'
-import { Card, CardTitle } from '../ui/card'
 import { TokenChainSelect } from './chain-select'
-import { TokenSortSelect } from './sort-select'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -94,10 +91,14 @@ export const TokenCards = (props: Props) => {
           </>
         ) : null}
         {isPending && (
-          <p className="text-center text-zinc-500 col-span-2">{t('loading')}</p>
+          <p className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
+            {t('loading')}
+          </p>
         )}
         {noMore && (
-          <p className="text-center text-zinc-500 col-span-2">{t('nomore')}</p>
+          <p className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
+            {t('nomore')}
+          </p>
         )}
       </CustomSuspense>
     </div>

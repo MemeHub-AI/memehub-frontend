@@ -1,8 +1,12 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
+import { isEmpty } from 'lodash'
 
 import { IdeaDataList, IdeaTokens } from '@/api/idea/type'
 import { Dialog, DialogTitle } from '@/components/ui/dialog'
+import { fmt } from '@/utils/fmt'
+import { Routes } from '@/routes'
 
 interface Props {
   ideaData: IdeaDataList | undefined
@@ -10,6 +14,7 @@ interface Props {
 
 export const CreatedUser = ({ ideaData }: Props) => {
   const { t } = useTranslation()
+  const router = useRouter()
   const [showMore, setShowMore] = useState(false)
 
   const handleList = (list: IdeaTokens[]) => {
@@ -28,7 +33,10 @@ export const CreatedUser = ({ ideaData }: Props) => {
             <span
               className="text-sm text-blue-600 cursor-pointer select-none"
               onClick={() => {
-                console.log('user', user)
+                if (isEmpty(user.chain.name) || isEmpty(user.address)) return
+                router.push(
+                  fmt.toHref(Routes.Main, user.chain.name, user.address)
+                )
               }}
             >
               {t('live.in.up')}

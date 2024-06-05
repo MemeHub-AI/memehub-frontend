@@ -1,11 +1,5 @@
 import type { UserCoinsCreated, UserInfoRes } from '../user/types'
 
-interface Chain {
-  id: number
-  name: string
-  logo: string
-}
-
 export interface TokenListItem extends UserCoinsCreated {
   twitter_url: string
   telegram_url: string
@@ -80,6 +74,8 @@ export interface OnchainTokensChain {
 }
 
 export interface OnchainTokensItem {
+  name: string
+  url: string
   symbol: string
   '24H_Volume': number
   logo: string
