@@ -303,5 +303,7 @@
   "klink": "",
   "token.detail": "Token detail",
   "login.addr.empty": "Cannot find your wallet address",
-  "login.chain.empty": "Cannot find chain"
+  "login.chain.empty": "Cannot find chain",
+  "switch.ai.poster": "Change the posters",
+  "create.ai.logo": "AI-generated"
 }

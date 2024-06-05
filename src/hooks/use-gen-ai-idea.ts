@@ -15,7 +15,6 @@ export const useGenAIIdea = () => {
     formInfo,
     setFormInfo,
     setLoadingImg,
-    setLoadingPoster,
   } = useAimemeInfoStore()
 
   const onInputGen = (value: string) => {
