@@ -192,7 +192,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
                 </div>
                 <div className="flex items-center gap-4">
                   <span>
-                    24H {t('volume')}: ${fmt.tradeFixed(token['24H_Volume'])}
+                    24H {t('volume')}: ${fmt.decimals(token['24H_Volume'])}
                   </span>
                   {token.publish_at && (
                     <span>

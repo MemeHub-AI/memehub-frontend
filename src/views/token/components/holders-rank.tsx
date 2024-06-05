@@ -47,16 +47,12 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
 }
 
 const HolderRankSkeleton = () => {
-  return (
-    <div className="flex flex-col gap-2">
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div key={i} className="flex items-center justify-between">
-          <Skeleton className="w-32 h-4" />
-          <Skeleton className="w-8 h-4" />
-        </div>
-      ))}
+  return Array.from({ length: 5 }).map((_, i) => (
+    <div key={i} className="flex items-center justify-between">
+      <Skeleton className="w-32 h-4" />
+      <Skeleton className="w-8 h-4" />
     </div>
-  )
+  ))
 }
 
 export default HoldersRank

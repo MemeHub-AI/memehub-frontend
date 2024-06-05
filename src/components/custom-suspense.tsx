@@ -16,14 +16,14 @@ export const CustomSuspense = (props: Props) => {
     nullback,
     children,
     container = 'div',
-    ...resetProps
+    ...restProps
   } = props
 
-  if (isPending) return fallback
+  if (isPending) return createElement(container, restProps, fallback)
   if (nullback && isEmpty(React.Children.toArray(children))) return nullback
   if (container === 'fragment') return <>{children}</>
 
-  return createElement(container, resetProps, children)
+  return createElement(container, restProps, children)
 }
 
 export default CustomSuspense

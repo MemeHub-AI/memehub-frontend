@@ -132,25 +132,23 @@ export const OpportunityMoonshot = ({
           fallback={<NewsSkeleton />}
           nullback={t('no.data')}
           className={clsx(
-            'flex flex-col gap-6  overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip',
+            'flex flex-col gap-3 overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip',
             tabIdx === 1 ? 'h-[calc(100vh-160px)]' : 'h-[calc(100vh-210px)]',
             listClassName
           )}
         >
-          <div className="flex flex-col gap-3">
-            {newsList?.map((news, i) => (
-              <NewsCard
-                news={news!}
-                key={i}
-                onClick={() => {
-                  push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
-                }}
-                onMeme={() => {
-                  handleClick?.(news)
-                }}
-              />
-            ))}
-          </div>
+          {newsList?.map((news, i) => (
+            <NewsCard
+              news={news!}
+              key={i}
+              onClick={() => {
+                push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
+              }}
+              onMeme={() => {
+                handleClick?.(news)
+              }}
+            />
+          ))}
         </CustomSuspense>
       </div>
     </div>

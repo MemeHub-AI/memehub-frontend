@@ -30,14 +30,6 @@ export const useLogin = () => {
         return
       }
 
-      console.log(
-        'sign account',
-        overrideAddr,
-        overrideChainId,
-        address,
-        chainId
-      )
-
       return login({
         wallet_address: (overrideAddr || address) as Address,
         chain_id: String(overrideChainId || chainId),
@@ -45,7 +37,7 @@ export const useLogin = () => {
         timestamp,
       })
     } catch (error) {
-      console.error('[signLogin Error]:', error)
+      throw new Error(String(error))
     }
   }
 

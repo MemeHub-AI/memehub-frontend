@@ -25,7 +25,13 @@ export const WalletConnector = () => {
       >
         {disabled ? t('wallet.connecting') : t('wallet.connect')}
       </Button>
-      <Dialog open={connectOpen} onOpenChange={setConnectOpen}>
+      <Dialog
+        open={connectOpen}
+        onOpenChange={(value) => {
+          console.log('value', value)
+          setConnectOpen(value)
+        }}
+      >
         <DialogTitle>{t('walle.select')}</DialogTitle>
         {/* Exclude `injected` connect */}
         {connectors.slice(1).map((c, i) => (
