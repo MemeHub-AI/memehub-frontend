@@ -11,43 +11,48 @@ interface Props {
   formHook: ReturnType<typeof useCreateTokenForm>
 }
 
+let memeInfoSign = new AbortController()
+
 export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
   const { t } = useTranslation()
   const {
-    formInfo,
     info,
     loadingInfo,
-    loadingImg,
-    loadingLogo,
-    loadingPoster,
     loadingInfoDialog,
     setLoadingInfo,
-    setLoadingImg,
     setLoadingLogo,
     setLoadingPoster,
     setLoadingInfoDialog,
   } = useAimemeInfoStore()
 
   const fetchMemeInfo = async () => {
+    if (!loadingInfo) {
+      memeInfoSign.abort()
+    }
+
     setLoadingInfo(true)
+    memeInfoSign = new AbortController()
     try {
-      const { data } = await aiApi.getMemeInfo({
-        input: info!.name!,
-      })
-      fetchMemeImage(data)
+      const { data } = await aiApi.getMemeInfo(
+        {
+          input: info!.name!,
+        },
+        memeInfoSign.signal
+      )
+      if (data) {
+        fetchMemeImage(data)
+      }
     } catch (e) {
       toast.error(t('create.info.error'))
     } finally {
       setLoadingInfoDialog(false)
       setLoadingInfo(false)
+      debugger
     }
   }
 
   const fetchMemeImage = (info?: AIMemeInfo) => {
-    setLoadingLogo(true)
-    setLoadingPoster(true)
-
-    info = info || formInfo
+    info = info
 
     if (info?.name) {
       formHook.form.setValue(formHook.formFields.fullname, info?.name)
@@ -61,52 +66,16 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     if (info?.chainName) {
       formHook.form.setValue(formHook.formFields.chainName, info?.chainName)
     }
-
-    aiApi
-      .getMemeImage({
-        name: info?.name!,
-        description: info?.description!,
-      })
-      .then(({ data }) => {
-        formHook.form.setValue(formHook.formFields.logo, data[0])
-      })
-      .finally(() => {
-        setLoadingLogo(false)
-        if (!loadingPoster) {
-          setLoadingImg(false)
-        }
-      })
-
-    aiApi
-      .getMemePoster({
-        name: info?.name!,
-        description: info?.description!,
-      })
-      .then(({ data }) => {
-        formHook.form.setValue(formHook.formFields.poster, [
-          ...data.poster1,
-          ...data.poster2,
-        ])
-      })
-      .finally(() => {
-        setLoadingPoster(false)
-        if (!loadingLogo) {
-          setLoadingImg(false)
-        }
-      })
+    setLoadingPoster(true)
+    setLoadingLogo(true)
   }
 
   useEffect(() => {
     if (loadingInfoDialog && info?.name !== undefined && !loadingInfo) {
+      debugger
       fetchMemeInfo()
     }
-  }, [loadingInfoDialog, loadingInfo])
-
-  useEffect(() => {
-    if (loadingImg) {
-      fetchMemeImage()
-    }
-  }, [loadingImg])
+  }, [loadingInfoDialog])
 
   return (
     <Dialog

@@ -296,5 +296,7 @@
   "view.profile": "查看个人信息",
   "token.detail": "代币详情",
   "login.addr.empty": "找不到您的钱包地址",
-  "login.chain.empty": "找不到链"
+  "login.chain.empty": "找不到链",
+  "switch.ai.poster": "换一批海报",
+  "create.ai.logo": "重新生成"
 }
