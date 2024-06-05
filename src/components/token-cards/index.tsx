@@ -83,13 +83,8 @@ export const TokenCards = (props: Props) => {
           </div>
         }
       >
-        {cards.length ? (
-          <>
-            {filteredCards.map((t, i) => (
-              <TokenCard key={i} card={t} />
-            ))}
-          </>
-        ) : null}
+        {!!cards.length &&
+          filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
         {isPending && (
           <p className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
             {t('loading')}

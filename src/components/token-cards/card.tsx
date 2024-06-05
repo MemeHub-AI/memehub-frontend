@@ -68,16 +68,13 @@ export const TokenCard = (props: Props) => {
         width={imageSize}
         height={imageSize}
       />
-      {/* Chain logo */}
-      <img
-        src={card.chain.logo}
-        alt="chain"
-        className="absolute right-2 top-2 w-5"
-      />
       <div className="py-2 pr-2 w-full flex flex-col justify-between">
         <div className="h-full">
-          <CardTitle className="pt-0 text-lg">
-            {card?.name} {card?.ticker && `(${card?.ticker})`}
+          <CardTitle className="pt-0 text-lg flex items-start justify-between gap-2">
+            <span className="break-all">
+              {card?.name} {card?.ticker && `(${card?.ticker})`}
+            </span>
+            <img src={card.chain.logo} alt="chain" className="w-5 mt-1" />
           </CardTitle>
           <p
             className={cn(
