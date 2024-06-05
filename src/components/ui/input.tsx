@@ -29,6 +29,7 @@ export interface InputProps
   disableFocusBorder?: boolean
   startIcon?: React.ReactNode
   endIcon?: React.ReactNode
+  inputClass?: string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
@@ -38,6 +39,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     border,
     startIcon,
     endIcon,
+    inputClass,
     ...restProps
   } = props
 
@@ -52,7 +54,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       >
         {startIcon}
         <input
-          className={cn(inputVariants({ border: 'none' }), 'ml-0')}
+          className={cn(inputVariants({ border: 'none' }), 'ml-0', inputClass)}
           ref={ref}
           {...restProps}
         />

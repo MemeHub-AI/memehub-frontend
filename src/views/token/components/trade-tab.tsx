@@ -112,6 +112,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   useEffect(() => {
     if (!isTraded) return
 
+    setValue('0')
     refetchNativeBalance()
     refetchTokenBalance()
   }, [isTraded])
