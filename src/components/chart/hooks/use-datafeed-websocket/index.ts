@@ -61,12 +61,10 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
     return new Promise<Event>((resolve, reject) => {
       wsRef.current = new WebSocket(wsApiURL.chart)
       wsRef.current.addEventListener('open', (e) => {
-        console.log('chart ws open', e)
         onOpen()
         resolve(e)
       })
       wsRef.current.addEventListener('close', (e) => {
-        console.log('chart ws close', e)
         chart && onReconnect?.(e) // Reconnect if chart exist.
       })
       wsRef.current.addEventListener('error', reject)

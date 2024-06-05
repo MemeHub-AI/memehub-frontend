@@ -73,19 +73,15 @@ const MentionCard = ({ c }: { c: UserListRes[UserListType.Notifications] }) => {
 }
 
 const CardSkeleton = () => {
-  return (
-    <div className="flex flex-col gap-3 max-sm:gap-2">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <Card key={i} padding="md" className="flex gap-2 items-center">
-          <Skeleton className="w-8 h-8" />
-          <div className="flex flex-col gap-2">
-            <Skeleton className="w-48 h-4" />
-            <Skeleton className="w-32 h-4" />
-          </div>
-        </Card>
-      ))}
-    </div>
-  )
+  return Array.from({ length: 3 }).map((_, i) => (
+    <Card key={i} padding="md" className="flex gap-2 items-center">
+      <Skeleton className="w-8 h-6" />
+      <div className="flex flex-col gap-2">
+        <Skeleton className="w-48 h-4" />
+        <Skeleton className="w-32 h-4" />
+      </div>
+    </Card>
+  ))
 }
 
 export default MentionCards

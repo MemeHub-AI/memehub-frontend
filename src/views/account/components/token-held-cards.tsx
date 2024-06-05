@@ -1,7 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
-import { BigNumber } from 'bignumber.js'
 
 import type { UserCoinsHeld } from '@/api/user/types'
 
@@ -64,11 +63,11 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
       <div className="flex items-center gap-2">
         <Avatar src={c.coin.image} fallback={c.coin.ticker.charAt(0)} />
         <div className="flex flex-col justify-between">
-          <p className="font-bold">
+          <p className="font-bold truncate">
             {c.coin.name}({c.coin.ticker})
           </p>
           <p className="text-zinc-500 text-sm">
-            {BigNumber(c.amount).toFixed(2)} {c.coin.ticker}
+            {fmt.decimals(c.amount)} {c.coin.ticker}
           </p>
         </div>
       </div>
@@ -77,19 +76,15 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
 }
 
 const CardSkeleton = () => {
-  return (
-    <div className="grid grid-cols-3 gap-3 2xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-2">
-      {Array.from({ length: 3 }).map((_, i) => (
-        <Card className="flex gap-2" padding="md" key={i}>
-          <Skeleton className="w-10 h-10 rounded-full" />
-          <div className="flex flex-col justify-between">
-            <Skeleton className="w-20 h-4" />
-            <Skeleton className="w-14 h-3 rounded-full" />
-          </div>
-        </Card>
-      ))}
-    </div>
-  )
+  return Array.from({ length: 3 }).map((_, i) => (
+    <Card className="flex gap-2" padding="md" key={i}>
+      <Skeleton className="w-10 h-10 rounded-full" />
+      <div className="flex flex-col justify-between">
+        <Skeleton className="w-20 h-4" />
+        <Skeleton className="w-14 h-3 rounded-full" />
+      </div>
+    </Card>
+  ))
 }
 
 export default TokenHeldCards

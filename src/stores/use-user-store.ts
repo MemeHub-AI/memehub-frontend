@@ -5,7 +5,7 @@ import type { UserInfoRes } from '@/api/user/types'
 interface UserStore {
   userInfo: UserInfoRes | null
 
-  setUserInfo: (userInfo: UserInfoRes) => void
+  setUserInfo: (userInfo: UserInfoRes | null) => void
 }
 
 export const useUserStore = create<UserStore>((set, get) => ({

@@ -68,7 +68,7 @@ export const TokenCards = (props: Props) => {
 
       <CustomSuspense
         className={cn(
-          'grid grid-cols-2 gap-4 2xl:grid-cols-3 max-sm:grid-cols-1',
+          'grid grid-cols-2 gap-4 2xl:grid-cols-3 max-lg:grid-cols-1',
           'max-sm:gap-2'
         )}
         isPending={isLoading}
@@ -83,13 +83,8 @@ export const TokenCards = (props: Props) => {
           </div>
         }
       >
-        {cards.length ? (
-          <>
-            {filteredCards.map((t, i) => (
-              <TokenCard key={i} card={t} />
-            ))}
-          </>
-        ) : null}
+        {!!cards.length &&
+          filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
         {isPending && (
           <p className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
             {t('loading')}
@@ -106,25 +101,21 @@ export const TokenCards = (props: Props) => {
 }
 
 const CardSkeleton = () => {
-  return (
-    <div className="grid grid-cols-2 gap-4 2xl:grid-cols-3 max-sm:grid-cols-1 max-sm:gap-2 ">
-      {Array.from({ length: 4 }).map((_, i) => (
-        <div className="border-2 rounded flex gap-2 relative" key={i}>
-          <Skeleton className="w-40 h-40 flex-shrink-0 rounded-none" />
-          <div className="w-full my-2 flex flex-col justify-between gap-2 mr-2">
-            <div className="flex flex-col gap-2">
-              <Skeleton className="w-1/2 h-6 mt-1" />
-              <Skeleton className="w-full h-4" />
-              <Skeleton className="w-full h-4" />
-              <Skeleton className="w-1/2 h-4" />
-            </div>
-            <Skeleton className="w-full h-5 rounded-full" />
-          </div>
-          <Skeleton className="w-6 h-6 rounded-full absolute right-2 top-2" />
+  return Array.from({ length: 4 }).map((_, i) => (
+    <div className="border-2 rounded flex gap-2 relative" key={i}>
+      <Skeleton className="w-40 h-40 flex-shrink-0 rounded-none" />
+      <div className="w-full my-2 flex flex-col justify-between gap-2 mr-2">
+        <div className="flex flex-col gap-2">
+          <Skeleton className="w-1/2 h-6 mt-1" />
+          <Skeleton className="w-full h-4" />
+          <Skeleton className="w-full h-4" />
+          <Skeleton className="w-1/2 h-4" />
         </div>
-      ))}
+        <Skeleton className="w-full h-5 rounded-full" />
+      </div>
+      <Skeleton className="w-6 h-6 rounded-full absolute right-2 top-2" />
     </div>
-  )
+  ))
 }
 
 export default TokenCards

@@ -34,10 +34,6 @@ export const fmt = {
     if (isEmpty(val)) return '#'
     return `#${val}`
   },
-  tradeFixed(n: BigNumber | number) {
-    n = typeof n === 'number' ? BigNumber(n) : n
-    return n.toFixed(n.lt(1) ? 6 : 2)
-  },
   percent: (value: string | number | undefined, fixed = 2) => {
     if (!value) return '0%'
 
@@ -57,21 +53,23 @@ export const fmt = {
 
     return args.join('/')
   },
-  decimals(value?: number | string, fixed = 2) {
-    if (!value) return 0
-    if (BigNumber(value).gt(1)) {
-      return BigNumber(value).toFixed(fixed)
-    }
+  decimals(value?: number | string | BigNumber, fixed = 2) {
+    if (!value) return '0'
 
-    const decimalIndex = value.toString().indexOf('.')
+    value = value instanceof BigNumber ? value : BigNumber(value)
+    if (value.gte(1)) return value.toFixed(fixed)
+    if (value.lte(0)) return '0'
+
+    const decimalIndex = value.toFixed().indexOf('.')
     if (decimalIndex !== -1) {
-      const decimalPart = value.toString().slice(decimalIndex + 1)
+      const decimalPart = value.toFixed().slice(decimalIndex + 1)
       const zeroLen = decimalPart.match(/^0*/)?.[0].length ?? 0
       const lastNumbers = decimalPart.replace(/^0+/, '')
       const slicedLastNum = lastNumbers.slice(0, fixed)
       const result = `0.0{${zeroLen}}${slicedLastNum}`
 
-      if (zeroLen < 2) return `0.${slicedLastNum}`
+      if (zeroLen < 2) return value.toFixed(fixed)
+      if (zeroLen === 2) return value.toFixed(++fixed)
 
       return result
     } else {

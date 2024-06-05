@@ -22,20 +22,20 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { getBuyTokenAmount, getSellTokenAmount } = useTradeInfo()
 
   const tokenSymbol = tokenInfo?.ticker || ''
-  const baseTokenAmount = fmt.tradeFixed(BigNumber(String(value || 0)))
+  const baseTokenAmount = fmt.decimals(String(value || 0))
   const tokenAddr = tokenInfo?.address as Address
   const balance = fmt.decimals(isBuy ? nativeBalance : tokenBalance)
 
   const calcBuyTokenAmount = () => {
     getBuyTokenAmount(tokenAddr, value as string).then((weiAmount) => {
-      const amount = fmt.tradeFixed(BigNumber(formatEther(weiAmount)))
+      const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
       setQuoteTokenAmount(Number(amount))
     })
   }
 
   const calcSellTokenAmount = () => {
     getSellTokenAmount(tokenAddr, value as string).then((weiAmount) => {
-      const amount = fmt.tradeFixed(BigNumber(formatEther(weiAmount)))
+      const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
       setQuoteTokenAmount(Number(amount))
     })
   }
@@ -51,6 +51,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
       <Input
         placeholder="0"
         className="flex-1"
+        inputClass="pr-1"
         type="number"
         value={value}
         onChange={(e) => {
