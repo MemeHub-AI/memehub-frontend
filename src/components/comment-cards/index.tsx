@@ -119,7 +119,7 @@ export const CommentCards = (props: Props) => {
 
 const CardSkeleton = () => {
   return Array.from({ length: 3 }).map((_, i) => (
-    <div className="border shadow rounded-md flex flex-col p-4" key={i}>
+    <div className="border-b-2 flex flex-col p-4 relative" key={i}>
       <div className="flex gap-2 items-stretch">
         <Skeleton className="rounded-full w-8 h-8" />
         <div className="flex flex-col justify-between">
@@ -127,13 +127,10 @@ const CardSkeleton = () => {
           <Skeleton className="w-20 h-3" />
         </div>
       </div>
-      <div className="flex flex-col gap-1 mt-2">
-        <Skeleton className="h-4 w-1/2" />
-        <Skeleton className="h-4 w-1/3" />
-      </div>
-      <div className="flex gap-2 mt-2">
+      <Skeleton className="h-4 w-1/2 mt-3" />
+      <div className="flex gap-2 mt-2 absolute right-0 top-0">
         <Skeleton className="h-5 w-8" />
-        <Skeleton className="h-5 w-14" />
+        <Skeleton className="h-5 w-8" />
       </div>
     </div>
   ))
