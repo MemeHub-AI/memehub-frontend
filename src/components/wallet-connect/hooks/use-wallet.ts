@@ -2,6 +2,8 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi'
 import { first } from 'lodash'
 
 import { useLogin } from '@/hooks/use-login'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const useWallet = () => {
   const {
@@ -15,13 +17,16 @@ export const useWallet = () => {
   const { connectors, connectAsync } = useConnect()
   const { disconnectAsync } = useDisconnect()
   const { signLogin, logout } = useLogin()
+  const { setConnectOpen } = useWalletStore()
+  const { setUserInfo } = useUserStore()
 
   const connectWallet = async (connector: (typeof connectors)[number]) => {
     try {
       const { accounts, chainId } = await connectAsync({ connector })
       const curAddress = first(accounts)
       if (!curAddress?.trim()) throw 'No address'
-      signLogin(curAddress, chainId)
+      setConnectOpen(false)
+      await signLogin(curAddress, chainId)
     } catch (e) {
       console.error('[connectWallet error]:', e)
       disconnectWallet()
@@ -33,6 +38,7 @@ export const useWallet = () => {
     try {
       await disconnectAsync()
       logout()
+      setUserInfo(null)
     } catch (e) {
       console.error(`[disconnectWallet error] : ${e}`)
     }

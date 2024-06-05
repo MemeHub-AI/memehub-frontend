@@ -16,10 +16,7 @@ export const useWatchAccount = (
     const { address, chainId } = account
     const { address: prevAddress } = prevAccount
 
-    // First change is connect on mount.
-    if (!prevAddress) return
-
-    // Same address, no change.
+    if (!prevAddress || !address) return
     if (address === prevAddress) return
 
     logout()

@@ -13,14 +13,12 @@ export const useSign = () => {
       onMutate: () => toast.loading(t('sign.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
       onError: () => toast.error(t('sign.failed')),
-      onSuccess: () => {
-        setIsSigned(true)
-        toast.success(t('sign.success'))
-      },
+      onSuccess: () => setIsSigned(true),
     },
   })
 
   const signAsync = async (salt = '') => {
+    console.log('sign')
     return signMessageAsync({
       account: address,
       connector,
