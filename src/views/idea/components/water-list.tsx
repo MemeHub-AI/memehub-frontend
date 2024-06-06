@@ -3,11 +3,12 @@ import CustomSuspense from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { TokenInfo } from './token-info'
-import { CreatedUser } from './created-user'
+import { TokenList } from './token-list'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useWindowScroll } from 'react-use'
+import { useWindowScroll, useWindowSize } from 'react-use'
 import { queryClient } from '@/components/app-providers'
+import { IdeaDataList } from '@/api/idea/type'
 
 interface Props {
   newsId: string
@@ -17,6 +18,7 @@ interface Props {
 export const WaterList = ({ newsId, type }: Props) => {
   const { t } = useTranslation()
   const { y } = useWindowScroll()
+  const { width } = useWindowSize()
 
   const queryKey = [ideaApi.getIdeaList.name, newsId, type]
 
@@ -40,10 +42,25 @@ export const WaterList = ({ newsId, type }: Props) => {
     getNextPageParam: (_, __, page) => {
       return page + 1
     },
-    select: (data) => {
+    select: (result) => {
+      const list = result.pages.flatMap((p) => p.data.results)
+
+      let count = 0
+      const limit = width > 1550 ? 4 : width > 1220 ? 3 : width > 600 ? 2 : 1
+
+      const waterfallList = new Array<IdeaDataList[]>(limit)
+        .fill([])
+        .map(() => [] as IdeaDataList[])
+
+      list?.forEach((item) => {
+        waterfallList[count].push(item!)
+        if (++count === limit) {
+          return (count = 0)
+        }
+      })
       return {
-        list: data.pages.flatMap((p) => p.data.results),
-        total: data.pages[0]?.data.count,
+        list: waterfallList,
+        total: result.pages[0]?.data.count,
       }
     },
   })
@@ -59,8 +76,6 @@ export const WaterList = ({ newsId, type }: Props) => {
       !isFetching &&
       !isFetchNextPageError
     ) {
-      console.log('fetchNextPage')
-
       // 加载下一页的数据
       fetchNextPage()
     }
@@ -79,26 +94,30 @@ export const WaterList = ({ newsId, type }: Props) => {
       <CustomSuspense
         isPending={isLoading}
         fallback={<WaterSkeleton />}
-        nullback={<div className="mt-5">{t('no.idea')}</div>}
-        className="columns-1 md:columns-2 xl:columns-3 gap-4 space-y-4 pb-6"
+        nullback={<div className="mt-5 text-gray-500">{t('no.idea')}</div>}
       >
-        {waterfallList?.list?.map((item, i) => {
-          return (
-            <div
-              key={i}
-              className="flex-1 max-sm:w-full max-sm:max-w-full break-inside-avoid"
-            >
-              <div
-                key={item?.id}
-                className="mb-3 border-black rounded-lg border-2 py-2 max-sm:py-3"
-              >
-                <TokenInfo ideaData={item} />
-
-                <CreatedUser ideaData={item} />
-              </div>
-            </div>
-          )
-        })}
+        {waterfallList?.list?.length ? (
+          <div className="flex gap-4 pb-6">
+            {waterfallList.list?.map((cols, i) => {
+              return (
+                <div
+                  key={i}
+                  className="flex-1  max-sm:w-full max-sm:max-w-full"
+                >
+                  {cols.map((item) => (
+                    <div
+                      key={item.id}
+                      className="mb-2 border-black rounded-lg border-2 py-2 max-sm:py-3"
+                    >
+                      <TokenInfo ideaData={item} />
+                      <TokenList ideaData={item} />
+                    </div>
+                  ))}
+                </div>
+              )
+            })}
+          </div>
+        ) : null}
       </CustomSuspense>
       {isFetching && !isLoading ? (
         <div className="text-center my-5">{t('loading')}</div>
@@ -108,19 +127,23 @@ export const WaterList = ({ newsId, type }: Props) => {
 }
 
 const WaterSkeleton = () => {
-  return Array.from({ length: 3 }).map((_, i) => (
-    <div className="flex gap-2 relative" key={i}>
-      <div className="w-full my-2 flex flex-col gap-2 mr-2">
-        <Skeleton className="w-1/2 h-4" />
-        <Skeleton className="w-1/3 h-3" />
-        <Skeleton className="w-[70%] h-3" />
-        <Skeleton className="w-1/2 h-4" />
-        <Skeleton className="w-1/3 h-3" />
-        <Skeleton className="w-[70%] h-3" />
-        <Skeleton className="w-1/2 h-3" />
-        <Skeleton className="w-full h-5 rounded-full mt-2" />
-      </div>
-      <Skeleton className="w-8 h-8 absolute right-2 top-2" />
+  return (
+    <div className="grid grid-cols-2 gap-4 xl:grid-cols-3 max-sm:grid-cols-1 max-sm:gap-2">
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div className="flex gap-2 relative" key={i}>
+          <div className="w-full my-2 flex flex-col gap-2 mr-2">
+            <Skeleton className="w-1/2 h-4" />
+            <Skeleton className="w-1/3 h-3" />
+            <Skeleton className="w-[70%] h-3" />
+            <Skeleton className="w-1/2 h-4" />
+            <Skeleton className="w-1/3 h-3" />
+            <Skeleton className="w-[70%] h-3" />
+            <Skeleton className="w-1/2 h-3" />
+            <Skeleton className="w-full h-5 rounded-full mt-2" />
+          </div>
+          <Skeleton className="w-8 h-8 absolute right-2 top-2" />
+        </div>
+      ))}
     </div>
-  ))
+  )
 }

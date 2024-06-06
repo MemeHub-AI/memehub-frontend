@@ -7,11 +7,10 @@ import { cn } from '@/lib/utils'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   news: MemeInfoDialogData
-  onMeme: () => any
   onClick?: () => any
 }
 
-export const NewsCard = ({ news, onMeme, onClick }: Props) => {
+export const NewsCard = ({ news, onClick }: Props) => {
   const { t } = useTranslation()
 
   return (

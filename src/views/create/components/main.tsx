@@ -20,8 +20,7 @@ export const Main = (props: Props) => {
   const { className, tab, setTab } = props
   const { t } = useTranslation()
 
-  const { newsListData, aiMemeInfo, formData, deployResult } =
-    useContext(CreateTokenContext)
+  const { formData, deployResult } = useContext(CreateTokenContext)
 
   const {
     show,
@@ -41,15 +40,7 @@ export const Main = (props: Props) => {
     >
       <Title className="w-fit max-sm:mt-3">{t('create.new')}</Title>
       <div className="sm:hidden">
-        <MobileQpportunityMoonshot
-          newsListData={newsListData}
-          isDialogLoading={aiMemeInfo?.isLoadingMemeInfo}
-          onConfirmDialog={() =>
-            aiMemeInfo?.getAIMemeInfo(newsListData?.memeit?.title || '')
-          }
-          tab={tab}
-          setTab={setTab}
-        ></MobileQpportunityMoonshot>
+        <MobileQpportunityMoonshot defalutTab={1}></MobileQpportunityMoonshot>
       </div>
 
       <AIIdeaBar
