@@ -15,7 +15,7 @@ interface Props extends ComponentProps<'input'> {}
 
 export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
-  const [quoteTokenAmount, setQuoteTokenAmount] = useState(0)
+  const [quoteTokenAmount, setQuoteTokenAmount] = useState('0')
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
@@ -29,14 +29,14 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const calcBuyTokenAmount = () => {
     getBuyTokenAmount(tokenAddr, value as string).then((weiAmount) => {
       const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
-      setQuoteTokenAmount(Number(amount))
+      setQuoteTokenAmount(amount)
     })
   }
 
   const calcSellTokenAmount = () => {
     getSellTokenAmount(tokenAddr, value as string).then((weiAmount) => {
       const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
-      setQuoteTokenAmount(Number(amount))
+      setQuoteTokenAmount(amount)
     })
   }
 
