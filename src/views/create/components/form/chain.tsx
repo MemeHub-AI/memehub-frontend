@@ -20,6 +20,7 @@ import {
   SelectTrigger,
 } from '@/components/ui/select'
 import clsx from 'clsx'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -29,6 +30,7 @@ export const FormChain = ({ formData }: Props) => {
   const { switchChain } = useSwitchChain()
   const { t } = useTranslation()
   const [show, setShow] = useState(false)
+  const { findChain } = useChainsStore()
 
   const isSelect = (v: string) => {
     return chains.findIndex((c) => c.name === v) > 6
@@ -104,34 +106,33 @@ export const FormChain = ({ formData }: Props) => {
                       value={field.value as string}
                       onValueChange={(v) => {
                         setShow(false)
-                        if (v === '') return
-                        form?.setValue(formFields?.chainName!, v)
+                        const chain = findChain(v)
+                        if (!chain) return
+                        form?.setValue(formFields?.chainName!, chain.name)
+                        switchChain({ chainId: Number(chain.id) })
                       }}
                     >
                       <SelectTrigger
                         showArrow={false}
-                        className="!border-0 !rounded-none !p-0 !translate-x-0 !translate-y-0 flex justify-center items-center "
+                        className="!border-0 !rounded-none !p-0 !translate-x-0 !translate-y-0 flex justify-center items-center"
                       >
                         {isSelect(field.value! as string) ? (
                           <img
-                            src={
-                              chains.find((c) => c.name === field.value)?.logo
-                            }
+                            src={findChain(field.value as string)?.logo}
                             className="w-[27px] h-[27px] bg-black"
-                          ></img>
+                          />
                         ) : (
                           <IoIosMore size={30} />
                         )}
                       </SelectTrigger>
-                      <SelectContent className="!w-[60px]">
+                      <SelectContent className="min-w-2">
                         {chains.slice(7)?.map((c) => (
                           <SelectItem
+                            showCheck={false}
+                            isActive={c.name === field.value}
                             key={c.name}
                             value={c.name}
-                            onClick={() => {
-                              setShow(true)
-                              switchChain({ chainId: Number(c.id) })
-                            }}
+                            className="mb-1"
                           >
                             <img
                               src={c.logo}
