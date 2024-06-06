@@ -10,6 +10,7 @@ import { useTradeInfo } from '../hooks/use-trade-info'
 import { cn } from '@/lib/utils'
 import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
+import { CustomSuspense } from '@/components/custom-suspense'
 
 interface Props extends ComponentProps<'input'> {}
 
@@ -87,24 +88,25 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
           )
         }
       />
-      <div className="text-zinc-500 text-xs flex justify-between mt-1 mr-1">
-        {isLoadingTokenInfo ? (
-          <Skeleton className="w-20 h-4" />
-        ) : (
-          <span>
-            {isBuy
-              ? `${baseTokenAmount} ${nativeSymbol} ≈ ${quoteTokenAmount} ${tokenSymbol}`
-              : `${baseTokenAmount} ${tokenSymbol} ≈ ${quoteTokenAmount} ${nativeSymbol}`}
-          </span>
-        )}
-        {isLoadingTokenInfo ? (
-          <Skeleton className="w-20 h-4" />
-        ) : (
-          <span>
-            {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
-          </span>
-        )}
-      </div>
+      <CustomSuspense
+        isPending={isLoadingTokenInfo}
+        fallback={
+          <>
+            <Skeleton className="w-20 h-4" />
+            <Skeleton className="w-24 h-4" />
+          </>
+        }
+        className="text-zinc-500 text-xs flex flex-col pt-1 gap-1"
+      >
+        <span>
+          {isBuy
+            ? `${baseTokenAmount} ${nativeSymbol} ≈ ${quoteTokenAmount} ${tokenSymbol}`
+            : `${baseTokenAmount} ${tokenSymbol} ≈ ${quoteTokenAmount} ${nativeSymbol}`}
+        </span>
+        <span>
+          {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
+        </span>
+      </CustomSuspense>
     </>
   )
 }
