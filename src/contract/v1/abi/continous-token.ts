@@ -1,4 +1,4 @@
-export const continousTokenAbi = [
+export const v1ContinousTokenAbi = [
   {
     inputs: [
       {

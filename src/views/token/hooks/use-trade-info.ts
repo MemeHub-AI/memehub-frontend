@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
 
 import { SupportedChainId, wagmiConfig } from '@/config/wagmi'
-import { continousTokenAbi } from '@/contract/abi/continous-token'
+import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const useTradeInfo = () => {
@@ -25,7 +25,7 @@ export const useTradeInfo = () => {
     isFetching: isFetchingTokenBalance,
     refetch: refetchTokenBalance,
   } = useReadContract({
-    abi: continousTokenAbi,
+    abi: v1ContinousTokenAbi,
     address: tokenAddress,
     functionName: 'balanceOf',
     chainId,
@@ -38,7 +38,7 @@ export const useTradeInfo = () => {
   // Get buy token amount from native token.
   const getBuyTokenAmount = async (address: Address, nativeToken: string) => {
     const data = await readContract(wagmiConfig, {
-      abi: continousTokenAbi,
+      abi: v1ContinousTokenAbi,
       address,
       functionName: 'calculateContinuousMintReturn',
       chainId: chainId as SupportedChainId,
@@ -54,7 +54,7 @@ export const useTradeInfo = () => {
   // Get sell token amount from native token.
   const getSellTokenAmount = async (address: Address, nativeToken: string) => {
     const data = await readContract(wagmiConfig, {
-      abi: continousTokenAbi,
+      abi: v1ContinousTokenAbi,
       address,
       functionName: 'calculateContinuousBurnReturn',
       chainId: chainId as SupportedChainId,
@@ -73,7 +73,7 @@ export const useTradeInfo = () => {
     nativeToken: string
   ) => {
     const data = await readContract(wagmiConfig, {
-      abi: continousTokenAbi,
+      abi: v1ContinousTokenAbi,
       address,
       functionName: 'fundCostByContinuous',
       chainId: chainId as SupportedChainId,
@@ -89,7 +89,7 @@ export const useTradeInfo = () => {
   // Get token price.
   const getPrice = async (address: Address) => {
     const data = await readContract(wagmiConfig, {
-      abi: continousTokenAbi,
+      abi: v1ContinousTokenAbi,
       address,
       functionName: 'getPrice',
       chainId: chainId as SupportedChainId,
@@ -112,13 +112,13 @@ export const useTradeInfo = () => {
       const [t, c] = await readContracts(wagmiConfig, {
         contracts: [
           {
-            abi: continousTokenAbi,
+            abi: v1ContinousTokenAbi,
             address,
             chainId: overrideChainId,
             functionName: 'ETH_AMOUNT',
           },
           {
-            abi: continousTokenAbi,
+            abi: v1ContinousTokenAbi,
             address,
             chainId: overrideChainId,
             functionName: 'raiseEthAmount',
@@ -135,7 +135,7 @@ export const useTradeInfo = () => {
   // Get avaiable to buy of token amount.
   const getAvailableTokenAmount = async (address: Address) => {
     const data = await readContract(wagmiConfig, {
-      abi: continousTokenAbi,
+      abi: v1ContinousTokenAbi,
       address,
       functionName: 'CAN_MINI',
       chainId: chainId as SupportedChainId,
