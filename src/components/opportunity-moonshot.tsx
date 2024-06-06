@@ -163,7 +163,7 @@ export const MobileQpportunityMoonshot = ({
 }: Props) => {
   return (
     <Drawer>
-      <DrawerTrigger>{children}</DrawerTrigger>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent>
         <OpportunityMoonshot
           className="relative"
