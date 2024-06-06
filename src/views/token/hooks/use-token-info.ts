@@ -45,10 +45,12 @@ export const useTokenInfo = () => {
     data: { data: tokenInfo } = {},
     isLoading: isLoadingTokenInfo,
     isFetching: isFetchingTokenInfo,
+    isRefetching: isRefetchingTokenInfo,
   } = useQuery({
     enabled: !!tokenAddr,
     queryKey: [tokenApi.details.name, tokenAddr],
     queryFn: () => tokenApi.details(tokenAddr),
+    refetchOnWindowFocus: false,
   })
 
   return {
@@ -59,6 +61,7 @@ export const useTokenInfo = () => {
     isFetchingProgress,
     isLoadingTokenInfo,
     isFetchingTokenInfo,
+    isRefetchingTokenInfo,
     refetchInfo,
   }
 }

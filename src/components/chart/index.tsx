@@ -22,19 +22,16 @@ export const Chart = memo(() => {
   const { chart } = useChartStore()
 
   useEffect(() => {
-    const tokenAddr = (query.address || '') as string
-    if (!chartRef.current || !tokenInfo || isEmpty(tokenAddr)) {
-      return
-    }
+    if (!chartRef.current || isEmpty(addr) || !tokenInfo) return
 
     createChart(chartRef.current, {
       symbol: tokenInfo.ticker,
       interval: getInterval(chain, addr) || '1m',
-      tokenAddr,
+      tokenAddr: addr,
     })
 
     return removeChart
-  }, [query, tokenInfo])
+  }, [tokenInfo])
 
   return (
     <>
