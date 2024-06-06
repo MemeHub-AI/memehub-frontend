@@ -8,13 +8,12 @@ export const useChainInfo = (nameOrId?: string | number) => {
   const { chain: accountChain } = useAccount()
   const { findChain } = useChainsStore()
 
-  const chainNameOrId = String(
-    nameOrId || query.chain || accountChain?.name || ''
+  const chain = findChain(
+    String(nameOrId || query.chain || accountChain?.id || '')
   )
-  const chain = findChain(chainNameOrId)
 
   return {
-    chainName: chain?.name,
-    chainId: chain?.id,
+    chainName: chain?.name || '',
+    chainId: Number(chain?.id || 0),
   }
 }
