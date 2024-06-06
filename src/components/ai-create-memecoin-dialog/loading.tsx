@@ -48,7 +48,6 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     } finally {
       setLoadingInfoDialog(false)
       setLoadingInfo(false)
-      debugger
     }
   }
 

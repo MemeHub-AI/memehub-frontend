@@ -25,8 +25,6 @@ export const FormLogo = ({ formData }: Props) => {
   const { form, formFields } = formData
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
 
-  console.log(loadingLogo)
-
   const createLogo = (e: any) => {
     e.stopPropagation()
     e.preventDefault()

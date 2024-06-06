@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { useDeployV2 } from './use-deploy-v2'
 
 export const formFields = {
   fullname: 'fullname',
@@ -35,6 +36,7 @@ export const useCreateTokenForm = (
   const { chains, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
   const { deploy, isDeploying } = useDeployResult
+  const { deploy: deployV2 } = useDeployV2()
 
   const require = {
     message: t('fields.required'),
@@ -82,17 +84,19 @@ export const useCreateTokenForm = (
       return
     }
 
-    deploy({
+    const params = {
       name: values.fullname! as string,
       ticker: values.symbol! as string,
       desc: values.description! as string,
       image: values.logo! as string,
       chain: values.chainName as string,
-      // Optional.
       twitter_url: values.twitter as string,
       telegram_url: values.telegram as string,
       website: values.website as string,
-    })
+    }
+
+    return deployV2(params)
+    deploy(params)
   }
 
   return {

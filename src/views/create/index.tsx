@@ -9,9 +9,11 @@ import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { CreateTokenContext } from './context'
 import { AICreateMemecoinDialogLoading } from '@/components/ai-create-memecoin-dialog/loading'
+import { useDeployV2 } from './hooks/use-deploy-v2'
 
 export const CreatePage = () => {
   const deployResult = useDeployV1()
+  // const deployResult = useDeployV2()
   const [tab, setTab] = useState(0)
   const formData = useCreateTokenForm(deployResult)
 
