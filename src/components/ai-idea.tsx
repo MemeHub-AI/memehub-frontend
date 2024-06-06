@@ -38,7 +38,7 @@ export const AIIdeaBar = (props: Props) => {
       <div className="flex items-center">
         <img
           src="/images/ai.png"
-          alt=""
+          alt="img"
           className="w-[60px] h-[60px] rounded-sm mr-5"
         />
         <div>{t('ai.generate.bio')}</div>

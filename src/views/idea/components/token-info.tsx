@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import clsx from 'clsx'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { Img } from '@/components/img'
 
 interface Props {
   ideaData: IdeaDataList | undefined
@@ -115,10 +116,10 @@ export const TokenInfo = ({ ideaData }: Props) => {
 
       <div className="flex px-2">
         {type === '2' && (
-          <img
+          <Img
             src={ideaData?.logo}
             alt="img"
-            className="w-20 h-20 rounded mr-2"
+            className="w-20 h-20 rounded mr-2 shrink-0"
           />
         )}
         <Desc description={ideaData?.description ?? ''}></Desc>
@@ -141,7 +142,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
           contentProps={{ className: 'max-w-[350px]' }}
         >
           <DialogTitle>{ideaData?.name}</DialogTitle>
-          <img
+          <Img
             src={ideaData?.logo}
             alt="logo"
             className="w-20 h-20 rounded object-cover"
@@ -161,7 +162,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
         >
           <DialogTitle>{ideaData?.name}</DialogTitle>
           <div className="flex items-center gap-2">
-            <img
+            <Img
               src={showTokens.chainData.logo}
               alt="Logo"
               className="w-8 h-8 rounded-full object-cover"
@@ -173,7 +174,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
               )}
             </span>
             {ideaData?.logo ? (
-              <img
+              <Img
                 src={ideaData?.logo}
                 alt="Logo"
                 className="w-12 h-12 rounded-sm object-cover"

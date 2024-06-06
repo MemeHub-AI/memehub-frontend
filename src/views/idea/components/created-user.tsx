@@ -7,6 +7,7 @@ import { IdeaDataList, IdeaTokens } from '@/api/idea/type'
 import { Dialog, DialogTitle } from '@/components/ui/dialog'
 import { fmt } from '@/utils/fmt'
 import { Routes } from '@/routes'
+import { Img } from '@/components/img'
 
 interface Props {
   ideaData: IdeaDataList | undefined
@@ -20,9 +21,9 @@ export const CreatedUser = ({ ideaData }: Props) => {
   const handleList = (list: IdeaTokens[]) => {
     return list.map((user) => {
       return (
-        <div className=" mt-2 flex justify-between items-center ">
+        <div className="mt-2 flex justify-between items-center" key={user.id}>
           <div className="flex items-center">
-            <img
+            <Img
               src={user.logo}
               alt="Logo"
               className="w-[25px] h-[25px] object-cover rounded-md mr-2"
