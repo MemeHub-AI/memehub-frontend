@@ -74,6 +74,7 @@ export const FormLogo = ({ formData }: Props) => {
       Router.events.off('routeChangeStart', cb)
     }
   }, [])
+
   return (
     <div>
       <FormField
@@ -139,12 +140,10 @@ export const FormLogo = ({ formData }: Props) => {
             </FormControl>
             <FormMessage />
 
-            {!loadingLogo && field.value?.length ? (
-              <Button className="mt-2 mb-2" onClick={createLogo}>
-                <LuRefreshCcw className="mr-2" />
-                {t('create.ai.logo')}
-              </Button>
-            ) : null}
+            <Button className="mt-2 mb-2" onClick={createLogo}>
+              <LuRefreshCcw className="mr-2" />
+              {t('create.ai.logo')}
+            </Button>
           </FormItem>
         )}
       />

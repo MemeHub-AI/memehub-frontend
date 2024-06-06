@@ -180,7 +180,11 @@ export const PosterForm = ({ formData }: Props) => {
             <FaChevronRight size={26} onClick={onRight}></FaChevronRight>
           </div>
           <img
-            src={form?.getValues(formFields?.poster!)?.[index] as string}
+            src={
+              form
+                ?.getValues(formFields?.poster!)
+                ?.[index]?.replace('mini', 'origin') as string
+            }
             alt="Poster"
             className="w-full rounded-md mb-4 select-none"
           />
@@ -203,7 +207,11 @@ export const PosterForm = ({ formData }: Props) => {
           <div
             className="mt-5  flex justify-center cursor-pointer"
             onClick={() =>
-              open((form?.getValues(formFields?.poster!) as string[])[index])
+              open(
+                (form?.getValues(formFields?.poster!) as string[])[
+                  index
+                ].replace('mini', 'origin')
+              )
             }
           >
             <Button>{t('download')}</Button>

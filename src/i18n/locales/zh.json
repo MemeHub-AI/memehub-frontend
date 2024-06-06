@@ -279,7 +279,7 @@
   "liquidity": "流动性: ",
   "go.bold.man": "未来的千万富翁，MemeHub AI为阁下联想到了以下创意，Go Bold man",
   "create.now": "创建代币",
-  "no.idea": "没有创意数据",
+  "no.idea": "目前还没创意，AI正在抓紧制作中，敬请期待～",
   "more": "展开",
   "hidden": "折叠",
   "virtual-liquidity": "虚拟流动性",
@@ -298,5 +298,6 @@
   "login.addr.empty": "找不到您的钱包地址",
   "login.chain.empty": "找不到链",
   "switch.ai.poster": "换一批海报",
-  "create.ai.logo": "重新生成"
+  "create.ai.logo": "重新生成",
+  "no.data.news": "暂时没有热点新闻"
 }
