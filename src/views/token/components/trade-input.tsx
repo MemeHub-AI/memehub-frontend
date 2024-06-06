@@ -1,7 +1,8 @@
-import React, { useEffect, useState, type ComponentProps } from 'react'
+import React, { useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatEther, type Address } from 'viem'
 import { BigNumber } from 'bignumber.js'
+import { useDebounce } from 'react-use'
 
 import { Input } from '@/components/ui/input'
 import { useTradeContext } from '@/contexts/trade'
@@ -12,7 +13,9 @@ import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
 
-interface Props extends ComponentProps<'input'> {}
+interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
+  onChange?: (value: string) => void
+}
 
 export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
@@ -41,11 +44,23 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     })
   }
 
-  useEffect(() => {
+  const calcAmount = () => {
     if (!tokenAddr) return
     if (isBuy) return calcBuyTokenAmount()
     if (isSell) return calcSellTokenAmount()
-  }, [value, isBuy, isSell, isTraded])
+  }
+
+  const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    if (BigNumber(target.value).lt(0)) return
+    if (BigNumber(balance).lte(0)) return
+    if (BigNumber(target.value).gt(balance)) {
+      return onChange?.(balance)
+    }
+
+    onChange?.(target.value)
+  }
+
+  useDebounce(calcAmount, 500, [value, isBuy, isSell, isTraded])
 
   return (
     <>
@@ -55,11 +70,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         inputClass="pr-1"
         type="number"
         value={value}
-        onChange={(e) => {
-          // Cannot enter less than zero.
-          if (BigNumber(e.target.value).lt(0)) return
-          onChange?.(e)
-        }}
+        onChange={onValueChange}
         disabled={disabled}
         endIcon={
           isLoadingTokenInfo ? (
