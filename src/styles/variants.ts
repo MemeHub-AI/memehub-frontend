@@ -1,6 +1,6 @@
 import { cva, VariantProps } from 'class-variance-authority'
 
-export const shadowVariants = cva('transition-all ', {
+export const shadowVariants = cva('transition-all duration-100', {
   variants: {
     shadow: {
       none: '',
@@ -15,7 +15,7 @@ export const shadowVariants = cva('transition-all ', {
 
 export type ShadowVariantsProps = VariantProps<typeof shadowVariants>
 
-export const shadowBorderVariants = cva('transition-all ', {
+export const shadowBorderVariants = cva('transition-all duration-100', {
   variants: {
     shadow: {
       none: '',
