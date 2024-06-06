@@ -34,6 +34,12 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     setLoadingInfo(true)
     memeInfoSign = new AbortController()
     try {
+      formHook.form.setValue(formHook.formFields.fullname, '')
+      formHook.form.setValue(formHook.formFields.symbol, '')
+      formHook.form.setValue(formHook.formFields.description, '')
+
+      toast.loading(t('create.info.loading'))
+
       const { data } = await aiApi.getMemeInfo(
         {
           input: info!.name!,
@@ -46,6 +52,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     } catch (e) {
       toast.error(t('create.info.error'))
     } finally {
+      toast.dismiss()
       setLoadingInfoDialog(false)
       setLoadingInfo(false)
     }
@@ -87,6 +94,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     Router.events.on('routeChangeStart', cb)
 
     return () => {
+      toast.dismiss()
       Router.events.off('routeChangeStart', cb)
     }
   }, [])

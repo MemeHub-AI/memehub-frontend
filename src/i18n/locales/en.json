@@ -306,5 +306,7 @@
   "login.chain.empty": "Cannot find chain",
   "switch.ai.poster": "Change the posters",
   "create.ai.logo": "AI-generated",
-  "no.data.news": "No hot news yet"
+  "no.data.news": "No hot news yet",
+  "meme.loading.tip": "AI is generating meme information, please wait a moment",
+  "create.info.loading": "AI is generating meme information..."
 }

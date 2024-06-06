@@ -142,7 +142,7 @@ export const FormLogo = ({ formData }: Props) => {
 
             {!loadingLogo ? (
               <Button className="mt-2 mb-2" onClick={createLogo}>
-                <LuRefreshCcw className="mr-2" />
+                <LuRefreshCcw className="mr-1" />
                 {t('create.ai.logo')}
               </Button>
             ) : null}

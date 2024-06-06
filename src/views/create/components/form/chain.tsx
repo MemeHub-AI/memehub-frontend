@@ -1,3 +1,9 @@
+import { useState } from 'react'
+import { IoIosMore } from 'react-icons/io'
+import { clsx } from 'clsx'
+import { useTranslation } from 'react-i18next'
+import { useSwitchChain } from 'wagmi'
+
 import {
   FormControl,
   FormField,
@@ -8,18 +14,13 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { useCreateTokenForm } from '../../hooks/use-form'
 import { fmt } from '@/utils/fmt'
-import { useTranslation } from 'react-i18next'
-import { useSwitchChain } from 'wagmi'
 import { cn } from '@/lib/utils'
-import { IoIosMore } from 'react-icons/io'
-import { useState } from 'react'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
 } from '@/components/ui/select'
-import clsx from 'clsx'
 import { useChainsStore } from '@/stores/use-chains-store'
 
 interface Props {

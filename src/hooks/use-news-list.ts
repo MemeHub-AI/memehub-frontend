@@ -80,7 +80,6 @@ export const useNewsList = (options?: Options) => {
               })),
             }
         } catch (error) {
-          throw error
           await utilTime.wait(2000)
           result = await getData()
         }
