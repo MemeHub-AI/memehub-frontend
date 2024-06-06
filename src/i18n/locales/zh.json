@@ -299,5 +299,7 @@
   "login.chain.empty": "找不到链",
   "switch.ai.poster": "换一批海报",
   "create.ai.logo": "重新生成",
-  "no.data.news": "暂时没有热点新闻"
+  "no.data.news": "暂时没有热点新闻",
+  "meme.loading.tip": "AI正在生成Meme信息请稍等",
+  "create.info.loading": "AI正在生成MEME信息中..."
 }

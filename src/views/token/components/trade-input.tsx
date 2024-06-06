@@ -1,7 +1,8 @@
-import React, { useEffect, useState, type ComponentProps } from 'react'
+import React, { useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatEther, type Address } from 'viem'
 import { BigNumber } from 'bignumber.js'
+import { useDebounce } from 'react-use'
 
 import { Input } from '@/components/ui/input'
 import { useTradeContext } from '@/contexts/trade'
@@ -10,12 +11,15 @@ import { useTradeInfo } from '../hooks/use-trade-info'
 import { cn } from '@/lib/utils'
 import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
+import { CustomSuspense } from '@/components/custom-suspense'
 
-interface Props extends ComponentProps<'input'> {}
+interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
+  onChange?: (value: string) => void
+}
 
 export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
-  const [quoteTokenAmount, setQuoteTokenAmount] = useState(0)
+  const [quoteTokenAmount, setQuoteTokenAmount] = useState('0')
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
@@ -29,22 +33,34 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const calcBuyTokenAmount = () => {
     getBuyTokenAmount(tokenAddr, value as string).then((weiAmount) => {
       const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
-      setQuoteTokenAmount(Number(amount))
+      setQuoteTokenAmount(amount)
     })
   }
 
   const calcSellTokenAmount = () => {
     getSellTokenAmount(tokenAddr, value as string).then((weiAmount) => {
       const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
-      setQuoteTokenAmount(Number(amount))
+      setQuoteTokenAmount(amount)
     })
   }
 
-  useEffect(() => {
+  const calcAmount = () => {
     if (!tokenAddr) return
     if (isBuy) return calcBuyTokenAmount()
     if (isSell) return calcSellTokenAmount()
-  }, [value, isBuy, isSell, isTraded])
+  }
+
+  const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    if (BigNumber(target.value).lt(0)) return
+    if (BigNumber(balance).lte(0)) return
+    if (BigNumber(target.value).gt(balance)) {
+      return onChange?.(balance)
+    }
+
+    onChange?.(target.value)
+  }
+
+  useDebounce(calcAmount, 500, [value, isBuy, isSell, isTraded])
 
   return (
     <>
@@ -54,11 +70,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         inputClass="pr-1"
         type="number"
         value={value}
-        onChange={(e) => {
-          // Cannot enter less than zero.
-          if (BigNumber(e.target.value).lt(0)) return
-          onChange?.(e)
-        }}
+        onChange={onValueChange}
         disabled={disabled}
         endIcon={
           isLoadingTokenInfo ? (
@@ -87,24 +99,25 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
           )
         }
       />
-      <div className="text-zinc-500 text-xs flex justify-between mt-1 mr-1">
-        {isLoadingTokenInfo ? (
-          <Skeleton className="w-20 h-4" />
-        ) : (
-          <span>
-            {isBuy
-              ? `${baseTokenAmount} ${nativeSymbol} ≈ ${quoteTokenAmount} ${tokenSymbol}`
-              : `${baseTokenAmount} ${tokenSymbol} ≈ ${quoteTokenAmount} ${nativeSymbol}`}
-          </span>
-        )}
-        {isLoadingTokenInfo ? (
-          <Skeleton className="w-20 h-4" />
-        ) : (
-          <span>
-            {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
-          </span>
-        )}
-      </div>
+      <CustomSuspense
+        isPending={isLoadingTokenInfo}
+        fallback={
+          <>
+            <Skeleton className="w-20 h-4" />
+            <Skeleton className="w-24 h-4" />
+          </>
+        }
+        className="text-zinc-500 text-xs flex flex-col pt-1 gap-1"
+      >
+        <span>
+          {isBuy
+            ? `${baseTokenAmount} ${nativeSymbol} ≈ ${quoteTokenAmount} ${tokenSymbol}`
+            : `${baseTokenAmount} ${tokenSymbol} ≈ ${quoteTokenAmount} ${nativeSymbol}`}
+        </span>
+        <span>
+          {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
+        </span>
+      </CustomSuspense>
     </>
   )
 }

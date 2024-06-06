@@ -7,6 +7,7 @@ import { IdeaDataList, IdeaTokens } from '@/api/idea/type'
 import { Dialog, DialogTitle } from '@/components/ui/dialog'
 import { fmt } from '@/utils/fmt'
 import { Routes } from '@/routes'
+import { Img } from '@/components/img'
 
 interface Props {
   ideaData: IdeaDataList | undefined
@@ -20,12 +21,9 @@ export const TokenList = ({ ideaData }: Props) => {
   const handleList = (tokenList: IdeaTokens[]) => {
     return tokenList.map((token) => {
       return (
-        <div
-          key={token.id}
-          className=" mt-2 flex justify-between items-center "
-        >
+        <div className="mt-2 flex justify-between items-center" key={token.id}>
           <div className="flex items-center">
-            <img
+            <Img
               src={token.logo}
               alt="Logo"
               className="w-[25px] h-[25px] object-cover rounded-md mr-2"

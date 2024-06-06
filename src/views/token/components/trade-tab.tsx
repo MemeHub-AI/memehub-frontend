@@ -158,7 +158,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             {/* Input */}
             <TradeInput
               value={value}
-              onChange={({ target }) => setValue(target.value)}
+              onChange={setValue}
               disabled={isSubmitting}
             />
 

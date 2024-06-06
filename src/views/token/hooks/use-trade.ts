@@ -10,14 +10,12 @@ import { useInternalTrade } from './use-internal-trade'
 import { useUniswapV2 } from './use-uniswap-v2'
 import { useTradeInfo } from './use-trade-info'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { useTokenContext } from '@/contexts/token'
 
 export const useTrade = () => {
   const { t } = useTranslation()
   const [isInternalTrade, setIsInternalTrade] = useState(true)
   const { query } = useRouter()
   const token = (query.address || '') as Address
-  const { refetchInfo } = useTokenContext()
 
   const { checkForOverflow } = useTradeInfo()
   const {
@@ -45,7 +43,6 @@ export const useTrade = () => {
     onError: () => toast.error(t('trade.failed')),
     onFillay: () => {
       resetTrade()
-      refetchInfo()
       toast.dismiss()
     },
   })

@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { MemeInfoDialogData } from '@/api/news/types'
 import { cn } from '@/lib/utils'
+import { Img } from '../img'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   news: MemeInfoDialogData
@@ -21,7 +22,7 @@ export const NewsCard = ({ news, onClick }: Props) => {
       )}
       onClick={onClick}
     >
-      <img
+      <Img
         src={news.image}
         alt="logo"
         className="w-[100px] h-[100px] flex-shrink-0 object-cover rounded"

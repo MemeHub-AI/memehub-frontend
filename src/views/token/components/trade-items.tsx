@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { useTradeContext } from '@/contexts/trade'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useTokenContext } from '@/contexts/token'
-import CustomSuspense from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
 
 const buyItems = ['0.001', '0.01', '1']
@@ -40,12 +39,19 @@ export const TradeItems = (props: Props) => {
 
   return (
     <div className="flex gap-2 mt-3">
-      <Button size="xs" onClick={() => onResetClick?.('')} disabled={disabled}>
+      <Button
+        size="xs"
+        shadow="none"
+        variant="outline"
+        onClick={() => onResetClick?.('')}
+        disabled={disabled}
+      >
         {t('reset')}
       </Button>
       {(isBuy ? buyItems : sellItems).map((value, i) => (
         <Button
           size="xs"
+          shadow="none"
           key={i}
           onClick={() => {
             if (!isConnected) {

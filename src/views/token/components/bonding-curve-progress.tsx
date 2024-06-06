@@ -4,19 +4,18 @@ import { useTranslation } from 'react-i18next'
 
 import { Progress } from '@/components/ui/progress'
 import { useTokenContext } from '@/contexts/token'
+import { fmt } from '@/utils/fmt'
+import { useTokenProgress } from '../hooks/use-token-progress'
 
 export const BondingCurveProgress = () => {
   const { t } = useTranslation()
-  const { currentToken, totalToken, tokenInfo } = useTokenContext()
-  const percent = BigNumber(currentToken)
-    .div(totalToken)
-    .multipliedBy(100)
-    .toFixed(2)
-  const marketMax = BigNumber(totalToken).toFixed(3)
+  const { tokenInfo } = useTokenContext()
+  const { total, progress } = useTokenProgress()
+
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
-  const threshold = BigNumber(marketMax).lte(0)
+  const threshold = BigNumber(total).lte(0)
     ? t('threshold')
-    : ` ${marketMax} ${nativeSymbol} `
+    : ` ${fmt.decimals(total, 3)} ${nativeSymbol} `
 
   return (
     <div className="my-3 flex-1">
@@ -24,8 +23,7 @@ export const BondingCurveProgress = () => {
         className="h-5"
         indicatorClass="bg-blue-600"
         labelClass="text-white"
-        value={Number(percent)}
-        label={Number.isNaN(Number(percent)) ? '0' : percent}
+        value={Number(progress)}
       />
       <div className="text-zinc-400 text-xs mt-2">
         {t('bonding-curve.token').replace('{}', threshold)}

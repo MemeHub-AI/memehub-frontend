@@ -1,14 +1,15 @@
-import { ideaApi } from '@/api/idea'
-import CustomSuspense from '@/components/custom-suspense'
-import { Skeleton } from '@/components/ui/skeleton'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { TokenInfo } from './token-info'
-import { TokenList } from './token-list'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useWindowScroll, useWindowSize } from 'react-use'
+import { useInfiniteQuery } from '@tanstack/react-query'
+
+import { ideaApi } from '@/api/idea'
+import { CustomSuspense } from '@/components/custom-suspense'
+import { Skeleton } from '@/components/ui/skeleton'
+import { TokenInfo } from './token-info'
 import { queryClient } from '@/components/app-providers'
 import { IdeaDataList } from '@/api/idea/type'
+import { TokenList } from './token-list'
 
 interface Props {
   newsId: string

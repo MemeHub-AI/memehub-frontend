@@ -13,26 +13,13 @@ import { cn } from '@/lib/utils'
 
 export const TokenPage = () => {
   const { isMobile } = useResponsive()
-  const {
-    tokenInfo,
-    totalToken,
-    currentToken,
-    isLoadingProgress,
-    isLoadingTokenInfo,
-    isFetchingProgress,
-    isFetchingTokenInfo,
-    refetchInfo,
-  } = useTokenInfo()
-
+  const { tokenInfo, isLoadingTokenInfo, isFetchingTokenInfo, refetchInfo } =
+    useTokenInfo()
   return (
     <TokenProvider
       value={{
         tokenInfo,
-        totalToken,
-        currentToken,
-        isLoadingProgress,
         isLoadingTokenInfo,
-        isFetchingProgress,
         isFetchingTokenInfo,
         refetchInfo,
       }}

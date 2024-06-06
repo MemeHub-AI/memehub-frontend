@@ -6,8 +6,7 @@ import { cn } from '@/lib/utils'
 interface Props
   extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
   indicatorClass?: string
-  label?: React.ReactNode
-  labelFormat?: boolean
+  withLabel?: boolean
   labelClass?: string
 }
 
@@ -19,8 +18,7 @@ const Progress = React.forwardRef<
     className,
     value,
     indicatorClass,
-    label,
-    labelFormat = true,
+    withLabel = true,
     labelClass,
     ...restProps
   } = props
@@ -41,15 +39,14 @@ const Progress = React.forwardRef<
         )}
         style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
       />
-      {label && (
+      {withLabel && (
         <div
           className={cn(
             'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm',
             labelClass
           )}
         >
-          {label}
-          {labelFormat && '%'}
+          {value}%
         </div>
       )}
     </ProgressPrimitive.Root>
