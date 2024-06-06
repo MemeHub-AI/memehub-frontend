@@ -56,7 +56,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
     if (info?.name) {
       formHook.form.setValue(formHook.formFields.fullname, info?.name)
-      formHook.form.setValue(formHook.formFields.symbol, info?.name)
+      formHook.form.setValue(formHook.formFields.symbol, info?.symbol)
     }
 
     if (info?.description) {
