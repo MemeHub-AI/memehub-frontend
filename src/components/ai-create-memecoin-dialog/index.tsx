@@ -1,11 +1,10 @@
 import { t } from 'i18next'
 import React from 'react'
+
 import { Button } from '../ui/button'
 import { Dialog } from '../ui/dialog'
-import { useRouter } from 'next/router'
-import { Routes } from '@/routes'
 import { AIMemeInfo } from '@/api/ai/type'
-import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { Img } from '@/components/img'
 
 interface Props {
   show: boolean
@@ -45,9 +44,9 @@ export const AICreateMemecoinDialog = (props: Props) => {
         </div>
         {data?.image ? (
           <div>
-            <img
-              src={data?.image}
-              alt={data?.name}
+            <Img
+              src={data.image}
+              alt={data.name}
               className="w-[150px] h-[150px] object-cover mx-auto my-4 rounded-md"
             />
           </div>
