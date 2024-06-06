@@ -41,7 +41,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
     router.push(`${Routes.Create}`)
     setFormInfo({
       name: item?.name,
-      symbol: item?.name,
+      symbol: item?.symbol,
       description: item?.description,
     })
     setLoadingLogo(true)
