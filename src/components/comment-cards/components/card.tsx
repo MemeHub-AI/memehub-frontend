@@ -15,6 +15,7 @@ import { Dialog } from '@/components/ui/dialog'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { UserListRes, UserListType } from '@/api/user/types'
+import Img from '@/components/img'
 
 interface Props extends ComponentProps<'div'> {
   c: UserListRes[UserListType.Replies]
@@ -151,16 +152,17 @@ export const CommentCard = (props: Props) => {
               onOpenChange={setOpen}
               contentProps={{ className: 'p-0 w-[50vw] border-none' }}
             >
-              <img
+              <Img
                 src={c.img}
                 alt="image"
                 className="w-full"
                 onClick={() => setOpen(true)}
               />
             </Dialog>
-            <img
+
+            <Img
               src={c.img}
-              alt="image"
+              alt="img"
               className="rounded max-w-64 cursor-pointer"
               onClick={() => setOpen(true)}
             />
