@@ -13,6 +13,7 @@ interface Value {
   tokenInfo: TokenListItem | undefined
   totalToken: string
   currentToken: string
+  tokenProgress: string
   isLoadingProgress: boolean
   isLoadingTokenInfo: boolean
   isFetchingProgress: boolean
