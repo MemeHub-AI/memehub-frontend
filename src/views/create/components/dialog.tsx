@@ -30,7 +30,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
   const { t } = useTranslation()
   const chainName = createTokenData?.chain?.name || ''
   const deployedAddr = createTokenData?.address || ''
-  const explorerUrl = createTokenData?.hash || ''
+  const explorerUrl = createTokenData?.explorer_tx || ''
 
   const withIcon = (children: ReactNode) => {
     return (
