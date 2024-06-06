@@ -11,7 +11,7 @@ import { Routes } from '@/routes'
 export const HotNewsAside = () => {
   const { t } = useTranslation()
   const { push } = useRouter()
-  const { handleClick, isFetching, newsList } = useNewsList({
+  const { isLoading, newsList, ref } = useNewsList({
     isOpportunity: true,
   })
 
@@ -22,7 +22,8 @@ export const HotNewsAside = () => {
           {t('hot-opportunity')}
         </h2>
         <CustomSuspense
-          isPending={isFetching}
+          ref={ref}
+          isPending={isLoading}
           fallback={<NewsSkeleton />}
           nullback={<>{t('no.data')}</>}
           className="flex flex-col gap-3 pr-5"
@@ -31,9 +32,6 @@ export const HotNewsAside = () => {
             <NewsCard
               key={i}
               news={news!}
-              onMeme={() => {
-                handleClick(news)
-              }}
               onClick={() => {
                 push(`${Routes.Idea}/${news?.id}?type=2`)
               }}

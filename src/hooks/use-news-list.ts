@@ -1,12 +1,11 @@
 import { newsApi } from '@/api/news'
-import { MemeInfoDialogData } from '@/api/news/types'
-import { Routes } from '@/routes'
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useStorage } from './use-storage'
-import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { defaultImg } from '@/config/link'
+import { useScroll } from 'react-use'
+import { queryClient } from '@/components/app-providers'
+import { utilTime } from '@/utils/time'
 
 interface Options {
   isOpportunity?: boolean
@@ -16,113 +15,120 @@ export const useNewsList = (options?: Options) => {
   const { isOpportunity = false } = options || {}
 
   const { getArea } = useStorage()
-  const [show, setShow] = useState(false)
   const [area, setArea] = useState(+getArea())
-  const [loading, setLoading] = useState(false)
-  const [memeit, setMemeit] = useState<MemeInfoDialogData>()
-
-  const { push, pathname } = useRouter()
-
-  const { data: country, isLoading } = useQuery({
-    queryKey: [newsApi.getCountry.name],
-    queryFn: newsApi.getCountry,
-  })
-
-  const hidden = () => {
-    setShow(false)
-  }
-
-  const onConfirmCreate = () => {
-    try {
-      if (!memeit) return
-      if (!pathname.startsWith(Routes.Create)) {
-        const aimemeInfoStore = useAimemeInfoStore.getState()
-        aimemeInfoStore.setInfo({
-          name: memeit.title,
-          description: memeit.title,
-        })
-        return push(Routes.Create)
-      }
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const handleClick = async (info?: MemeInfoDialogData) => {
-    setShow(true)
-    setMemeit(info)
-  }
+  const ref = useRef<HTMLDivElement>(null)
+  const { y } = useScroll(ref)
+  const newsListKeys = [newsApi.getNews.name, area, isOpportunity]
 
   const {
     data: newsData,
-    isLoading: isFetching,
+    isLoading,
+    isFetching,
+    hasNextPage,
+    isFetchNextPageError,
     fetchNextPage,
-    fetchPreviousPage,
   } = useInfiniteQuery({
-    queryKey: [newsApi.getNews.name, area, isOpportunity],
+    queryKey: newsListKeys,
     initialPageParam: 1,
     refetchInterval: 10_000,
     queryFn: async ({ pageParam }) => {
-      if (isOpportunity) {
-        const { data } = await newsApi.getOpportunity({
-          page: pageParam,
-          page_size: 7,
-        })
+      if (isFetchNextPageError) throw new Error('fetching next page')
+      let result: any
 
-        return {
-          count: data.count,
-          results: data.results?.map((item) => ({
-            id: item.id,
-            title: item?.title,
-            link: '',
-            content: item?.content,
-            image: item?.image,
-          })),
+      if (isOpportunity) {
+        const getData: any = async () => {
+          try {
+            const { data } = await newsApi.getOpportunity({
+              page: pageParam,
+              page_size: 10,
+            })
+            if (data)
+              result = {
+                count: data.count,
+                results: data.results?.map((item) => ({
+                  id: item.id,
+                  title: item?.title,
+                  link: '',
+                  content: item?.content,
+                  image: item?.image,
+                })),
+              }
+          } catch (error) {
+            throw error
+            await utilTime.wait(2000)
+            result = await getData()
+          }
+        }
+        await getData()
+        return result
+      }
+      const getData: any = async () => {
+        try {
+          const { data } = await newsApi.getNews({
+            country: +getArea(),
+            page: pageParam,
+            page_size: 10,
+          })
+          if (data)
+            result = {
+              count: data?.count,
+              results: data?.results?.map((item) => ({
+                id: item?.id,
+                title: item?.title?.query,
+                link: item?.title?.exploreLink,
+                content: item?.articles?.[0]?.snippet,
+                image: item?.articles?.[0]?.image?.imageUrl || defaultImg,
+              })),
+            }
+        } catch (error) {
+          throw error
+          await utilTime.wait(2000)
+          result = await getData()
         }
       }
 
-      const { data } = await newsApi.getNews({
-        country: +area,
-        page: pageParam,
-      })
-
-      return {
-        count: data?.count,
-        results: data?.results?.map((item) => ({
-          id: item?.id,
-          title: item?.title?.query,
-          link: item?.title?.exploreLink,
-          content: item?.articles?.[0]?.snippet,
-          image: item?.articles?.[0]?.image?.imageUrl || defaultImg,
-        })),
-      }
+      await getData()
+      return result
     },
     getNextPageParam: (_, _1, page) => page + 1,
     select: (data) => {
       return {
         total: data.pages[0].count,
-        newsList: data.pages.flatMap((p) => p.results).filter(Boolean),
+        newsList: data.pages.flatMap((p) => p?.results).filter(Boolean),
       }
     },
   })
 
+  console.log(isFetchNextPageError)
+
+  useEffect(() => {
+    if (!ref.current) return
+    const { scrollHeight, clientHeight } = ref.current
+
+    if (
+      scrollHeight - y < clientHeight * 1.5 &&
+      !isFetching &&
+      !isFetchNextPageError &&
+      hasNextPage &&
+      newsData?.total > (newsData?.newsList?.length || 0)
+    ) {
+      fetchNextPage()
+    }
+  }, [y, isFetchNextPageError])
+
+  // useEffect(() => {
+  //   return () => {
+  //     queryClient.resetQueries({ queryKey: newsListKeys, exact: true })
+  //   }
+  // }, [])
+
   return {
+    ref,
     area,
-    show,
-    loading,
-    memeit,
+    isLoading,
     isFetching,
-    loadingCountry: isLoading,
     newsList: newsData?.newsList,
-    countryList: country?.data,
-    handleClick,
-    onConfirmCreate,
-    hidden,
-    setShow,
     setArea,
     fetchNextPage,
-    fetchPreviousPage,
   }
 }

@@ -18,14 +18,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { FormLogo } from './logo'
 import { FormChain } from './chain'
 import { PosterForm } from './poster'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
-  const { deployResult, formData, aiMemeInfo } = useContext(CreateTokenContext)
-
-  const { url, form, chains, formFields, onSubmit } = formData
-  const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } =
-    aiMemeInfo
+  const { deployResult, formData } = useContext(CreateTokenContext)
+  const { loadingInfo, loadingLogo } = useAimemeInfoStore()
+  const { url, form, formFields, onSubmit } = formData
 
   const { deployFee, deploySymbol, isDeploying } = deployResult || {}
 
@@ -33,7 +32,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const symbol = deploySymbol
 
   const beforeSubmit = (values: any) => {
-    if (isLoadingMemeInfo || isLoadingMemeImg) {
+    if (loadingInfo || loadingLogo) {
       toast.warning(t('onsubmit.createing.warning'))
       return
     }

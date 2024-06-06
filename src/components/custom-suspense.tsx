@@ -1,4 +1,4 @@
-import React, { type ComponentProps, createElement } from 'react'
+import React, { type ComponentProps, createElement, forwardRef } from 'react'
 import { isEmpty } from 'lodash'
 
 interface Props extends ComponentProps<'div'> {
@@ -9,21 +9,24 @@ interface Props extends ComponentProps<'div'> {
 }
 
 // TODO: pass `className` to the root element.
-export const CustomSuspense = (props: Props) => {
-  const {
-    isPending,
-    fallback,
-    nullback,
-    children,
-    container = 'div',
-    ...restProps
-  } = props
+export const CustomSuspense = forwardRef<HTMLDivElement, Props>(
+  (props, ref) => {
+    const {
+      isPending,
+      fallback,
+      nullback,
+      children,
+      container = 'div',
+      ...restProps
+    } = props
 
-  if (isPending) return createElement(container, restProps, fallback)
-  if (nullback && isEmpty(React.Children.toArray(children))) return nullback
-  if (container === 'fragment') return <>{children}</>
+    if (isPending)
+      return createElement(container, { ...restProps, ref }, fallback)
+    if (nullback && isEmpty(React.Children.toArray(children))) return nullback
+    if (container === 'fragment') return <>{children}</>
 
-  return createElement(container, restProps, children)
-}
+    return createElement(container, { ...restProps, ref }, children)
+  }
+)
 
 export default CustomSuspense
