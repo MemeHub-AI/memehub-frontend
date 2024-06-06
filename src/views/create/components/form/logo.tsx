@@ -140,10 +140,12 @@ export const FormLogo = ({ formData }: Props) => {
             </FormControl>
             <FormMessage />
 
-            <Button className="mt-2 mb-2" onClick={createLogo}>
-              <LuRefreshCcw className="mr-2" />
-              {t('create.ai.logo')}
-            </Button>
+            {!loadingLogo ? (
+              <Button className="mt-2 mb-2" onClick={createLogo}>
+                <LuRefreshCcw className="mr-2" />
+                {t('create.ai.logo')}
+              </Button>
+            ) : null}
           </FormItem>
         )}
       />

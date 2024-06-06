@@ -54,7 +54,6 @@ export const useNewsList = (options?: Options) => {
                 })),
               }
           } catch (error) {
-            throw error
             await utilTime.wait(2000)
             result = await getData()
           }
@@ -99,8 +98,6 @@ export const useNewsList = (options?: Options) => {
     },
   })
 
-  console.log(isFetchNextPageError)
-
   useEffect(() => {
     if (!ref.current) return
     const { scrollHeight, clientHeight } = ref.current
@@ -115,12 +112,6 @@ export const useNewsList = (options?: Options) => {
       fetchNextPage()
     }
   }, [y, isFetchNextPageError])
-
-  // useEffect(() => {
-  //   return () => {
-  //     queryClient.resetQueries({ queryKey: newsListKeys, exact: true })
-  //   }
-  // }, [])
 
   return {
     ref,
