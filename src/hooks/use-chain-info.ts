@@ -3,16 +3,18 @@ import { useRouter } from 'next/router'
 
 import { useChainsStore } from '@/stores/use-chains-store'
 
-export const useChainInfo = () => {
+export const useChainInfo = (nameOrId?: string | number) => {
   const { query } = useRouter()
-  const { chain } = useAccount()
+  const { chain: accountChain } = useAccount()
   const { findChain } = useChainsStore()
 
-  const chainName = (query.chain || chain?.name || '') as string
-  const chainId = Number(findChain(chainName)?.id || 0)
+  const chainNameOrId = String(
+    nameOrId || query.chain || accountChain?.name || ''
+  )
+  const chain = findChain(chainNameOrId)
 
   return {
-    chainName,
-    chainId,
+    chainName: chain?.name,
+    chainId: chain?.id,
   }
 }

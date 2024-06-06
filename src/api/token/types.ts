@@ -9,6 +9,7 @@ export interface TokenListItem extends UserCoinsCreated {
   last_reply: null
   create_time: null
   hash: string
+  explorer_tx: string
 }
 
 export interface TokenNewReq {
