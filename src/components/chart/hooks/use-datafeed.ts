@@ -48,7 +48,6 @@ export const useDatafeed = () => {
           // minmov: 1,
         }
 
-        console.log('pricescale', symbolInfo.pricescale)
         cache.setBars(bars)
         cache.setLastBar(lastBar)
         onResolve(symbolInfo)
@@ -108,7 +107,6 @@ export const useDatafeed = () => {
   }
 
   const removeDatafeed = () => {
-    console.log('remove datafeed')
     disconenct()
   }
 
