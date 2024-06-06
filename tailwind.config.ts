@@ -90,8 +90,8 @@ const config = {
         bold: '0 0 0 4px hsl(var(--border))',
         offset:
           'var(--offset-width, 3px) var(--offset-width, 3px) 0 0 var(--offset-color, black)',
-        'offset-border':
-          'var(--offset-width, 3px) var(--offset-width, 3px) 0 0 var(--offset-color, white), var(--offset-width, 3px) var(--offset-width, 3px) 0 2px var(--offset-border-color, black)',
+        'offset-border': `var(--offset-width, 3px) var(--offset-width, 3px) 0 0 var(--offset-color, white), 
+          var(--offset-width, 3px) var(--offset-width, 3px) 0 2px var(--offset-border-color, black)`,
       },
       translate: {
         offset: '4px',
