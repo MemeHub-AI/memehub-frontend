@@ -16,10 +16,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import { Dialog } from '@/components/ui/dialog'
 import { aiApi } from '@/api/ai'
 import { toast } from 'sonner'
-<<<<<<< HEAD
 import { Router } from 'next/router'
-=======
->>>>>>> 148fa4f (feat: Optimize AI to generate Meme information)
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
