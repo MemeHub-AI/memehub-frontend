@@ -21,7 +21,6 @@ export const useInternalTrade = () => {
       onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
       onError: customToast.errorContract,
-      onSuccess: () => toast.success(t('submit.success')),
     },
   })
 

@@ -10,19 +10,19 @@ import { useTokenInfo } from './hooks/use-token-info'
 import { Chart } from '@/components/chart'
 import { TokenInfoHeader } from './components/token-info-header'
 import { cn } from '@/lib/utils'
+import { useTokenProgress } from './hooks/use-token-progress'
 
 export const TokenPage = () => {
   const { isMobile } = useResponsive()
+  const { tokenInfo, isLoadingTokenInfo, isFetchingTokenInfo, refetchInfo } =
+    useTokenInfo()
   const {
-    tokenInfo,
-    totalToken,
-    currentToken,
+    total: totalToken,
+    current: currentToken,
+    progress: tokenProgress,
     isLoadingProgress,
-    isLoadingTokenInfo,
     isFetchingProgress,
-    isFetchingTokenInfo,
-    refetchInfo,
-  } = useTokenInfo()
+  } = useTokenProgress()
 
   return (
     <TokenProvider
@@ -30,6 +30,7 @@ export const TokenPage = () => {
         tokenInfo,
         totalToken,
         currentToken,
+        tokenProgress,
         isLoadingProgress,
         isLoadingTokenInfo,
         isFetchingProgress,
