@@ -1,4 +1,4 @@
-export const uniswapV2Abi = [
+export const v1UniswapV2Abi = [
   {
     inputs: [
       { internalType: 'address', name: '_factory', type: 'address' },

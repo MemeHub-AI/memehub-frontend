@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 
 import type { TokenNewReq } from '@/api/token/types'
 
-import { factoryAbi } from '../../../contract/abi/factory'
+import { v1FactoryAbi } from '../../../contract/v1/abi/factory'
 import { useCreateToken } from './use-create-token'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useDeployConfig } from './use-deploy-config'
-import { ca } from '@/contract/address'
+import { addressesV1 } from '@/contract/v1/addresses'
 
 let cacheParams: Omit<TokenNewReq, 'hash'>
 
@@ -44,15 +44,16 @@ export const useDeploy = () => {
     //   return
     // }
 
-    const id = chainId as keyof typeof ca.reserveToken
-    const nativeTokenAddr = ca.reserveToken[id]
-    const routerAddr = ca.routerAddress[id]
+    const id = chainId as keyof typeof addressesV1.reserveToken
+    const nativeTokenAddr = addressesV1.reserveToken[id]
+    const routerAddr = addressesV1.routerAddress[id]
     if (!nativeTokenAddr || !routerAddr) {
       toast.error(t('chain.empty'))
       return
     }
 
-    const address = ca.factory[chainId as keyof typeof ca.factory]
+    const address =
+      addressesV1.factory[chainId as keyof typeof addressesV1.factory]
     if (!address) {
       toast.error(t('addr.empty'))
       return
@@ -60,7 +61,7 @@ export const useDeploy = () => {
 
     return writeContract(
       {
-        abi: factoryAbi,
+        abi: v1FactoryAbi,
         address,
         functionName: 'deploy',
         args: [

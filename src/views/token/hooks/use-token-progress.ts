@@ -3,7 +3,7 @@ import { useReadContracts } from 'wagmi'
 import { formatEther, type Address } from 'viem'
 import { BigNumber } from 'bignumber.js'
 
-import { continousTokenAbi } from '@/contract/abi/continous-token'
+import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const useTokenProgress = (
@@ -25,13 +25,13 @@ export const useTokenProgress = (
   } = useReadContracts({
     contracts: [
       {
-        abi: continousTokenAbi,
+        abi: v1ContinousTokenAbi,
         address,
         chainId,
         functionName: 'ETH_AMOUNT',
       },
       {
-        abi: continousTokenAbi,
+        abi: v1ContinousTokenAbi,
         address,
         chainId,
         functionName: 'raiseEthAmount',
