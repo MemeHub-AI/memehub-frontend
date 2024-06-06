@@ -12,7 +12,7 @@ import { v1FactoryParams } from '@/contract/v1/params/factory'
 
 let cacheParams: Omit<TokenNewReq, 'hash'>
 
-export const useDeploy = () => {
+export const useDeployV1 = () => {
   const { t } = useTranslation()
   const { chainId } = useAccount()
   const { createTokenData, createTokenError, isCreatingToken, create } =

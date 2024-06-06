@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { Main } from './components/main'
 import { CreateTokenStatusDialog } from './components/dialog'
-import { useDeploy } from './hooks/use-deploy'
+import { useDeployV1 } from './hooks/use-deploy-v1'
 import { useCreateTokenForm } from './hooks/use-form'
 import { useNewsList } from '@/hooks/use-news-list'
 import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
@@ -11,7 +11,7 @@ import { CreateTokenContext } from './context'
 import { AICreateMemecoinDialogLoading } from '@/components/ai-create-memecoin-dialog/loading'
 
 export const CreatePage = () => {
-  const deployResult = useDeploy()
+  const deployResult = useDeployV1()
   const [tab, setTab] = useState(0)
   const formData = useCreateTokenForm(deployResult)
 
