@@ -1,6 +1,7 @@
 import { bsc, bscTestnet } from '@wagmi/core/chains'
 
 import { dotenv } from '@/utils/env'
+import { reserveTokenAddr, routerAddr } from '../address'
 
 const prod = {
   bond: {
@@ -12,7 +13,9 @@ const prod = {
   zapV1: {
     [bsc.id]: '',
   },
-}
+  reserveTokenAddr,
+  routerAddr,
+} as const
 
 const dev = {
   bond: {
@@ -24,7 +27,9 @@ const dev = {
   zapV1: {
     [bscTestnet.id]: '0x80c17A095DaACb58399Db22639Dc3B9c7d62660e',
   },
-}
+  reserveTokenAddr,
+  routerAddr,
+} as const
 
 // Only export this line plz.
-export const v2Addr = dotenv.isProd ? prod : dev
+export const v2Addr = dev

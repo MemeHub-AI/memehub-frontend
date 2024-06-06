@@ -15,7 +15,7 @@ export const useUniswapV2 = () => {
   const { isApproving, checkForApproval } = useApprove()
 
   const nativeTokenAddr =
-    v1Addr.reserveToken[chainId as keyof typeof v1Addr.reserveToken]
+    v1Addr.reserveTokenAddr[chainId as keyof typeof v1Addr.reserveTokenAddr]
 
   const {
     data: hash,

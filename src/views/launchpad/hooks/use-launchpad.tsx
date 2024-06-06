@@ -1,5 +1,5 @@
 import { idoAbi } from '@/contract/v1/abi/ido'
-import { idoAddress } from '@/contract/v1/addresses'
+import { idoAddress } from '@/contract/address'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import BigNumber from 'bignumber.js'
 import { useEffect, useState } from 'react'
