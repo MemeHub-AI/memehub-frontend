@@ -20,6 +20,7 @@ import { TradeItems } from './trade-items'
 import { TradeInput } from './trade-input'
 import { TradeType } from '@/api/websocket/types'
 import { useTokenContext } from '@/contexts/token'
+import { useTradeInfoV2 } from '../hooks/use-trade-info-v2'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -34,6 +35,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
   const { isSubmitting, isTraded, buy, sell } = useTrade()
+  const {} = useTradeInfoV2()
   const {
     nativeBalance,
     tokenBalance,
