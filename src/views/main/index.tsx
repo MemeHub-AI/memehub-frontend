@@ -2,7 +2,7 @@ import React from 'react'
 
 import { TokenCards } from '@/components/token-cards'
 import { useTokens } from '@/hooks/use-tokens'
-import { AIIdeaBar } from '@/components/ai-idea'
+import { AIIdeaBar } from '@/components/ai-idea-bar'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
 import { OpportunityMoonshot } from '@/components/opportunity-moonshot'

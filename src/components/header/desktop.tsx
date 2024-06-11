@@ -26,9 +26,7 @@ export const HeaderDesktop = (props: Props) => {
     <>
       <div className="flex items-center gap-4">
         <Logo showMeme />
-      </div>
-      <div className="flex items-center gap-3">
-        <nav className="flex items-center gap-3">
+        <nav className="ml-[30px] flex items-center gap-3">
           <ul className="flex items-center gap-3">
             {navs.map((n, i) => (
               <li key={i}>
@@ -39,15 +37,17 @@ export const HeaderDesktop = (props: Props) => {
             ))}
           </ul>
         </nav>
+      </div>
+      <div className="flex items-center gap-3">
         <SearchInput />
-        {router.pathname !== Routes.Create ? (
+        {/* {router.pathname !== Routes.Create ? (
           <Button
             className="max-sm:mx-1.5"
             onClick={() => router.push(Routes.Create)}
           >
             {t('token.create')}
           </Button>
-        ) : null}
+        ) : null} */}
         <LangSelect className="flex-shrink-0" />
         <WalletConnect />
       </div>

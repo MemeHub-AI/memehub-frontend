@@ -301,5 +301,17 @@
   "create.ai.logo": "重新生成",
   "no.data.news": "暂时没有热点新闻",
   "meme.loading.tip": "AI正在生成Meme信息请稍等",
-  "create.info.loading": "AI正在生成MEME信息中..."
+  "create.info.loading": "AI正在生成MEME信息中...",
+  "my.identity": "我的身份",
+  "apply.kol": "申请成为KOL大使",
+  "platform.airdrop": "可获得平台丰富空投",
+  "apply.community": "为我的社区申请合作",
+  "community.airdrops": "社群成员可永久获取大量空投",
+  "airdrop.you": "🎁给你的空投",
+  "claim.airdrop": "去领取",
+  "expired": "已过期",
+  "check.wallet.airdrop": "查看可以领取的空投",
+  "unfortunately": "很遗憾，查询到您还未拥有任何身份以领取空投",
+  "home": "首页",
+  "airdrop": "空投"
 }

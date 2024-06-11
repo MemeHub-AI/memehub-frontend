@@ -6,4 +6,11 @@ export const utilTime = {
       }, time)
     })
   },
+
+  isPast(date: number | string | Date) {
+    if (typeof date === 'number') {
+      date = date * 1000
+    }
+    return new Date(date) < new Date()
+  },
 }

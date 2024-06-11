@@ -61,12 +61,12 @@ const IdeaPage = () => {
   }
 
   return (
-    <main className="min-h-main flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
+    <main className="min-h-main flex max-md:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
       <OpportunityMoonshot
         defalutTab={defualtTab}
-        className="max-sm:!hidden max-sm:!px-0"
+        className="max-md:!hidden max-sm:!px-0"
       />
-      <div className="max-w-[1185px] max-sm:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
+      <div className="max-w-[1185px] max-md:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <div className="flex flex-1">
             <img
@@ -87,9 +87,9 @@ const IdeaPage = () => {
             </Button>
             <MobileQpportunityMoonshot
               defalutTab={defualtTab}
-              className="max-sm:!hidden max-sm:!px-0 "
+              className="max-md:!hidden max-sm:!px-0 "
             >
-              <div className="sm:hidden ml-4">
+              <div className="md:hidden ml-4">
                 <Button className="bg-white text-2xl" size={'icon'}>
                   💡
                 </Button>

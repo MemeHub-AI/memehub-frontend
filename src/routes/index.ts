@@ -3,6 +3,8 @@ export enum Routes {
 
   Create = '/create',
 
+  Airdrop = '/airdrop',
+
   Account = '/account',
 
   Launchpad = '/launchpad',

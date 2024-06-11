@@ -4,10 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { WiStars } from 'react-icons/wi'
 import { toast } from 'sonner'
 
-import { AIMemeInfo } from '@/api/ai/type'
-import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from './ui/tooltip'
 
 interface Props {
   className?: string
@@ -49,12 +53,18 @@ export const AIIdeaBar = (props: Props) => {
           className="max-w-[180px] ml-4 max-md:ml-0 items-stretch"
           onChange={({ target }) => setValue(target.value)}
           endIcon={
-            <div
-              className="bg-black text-white flex items-center px-1.5 cursor-pointer"
-              onClick={onRandomGen}
-            >
-              <WiStars size={26} />
-            </div>
+            <TooltipProvider>
+              <Tooltip className="block h-full" tip={t('random.meme')}>
+                <TooltipTrigger className="block h-full">
+                  <div
+                    className="bg-black h-full text-white flex items-center px-1.5 cursor-pointer"
+                    onClick={onRandomGen}
+                  >
+                    <WiStars size={26} />
+                  </div>
+                </TooltipTrigger>
+              </Tooltip>
+            </TooltipProvider>
           }
         />
         <Button onClick={onGen} className="ml-5">

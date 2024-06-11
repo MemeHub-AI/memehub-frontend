@@ -55,7 +55,10 @@ export const HeaderMobile = (props: Props) => {
                 <Button
                   className="w-full justify-start"
                   variant="outline"
-                  onClick={() => onNavClick?.(n)}
+                  onClick={() => {
+                    onNavClick?.(n)
+                    closeRef.current?.click()
+                  }}
                 >
                   {n.title}
                 </Button>
@@ -74,7 +77,7 @@ export const HeaderMobile = (props: Props) => {
       </Sheet>
 
       <div className="flex items-center">
-        {isConnected && router.pathname !== Routes.Create && (
+        {/* {isConnected && router.pathname !== Routes.Create && (
           <Button
             className="mx-3 max-sm:mx-1.5"
             onClick={() => router.push(Routes.Create)}
@@ -82,7 +85,7 @@ export const HeaderMobile = (props: Props) => {
           >
             {t('token.create')}
           </Button>
-        )}
+        )} */}
         <WalletConnect />
       </div>
     </>
