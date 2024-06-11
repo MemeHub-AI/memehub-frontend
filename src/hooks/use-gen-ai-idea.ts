@@ -2,28 +2,44 @@ import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 export const useGenAIIdea = () => {
   const [show, setShow] = useState(false)
   const [isRandom, setRandom] = useState(false)
   const [value, setValue] = useState('')
   const { pathname, push } = useRouter()
+  const { t } = useTranslation()
 
   const {
-    setLoadingInfoDialog,
-    setInfo,
+    loadingInfo,
+    loadingLogo,
+    loadingPoster,
     formInfo,
+    setInfo,
     setFormInfo,
-    setLoadingImg,
+    setLoadingLogo,
+    setLoadingPoster,
+    setLoadingInfoDialog,
   } = useAimemeInfoStore()
 
   const onInputGen = (value: string) => {
+    if (loadingInfo || loadingLogo || loadingPoster) {
+      toast.warning(t('meme.loading.tip'))
+      return
+    }
     setShow(true)
     setRandom(false)
     setValue(value)
   }
 
   const onRandomGen = () => {
+    if (loadingInfo || loadingLogo || loadingPoster) {
+      toast.warning(t('meme.loading.tip'))
+      return
+    }
+
     setShow(true)
     setRandom(true)
   }
@@ -47,7 +63,8 @@ export const useGenAIIdea = () => {
     }
 
     setFormInfo(data)
-    setLoadingImg(true)
+    setLoadingLogo(true)
+    setLoadingPoster(true)
   }
 
   const onCancel = () => {

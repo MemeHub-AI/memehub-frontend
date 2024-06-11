@@ -14,6 +14,7 @@ import { aiApi } from '@/api/ai'
 import { Button } from '@/components/ui/button'
 import { LuRefreshCcw } from 'react-icons/lu'
 import { toast } from 'sonner'
+import { Router } from 'next/router'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -49,7 +50,9 @@ export const FormLogo = ({ formData }: Props) => {
         memeLogoSign.signal
       )
       .then(({ data }) => {
-        form.setValue(formFields.logo, data[0])
+        if (data) {
+          form.setValue(formFields.logo, data[0])
+        }
       })
       .finally(() => {
         setLoadingLogo(false)
@@ -61,6 +64,16 @@ export const FormLogo = ({ formData }: Props) => {
       fetchMemeLogo()
     }
   }, [loadingLogo])
+
+  useEffect(() => {
+    const cb = () => {
+      memeLogoSign.abort()
+    }
+    Router.events.on('routeChangeStart', cb)
+    return () => {
+      Router.events.off('routeChangeStart', cb)
+    }
+  }, [])
 
   return (
     <div>
@@ -127,9 +140,9 @@ export const FormLogo = ({ formData }: Props) => {
             </FormControl>
             <FormMessage />
 
-            {!loadingLogo && field.value?.length ? (
+            {!loadingLogo ? (
               <Button className="mt-2 mb-2" onClick={createLogo}>
-                <LuRefreshCcw className="mr-2" />
+                <LuRefreshCcw className="mr-1" />
                 {t('create.ai.logo')}
               </Button>
             ) : null}

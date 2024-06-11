@@ -86,7 +86,7 @@ export const useCreateTokenForm = (
       name: values.fullname! as string,
       ticker: values.symbol! as string,
       desc: values.description! as string,
-      image: values.logo! as string,
+      image: (values.logo! as string).replace('mini', 'origin'),
       chain: values.chainName as string,
       // Optional.
       twitter_url: values.twitter as string,

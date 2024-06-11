@@ -16,6 +16,7 @@ import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import { Dialog } from '@/components/ui/dialog'
 import { aiApi } from '@/api/ai'
 import { toast } from 'sonner'
+import { Router } from 'next/router'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -76,10 +77,12 @@ export const PosterForm = ({ formData }: Props) => {
         memePosterSign.signal
       )
       .then(({ data }) => {
-        formData.form.setValue(formData.formFields.poster, [
-          ...data.poster1,
-          ...data.poster2,
-        ])
+        if (data) {
+          formData.form.setValue(formData.formFields.poster, [
+            ...data.poster1,
+            ...data.poster2,
+          ])
+        }
       })
       .finally(() => {
         setLoadingPoster(false)
@@ -92,6 +95,16 @@ export const PosterForm = ({ formData }: Props) => {
     }
   }, [loadingPoster])
 
+  useEffect(() => {
+    const cb = () => {
+      memePosterSign.abort()
+    }
+    Router.events.on('routeChangeStart', cb)
+
+    return () => {
+      Router.events.off('routeChangeStart', cb)
+    }
+  }, [])
   return (
     <>
       <FormField
@@ -164,7 +177,11 @@ export const PosterForm = ({ formData }: Props) => {
             <FaChevronRight size={26} onClick={onRight}></FaChevronRight>
           </div>
           <img
-            src={form?.getValues(formFields?.poster!)?.[index] as string}
+            src={
+              form
+                ?.getValues(formFields?.poster!)
+                ?.[index]?.replace('mini', 'origin') as string
+            }
             alt="Poster"
             className="w-full rounded-md mb-4 select-none"
           />
@@ -187,7 +204,11 @@ export const PosterForm = ({ formData }: Props) => {
           <div
             className="mt-5  flex justify-center cursor-pointer"
             onClick={() =>
-              open((form?.getValues(formFields?.poster!) as string[])[index])
+              open(
+                (form?.getValues(formFields?.poster!) as string[])[
+                  index
+                ].replace('mini', 'origin')
+              )
             }
           >
             <Button>{t('download')}</Button>

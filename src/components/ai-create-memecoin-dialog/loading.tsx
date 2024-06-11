@@ -6,6 +6,7 @@ import { aiApi } from '@/api/ai'
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { AIMemeInfo } from '@/api/ai/type'
 import { toast } from 'sonner'
+import { Router } from 'next/router'
 
 interface Props {
   formHook: ReturnType<typeof useCreateTokenForm>
@@ -33,6 +34,12 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     setLoadingInfo(true)
     memeInfoSign = new AbortController()
     try {
+      formHook.form.setValue(formHook.formFields.fullname, '')
+      formHook.form.setValue(formHook.formFields.symbol, '')
+      formHook.form.setValue(formHook.formFields.description, '')
+
+      toast.loading(t('create.info.loading'))
+
       const { data } = await aiApi.getMemeInfo(
         {
           input: info!.name!,
@@ -45,6 +52,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     } catch (e) {
       toast.error(t('create.info.error'))
     } finally {
+      toast.dismiss()
       setLoadingInfoDialog(false)
       setLoadingInfo(false)
       debugger
@@ -77,6 +85,21 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     }
   }, [loadingInfoDialog])
 
+  useEffect(() => {
+    const cb = () => {
+      memeInfoSign.abort()
+      setLoadingInfoDialog(false)
+      setLoadingInfo(false)
+      setLoadingPoster(false)
+      setLoadingLogo(false)
+    }
+    Router.events.on('routeChangeStart', cb)
+
+    return () => {
+      toast.dismiss()
+      Router.events.off('routeChangeStart', cb)
+    }
+  }, [])
   return (
     <Dialog
       open={loadingInfoDialog}

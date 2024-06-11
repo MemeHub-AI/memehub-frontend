@@ -13,31 +13,29 @@ interface Props {
   ideaData: IdeaDataList | undefined
 }
 
-export const CreatedUser = ({ ideaData }: Props) => {
+export const TokenList = ({ ideaData }: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
   const [showMore, setShowMore] = useState(false)
 
-  const handleList = (list: IdeaTokens[]) => {
-    return list.map((user) => {
+  const handleList = (tokenList: IdeaTokens[]) => {
+    return tokenList.map((token) => {
       return (
-        <div className="mt-2 flex justify-between items-center" key={user.id}>
+        <div className="mt-2 flex justify-between items-center" key={token.id}>
           <div className="flex items-center">
             <Img
-              src={user.logo}
+              src={token.logo}
               alt="Logo"
               className="w-[25px] h-[25px] object-cover rounded-md mr-2"
             />
-            <span>{user.name}</span>
+            <span>{token.name}</span>
           </div>
           <div className="">
             <span
               className="text-sm text-blue-600 cursor-pointer select-none"
               onClick={() => {
-                if (isEmpty(user.chain.name) || isEmpty(user.address)) return
-                router.push(
-                  fmt.toHref(Routes.Main, user.chain.name, user.address)
-                )
+                if (isEmpty(token.chain.name) || isEmpty(token.address)) return
+                open(fmt.toHref(Routes.Main, token.chain.name, token.address))
               }}
             >
               {t('live.in.up')}

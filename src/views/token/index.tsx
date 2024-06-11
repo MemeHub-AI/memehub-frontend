@@ -15,7 +15,6 @@ export const TokenPage = () => {
   const { isMobile } = useResponsive()
   const { tokenInfo, isLoadingTokenInfo, isFetchingTokenInfo, refetchInfo } =
     useTokenInfo()
-
   return (
     <TokenProvider
       value={{

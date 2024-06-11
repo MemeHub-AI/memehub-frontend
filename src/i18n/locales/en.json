@@ -284,7 +284,7 @@
   "liquidity": "Liquidity:",
   "go.bold.man": "Future millionaire, MemeHub AI has come up with the following creative ideas for you: Go Bold man.",
   "create.now": "Create Now",
-  "no.idea": "No Idea",
+  "no.idea": "There is currently no creative idea yet, and the AI is actively working on it. Please stay tuned～",
   "show": "Show MOre",
   "more": "More",
   "hidden": "Hidden",
@@ -305,5 +305,8 @@
   "login.addr.empty": "Cannot find your wallet address",
   "login.chain.empty": "Cannot find chain",
   "switch.ai.poster": "Change the posters",
-  "create.ai.logo": "AI-generated"
+  "create.ai.logo": "AI-generated",
+  "no.data.news": "No hot news yet",
+  "meme.loading.tip": "AI is generating meme information, please wait a moment",
+  "create.info.loading": "AI is generating meme information..."
 }

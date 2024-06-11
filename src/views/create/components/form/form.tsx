@@ -20,15 +20,14 @@ import { FormLogo } from './logo'
 import { FormChain } from './chain'
 import { PosterForm } from './poster'
 import { v1FactoryParams } from '@/contract/v1/params/factory'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
-  const { deployResult, formData, aiMemeInfo } = useContext(CreateTokenContext)
+  const { deployResult, formData } = useContext(CreateTokenContext)
+  const { loadingInfo, loadingLogo } = useAimemeInfoStore()
+  const { url, form, formFields, onSubmit } = formData
   const { chain } = useAccount()
-
-  const { url, form, chains, formFields, onSubmit } = formData
-  const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } =
-    aiMemeInfo
 
   const { isDeploying } = deployResult || {}
   const { deployFee } = v1FactoryParams
@@ -37,7 +36,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const symbol = chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
-    if (isLoadingMemeInfo || isLoadingMemeImg) {
+    if (loadingInfo || loadingLogo) {
       toast.warning(t('onsubmit.createing.warning'))
       return
     }
