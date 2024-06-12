@@ -6,12 +6,7 @@ import { toast } from 'sonner'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from './ui/tooltip'
+import { Tooltip, TooltipProvider, TooltipTrigger } from './ui/tooltip'
 
 interface Props {
   className?: string
