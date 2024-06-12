@@ -24,7 +24,9 @@ export default function App({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         />
       </Head>
-      <GoogleTagManager gtmId={'G-0X7YR0CVS7'}></GoogleTagManager>
+      <GoogleTagManager
+        gtmId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!}
+      ></GoogleTagManager>
       <AppProviders>
         <AppLayout children={<Component {...pageProps} />} />
       </AppProviders>
