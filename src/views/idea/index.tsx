@@ -15,6 +15,8 @@ import {
   MobileQpportunityMoonshot,
   OpportunityMoonshot,
 } from '@/components/opportunity-moonshot'
+import { cn } from '@/lib/utils'
+import { MemeStory } from './components/meme-story'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -26,11 +28,18 @@ const IdeaPage = () => {
   const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
   const defualtTab = +type - 1
 
+  const [tabIdx, setTab] = useState(defualtTab)
+  const tabs = [t('ideas'), t('meme.story')]
+
   const { data: basicInfoData } = useQuery({
     queryKey: [ideaApi.getIdeaInfo.name, newsId, type],
     queryFn: () => {
       if (newsId == undefined || type === undefined) {
         throw new Error('newsId is undefined')
+      }
+
+      if (+type === 2) {
+        return ideaApi.getMemeStory(newsId as string)
       }
 
       return ideaApi.getIdeaInfo(newsId, { type })
@@ -76,7 +85,9 @@ const IdeaPage = () => {
             />
             <div className="ml-3 w-full">
               <div className="text-xl text">{basicInfo?.title}</div>
-              <Content content={basicInfo?.content}></Content>
+              <Content
+                content={basicInfo?.content.replace(/<[^>]*>/g, '')}
+              ></Content>
             </div>
           </div>
 
@@ -97,7 +108,31 @@ const IdeaPage = () => {
             </MobileQpportunityMoonshot>
           </div>
         </div>
-        <WaterList newsId={newsId} type={type}></WaterList>
+        {+type === 2 ? (
+          <div className="flex items-start">
+            {tabs.map((tab, i) => {
+              return (
+                <div
+                  key={i}
+                  className={cn(
+                    'px-2.5 py-1.5 text-nowrap rounded-xl mt-5 cursor-pointer border-2 border-transparent',
+                    'hover:border-black',
+                    i === 1 && 'ml-3',
+                    tabIdx == i && 'bg-black text-[#ffe770]'
+                  )}
+                  onClick={() => setTab(i)}
+                >
+                  {tab}
+                </div>
+              )
+            })}
+          </div>
+        ) : null}
+        {tabIdx === 0 ? (
+          <WaterList newsId={newsId} type={type}></WaterList>
+        ) : (
+          <MemeStory data={basicInfo!}></MemeStory>
+        )}
       </div>
       <AICreateMemecoinDialog
         show={show}

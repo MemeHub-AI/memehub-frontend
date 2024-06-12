@@ -38,7 +38,7 @@ export const useNewsList = (options?: Options) => {
       if (isOpportunity) {
         const getData: any = async () => {
           try {
-            const { data } = await newsApi.getOpportunity({
+            const { data } = await newsApi.getNewsMeme({
               page: pageParam,
               page_size: 10,
             })
@@ -49,8 +49,8 @@ export const useNewsList = (options?: Options) => {
                   id: item.id,
                   title: item?.title,
                   link: '',
-                  content: item?.content,
-                  image: item?.image,
+                  content: item?.description,
+                  image: item?.logo,
                 })),
               }
           } catch (error) {

@@ -30,7 +30,7 @@ export const Ids = () => {
   const getIdStatus = () => {
     if (!isConnected) {
       return (
-        <div className="mt-2 flex items-center">
+        <div className="mt-3 flex items-center">
           <Button onClick={() => setConnectOpen(true)}>
             {t('connect.wallet')}
           </Button>
@@ -39,9 +39,9 @@ export const Ids = () => {
       )
     }
 
-    if (true) {
+    if (false) {
       return (
-        <div className="mt-2 flex items-center">
+        <div className="mt-3 flex items-center">
           <img src="/images/no-airdrop.png" alt="" />
           <span>{t('unfortunately')}</span>
         </div>
@@ -67,7 +67,7 @@ export const Ids = () => {
 
   return (
     <Fragment>
-      <h1 className="text-xl">{t('my.identity')}</h1>
+      <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
       <div className="mt-4">
         <span className="text-blue-700 cursor-pointer">{t('apply.kol')}</span>

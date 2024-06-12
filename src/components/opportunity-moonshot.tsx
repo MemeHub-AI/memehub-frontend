@@ -63,7 +63,7 @@ export const OpportunityMoonshot = (props: Props) => {
     if (country) countryList?.data?.unshift(country)
   }
 
-  const tabs = [t('next.moonshot'), t('take.wave')]
+  const tabs = [t('next.moonshot'), t('classic.meme')]
 
   const onChange = (value: string) => {
     storage.setArea(value)

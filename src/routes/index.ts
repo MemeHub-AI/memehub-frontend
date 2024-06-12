@@ -5,6 +5,10 @@ export enum Routes {
 
   Airdrop = '/airdrop',
 
+  KOL = '/kol',
+
+  Community = '/communities',
+
   Account = '/account',
 
   Launchpad = '/launchpad',

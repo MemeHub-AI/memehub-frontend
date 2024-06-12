@@ -46,7 +46,7 @@ const Airdrop = () => {
       <OpportunityMoonshot defalutTab={0} className="max-sm:!hidden" />
       <div className="py-5">
         <Ids></Ids>
-        <h1 className="mt-5 text-xl">{t('airdrop.you')}</h1>
+        <h1 className="mt-5 text-2xl">{t('airdrop.you')}</h1>
         <div className="mt-3 grid grid-cols-3 gap-4 max-2xl:grid-cols-2 max-xl:grid-cols-1 max-w-max">
           {airdrops.map((airdrop, i) => (
             <Card key={airdrop.id} className="p-2">

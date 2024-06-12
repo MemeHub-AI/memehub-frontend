@@ -34,4 +34,13 @@ export interface IdeaBasicInfo {
   title: string
   content: string
   logo: string
+  types: any
+}
+
+export interface MemeStoryData {
+  id: number
+  title: string
+  content: string
+  logo: string
+  types: any
 }

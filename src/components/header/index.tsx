@@ -23,6 +23,8 @@ export const Header = () => {
     { id: 'home', title: t('home'), path: Routes.Main },
     { id: 'create', title: t('create.token'), path: Routes.Create },
     { id: 'airdrop', title: t('airdrop'), path: Routes.Airdrop },
+    { id: 'KOL', title: t('KOL'), path: Routes.KOL },
+    { id: 'COMMUNITIES', title: t('community'), path: Routes.Community },
   ]
 
   const onNavClick = (n: Nav) => {
