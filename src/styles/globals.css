@@ -102,3 +102,15 @@
 .story a {
   color: firebrick;
 }
+
+.story hr {
+  margin: 15px 0;
+}
+
+.story p {
+  margin-top: 15px;
+}
+
+.story center {
+  margin: 15px 0;
+}
