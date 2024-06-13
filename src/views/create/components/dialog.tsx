@@ -6,27 +6,28 @@ import { CircleAlert } from 'lucide-react'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
-import { useDeployV1 } from '../hooks/use-deploy-v1'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { isUserReject } from '@/utils/contract'
 import { fmt } from '@/utils/fmt'
+import { useCreateTokenContext } from '@/contexts/create-token'
 
-interface Props extends ReturnType<typeof useDeployV1> {}
-
-export const CreateTokenStatusDialog = (props: Props) => {
-  const {
-    createTokenData,
-    createTokenError,
-    isSubmitting,
-    isConfirming,
-    isDeploySuccess,
-    isCreatingToken,
-    submitError,
-    confirmError,
-    resetDeploy,
-    retryCreate,
-  } = props
+export const CreateTokenStatusDialog = () => {
   const { t } = useTranslation()
+  const {
+    deployResult: {
+      createTokenData,
+      createTokenError,
+      isSubmitting,
+      isConfirming,
+      isDeploySuccess,
+      isCreatingToken,
+      submitError,
+      confirmError,
+      resetDeploy,
+      retryCreate,
+    },
+  } = useCreateTokenContext()
+
   const chainName = createTokenData?.chain?.name || ''
   const deployedAddr = createTokenData?.address || ''
   const explorerUrl = createTokenData?.chain?.explorer_tx || ''

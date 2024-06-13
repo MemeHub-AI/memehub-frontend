@@ -4,7 +4,6 @@ import { formatEther } from 'viem'
 import { toast } from 'sonner'
 import { useAccount } from 'wagmi'
 
-import { CreateTokenContext } from '../../context'
 import {
   Form,
   FormControl,
@@ -21,10 +20,11 @@ import { FormChain } from './chain'
 import { PosterForm } from './poster'
 import { DEPLOY_FEE } from '@/contract/v2/config/bond'
 import { fmt } from '@/utils/fmt'
+import { useCreateTokenContext } from '@/contexts/create-token'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
-  const { deployResult, formData, aiMemeInfo } = useContext(CreateTokenContext)
+  const { deployResult, formData, aiMemeInfo } = useCreateTokenContext()
   const { chain } = useAccount()
 
   const { url, form, chains, formFields, onSubmit } = formData
