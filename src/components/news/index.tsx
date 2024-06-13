@@ -8,11 +8,10 @@ import { Img } from '../img'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   news: MemeInfoDialogData
-  onMeme: () => any
   onClick?: () => any
 }
 
-export const NewsCard = ({ news, onMeme, onClick }: Props) => {
+export const NewsCard = ({ news, onClick }: Props) => {
   const { t } = useTranslation()
 
   return (
@@ -40,10 +39,11 @@ export const NewsCard = ({ news, onMeme, onClick }: Props) => {
         {news.title.length < 31 ? (
           <p
             className={clsx(
-              'mt-5 text-sm leading-4 text-gray-500 line-clamp-4'
+              'mt-5 text-sm leading-4 text-gray-500 ',
+              news.title.length < 22 ? 'line-clamp-4' : 'line-clamp-3'
             )}
           >
-            {news?.content}
+            {news?.content.replaceAll('\n', '')}
           </p>
         ) : null}
       </div>

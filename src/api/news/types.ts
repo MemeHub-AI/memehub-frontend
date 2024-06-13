@@ -56,6 +56,8 @@ export interface MemeInfoDialogData {
   id: number
   title: string
   content: string
+  description: string
   image: string
   link: string
+  logo: string
 }

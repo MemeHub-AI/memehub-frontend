@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from 'react'
+import React, { useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { clsx } from 'clsx'
@@ -20,54 +20,54 @@ import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Button } from './ui/button'
 import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
+import { useQuery } from '@tanstack/react-query'
+import { newsApi } from '@/api/news'
 
 interface Props extends ComponentProps<'div'> {
-  newsListData?: ReturnType<typeof useNewsList>
-  tab: number
+  defalutTab?: number
   listClassName?: string
-  isDialogLoading?: boolean
   containerClass?: string
-  setTab: (tab: number) => void
-  onConfirmDialog: () => void
 }
 
-export const OpportunityMoonshot = ({
-  className,
-  listClassName,
-  newsListData,
-  tab: tabIdx,
-  containerClass,
-  setTab,
-  onConfirmDialog,
-}: Props) => {
+const containerClassName = `flex flex-col gap-3 max-md:gap-4 max-md:overflow-y-clip  overflow-y-auto`
+
+export const OpportunityMoonshot = (props: Props) => {
+  const { defalutTab = 1, className, listClassName, containerClass } = props
+  const storage = useStorage()
   const { t } = useTranslation()
-  const { getArea, setArea } = useStorage()
   const { push } = useRouter()
+  const [tabIdx, setTab] = useState(defalutTab)
+
+  const { data: countryList, isLoading: loadingCountry } = useQuery({
+    queryKey: [newsApi.getCountry.name],
+    queryFn: newsApi.getCountry,
+  })
+
+  const { isLoading, isFetching, newsList, setArea, ref } = useNewsList({
+    isOpportunity: false,
+  })
 
   const {
-    isFetching,
-    newsList,
-    loadingCountry,
-    countryList,
-    show,
-    memeit,
-    setShow,
-    handleClick,
-    fetchPreviousPage,
-    fetchNextPage,
-  } = newsListData || {}
+    isLoading: opportunityListLoading,
+    isFetching: opportunityListFetching,
+    newsList: opportunityList,
+    ref: opportunityRef,
+  } = useNewsList({
+    isOpportunity: true,
+  })
 
-  if (countryList) {
-    const usIdx = countryList?.findIndex((country) => country.id === 24) || 0
-    const country = countryList.splice(usIdx, 1)?.[0]
-    if (country) countryList?.unshift(country)
+  if (countryList?.data) {
+    const usIdx =
+      countryList?.data?.findIndex((country) => country.id === 24) || 0
+    const country = countryList?.data.splice(usIdx, 1)?.[0]
+    if (country) countryList?.data?.unshift(country)
   }
 
-  const tabs = [t('next.moonshot'), t('take.wave')]
+  const tabs = [t('next.moonshot'), t('classic.meme')]
 
   const onChange = (value: string) => {
-    setArea(value)
-    newsListData?.setArea(+value)
+    storage.setArea(value)
+    setArea(+value)
   }
 
   const onChangeTab = (idx: number) => {
@@ -84,7 +84,7 @@ export const OpportunityMoonshot = ({
       <div className="hidden h-[98vh]"></div>
       <div
         className={clsx(
-          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full',
+          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
           tabIdx === 1 ? 'h-[90vh]' : 'h-[92vh]',
           containerClass
         )}
@@ -108,7 +108,7 @@ export const OpportunityMoonshot = ({
           })}
         </div>
         {tabIdx === 0 ? (
-          <Select defaultValue={getArea()} onValueChange={onChange}>
+          <Select defaultValue={storage.getArea()} onValueChange={onChange}>
             {loadingCountry ? (
               <Button className="mb-4 w-[inheirt] max-sm:mb-2">
                 {t('loading.country')}
@@ -119,7 +119,7 @@ export const OpportunityMoonshot = ({
               </SelectTrigger>
             )}
             <SelectContent>
-              {countryList?.map((country, i) => (
+              {countryList?.data?.map((country, i) => (
                 <SelectItem key={i} value={`${country.id}`}>
                   {utilLang.getContent(country.name)}
                 </SelectItem>
@@ -127,13 +127,16 @@ export const OpportunityMoonshot = ({
             </SelectContent>
           </Select>
         ) : null}
+
         <CustomSuspense
-          isPending={isFetching}
+          ref={ref}
+          isPending={isLoading}
           fallback={<NewsSkeleton />}
-          nullback={t('no.data')}
+          nullback={tabIdx === 0 ? <Nullback /> : null}
           className={clsx(
-            'flex flex-col gap-3 overflow-y-auto max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip',
+            containerClassName,
             tabIdx === 1 ? 'h-[calc(100vh-160px)]' : 'h-[calc(100vh-210px)]',
+            tabIdx === 1 && 'hidden',
             listClassName
           )}
         >
@@ -144,40 +147,69 @@ export const OpportunityMoonshot = ({
               onClick={() => {
                 push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
               }}
-              onMeme={() => {
-                handleClick?.(news)
+            />
+          ))}
+          {isFetching && tabIdx === 0 ? (
+            <div className="text-center my-5">{t('loading')}</div>
+          ) : null}
+        </CustomSuspense>
+
+        <CustomSuspense
+          ref={opportunityRef}
+          isPending={opportunityListLoading}
+          fallback={<NewsSkeleton />}
+          nullback={tabIdx === 1 ? <Nullback /> : null}
+          className={clsx(
+            containerClassName,
+            tabIdx === 1 ? 'h-[calc(100vh-160px)]' : 'h-[calc(100vh-210px)]',
+            tabIdx === 0 ? 'hidden' : '',
+            listClassName
+          )}
+        >
+          {opportunityList?.map((news, i) => (
+            <NewsCard
+              news={news!}
+              key={i}
+              onClick={() => {
+                push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
               }}
             />
           ))}
+          {opportunityListFetching && tabIdx === 1 ? (
+            <div className="text-center my-5">{t('loading')}</div>
+          ) : null}
         </CustomSuspense>
       </div>
     </div>
   )
 }
 
-export const MobileQpportunityMoonshot = ({
-  newsListData,
-  tab: tabIdx,
-  setTab,
-  children,
-}: Props) => {
+export const MobileQpportunityMoonshot = (props: Props) => {
+  const { children, defalutTab } = props
   return (
     <Drawer>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="h-[95vh]">
         <OpportunityMoonshot
           className="relative"
-          listClassName={clsx(
-            '!overflow-y-auto',
-            tabIdx == 0 ? 'max-sm:h-[65vh]' : 'max-sm:h-[70vh]'
-          )}
-          newsListData={newsListData}
-          isDialogLoading={false}
-          onConfirmDialog={() => {}}
-          tab={tabIdx}
-          setTab={setTab}
+          listClassName={clsx('max-md:!overflow-y-auto')}
+          defalutTab={defalutTab}
         />
       </DrawerContent>
     </Drawer>
+  )
+}
+
+const Nullback = () => {
+  const { t } = useTranslation()
+  return (
+    <div className="mt-10 text-xl text-center">
+      <img
+        src="/images/empty.png"
+        alt="Empty"
+        className="w-[50%] mx-auto mb-2"
+      />
+      <span className="">{t('no.data.news')}</span>
+    </div>
   )
 }
