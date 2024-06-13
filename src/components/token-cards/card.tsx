@@ -10,7 +10,7 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
-import { useTokenProgress } from '@/views/token/hooks/use-token-progress'
+import { useTokenProgressV1 } from '@/views/token/hooks/v1/use-token-progress'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -28,7 +28,7 @@ export const TokenCard = (props: Props) => {
     ...restProps
   } = props
   const router = useRouter()
-  const { progress } = useTokenProgress(
+  const { progress } = useTokenProgressV1(
     card.address as Address,
     Number(card.chain.id)
   )
