@@ -2,6 +2,7 @@ import React, { forwardRef, useContext, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatEther } from 'viem'
 import { toast } from 'sonner'
+import { useAccount } from 'wagmi'
 
 import { CreateTokenContext } from '../../context'
 import {
@@ -18,6 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { FormLogo } from './logo'
 import { FormChain } from './chain'
 import { PosterForm } from './poster'
+import { v1FactoryParams } from '@/contract/v1/params/factory'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
@@ -25,11 +27,13 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { deployResult, formData } = useContext(CreateTokenContext)
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
   const { url, form, formFields, onSubmit } = formData
+  const { chain } = useAccount()
 
-  const { deployFee, deploySymbol, isDeploying } = deployResult || {}
+  const { isDeploying } = deployResult || {}
+  const { deployFee } = v1FactoryParams
 
   const fee = Number(formatEther(BigInt(deployFee!))).toFixed(3)
-  const symbol = deploySymbol
+  const symbol = chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
     if (loadingInfo || loadingLogo) {

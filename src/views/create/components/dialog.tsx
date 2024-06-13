@@ -6,12 +6,12 @@ import { CircleAlert } from 'lucide-react'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
-import { useDeploy } from '../hooks/use-deploy'
+import { useDeployV1 } from '../hooks/use-deploy-v1'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { isUserReject } from '@/utils/contract'
 import { fmt } from '@/utils/fmt'
 
-interface Props extends ReturnType<typeof useDeploy> {}
+interface Props extends ReturnType<typeof useDeployV1> {}
 
 export const CreateTokenStatusDialog = (props: Props) => {
   const {

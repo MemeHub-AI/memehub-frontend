@@ -4,9 +4,9 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
-import { uniswapV2Abi } from '../../../contract/abi/uniswap-v2'
+import { v1UniswapV2Abi } from '../../../contract/v1/abi/uniswap-v2'
 import { customToast } from '@/utils/toast'
-import { ca } from '@/contract/address'
+import { v1Addr } from '@/contract/v1/address'
 import { useApprove } from '@/hooks/use-approve'
 
 export const useUniswapV2 = () => {
@@ -15,7 +15,7 @@ export const useUniswapV2 = () => {
   const { isApproving, checkForApproval } = useApprove()
 
   const nativeTokenAddr =
-    ca.reserveToken[chainId as keyof typeof ca.reserveToken]
+    v1Addr.reserveToken[chainId as keyof typeof v1Addr.reserveToken]
 
   const {
     data: hash,
@@ -56,8 +56,8 @@ export const useUniswapV2 = () => {
 
     console.log('uniswap buy', amount, token)
     writeContract({
-      abi: uniswapV2Abi,
-      address: ca.uniswapV2,
+      abi: v1UniswapV2Abi,
+      address: v1Addr.uniswapV2,
       functionName: 'swapExactETHForTokens',
       args: [BigInt(0), [nativeTokenAddr, token], address!, BigInt(Date.now())],
       value: parseEther(amount),
@@ -77,8 +77,8 @@ export const useUniswapV2 = () => {
 
     console.log('uniswap sell', amount, token)
     writeContract({
-      abi: uniswapV2Abi,
-      address: ca.uniswapV2,
+      abi: v1UniswapV2Abi,
+      address: v1Addr.uniswapV2,
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),

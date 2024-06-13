@@ -4,20 +4,19 @@ import { useTranslation } from 'react-i18next'
 
 import type { TokenNewReq } from '@/api/token/types'
 
-import { factoryAbi } from '../../../contract/abi/factory'
+import { v1FactoryAbi } from '../../../contract/v1/abi/factory'
 import { useCreateToken } from './use-create-token'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { useDeployConfig } from './use-deploy-config'
-import { ca } from '@/contract/address'
+import { v1Addr } from '@/contract/v1/address'
+import { v1FactoryParams } from '@/contract/v1/params/factory'
 
 let cacheParams: Omit<TokenNewReq, 'hash'>
 
-export const useDeploy = () => {
+export const useDeployV1 = () => {
   const { t } = useTranslation()
   const { chainId } = useAccount()
   const { createTokenData, createTokenError, isCreatingToken, create } =
     useCreateToken()
-  const { deployFee, deploySymbol, reserveRatio } = useDeployConfig()
 
   const {
     data: hash,
@@ -44,15 +43,15 @@ export const useDeploy = () => {
     //   return
     // }
 
-    const id = chainId as keyof typeof ca.reserveToken
-    const nativeTokenAddr = ca.reserveToken[id]
-    const routerAddr = ca.routerAddress[id]
+    const id = chainId as keyof typeof v1Addr.reserveToken
+    const nativeTokenAddr = v1Addr.reserveToken[id]
+    const routerAddr = v1Addr.routerAddress[id]
     if (!nativeTokenAddr || !routerAddr) {
       toast.error(t('chain.empty'))
       return
     }
 
-    const address = ca.factory[chainId as keyof typeof ca.factory]
+    const address = v1Addr.factory[chainId as keyof typeof v1Addr.factory]
     if (!address) {
       toast.error(t('addr.empty'))
       return
@@ -60,17 +59,17 @@ export const useDeploy = () => {
 
     return writeContract(
       {
-        abi: factoryAbi,
+        abi: v1FactoryAbi,
         address,
         functionName: 'deploy',
         args: [
-          reserveRatio,
+          v1FactoryParams.reserveRatio,
           nativeTokenAddr,
           params.name,
           params.ticker,
           routerAddr,
         ],
-        value: BigInt(deployFee),
+        value: v1FactoryParams.deployFee,
       },
       {
         // Submit hash to backend when contract submit success.
@@ -90,8 +89,6 @@ export const useDeploy = () => {
 
   return {
     data,
-    deployFee,
-    deploySymbol,
     deployHash: hash,
     isDeploying: isPending || isLoading || isCreatingToken,
     isSubmitting: isPending,

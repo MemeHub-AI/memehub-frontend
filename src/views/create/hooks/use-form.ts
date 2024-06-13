@@ -1,4 +1,4 @@
-import { useDeploy } from './use-deploy'
+import { useDeployV1 } from './use-deploy-v1'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -24,7 +24,7 @@ export const formFields = {
 }
 
 export const useCreateTokenForm = (
-  useDeployResult: ReturnType<typeof useDeploy>
+  useDeployResult: ReturnType<typeof useDeployV1>
 ) => {
   const { t } = useTranslation()
   const { isConnected, chainId } = useAccount()

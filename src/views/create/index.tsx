@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 
 import { Main } from './components/main'
 import { CreateTokenStatusDialog } from './components/dialog'
-import { useDeploy } from './hooks/use-deploy'
+import { useDeployV1 } from './hooks/use-deploy-v1'
 import { useCreateTokenForm } from './hooks/use-form'
 import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { CreateTokenContext } from './context'
 import { AICreateMemecoinDialogLoading } from '@/components/ai-create-memecoin-dialog/loading'
 
 export const CreatePage = () => {
-  const deployResult = useDeploy()
+  const deployResult = useDeployV1()
   const [tab, setTab] = useState(0)
   const formData = useCreateTokenForm(deployResult)
 

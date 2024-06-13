@@ -68,4 +68,5 @@ const dev = {
   routerAddress,
 } as const
 
-export const ca = dotenv.isProd ? prod : dev
+// Only export this line plz.
+export const v1Addr = dotenv.isProd ? prod : dev

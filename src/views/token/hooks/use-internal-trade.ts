@@ -4,7 +4,7 @@ import { type Address, isAddress, parseEther } from 'viem'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
-import { continousTokenAbi } from '@/contract/abi/continous-token'
+import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
 import { addServiceFee } from '@/utils/contract'
 import { customToast } from '@/utils/toast'
 
@@ -36,7 +36,7 @@ export const useInternalTrade = () => {
 
     console.log('internal buy', amount, token)
     writeContract({
-      abi: continousTokenAbi,
+      abi: v1ContinousTokenAbi,
       address: token,
       functionName: 'mint',
       args: [parseEther(amount)],
@@ -56,7 +56,7 @@ export const useInternalTrade = () => {
 
     console.log('internal sell', amount, token)
     writeContract({
-      abi: continousTokenAbi,
+      abi: v1ContinousTokenAbi,
       address: token,
       functionName: 'burn',
       args: [parseEther(amount)],
