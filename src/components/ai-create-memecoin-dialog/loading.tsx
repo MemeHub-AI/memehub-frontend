@@ -55,7 +55,6 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       toast.dismiss()
       setLoadingInfoDialog(false)
       setLoadingInfo(false)
-      debugger
     }
   }
 
@@ -80,7 +79,6 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
   useEffect(() => {
     if (loadingInfoDialog && info?.name !== undefined && !loadingInfo) {
-      debugger
       fetchMemeInfo()
     }
   }, [loadingInfoDialog])

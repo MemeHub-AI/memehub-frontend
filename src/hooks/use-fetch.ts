@@ -1,3 +1,4 @@
+import { toast } from 'sonner'
 import { useStorage } from './use-storage'
 
 export enum CommonHeaders {
@@ -6,9 +7,9 @@ export enum CommonHeaders {
 }
 
 export enum ContentType {
-  Text = 'text/plain;',
-  Json = 'application/json;',
-  FormData = 'multipart/form-data;',
+  Text = 'text/plain',
+  Json = 'application/json',
+  FormData = 'multipart/form-data',
 }
 
 export interface FetcherOptions extends Omit<RequestInit, 'body'> {
@@ -87,13 +88,23 @@ export const useFetch = (baseURL: string) => {
             ? options.body
             : JSON.stringify(options.body),
       })
+
       // Response error.
-      if (!response.ok) return response.body as T
+      if (!response.ok) throw response
 
       // Response success.
       return processSuccess(response, options) as T
     } catch (error) {
-      console.error('[useFetch Error]:', error)
+      let err = '[Request Error]: '
+
+      if (error instanceof Response) {
+        err += `${error.status} ${error.statusText}`
+      } else {
+        err += (error as Error)?.message
+      }
+
+      console.log(err)
+      toast.error(err)
       return error as T
     }
   }
@@ -115,6 +126,10 @@ export const useFetch = (baseURL: string) => {
       return fetcher<T>(path, { ...options, method: 'PATCH' })
     },
   }
+}
+
+const isJson = (h: Headers) => {
+  return h.get(CommonHeaders.ContentType)?.includes(ContentType.Json)
 }
 
 export const qs = {
