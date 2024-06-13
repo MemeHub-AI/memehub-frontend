@@ -4,8 +4,9 @@ import { v2BondAbi } from '../abi/bond'
 import { v2Addr } from '../address'
 import { commonAddr } from '@/contract/address'
 
+export const DEPLOY_FEE = BigInt(1500000000000000) // 0.0015 native token
+
 const params = {
-  deployFee: BigInt(1500000000000000), // 0.0015 native token
   mintRoyalty: 100,
   burnRoyalty: 100,
   addLiquidityTokenAmount: parseEther('270000000'),

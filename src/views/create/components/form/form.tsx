@@ -19,7 +19,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { FormLogo } from './logo'
 import { FormChain } from './chain'
 import { PosterForm } from './poster'
-import { v1FactoryParams } from '@/contract/v1/config/factory'
+import { DEPLOY_FEE } from '@/contract/v2/config/bond'
+import { fmt } from '@/utils/fmt'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
@@ -31,9 +32,8 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
     aiMemeInfo
 
   const { isDeploying } = deployResult || {}
-  const { deployFee } = v1FactoryParams
 
-  const fee = Number(formatEther(BigInt(deployFee!))).toFixed(3)
+  const fee = fmt.decimals(formatEther(DEPLOY_FEE), 3)
   const symbol = chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
@@ -104,8 +104,12 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
               </div>
             </div>
 
-            {/* chain */}
-            <FormChain formData={formData}></FormChain>
+            {/* Chain / coinType */}
+            <div className="h-[150px] flex flex-col justify-between">
+              <FormChain formData={formData} />
+
+              <div>cointype</div>
+            </div>
           </div>
 
           {/* Description */}

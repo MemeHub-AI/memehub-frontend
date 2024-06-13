@@ -6,7 +6,9 @@ import type { TokenNewReq } from '@/api/token/types'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
-import { getBondConfig } from '@/contract/v2/config/bond'
+import { DEPLOY_FEE, getBondConfig } from '@/contract/v2/config/bond'
+
+let cacheParams: Omit<TokenNewReq, 'hash'>
 
 export const useDeployV2 = () => {
   const { t } = useTranslation()
@@ -30,6 +32,7 @@ export const useDeployV2 = () => {
   } = useWaitForTx({ hash })
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
+    cacheParams = params
     if (!chainId) {
       toast.error(t('deploy.chain.empty'))
       return
@@ -40,21 +43,27 @@ export const useDeployV2 = () => {
       toast.error(t('deploy.config.empty'))
       return
     }
-    const { deployFee, ...restParams } = bondParams
 
     console.log('v2 deploy', bondConfig)
     writeContract(
       {
         ...bondConfig,
         functionName: 'createToken',
-        args: [{ name: params.name, symbol: params.ticker }, restParams],
-        value: deployFee,
+        args: [{ name: params.name, symbol: params.ticker }, bondParams],
+        value: DEPLOY_FEE,
       },
       { onSuccess: (hash) => create({ ...params, hash }) }
     )
   }
 
-  const retryCreate = () => {}
+  const retryCreate = () => {
+    if (!cacheParams || !hash) {
+      toast.error(t('cannot-retry'))
+      return
+    }
+
+    create({ ...cacheParams, hash })
+  }
 
   return {
     data,

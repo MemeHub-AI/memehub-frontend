@@ -63,7 +63,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!submitError}
         title={withIcon(t('deploy.submit.error') + ':')}
         description={
-          <p className="break-all line-clamp-3">{submitError?.message}</p>
+          <span className="break-all line-clamp-3">{submitError?.message}</span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -82,7 +82,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
       >
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
-          <p>{t('deploy.submit.success.desc')}</p>
+          <span>{t('deploy.submit.success.desc')}</span>
         </DialogDescription>
       </Dialog>
     )
@@ -95,7 +95,9 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!confirmError}
         title={withIcon(t('deploy.confirm.error') + ':')}
         description={
-          <p className="break-all line-clamp-3">{confirmError?.message}</p>
+          <span className="break-all line-clamp-3">
+            {confirmError?.message}
+          </span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -122,8 +124,8 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!createTokenError}
         title={withIcon(t('deploy.backend.error') + ':')}
         description={
-          <div>
-            <p className="break-all line-clamp-3">
+          <span>
+            <span className="break-all line-clamp-3">
               {t('deploy.backend.error.desc')}
               <span
                 className="text-blue-600 cursor-pointer hover:underline"
@@ -131,8 +133,8 @@ export const CreateTokenStatusDialog = (props: Props) => {
               >
                 {t('retry')}
               </span>
-            </p>
-          </div>
+            </span>
+          </span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -149,7 +151,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
         description={
-          <div className="flex flex-col gap-2 w-fit">
+          <span className="flex flex-col gap-2 w-fit">
             <Link
               className="text-blue-600 hover:underline"
               href={Routes.Main}
@@ -174,7 +176,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
             >
               {t('deploy.success.view-hash')}
             </Link>
-          </div>
+          </span>
         }
       />
     )
