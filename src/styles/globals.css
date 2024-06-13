@@ -93,3 +93,12 @@
     background-color: #555;
   }
 }
+
+
+.story h2 {
+  font-size: 24px;
+}
+
+.story a {
+  color: firebrick;
+}

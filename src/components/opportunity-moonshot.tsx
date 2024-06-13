@@ -29,7 +29,7 @@ interface Props extends ComponentProps<'div'> {
   containerClass?: string
 }
 
-const containerClassName = `flex flex-col gap-3 max-md:h-[unset] max-md:gap-4 max-md:overflow-y-clip  overflow-y-auto`
+const containerClassName = `flex flex-col gap-3 max-md:gap-4 max-md:overflow-y-clip  overflow-y-auto`
 
 export const OpportunityMoonshot = (props: Props) => {
   const { defalutTab = 1, className, listClassName, containerClass } = props
@@ -63,7 +63,7 @@ export const OpportunityMoonshot = (props: Props) => {
     if (country) countryList?.data?.unshift(country)
   }
 
-  const tabs = [t('next.moonshot'), t('take.wave')]
+  const tabs = [t('next.moonshot'), t('classic.meme')]
 
   const onChange = (value: string) => {
     storage.setArea(value)
@@ -84,9 +84,8 @@ export const OpportunityMoonshot = (props: Props) => {
       <div className="hidden h-[98vh]"></div>
       <div
         className={clsx(
-          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-[480px] max-sm:w-full',
+          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
           tabIdx === 1 ? 'h-[90vh]' : 'h-[92vh]',
-          tabIdx === 1 ? 'max-sm:h-[65vh]' : 'max-sm:h-[70vh]',
           containerClass
         )}
       >
@@ -190,10 +189,10 @@ export const MobileQpportunityMoonshot = (props: Props) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent className="h-[95vh]">
         <OpportunityMoonshot
           className="relative"
-          listClassName={clsx('!overflow-y-auto')}
+          listClassName={clsx('max-md:!overflow-y-auto')}
           defalutTab={defalutTab}
         />
       </DrawerContent>

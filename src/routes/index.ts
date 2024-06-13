@@ -3,6 +3,12 @@ export enum Routes {
 
   Create = '/create',
 
+  Airdrop = '/airdrop',
+
+  KOL = '/kol',
+
+  Community = '/communities',
+
   Account = '/account',
 
   Launchpad = '/launchpad',

@@ -15,6 +15,8 @@ import {
   MobileQpportunityMoonshot,
   OpportunityMoonshot,
 } from '@/components/opportunity-moonshot'
+import { cn } from '@/lib/utils'
+import { MemeStory } from './components/meme-story'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -26,11 +28,18 @@ const IdeaPage = () => {
   const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
   const defualtTab = +type - 1
 
+  const [tabIdx, setTab] = useState(defualtTab)
+  const tabs = [t('ideas'), t('meme.story')]
+
   const { data: basicInfoData } = useQuery({
     queryKey: [ideaApi.getIdeaInfo.name, newsId, type],
     queryFn: () => {
       if (newsId == undefined || type === undefined) {
         throw new Error('newsId is undefined')
+      }
+
+      if (+type === 2) {
+        return ideaApi.getMemeStory(newsId as string)
       }
 
       return ideaApi.getIdeaInfo(newsId, { type })
@@ -61,12 +70,12 @@ const IdeaPage = () => {
   }
 
   return (
-    <main className="min-h-main flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
+    <main className="min-h-main flex max-md:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
       <OpportunityMoonshot
         defalutTab={defualtTab}
-        className="max-sm:!hidden max-sm:!px-0"
+        className="max-md:!hidden max-sm:!px-0"
       />
-      <div className="max-w-[1185px] max-sm:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
+      <div className="max-w-[1185px] max-md:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <div className="flex flex-1">
             <img
@@ -76,7 +85,9 @@ const IdeaPage = () => {
             />
             <div className="ml-3 w-full">
               <div className="text-xl text">{basicInfo?.title}</div>
-              <Content content={basicInfo?.content}></Content>
+              <Content
+                content={basicInfo?.content.replace(/<[^>]*>/g, '')}
+              ></Content>
             </div>
           </div>
 
@@ -87,9 +98,9 @@ const IdeaPage = () => {
             </Button>
             <MobileQpportunityMoonshot
               defalutTab={defualtTab}
-              className="max-sm:!hidden max-sm:!px-0 "
+              className="max-md:!hidden max-sm:!px-0 "
             >
-              <div className="sm:hidden ml-4">
+              <div className="md:hidden ml-4">
                 <Button className="bg-white text-2xl" size={'icon'}>
                   💡
                 </Button>
@@ -97,7 +108,31 @@ const IdeaPage = () => {
             </MobileQpportunityMoonshot>
           </div>
         </div>
-        <WaterList newsId={newsId} type={type}></WaterList>
+        {+type === 2 ? (
+          <div className="flex items-start">
+            {tabs.map((tab, i) => {
+              return (
+                <div
+                  key={i}
+                  className={cn(
+                    'px-2.5 py-1.5 text-nowrap rounded-xl mt-5 cursor-pointer border-2 border-transparent',
+                    'hover:border-black',
+                    i === 1 && 'ml-3',
+                    tabIdx == i && 'bg-black text-[#ffe770]'
+                  )}
+                  onClick={() => setTab(i)}
+                >
+                  {tab}
+                </div>
+              )
+            })}
+          </div>
+        ) : null}
+        {tabIdx === 0 ? (
+          <WaterList newsId={newsId} type={type}></WaterList>
+        ) : (
+          <MemeStory data={basicInfo!}></MemeStory>
+        )}
       </div>
       <AICreateMemecoinDialog
         show={show}

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { Title } from './title'
-import { AIIdeaBar } from '@/components/ai-idea'
+import { AIIdeaBar } from '@/components/ai-idea-bar'
 import { CreateTokenForm } from './form/form'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { CreateTokenContext } from '../context'

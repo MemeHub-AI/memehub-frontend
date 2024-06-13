@@ -4,18 +4,32 @@ import { cn } from '@/lib/utils'
 import { useResponsive } from '@/hooks/use-responsive'
 import { HeaderMobile } from './mobile'
 import { HeaderDesktop } from './desktop'
+import { Routes } from '@/routes'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
 
 export interface Nav {
   id: string
   title: string
+  path: string
 }
 
 export const Header = () => {
-  const { isMobile } = useResponsive()
+  const { isPad } = useResponsive()
+  const { t } = useTranslation()
+  const { push } = useRouter()
 
-  const navs: Nav[] = []
+  const navs: Nav[] = [
+    { id: 'home', title: t('home'), path: Routes.Main },
+    { id: 'create', title: t('create.token'), path: Routes.Create },
+    { id: 'airdrop', title: t('airdrop'), path: Routes.Airdrop },
+    { id: 'KOL', title: t('KOL'), path: Routes.KOL },
+    { id: 'COMMUNITIES', title: t('community'), path: Routes.Community },
+  ]
 
-  const onNavClick = () => {}
+  const onNavClick = (n: Nav) => {
+    push(n.path)
+  }
 
   return (
     <header
@@ -25,7 +39,7 @@ export const Header = () => {
         'border-b-2 border-black'
       )}
     >
-      {isMobile ? (
+      {isPad ? (
         <HeaderMobile navs={navs} onNavClick={onNavClick} />
       ) : (
         <HeaderDesktop navs={navs} onNavClick={onNavClick} />
