@@ -55,7 +55,7 @@ export const FormChain = ({ formData }: Props) => {
       name={formFields?.chainName!}
       render={({ field }) => (
         <FormItem className="mt-0">
-          <FormLabel className="mt-0">
+          <FormLabel className="mt-0 font-bold">
             *
             {fmt.firstUpperCase(
               chains?.find((c) => c.name === field.value)?.name
