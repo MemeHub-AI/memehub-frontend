@@ -12,8 +12,8 @@ import { AICreateMemecoinDialogLoading } from '@/components/ai-create-memecoin-d
 import { useDeployV2 } from './hooks/use-deploy-v2'
 
 export const CreatePage = () => {
-  // const deployResult = useDeployV1()
-  const deployResult = useDeployV2()
+  const deployResult = useDeployV1()
+  // const deployResult = useDeployV2()
   const [tab, setTab] = useState(0)
   const formData = useCreateTokenForm(deployResult)
 

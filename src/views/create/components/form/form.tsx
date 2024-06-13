@@ -19,7 +19,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { FormLogo } from './logo'
 import { FormChain } from './chain'
 import { PosterForm } from './poster'
-import { v1FactoryParams } from '@/contract/v1/params/factory'
+import { v1FactoryParams } from '@/contract/v1/config/factory'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()

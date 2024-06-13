@@ -1,15 +1,15 @@
 import { useAccount, useWriteContract } from 'wagmi'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import type { TokenNewReq } from '@/api/token/types'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { v2BondAbi } from '@/contract/v2/abi/bond'
-import { v2Addr } from '@/contract/v2/address'
-import { v2BondParams } from '@/contract/v2/params/bond'
-import { commonAddr } from '@/contract/address'
 import { useCreateToken } from './use-create-token'
+import { getBondConfig } from '@/contract/v2/config/bond'
 
 export const useDeployV2 = () => {
+  const { t } = useTranslation()
   const { chainId } = useAccount()
   const { createTokenData, createTokenError, isCreatingToken, create } =
     useCreateToken()
@@ -30,25 +30,28 @@ export const useDeployV2 = () => {
   } = useWaitForTx({ hash })
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
-    const chainId = 97
-    const { deployFee, ...bondParams } = v2BondParams
+    if (!chainId) {
+      toast.error(t('deploy.chain.empty'))
+      return
+    }
 
-    console.log('v2 deploy', params)
+    const [bondConfig, bondParams] = getBondConfig(chainId)
+    if (!bondConfig || !bondParams) {
+      toast.error(t('deploy.config.empty'))
+      return
+    }
+    const { deployFee, ...restParams } = bondParams
 
-    writeContract({
-      abi: v2BondAbi,
-      address: v2Addr[chainId].bond,
-      functionName: 'createToken',
-      args: [
-        { name: params.name, symbol: params.ticker },
-        {
-          ...bondParams,
-          reserveToken: commonAddr[chainId].reserveToken,
-          router: commonAddr[chainId].router,
-        },
-      ],
-      value: deployFee,
-    })
+    console.log('v2 deploy', bondConfig)
+    writeContract(
+      {
+        ...bondConfig,
+        functionName: 'createToken',
+        args: [{ name: params.name, symbol: params.ticker }, restParams],
+        value: deployFee,
+      },
+      { onSuccess: (hash) => create({ ...params, hash }) }
+    )
   }
 
   const retryCreate = () => {}

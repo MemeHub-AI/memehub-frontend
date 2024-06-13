@@ -322,5 +322,7 @@
   "community": "COMMUNITIES",
   "ideas": "💡创意",
   "meme.story": "👏Meme故事",
-  "classic.meme": "🔥经典Meme"
+  "classic.meme": "🔥经典Meme",
+  "deploy.chain.empty": "找不到对应的链",
+  "deploy.config.empty": "找不到对应的合约配置"
 }

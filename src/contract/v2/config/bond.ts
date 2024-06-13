@@ -1,6 +1,10 @@
 import { parseEther } from 'viem'
 
-export const v2BondParams = {
+import { v2BondAbi } from '../abi/bond'
+import { v2Addr } from '../address'
+import { commonAddr } from '@/contract/address'
+
+const params = {
   deployFee: BigInt(1500000000000000), // 0.0015 native token
   mintRoyalty: 100,
   burnRoyalty: 100,
@@ -213,3 +217,22 @@ export const v2BondParams = {
     BigInt(49999999994),
   ],
 } as const
+
+export const getBondConfig = (chainId: number) => {
+  const id = chainId as keyof typeof v2Addr
+  const addr = v2Addr[id]
+  const commonAddress = commonAddr[id]
+
+  if (!addr || !commonAddress) return [] as const
+
+  const contractConfig = {
+    abi: v2BondAbi,
+    address: addr.bond,
+  } as const
+  const paramsConfig = {
+    ...params,
+    ...commonAddress,
+  } as const
+
+  return [contractConfig, paramsConfig] as const
+}

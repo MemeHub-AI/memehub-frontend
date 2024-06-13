@@ -9,7 +9,7 @@ import { v1FactoryAbi } from '../../../contract/v1/abi/factory'
 import { useCreateToken } from './use-create-token'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { v1Addr } from '@/contract/v1/address'
-import { v1FactoryParams } from '@/contract/v1/params/factory'
+import { v1FactoryParams } from '@/contract/v1/config/factory'
 import { commonAddr } from '@/contract/address'
 
 let cacheParams: Omit<TokenNewReq, 'hash'>

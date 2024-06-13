@@ -329,5 +329,7 @@
   "community": "COMMUNITIES",
   "ideas": "💡Ideas",
   "meme.story": "👏Meme story",
-  "classic.meme": "🔥Classic meme"
+  "classic.meme": "🔥Classic meme",
+  "deploy.chain.empty": "Cannot find chain",
+  "deploy.config.empty": "Cannot find contract config"
 }
