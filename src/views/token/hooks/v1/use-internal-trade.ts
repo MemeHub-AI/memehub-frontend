@@ -8,7 +8,7 @@ import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
 import { addServiceFee } from '@/utils/contract'
 import { customToast } from '@/utils/toast'
 
-export const useInternalTrade = () => {
+export const useInternalTradeV1 = () => {
   const { t } = useTranslation()
 
   const {

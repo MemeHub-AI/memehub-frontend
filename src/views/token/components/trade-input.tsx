@@ -7,7 +7,7 @@ import { useDebounce } from 'react-use'
 import { Input } from '@/components/ui/input'
 import { useTradeContext } from '@/contexts/trade'
 import { useTokenContext } from '@/contexts/token'
-import { useTradeInfo } from '../hooks/use-trade-info'
+import { useTradeInfoV1 } from '../hooks/v1/use-trade-info'
 import { cn } from '@/lib/utils'
 import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -23,7 +23,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
-  const { getBuyTokenAmount, getSellTokenAmount } = useTradeInfo()
+  const { getBuyTokenAmount, getSellTokenAmount } = useTradeInfoV1()
 
   const tokenSymbol = tokenInfo?.ticker || ''
   const baseTokenAmount = fmt.decimals(String(value || 0))

@@ -17,7 +17,6 @@ export const CreateTokenStatusDialog = (props: Props) => {
   const {
     createTokenData,
     createTokenError,
-    deployHash = '',
     isSubmitting,
     isConfirming,
     isDeploySuccess,

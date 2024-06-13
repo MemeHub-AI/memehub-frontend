@@ -6,7 +6,7 @@ import { BigNumber } from 'bignumber.js'
 import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
-export const useTokenProgress = (
+export const useTokenProgressV1 = (
   overrideAddr?: Address,
   overrideChainId?: number
 ) => {
@@ -44,7 +44,9 @@ export const useTokenProgress = (
   })
   const total = formatEther(data[0]?.result || BigInt(0))
   const current = formatEther(data[1]?.result || BigInt(0))
-  const progress = BigNumber(current).div(total).multipliedBy(100).toFixed(2)
+  const progress = BigNumber(current).isZero()
+    ? BigInt(0)
+    : BigNumber(current).div(total).multipliedBy(100).toFixed(2)
 
   return {
     total,

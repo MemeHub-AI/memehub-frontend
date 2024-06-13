@@ -6,25 +6,25 @@ import { useTranslation } from 'react-i18next'
 
 import type { Address } from 'viem'
 
-import { useInternalTrade } from './use-internal-trade'
-import { useUniswapV2 } from './use-uniswap-v2'
-import { useTradeInfo } from './use-trade-info'
+import { useInternalTradeV1 } from './use-internal-trade'
+import { useUniswapV2 } from './use-uniswapv2'
+import { useTradeInfoV1 } from './use-trade-info'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 
-export const useTrade = () => {
+export const useTradeV1 = () => {
   const { t } = useTranslation()
   const [isInternalTrade, setIsInternalTrade] = useState(true)
   const { query } = useRouter()
   const token = (query.address || '') as Address
 
-  const { checkForOverflow } = useTradeInfo()
+  const { checkForOverflow } = useTradeInfoV1()
   const {
     internalHash,
     isInternalTrading,
     internalBuy,
     internalSell,
     resetInternalTrade,
-  } = useInternalTrade()
+  } = useInternalTradeV1()
   const {
     uniswapHash,
     isUniswapTrading,

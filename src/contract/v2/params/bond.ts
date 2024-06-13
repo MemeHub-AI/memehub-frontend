@@ -1,9 +1,13 @@
 import { parseEther } from 'viem'
 
 export const v2BondParams = {
-  mintFee: 100,
-  burnFee: 100,
   deployFee: BigInt(1500000000000000), // 0.0015 native token
+  mintRoyalty: 100,
+  burnRoyalty: 100,
+  addLiquidityTokenAmount: parseEther('270000000'),
+  addLiquidityReserveAmount: parseEther('13.5'),
+  reserveTotalsupply: parseEther('14.325294685317497'),
+  maxSupply: parseEther('730000000'),
   stepRanges: [
     parseEther('7300000'),
     parseEther('14600000'),

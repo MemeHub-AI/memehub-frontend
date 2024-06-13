@@ -1,5 +1,4 @@
 import { useAccount, useWriteContract } from 'wagmi'
-import { parseEther } from 'viem'
 
 import type { TokenNewReq } from '@/api/token/types'
 
@@ -7,78 +6,68 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { v2BondAbi } from '@/contract/v2/abi/bond'
 import { v2Addr } from '@/contract/v2/address'
 import { v2BondParams } from '@/contract/v2/params/bond'
+import { commonAddr } from '@/contract/address'
+import { useCreateToken } from './use-create-token'
 
 export const useDeployV2 = () => {
   const { chainId } = useAccount()
+  const { createTokenData, createTokenError, isCreatingToken, create } =
+    useCreateToken()
+
   const {
     data: hash,
     isPending: isSubmitting,
-    error: submitErr,
+    error: submitError,
     writeContract,
     reset,
-  } = useWriteContract({
-    mutation: {
-      onMutate: () => {
-        console.log('submit deploy')
-      },
-      onError(error) {
-        console.log('submit error', error)
-      },
-      onSuccess(data) {
-        console.log('submit success', data)
-      },
-    },
-  })
-
+  } = useWriteContract()
   const {
-    data: confirmData,
-    error: confirmErr,
+    data,
+    error: confirmError,
     isLoading: isConfirming,
-  } = useWaitForTx({
-    hash,
-    onError(error) {
-      console.log('confirm error', error)
-    },
-    onSuccess(data) {
-      console.log('confirm success', data)
-    },
-  })
+    isSuccess,
+    isError,
+  } = useWaitForTx({ hash })
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
     const chainId = 97
+    const { deployFee, ...bondParams } = v2BondParams
+
+    console.log('v2 deploy', params)
+
     writeContract({
       abi: v2BondAbi,
-      address: v2Addr.bond[chainId],
+      address: v2Addr[chainId].bond,
       functionName: 'createToken',
       args: [
         { name: params.name, symbol: params.ticker },
         {
-          mintRoyalty: v2BondParams.mintFee,
-          burnRoyalty: v2BondParams.burnFee,
-          reserveToken: v2Addr.reserveTokenAddr[chainId],
-          // TODO: should be dynamic?
-          addLiquidityTokenAmount: parseEther('270000000'),
-          addLiquidityReserveAmount: parseEther('13.5'),
-          reserveTotalsupply: parseEther('14.325294685317497'),
-          router: v2Addr.routerAddr[chainId],
-          maxSupply: parseEther('730000000'),
-          stepRanges: v2BondParams.stepRanges,
-          stepPrices: v2BondParams.stepPrices,
+          ...bondParams,
+          reserveToken: commonAddr[chainId].reserveToken,
+          router: commonAddr[chainId].router,
         },
       ],
-      value: v2BondParams.deployFee,
+      value: deployFee,
     })
   }
 
+  const retryCreate = () => {}
+
   return {
-    hash,
-    submitErr,
-    confirmData,
-    confirmErr,
+    data,
+    deployHash: hash,
+    isDeploying: isSubmitting || isConfirming,
     isSubmitting,
     isConfirming,
-    isDeploying: isSubmitting || isConfirming,
+    isCreatingToken,
+    isDeploySuccess: isSuccess,
+    isDeployError: isError,
+    submitError,
+    confirmError,
+    createTokenData,
+    createTokenError,
     deploy,
-    reset,
+    resetDeploy: reset,
+    retryCreate,
   }
 }

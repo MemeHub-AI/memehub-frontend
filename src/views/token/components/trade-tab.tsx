@@ -11,16 +11,17 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
-import { useTrade } from '../hooks/use-trade'
+import { useTradeV1 } from '../hooks/v1/use-trade'
 import { useWalletStore } from '@/stores/use-wallet-store'
-import { useTradeInfo } from '../hooks/use-trade-info'
+import { useTradeInfoV1 } from '../hooks/v1/use-trade-info'
 import { SlippageButton } from './slippage-button'
 import { TradeProvider } from '@/contexts/trade'
 import { TradeItems } from './trade-items'
 import { TradeInput } from './trade-input'
 import { TradeType } from '@/api/websocket/types'
 import { useTokenContext } from '@/contexts/token'
-import { useTradeInfoV2 } from '../hooks/use-trade-info-v2'
+import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
+import { useTradeV2 } from '../hooks/v2/use-trade'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -34,14 +35,15 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
-  const { isSubmitting, isTraded, buy, sell } = useTrade()
-  const {} = useTradeInfoV2()
+  const { isSubmitting, isTraded, buy, sell } = useTradeV1()
   const {
     nativeBalance,
     tokenBalance,
     refetchNativeBalance,
     refetchTokenBalance,
-  } = useTradeInfo()
+  } = useTradeInfoV1()
+  const { buy: buyV2, sell: sellV2 } = useTradeV2()
+  const {} = useTradeInfoV2()
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
 
@@ -91,6 +93,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   }
 
   const onTrade = async () => {
+    isBuy ? buyV2(value) : sellV2(value)
+    return
     // Wallet is not connect.
     if (!isConnected) {
       setConnectOpen(true)

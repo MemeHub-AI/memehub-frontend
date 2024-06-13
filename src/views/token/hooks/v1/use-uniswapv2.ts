@@ -4,18 +4,18 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
-import { v1UniswapV2Abi } from '../../../contract/v1/abi/uniswap-v2'
+import { v1UniswapV2Abi } from '../../../../contract/v1/abi/uniswap-v2'
 import { customToast } from '@/utils/toast'
 import { v1Addr } from '@/contract/v1/address'
 import { useApprove } from '@/hooks/use-approve'
+import { commonAddr } from '@/contract/address'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
   const { address, chainId } = useAccount()
   const { isApproving, checkForApproval } = useApprove()
 
-  const nativeTokenAddr =
-    v1Addr.reserveTokenAddr[chainId as keyof typeof v1Addr.reserveTokenAddr]
+  const { reserveToken } = commonAddr[chainId as keyof typeof commonAddr]
 
   const {
     data: hash,
@@ -50,7 +50,7 @@ export const useUniswapV2 = () => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
-    if (!nativeTokenAddr) {
+    if (!reserveToken) {
       return toast.error(t('chain.empty'))
     }
 
@@ -59,17 +59,17 @@ export const useUniswapV2 = () => {
       abi: v1UniswapV2Abi,
       address: v1Addr.uniswapV2,
       functionName: 'swapExactETHForTokens',
-      args: [BigInt(0), [nativeTokenAddr, token], address!, BigInt(Date.now())],
+      args: [BigInt(0), [reserveToken, token], address!, BigInt(Date.now())],
       value: parseEther(amount),
     })
   }
 
   const uniswapSell = async (amount: string, token: Address) => {
-    if (!nativeTokenAddr) {
+    if (!reserveToken) {
       return toast.error(t('chain.empty'))
     }
 
-    const isApproved = await checkForApproval(token, nativeTokenAddr, amount)
+    const isApproved = await checkForApproval(token, reserveToken, amount)
     if (!isApproved) return
 
     const isValid = checkForTrade(amount, token)
@@ -83,7 +83,7 @@ export const useUniswapV2 = () => {
       args: [
         parseEther(amount),
         BigInt(0),
-        [token, nativeTokenAddr],
+        [token, reserveToken],
         address!,
         BigInt(Date.now()),
       ],
