@@ -6,7 +6,7 @@ import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import { AppLayout } from '@/components/layouts/app'
 import { AppProviders } from '@/components/app-providers'
-import { GoogleTagManager } from '@next/third-parties/google'
+import Script from 'next/script'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation()
@@ -24,9 +24,20 @@ export default function App({ Component, pageProps }: AppProps) {
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
         />
       </Head>
-      <GoogleTagManager
-        gtmId={process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID!}
-      ></GoogleTagManager>
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+      ></Script>
+      <Script
+        dangerouslySetInnerHTML={{
+          __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', '${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}');
+          `,
+        }}
+      ></Script>
       <AppProviders>
         <AppLayout children={<Component {...pageProps} />} />
       </AppProviders>

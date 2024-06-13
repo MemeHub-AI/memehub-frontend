@@ -128,7 +128,7 @@ const IdeaPage = () => {
             })}
           </div>
         ) : null}
-        {tabIdx === 0 ? (
+        {tabIdx === 0 || type === '1' ? (
           <WaterList newsId={newsId} type={type}></WaterList>
         ) : (
           <MemeStory data={basicInfo!}></MemeStory>
