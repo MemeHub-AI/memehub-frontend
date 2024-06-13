@@ -50,7 +50,7 @@ export const AIIdeaBar = (props: Props) => {
           endIcon={
             <TooltipProvider>
               <Tooltip className="block h-full" tip={t('random.meme')}>
-                <TooltipTrigger className="block h-full">
+                <TooltipTrigger className="block h-full" asChild>
                   <div
                     className="bg-black h-full text-white flex items-center px-1.5 cursor-pointer"
                     onClick={onRandomGen}
