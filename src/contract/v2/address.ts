@@ -1,35 +1,22 @@
-import { bsc, bscTestnet } from '@wagmi/core/chains'
+import {
+  // testnet.
+  sepolia,
+  bscTestnet,
+  // mainnet.
+  mainnet,
+} from 'wagmi/chains'
+import { Config } from 'wagmi'
 
 import { dotenv } from '@/utils/env'
-import { reserveTokenAddr, routerAddr } from '../address'
 
-const prod = {
-  bond: {
-    [bsc.id]: '',
-  },
-  token: {
-    [bsc.id]: '',
-  },
-  zapV1: {
-    [bsc.id]: '',
-  },
-  reserveTokenAddr,
-  routerAddr,
-} as const
+const prod = {} as const
 
 const dev = {
-  bond: {
-    [bscTestnet.id]: '0xcc27db6158c2971Af3366e8FEBa5049B64534105',
+  [bscTestnet.id]: {
+    bond: '0x7DC5689651c0aA95Ee354dFC724046e018438C9d',
+    token: '0x4ac6d25f3cd82cb18f8830d2dd517152bad8107f',
+    zapV1: '0x12f68F27156Def59e1E66762DbE967ef17ecc8C6',
   },
-  token: {
-    [bscTestnet.id]: '0xE5eC2c25f86Af9eB47f3f7213e2D88679b92A1cf',
-  },
-  zapV1: {
-    [bscTestnet.id]: '0x80c17A095DaACb58399Db22639Dc3B9c7d62660e',
-  },
-  reserveTokenAddr,
-  routerAddr,
 } as const
 
-// Only export this line plz.
 export const v2Addr = dev
