@@ -15,7 +15,7 @@ export const useUniswapV2 = () => {
   const { address, chainId } = useAccount()
   const { isApproving, checkForApproval } = useApprove()
 
-  const { reserveToken } = commonAddr[chainId as keyof typeof commonAddr]
+  const { reserveToken } = commonAddr[chainId as keyof typeof commonAddr] || {}
 
   const {
     data: hash,

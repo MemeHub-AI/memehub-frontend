@@ -1,25 +1,18 @@
 import { useAccount, useWriteContract } from 'wagmi'
-import { readContract } from 'wagmi/actions'
-import { erc20Abi, parseEther } from 'viem'
+import { Address, parseEther } from 'viem'
 
 import { v2ZapV1Abi } from './../../../../contract/v2/abi/zapv1'
 import { v2Addr } from '@/contract/v2/address'
 import { addServiceFee } from '@/utils/contract'
 import { useApprove } from '@/hooks/use-approve'
-import { v2TokenAbi } from '@/contract/v2/abi/token'
-import { wagmiConfig } from '@/config/wagmi'
-import { BigNumber } from 'bignumber.js'
-
-const tokenAddr = '0x2125a289aDE91aB855CbE7B66ee77d39AC8a9148'
-
-const APPROVE_MAX_VALUE = BigInt(
-  '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-)
+import { useRouter } from 'next/router'
 
 export const useTradeV2 = () => {
+  const { query } = useRouter()
+  const tokenAddr = (query.address || '') as Address
   const { address } = useAccount()
-  const { writeContract, writeContractAsync } = useWriteContract()
-  const { checkForApproval } = useApprove()
+  const { writeContract } = useWriteContract()
+  const { approvalForAll } = useApprove()
 
   const buy = (amount: string) => {
     if (!address) return
@@ -37,16 +30,11 @@ export const useTradeV2 = () => {
   const sell = async (amount: string) => {
     if (!address) return
 
-    const isApproved = await checkForApproval(
-      v2Addr[97].token,
-      v2Addr[97].zapV1,
-      amount
-    )
-    console.log('isApproved', isApproved)
+    const isApproved = await approvalForAll(tokenAddr, v2Addr[97].zapV1, amount)
     if (!isApproved) return
 
     console.log('v2 sell', parseEther(amount), tokenAddr, address)
-    writeContractAsync({
+    writeContract({
       abi: v2ZapV1Abi,
       address: v2Addr[97].zapV1,
       functionName: 'burnToEth',
