@@ -14,4 +14,6 @@ export enum Routes {
   Launchpad = '/launchpad',
 
   Idea = '/idea',
+
+  Reward = '/reward',
 }

@@ -11,6 +11,7 @@ import { LangSelect } from '../lang-select'
 import { SocialLinks } from '../social-links'
 import { Routes } from '@/routes'
 import { SearchInput } from '../search-input'
+import { RewardButton } from '../reward-button'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -48,6 +49,7 @@ export const HeaderDesktop = (props: Props) => {
             {t('token.create')}
           </Button>
         ) : null} */}
+        <RewardButton />
         <LangSelect className="flex-shrink-0" />
         <WalletConnect />
       </div>

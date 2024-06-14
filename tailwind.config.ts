@@ -52,6 +52,7 @@ const config = {
         ...baseHeight,
       },
       colors: {
+        'blue-deep': '#2c30ee',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
