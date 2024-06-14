@@ -38,11 +38,12 @@ export const useDeployV2 = () => {
       return
     }
 
-    const [bondConfig, bondParams] = getBondConfig(chainId)
-    if (!bondConfig || !bondParams) {
+    const config = getBondConfig(chainId)
+    if (!config) {
       toast.error(t('deploy.config.empty'))
       return
     }
+    const [bondConfig, bondParams] = config
 
     console.log('v2 deploy', bondConfig)
     writeContract(

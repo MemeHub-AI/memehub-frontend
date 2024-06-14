@@ -342,5 +342,6 @@
   "marketing.community": "空投 {} 代币给 {} 联盟",
   "marketing.community.desc": "将代币总量的 {} 空投给平台内的社区联盟",
   "marketing.memehub": "空投 {} 代币给 {} 联盟",
-  "marketing.memehub.desc": "将代币总量的 {} 空投给接入 {} 的联盟"
+  "marketing.memehub.desc": "将代币总量的 {} 空投给接入 {} 的联盟",
+  "trade.balance.invalid": "余额错误"
 }

@@ -1,8 +1,7 @@
 import { parseEther } from 'viem'
 
 import { v2BondAbi } from '../abi/bond'
-import { v2Addr } from '../address'
-import { commonAddr } from '@/contract/address'
+import { getV2Addr } from '.'
 
 export const DEPLOY_FEE = BigInt(1500000000000000) // 0.0015 native token
 
@@ -220,19 +219,17 @@ const params = {
 } as const
 
 export const getBondConfig = (chainId: number) => {
-  const id = chainId as keyof typeof v2Addr
-  const addr = v2Addr[id]
-  const commonAddress = commonAddr[id]
+  const addr = getV2Addr(chainId)
+  if (addr.length === 0) return
 
-  if (!addr || !commonAddress) return [] as const
-
+  const [v2Addr, commonAddr] = addr
   const contractConfig = {
     abi: v2BondAbi,
-    address: addr.bond,
+    address: v2Addr.bond,
   } as const
   const paramsConfig = {
     ...params,
-    ...commonAddress,
+    ...commonAddr,
   } as const
 
   return [contractConfig, paramsConfig] as const

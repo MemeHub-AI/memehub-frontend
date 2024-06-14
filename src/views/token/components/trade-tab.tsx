@@ -11,9 +11,7 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
-import { useTradeV1 } from '../hooks/v1/use-trade'
 import { useWalletStore } from '@/stores/use-wallet-store'
-import { useTradeInfoV1 } from '../hooks/v1/use-trade-info'
 import { SlippageButton } from './slippage-button'
 import { TradeProvider } from '@/contexts/trade'
 import { TradeItems } from './trade-items'
@@ -22,6 +20,7 @@ import { TradeType } from '@/api/websocket/types'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
 import { useTradeV2 } from '../hooks/v2/use-trade'
+import { useSlippage } from '../hooks/use-slippage'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -32,18 +31,17 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     [tab]
   )
   const { query } = useRouter()
+  const { slippage, setSlippage } = useSlippage()
 
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
-  const { isSubmitting, isTraded, buy, sell } = useTradeV1()
+  const { isSubmitting, isTraded, buy, sell } = useTradeV2()
   const {
     nativeBalance,
     tokenBalance,
     refetchNativeBalance,
     refetchTokenBalance,
-  } = useTradeInfoV1()
-  const { buy: buyV2, sell: sellV2 } = useTradeV2()
-  const {} = useTradeInfoV2()
+  } = useTradeInfoV2()
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
 
@@ -57,7 +55,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       setValue(nativeBalance)
       return
     }
-    const max = await buy(value)
+    const max = await buy(value, slippage)
 
     // Internal buy & overflow current max value.
     if (max) {
@@ -93,8 +91,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   }
 
   const onTrade = async () => {
-    isBuy ? buyV2(value) : sellV2(value)
-    return
     // Wallet is not connect.
     if (!isConnected) {
       setConnectOpen(true)
@@ -158,7 +154,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           </TabsList>
 
           {/* Slippage button */}
-          {/* <SlippageButton disabled={isTrading} /> */}
+          <SlippageButton
+            value={slippage}
+            onChange={setSlippage}
+            disabled={isSubmitting}
+          />
 
           <div className="flex flex-col my-6">
             {/* Input */}
@@ -172,27 +172,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             <TradeItems
               disabled={isSubmitting}
               onResetClick={setValue}
-              onBuyItemClick={(value) => {
-                if (BigNumber(nativeBalance).lte(0)) {
-                  toast.warning(t('trade.balance.zero'))
-                  return
-                }
-                if (BigNumber(value).gt(nativeBalance)) {
-                  setValue(nativeBalance)
-                  return
-                }
-                setValue(value)
-              }}
-              onSellItemClick={(value: string) => {
-                if (BigNumber(tokenBalance).lte(0)) {
-                  toast.warning(t('trade.balance.zero'))
-                  return
-                }
-                const percent = BigNumber(value)
-                  .multipliedBy(tokenBalance)
-                  .div(100)
-                setValue(percent.toFixed())
-              }}
+              onItemClick={setValue}
             />
           </div>
 

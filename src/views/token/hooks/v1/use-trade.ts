@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import type { Address } from 'viem'
 
 import { useInternalTradeV1 } from './use-internal-trade'
-import { useUniswapV2 } from './use-uniswapv2'
+import { useUniswapV2 } from '../use-uniswap-v2'
 import { useTradeInfoV1 } from './use-trade-info'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 

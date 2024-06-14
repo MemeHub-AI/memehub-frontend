@@ -23,7 +23,9 @@ import { dotenv } from '@/utils/env'
 
 export const idoAddress = '0x1778EDfF5DBD9a64Fa54D237F828F317DB884056'
 
-// Common address.
+export const uniswapV2Addr = '0x9B3336186a38E1b6c21955d112dbb0343Ee061eE'
+
+// Bonding Curve v2 common address.
 export const commonAddr = {
   // testnet.
   [bscTestnet.id]: {

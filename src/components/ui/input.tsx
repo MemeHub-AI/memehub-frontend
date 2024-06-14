@@ -13,7 +13,7 @@ const inputVariants = cva(
   {
     variants: {
       border: {
-        default: 'border border-input focus-visible:outline-none',
+        default: 'border-2 border-black focus-visible:outline-none',
         none: 'focus-visible:outline-none focus-visible:ring-none',
       },
     },

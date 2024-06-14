@@ -349,5 +349,6 @@
   "marketing.community": "Airdrop {} tokens to the {} Aliance",
   "marketing.community.desc": "Airdrop {} of the total token supply to community alliances within the platform",
   "marketing.memehub": "Airdrop {} tokens to {} Aliance",
-  "marketing.memehub.desc": "Airdrop {} of the total token supply to the alliances integrated with {}"
+  "marketing.memehub.desc": "Airdrop {} of the total token supply to the alliances integrated with {}",
+  "trade.balance.invalid": "Balance is invalid"
 }

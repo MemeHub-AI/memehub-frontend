@@ -67,7 +67,7 @@ export const useApprove = () => {
         abi: erc20Abi,
         address: token,
         functionName: 'allowance',
-        chainId: chainId as ChainId,
+        chainId,
         args: [address, spender],
       })
 

@@ -4,16 +4,15 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
-import { v1UniswapV2Abi } from '../../../../contract/v1/abi/uniswap-v2'
-import { customToast } from '@/utils/toast'
-import { v1Addr } from '@/contract/v1/address'
+import { uniswapV2Config } from '../../../contract/abi/uniswap-v2'
 import { useApprove } from '@/hooks/use-approve'
 import { commonAddr } from '@/contract/address'
+import { ERR } from '@/errors'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
   const { address, chainId } = useAccount()
-  const { isApproving, checkForApproval } = useApprove()
+  const { isApproving, approvalForAll } = useApprove()
 
   const { reserveToken } = commonAddr[chainId as keyof typeof commonAddr] || {}
 
@@ -26,7 +25,7 @@ export const useUniswapV2 = () => {
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: customToast.errorContract,
+      onError: (e) => ERR.contract(e),
     },
   })
 
@@ -43,6 +42,9 @@ export const useUniswapV2 = () => {
       toast.error(t('trade.token.invalid'))
       return false
     }
+    if (!reserveToken) {
+      return toast.error(t('chain.empty'))
+    }
     return true
   }
 
@@ -50,14 +52,9 @@ export const useUniswapV2 = () => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
-    if (!reserveToken) {
-      return toast.error(t('chain.empty'))
-    }
-
     console.log('uniswap buy', amount, token)
     writeContract({
-      abi: v1UniswapV2Abi,
-      address: v1Addr.uniswapV2,
+      ...uniswapV2Config,
       functionName: 'swapExactETHForTokens',
       args: [BigInt(0), [reserveToken, token], address!, BigInt(Date.now())],
       value: parseEther(amount),
@@ -65,20 +62,15 @@ export const useUniswapV2 = () => {
   }
 
   const uniswapSell = async (amount: string, token: Address) => {
-    if (!reserveToken) {
-      return toast.error(t('chain.empty'))
-    }
-
-    const isApproved = await checkForApproval(token, reserveToken, amount)
-    if (!isApproved) return
-
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
+    const isApproved = await approvalForAll(token, reserveToken, amount)
+    if (!isApproved) return
+
     console.log('uniswap sell', amount, token)
     writeContract({
-      abi: v1UniswapV2Abi,
-      address: v1Addr.uniswapV2,
+      ...uniswapV2Config,
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),

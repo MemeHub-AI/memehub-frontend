@@ -1,49 +1,109 @@
-import { useAccount, useWriteContract } from 'wagmi'
-import { Address, parseEther } from 'viem'
-
-import { v2ZapV1Abi } from './../../../../contract/v2/abi/zapv1'
-import { v2Addr } from '@/contract/v2/address'
-import { addServiceFee } from '@/utils/contract'
-import { useApprove } from '@/hooks/use-approve'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Address, formatEther, isAddress } from 'viem'
 import { useRouter } from 'next/router'
+import { toast } from 'sonner'
+import { isEmpty } from 'lodash'
+import { BigNumber } from 'bignumber.js'
+
+import { useInternelTradeV2 } from './use-internal-trade'
+import { useUniswapV2 } from '../use-uniswap-v2'
+import { useWaitForTx } from '@/hooks/use-wait-for-tx'
+import { useTradeInfoV2 } from './use-trade-info'
 
 export const useTradeV2 = () => {
+  const { t } = useTranslation()
+  const [isListed, setIsListed] = useState(false)
   const { query } = useRouter()
-  const tokenAddr = (query.address || '') as Address
-  const { address } = useAccount()
-  const { writeContract } = useWriteContract()
-  const { approvalForAll } = useApprove()
+  const token = (query.address ?? '') as Address
 
-  const buy = (amount: string) => {
-    if (!address) return
+  const { checkForToken, getAmountForBuy } = useTradeInfoV2()
+  const {
+    internalHash,
+    isInternalTrading,
+    internalBuy,
+    internalSell,
+    resetInternalTrade,
+  } = useInternelTradeV2()
+  const {
+    uniswapHash,
+    isUniswapTrading,
+    uniswapBuy,
+    uniswapSell,
+    resetUniswapTrade,
+  } = useUniswapV2()
+  const tradeHash = isListed ? uniswapHash : internalHash
+  const isSubmitting = isListed ? isUniswapTrading : isInternalTrading
 
-    console.log('v2 buy', parseEther(amount), tokenAddr, address)
-    writeContract({
-      abi: v2ZapV1Abi,
-      address: v2Addr[97].zapV1,
-      functionName: 'mintWithEth',
-      args: [tokenAddr, parseEther(amount), address],
-      value: addServiceFee(amount),
-    })
+  const { isLoading, isFetched: isTraded } = useWaitForTx({
+    hash: tradeHash,
+    onLoading: () => toast.loading(t('tx.waiting')),
+    onSuccess: () => toast.success(t('trade.success')),
+    onError: () => toast.error(t('trade.failed')),
+    onFillay: () => {
+      resetTrade()
+      toast.dismiss()
+    },
+  })
+  const isTrading = isSubmitting || isLoading
+
+  const checkForTrade = (amount: string) => {
+    if (isEmpty(amount)) {
+      toast.error(t('trade.amount.invalid'))
+      return false
+    }
+    if (!isAddress(token)) {
+      toast.error(t('trade.token.invalid'))
+      return false
+    }
+
+    return true
+  }
+
+  const buy = async (amount: string, slippage: string) => {
+    if (!checkForTrade(amount)) return
+
+    const [weiNativeAmount] = await getAmountForBuy(token, amount)
+    const nativeAmount = BigNumber(formatEther(weiNativeAmount))
+    if (nativeAmount.lte(0)) {
+      toast.error(t('trade.balance.invalid'))
+      return
+    }
+
+    const { isOverflow, isListed, currentMax } = await checkForToken(
+      token,
+      amount
+    )
+    setIsListed(isListed)
+
+    if (isOverflow && !isListed) return currentMax
+    if (isListed) return uniswapBuy(amount, token)
+
+    internalBuy(amount, nativeAmount.toFixed(), token, slippage)
   }
 
   const sell = async (amount: string) => {
-    if (!address) return
+    if (!checkForTrade(amount)) return
 
-    const isApproved = await approvalForAll(tokenAddr, v2Addr[97].zapV1, amount)
-    if (!isApproved) return
+    const { isListed } = await checkForToken(token, amount)
+    setIsListed(isListed)
 
-    console.log('v2 sell', parseEther(amount), tokenAddr, address)
-    writeContract({
-      abi: v2ZapV1Abi,
-      address: v2Addr[97].zapV1,
-      functionName: 'burnToEth',
-      args: [tokenAddr, parseEther(amount), BigInt(0), address],
-    })
+    if (isListed) return uniswapSell(amount, token)
+    internalSell(amount, token)
+  }
+
+  const resetTrade = () => {
+    resetInternalTrade()
+    resetUniswapTrade()
   }
 
   return {
+    tradeHash,
+    isSubmitting,
+    isTrading,
+    isTraded,
     buy,
     sell,
+    resetTrade,
   }
 }

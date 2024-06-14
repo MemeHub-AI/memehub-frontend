@@ -41,7 +41,7 @@ export const useTradeInfoV1 = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'calculateContinuousMintReturn',
-      chainId: chainId as ChainId,
+      chainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getBuyTokenAmount Error]:', e)
@@ -57,7 +57,7 @@ export const useTradeInfoV1 = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'calculateContinuousBurnReturn',
-      chainId: chainId as ChainId,
+      chainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getSellTokenAmount Error]:', e)
@@ -76,7 +76,7 @@ export const useTradeInfoV1 = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'fundCostByContinuous',
-      chainId: chainId as ChainId,
+      chainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getBuyTokenEthAmount Error]:', e)
@@ -92,7 +92,7 @@ export const useTradeInfoV1 = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'getPrice',
-      chainId: chainId as ChainId,
+      chainId,
     }).catch((e) => {
       console.error('[getPrice Error]:', e)
       return BigInt(0)
@@ -138,7 +138,7 @@ export const useTradeInfoV1 = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'CAN_MINI',
-      chainId: chainId as ChainId,
+      chainId,
     }).catch((e) => {
       console.error('[getAvailableTokenAmount Error]:', e)
       return BigInt(0)

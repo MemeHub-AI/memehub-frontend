@@ -40,7 +40,7 @@ export interface Marketing {
 }
 
 export enum MarketType {
-  Kol,
+  Kol = 1,
   Community,
   Memehub,
 }

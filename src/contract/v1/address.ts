@@ -18,7 +18,6 @@ const prod = {
     [opBNB.id]: '0x6F42595e0191c9607582c188F309d53DD42A5e87',
     [scroll.id]: '0x35Ce38AC48Dd3c7Bf6bd14dE8e81128d76E11885',
   },
-  uniswapV2: '0x9B3336186a38E1b6c21955d112dbb0343Ee061eE',
 } as const
 
 const dev = {
@@ -35,7 +34,6 @@ const dev = {
     [opBNB.id]: '0x088F3DEb771A6a7608b6FBd5715708F5957F63fD',
     [scroll.id]: '0x34EeA145539327499A00B499F05b6e8eD3FdCbdc',
   },
-  uniswapV2: '0x9B3336186a38E1b6c21955d112dbb0343Ee061eE',
 } as const
 
 export const v1Addr = dotenv.isProd ? prod : dev
