@@ -171,7 +171,7 @@ export const OpportunityMoonshot = (props: Props) => {
               news={news!}
               key={i}
               onClick={() => {
-                push(`${Routes.Idea}/${news?.id}?type=${tabIdx + 1}`)
+                push(`${Routes.Idea}/${news?.id}?type=${tabIdx === 1 ? 3 : 1}`)
               }}
             />
           ))}

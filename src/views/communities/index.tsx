@@ -48,9 +48,7 @@ const CommunitiePage = () => {
           </MobileQpportunityMoonshot>
         </h1>
         <div className="my-3">{t('community.desc').replace('$1', '50')}</div>
-        <span className="text-blue-700 cursor-pointer">
-          {t('apply.community')}
-        </span>
+        <Button>{t('apply.community')}</Button>
         <CustomSuspense
           className="mt-5 grid grid-cols-3 gap-4 w-full max-2xl:grid-cols-2 max-xl:grid-cols-1"
           isPending={false}
@@ -61,6 +59,12 @@ const CommunitiePage = () => {
             return <AmbassadorCard data={communitie}></AmbassadorCard>
           })}
         </CustomSuspense>
+        <div
+          className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
+          onClick={() => {}}
+        >
+          {t('loading.more')}
+        </div>
       </div>
     </main>
   )

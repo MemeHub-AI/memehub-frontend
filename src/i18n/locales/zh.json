@@ -177,7 +177,7 @@
   "create.memecoin.with.ai": "使用AI创造一个Memecoin",
   "create,random.memecoin.with.ai.1": "这个爆炸性的想法应该会开启一个10,000x倍传奇",
   "create.random.memecoin.with.ai": "使用AI来创建一个随机的Memecoin?",
-  "meme.it": "生成Meme币",
+  "meme.it": "Meme它",
   "no.data": "无数据",
   "next.moonshot": "💡 下一个登月计划",
   "area": "地区",
@@ -305,7 +305,7 @@
   "my.identity": "我的身份",
   "apply.kol": "申请成为KOL大使",
   "platform.airdrop": "可获得平台丰富空投",
-  "apply.community": "为我的社区申请合作",
+  "apply.community": "申请社区合作",
   "community.airdrops": "社群成员可永久获取大量空投",
   "airdrop.you": "🎁给你的空投",
   "claim.airdrop": "去领取",
@@ -322,5 +322,7 @@
   "community": "COMMUNITIES",
   "ideas": "💡创意",
   "meme.story": "👏Meme故事",
-  "classic.meme": "🔥经典Meme"
+  "classic.meme": "🔥经典Meme",
+  "trending.idea": "热门创意: ",
+  "loading.more": "加载更多"
 }

@@ -10,11 +10,11 @@ interface AmbassadorCardProps {
 
 export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
   return (
-    <Card className="flex p-4">
+    <Card className="flex p-4 hover:scale-105" shadow="none">
       <img
         src={data.logo}
         alt="Avatar"
-        className="w-[150px] h-[150px] max-sm:w-[100px] max-sm:h-[100px]"
+        className="w-[110px] h-[110px] max-sm:w-[100px] max-sm:h-[100px] rounded-full"
       />
       <div className="ml-2">
         <h2 className="text-2xl">{data.name}</h2>

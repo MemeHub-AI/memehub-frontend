@@ -30,7 +30,7 @@ export const useNewsList = (options?: Options) => {
   } = useInfiniteQuery({
     queryKey: newsListKeys,
     initialPageParam: 1,
-    refetchInterval: 10_000,
+    refetchOnWindowFocus: false,
     queryFn: async ({ pageParam }) => {
       if (isFetchNextPageError) throw new Error('fetching next page')
       let result: any

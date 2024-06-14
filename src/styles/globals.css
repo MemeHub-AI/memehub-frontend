@@ -108,9 +108,14 @@
 }
 
 .story p {
-  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .story center {
   margin: 15px 0;
+}
+
+.story img {
+  margin: 15px 0;
+  border-radius: 4px;
 }

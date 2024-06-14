@@ -1,14 +1,14 @@
-import { ideaApi } from '@/api/idea'
 import { IdeaBasicInfo } from '@/api/idea/type'
+import { Skeleton } from '@/components/ui/skeleton'
 import { fmt } from '@/utils/fmt'
-import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 
 interface MemeStoryData {
   data: IdeaBasicInfo
 }
 
 export const MemeStory = ({ data }: MemeStoryData) => {
+  console.log(data?.content)
+
   let content =
     data?.content
       .replaceAll(/ src=/g, ' data-src1=')
@@ -19,50 +19,81 @@ export const MemeStory = ({ data }: MemeStoryData) => {
 
   console.log(content)
 
-  const memeInfo = data?.types || {}
+  const memeInfo = data?.meme || {}
   const h2List = content.match(/<h2 id="[^"]*">[^<]+<\/h2>/g) || []
+  let firstContent = ''
+  let laterContent = ''
   const getIndex = (i: number) => content.indexOf(h2List[i]!)
-  const firstContent = content.slice(getIndex(0), getIndex(1))
-  const laterContent = content.slice(getIndex(1))
+
+  firstContent = content.slice(getIndex(0), getIndex(1)) || content
+  laterContent = content.slice(getIndex(1))
+
+  if (!data) {
+    return <Contentskeleton></Contentskeleton>
+  }
 
   return (
-    <div className="flex">
-      <div>
-        <div className="pt-5 flex">
-          <div
-            className="story"
-            dangerouslySetInnerHTML={{ __html: firstContent }}
-          ></div>
-        </div>
+    <div className="flex max-sm:flex-col">
+      <div className="flex-1 max-sm:order-2">
+        <div
+          className="pt-5 story"
+          dangerouslySetInnerHTML={{ __html: firstContent }}
+        ></div>
         <div
           className="py-5 story"
           dangerouslySetInnerHTML={{ __html: laterContent }}
         ></div>
       </div>
-      <div className="ml-4 w-[200px] flex-shrink-0 sticky top-[80px] h-min">
-        <div className="rounded-md bg-blue-950 text-white text-xl text-center py-1">
-          Meme
+      {data.category !== '2' ? (
+        <div className="mt-5 ml-5 w-[200px] flex-shrink-0 sticky top-[80px] h-min max-sm:order-1 max-sm:static max-sm:ml-0 max-sm:w-auto">
+          <div className="rounded-md bg-blue-950 text-white text-xl text-center py-1 ">
+            Meme
+          </div>
+          <div className="max-sm:grid max-sm:grid-cols-2 max-sm:gap-2 max-sm:mt-2">
+            {Object.keys(memeInfo).map((key) => {
+              if (!memeInfo[key] || !memeInfo[key]?.length) return <></>
+              return (
+                <div
+                  key={key}
+                  className="max-sm:bg-slate-100 mt-2 max-sm:mt-0 max-sm:p-2 rounded-sm"
+                >
+                  {key.toLocaleLowerCase() === 'tags' ? (
+                    <div className="h-[1px] bg-slate-200 mt-2 max-sm:hidden"></div>
+                  ) : (
+                    ''
+                  )}
+                  <div className="font-bold">
+                    {fmt.firstUpperCase(key || '')}
+                  </div>
+                  <div>
+                    {Array.isArray(memeInfo[key])
+                      ? memeInfo[key].join(', ')
+                      : memeInfo[key]}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
         </div>
-        {Object.keys(memeInfo).map((key) => {
-          return (
-            <div key={key}>
-              {key.toLocaleLowerCase() === 'tags' ? (
-                <div className="h-[1px] bg-slate-200 mt-2"></div>
-              ) : (
-                ''
-              )}
-              <div className="font-bold mt-2">
-                {fmt.firstUpperCase(key || '')}
-              </div>
-              <div>
-                {Array.isArray(memeInfo[key])
-                  ? memeInfo[key].join(', ')
-                  : memeInfo[key]}
-              </div>
-            </div>
-          )
-        })}
+      ) : null}
+    </div>
+  )
+}
+
+const Contentskeleton = () => {
+  return (
+    <div>
+      <div className="w-full my-2 flex flex-col gap-2 mr-2">
+        <Skeleton className="w-1/2 h-4" />
+        <Skeleton className="w-1/3 h-3" />
+        <Skeleton className="w-[70%] h-3" />
+        <Skeleton className="w-1/2 h-4" />
+        <Skeleton className="w-1/3 h-3" />
+        <Skeleton className="w-[70%] h-3" />
+        <Skeleton className="w-1/2 h-3" />
+        <Skeleton className="w-full h-5 rounded-full mt-2" />
       </div>
+      <Skeleton className="w-8 h-8 absolute right-2 top-2" />
     </div>
   )
 }

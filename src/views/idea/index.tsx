@@ -17,6 +17,7 @@ import {
 } from '@/components/opportunity-moonshot'
 import { cn } from '@/lib/utils'
 import { MemeStory } from './components/meme-story'
+import { newsApi } from '@/api/news'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -26,10 +27,10 @@ const IdeaPage = () => {
   const [show, setShow] = useState(false)
   const { push } = useRouter()
   const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
-  const defualtTab = +type - 1
+  const defualtTab = Math.min(+type - 1, 1)
 
-  const [tabIdx, setTab] = useState(defualtTab)
-  const tabs = [t('ideas'), t('meme.story')]
+  // const [tabIdx, setTab] = useState(defualtTab)
+  // const tabs = [t('ideas'), t('meme.story')]
 
   const { data: basicInfoData } = useQuery({
     queryKey: [ideaApi.getIdeaInfo.name, newsId, type],
@@ -38,7 +39,7 @@ const IdeaPage = () => {
         throw new Error('newsId is undefined')
       }
 
-      if (+type === 2) {
+      if (+type === 3) {
         return ideaApi.getMemeStory(newsId as string)
       }
 
@@ -85,16 +86,14 @@ const IdeaPage = () => {
             />
             <div className="ml-3 w-full">
               <div className="text-xl text">{basicInfo?.title}</div>
-              <Content
-                content={basicInfo?.content.replace(/<[^>]*>/g, '')}
-              ></Content>
+              <Content content={basicInfo?.description}></Content>
             </div>
           </div>
 
           <div className="flex max-md:mt-4">
             <Button onClick={onRandomCreate}>
               <BsStars className="mr-1"></BsStars>
-              {t('random.meme')}
+              {type !== '3' ? t('random.meme') : t('meme.it')}
             </Button>
             <MobileQpportunityMoonshot
               defalutTab={defualtTab}
@@ -108,7 +107,7 @@ const IdeaPage = () => {
             </MobileQpportunityMoonshot>
           </div>
         </div>
-        {+type === 2 ? (
+        {/* {+type === 2 ? (
           <div className="flex items-start">
             {tabs.map((tab, i) => {
               return (
@@ -127,8 +126,9 @@ const IdeaPage = () => {
               )
             })}
           </div>
-        ) : null}
-        {tabIdx === 0 || type === '1' ? (
+        ) : null} */}
+        {/* tabIdx === 0 ||  */}
+        {type !== '3' ? (
           <WaterList newsId={newsId} type={type}></WaterList>
         ) : (
           <MemeStory data={basicInfo!}></MemeStory>
@@ -149,8 +149,8 @@ const Content = memo(({ content }: { content?: string }) => {
   return (
     <div
       className={clsx(
-        'mt-2 text-gray-500 max-w-[90%] max-sm:max-w-full cursor-pointer leading-[23px]',
-        show ? '' : 'line-clamp-3'
+        'mt-2 max-sm:mt-1 text-gray-500 max-w-[90%] max-sm:max-w-full cursor-pointer leading-[23px]',
+        show ? '' : 'line-clamp-3 max-sm:line-clamp-2'
       )}
       onClick={() => setShow(!show)}
     >
