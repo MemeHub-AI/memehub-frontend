@@ -3,6 +3,8 @@ import type { Config } from 'tailwindcss'
 const baseWidth = {
   main: '1280px',
   aside: '340px',
+  100: '28rem',
+  128: '32rem',
 }
 
 const baseHeight = {

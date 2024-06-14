@@ -21,6 +21,7 @@ import { useTokenContext } from '@/contexts/token'
 import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
 import { useTradeV2 } from '../hooks/v2/use-trade'
 import { useSlippage } from '../hooks/use-slippage'
+import TradeSuccessCard from './trade-success-card'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -50,11 +51,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const onBuy = async () => {
     // Overflow current wallet balance.
-    if (BigNumber(value).gt(nativeBalance)) {
-      toast.error(t('balance.illegality'))
-      setValue(nativeBalance)
-      return
-    }
+    // if (BigNumber(value).gt(nativeBalance)) {
+    //   toast.error(t('balance.illegality'))
+    //   setValue(nativeBalance)
+    //   return
+    // }
     const max = await buy(value, slippage)
 
     // Internal buy & overflow current max value.

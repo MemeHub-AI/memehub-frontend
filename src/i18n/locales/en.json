@@ -102,7 +102,7 @@
   "view.details": "View detalis",
   "trade.limit": "Only {} is available for {} now",
   "trade.loading": "Trading...",
-  "trade.success": "Trade successful!",
+  "trade.success": "Congratulations on your successful trade!",
   "trade.failed": "Trade failed",
   "trade.checking": "Trade checking...",
   "trade.is-zero": "Trade amount must greater than zero",
@@ -350,5 +350,7 @@
   "marketing.community.desc": "Airdrop {} of the total token supply to community alliances within the platform",
   "marketing.memehub": "Airdrop {} tokens to {} Aliance",
   "marketing.memehub.desc": "Airdrop {} of the total token supply to the alliances integrated with {}",
-  "trade.balance.invalid": "Balance is invalid"
+  "trade.balance.invalid": "Balance is invalid",
+  "trade.success.reward": "Obtained {} {} tokens",
+  "trade.success.diamond": "Received an additional $ diamond reward"
 }

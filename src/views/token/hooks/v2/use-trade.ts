@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { createElement, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Address, formatEther, isAddress } from 'viem'
 import { useRouter } from 'next/router'
@@ -10,6 +10,9 @@ import { useInternelTradeV2 } from './use-internal-trade'
 import { useUniswapV2 } from '../use-uniswap-v2'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useTradeInfoV2 } from './use-trade-info'
+import { TradeSuccessCard } from '../../components/trade-success-card'
+
+let lastTradeAmount = ''
 
 export const useTradeV2 = () => {
   const { t } = useTranslation()
@@ -17,7 +20,7 @@ export const useTradeV2 = () => {
   const { query } = useRouter()
   const token = (query.address ?? '') as Address
 
-  const { checkForToken, getAmountForBuy } = useTradeInfoV2()
+  const { tokenDetails, checkForToken, getAmountForBuy } = useTradeInfoV2()
   const {
     internalHash,
     isInternalTrading,
@@ -38,12 +41,19 @@ export const useTradeV2 = () => {
   const { isLoading, isFetched: isTraded } = useWaitForTx({
     hash: tradeHash,
     onLoading: () => toast.loading(t('tx.waiting')),
-    onSuccess: () => toast.success(t('trade.success')),
-    onError: () => toast.error(t('trade.failed')),
-    onFillay: () => {
-      resetTrade()
+    onSuccess: () => {
       toast.dismiss()
+      return toast(
+        createElement(TradeSuccessCard, {
+          amount: lastTradeAmount,
+          symbol: tokenDetails?.info.symbol ?? '',
+          diamond: '100',
+        }),
+        { position: 'bottom-left', className: 'w-100' }
+      )
     },
+    onError: () => toast.error(t('trade.failed')),
+    onFillay: () => resetTrade(),
   })
   const isTrading = isSubmitting || isLoading
 
@@ -62,6 +72,7 @@ export const useTradeV2 = () => {
 
   const buy = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
+    lastTradeAmount = amount
 
     const [weiNativeAmount] = await getAmountForBuy(token, amount)
     const nativeAmount = BigNumber(formatEther(weiNativeAmount))

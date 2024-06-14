@@ -101,7 +101,7 @@
   "trade.limit": "目前只有 {} 可供 {} ",
   "buy": "购买代币",
   "trade.loading": "交易中...",
-  "trade.success": "交易成功！",
+  "trade.success": "恭喜你交易成功！",
   "trade.failed": "交易失败",
   "trade.checking": "交易检查中...",
   "trade.is-zero": "交易金额必须大于零",
@@ -343,5 +343,7 @@
   "marketing.community.desc": "将代币总量的 {} 空投给平台内的社区联盟",
   "marketing.memehub": "空投 {} 代币给 {} 联盟",
   "marketing.memehub.desc": "将代币总量的 {} 空投给接入 {} 的联盟",
-  "trade.balance.invalid": "余额错误"
+  "trade.balance.invalid": "余额错误",
+  "trade.success.reward": "获得了 {} 个 {}",
+  "trade.success.diamond": "额外获得了 $ 钻石奖励"
 }
