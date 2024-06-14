@@ -6,6 +6,7 @@ import { TbUsers } from 'react-icons/tb'
 import { Countdown } from './components/countdown'
 import { utilTime } from '@/utils/time'
 import { Ids } from './components/ids'
+import PrimaryLayout from '@/components/layouts/primary'
 
 const Airdrop = () => {
   const { t } = useTranslation()
@@ -42,8 +43,7 @@ const Airdrop = () => {
   ]
 
   return (
-    <main className="min-h-main flex gap-6 mx-auto max-md:flex-col max-md:items-center max-sm:gap-8 pr-5 max-sm:px-2">
-      <OpportunityMoonshot defalutTab={0} className="max-sm:!hidden" />
+    <PrimaryLayout>
       <div className="py-5">
         <Ids></Ids>
         <h1 className="mt-5 text-2xl">{t('airdrop.you')}</h1>
@@ -104,7 +104,7 @@ const Airdrop = () => {
           ))}
         </div>
       </div>
-    </main>
+    </PrimaryLayout>
   )
 }
 

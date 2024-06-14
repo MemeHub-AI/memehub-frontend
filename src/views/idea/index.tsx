@@ -18,6 +18,7 @@ import {
 import { cn } from '@/lib/utils'
 import { MemeStory } from './components/meme-story'
 import { newsApi } from '@/api/news'
+import { PrimaryLayout } from '@/components/layouts/primary'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -71,11 +72,7 @@ const IdeaPage = () => {
   }
 
   return (
-    <main className="min-h-main flex max-md:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
-      <OpportunityMoonshot
-        defalutTab={defualtTab}
-        className="max-md:!hidden max-sm:!px-0"
-      />
+    <PrimaryLayout>
       <div className="max-w-[1185px] max-md:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <div className="flex flex-1">
@@ -140,7 +137,7 @@ const IdeaPage = () => {
         onConfirm={onConfirm}
         onCancel={onCancel}
       ></AICreateMemecoinDialog>
-    </main>
+    </PrimaryLayout>
   )
 }
 

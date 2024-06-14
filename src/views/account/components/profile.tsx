@@ -1,6 +1,5 @@
 import React, { useState, type ComponentProps } from 'react'
 import {
-  Pencil2Icon,
   HeartFilledIcon,
   EnvelopeClosedIcon,
   PlusIcon,
@@ -9,9 +8,11 @@ import {
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
+import { AiOutlineEdit } from 'react-icons/ai'
 
 import {
   Card,
+  CardContent,
   CardDescription,
   CardFooter,
   CardHeader,
@@ -28,11 +29,13 @@ import { useUser } from '@/hooks/use-user'
 import { Dialog } from '@/components/ui/dialog'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
+import { RewardButton } from '@/components/reward-button'
+import { Routes } from '@/routes'
 
 export const Profile = (props: ComponentProps<'div'>) => {
   const { className } = props
   const { t } = useTranslation()
-  const { query } = useRouter()
+  const { query, ...router } = useRouter()
   const [open, setOpen] = useState(false)
 
   const { userInfo, isOtherUser, refetchUserInfo } = useAccountContext()
@@ -78,12 +81,12 @@ export const Profile = (props: ComponentProps<'div'>) => {
             src={userInfo?.logo || ''}
             fallback={userInfo?.wallet_address.slice(-4)}
             size={64}
+            className="border-2 border-black"
           />
           {!isOtherUser && (
             <>
-              <Pencil2Icon
-                width={26}
-                height={26}
+              <AiOutlineEdit
+                size={26}
                 className={cn(
                   'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
                   'z-50 opacity-0 group-hover:opacity-100 transition-all text-white'
@@ -100,7 +103,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
         <div>
           <CardTitle>{userInfo?.name}</CardTitle>
           <CardDescription>
-            {fmt.addr(userInfo?.wallet_address)}
+            {fmt.addr(userInfo?.wallet_address, { len: 8 })}
           </CardDescription>
           <CardDescription className="break-all line-clamp-2">
             {userInfo?.description}
@@ -127,11 +130,21 @@ export const Profile = (props: ComponentProps<'div'>) => {
               shadow="none"
               className="absolute right-4 top-2 hover:bg-zinc-200"
             >
-              <Pencil2Icon />
+              <AiOutlineEdit size={20} />
             </Button>
           </ProfileForm>
         )}
       </CardHeader>
+
+      <CardContent className="px-4 flex items-center gap-2">
+        <RewardButton shadow="none" className="border-none text-lg px-3" />
+        <p
+          className="text-sm text-blue-600 cursor-pointer hover:underline"
+          onClick={() => router.push(Routes.Reward)}
+        >
+          {t('reward.rule')}
+        </p>
+      </CardContent>
 
       <CardFooter className="p-4 pt-0 flex justify-between">
         <div className="flex items-center gap-1 text-zinc-500 text-sm">

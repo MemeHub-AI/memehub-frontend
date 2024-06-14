@@ -1,5 +1,6 @@
 import { AmbassadorCard } from '@/components/ambassador-card'
 import CustomSuspense from '@/components/custom-suspense'
+import { PrimaryLayout } from '@/components/layouts/primary'
 import {
   MobileQpportunityMoonshot,
   OpportunityMoonshot,
@@ -33,8 +34,7 @@ const KOLPage = () => {
     },
   ]
   return (
-    <main className="min-h-main flex max-md:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
-      <OpportunityMoonshot className="max-md:hidden"></OpportunityMoonshot>
+    <PrimaryLayout>
       <div className="py-5 pr-4">
         <h1 className="text-2xl max-sm:flex max-sm:justify-between ">
           {t('kol.ambassador')}
@@ -66,7 +66,7 @@ const KOLPage = () => {
           {t('loading.more')}
         </div>
       </div>
-    </main>
+    </PrimaryLayout>
   )
 }
 

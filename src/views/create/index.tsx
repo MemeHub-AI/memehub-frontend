@@ -7,6 +7,7 @@ import { useCreateTokenForm } from './hooks/use-form'
 import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { CreateTokenContext } from './context'
 import { AICreateMemecoinDialogLoading } from '@/components/ai-create-memecoin-dialog/loading'
+import { PrimaryLayout } from '@/components/layouts/primary'
 
 export const CreatePage = () => {
   const deployResult = useDeployV1()
@@ -20,8 +21,7 @@ export const CreatePage = () => {
         deployResult,
       }}
     >
-      <main className="min-h-main flex justify-center gap-6 mx-auto max-md:flex-col max-md:items-center max-sm:gap-8">
-        <OpportunityMoonshot defalutTab={0} className="max-sm:!hidden" />
+      <PrimaryLayout>
         <Main
           className="flex-1 pb-5 max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0"
           tab={tab}
@@ -30,7 +30,7 @@ export const CreatePage = () => {
 
         {/* All status dialog during create. */}
         <CreateTokenStatusDialog {...deployResult} />
-      </main>
+      </PrimaryLayout>
       <AICreateMemecoinDialogLoading
         formHook={formData}
       ></AICreateMemecoinDialogLoading>
