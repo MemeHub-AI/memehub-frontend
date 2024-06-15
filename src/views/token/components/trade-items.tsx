@@ -1,6 +1,8 @@
-import React, { ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
+import { BigNumber } from 'bignumber.js'
+import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { useTradeContext } from '@/contexts/trade'
@@ -8,23 +10,44 @@ import { useWalletStore } from '@/stores/use-wallet-store'
 import { useTokenContext } from '@/contexts/token'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const buyItems = ['0.001', '0.01', '1']
+const buyItems = ['1', '10', '100']
 
 const sellItems = ['10', '25', '75', '100']
 
 interface Props extends ComponentProps<'button'> {
-  onBuyItemClick?: (value: string) => void
-  onSellItemClick?: (value: string) => void
+  onItemClick?: (value: string) => void
   onResetClick?: (value: '') => void
 }
 
-export const TradeItems = (props: Props) => {
-  const { disabled, onBuyItemClick, onSellItemClick, onResetClick } = props
+export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
   const { t } = useTranslation()
-  const { isLoadingTokenInfo } = useTokenContext()
-  const { isBuy, nativeSymbol } = useTradeContext()
+  const { isLoadingTokenInfo, tokenInfo } = useTokenContext()
+  const { isBuy, nativeBalance, nativeSymbol, tokenBalance } = useTradeContext()
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
+
+  const onBuyClick = (value: string) => {
+    if (BigNumber(nativeBalance).lte(0)) {
+      toast.warning(t('trade.balance.zero'))
+      return
+    }
+    // if (BigNumber(value).gt(nativeBalance)) {
+    //   setValue(nativeBalance)
+    //   return
+    // }
+
+    onItemClick?.(value)
+  }
+
+  const onSellClick = (value: string) => {
+    if (BigNumber(tokenBalance).lte(0)) {
+      toast.warning(t('trade.balance.zero'))
+      return
+    }
+    const percent = BigNumber(value).multipliedBy(tokenBalance).div(100)
+
+    onItemClick?.(percent.toFixed())
+  }
 
   if (isLoadingTokenInfo) {
     return (
@@ -55,14 +78,13 @@ export const TradeItems = (props: Props) => {
           key={i}
           onClick={() => {
             if (!isConnected) {
-              setConnectOpen(true)
-              return
+              return setConnectOpen(true)
             }
-            isBuy ? onBuyItemClick?.(value) : onSellItemClick?.(value)
+            isBuy ? onBuyClick(value) : onSellClick(value)
           }}
           disabled={disabled}
         >
-          {value} {isBuy ? nativeSymbol : '%'}
+          {value} {isBuy ? tokenInfo?.ticker ?? '' : '%'}
         </Button>
       ))}
     </div>

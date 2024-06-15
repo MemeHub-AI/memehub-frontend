@@ -32,16 +32,16 @@ export const NewsCard = ({ news, onClick }: Props) => {
         <div
           className={clsx(
             'font-bold text-sm ',
-            news.title.length < 12 ? 'w-[80%] truncate block' : 'line-clamp-5'
+            news.title?.length < 12 ? 'w-[80%] truncate block' : 'line-clamp-5'
           )}
         >
           {news?.title}
         </div>
-        {news.title.length < 40 ? (
+        {news.title?.length < 40 ? (
           <p
             className={clsx(
               'mt-5 text-sm leading-4 text-gray-500 ',
-              news.title.length < 22 ? 'line-clamp-4' : 'line-clamp-3'
+              news.title?.length < 22 ? 'line-clamp-4' : 'line-clamp-3'
             )}
           >
             {fmt.replaceHTMLCode(news?.content.replaceAll('\n', ''))}

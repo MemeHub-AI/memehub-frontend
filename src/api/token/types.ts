@@ -22,6 +22,27 @@ export interface TokenNewReq {
   twitter_url?: string
   telegram_url?: string
   website?: string
+  coin_type?: CoinType
+  marketing?: Marketing[]
+}
+
+export enum CoinType {
+  Normal,
+  Erc404,
+  RewardLp,
+  RewardHolder,
+  Burning,
+}
+
+export interface Marketing {
+  type: MarketType
+  percent: number
+}
+
+export enum MarketType {
+  Kol = 1,
+  Community,
+  Memehub,
 }
 
 export interface TokenNewRes {

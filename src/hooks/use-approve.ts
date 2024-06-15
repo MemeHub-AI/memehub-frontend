@@ -5,8 +5,9 @@ import { readContract } from '@wagmi/core'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 
-import { SupportedChainId, wagmiConfig } from '@/config/wagmi'
+import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from './use-chain-info'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 const APPROVE_MAX_VALUE = BigInt(
   '115792089237316195423570985008687907853269984665640564039457584007913129639935'
@@ -25,28 +26,36 @@ export const useApprove = () => {
     mutation: {
       onMutate: () => toast.loading(t('approving')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: () => toast.error(t('approve.error')),
+      onError: () => CONTRACT_ERR.approve(),
       onSuccess: () => toast.success(t('approve.success')),
     },
   })
 
-  const approvalForAll = async (token: Address, spender: Address) => {
+  const approvalForAll = async (
+    token: Address,
+    spender: Address,
+    amount: string
+  ) => {
+    const isApproved = await checkForApproval(token, spender, amount)
+    if (isApproved) return true
+
     try {
-      return await writeContractAsync({
+      await writeContractAsync({
         abi: erc20Abi,
         address: token,
         chainId,
         functionName: 'approve',
         args: [spender, APPROVE_MAX_VALUE],
       })
+      return true
     } catch (error) {
+      CONTRACT_ERR.exec(error)
       return false
     } finally {
       resetApprove()
     }
   }
 
-  // Check a user's approval for a spender whether greater than amount.
   const checkForApproval = async (
     token: Address,
     spender: Address,
@@ -54,21 +63,17 @@ export const useApprove = () => {
   ) => {
     try {
       if (!address) return false
-      const approvedValue = await readContract(wagmiConfig, {
+      const value = await readContract(wagmiConfig, {
         abi: erc20Abi,
         address: token,
         functionName: 'allowance',
-        chainId: chainId as SupportedChainId,
+        chainId,
         args: [address, spender],
       })
-      const shouldApprove = BigNumber(formatEther(approvedValue)).lt(amount)
 
-      if (shouldApprove) {
-        return await approvalForAll(token, spender)
-      }
-      return true
+      return BigNumber(formatEther(value)).gte(amount)
     } catch (error) {
-      console.error('approve error', error)
+      CONTRACT_ERR.exec(error)
       return false
     }
   }

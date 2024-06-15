@@ -113,7 +113,7 @@ export const PosterForm = ({ formData }: Props) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel className="mr-2">
+              <FormLabel className="mr-2 font-bold">
                 {loadingPoster ? (
                   t('ai.poster.tip')
                 ) : field.value?.length ? (

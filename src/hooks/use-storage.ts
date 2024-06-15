@@ -44,5 +44,8 @@ export const useStorage = (useSession = false) => {
     // c === chain, a === address
     getInterval: (c: string, a: string) => get(`${c}.${a}`),
     setInterval: (c: string, a: string, i: string) => set(`${c}.${a}`, i),
+
+    getSlippage: () => get('slippage'),
+    setSlippage: (v: string) => set('slippage', v),
   }
 }
