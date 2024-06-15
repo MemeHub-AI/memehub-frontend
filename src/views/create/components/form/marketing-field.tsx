@@ -63,6 +63,7 @@ export const MarketingField = () => {
         .replace('{}', memehubName),
       value: MarketType.Memehub,
       percent: memehubPercent,
+      disabled: true,
     },
   ]
 
@@ -78,6 +79,7 @@ export const MarketingField = () => {
             <FormItem className="flex items-center gap-2 mt-2">
               <FormControl>
                 <Checkbox
+                  disabled={m.disabled}
                   onCheckedChange={(checked) => {
                     const value = field.value as Marketing[]
                     const { added, removed } = marketingActions(value, m)

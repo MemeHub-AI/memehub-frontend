@@ -6,13 +6,19 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
 import { DEPLOY_FEE, getBondConfig } from '@/contract/v2/config/bond'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 let cacheParams: Omit<TokenNewReq, 'hash'>
 
 export const useDeployV2 = () => {
-  const { chainId } = useAccount()
-  const { createTokenData, createTokenError, isCreatingToken, create } =
-    useCreateToken()
+  const { chainId, chainName } = useChainInfo()
+  const {
+    createTokenData,
+    createTokenError,
+    isCreatingToken,
+    create,
+    getMerkleRoot,
+  } = useCreateToken()
 
   const {
     data: hash,
@@ -29,7 +35,9 @@ export const useDeployV2 = () => {
     isError,
   } = useWaitForTx({ hash })
 
-  const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
+  const genMerkleRoot = () => {}
+
+  const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
     cacheParams = params
 
     const config = getBondConfig(chainId)
@@ -37,7 +45,6 @@ export const useDeployV2 = () => {
       CONTRACT_ERR.unsupport()
       return
     }
-
     const [bondConfig, bondParams] = config
 
     writeContract(
