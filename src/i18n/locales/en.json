@@ -331,5 +331,8 @@
   "meme.story": "👏Meme story",
   "classic.meme": "🔥Classic meme",
   "trending.idea": "Trending idea: ",
-  "loading.more": "Load more"
+  "loading.more": "Load more",
+  "no.kol": "There are currently no KOLs registered.",
+  "apply,now": "Apply Now",
+  "no.communities": "There are currently no communities registered"
 }

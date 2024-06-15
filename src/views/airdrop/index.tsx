@@ -62,8 +62,8 @@ const Airdrop = () => {
                   )}
                 </span>
               </div>
-              <div className="mt-3 flex">
-                <div>
+              <div className="mt-3 flex ">
+                <div className="flex-1">
                   <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden ">
                     <img
                       src="/images/avatar1.png"
@@ -97,7 +97,7 @@ const Airdrop = () => {
                 </div>
                 <img
                   src="/images/airdrop.png"
-                  className="w-[150px] h-[150px] ml-4 max-sm:w-[120px] max-sm:h-[120px]"
+                  className="max-w-[130px] max-h-[130px] ml-4 max-sm:w-[120px] max-sm:h-[120px]"
                 />
               </div>
             </Card>

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useStorage } from './use-storage'
 import { defaultImg } from '@/config/link'
 import { useScroll } from 'react-use'
-import { queryClient } from '@/components/app-providers'
 import { utilTime } from '@/utils/time'
 
 interface Options {
@@ -31,6 +30,7 @@ export const useNewsList = (options?: Options) => {
     queryKey: newsListKeys,
     initialPageParam: 1,
     refetchOnWindowFocus: false,
+    refetchInterval: false,
     queryFn: async ({ pageParam }) => {
       if (isFetchNextPageError) throw new Error('fetching next page')
       let result: any
@@ -76,7 +76,7 @@ export const useNewsList = (options?: Options) => {
                 title: item?.title?.query,
                 link: item?.title?.exploreLink,
                 content: item?.articles?.[0]?.snippet,
-                image: item?.articles?.[0]?.image?.imageUrl || defaultImg,
+                image: item?.image?.imageUrl || defaultImg,
               })),
             }
         } catch (error) {
