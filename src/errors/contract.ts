@@ -1,4 +1,5 @@
 import { toast } from 'sonner'
+import { t } from 'i18next'
 
 import { isUserReject } from '@/utils/contract'
 
@@ -12,4 +13,11 @@ export const CONTRACT_ERR = {
 
     console.error(e?.message)
   },
+  unsupport: () => toast.error(t('deploy.unsupport.chain')),
+  retryCreate: () => toast.error(t('cannot-retry')),
+  tradeFailed: () => toast.error(t('trade.failed')),
+  tokenInvalid: () => toast.error(t('trade.token.invalid')),
+  amountInvlid: () => toast.error(t('trade.amount.invalid')),
+  balanceInvalid: () => toast.error(t('trade.balance.invalid')),
+  approve: () => toast.error(t('approve.error')),
 }

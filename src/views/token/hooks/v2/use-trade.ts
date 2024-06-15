@@ -11,6 +11,7 @@ import { useUniswapV2 } from '../use-uniswap-v2'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useTradeInfoV2 } from './use-trade-info'
 import { TradeSuccessCard } from '../../components/trade-success-card'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 let lastTradeAmount = ''
 
@@ -52,18 +53,18 @@ export const useTradeV2 = () => {
         { position: 'bottom-left', className: 'w-100' }
       )
     },
-    onError: () => toast.error(t('trade.failed')),
+    onError: CONTRACT_ERR.tradeFailed,
     onFillay: () => resetTrade(),
   })
   const isTrading = isSubmitting || isLoading
 
   const checkForTrade = (amount: string) => {
     if (isEmpty(amount)) {
-      toast.error(t('trade.amount.invalid'))
+      CONTRACT_ERR.amountInvlid()
       return false
     }
     if (!isAddress(token)) {
-      toast.error(t('trade.token.invalid'))
+      CONTRACT_ERR.tokenInvalid()
       return false
     }
 
@@ -77,7 +78,7 @@ export const useTradeV2 = () => {
     const [weiNativeAmount] = await getAmountForBuy(token, amount)
     const nativeAmount = BigNumber(formatEther(weiNativeAmount))
     if (nativeAmount.lte(0)) {
-      toast.error(t('trade.balance.invalid'))
+      CONTRACT_ERR.balanceInvalid()
       return
     }
 

@@ -102,7 +102,7 @@
   "buy": "购买代币",
   "trade.loading": "交易中...",
   "trade.success": "恭喜你交易成功！",
-  "trade.failed": "交易失败",
+  "trade.failed": "交易失败，请重试",
   "trade.checking": "交易检查中...",
   "trade.is-zero": "交易金额必须大于零",
   "create.inspiration.title": "Meme 灵感💡",

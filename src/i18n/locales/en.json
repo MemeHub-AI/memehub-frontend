@@ -103,7 +103,7 @@
   "trade.limit": "Only {} is available for {} now",
   "trade.loading": "Trading...",
   "trade.success": "Congratulations on your successful trade!",
-  "trade.failed": "Trade failed",
+  "trade.failed": "Trade failed, please try again",
   "trade.checking": "Trade checking...",
   "trade.is-zero": "Trade amount must greater than zero",
   "create.inspiration.title": "Meme inspiration💡",

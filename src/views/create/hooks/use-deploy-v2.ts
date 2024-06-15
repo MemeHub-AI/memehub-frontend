@@ -1,17 +1,15 @@
 import { useAccount, useWriteContract } from 'wagmi'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 
 import type { TokenNewReq } from '@/api/token/types'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
 import { DEPLOY_FEE, getBondConfig } from '@/contract/v2/config/bond'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 let cacheParams: Omit<TokenNewReq, 'hash'>
 
 export const useDeployV2 = () => {
-  const { t } = useTranslation()
   const { chainId } = useAccount()
   const { createTokenData, createTokenError, isCreatingToken, create } =
     useCreateToken()
@@ -36,7 +34,7 @@ export const useDeployV2 = () => {
 
     const config = getBondConfig(chainId)
     if (!chainId || !config) {
-      toast.error(t('deploy.unsupport.chain'))
+      CONTRACT_ERR.unsupport()
       return
     }
 
@@ -55,7 +53,7 @@ export const useDeployV2 = () => {
 
   const retryCreate = () => {
     if (!cacheParams || !hash) {
-      toast.error(t('cannot-retry'))
+      CONTRACT_ERR.retryCreate()
       return
     }
 
