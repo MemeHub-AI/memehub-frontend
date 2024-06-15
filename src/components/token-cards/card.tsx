@@ -10,7 +10,6 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
-import { useTradeInfoV2 } from '@/views/token/hooks/v2/use-trade-info'
 import { useTokenProgressV2 } from '@/views/token/hooks/v2/use-token-progress'
 
 interface Props extends ComponentProps<typeof Card> {
@@ -33,9 +32,6 @@ export const TokenCard = (props: Props) => {
     card.address as Address,
     Number(card.chain.id)
   )
-  const { tokenDetails } = useTradeInfoV2()
-
-  console.log('tokendetails', tokenDetails?.info)
 
   return (
     <Card
