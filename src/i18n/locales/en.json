@@ -366,5 +366,8 @@
   "trade.balance.invalid": "Balance is invalid",
   "trade.success.reward": "Obtained {} {} tokens",
   "trade.success.diamond": "Received an additional $ diamond reward",
-  "deploy.unsupport.chain": "Unsupport chain"
+  "deploy.unsupport.chain": "Unsupport chain",
+  "no.kol": "There are currently no KOLs registered.",
+  "apply,now": "Apply Now",
+  "no.communities": "There are currently no communities registered"
 }

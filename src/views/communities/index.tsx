@@ -1,3 +1,4 @@
+import { allianceApi } from '@/api/alliance'
 import { AmbassadorCard } from '@/components/ambassador-card'
 import CustomSuspense from '@/components/custom-suspense'
 import { PrimaryLayout } from '@/components/layouts/primary'
@@ -7,32 +8,50 @@ import {
 } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 const CommunitiePage = () => {
   const { t } = useTranslation()
-  const communities = [
-    {
-      logo: '/images/logo.png',
-      name: 'Jack Ma',
-      desc: '一位优秀的土狗猎手，获得过马斯克的点赞',
-    },
-    {
-      logo: '/images/logo.png',
-      name: 'Jack Ma',
-      desc: '一位优秀的土狗猎手，获得过马斯克的点赞',
-    },
-    {
-      logo: '/images/logo.png',
-      name: 'Jack Ma',
-      desc: '一位优秀的土狗猎手，获得过马斯克的点赞',
-    },
-    {
-      logo: '/images/logo.png',
-      name: 'Jack Ma',
-      desc: '一位优秀的土狗猎手，获得过马斯克的点赞',
-    },
-  ]
+
+  const { data, isLoading, fetchNextPage, isFetching, isFetched } =
+    useInfiniteQuery({
+      queryKey: [allianceApi.getKols.name],
+      queryFn: async ({ pageParam }) => {
+        const { data } = await allianceApi.getCommunity({ page: pageParam })
+        return data
+      },
+      initialPageParam: 1,
+      getNextPageParam: (_, _1, page) => page + 1,
+      select: (data) => {
+        return {
+          total: data.pages[0].count,
+          newsList: data.pages.flatMap((p) => p?.results).filter(Boolean),
+        }
+      },
+    })
+  const communities = data?.newsList
+
+  const handleLoadStatus = () => {
+    if (isFetching && data?.total != null) {
+      return (
+        <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
+          {t('loading')}
+        </div>
+      )
+    }
+
+    if (data?.total !== communities?.length) {
+      return (
+        <div
+          className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
+          onClick={() => fetchNextPage()}
+        >
+          {t('loading.more')}
+        </div>
+      )
+    }
+  }
   return (
     <PrimaryLayout>
       <div className="py-5 pr-4">
@@ -47,24 +66,26 @@ const CommunitiePage = () => {
             </Button>
           </MobileQpportunityMoonshot>
         </h1>
-        <div className="my-3">{t('community.desc').replace('$1', '50')}</div>
+        <div className="my-3">
+          {t('community.desc').replace('$1', `${data?.total}` || '-')}
+        </div>
         <Button>{t('apply.community')}</Button>
         <CustomSuspense
           className="mt-5 grid grid-cols-3 gap-4 w-full max-2xl:grid-cols-2 max-xl:grid-cols-1"
-          isPending={false}
+          isPending={isLoading}
           fallback={<CardSkeleton></CardSkeleton>}
-          nullback={<></>}
+          nullback={<div className="mt-4">{t('no.communities')}</div>}
         >
-          {communities.map((communitie) => {
-            return <AmbassadorCard data={communitie}></AmbassadorCard>
+          {communities?.map((communitie) => {
+            return (
+              <AmbassadorCard
+                key={communitie!.id}
+                data={communitie}
+              ></AmbassadorCard>
+            )
           })}
         </CustomSuspense>
-        <div
-          className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
-          onClick={() => {}}
-        >
-          {t('loading.more')}
-        </div>
+        {handleLoadStatus()}
       </div>
     </PrimaryLayout>
   )

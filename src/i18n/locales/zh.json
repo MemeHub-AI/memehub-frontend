@@ -359,5 +359,8 @@
   "trade.balance.invalid": "余额错误",
   "trade.success.reward": "获得了 {} 个 {}",
   "trade.success.diamond": "额外获得了 $ 钻石奖励",
-  "deploy.unsupport.chain": "暂不支持此链"
+  "deploy.unsupport.chain": "暂不支持此链",
+  "no.kol": "目前还没有KOL入驻",
+  "apply,now": "立即申请",
+  "no.communities": "目前还没有社区入驻"
 }
