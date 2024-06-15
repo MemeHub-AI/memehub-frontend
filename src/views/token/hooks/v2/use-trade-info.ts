@@ -8,8 +8,8 @@ import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getTokenConfig } from '@/contract/v2/config/token'
 import { getBondConfig } from '@/contract/v2/config/bond'
-import { ERR } from '@/errors'
 import { BI_ZERO, BI_ZERO_TUPLE } from '@/constants/contract'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useTradeInfoV2 = () => {
   const { address } = useAccount()
@@ -62,7 +62,7 @@ export const useTradeInfoV2 = () => {
       functionName: 'getReserveForToken',
       args: [token, parseEther(amount)],
     }).catch((e) => {
-      ERR.contract(e, false)
+      CONTRACT_ERR.exec(e, false)
       return BI_ZERO_TUPLE
     })
   }
@@ -76,7 +76,7 @@ export const useTradeInfoV2 = () => {
       functionName: 'getRefundForTokens',
       args: [token, parseEther(amount)],
     }).catch((e) => {
-      ERR.contract(e, false)
+      CONTRACT_ERR.exec(e, false)
       return BI_ZERO_TUPLE
     })
   }
@@ -90,7 +90,7 @@ export const useTradeInfoV2 = () => {
       functionName: 'priceForNextMint',
       args: [token],
     }).catch((e) => {
-      ERR.contract(e, false)
+      CONTRACT_ERR.exec(e, false)
       return BI_ZERO
     })
   }
@@ -104,7 +104,7 @@ export const useTradeInfoV2 = () => {
       functionName: 'maxSupply',
       args: [token],
     }).catch((e) => {
-      ERR.contract(e, false)
+      CONTRACT_ERR.exec(e, false)
       return BI_ZERO
     })
   }
@@ -118,7 +118,7 @@ export const useTradeInfoV2 = () => {
       functionName: 'getDetail',
       args: [token],
     }).catch((e) => {
-      ERR.contract(e, false)
+      CONTRACT_ERR.exec(e, false)
       return undefined
     })
   }

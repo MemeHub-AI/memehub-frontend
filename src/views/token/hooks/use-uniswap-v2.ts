@@ -7,7 +7,7 @@ import { isEmpty } from 'lodash'
 import { uniswapV2Config } from '../../../contract/abi/uniswap-v2'
 import { useApprove } from '@/hooks/use-approve'
 import { commonAddr } from '@/contract/address'
-import { ERR } from '@/errors'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
@@ -25,7 +25,7 @@ export const useUniswapV2 = () => {
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: (e) => ERR.contract(e),
+      onError: (e) => CONTRACT_ERR.exec(e),
     },
   })
 

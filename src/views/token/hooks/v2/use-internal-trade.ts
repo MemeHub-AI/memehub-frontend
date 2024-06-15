@@ -1,10 +1,9 @@
-import { Address, formatEther, parseEther } from 'viem'
+import { Address, parseEther } from 'viem'
 import { useAccount, useWriteContract } from 'wagmi'
 
 import { getZapV1Config } from '@/contract/v2/config/zapv1'
 import { useApprove } from '@/hooks/use-approve'
-import { ERR } from '@/errors'
-import { useTradeInfoV2 } from './use-trade-info'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useInternelTradeV2 = () => {
   const { address, chainId } = useAccount()
@@ -14,7 +13,7 @@ export const useInternelTradeV2 = () => {
     writeContract,
     reset: resetInternalTrade,
   } = useWriteContract({
-    mutation: { onError: (e) => ERR.contract(e) },
+    mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
   })
   const { approvalForAll } = useApprove()
 

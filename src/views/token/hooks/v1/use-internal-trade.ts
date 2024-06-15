@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash'
 
 import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
 import { addServiceFeeV1 } from '@/utils/contract'
-import { ERR } from '@/errors'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useInternalTradeV1 = () => {
   const { t } = useTranslation()
@@ -20,7 +20,7 @@ export const useInternalTradeV1 = () => {
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: (e) => ERR.contract(e),
+      onError: (e) => CONTRACT_ERR.exec(e),
     },
   })
 

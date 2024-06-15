@@ -5,9 +5,9 @@ import { readContract } from '@wagmi/core'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 
-import { ChainId, wagmiConfig } from '@/config/wagmi'
+import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from './use-chain-info'
-import { ERR } from '@/errors'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 const APPROVE_MAX_VALUE = BigInt(
   '115792089237316195423570985008687907853269984665640564039457584007913129639935'
@@ -49,7 +49,7 @@ export const useApprove = () => {
       })
       return true
     } catch (error) {
-      ERR.contract(error)
+      CONTRACT_ERR.exec(error)
       return false
     } finally {
       resetApprove()
@@ -73,7 +73,7 @@ export const useApprove = () => {
 
       return BigNumber(formatEther(value)).gte(amount)
     } catch (error) {
-      ERR.contract(error)
+      CONTRACT_ERR.exec(error)
       return false
     }
   }
