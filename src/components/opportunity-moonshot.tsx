@@ -77,7 +77,7 @@ export const OpportunityMoonshot = (props: Props) => {
   return (
     <div
       className={clsx(
-        'pr-2 border-r-2 border-black min-h-[100vh] max-sm:mr-0 max-sm:pr-0  max-sm:h-min max-sm:border-0',
+        'pr-2 border-r-2 border-black min-h-body max-sm:mr-0 max-sm:pr-0  max-sm:h-min max-sm:border-0',
         className
       )}
     >

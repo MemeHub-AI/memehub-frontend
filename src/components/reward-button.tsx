@@ -1,10 +1,11 @@
-import React, { ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
 import { Button } from './ui/button'
 import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
+import { DiamondIcon } from './diamond-icon'
 
 interface Props extends ComponentProps<typeof Button> {
   showReferral?: boolean
@@ -29,7 +30,10 @@ export const RewardButton = ({
       {...props}
     >
       {showReferral && <div>🧑‍🚀 {t('referral')}</div>}
-      <div>💎 {t('diamond')}</div>
+      <div className="flex items-center gap-1">
+        <DiamondIcon size={20} />
+        <span>{t('rewards')}</span>
+      </div>
     </Button>
   )
 }

@@ -341,5 +341,6 @@
   "reward.rule2": "Engaging in transactions will earn you diamonds; for every purchase of Memecoin valued at 10 USDT, you will receive 5 diamonds, and for every sale of Memecoin valued at 10 USDT, you will receive 3 diamonds.",
   "reward.rule3": "When the coin reaches its target market capitalization and is launched on the dex with LP added, you will receive a reward of 1000 diamonds!",
   "reward.diamond": "Memehub diamond reward",
-  "reward.my-diamond": "My reward"
+  "reward.my-diamond": "My reward",
+  "rewards": "Rewards"
 }
