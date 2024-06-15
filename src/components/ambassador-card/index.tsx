@@ -11,7 +11,7 @@ interface AmbassadorCardProps {
 
 export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
   return (
-    <Card className="flex p-4">
+    <Card className="flex p-4 hover:scale-105" shadow={'none'}>
       <img
         src={data?.logo || defaultImg}
         alt="Avatar"
