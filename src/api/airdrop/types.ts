@@ -1,6 +1,6 @@
 export interface AirdropMerkleRootReq {
   chain: string
-  type_list: number[]
+  type_list: string
 }
 
 export interface AirdropMerkleRootRes {

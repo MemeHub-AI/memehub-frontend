@@ -1,6 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
+import { isEmpty } from 'lodash'
+import { zeroHash } from 'viem'
 
-import type { TokenUpdateReq } from '@/api/token/types'
+import type { Marketing, TokenUpdateReq } from '@/api/token/types'
 
 import { tokenApi } from '@/api/token'
 import { airdropApi } from '@/api/airdrop'
@@ -43,6 +45,29 @@ export const useCreateToken = () => {
     mutationFn: airdropApi.getMerkleRoot,
   })
 
+  const genAirdropParams = async (
+    chain: string,
+    marketing: Marketing[] | undefined
+  ) => {
+    const params = {
+      distributionRatioKol: 0,
+      distributionRatioCommunity: 0,
+      walletCountKol: 0,
+      walletCountCommunity: 0,
+      merkleRootKol: zeroHash,
+      merkleRootCommunity: zeroHash,
+    } as const
+    const type_list = marketing?.map((m) => m.type).join(',') ?? ''
+
+    // Didn't select marketing.
+    if (isEmpty(type_list)) return params
+
+    const { data } = await getMerkleRoot({ chain, type_list })
+    console.log('gen airdrop params', type_list, data)
+
+    return params
+  }
+
   return {
     createTokenData,
     updateTokenData,
@@ -56,5 +81,6 @@ export const useCreateToken = () => {
     create,
     update,
     getMerkleRoot,
+    genAirdropParams,
   }
 }

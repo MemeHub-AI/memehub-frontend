@@ -1,4 +1,4 @@
-import { useAccount, useWriteContract } from 'wagmi'
+import { useWriteContract } from 'wagmi'
 
 import type { TokenNewReq } from '@/api/token/types'
 
@@ -17,7 +17,7 @@ export const useDeployV2 = () => {
     createTokenError,
     isCreatingToken,
     create,
-    getMerkleRoot,
+    genAirdropParams,
   } = useCreateToken()
 
   const {
@@ -35,8 +35,6 @@ export const useDeployV2 = () => {
     isError,
   } = useWaitForTx({ hash })
 
-  const genMerkleRoot = () => {}
-
   const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
     cacheParams = params
 
@@ -46,12 +44,18 @@ export const useDeployV2 = () => {
       return
     }
     const [bondConfig, bondParams] = config
+    const airdropParams = await genAirdropParams(chainName, params.marketing)
 
+    return
     writeContract(
       {
         ...bondConfig,
         functionName: 'createToken',
-        args: [{ name: params.name, symbol: params.ticker }, bondParams],
+        args: [
+          { name: params.name, symbol: params.ticker },
+          bondParams,
+          airdropParams,
+        ],
         value: DEPLOY_FEE,
       },
       { onSuccess: (hash) => create({ ...params, hash }) }
