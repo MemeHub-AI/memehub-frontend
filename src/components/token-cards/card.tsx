@@ -10,7 +10,8 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
-import { useTokenProgressV1 } from '@/views/token/hooks/v1/use-token-progress'
+import { useTradeInfoV2 } from '@/views/token/hooks/v2/use-trade-info'
+import { useTokenProgressV2 } from '@/views/token/hooks/v2/use-token-progress'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -28,10 +29,13 @@ export const TokenCard = (props: Props) => {
     ...restProps
   } = props
   const router = useRouter()
-  const { progress } = useTokenProgressV1(
+  const { progress } = useTokenProgressV2(
     card.address as Address,
     Number(card.chain.id)
   )
+  const { tokenDetails } = useTradeInfoV2()
+
+  console.log('tokendetails', tokenDetails?.info)
 
   return (
     <Card
@@ -74,7 +78,7 @@ export const TokenCard = (props: Props) => {
           <Progress
             className="h-4 self-end w-full mt-1"
             indicatorClass="bg-green-500"
-            value={Number(progress)}
+            value={progress}
           />
         </div>
       </div>

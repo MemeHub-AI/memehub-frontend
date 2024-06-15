@@ -5,12 +5,12 @@ import { useTranslation } from 'react-i18next'
 import { Progress } from '@/components/ui/progress'
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
-import { useTokenProgressV1 } from '../hooks/v1/use-token-progress'
+import { useTokenProgressV2 } from '../hooks/v2/use-token-progress'
 
 export const BondingCurveProgress = () => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
-  const { total, progress } = useTokenProgressV1()
+  const { total, progress } = useTokenProgressV2()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const threshold = BigNumber(total).lte(0)
@@ -23,7 +23,7 @@ export const BondingCurveProgress = () => {
         className="h-5"
         indicatorClass="bg-blue-600"
         labelClass="text-white"
-        value={Number(progress)}
+        value={progress}
       />
       <div className="text-zinc-400 text-xs mt-2">
         {t('bonding-curve.token').replace('{}', threshold)}
