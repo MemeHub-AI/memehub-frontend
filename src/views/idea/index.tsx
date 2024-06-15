@@ -19,6 +19,7 @@ import { cn } from '@/lib/utils'
 import { MemeStory } from './components/meme-story'
 import { newsApi } from '@/api/news'
 import { PrimaryLayout } from '@/components/layouts/primary'
+import { fmt } from '@/utils/fmt'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -151,7 +152,7 @@ const Content = memo(({ content }: { content?: string }) => {
       )}
       onClick={() => setShow(!show)}
     >
-      {content}
+      {fmt.replaceHTMLCode(content || '')}
     </div>
   )
 })

@@ -335,5 +335,8 @@
   "reward.rule1": "启动一个新代币将获得7个钻石，感谢你为世界带来了一个有趣的Memecoin。",
   "reward.rule2": "进行交易将获得钻石，每买入价值10USDT的memecoin将获得5个钻石，每卖出价值10USDT的memecoin将获得3个钻石. ",
   "reward.rule3": "当代币到达目标市值启动在dex添加LP时，\n\n你将获得5000个钻石奖励！",
-  "rewards": "奖励"
+  "rewards": "奖励",
+  "no.kol": "目前还没有KOL入驻",
+  "apply,now": "立即申请",
+  "no.communities": "目前还没有社区入驻"
 }

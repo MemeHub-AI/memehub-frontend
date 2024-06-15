@@ -342,5 +342,8 @@
   "reward.rule3": "When the coin reaches its target market capitalization and is launched on the dex with LP added, you will receive a reward of 1000 diamonds!",
   "reward.diamond": "Memehub diamond reward",
   "reward.my-diamond": "My reward",
-  "rewards": "Rewards"
+  "rewards": "Rewards",
+  "no.kol": "There are currently no KOLs registered.",
+  "apply,now": "Apply Now",
+  "no.communities": "There are currently no communities registered"
 }

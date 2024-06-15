@@ -76,4 +76,19 @@ export const fmt = {
       return BigNumber(value).toFixed()
     }
   },
+  replaceHTMLCode(content: string) {
+    const reg = /&lt;|&gt;|&amp;|&quot;|&#39;|&nbsp;/g
+    const map = {
+      '&lt;': '<',
+      '&gt;': '>',
+      '&amp;': '&',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&nbsp;': ' ',
+    } as Record<string, string>
+
+    return content.replaceAll(reg, (match) => {
+      return map[match] as string
+    })
+  },
 }

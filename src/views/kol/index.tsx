@@ -1,3 +1,4 @@
+import { allianceApi } from '@/api/alliance'
 import { AmbassadorCard } from '@/components/ambassador-card'
 import CustomSuspense from '@/components/custom-suspense'
 import { PrimaryLayout } from '@/components/layouts/primary'
@@ -7,32 +8,50 @@ import {
 } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 const KOLPage = () => {
   const { t } = useTranslation()
-  const kols = [
-    {
-      logo: '/images/logo.png',
-      name: 'Jack Ma',
-      desc: '一位优秀的土狗猎手，获得过马斯克的点赞',
+
+  const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
+    queryKey: [allianceApi.getKols.name],
+    queryFn: async ({ pageParam }) => {
+      const { data } = await allianceApi.getKols({ page: pageParam })
+      return data
     },
-    {
-      logo: '/images/logo.png',
-      name: 'Jack Ma',
-      desc: '一位优秀的土狗猎手，获得过马斯克的点赞',
+    initialPageParam: 1,
+    getNextPageParam: (_, _1, page) => page + 1,
+    select: (data) => {
+      return {
+        total: data.pages[0].count,
+        newsList: data.pages.flatMap((p) => p?.results).filter(Boolean),
+      }
     },
-    {
-      logo: '/images/logo.png',
-      name: 'Jack Ma',
-      desc: '一位优秀的土狗猎手，获得过马斯克的点赞',
-    },
-    {
-      logo: '/images/logo.png',
-      name: 'Jack Ma',
-      desc: '一位优秀的土狗猎手，获得过马斯克的点赞',
-    },
-  ]
+  })
+
+  const handleLoadStatus = () => {
+    if (isFetching && data?.total != null) {
+      return (
+        <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
+          {t('loading')}
+        </div>
+      )
+    }
+
+    if (data?.total !== kols?.length) {
+      return (
+        <div
+          className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
+          onClick={() => fetchNextPage()}
+        >
+          {t('loading.more')}
+        </div>
+      )
+    }
+  }
+
+  const kols = data?.newsList
   return (
     <PrimaryLayout>
       <div className="py-5 pr-4">
@@ -47,24 +66,21 @@ const KOLPage = () => {
             </Button>
           </MobileQpportunityMoonshot>
         </h1>
-        <div className="my-3">{t('kol.desc').replace('$1', '50')}</div>
+        <div className="my-3">
+          {t('kol.desc').replace('$1', `${data?.total}` || '-')}
+        </div>
         <Button>{t('apply.kol')}</Button>
         <CustomSuspense
-          className="mt-5 grid grid-cols-3 gap-4 w-full max-2xl:grid-cols-2 max-xl:grid-cols-1"
-          isPending={false}
+          className="mt-5 grid grid-cols-3 gap-4 w-full max-xl:grid-cols-2 max-md:grid-cols-1"
+          isPending={isLoading}
           fallback={<CardSkeleton></CardSkeleton>}
-          nullback={<></>}
+          nullback={<div className="mt-4">{t('no.kol')}</div>}
         >
-          {kols.map((kol) => {
-            return <AmbassadorCard data={kol}></AmbassadorCard>
+          {kols?.map((kol) => {
+            return <AmbassadorCard key={kol!.id} data={kol}></AmbassadorCard>
           })}
         </CustomSuspense>
-        <div
-          className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
-          onClick={() => {}}
-        >
-          {t('loading.more')}
-        </div>
+        {handleLoadStatus()}
       </div>
     </PrimaryLayout>
   )
