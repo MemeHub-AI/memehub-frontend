@@ -48,7 +48,6 @@ export const useNewsList = (options?: Options) => {
                 results: data.results?.map((item) => ({
                   id: item.id,
                   title: item?.title,
-                  link: '',
                   content: item?.description,
                   image: item?.logo,
                 })),
@@ -73,10 +72,9 @@ export const useNewsList = (options?: Options) => {
               count: data?.count,
               results: data?.results?.map((item) => ({
                 id: item?.id,
-                title: item?.title?.query,
-                link: item?.title?.exploreLink,
-                content: item?.articles?.[0]?.snippet,
-                image: item?.image?.imageUrl || defaultImg,
+                title: item?.title,
+                content: item?.description,
+                image: item?.logo || defaultImg,
               })),
             }
         } catch (error) {

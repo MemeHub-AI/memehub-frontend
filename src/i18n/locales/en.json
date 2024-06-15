@@ -334,5 +334,7 @@
   "loading.more": "Load more",
   "no.kol": "There are currently no KOLs registered.",
   "apply,now": "Apply Now",
-  "no.communities": "There are currently no communities registered"
+  "no.communities": "There are currently no communities registered",
+  "no.airdrop": "No available airdrops to claim at the moment",
+  "connect.wallet.airdrop.link": "View Airdrop List after Connecting Wallet"
 }

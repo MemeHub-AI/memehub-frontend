@@ -327,5 +327,7 @@
   "loading.more": "加载更多",
   "no.kol": "目前还没有KOL入驻",
   "apply,now": "立即申请",
-  "no.communities": "目前还没有社区入驻"
+  "no.communities": "目前还没有社区入驻",
+  "no.airdrop": "暂无可领取的空投",
+  "connect.wallet.airdrop.link": "连接钱包后查看空投列表"
 }

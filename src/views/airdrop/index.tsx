@@ -1,110 +1,95 @@
 import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
-import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
 import { useTranslation } from 'react-i18next'
-import { TbUsers } from 'react-icons/tb'
-import { Countdown } from './components/countdown'
-import { utilTime } from '@/utils/time'
 import { Ids } from './components/ids'
+import { allianceApi } from '@/api/alliance'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import CustomSuspense from '@/components/custom-suspense'
+import { AirdropCard } from './components/card'
+import { useAccount } from 'wagmi'
+import { data } from './data'
+import { Button } from '@/components/ui/button'
 
 const Airdrop = () => {
   const { t } = useTranslation()
+  const { isConnected } = useAccount()
+  const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
+    queryKey: [allianceApi.getAirdrop.name],
+    queryFn: async ({ pageParam }) => {
+      const { data } = await allianceApi.getAirdrop({ page: pageParam })
+      return data
+    },
+    initialPageParam: 1,
+    getNextPageParam: (_, _1, page) => page + 1,
+    select: (data) => {
+      return {
+        total: data.pages[0].count,
+        airdropList: data.pages.flatMap((p) => p?.results).filter(Boolean),
+      }
+    },
+  })
 
-  const airdrops = [
-    {
-      id: '1',
-      name: 'Pudgy Penguins Holder',
-      logo: '/images/avatar1.png',
-      amount: '1000',
-      time: new Date('2024/6/13 12:00:00'),
-    },
-    {
-      id: '2',
-      name: 'Pudgy Penguins Holder',
-      logo: '/images/avatar1.png',
-      amount: '1000',
-      time: new Date('2024/6/13 12:00:00'),
-    },
-    {
-      id: '3',
-      name: 'Pudgy Penguins Holder',
-      logo: '/images/avatar1.png',
-      amount: '1000',
-      time: new Date('2024/6/13 12:00:00'),
-    },
-    {
-      id: '4',
-      name: 'Pudgy Penguins Holder',
-      logo: '/images/avatar1.png',
-      amount: '1000',
-      time: new Date('2024/6/13 12:00:00'),
-    },
-  ]
+  const airdrops = data?.airdropList
+
+  const handleLoadStatus = () => {
+    if (isFetching && data?.total) {
+      return (
+        <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
+          {t('loading')}
+        </div>
+      )
+    }
+
+    if (Number(data?.total) > Number(airdrops?.length)) {
+      return (
+        <div
+          className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
+          onClick={() => fetchNextPage()}
+        >
+          {t('loading.more')}
+        </div>
+      )
+    }
+  }
 
   return (
     <main className="min-h-main flex gap-6 mx-auto max-md:flex-col max-md:items-center max-sm:gap-8 pr-5 max-sm:px-2">
-      <OpportunityMoonshot defalutTab={0} className="max-sm:!hidden" />
+      <OpportunityMoonshot defalutTab={0} className="max-md:!hidden" />
       <div className="py-5">
         <Ids></Ids>
         <h1 className="mt-5 text-2xl">{t('airdrop.you')}</h1>
-        <div className="mt-3 grid grid-cols-3 gap-4 max-2xl:grid-cols-2 max-xl:grid-cols-1 max-w-max">
-          {airdrops.map((airdrop, i) => (
-            <Card key={airdrop.id} className="p-2">
-              <div className="flex justify-between">
-                <span>Roaringtube(RTUBE)</span>
-                <span className="text-red-700">
-                  {utilTime.isPast(new Date('2024/6/13 12:00:00').getTime()) ? (
-                    t('expired')
-                  ) : (
-                    <Countdown
-                      targetTimestamp={new Date('2024/6/13 12:00:00').getTime()}
-                    ></Countdown>
-                  )}
-                </span>
-              </div>
-              <div className="mt-3 flex ">
-                <div className="flex-1">
-                  <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden ">
-                    <img
-                      src="/images/avatar1.png"
-                      alt="Avatar"
-                      className="w-[40px] h-[40px]"
-                    />
-                    <span className="mx-2 truncate">Pudgy Penguins Holder</span>
-                    <img
-                      src="/images/check.png"
-                      alt="Avatar"
-                      className="w-[40px] h-[40px] p-2"
-                    />
-                  </div>
-                  <div className="mt-3 flex items-center">
-                    <img
-                      src="/images/gift.png"
-                      alt="gift"
-                      className="w-[30px] h-[30px]"
-                    />
-                    <span className="ml-2 text-gray-500">
-                      1000,000,000 RTUBE
-                    </span>
-                  </div>
-                  <div className="mt-3 flex items-center text-gray-500">
-                    <TbUsers size={24} />
-                    <span className="ml-2">10/100</span>
-                  </div>
-                  <Button className="mt-3" disabled>
-                    {t('claim.airdrop')}
-                  </Button>
-                </div>
-                <img
-                  src="/images/airdrop.png"
-                  className="max-w-[130px] max-h-[130px] ml-4 max-sm:w-[120px] max-sm:h-[120px]"
-                />
-              </div>
-            </Card>
-          ))}
-        </div>
+        {isConnected ? (
+          <>
+            <CustomSuspense
+              isPending={isLoading}
+              fallback={<div></div>}
+              nullback={<div className="mt-3">{t('no.airdrop')}</div>}
+              className="mt-3 flex flex-wrap gap-4 max-w-max"
+            >
+              {airdrops?.map((airdrop, i) => (
+                <AirdropCard key={i} airdrop={airdrop} />
+              ))}
+            </CustomSuspense>
+            {handleLoadStatus()}
+          </>
+        ) : (
+          <AirdropSkeleton />
+        )}
       </div>
     </main>
+  )
+}
+
+const AirdropSkeleton = () => {
+  return (
+    <div className="relative mt-6 flex flex-wrap gap-5 max-w-max ">
+      {data?.map((airdrop, i) => (
+        <AirdropCard
+          key={i}
+          className="blur-md pointer-events-none select-none"
+          airdrop={airdrop}
+        />
+      ))}
+    </div>
   )
 }
 

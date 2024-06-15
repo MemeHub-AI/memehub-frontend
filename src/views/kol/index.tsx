@@ -24,13 +24,13 @@ const KOLPage = () => {
     select: (data) => {
       return {
         total: data.pages[0].count,
-        newsList: data.pages.flatMap((p) => p?.results).filter(Boolean),
+        kol: data.pages.flatMap((p) => p?.results).filter(Boolean),
       }
     },
   })
 
   const handleLoadStatus = () => {
-    if (isFetching && data?.total != null) {
+    if (isFetching && !data?.total) {
       return (
         <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
           {t('loading')}
@@ -38,7 +38,7 @@ const KOLPage = () => {
       )
     }
 
-    if (data?.total !== kols?.length) {
+    if (Number(data?.total) > Number(kols?.length)) {
       return (
         <div
           className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
@@ -50,7 +50,7 @@ const KOLPage = () => {
     }
   }
 
-  const kols = data?.newsList
+  const kols = data?.kol
   return (
     <main className="min-h-main flex max-md:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
       <OpportunityMoonshot className="max-md:hidden"></OpportunityMoonshot>

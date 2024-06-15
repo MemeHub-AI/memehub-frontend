@@ -13,26 +13,25 @@ import { useTranslation } from 'react-i18next'
 const CommunitiePage = () => {
   const { t } = useTranslation()
 
-  const { data, isLoading, fetchNextPage, isFetching, isFetched } =
-    useInfiniteQuery({
-      queryKey: [allianceApi.getKols.name],
-      queryFn: async ({ pageParam }) => {
-        const { data } = await allianceApi.getCommunity({ page: pageParam })
-        return data
-      },
-      initialPageParam: 1,
-      getNextPageParam: (_, _1, page) => page + 1,
-      select: (data) => {
-        return {
-          total: data.pages[0].count,
-          newsList: data.pages.flatMap((p) => p?.results).filter(Boolean),
-        }
-      },
-    })
-  const communities = data?.newsList
+  const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
+    queryKey: [allianceApi.getCommunity.name],
+    queryFn: async ({ pageParam }) => {
+      const { data } = await allianceApi.getCommunity({ page: pageParam })
+      return data
+    },
+    initialPageParam: 1,
+    getNextPageParam: (_, _1, page) => page + 1,
+    select: (data) => {
+      return {
+        total: data.pages[0].count,
+        communities: data.pages.flatMap((p) => p?.results).filter(Boolean),
+      }
+    },
+  })
+  const communities = data?.communities
 
   const handleLoadStatus = () => {
-    if (isFetching && data?.total != null) {
+    if (isFetching && !data?.total) {
       return (
         <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
           {t('loading')}
@@ -40,7 +39,7 @@ const CommunitiePage = () => {
       )
     }
 
-    if (data?.total !== communities?.length) {
+    if (Number(data?.total) > Number(communities?.length)) {
       return (
         <div
           className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
@@ -80,7 +79,7 @@ const CommunitiePage = () => {
             return (
               <AmbassadorCard
                 key={communitie!.id}
-                data={communitie}
+                data={communitie!}
               ></AmbassadorCard>
             )
           })}
