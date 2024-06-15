@@ -23,15 +23,15 @@ import { fmt } from '@/utils/fmt'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { CoinTypeField } from './coin-type-field'
 import { MarketingField } from './marketing-field'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
-  const { deployResult, formData, aiMemeInfo } = useCreateTokenContext()
+  const { deployResult, formData } = useCreateTokenContext()
   const { chain } = useAccount()
 
   const { url, form, chains, formFields, onSubmit } = formData
-  const { isLoadingMemeInfo, isLoadingMemeImg, isLoadingMemePoster } =
-    aiMemeInfo
+  const { loadingInfo, loadingLogo } = useAimemeInfoStore()
 
   const { isDeploying } = deployResult || {}
 
@@ -39,7 +39,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const symbol = chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
-    if (isLoadingMemeInfo || isLoadingMemeImg) {
+    if (loadingInfo || loadingLogo) {
       toast.warning(t('onsubmit.createing.warning'))
       return
     }
@@ -80,7 +80,6 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                           placeholder={t('name.placeholder')}
                           {...field}
                           className="w-full"
-                          inputClassName="w-full"
                         />
                       </FormControl>
                       <FormMessage />
@@ -91,7 +90,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                   control={form?.control}
                   name={formFields?.symbol!}
                   render={({ field }) => (
-                    <FormItem className="w-full ">
+                    <FormItem className="w-full">
                       <FormLabel className="font-bold">
                         *{t('symbol')}
                       </FormLabel>
@@ -100,7 +99,6 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                           placeholder={t('symbol.placeholder')}
                           {...field}
                           className="w-full"
-                          inputClassName="w-full"
                         />
                       </FormControl>
                       <FormMessage />

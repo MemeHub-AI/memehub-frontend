@@ -1,6 +1,5 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { ControllerRenderProps } from 'react-hook-form'
 
 import { useCreateTokenContext } from '@/contexts/create-token'
 import {
@@ -32,27 +31,27 @@ export const CoinTypeField = () => {
       title: t('deploy.coin-type.erc404'),
       desc: t('deploy.coin-type.erc404.desc'),
       value: CoinType.Erc404,
+      disabled: true,
     },
     {
       title: t('deploy.coin-type.reward-lp'),
       desc: t('deploy.coin-type.reward-lp.desc').replace('{}', '3%'),
       value: CoinType.RewardLp,
+      disabled: true,
     },
     {
       title: t('deploy.coin-type.reward-holder'),
       desc: t('deploy.coin-type.reward-holder.desc').replace('{}', '3%'),
       value: CoinType.RewardHolder,
+      disabled: true,
     },
     {
       title: t('deploy.coin-type.burning'),
       desc: t('deploy.coin-type.burning.desc'),
       value: CoinType.Burning,
+      disabled: true,
     },
   ]
-
-  const activeType = (
-    field: ControllerRenderProps<Record<string, any>, string>
-  ) => types.find((t) => t.value === Number(field.value))?.title
 
   return (
     <FormField
@@ -67,7 +66,7 @@ export const CoinTypeField = () => {
               onValueChange={field.onChange}
             >
               <SelectTrigger className="w-4/6 h-10" shadow="none">
-                {activeType(field)}
+                {types.find((t) => t.value === Number(field.value))?.title}
               </SelectTrigger>
               <SelectContent viewportClass="p-0">
                 {types.map((t) => (
@@ -75,6 +74,7 @@ export const CoinTypeField = () => {
                     key={t.value}
                     value={t.value.toString()}
                     className="border-b-2 border-black rounded-none m-0 last:border-none  p-3"
+                    disabled={t.disabled}
                   >
                     <h3 className="font-bold text-base text-start">
                       {t.title}

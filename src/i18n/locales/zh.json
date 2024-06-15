@@ -358,5 +358,6 @@
   "marketing.memehub.desc": "将代币总量的 {} 空投给接入 {} 的联盟",
   "trade.balance.invalid": "余额错误",
   "trade.success.reward": "获得了 {} 个 {}",
-  "trade.success.diamond": "额外获得了 $ 钻石奖励"
+  "trade.success.diamond": "额外获得了 $ 钻石奖励",
+  "deploy.unsupport.chain": "暂不支持此链"
 }

@@ -24,7 +24,7 @@ export const formFields = {
   poster: 'poster',
   coinType: 'coinType',
   marketing: 'marketing',
-}
+} as const
 
 export const useCreateTokenForm = (
   useDeployResult: ReturnType<typeof useDeployV1>

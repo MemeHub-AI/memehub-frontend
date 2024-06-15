@@ -365,5 +365,6 @@
   "marketing.memehub.desc": "Airdrop {} of the total token supply to the alliances integrated with {}",
   "trade.balance.invalid": "Balance is invalid",
   "trade.success.reward": "Obtained {} {} tokens",
-  "trade.success.diamond": "Received an additional $ diamond reward"
+  "trade.success.diamond": "Received an additional $ diamond reward",
+  "deploy.unsupport.chain": "Unsupport chain"
 }

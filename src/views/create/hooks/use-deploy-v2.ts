@@ -33,19 +33,15 @@ export const useDeployV2 = () => {
 
   const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
     cacheParams = params
-    if (!chainId) {
-      toast.error(t('deploy.chain.empty'))
-      return
-    }
 
     const config = getBondConfig(chainId)
-    if (!config) {
-      toast.error(t('deploy.config.empty'))
+    if (!chainId || !config) {
+      toast.error(t('deploy.unsupport.chain'))
       return
     }
+
     const [bondConfig, bondParams] = config
 
-    console.log('v2 deploy', bondConfig)
     writeContract(
       {
         ...bondConfig,

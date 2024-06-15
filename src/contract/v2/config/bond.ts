@@ -218,7 +218,9 @@ const params = {
   ],
 } as const
 
-export const getBondConfig = (chainId: number) => {
+export const getBondConfig = (chainId: number | undefined) => {
+  if (!chainId) return
+
   const addr = getV2Addr(chainId)
   if (addr.length === 0) return
 
