@@ -72,4 +72,4 @@ const dev = createConfig({
 
 export const wagmiConfig = dotenv.isProd ? prod : dev
 
-export type SupportedChainId = (typeof wagmiConfig)['chains'][number]['id']
+export type ChainId = (typeof wagmiConfig)['chains'][number]['id']

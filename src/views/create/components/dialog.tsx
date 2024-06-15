@@ -6,28 +6,28 @@ import { CircleAlert } from 'lucide-react'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
-import { useDeployV1 } from '../hooks/use-deploy-v1'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { isUserReject } from '@/utils/contract'
 import { fmt } from '@/utils/fmt'
+import { useCreateTokenContext } from '@/contexts/create-token'
 
-interface Props extends ReturnType<typeof useDeployV1> {}
-
-export const CreateTokenStatusDialog = (props: Props) => {
-  const {
-    createTokenData,
-    createTokenError,
-    deployHash = '',
-    isSubmitting,
-    isConfirming,
-    isDeploySuccess,
-    isCreatingToken,
-    submitError,
-    confirmError,
-    resetDeploy,
-    retryCreate,
-  } = props
+export const CreateTokenStatusDialog = () => {
   const { t } = useTranslation()
+  const {
+    deployResult: {
+      createTokenData,
+      createTokenError,
+      isSubmitting,
+      isConfirming,
+      isDeploySuccess,
+      isCreatingToken,
+      submitError,
+      confirmError,
+      resetDeploy,
+      retryCreate,
+    },
+  } = useCreateTokenContext()
+
   const chainName = createTokenData?.chain?.name || ''
   const deployedAddr = createTokenData?.address || ''
   const explorerUrl = createTokenData?.chain?.explorer_tx || ''
@@ -64,7 +64,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!submitError}
         title={withIcon(t('deploy.submit.error') + ':')}
         description={
-          <p className="break-all line-clamp-3">{submitError?.message}</p>
+          <span className="break-all line-clamp-3">{submitError?.message}</span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -83,7 +83,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
       >
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
-          <p>{t('deploy.submit.success.desc')}</p>
+          <span>{t('deploy.submit.success.desc')}</span>
         </DialogDescription>
       </Dialog>
     )
@@ -96,7 +96,9 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!confirmError}
         title={withIcon(t('deploy.confirm.error') + ':')}
         description={
-          <p className="break-all line-clamp-3">{confirmError?.message}</p>
+          <span className="break-all line-clamp-3">
+            {confirmError?.message}
+          </span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -123,8 +125,8 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!createTokenError}
         title={withIcon(t('deploy.backend.error') + ':')}
         description={
-          <div>
-            <p className="break-all line-clamp-3">
+          <span>
+            <span className="break-all line-clamp-3">
               {t('deploy.backend.error.desc')}
               <span
                 className="text-blue-600 cursor-pointer hover:underline"
@@ -132,8 +134,8 @@ export const CreateTokenStatusDialog = (props: Props) => {
               >
                 {t('retry')}
               </span>
-            </p>
-          </div>
+            </span>
+          </span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -150,7 +152,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
         description={
-          <div className="flex flex-col gap-2 w-fit">
+          <span className="flex flex-col gap-2 w-fit">
             <Link
               className="text-blue-600 hover:underline"
               href={Routes.Main}
@@ -175,7 +177,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
             >
               {t('deploy.success.view-hash')}
             </Link>
-          </div>
+          </span>
         }
       />
     )

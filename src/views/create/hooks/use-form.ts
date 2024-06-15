@@ -10,6 +10,7 @@ import { toast } from 'sonner'
 
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { CoinType, Marketing } from '@/api/token/types'
 
 export const formFields = {
   fullname: 'fullname',
@@ -21,6 +22,8 @@ export const formFields = {
   chainName: 'chainName',
   logo: 'logo',
   poster: 'poster',
+  coinType: 'coinType',
+  marketing: 'marketing',
 }
 
 export const useCreateTokenForm = (
@@ -52,6 +55,10 @@ export const useCreateTokenForm = (
     [formFields.chainName]: z.string().refine(validateInput, require),
     [formFields.logo]: z.string().refine(validateInput, require),
     [formFields.poster]: z.array(z.string()).optional(),
+    [formFields.coinType]: z.number(),
+    [formFields.marketing]: z
+      .array(z.object({ type: z.number(), percent: z.number() }))
+      .optional(),
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -66,6 +73,8 @@ export const useCreateTokenForm = (
       [formFields.chainName]: '',
       [formFields.logo]: '',
       [formFields.poster]: [],
+      [formFields.coinType]: CoinType.Normal,
+      [formFields.marketing]: [],
     },
   })
 
@@ -82,16 +91,18 @@ export const useCreateTokenForm = (
       return
     }
 
+    console.log('submit deploy', values)
     deploy({
       name: values.fullname! as string,
       ticker: values.symbol! as string,
       desc: values.description! as string,
       image: (values.logo! as string).replace('mini', 'origin'),
       chain: values.chainName as string,
-      // Optional.
       twitter_url: values.twitter as string,
       telegram_url: values.telegram as string,
       website: values.website as string,
+      coin_type: values.coinType as number,
+      marketing: values.marketing as Marketing[],
     })
   }
 

@@ -3,6 +3,8 @@ import type { Config } from 'tailwindcss'
 const baseWidth = {
   main: '1280px',
   aside: '340px',
+  100: '28rem',
+  128: '32rem',
 }
 
 const baseHeight = {
@@ -93,6 +95,7 @@ const config = {
           'var(--offset-width, 3px) var(--offset-width, 3px) 0 0 var(--offset-color, black)',
         'offset-border': `var(--offset-width, 3px) var(--offset-width, 3px) 0 0 var(--offset-color, white), 
           var(--offset-width, 3px) var(--offset-width, 3px) 0 2px var(--offset-border-color, black)`,
+        input2: '0 0 5px 3px #A4C9EC',
       },
       translate: {
         offset: '4px',

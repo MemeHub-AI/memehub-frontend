@@ -7,7 +7,7 @@ interface ChainsStore {
   loadingChains: boolean
 
   setChains: (chains: ChainData[]) => void
-  findChain: (nameOrId: string) => ChainData | undefined
+  findChain: (nameOrId: string | number | undefined) => ChainData | undefined
 }
 
 export const useChainsStore = create<ChainsStore>((set, get) => ({
@@ -21,10 +21,10 @@ export const useChainsStore = create<ChainsStore>((set, get) => ({
     })
   },
   findChain: (nameOrId) => {
+    if (!nameOrId) return
     const { chains } = get()
+    const ni = String(nameOrId)
 
-    return chains.find(
-      (chain) => chain.name === nameOrId || chain.id === nameOrId
-    )
+    return chains.find((chain) => chain.name === ni || chain.id === ni)
   },
 }))

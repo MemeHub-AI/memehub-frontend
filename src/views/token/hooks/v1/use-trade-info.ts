@@ -4,11 +4,11 @@ import { Address, formatEther, parseEther } from 'viem'
 import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
 
-import { SupportedChainId, wagmiConfig } from '@/config/wagmi'
+import { ChainId, wagmiConfig } from '@/config/wagmi'
 import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
-export const useTradeInfo = () => {
+export const useTradeInfoV1 = () => {
   const { address } = useAccount()
   const { query } = useRouter()
   const tokenAddress = query.address as Address
@@ -41,7 +41,7 @@ export const useTradeInfo = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'calculateContinuousMintReturn',
-      chainId: chainId as SupportedChainId,
+      chainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getBuyTokenAmount Error]:', e)
@@ -57,7 +57,7 @@ export const useTradeInfo = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'calculateContinuousBurnReturn',
-      chainId: chainId as SupportedChainId,
+      chainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getSellTokenAmount Error]:', e)
@@ -76,7 +76,7 @@ export const useTradeInfo = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'fundCostByContinuous',
-      chainId: chainId as SupportedChainId,
+      chainId,
       args: [parseEther(nativeToken)],
     }).catch((e) => {
       console.error('[getBuyTokenEthAmount Error]:', e)
@@ -92,7 +92,7 @@ export const useTradeInfo = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'getPrice',
-      chainId: chainId as SupportedChainId,
+      chainId,
     }).catch((e) => {
       console.error('[getPrice Error]:', e)
       return BigInt(0)
@@ -104,7 +104,7 @@ export const useTradeInfo = () => {
   // Get token amounts, used for calc percent.
   const getTokenAmounts = async (
     address: Address,
-    overrideChainId = chainId as SupportedChainId
+    overrideChainId = chainId as ChainId
   ) => {
     const zero = BigInt(0)
 
@@ -138,7 +138,7 @@ export const useTradeInfo = () => {
       abi: v1ContinousTokenAbi,
       address,
       functionName: 'CAN_MINI',
-      chainId: chainId as SupportedChainId,
+      chainId,
     }).catch((e) => {
       console.error('[getAvailableTokenAmount Error]:', e)
       return BigInt(0)

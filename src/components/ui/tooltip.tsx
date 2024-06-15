@@ -12,6 +12,14 @@ interface Props extends TooltipPrimitive.TooltipProps {
   className?: string
 }
 
+/**
+ * @example
+ * ```tsx
+ * <Tooltip tip={<div>your tips</div>}>
+ *  <div>your trigger<div>
+ * </Tooltip>
+ * ```
+ */
 const Tooltip = ({
   tip,
   children,
@@ -23,7 +31,9 @@ const Tooltip = ({
   return (
     <TooltipProvider>
       <TooltipPrimitive.Root delayDuration={delayDuration} {...props}>
-        <TooltipTrigger {...triggerProps}>{children}</TooltipTrigger>
+        <TooltipTrigger asChild {...triggerProps}>
+          {children}
+        </TooltipTrigger>
         <TooltipContent className={className}>{tip}</TooltipContent>
       </TooltipPrimitive.Root>
     </TooltipProvider>

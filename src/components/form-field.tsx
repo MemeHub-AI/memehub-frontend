@@ -12,10 +12,10 @@ export type Props = {
 } & (ComponentProps<'textarea'> | ComponentProps<'input'>)
 
 export const FormField = (props: Props) => {
-  const { render, label, isRequired, error, ...restProps } = props
+  const { render, label, isRequired, error, className, ...restProps } = props
 
   return (
-    <div className="space-y-1 relative">
+    <div className={cn('space-y-1 relative', className)}>
       {label && (
         <Label htmlFor={restProps.id} className={cn(!!error && 'text-red-600')}>
           {isRequired && '*'}

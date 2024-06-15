@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IoIosMore } from 'react-icons/io'
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
-import { useSwitchChain } from 'wagmi'
+import { useAccount, useSwitchChain } from 'wagmi'
+import { isEmpty } from 'lodash'
 
 import {
   FormControl,
@@ -32,10 +33,21 @@ export const FormChain = ({ formData }: Props) => {
   const { t } = useTranslation()
   const [show, setShow] = useState(false)
   const { findChain } = useChainsStore()
+  const { chainId } = useAccount()
 
   const isSelect = (v: string) => {
     return chains.findIndex((c) => c.name === v) > 6
   }
+
+  // Default select.
+  useEffect(() => {
+    if (!chainId || isEmpty(chains)) return
+
+    const chain = findChain(chainId)
+    if (!chain) return
+
+    form.setValue(formFields.chainName, chain.name)
+  }, [chainId, chains])
 
   return (
     <FormField
@@ -43,7 +55,7 @@ export const FormChain = ({ formData }: Props) => {
       name={formFields?.chainName!}
       render={({ field }) => (
         <FormItem className="mt-0">
-          <FormLabel className="mt-0">
+          <FormLabel className="mt-0 font-bold">
             *
             {fmt.firstUpperCase(
               chains?.find((c) => c.name === field.value)?.name
@@ -81,9 +93,7 @@ export const FormChain = ({ formData }: Props) => {
                           about={c.name}
                           className={cn(
                             'w-[27px] h-[27px] block rounded-full overflow-hidden',
-                            !c.is_supported
-                              ? 'opacity-50 cursor-not-allowed'
-                              : ''
+                            !c.is_supported && 'opacity-50 cursor-not-allowed'
                           )}
                         />
                       </RadioGroupItem>

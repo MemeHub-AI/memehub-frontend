@@ -6,9 +6,9 @@ import { Title } from './title'
 import { AIIdeaBar } from '@/components/ai-idea-bar'
 import { CreateTokenForm } from './form/form'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
-import { CreateTokenContext } from '../context'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
+import { useCreateTokenContext } from '@/contexts/create-token'
 
 interface Props {
   className?: string
@@ -16,11 +16,11 @@ interface Props {
   setTab: (tab: number) => void
 }
 
-export const Main = (props: Props) => {
+export const CreateTokenMain = (props: Props) => {
   const { className, tab, setTab } = props
   const { t } = useTranslation()
 
-  const { formData, deployResult } = useContext(CreateTokenContext)
+  const { formData, deployResult } = useCreateTokenContext()
 
   const {
     show,
