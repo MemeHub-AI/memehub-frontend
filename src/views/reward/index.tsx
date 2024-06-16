@@ -6,9 +6,9 @@ import { RewardFullPage } from './components/full-page'
 
 export const RewardPage = () => {
   return (
-    <PrimaryLayout container="div" className="mt-4 space-y-3">
-      <RewardPointsPage />
-      {/* <RewardFullPage /> */}
+    <PrimaryLayout container="div" className="my-4">
+      {/* <RewardPointsPage /> */}
+      <RewardFullPage />
     </PrimaryLayout>
   )
 }

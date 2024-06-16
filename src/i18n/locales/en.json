@@ -369,5 +369,18 @@
   "deploy.unsupport.chain": "Unsupport chain",
   "no.kol": "There are currently no KOLs registered.",
   "apply,now": "Apply Now",
-  "no.communities": "There are currently no communities registered"
+  "no.communities": "There are currently no communities registered",
+  "reward.invite-count": "Total invite",
+  "reward.invite-friends": "Invite Friends & Earn Rewards",
+  "reward.diamond-reward": "Diamond rewrad",
+  "copy": "Copy",
+  "reward.invite": "Invite reward",
+  "reward.invite-desc": "Earn $ from each referrals trading fees. Start sharing and earning today!",
+  "reward.invite.total-earned": "Total Earned",
+  "reward.invite.unclaimed": "Unclaimed",
+  "reward.invite.claim": "Claim",
+  "reward.earned": "Earned",
+  "reward.time": "Time",
+  "reward.username": "Username",
+  "view-more": "View more"
 }
