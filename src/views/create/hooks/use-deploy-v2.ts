@@ -46,9 +46,9 @@ export const useDeployV2 = () => {
       CONTRACT_ERR.unsupport()
       return
     }
+
     const [bondConfig, bondParams] = config
     const airdropParams = await genAirdropParams(chainName, params.marketing)
-
     if (!airdropParams) {
       toast.error(t('deploy.invalid.merkle-root'))
       return
