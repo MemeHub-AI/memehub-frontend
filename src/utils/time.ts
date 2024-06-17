@@ -9,8 +9,10 @@ export const utilTime = {
 
   isPast(date: number | string | Date) {
     if (typeof date === 'number') {
-      date = date * 1000
+      date = Math.floor(date * 1000)
     }
-    return new Date(date) < new Date()
+    console.log(new Date(date).getTime(), new Date().getTime())
+
+    return new Date(date).getTime() < new Date().getTime()
   },
 }

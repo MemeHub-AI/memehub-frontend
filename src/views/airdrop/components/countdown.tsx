@@ -39,7 +39,7 @@ export const Countdown = ({ targetTimestamp }: CountdownProps) => {
 
   return (
     <div>
-      <p>
+      <p className="text-[#CF1322]">
         {countdown.hours}:{countdown.minutes}:{countdown.seconds}
       </p>
     </div>

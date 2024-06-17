@@ -6,12 +6,21 @@ interface AmbassadorCardProps {
     logo: string
     name: string
     description: string
+    twitter_url?: string
+    telegram_url?: string
   }
 }
 
 export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
   return (
-    <Card className="flex p-4">
+    <Card
+      className="flex p-4 hover:scale-105"
+      shadow={'none'}
+      onClick={() => {
+        if (!data?.telegram_url && !data?.twitter_url) return
+        open(data?.telegram_url || data?.twitter_url)
+      }}
+    >
       <img
         src={data?.logo || defaultImg}
         alt="Avatar"

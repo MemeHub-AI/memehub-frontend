@@ -4,14 +4,12 @@ import { useTranslation } from 'react-i18next'
 
 import type { Nav } from './'
 
-import { Button } from '../ui/button'
 import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
-import { SocialLinks } from '../social-links'
-import { Routes } from '@/routes'
 import { SearchInput } from '../search-input'
 import { RewardButton } from '../reward-button'
+import clsx from 'clsx'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -28,12 +26,20 @@ export const HeaderDesktop = (props: Props) => {
       <div className="flex items-center gap-4">
         <Logo showMeme />
         <nav className="ml-[30px] flex items-center gap-3">
-          <ul className="flex items-center gap-3">
+          <ul className="flex items-center gap-2">
             {navs.map((n, i) => (
               <li key={i}>
-                <Button variant="ghost" onClick={() => onNavClick?.(n)}>
+                <div
+                  className={clsx(
+                    'px-4 py-2 rounded-lg cursor-pointer border-2 border-white hover:border-2 hover:border-black text-nowrap font-bold',
+                    router.pathname === n.path
+                      ? '!border-2 !border-black bg-black text-white'
+                      : ''
+                  )}
+                  onClick={() => onNavClick?.(n)}
+                >
                   {n.title}
-                </Button>
+                </div>
               </li>
             ))}
           </ul>

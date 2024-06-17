@@ -1,5 +1,7 @@
+import { allianceApi } from '@/api/alliance'
 import { Button } from '@/components/ui/button'
 import { useWalletStore } from '@/stores/use-wallet-store'
+import { useQuery } from '@tanstack/react-query'
 import { Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
@@ -9,23 +11,15 @@ export const Ids = () => {
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
 
-  const ids = [
-    {
-      id: '1',
-      name: 'Pudgy Penguins Holder',
-      logo: '/images/avatar1.png',
+  const { data } = useQuery({
+    queryKey: [allianceApi.getIdentityList.name],
+    queryFn: async () => {
+      const { data } = await allianceApi.getIdentityList()
+      return data
     },
-    {
-      id: '2',
-      name: 'Pudgy Penguins Holder',
-      logo: '/images/avatar2.png',
-    },
-    {
-      id: '3',
-      name: 'Pudgy Penguins Holder',
-      logo: '/images/avatar3.png',
-    },
-  ]
+  })
+
+  const ids = data
 
   const getIdStatus = () => {
     if (!isConnected) {
@@ -39,7 +33,7 @@ export const Ids = () => {
       )
     }
 
-    if (false) {
+    if (ids?.kol == null && !ids?.community) {
       return (
         <div className="mt-3 flex items-center">
           <img src="/images/no-airdrop.png" alt="" />
@@ -50,7 +44,16 @@ export const Ids = () => {
 
     return (
       <div className="mt-2 flex gap-4 flex-wrap">
-        {ids.map((id, i) => (
+        <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden">
+          <img src={ids?.kol.logo} alt="Avatar" className="w-[46px] h-[46px]" />
+          <span className="mx-3 text-xl truncate">{ids?.kol?.name}</span>
+          <img
+            src="/images/check.png"
+            alt="Avatar"
+            className="w-[46px] h-[46px] p-2"
+          />
+        </div>
+        {ids?.community.map((id, i) => (
           <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden">
             <img src={id.logo} alt="Avatar" className="w-[46px] h-[46px]" />
             <span className="mx-3 text-xl truncate">{id.name}</span>

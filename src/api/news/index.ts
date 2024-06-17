@@ -12,7 +12,7 @@ import type {
 
 export const newsApi = {
   async getNews(query: NewsQuery) {
-    return api.GET<ApiResponse<Pagination<NewsData>>>(
+    return api.GET<ApiResponse<Pagination<MemeInfoDialogData>>>(
       '/api/v1/news/' + qs.stringify(query)
     )
   },

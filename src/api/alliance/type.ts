@@ -60,3 +60,29 @@ export interface CommunityListItem {
    */
   name: string
 }
+
+export interface AirdropItem {
+  name: string
+  ticker: string
+  logo: string
+  amount: number
+  create: number
+  address: string
+  community_name: string
+  community_logo: string
+  kol_name: string
+  kol_logo: string
+  chain: string
+}
+
+export interface IdentityList {
+  kol: Kol
+  community: Kol[]
+}
+
+export interface Kol {
+  id: number
+  name: string
+  logo: string
+  description: string
+}
