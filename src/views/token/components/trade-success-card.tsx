@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
+import { gsap } from 'gsap'
 
 import { utilLang } from '@/utils/lang'
+import { DiamondIcon } from '@/components/diamond-icon'
+import { useHeaderStore } from '@/stores/use-header-store'
 
 interface Props {
   amount: string
@@ -14,6 +17,24 @@ interface Props {
 
 export const TradeSuccessCard = ({ amount, symbol, diamond }: Props) => {
   const { t } = useTranslation()
+  const diamondRef = useRef<HTMLImageElement>(null)
+  const { rewardButtonEl } = useHeaderStore()
+
+  useEffect(() => {
+    if (!diamondRef.current || !rewardButtonEl) return
+
+    const startRect = diamondRef.current.getBoundingClientRect()
+    const endRect = rewardButtonEl.getBoundingClientRect()
+
+    console.log('startRect', startRect.x, startRect.y)
+    console.log('endRect', endRect.x, endRect.y)
+
+    gsap.to(diamondRef.current, {
+      x: endRect.x,
+      y: endRect.y,
+      duration: 5,
+    })
+  }, [rewardButtonEl])
 
   return (
     <>
@@ -23,10 +44,13 @@ export const TradeSuccessCard = ({ amount, symbol, diamond }: Props) => {
         onClick={() => toast.dismiss()}
       />
       <div>
-        <h2 className="font-bold text-lg">{t('trade.success')}</h2>
+        <h2 className="font-bold text-lg flex items-center gap-2">
+          <DiamondIcon type="diamond-star" ref={diamondRef} />
+          {t('trade.success')}
+        </h2>
         <p className="text-base my-1">
           {utilLang.replace(t('trade.success.reward'), [
-            BigNumber(amount).toFormat(),
+            BigNumber(amount || 0).toFormat(),
             symbol,
           ])}
         </p>

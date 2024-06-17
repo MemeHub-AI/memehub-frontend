@@ -7,15 +7,15 @@ import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
 import { DiamondIcon } from './diamond-icon'
 
-interface Props extends ComponentProps<typeof Button> {
+interface RewardButtonProps extends ComponentProps<typeof Button> {
   showReferral?: boolean
 }
 
-export const RewardButton = ({
-  showReferral = false,
-  className,
-  ...props
-}: Props) => {
+export const RewardButton = React.forwardRef<
+  HTMLButtonElement,
+  RewardButtonProps
+>((props, ref) => {
+  const { showReferral = false, className, ...restProps } = props
   const { t } = useTranslation()
   const router = useRouter()
 
@@ -27,7 +27,8 @@ export const RewardButton = ({
         className
       )}
       onClick={() => router.push(Routes.Reward)}
-      {...props}
+      ref={ref}
+      {...restProps}
     >
       {showReferral && <div>🧑‍🚀 {t('referral')}</div>}
       <div className="flex items-center gap-1">
@@ -36,6 +37,6 @@ export const RewardButton = ({
       </div>
     </Button>
   )
-}
+})
 
 export default RewardButton
