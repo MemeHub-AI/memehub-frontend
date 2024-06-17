@@ -1,4 +1,4 @@
-import { parseEther } from 'viem'
+import { Hash, parseEther, zeroHash } from 'viem'
 
 import { v2BondAbi } from '../abi/bond'
 import { getV2Addr } from '.'
@@ -217,6 +217,15 @@ const params = {
     BigInt(49999999994),
   ],
 } as const
+
+export const bondDistributorParams = {
+  distributionRatioKol: 0,
+  distributionRatioCommunity: 0,
+  walletCountKol: 0,
+  walletCountCommunity: 0,
+  merkleRootKol: zeroHash as Hash,
+  merkleRootCommunity: zeroHash as Hash,
+}
 
 export const getBondConfig = (chainId: number | undefined) => {
   if (!chainId) return

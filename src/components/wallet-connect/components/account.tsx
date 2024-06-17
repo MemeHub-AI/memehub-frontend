@@ -36,7 +36,7 @@ export const WalletAccount = () => {
             shadow="default"
           />
         </HoverCardTrigger>
-        <HoverCardContent className="flex flex-col mr-5 p-3 w-40">
+        <HoverCardContent className="flex flex-col mr-5 p-1 w-40">
           <Button
             className="w-full gap-2 justify-start"
             variant="ghost"

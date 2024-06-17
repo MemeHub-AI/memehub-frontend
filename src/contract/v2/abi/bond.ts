@@ -109,6 +109,11 @@ export const v2BondAbi = [
     type: 'error',
   },
   {
+    inputs: [],
+    name: 'MEMEHUB_Bond__InvalidReserveAmount',
+    type: 'error',
+  },
+  {
     inputs: [
       {
         internalType: 'string',
@@ -258,49 +263,6 @@ export const v2BondAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'user',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'receiver',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amountBurned',
-        type: 'uint256',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'reserveToken',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'refundAmount',
-        type: 'uint256',
-      },
-    ],
-    name: 'Burn',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: false,
         internalType: 'uint256',
         name: 'amount',
@@ -316,17 +278,23 @@ export const v2BondAbi = [
       {
         indexed: true,
         internalType: 'address',
-        name: 'lpAddress',
+        name: 'token',
         type: 'address',
       },
       {
         indexed: true,
+        internalType: 'address',
+        name: 'lpAddress',
+        type: 'address',
+      },
+      {
+        indexed: false,
         internalType: 'uint256',
         name: 'ethAmount',
         type: 'uint256',
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: 'uint256',
         name: 'tokenAmount',
         type: 'uint256',
@@ -351,7 +319,44 @@ export const v2BondAbi = [
         type: 'address',
       },
       {
+        indexed: true,
+        internalType: 'address',
+        name: 'receiver',
+        type: 'address',
+      },
+      {
         indexed: false,
+        internalType: 'uint256',
+        name: 'amountBurned',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'refundAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubContinuousBurn',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        indexed: true,
         internalType: 'address',
         name: 'receiver',
         type: 'address',
@@ -363,19 +368,13 @@ export const v2BondAbi = [
         type: 'uint256',
       },
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'reserveToken',
-        type: 'address',
-      },
-      {
         indexed: false,
         internalType: 'uint256',
         name: 'reserveAmount',
         type: 'uint256',
       },
     ],
-    name: 'Mint',
+    name: 'MemeHubContinuousMint',
     type: 'event',
   },
   {
@@ -399,20 +398,8 @@ export const v2BondAbi = [
         name: 'symbol',
         type: 'string',
       },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'uri',
-        type: 'string',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'reserveToken',
-        type: 'address',
-      },
     ],
-    name: 'MultiTokenCreated',
+    name: 'MemeHubDeployToken',
     type: 'event',
   },
   {
@@ -483,37 +470,6 @@ export const v2BondAbi = [
       },
     ],
     name: 'RoyaltyRangeUpdated',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'symbol',
-        type: 'string',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'reserveToken',
-        type: 'address',
-      },
-    ],
-    name: 'TokenCreated',
     type: 'event',
   },
   {
@@ -652,6 +608,43 @@ export const v2BondAbi = [
         name: 'bp',
         type: 'tuple',
       },
+      {
+        components: [
+          {
+            internalType: 'uint8',
+            name: 'distributionRatioKol',
+            type: 'uint8',
+          },
+          {
+            internalType: 'uint8',
+            name: 'distributionRatioCommunity',
+            type: 'uint8',
+          },
+          {
+            internalType: 'uint40',
+            name: 'walletCountKol',
+            type: 'uint40',
+          },
+          {
+            internalType: 'uint40',
+            name: 'walletCountCommunity',
+            type: 'uint40',
+          },
+          {
+            internalType: 'bytes32',
+            name: 'merkleRootKol',
+            type: 'bytes32',
+          },
+          {
+            internalType: 'bytes32',
+            name: 'merkleRootCommunity',
+            type: 'bytes32',
+          },
+        ],
+        internalType: 'struct IMEMEHUB_Distributor.DistributionParams',
+        name: 'dp',
+        type: 'tuple',
+      },
     ],
     name: 'createToken',
     outputs: [
@@ -672,6 +665,19 @@ export const v2BondAbi = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'distributor',
+    outputs: [
+      {
+        internalType: 'contract MEMEHUB_Distributor',
+        name: '',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -1401,5 +1407,9 @@ export const v2BondAbi = [
     ],
     stateMutability: 'pure',
     type: 'function',
+  },
+  {
+    stateMutability: 'payable',
+    type: 'receive',
   },
 ] as const

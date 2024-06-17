@@ -21,7 +21,7 @@ export const RewardRules = () => {
 
   return (
     <>
-      <h3 className="font-bold text-lg !mt-8">{t('reward.rule')}</h3>
+      <h3 className="font-bold text-lg mt-8 mb-3">{t('reward.rule')}</h3>
       {rules.map((r, i) => (
         <div key={i} className="flex items-center gap-4 2xl:w-5/6">
           <img src={r.src} alt="img" className="max-w-16 max-h-16 rounded" />

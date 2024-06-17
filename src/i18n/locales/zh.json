@@ -364,5 +364,19 @@
   "apply,now": "立即申请",
   "no.communities": "目前还没有社区入驻",
   "no.airdrop": "暂无可领取的空投",
-  "connect.wallet.airdrop.link": "连接钱包后查看空投列表"
+  "connect.wallet.airdrop.link": "连接钱包后查看空投列表",
+  "reward.invite-count": "邀请人数",
+  "reward.invite-friends": "邀请好友 & 获得奖励",
+  "reward.diamond-reward": "钻石奖励",
+  "copy": "复制",
+  "reward.invite": "邀请奖励",
+  "reward.invite-desc": "从每个被邀请者的交易中赚取 $ 的交易费。现在就开始分享和赚取吧！",
+  "reward.invite.total-earned": "总赚取",
+  "reward.invite.unclaimed": "未领取的",
+  "reward.invite.claim": "领取",
+  "reward.earned": "已赚取",
+  "reward.time": "时间",
+  "reward.username": "用户名",
+  "view-more": "查看更多",
+  "deploy.invalid.merkle-root": "获取市场参数失败，请重试"
 }

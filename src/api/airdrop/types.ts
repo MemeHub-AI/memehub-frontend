@@ -1,9 +1,13 @@
+import { Hash } from 'viem'
+
 export interface AirdropMerkleRootReq {
   chain: string
-  type_list: number[]
+  type_list: string
 }
 
 export interface AirdropMerkleRootRes {
-  kol_hash: string
-  community_hash: string
+  kol_count: number
+  community_count: number
+  kol_root_hash: Hash
+  community_root_hash: Hash
 }

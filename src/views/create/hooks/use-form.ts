@@ -91,7 +91,6 @@ export const useCreateTokenForm = (
       return
     }
 
-    console.log('submit deploy', values)
     deploy({
       name: values.fullname! as string,
       ticker: values.symbol! as string,

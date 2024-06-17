@@ -23,19 +23,18 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
           <Languages size={20} />
         </Button>
       </HoverCardTrigger>
-      <HoverCardContent className="w-fit py-[6px] px-1 mt-1">
+      <HoverCardContent className="w-min py-[6px] px-1 mt-1">
         {langs.map(([code, { name }], i) => (
-          <div
+          <Button
             key={i}
             onClick={() => setLang(code)}
-            className={cn(
-              'flex justify-between items-center leading-8 cursor-pointer',
-              'px-3 rounded hover:bg-black hover:text-white'
-            )}
+            variant="ghost"
+            shadow="none"
+            className="w-full justify-start"
           >
             {name}
             {i18n.language === code ? <FaCheck className="ml-5" /> : null}
-          </div>
+          </Button>
         ))}
       </HoverCardContent>
     </HoverCard>

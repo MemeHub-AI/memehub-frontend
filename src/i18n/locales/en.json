@@ -371,5 +371,19 @@
   "apply,now": "Apply Now",
   "no.communities": "There are currently no communities registered",
   "no.airdrop": "No available airdrops to claim at the moment",
-  "connect.wallet.airdrop.link": "View Airdrop List after Connecting Wallet"
+  "connect.wallet.airdrop.link": "View Airdrop List after Connecting Wallet",
+  "reward.invite-count": "Total invite",
+  "reward.invite-friends": "Invite Friends & Earn Rewards",
+  "reward.diamond-reward": "Diamond rewrad",
+  "copy": "Copy",
+  "reward.invite": "Invite reward",
+  "reward.invite-desc": "Earn $ from each referrals trading fees. Start sharing and earning today!",
+  "reward.invite.total-earned": "Total Earned",
+  "reward.invite.unclaimed": "Unclaimed",
+  "reward.invite.claim": "Claim",
+  "reward.earned": "Earned",
+  "reward.time": "Time",
+  "reward.username": "Username",
+  "view-more": "View more",
+  "deploy.invalid.merkle-root": "Failed to retrieve marketing parameters. Please try again"
 }

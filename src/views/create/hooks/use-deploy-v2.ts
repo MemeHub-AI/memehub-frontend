@@ -1,4 +1,6 @@
-import { useAccount, useWriteContract } from 'wagmi'
+import { useWriteContract } from 'wagmi'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import type { TokenNewReq } from '@/api/token/types'
 
@@ -11,13 +13,14 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 let cacheParams: Omit<TokenNewReq, 'hash'>
 
 export const useDeployV2 = () => {
+  const { t } = useTranslation()
   const { chainId, chainName } = useChainInfo()
   const {
     createTokenData,
     createTokenError,
     isCreatingToken,
     create,
-    getMerkleRoot,
+    genAirdropParams,
   } = useCreateToken()
 
   const {
@@ -35,8 +38,6 @@ export const useDeployV2 = () => {
     isError,
   } = useWaitForTx({ hash })
 
-  const genMerkleRoot = () => {}
-
   const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
     cacheParams = params
 
@@ -46,12 +47,23 @@ export const useDeployV2 = () => {
       return
     }
     const [bondConfig, bondParams] = config
+    const airdropParams = await genAirdropParams(chainName, params.marketing)
 
+    if (!airdropParams) {
+      toast.error(t('deploy.invalid.merkle-root'))
+      return
+    }
+
+    console.log('v2 deploy', airdropParams)
     writeContract(
       {
         ...bondConfig,
         functionName: 'createToken',
-        args: [{ name: params.name, symbol: params.ticker }, bondParams],
+        args: [
+          { name: params.name, symbol: params.ticker },
+          bondParams,
+          airdropParams,
+        ],
         value: DEPLOY_FEE,
       },
       { onSuccess: (hash) => create({ ...params, hash }) }
