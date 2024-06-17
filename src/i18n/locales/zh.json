@@ -375,5 +375,6 @@
   "reward.earned": "已赚取",
   "reward.time": "时间",
   "reward.username": "用户名",
-  "view-more": "查看更多"
+  "view-more": "查看更多",
+  "deploy.invalid.merkle-root": "获取市场参数失败，请重试"
 }

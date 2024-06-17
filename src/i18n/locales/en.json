@@ -382,5 +382,6 @@
   "reward.earned": "Earned",
   "reward.time": "Time",
   "reward.username": "Username",
-  "view-more": "View more"
+  "view-more": "View more",
+  "deploy.invalid.merkle-root": "Failed to retrieve marketing parameters. Please try again"
 }

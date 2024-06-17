@@ -1,4 +1,6 @@
 import { useWriteContract } from 'wagmi'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import type { TokenNewReq } from '@/api/token/types'
 
@@ -11,6 +13,7 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 let cacheParams: Omit<TokenNewReq, 'hash'>
 
 export const useDeployV2 = () => {
+  const { t } = useTranslation()
   const { chainId, chainName } = useChainInfo()
   const {
     createTokenData,
@@ -46,7 +49,12 @@ export const useDeployV2 = () => {
     const [bondConfig, bondParams] = config
     const airdropParams = await genAirdropParams(chainName, params.marketing)
 
-    return
+    if (!airdropParams) {
+      toast.error(t('deploy.invalid.merkle-root'))
+      return
+    }
+
+    console.log('v2 deploy', airdropParams)
     writeContract(
       {
         ...bondConfig,
