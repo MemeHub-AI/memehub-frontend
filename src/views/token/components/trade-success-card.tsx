@@ -29,11 +29,11 @@ export const TradeSuccessCard = ({ amount, symbol, diamond }: Props) => {
     console.log('startRect', startRect.x, startRect.y)
     console.log('endRect', endRect.x, endRect.y)
 
-    gsap.to(diamondRef.current, {
-      x: endRect.x,
-      y: endRect.y,
-      duration: 5,
-    })
+    // gsap.to(diamondRef.current, {
+    //   x: endRect.x,
+    //   y: endRect.y,
+    //   duration: 5,
+    // })
   }, [rewardButtonEl])
 
   return (
