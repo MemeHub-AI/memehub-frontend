@@ -31,7 +31,6 @@ export const TokenCards = (props: Props) => {
   const { t } = useTranslation()
   const [filteredCards, setFilteredCards] = useState(cards)
 
-  // TODO: Encapsulate a component to handling scroll load.
   const { noMore } = useScrollLoad({
     onFetchNext,
     hasMore: cards.length < total,

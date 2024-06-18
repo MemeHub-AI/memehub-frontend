@@ -59,6 +59,11 @@ export const v2ZapV1Abi = [
   },
   {
     inputs: [],
+    name: 'MEMEHUB_ZapV1__InvalidReferrer',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'MEMEHUB_ZapV1__NoETHToRescue',
     type: 'error',
   },
@@ -109,6 +114,25 @@ export const v2ZapV1Abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: false,
+        internalType: 'address',
+        name: 'receiver',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubRescuedETH',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: 'address',
         name: 'previousOwner',
@@ -122,25 +146,6 @@ export const v2ZapV1Abi = [
       },
     ],
     name: 'OwnershipTransferred',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'receiver',
-        type: 'address',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'RescuedETH',
     type: 'event',
   },
   {
@@ -191,6 +196,11 @@ export const v2ZapV1Abi = [
         name: 'receiver',
         type: 'address',
       },
+      {
+        internalType: 'address',
+        name: 'referrer',
+        type: 'address',
+      },
     ],
     name: 'burnToEth',
     outputs: [],
@@ -212,6 +222,11 @@ export const v2ZapV1Abi = [
       {
         internalType: 'address',
         name: 'receiver',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'referrer',
         type: 'address',
       },
     ],

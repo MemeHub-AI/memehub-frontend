@@ -1,4 +1,4 @@
-import { createElement, useEffect, useState } from 'react'
+import { createElement, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Address, formatEther, isAddress } from 'viem'
 import { useRouter } from 'next/router'
@@ -12,8 +12,8 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useTradeInfoV2 } from './use-trade-info'
 import { TradeSuccessCard } from '../../components/trade-success-card'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { utilLang } from '@/utils/lang'
 
+// Used for trade success tips.
 let lastTradeAmount = ''
 
 export const useTradeV2 = () => {
@@ -40,22 +40,6 @@ export const useTradeV2 = () => {
   const tradeHash = isListed ? uniswapHash : internalHash
   const isSubmitting = isListed ? isUniswapTrading : isInternalTrading
 
-  // useEffect(() => {
-  //   console.log('::::::::::::::::::::::::::::：::::::')
-  //   toast(
-  //     createElement(TradeSuccessCard, {
-  //       amount: lastTradeAmount,
-  //       symbol: tokenDetails?.info.symbol ?? '',
-  //       diamond: '100',
-  //     }),
-  //     {
-  //       position: 'bottom-left',
-  //       className: utilLang.isEn() ? 'w-128' : 'w-96',
-  //       duration: Infinity,
-  //     }
-  //   )
-  // }, [])
-
   const { isLoading, isFetched: isTraded } = useWaitForTx({
     hash: tradeHash,
     onLoading: () => toast.loading(t('tx.waiting')),
@@ -65,7 +49,7 @@ export const useTradeV2 = () => {
         createElement(TradeSuccessCard, {
           amount: lastTradeAmount,
           symbol: tokenDetails?.info.symbol ?? '',
-          diamond: '100',
+          diamond: '100', // TODO: should be dynamic.
         }),
         { position: 'bottom-left', className: 'w-100' }
       )

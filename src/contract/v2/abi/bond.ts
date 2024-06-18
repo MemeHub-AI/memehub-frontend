@@ -183,6 +183,11 @@ export const v2BondAbi = [
   },
   {
     inputs: [],
+    name: 'MEMEHUB_RecommendFee__InvalidParams',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'MEMEHUB_Royalty__InvalidParams',
     type: 'error',
   },
@@ -263,19 +268,6 @@ export const v2BondAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amount',
-        type: 'uint256',
-      },
-    ],
-    name: 'CreationFeeUpdated',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
         indexed: true,
         internalType: 'address',
         name: 'token',
@@ -300,7 +292,7 @@ export const v2BondAbi = [
         type: 'uint256',
       },
     ],
-    name: 'MemeHubAddLiquidity',
+    name: 'MemeHubAddLiquidityDev',
     type: 'event',
   },
   {
@@ -337,7 +329,7 @@ export const v2BondAbi = [
         type: 'uint256',
       },
     ],
-    name: 'MemeHubContinuousBurn',
+    name: 'MemeHubContinuousBurnDev',
     type: 'event',
   },
   {
@@ -374,7 +366,20 @@ export const v2BondAbi = [
         type: 'uint256',
       },
     ],
-    name: 'MemeHubContinuousMint',
+    name: 'MemeHubContinuousMintDev',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubCreationFeeUpdated',
     type: 'event',
   },
   {
@@ -399,26 +404,7 @@ export const v2BondAbi = [
         type: 'string',
       },
     ],
-    name: 'MemeHubDeployToken',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'previousOwner',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
-    name: 'OwnershipTransferred',
+    name: 'MemeHubDeployTokenDev',
     type: 'event',
   },
   {
@@ -431,7 +417,20 @@ export const v2BondAbi = [
         type: 'address',
       },
     ],
-    name: 'ProtocolBeneficiaryUpdated',
+    name: 'MemeHubProtocolBeneficiaryUpdated',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubRecommendFeeUpdated',
     type: 'event',
   },
   {
@@ -456,7 +455,7 @@ export const v2BondAbi = [
         type: 'uint256',
       },
     ],
-    name: 'RoyaltyClaimed',
+    name: 'MemeHubRoyaltyClaimed',
     type: 'event',
   },
   {
@@ -469,21 +468,27 @@ export const v2BondAbi = [
         type: 'uint256',
       },
     ],
-    name: 'RoyaltyRangeUpdated',
+    name: 'MemeHubRoyaltyRangeUpdated',
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'BURN_ADDRESS',
-    outputs: [
+    anonymous: false,
+    inputs: [
       {
+        indexed: true,
         internalType: 'address',
-        name: '',
+        name: 'previousOwner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'newOwner',
         type: 'address',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
+    name: 'OwnershipTransferred',
+    type: 'event',
   },
   {
     inputs: [
@@ -505,6 +510,11 @@ export const v2BondAbi = [
       {
         internalType: 'address',
         name: 'receiver',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'referrer',
         type: 'address',
       },
     ],
@@ -1114,6 +1124,11 @@ export const v2BondAbi = [
         name: 'receiver',
         type: 'address',
       },
+      {
+        internalType: 'address',
+        name: 'referrer',
+        type: 'address',
+      },
     ],
     name: 'mint',
     outputs: [
@@ -1173,9 +1188,48 @@ export const v2BondAbi = [
   },
   {
     inputs: [],
+    name: 'recommend',
+    outputs: [
+      {
+        internalType: 'contract MEMEHUB_Recommend',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'recommendFee',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'renounceOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'serialNumber',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -1350,6 +1404,19 @@ export const v2BondAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: 'fee',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateRecommedFee',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '',
         type: 'address',
@@ -1394,22 +1461,5 @@ export const v2BondAbi = [
     ],
     stateMutability: 'view',
     type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'version',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'pure',
-    type: 'function',
-  },
-  {
-    stateMutability: 'payable',
-    type: 'receive',
   },
 ] as const

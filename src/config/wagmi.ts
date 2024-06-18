@@ -52,12 +52,7 @@ const dev = createConfig({
   connectors: [injected()],
   transports: {
     [sepolia.id]: fallback([http(), unstable_connector(injected)]),
-    [bscTestnet.id]: fallback([
-      http(
-        'https://greatest-broken-tab.bsc-testnet.quiknode.pro/0ce6bb713784c756397169ec4fc2fa6f7eaa9608'
-      ),
-      unstable_connector(injected),
-    ]),
+    [bscTestnet.id]: fallback([http(), unstable_connector(injected)]),
     [opBNBTestnet.id]: fallback([http(), unstable_connector(injected)]),
     [scrollSepolia.id]: fallback([http(), unstable_connector(injected)]),
     [baseSepolia.id]: fallback([http(), unstable_connector(injected)]),
