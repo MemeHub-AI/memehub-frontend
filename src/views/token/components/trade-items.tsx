@@ -61,7 +61,7 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
   }
 
   return (
-    <div className="flex gap-2 mt-3">
+    <div className="flex gap-2 mt-3 flex-wrap">
       <Button
         size="xs"
         shadow="none"
