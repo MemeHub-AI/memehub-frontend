@@ -76,8 +76,8 @@ export interface AirdropItem {
 }
 
 export interface IdentityList {
-  kol: Kol
-  community: Kol[]
+  kol?: Kol
+  community?: Kol[]
 }
 
 export interface Kol {

@@ -44,19 +44,29 @@ export const Ids = () => {
 
     return (
       <div className="mt-2 flex gap-4 flex-wrap">
-        <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden">
-          <img src={ids?.kol.logo} alt="Avatar" className="w-[46px] h-[46px]" />
-          <span className="mx-3 text-xl truncate">{ids?.kol?.name}</span>
-          <img
-            src="/images/check.png"
-            alt="Avatar"
-            className="w-[46px] h-[46px] p-2"
-          />
-        </div>
-        {ids?.community.map((id, i) => (
+        {ids?.kol != null ? (
+          <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden">
+            <img
+              src={ids?.kol?.logo}
+              alt="Avatar"
+              className="w-[46px] h-[46px]"
+            />
+            <span className="mx-3 min-w-[50px] text-xl truncate">
+              {ids?.kol?.name}
+            </span>
+            <img
+              src="/images/check.png"
+              alt="Avatar"
+              className="w-[46px] h-[46px] p-2"
+            />
+          </div>
+        ) : null}
+        {ids?.community?.map((id, i) => (
           <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden">
             <img src={id.logo} alt="Avatar" className="w-[46px] h-[46px]" />
-            <span className="mx-3 text-xl truncate">{id.name}</span>
+            <span className="mx-3 min-w-[50px] text-xl truncate">
+              {id.name}
+            </span>
             <img
               src="/images/check.png"
               alt="Avatar"
