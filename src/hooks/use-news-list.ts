@@ -29,6 +29,7 @@ export const useNewsList = (options?: Options) => {
   } = useInfiniteQuery({
     queryKey: newsListKeys,
     initialPageParam: 1,
+    refetchOnMount: false,
     refetchOnWindowFocus: false,
     refetchInterval: false,
     queryFn: async ({ pageParam }) => {

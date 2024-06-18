@@ -1,14 +1,13 @@
 import { IdeaBasicInfo } from '@/api/idea/type'
 import { Skeleton } from '@/components/ui/skeleton'
 import { fmt } from '@/utils/fmt'
+import clsx from 'clsx'
 
 interface MemeStoryData {
   data: IdeaBasicInfo
 }
 
 export const MemeStory = ({ data }: MemeStoryData) => {
-  console.log(data?.content)
-
   let content =
     data?.content
       .replaceAll(/ src=/g, ' data-src1=')
@@ -40,7 +39,7 @@ export const MemeStory = ({ data }: MemeStoryData) => {
           dangerouslySetInnerHTML={{ __html: firstContent }}
         ></div>
         <div
-          className="py-5 story"
+          className="my-5 story"
           dangerouslySetInnerHTML={{ __html: laterContent }}
         ></div>
       </div>
@@ -55,10 +54,12 @@ export const MemeStory = ({ data }: MemeStoryData) => {
               return (
                 <div
                   key={key}
-                  className="max-sm:bg-slate-100 mt-2 max-sm:mt-0 max-sm:p-2 rounded-sm"
+                  className={clsx(
+                    'max-sm:bg-slate-100 mt-2 max-sm:mt-0 max-sm:p-2 rounded-sm'
+                  )}
                 >
                   {key.toLocaleLowerCase() === 'tags' ? (
-                    <div className="h-[1px] bg-slate-200 mt-2 max-sm:hidden"></div>
+                    <div className="h-[1px] bg-slate-200 my-1 max-sm:hidden"></div>
                   ) : (
                     ''
                   )}
