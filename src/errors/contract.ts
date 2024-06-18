@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import { isUserReject } from '@/utils/contract'
 
 export const CONTRACT_ERR = {
+  // Contract execute error.
   exec: (err: unknown, showToast = true) => {
     const e = err as { message?: string }
 
@@ -13,8 +14,13 @@ export const CONTRACT_ERR = {
 
     console.error(e?.message)
   },
+
+  // deploy related.
   unsupport: () => toast.error(t('deploy.unsupport.chain')),
   retryCreate: () => toast.error(t('cannot-retry')),
+  marketParams: () => toast.error(t('deploy.invalid.merkle-root')),
+
+  // trade related.
   tradeFailed: () => toast.error(t('trade.failed')),
   tokenInvalid: () => toast.error(t('trade.token.invalid')),
   amountInvlid: () => toast.error(t('trade.amount.invalid')),
