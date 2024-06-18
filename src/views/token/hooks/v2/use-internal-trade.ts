@@ -1,9 +1,12 @@
-import { Address, parseEther } from 'viem'
+import { Address, parseEther, zeroAddress } from 'viem'
 import { useAccount, useWriteContract } from 'wagmi'
 
 import { getZapV1Config } from '@/contract/v2/config/zapv1'
 import { useApprove } from '@/hooks/use-approve'
 import { CONTRACT_ERR } from '@/errors/contract'
+
+// TODO: should dynamic referral
+const referral = zeroAddress
 
 export const useInternelTradeV2 = () => {
   const { address, chainId } = useAccount()
@@ -40,7 +43,8 @@ export const useInternelTradeV2 = () => {
     writeContract({
       ...config!,
       functionName: 'mintWithEth',
-      args: [token, parseEther(amount), address!],
+
+      args: [token, parseEther(amount), address!, referral],
       value: parseEther(value),
     })
   }
@@ -56,7 +60,7 @@ export const useInternelTradeV2 = () => {
     writeContract({
       ...config!,
       functionName: 'burnToEth',
-      args: [token, parseEther(amount), BigInt(0), address!],
+      args: [token, parseEther(amount), BigInt(0), address!, referral],
     })
   }
 
