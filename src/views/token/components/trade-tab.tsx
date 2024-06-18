@@ -21,7 +21,6 @@ import { useTokenContext } from '@/contexts/token'
 import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
 import { useTradeV2 } from '../hooks/v2/use-trade'
 import { useSlippage } from '../hooks/use-slippage'
-import TradeSuccessCard from './trade-success-card'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -134,9 +133,9 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       <Card
         hover="none"
         shadow="none"
-        className={cn('p-3 grid gap-4 rounded-lg', className)}
+        className={cn('p-3 gap-4 rounded-lg', className)}
       >
-        <Tabs className="w-full" value={tab} onValueChange={setTab}>
+        <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="grid grid-cols-2 h-11 mb-6">
             <TabsTrigger
               className="h-full font-bold"
