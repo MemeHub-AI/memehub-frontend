@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
 import { clsx } from 'clsx'
 
 import type { Nav } from './'
-
 import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
@@ -19,7 +17,6 @@ interface Props extends ComponentProps<'div'> {
 
 export const HeaderDesktop = (props: Props) => {
   const { navs, onNavClick } = props
-  const { t } = useTranslation()
   const router = useRouter()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const { setRewardButtonEl } = useHeaderStore()
@@ -31,18 +28,18 @@ export const HeaderDesktop = (props: Props) => {
 
   return (
     <>
-      <div className="flex items-center gap-4">
-        <Logo showMeme />
-        <nav className="ml-[30px] flex items-center gap-3">
-          <ul className="flex items-center gap-2">
+      <div className="flex items-center lg:gap-3 mr-3">
+        <Logo showMeme className="shrink-0" />
+        <nav className="ml-2 xl:ml-[30px] flex items-center">
+          <ul className="flex items-center gap-1 lg:gap-2">
             {navs.map((n, i) => (
               <li key={i}>
                 <div
                   className={clsx(
-                    'px-4 py-2 rounded-lg cursor-pointer border-2 border-white hover:border-2 hover:border-black text-nowrap font-bold',
-                    router.pathname === n.path
-                      ? '!border-2 !border-black bg-black text-white'
-                      : ''
+                    'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
+                    'hover:border-black text-nowrap font-bold xl:px-4',
+                    router.pathname === n.path &&
+                      'bg-black text-white border-black'
                   )}
                   onClick={() => onNavClick?.(n)}
                 >
@@ -55,14 +52,6 @@ export const HeaderDesktop = (props: Props) => {
       </div>
       <div className="flex items-center gap-3">
         <SearchInput />
-        {/* {router.pathname !== Routes.Create ? (
-          <Button
-            className="max-sm:mx-1.5"
-            onClick={() => router.push(Routes.Create)}
-          >
-            {t('token.create')}
-          </Button>
-        ) : null} */}
         <RewardButton ref={buttonRef} />
         <LangSelect className="flex-shrink-0" />
         <WalletConnect />

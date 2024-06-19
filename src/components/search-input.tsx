@@ -57,8 +57,8 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
             <TokenCard
               key={t.id}
               card={t}
-              imageSize={100}
               descClass="line-clamp-2"
+              className="w-24 h-24"
               hover="bg"
               shadow="none"
               onClick={reset}
