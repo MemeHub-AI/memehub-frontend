@@ -53,6 +53,9 @@ const config = {
       scrollMargin: {
         ...baseHeight,
       },
+      scale: {
+        102: '1.02',
+      },
       colors: {
         'blue-deep': '#2c30ee',
         border: 'hsl(var(--border))',
