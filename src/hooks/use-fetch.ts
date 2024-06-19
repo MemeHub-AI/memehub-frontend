@@ -25,6 +25,7 @@ export type AliasOptions = Omit<FetcherOptions, 'method'>
 
 export const useFetch = (baseURL: string) => {
   const { getToken } = useStorage()
+  const throttleToast = useThrottleErr()
 
   // Init headers config.
   const initHeaders = ({ requireAuth = true, headers }: FetcherOptions) => {
@@ -90,8 +91,8 @@ export const useFetch = (baseURL: string) => {
         err += (error as Error)?.message
       }
 
-      console.log(err)
-      toast.error(err)
+      console.error(error)
+      throttleToast(err)
       return error as T
     }
   }
@@ -112,6 +113,19 @@ export const useFetch = (baseURL: string) => {
     PATCH: <T>(path: string, options?: AliasOptions) => {
       return fetcher<T>(path, { ...options, method: 'PATCH' })
     },
+  }
+}
+
+// Merge multiple error within `delay` time.
+const useThrottleErr = (delay = 300) => {
+  let lastTime = 0
+
+  return (e: string) => {
+    const now = Date.now()
+    if (now - lastTime > delay) {
+      lastTime = now
+      toast.error(e)
+    }
   }
 }
 
