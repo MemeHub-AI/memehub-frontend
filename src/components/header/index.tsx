@@ -17,7 +17,7 @@ export interface Nav {
 export const Header = () => {
   const { isPad } = useResponsive()
   const { t } = useTranslation()
-  const { push } = useRouter()
+  const { query, push } = useRouter()
 
   const navs: Nav[] = [
     { id: 'home', title: t('home'), path: Routes.Main },
@@ -28,7 +28,7 @@ export const Header = () => {
   ]
 
   const onNavClick = (n: Nav) => {
-    push(n.path)
+    push({ pathname: n.path, query })
   }
 
   return (
