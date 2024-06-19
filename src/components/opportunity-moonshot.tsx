@@ -22,6 +22,7 @@ import { Routes } from '@/routes'
 import { Button } from './ui/button'
 import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
 import { newsApi } from '@/api/news'
+import { useAsideStore } from '@/stores/use-aside-store'
 
 interface Props extends ComponentProps<'div'> {
   defalutTab?: number
@@ -41,8 +42,7 @@ export const OpportunityMoonshot = (props: Props) => {
   const storage = useStorage()
   const { t } = useTranslation()
   const { push, query, ...router } = useRouter()
-  // const [tabIdx, setTab] = useState(defalutTab)
-  const tab = Number(query.tab || defalutTab)
+  const { tab, setTab } = useAsideStore()
 
   const { data: countryList, isLoading: loadingCountry } = useQuery({
     queryKey: [newsApi.getCountry.name],
@@ -77,10 +77,7 @@ export const OpportunityMoonshot = (props: Props) => {
   }
 
   const onChangeTab = (idx: number) => {
-    push({
-      pathname: router.pathname,
-      query: { tab: idx },
-    })
+    setTab(idx)
   }
 
   return (
