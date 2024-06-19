@@ -1,5 +1,7 @@
 import { toast } from 'sonner'
+
 import { useStorage } from './use-storage'
+import { ApiCode, ApiResponse } from '@/api/types'
 
 export enum CommonHeaders {
   ContentType = 'Content-Type',
@@ -21,12 +23,6 @@ export interface FetcherOptions extends Omit<RequestInit, 'body'> {
 
 export type AliasOptions = Omit<FetcherOptions, 'method'>
 
-/**
- * A reusable fetch function, You just need
- * to modify `useStorage` or implement it.
- * @param baseURL
- * @returns
- */
 export const useFetch = (baseURL: string) => {
   const { getToken } = useStorage()
 
@@ -56,32 +52,15 @@ export const useFetch = (baseURL: string) => {
     return newHeaders
   }
 
-  // Process response success.
-  const processSuccess = async <T>(
-    response: Response,
-    { toJson = true }: FetcherOptions
-  ) => {
-    const contentType = response.headers.get('content-type')
-
-    // Extract json.
-    const isJson = ContentType.Json.includes(contentType ?? '')
-    if (isJson && toJson) return (await response.json()) as T
-
-    // More process...
-
-    return response
-  }
-
   // Main fetch function.
   const fetcher = async <T>(path: string, options: FetcherOptions) => {
-    const fullURL = `${baseURL}${path}`
-
+    const { toJson = true } = options
     // Handle headers.
     options.headers = initHeaders(options)
 
     // Handle response.
     try {
-      const response = await fetch(fullURL, {
+      const response = await fetch(`${baseURL}${path}`, {
         ...options,
         body:
           options.body instanceof FormData
@@ -92,8 +71,16 @@ export const useFetch = (baseURL: string) => {
       // Response error.
       if (!response.ok) throw response
 
+      // Extract json.
+      if (isJson(response.headers) && toJson) {
+        const data = (await response.json()) as ApiResponse<T>
+
+        if (data.code !== ApiCode.Success) throw data
+        return data as T
+      }
+
       // Response success.
-      return processSuccess(response, options) as T
+      return response as T
     } catch (error) {
       let err = '[Request Error]: '
 
