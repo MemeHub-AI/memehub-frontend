@@ -1,7 +1,9 @@
+import { Fragment } from 'react'
+import clsx from 'clsx'
+
 import { IdeaBasicInfo } from '@/api/idea/type'
 import { Skeleton } from '@/components/ui/skeleton'
 import { fmt } from '@/utils/fmt'
-import clsx from 'clsx'
 
 interface MemeStoryData {
   data: IdeaBasicInfo
@@ -50,7 +52,9 @@ export const MemeStory = ({ data }: MemeStoryData) => {
           </div>
           <div className="max-sm:grid max-sm:grid-cols-2 max-sm:gap-2 max-sm:mt-2">
             {Object.keys(memeInfo).map((key) => {
-              if (!memeInfo[key] || !memeInfo[key]?.length) return <></>
+              if (!memeInfo[key] || !memeInfo[key]?.length) {
+                return <Fragment key={key} />
+              }
               return (
                 <div
                   key={key}
