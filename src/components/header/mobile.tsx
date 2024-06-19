@@ -38,7 +38,7 @@ export const HeaderMobile = (props: Props) => {
             {/* <Logo showMeme /> */}
           </div>
         </SheetTrigger>
-        <SearchInput className="h-8 ml-3 mr-1" />
+
         <SheetContent
           onOpenAutoFocus={(e) => e.preventDefault()}
           showClose={false}
@@ -76,8 +76,10 @@ export const HeaderMobile = (props: Props) => {
         </SheetContent>
       </Sheet>
 
-      <div className="flex items-center">
-        {/* {isConnected && router.pathname !== Routes.Create && (
+      <div className="flex items-center gap-3">
+        <SearchInput />
+        <div className="flex items-center">
+          {/* {isConnected && router.pathname !== Routes.Create && (
           <Button
             className="mx-3 max-sm:mx-1.5"
             onClick={() => router.push(Routes.Create)}
@@ -86,7 +88,8 @@ export const HeaderMobile = (props: Props) => {
             {t('token.create')}
           </Button>
         )} */}
-        <WalletConnect />
+          <WalletConnect />
+        </div>
       </div>
     </>
   )

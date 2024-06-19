@@ -15,7 +15,7 @@ export interface Nav {
 }
 
 export const Header = () => {
-  const { isPad } = useResponsive()
+  const { isPad, isLaptop } = useResponsive()
   const { t } = useTranslation()
   const { query, push } = useRouter()
 
@@ -39,7 +39,7 @@ export const Header = () => {
         'border-b-2 border-black'
       )}
     >
-      {isPad ? (
+      {isLaptop ? (
         <HeaderMobile navs={navs} onNavClick={onNavClick} />
       ) : (
         <HeaderDesktop navs={navs} onNavClick={onNavClick} />
