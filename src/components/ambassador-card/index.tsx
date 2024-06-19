@@ -18,8 +18,8 @@ export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
       className="flex p-4 hover:scale-102 gap-2"
       shadow={'none'}
       onClick={() => {
-        if (!data?.telegram_url && !data?.twitter_url) return
-        open(data?.telegram_url || data?.twitter_url)
+        if (!data?.twitter_url && !data?.telegram_url) return
+        open(data?.twitter_url || data?.telegram_url)
       }}
     >
       <Img
