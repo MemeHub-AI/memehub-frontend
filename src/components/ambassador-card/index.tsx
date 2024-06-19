@@ -25,7 +25,7 @@ export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
       <Img
         src={data?.logo || defaultImg}
         alt="Avatar"
-        className="w-32 h-32 max-sm:w-24 max-sm:h-24 rounded-full border-2 border-black"
+        className="w-24 h-24 xl:w-32 xl:h-32  rounded-full border-2 border-black"
       />
       <div className="ml-2">
         <h2 className="text-2xl max-sm:text-xl">{data?.name}</h2>
