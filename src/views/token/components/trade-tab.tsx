@@ -6,7 +6,6 @@ import { BigNumber } from 'bignumber.js'
 import { useRouter } from 'next/router'
 import { useAccount, useSwitchChain } from 'wagmi'
 import { isEmpty } from 'lodash'
-
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -31,6 +30,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     [tab]
   )
   const { query } = useRouter()
+
   const { slippage, setSlippage } = useSlippage()
 
   const { switchChainAsync } = useSwitchChain()
@@ -47,7 +47,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
-
   const onBuy = async () => {
     // Overflow current wallet balance.
     // if (BigNumber(value).gt(nativeBalance)) {
@@ -72,7 +71,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       return
     }
 
-    sell(value)
+    sell(value, slippage,)
   }
 
   const checkForChain = async () => {
@@ -113,7 +112,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   // Refresh balance when trade completed.
   useEffect(() => {
     if (!isTraded) return
-
     setValue('0')
     refetchNativeBalance()
     refetchTokenBalance()
@@ -184,6 +182,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
+          {/* <Button
+            className="!w-full font-bold mt-3"
+          >
+            {t('aridrop.pickup')}
+          </Button> */}
         </Tabs>
       </Card>
     </TradeProvider>

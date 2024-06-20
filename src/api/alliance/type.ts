@@ -73,6 +73,7 @@ export interface AirdropItem {
   kol_name: string
   kol_logo: string
   chain: string
+  distribution_id: number
 }
 
 export interface IdentityList {

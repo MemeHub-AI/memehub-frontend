@@ -11,14 +11,28 @@ import { INVITE_LINK } from '@/config/link'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { InviteReward } from './invite-reward'
 import { InviteTable } from './invite-table'
+import { rewardApi } from '@/api/reward'
+import { useQuery } from '@tanstack/react-query'
+import { useUserStore } from '@/stores/use-user-store'
 
 const diamond = 123
 
 export const RewardFullPage = () => {
   const { t } = useTranslation()
   const { isCopied, copy } = useClipboard()
+  const { userInfo } = useUserStore()
 
-  const link = INVITE_LINK + '0x00AA'
+  const { data: inviteCode } = useQuery({
+    queryKey: [rewardApi.getInviteCode.name],
+    queryFn: rewardApi.getInviteCode,
+  })
+
+  const { data: inviteCount } = useQuery({
+    queryKey: [rewardApi.getInvCount.name],
+    queryFn: rewardApi.getInvCount,
+  })
+
+  const link = INVITE_LINK + inviteCode?.data
 
   return (
     <>
@@ -34,7 +48,7 @@ export const RewardFullPage = () => {
           <div className="flex items-center gap-2">
             <DiamondIcon />
             <p className="text-blue-600 text-xl font-bold">
-              {BigNumber(diamond).toFormat()}
+              {BigNumber(userInfo?.reward_amount || 0).toFormat()}
             </p>
           </div>
         </div>
@@ -43,7 +57,7 @@ export const RewardFullPage = () => {
           <div className="flex items-center gap-2">
             <UserIcon />
             <p className="text-blue-600 text-xl font-bold">
-              {BigNumber(diamond).toFormat()}
+              {BigNumber(inviteCount?.data.count || 0).toFormat()}
             </p>
           </div>
         </div>

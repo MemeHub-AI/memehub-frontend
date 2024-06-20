@@ -6,7 +6,7 @@ import { Button } from './ui/button'
 import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
 import { DiamondIcon } from './diamond-icon'
-
+import { useUserStore } from '@/stores/use-user-store'
 interface RewardButtonProps extends ComponentProps<typeof Button> {
   showReferral?: boolean
 }
@@ -18,6 +18,7 @@ export const RewardButton = React.forwardRef<
   const { showReferral = false, className, ...restProps } = props
   const { t } = useTranslation()
   const router = useRouter()
+  const { userInfo } = useUserStore()
 
   return (
     <Button
@@ -33,7 +34,8 @@ export const RewardButton = React.forwardRef<
       {showReferral && <div>🧑‍🚀 {t('referral')}</div>}
       <div className="flex items-center gap-1">
         <DiamondIcon size={20} />
-        <span>{t('rewards')}</span>
+        {userInfo?.reward_amount ? <span>{userInfo?.reward_amount}</span> : <span>{t('rewards')}</span>}
+
       </div>
     </Button>
   )

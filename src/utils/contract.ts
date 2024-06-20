@@ -21,6 +21,13 @@ export const addServiceFeeV1 = (amount: string) => {
 }
 
 // v2's `amount` is based target token.
-export const addServiceFeeV2 = (amount: string) => {
-  console.log('fee v2', amount)
+export const addServiceFeeV2 = (amount: string, slippage: string) => {
+  console.log('fee v2', amount, slippage)
+  const amountBigint = parseEther(amount)
+  const total = BigNumber(amountBigint.toString())
+    .multipliedBy(1 - parseFloat(slippage) / 100)
+    .multipliedBy(TRADE_SERVICE_FEE)
+    .toFixed(0)
+
+  return BigInt(total)
 }

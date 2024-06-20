@@ -54,7 +54,7 @@ const Airdrop = () => {
     <PrimaryLayout>
       <div className="py-5">
         <Ids></Ids>
-        <h1 className="mt-5 text-2xl">{t('airdrop.you')}</h1>
+        <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
         {isConnected ? (
           <>
             <CustomSuspense
