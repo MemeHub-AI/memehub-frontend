@@ -63,8 +63,8 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           )}
         </span>
       </div>
-      <div className="mt-3 flex justify-between">
-        <div className="flex-shrink-0">
+      <div className="mt-3 flex justify-between gap-4">
+        <div className="">
           <div className="flex items-center justify-between rounded bg-lime-green">
             <div className="flex items-center w-[150px]">
               <Img
@@ -107,10 +107,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
             {t('claim.airdrop')}
           </Button>
         </div>
-        <Img
-          src={airdrop?.logo}
-          className="w-42 h-42 ml-4 flex-shrink-0 object-cover"
-        />
+        <Img src={airdrop?.logo} className="w-36 h-36 xl:w-42 xl:h-42" />
       </div>
     </Card>
   )
