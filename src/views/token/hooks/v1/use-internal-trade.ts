@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
 import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
-import { addServiceFeeV1 } from '@/utils/contract'
+import { addServiceFee } from '@/utils/contract'
 import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useInternalTradeV1 = () => {
@@ -46,7 +46,7 @@ export const useInternalTradeV1 = () => {
       address: token,
       functionName: 'mint',
       args: [parseEther(amount)],
-      value: addServiceFeeV1(amount),
+      value: addServiceFee(amount),
     })
   }
 

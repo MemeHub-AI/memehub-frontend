@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -20,7 +20,7 @@ export const TradeSuccessCard = ({ amount, symbol, diamond }: Props) => {
   const diamondRef = useRef<HTMLImageElement>(null)
   const { rewardButtonEl } = useHeaderStore()
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (!diamondRef.current || !rewardButtonEl) return
 
     const startRect = diamondRef.current.getBoundingClientRect()
@@ -35,10 +35,8 @@ export const TradeSuccessCard = ({ amount, symbol, diamond }: Props) => {
       x: deltaX,
       y: deltaY,
       duration: 2,
-      opacity: 0,
-      ease: 'power4.inOut',
-    }
-    )
+    })
+
     return () => {
       tween.kill()
     }

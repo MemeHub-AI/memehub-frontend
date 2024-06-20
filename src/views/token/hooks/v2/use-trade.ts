@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
+
 import type { UserInfoRes } from '@/api/user/types'
 import { useInternelTradeV2 } from './use-internal-trade'
 import { useUniswapV2 } from '../use-uniswap-v2'
@@ -15,6 +16,7 @@ import { CONTRACT_ERR } from '@/errors/contract'
 import { rewardApi } from '@/api/reward'
 import { useStorage } from '@/hooks/use-storage'
 import { useUserStore } from '@/stores/use-user-store'
+
 // Used for trade success tips.
 let lastTradeAmount = ''
 
@@ -29,7 +31,8 @@ export const useTradeV2 = () => {
   const [rewardCount, setRewardCount] = useState<number>()
   const { getRewardCode } = useStorage()
   const { userInfo, setUserInfo } = useUserStore()
-  const { tokenDetails, checkForToken, getAmountForBuy } = useTradeInfoV2()
+  const { tokenDetails, checkForToken, getAmountForBuy, getAmountForSell } =
+    useTradeInfoV2()
   const {
     internalHash,
     isInternalTrading,
@@ -54,6 +57,7 @@ export const useTradeV2 = () => {
     })
     if (code === 200) return
   }
+
   const diamondAdd = async () => {
     const { data } = await rewardApi.diamondAdd({
       token_address: token,
@@ -70,6 +74,7 @@ export const useTradeV2 = () => {
       setUserInfo(newUserInfo)
     }
   }
+
   const { isLoading, isFetched: isTraded } = useWaitForTx({
     hash: tradeHash,
     onLoading: () => toast.loading(t('tx.waiting')),
@@ -136,11 +141,19 @@ export const useTradeV2 = () => {
     setOperation('sell')
     if (!checkForTrade(amount)) return
 
+    const [weiNativeAmount] = await getAmountForSell(token, amount)
+    const nativeAmount = BigNumber(formatEther(weiNativeAmount))
+
+    if (nativeAmount.lte(0)) {
+      CONTRACT_ERR.balanceInvalid()
+      return
+    }
+
     const { isListed } = await checkForToken(token, amount)
     setIsListed(isListed)
 
     if (isListed) return uniswapSell(amount, token)
-    internalSell(amount, token, slippage)
+    internalSell(amount, nativeAmount.toFixed(), token, slippage)
   }
 
   const resetTrade = () => {

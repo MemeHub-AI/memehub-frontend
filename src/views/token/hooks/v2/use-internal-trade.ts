@@ -1,10 +1,10 @@
-import { Address, parseEther, parseUnits, zeroAddress } from 'viem'
+import { Address, formatEther, parseEther, parseUnits, zeroAddress } from 'viem'
 import { useAccount, useWriteContract } from 'wagmi'
 
 import { getZapV1Config } from '@/contract/v2/config/zapv1'
 import { useApprove } from '@/hooks/use-approve'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { addServiceFeeV2, addServiceFeeV1 } from '@/utils/contract'
+import { addSlippage, subSlippage } from '@/utils/contract'
 
 // TODO: should dynamic referral
 const referral = zeroAddress
@@ -39,37 +39,51 @@ export const useInternelTradeV2 = () => {
   ) => {
     if (!checkForTrade()) return
 
-    console.log('v2 internal buy', amount, slippage, value, token)
+    console.log('v2 internal buy', {
+      amount,
+      value,
+      slippage,
+      result: formatEther(addSlippage(value, slippage)),
+    })
 
-    // We can safely use config here, because `checkForTrade` already checked.
+    // We can safely use config here,
+    // because `checkForTrade` already checked.
     writeContract({
       ...config!,
       functionName: 'mintWithEth',
-
-      args: [token, addServiceFeeV2(amount, slippage), address!, referral],
-      value: parseEther(value),
+      args: [token, parseEther(amount), address!, referral],
+      // You don't need `addServiceFee`,
+      // because `value` is includes service fee.
+      value: addSlippage(value, slippage),
     })
   }
 
   const internalSell = async (
     amount: string,
+    value: string,
     token: Address,
     slippage: string
   ) => {
     if (!checkForTrade()) return
 
-    // We can safely use config here, because `checkForTrade` already checked.
+    // We can safely use config here,
+    // because `checkForTrade` already checked.
     const isApproved = await approvalForAll(token, config!.address, amount)
     if (!isApproved) return
 
-    console.log('v2 internal sell', amount, token, slippage)
+    console.log('v2 internal sell', {
+      amount,
+      value,
+      slippage,
+      result: formatEther(subSlippage(value, slippage)),
+    })
     writeContract({
       ...config!,
       functionName: 'burnToEth',
       args: [
         token,
-        addServiceFeeV2(amount, slippage),
-        BigInt(0),
+        parseEther(amount),
+        addSlippage(amount, slippage),
         address!,
         referral,
       ],
