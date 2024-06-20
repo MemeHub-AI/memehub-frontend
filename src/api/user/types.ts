@@ -31,6 +31,7 @@ export interface UserInfoRes {
   like_count: number
   mention_count: number
   is_follower: boolean
+  reward_amount: number
 }
 
 export interface UserMyInfoFollow {
