@@ -4,13 +4,13 @@ import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import Link from 'next/link'
 
-import { allianceApi } from '@/api/alliance'
 import { Button } from '@/components/ui/button'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { CheckIcon } from '@/components/check-icon'
 import { Img } from '@/components/img'
-import { CommunityCategory } from '@/api/alliance/type'
+import { CommunityCategory } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
+import { airdropApi } from '@/api/airdrop'
 
 const kolHref = ''
 const communityHref = ''
@@ -22,9 +22,9 @@ export const Ids = () => {
   const { setUserIdentity } = useUserStore()
 
   const { data } = useQuery({
-    queryKey: [allianceApi.getIdentityList.name],
+    queryKey: [airdropApi.getIdentityList.name],
     queryFn: async () => {
-      const { data } = await allianceApi.getIdentityList()
+      const { data } = await airdropApi.getIdentityList()
       return data
     },
   })

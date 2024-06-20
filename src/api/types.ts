@@ -8,12 +8,12 @@ export enum ApiCode {
   Success = 200,
 }
 
-export interface PaginationParams {
-  page: number
-  page_size: number
+export interface PaginationReq {
+  page?: number
+  page_size?: number
 }
 
-export interface Pagination<T> {
+export interface PaginationRes<T> {
   count: number
   results?: T[]
 }

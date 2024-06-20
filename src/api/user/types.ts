@@ -1,4 +1,4 @@
-import type { PaginationParams } from '../types'
+import type { PaginationReq } from '../types'
 
 export interface UserLoginReq {
   name?: string
@@ -66,7 +66,7 @@ export enum UserListType {
   CoinsHeld,
 }
 
-export interface UserListReq extends PaginationParams {
+export interface UserListReq extends PaginationReq {
   type: UserListType
 }
 

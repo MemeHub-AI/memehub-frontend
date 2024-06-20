@@ -4,20 +4,20 @@ import { useAccount } from 'wagmi'
 
 import { Ids } from './components/ids'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { allianceApi } from '@/api/alliance'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { AirdropCard } from './components/card'
 import { data } from './data'
 import { useUserStore } from '@/stores/use-user-store'
+import { airdropApi } from '@/api/airdrop'
 
 const Airdrop = () => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
   const { hasIdentity } = useUserStore()
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryKey: [allianceApi.getAirdrop.name],
+    queryKey: [airdropApi.getList.name],
     queryFn: async ({ pageParam }) => {
-      const { data } = await allianceApi.getAirdrop({ page: pageParam })
+      const { data } = await airdropApi.getList({ page: pageParam })
       return data
     },
     initialPageParam: 1,

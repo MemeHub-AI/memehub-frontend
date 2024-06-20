@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { isEmpty } from 'lodash'
 
 import type { UserInfoRes } from '@/api/user/types'
-import type { IdentityList } from '@/api/alliance/type'
+import type { IdentityList } from '@/api/airdrop/types'
 
 interface UserStore {
   userInfo: UserInfoRes | null
