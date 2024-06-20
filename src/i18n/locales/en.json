@@ -386,5 +386,8 @@
   "reward.time": "Time",
   "reward.username": "Username",
   "view-more": "View more",
-  "deploy.invalid.merkle-root": "Failed to retrieve marketing parameters. Please try again"
+  "deploy.invalid.merkle-root": "Failed to retrieve marketing parameters. Please try again",
+  "member": "Member",
+  "holder": "Holder",
+  "ambassador": "Ambassador"
 }

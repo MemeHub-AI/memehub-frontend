@@ -1,20 +1,20 @@
+import { useTranslation } from 'react-i18next'
+import { TbUsers } from 'react-icons/tb'
+import { BigNumber } from 'bignumber.js'
+import { useReadContract } from 'wagmi'
+import { formatEther } from 'viem'
+import { useRouter } from 'next/router'
+
 import { Card } from '@/components/ui/card'
 import { Countdown } from './countdown'
 import { utilTime } from '@/utils/time'
-import { useTranslation } from 'react-i18next'
 import { AirdropItem } from '@/api/alliance/type'
-import { TbUsers } from 'react-icons/tb'
 import { Button } from '@/components/ui/button'
-import { defaultImg } from '@/config/link'
-import BigNumber from 'bignumber.js'
-import { useReadContract } from 'wagmi'
-import { v2DistributorAbi } from '@/contract/v2/abi/distributor'
-import { v2TokenAbi } from '@/contract/v2/abi/token'
-import { v2Addr } from '@/contract/v2/address'
 import { getDistributorConfig } from '@/contract/v2/config/distributor'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { bigint } from 'zod'
-import { formatEther } from 'viem'
+import { cn } from '@/lib/utils'
+import { Img } from '@/components/img'
+import { fmt } from '@/utils/fmt'
 
 interface Props {
   airdrop: AirdropItem | undefined
@@ -24,25 +24,34 @@ interface Props {
 export const AirdropCard = ({ airdrop, className }: Props) => {
   const { t } = useTranslation()
   const { chainId } = useChainInfo(airdrop?.chain)
+  const router = useRouter()
 
   const config = getDistributorConfig(chainId)
 
   const { data: amountLeft } = useReadContract({
     ...config!,
     functionName: 'getAmountLeft',
-    args: [BigInt(airdrop?.distribution_id ?? 0)]
+    args: [BigInt(airdrop?.distribution_id ?? 0)],
   })
   const { data: amountClaimed } = useReadContract({
     ...config!,
     functionName: 'getAmountClaimed',
-    args: [BigInt(airdrop?.distribution_id ?? 0)]
+    args: [BigInt(airdrop?.distribution_id ?? 0)],
   })
 
+  const onPushToken = () => {
+    if (!airdrop?.chain || !airdrop?.address) return
+    router.push(fmt.toHref(airdrop?.chain, airdrop?.address))
+  }
 
   return (
-    <Card className={`p-2 max-sm:w-[96vw] ${className}`}>
+    <Card
+      className={cn('p-3 max-sm:w-[96vw]', className)}
+      shadow="none"
+      onClick={onPushToken}
+    >
       <div className="flex justify-between">
-        <span className=' font-bold'>
+        <span className=" font-bold">
           {airdrop?.name}
           {airdrop?.ticker ? `(${airdrop.ticker})` : ''}
         </span>
@@ -50,18 +59,18 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           {utilTime.isPast(airdrop!.create) ? (
             t('expired')
           ) : (
-            <Countdown targetTimestamp={airdrop!.create * 1000} ></Countdown>
+            <Countdown targetTimestamp={airdrop!.create * 1000}></Countdown>
           )}
         </span>
       </div>
       <div className="mt-3 flex justify-between">
         <div className="flex-shrink-0">
-          <div className="flex items-center justify-between bg-[#CBFF08] rounded">
+          <div className="flex items-center justify-between rounded bg-lime-green">
             <div className="flex items-center w-[150px]">
-              <img
-                src={airdrop?.kol_logo || airdrop?.community_logo || defaultImg}
-                alt="Avatar"
-                className="w-[40px] h-[40px] flex-shrink-0 rounded-tl-md  rounded-bl-md "
+              <Img
+                src={airdrop?.kol_logo || airdrop?.community_logo}
+                alt="avatar"
+                className="w-10 h-10 shrink-0 rounded-r-none"
               />
               <span className="mx-2 truncate w-[80%]">
                 {airdrop?.kol_name || airdrop?.community_name}
@@ -85,21 +94,22 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           </div>
           <div className="mt-3 flex items-center text-gray-500">
             <TbUsers size={24} />
-            <span className="ml-2">{formatEther(amountClaimed ?? BigInt(0))} / {formatEther(amountLeft ?? BigInt(0))}</span>
+            <span className="ml-2">
+              {formatEther(amountClaimed ?? BigInt(0))} /{' '}
+              {formatEther(amountLeft ?? BigInt(0))}
+            </span>
           </div>
           <Button
             className="mt-3 font-bold"
             disabled={utilTime.isPast(airdrop!.create)}
-            onClick={() => {
-              open(`/${airdrop?.chain}/${airdrop?.address}`)
-            }}
+            onClick={onPushToken}
           >
             {t('claim.airdrop')}
           </Button>
         </div>
-        <img
-          src={airdrop?.logo || defaultImg}
-          className="w-[140px] h-[140px] ml-4 flex-shrink-0 object-cover"
+        <Img
+          src={airdrop?.logo}
+          className="w-42 h-42 ml-4 flex-shrink-0 object-cover"
         />
       </div>
     </Card>

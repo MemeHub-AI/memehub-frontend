@@ -379,5 +379,8 @@
   "reward.time": "时间",
   "reward.username": "用户名",
   "view-more": "查看更多",
-  "deploy.invalid.merkle-root": "获取市场参数失败，请重试"
+  "deploy.invalid.merkle-root": "获取市场参数失败，请重试",
+  "member": "成员",
+  "holder": "持有者",
+  "ambassador": "大使"
 }

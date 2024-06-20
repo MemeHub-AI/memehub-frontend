@@ -5,6 +5,7 @@ const baseWidth = {
   aside: '340px',
   100: '28rem',
   128: '32rem',
+  42: '10.5rem',
 }
 
 const baseHeight = {
@@ -12,6 +13,7 @@ const baseHeight = {
   body: 'calc(100vh - 64px)', // Exclude footer height.
   main: 'calc(100vh - 64px - 64px)', // Include footer height.
   footer: '64px',
+  42: '10.5rem',
 }
 
 const config = {
@@ -58,6 +60,7 @@ const config = {
         102: '1.02',
       },
       colors: {
+        'lime-green': '#CBFF08',
         'blue-deep': '#2c30ee',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

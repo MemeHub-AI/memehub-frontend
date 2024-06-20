@@ -1,15 +1,25 @@
+import React, { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+import { useAccount } from 'wagmi'
+import Link from 'next/link'
+
 import { allianceApi } from '@/api/alliance'
 import { Button } from '@/components/ui/button'
 import { useWalletStore } from '@/stores/use-wallet-store'
-import { useQuery } from '@tanstack/react-query'
-import { Fragment } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useAccount } from 'wagmi'
+import { CheckIcon } from '@/components/check-icon'
+import { Img } from '@/components/img'
+import { CommunityCategory } from '@/api/alliance/type'
+import { useUserStore } from '@/stores/use-user-store'
+
+const kolHref = ''
+const communityHref = ''
 
 export const Ids = () => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
+  const { setUserIdentity } = useUserStore()
 
   const { data } = useQuery({
     queryKey: [allianceApi.getIdentityList.name],
@@ -18,14 +28,24 @@ export const Ids = () => {
       return data
     },
   })
-
   const ids = data
+  const communityMap = {
+    [CommunityCategory.Chat]: t('member'),
+    [CommunityCategory.Nft]: t('holder'),
+    [CommunityCategory.Token]: t('holder'),
+  }
+
+  useEffect(() => {
+    if (ids) {
+      setUserIdentity(ids)
+    }
+  }, [ids])
 
   const getIdStatus = () => {
     if (!isConnected) {
       return (
         <div className="mt-3 flex items-center">
-          <Button onClick={() => setConnectOpen(true)}>
+          <Button size="lg" onClick={() => setConnectOpen(true)}>
             {t('connect.wallet')}
           </Button>
           <span className="ml-4">{t('check.wallet.airdrop')}</span>
@@ -36,7 +56,7 @@ export const Ids = () => {
     if (ids?.kol == null && !ids?.community) {
       return (
         <div className="mt-3 flex items-center">
-          <img src="/images/no-airdrop.png" alt="" />
+          <img src="/images/no-airdrop.png" alt="empty" />
           <span>{t('unfortunately')}</span>
         </div>
       )
@@ -44,34 +64,33 @@ export const Ids = () => {
 
     return (
       <div className="mt-2 flex gap-4 flex-wrap">
-        {ids?.kol != null ? (
-          <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden">
-            <img
+        {ids?.kol && (
+          <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
+            <Img
               src={ids?.kol?.logo}
               alt="Avatar"
-              className="w-[46px] h-[46px]"
+              className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {ids?.kol?.name}
+              {ids?.kol?.name} {t('ambassador')}
             </span>
-            <img
-              src="/images/check.png"
-              alt="Avatar"
-              className="w-[46px] h-[46px] p-2"
-            />
+            <CheckIcon />
           </div>
-        ) : null}
-        {ids?.community?.map((id, i) => (
-          <div className="flex items-center bg-[#CBFF08] rounded-sm overflow-hidden">
-            <img src={id.logo} alt="Avatar" className="w-[46px] h-[46px]" />
-            <span className="mx-3 min-w-[50px] text-xl truncate">
-              {id.name}
-            </span>
-            <img
-              src="/images/check.png"
+        )}
+        {ids?.community?.map((c, i) => (
+          <div
+            className="flex items-center bg-lime-green rounded-sm overflow-hidden"
+            key={i}
+          >
+            <Img
+              src={c.logo}
               alt="Avatar"
-              className="w-[46px] h-[46px] p-2"
+              className="w-11 h-11 rounded-r-none"
             />
+            <span className="mx-3 min-w-[50px] text-xl truncate">
+              {c.name} {communityMap[c.category]}
+            </span>
+            <CheckIcon />
           </div>
         ))}
       </div>
@@ -79,19 +98,29 @@ export const Ids = () => {
   }
 
   return (
-    <Fragment>
+    <>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
       <div className="mt-4">
-        <span className="text-blue-700 cursor-pointer">{t('apply.kol')}</span>
+        <Link
+          href={kolHref}
+          target="_blank"
+          className="text-blue-700 cursor-pointer"
+        >
+          {t('apply.kol')}
+        </Link>
         <span className="ml-2">{t('platform.airdrop')}</span>
       </div>
       <div className="mt-1">
-        <span className="text-blue-700 cursor-pointer">
+        <Link
+          href={communityHref}
+          target="_blank"
+          className="text-blue-700 cursor-pointer"
+        >
           {t('apply.community')}
-        </span>
+        </Link>
         <span className="ml-2">{t('community.airdrops')}</span>
       </div>
-    </Fragment>
+    </>
   )
 }

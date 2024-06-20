@@ -78,7 +78,7 @@ export interface AirdropItem {
 
 export interface IdentityList {
   kol?: Kol
-  community?: Kol[]
+  community?: Community[]
 }
 
 export interface Kol {
@@ -86,4 +86,14 @@ export interface Kol {
   name: string
   logo: string
   description: string
+}
+
+export interface Community extends Kol {
+  category: CommunityCategory
+}
+
+export enum CommunityCategory {
+  Chat = 1,
+  Nft,
+  Token,
 }
