@@ -31,7 +31,7 @@ export const WalletAccount = () => {
             src={userInfo?.logo || ''}
             fallback={userInfo?.wallet_address.slice(-4)}
             size={isMobile ? 32 : 36}
-            className="rounded-lg cursor-pointer"
+            className="rounded-lg cursor-pointer select-none"
             fallbackClass="rounded-lg text-xs"
             shadow="default"
           />

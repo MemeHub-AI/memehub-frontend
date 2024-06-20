@@ -102,7 +102,7 @@ export const OpportunityMoonshot = (props: Props) => {
                 key={i}
                 className={cn(
                   'px-2.5 py-1.5 text-nowrap rounded-xl my-5 cursor-pointer border-2 border-transparent',
-                  'hover:border-black',
+                  'hover:border-black select-none',
                   i === Tab.Classic && 'ml-3',
                   tab === i && 'bg-black text-[#ffe770]'
                 )}
