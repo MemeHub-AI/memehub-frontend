@@ -6,6 +6,7 @@ import { LiaTelegramPlane } from 'react-icons/lia'
 
 import { Button, buttonVariants } from './ui/button'
 import { cn } from '@/lib/utils'
+import { SOCIAL_LINKS } from '@/config/link'
 
 export const SocialLinks = ({
   className,
@@ -14,8 +15,16 @@ export const SocialLinks = ({
   const { t } = useTranslation()
 
   const links = [
-    { name: t('twitter-x'), icon: <Twitter strokeWidth={1.5} size={20} /> },
-    { name: t('telegram'), icon: <LiaTelegramPlane size={20} /> },
+    {
+      name: t('twitter-x'),
+      icon: <Twitter strokeWidth={1.5} size={20} />,
+      link: SOCIAL_LINKS.x,
+    },
+    {
+      name: t('telegram'),
+      icon: <LiaTelegramPlane size={20} />,
+      link: SOCIAL_LINKS.tg,
+    },
   ]
 
   return (
@@ -27,6 +36,9 @@ export const SocialLinks = ({
           variant="ghost"
           shadow="none"
           className="w-full gap-2 justify-start items-start"
+          onClick={() => {
+            if (l.link) open(l.link)
+          }}
         >
           {l.icon}
           {l.name}
