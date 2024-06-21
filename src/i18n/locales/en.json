@@ -389,5 +389,12 @@
   "member": "Member",
   "holder": "Holder",
   "ambassador": "Ambassador",
-  "aridrop.claim": "🎁 Claim Airdrop"
+  "aridrop.claim": "🎁 Claim Airdrop",
+  "reward.direct-invite-count": "Direct invitation count",
+  "reward.indirect-invite-count": "Indirect invitation count",
+  "reward.record": "Reward records",
+  "earned": "Earned",
+  "username": "username",
+  "time": "Time",
+  "no.earned": "No earned"
 }

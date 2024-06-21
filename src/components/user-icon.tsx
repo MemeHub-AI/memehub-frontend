@@ -3,14 +3,14 @@ import React, { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 
 interface Props extends ComponentProps<'img'> {
-  type?: 'diamond' | 'diamond-star'
+  type?: 'user' | 'user2'
   size?: number
 }
 
-export const UserIcon = ({ className, size = 28 }: Props) => {
+export const UserIcon = ({ className, size = 28, type = 'user' }: Props) => {
   return (
     <img
-      src="/images/reward/user.png"
+      src={`/images/reward/${type}.png`}
       alt="icon"
       className={cn('', className)}
       style={{

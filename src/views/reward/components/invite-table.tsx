@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
+import { ColumnDef, flexRender } from '@tanstack/react-table'
 
 import {
   Table,
@@ -11,73 +12,119 @@ import {
   TableRow,
   TableFooter,
 } from '@/components/ui/table'
+import { cn } from '@/lib/utils'
 
-const rows = [
-  {
-    name: 'L1en',
-    earned: '0.23 ETH',
-    time: '2022-08-01 12:00:00',
-  },
-  {
-    name: 'L1en',
-    earned: '1.23 ETH',
-    time: '2022-08-02 11:00:00',
-  },
-  {
-    name: 'L1en',
-    earned: '10.23 ETH',
-    time: '2022-08-03 12:30:00',
-  },
-]
+import { RewardItem } from '@/api/invite/types'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { Img } from '@/components/img'
+import { DiamondIcon } from '@/components/diamond-icon'
+import { useRewardTable } from '../hooks/use-reward-table'
 
-export const InviteTable = () => {
+enum RewardType {
+  Token = 1,
+  Diamond,
+}
+
+export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
+  const { findChain } = useChainsStore()
 
-  const ths = [t('reward.earned'), t('reward.time'), t('reward.username')]
+  const columns: ColumnDef<RewardItem>[] = [
+    {
+      header: t('earned'),
+      accessorKey: 'earned',
+      cell: ({ row }) => {
+        const { chain, earned, category } = row.original
+        return (
+          <div className="flex items-center gap-1">
+            <span>{earned}</span>
+            {category === RewardType.Diamond ? (
+              <DiamondIcon size={20} />
+            ) : (
+              <Img src={findChain(chain)?.logo} alt="logo" className="w-5" />
+            )}
+          </div>
+        )
+      },
+    },
+    {
+      header: t('time'),
+      accessorKey: 'time',
+    },
+    {
+      header: t('username'),
+      accessorKey: 'username',
+    },
+  ]
+
+  const { ths, rows, page_size } = useRewardTable(columns)
+
+  const onViewMore = () => {}
+
+  console.log('table refresh')
 
   return (
-    <Table containerClass="border-2 border-black rounded-md mt-4 w-3/5 px-2">
-      <TableHeader>
-        <TableRow className="!border-b-2 border-b-zinc-300">
-          {ths.map((t, i) => (
-            <TableHead key={i} className="pl-6 text-black font-bold">
-              {t}
-            </TableHead>
-          ))}
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {rows.map((r, i) => {
-          return (
-            <TableRow
-              key={i}
-              className="border-b-zinc-300 !border-b-2 last:!border-b-0 "
-            >
-              <TableCell className="pl-6">{r.earned}</TableCell>
-              <TableCell className="pl-6">{r.time}</TableCell>
-              <TableCell className="pl-6">{r.name}</TableCell>
+    <>
+      <h2 className={cn('font-bold text-2xl mb-2', className)}>
+        {t('reward.record')}
+      </h2>
+      <Table containerClass="border-2 border-black rounded-md px-2 w-4/5 2xl:w-3/5">
+        <TableHeader>
+          {ths.map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id} className="text-black px-3">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                )
+              })}
             </TableRow>
-          )
-        })}
-        {isEmpty(rows) && (
-          <tr>
-            <td colSpan={ths.length} className="text-zinc-400 text-center py-4">
-              {t('no.earned')}
-            </td>
-          </tr>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow
+              key={row.id}
+              data-state={row.getIsSelected() && 'selected'}
+            >
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id} className="px-3">
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+          {isEmpty(rows) && (
+            <tr>
+              <td
+                colSpan={ths[0]?.headers.length}
+                className="text-zinc-400 text-center py-4"
+              >
+                {t('no.earned')}
+              </td>
+            </tr>
+          )}
+        </TableBody>
+        {rows.length > page_size && (
+          <TableFooter className="bg-transparent text-center">
+            <TableRow onClick={onViewMore}>
+              <TableCell
+                colSpan={ths.length}
+                className="text-blue-600 cursor-pointer hover:underline"
+              >
+                {t('view-more')}...
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         )}
-      </TableBody>
-      <TableFooter className="bg-transparent text-center">
-        <TableRow>
-          <TableCell
-            colSpan={ths.length}
-            className="text-blue-600 cursor-pointer hover:underline"
-          >
-            {t('view-more')}...
-          </TableCell>
-        </TableRow>
-      </TableFooter>
-    </Table>
+      </Table>
+    </>
   )
 }
 
