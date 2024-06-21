@@ -22,14 +22,14 @@ export const useDeployV2 = (
   }: DeployParams) => {
     const config = getBondConfig(chainId)
     if (!chainId || !config) {
-      CONTRACT_ERR.unsupportChain()
+      CONTRACT_ERR.configNotFound()
       return
     }
 
     const [bondConfig, bondParams] = config
     const airdropParams = await getAirdropParams(chainName, marketing)
     if (!airdropParams) {
-      CONTRACT_ERR.marketParams()
+      CONTRACT_ERR.marketParamsNotFound()
       return
     }
 

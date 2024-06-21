@@ -62,7 +62,7 @@ export const useDeploy = () => {
 
   const retryCreate = () => {
     if (!cacheParams || !hash) {
-      CONTRACT_ERR.retryCreate()
+      CONTRACT_ERR.retryCreateFailed()
       return
     }
 

@@ -23,13 +23,13 @@ export const useDeployV3 = (
   }: DeployParams) => {
     const config = getV3Config(chainId)
     if (!config || !chainId) {
-      CONTRACT_ERR.unsupport()
+      CONTRACT_ERR.configNotFound()
       return
     }
 
     const airdropParams = await getAirdropParams(chainName, marketing)
     if (!airdropParams) {
-      CONTRACT_ERR.marketParams()
+      CONTRACT_ERR.marketParamsNotFound()
       return
     }
 

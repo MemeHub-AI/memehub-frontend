@@ -26,7 +26,7 @@ export const useApprove = () => {
     mutation: {
       onMutate: () => toast.loading(t('approving')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: () => CONTRACT_ERR.approve(),
+      onError: () => CONTRACT_ERR.approveFailed(),
       onSuccess: () => toast.success(t('approve.success')),
     },
   })

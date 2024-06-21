@@ -4,7 +4,7 @@ import { t } from 'i18next'
 import { isUserReject } from '@/utils/contract'
 
 export const CONTRACT_ERR = {
-  // Contract execute error.
+  // Execute contract error.
   exec: (err: unknown, showToast = true) => {
     const e = err as { message?: string }
 
@@ -15,18 +15,18 @@ export const CONTRACT_ERR = {
     console.error(e?.message)
   },
 
-  // deploy related.
-  unsupportChain: () => toast.error(t('deploy.unsupport.chain')),
-  retryCreate: () => toast.error(t('cannot-retry')),
-  marketParams: () => toast.error(t('deploy.invalid.merkle-root')),
+  // Not found.
+  configNotFound: () => toast.error(t('deploy.config.empty')),
+  proofNotFound: () => toast.error(t('deploy.proof.empty')),
+  marketParamsNotFound: () => toast.error(t('deploy.invalid.merkle-root')),
 
-  // trade related.
+  // Failed.
+  retryCreateFailed: () => toast.error(t('cannot-retry')),
   tradeFailed: () => toast.error(t('trade.failed')),
+  approveFailed: () => toast.error(t('approve.error')),
+
+  // Invalid.
   tokenInvalid: () => toast.error(t('trade.token.invalid')),
   amountInvlid: () => toast.error(t('trade.amount.invalid')),
   balanceInvalid: () => toast.error(t('trade.balance.invalid')),
-  approve: () => toast.error(t('approve.error')),
-
-  configNotFound: () => toast.error(t('deploy.config.empty')),
-  proofNotFound: () => toast.error(t('deploy.proof.empty')),
 }
