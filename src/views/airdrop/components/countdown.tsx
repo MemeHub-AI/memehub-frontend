@@ -6,9 +6,9 @@ interface CountdownProps {
 
 export const Countdown = ({ targetTimestamp }: CountdownProps) => {
   const [countdown, setCountdown] = useState({
-    hours: '-',
-    minutes: '-',
-    seconds: '-',
+    hours: '00',
+    minutes: '00',
+    seconds: '00',
   })
 
   const formatNumber = (num: number) => {
@@ -18,15 +18,15 @@ export const Countdown = ({ targetTimestamp }: CountdownProps) => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       const currentTimestamp = Date.now()
+      const endTime = 48 * 60 * 60 * 1000
+      const timeDifference = currentTimestamp - targetTimestamp
 
-      const timeDifference = targetTimestamp - currentTimestamp
-
-      const hours = formatNumber(Math.floor(timeDifference / (1000 * 60 * 60)))
+      const hours = formatNumber(Math.floor((endTime - timeDifference) / (1000 * 60 * 60)))
       const minutes = formatNumber(
-        Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))
+        Math.floor(((endTime - timeDifference) % (1000 * 60 * 60)) / (1000 * 60))
       )
       const seconds = formatNumber(
-        Math.floor((timeDifference % (1000 * 60)) / 1000)
+        Math.floor(((endTime - timeDifference) % (1000 * 60)) / 1000)
       )
       setCountdown({ hours, minutes, seconds })
       if (timeDifference <= 0) {
@@ -39,7 +39,7 @@ export const Countdown = ({ targetTimestamp }: CountdownProps) => {
 
   return (
     <div>
-      <p className="text-[#CF1322]">
+      <p className="text-[#CF1322] font-bold">
         {countdown.hours}:{countdown.minutes}:{countdown.seconds}
       </p>
     </div>

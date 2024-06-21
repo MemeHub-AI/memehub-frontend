@@ -1,4 +1,4 @@
-import type { PaginationParams } from '../types'
+import type { PaginationReq } from '../types'
 
 export interface UserLoginReq {
   name?: string
@@ -31,6 +31,7 @@ export interface UserInfoRes {
   like_count: number
   mention_count: number
   is_follower: boolean
+  reward_amount: number
 }
 
 export interface UserMyInfoFollow {
@@ -65,7 +66,7 @@ export enum UserListType {
   CoinsHeld,
 }
 
-export interface UserListReq extends PaginationParams {
+export interface UserListReq extends PaginationReq {
   type: UserListType
 }
 

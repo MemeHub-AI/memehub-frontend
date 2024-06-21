@@ -11,8 +11,6 @@ export const utilTime = {
     if (typeof date === 'number') {
       date = Math.floor(date * 1000)
     }
-    console.log(new Date(date).getTime(), new Date().getTime())
-
-    return new Date(date).getTime() < new Date().getTime()
+    return new Date(date).getTime() + 48 * 60 * 60 * 1000 < new Date().getTime()
   },
 }

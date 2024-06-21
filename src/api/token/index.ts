@@ -10,11 +10,11 @@ import type {
   TokenAddCommentReq,
   OnchainTokensRes,
 } from './types'
-import { ApiResponse, Pagination, PaginationParams } from '../types'
+import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 
 export const tokenApi = {
-  list(req: PaginationParams & { token?: string }) {
-    return api.GET<ApiResponse<Pagination<TokenListItem>>>(
+  list(req: PaginationReq & { token?: string }) {
+    return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
       '/api/v1/coin/coinslist/' + qs.stringify(req)
     )
   },
@@ -31,8 +31,8 @@ export const tokenApi = {
   details(addr: string) {
     return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${addr}/`)
   },
-  commentList(addr: string, req: PaginationParams) {
-    return api.GET<ApiResponse<Pagination<TokenCommentListRes>>>(
+  commentList(addr: string, req: PaginationReq) {
+    return api.GET<ApiResponse<PaginationRes<TokenCommentListRes>>>(
       `/api/v1/coin/comments/${addr}/` + qs.stringify(req)
     )
   },

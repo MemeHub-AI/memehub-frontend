@@ -38,7 +38,7 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
       <Popover open={!isEmpty(tokens) || isPending} onOpenChange={reset}>
         <PopoverAnchor>
           <Input
-            className={cn('shadow-offset h-9', className)}
+            className={cn('shadow-offset h-9 select-none', className)}
             value={value}
             onChange={({ target }) => setValue(target.value)}
             placeholder={t('search.placeholder')}
@@ -57,8 +57,8 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
             <TokenCard
               key={t.id}
               card={t}
-              imageSize={100}
               descClass="line-clamp-2"
+              className="w-24 h-24"
               hover="bg"
               shadow="none"
               onClick={reset}

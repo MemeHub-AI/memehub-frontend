@@ -31,6 +31,8 @@ import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
 import { RewardButton } from '@/components/reward-button'
 import { Routes } from '@/routes'
+import { Tooltip } from '@/components/ui/tooltip'
+import { useClipboard } from '@/hooks/use-clipboard'
 
 export const Profile = (props: ComponentProps<'div'>) => {
   const { className } = props
@@ -43,6 +45,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
     onFollowFinlly: refetchUserInfo,
   })
   const tokenAddr = (query.address || '') as string
+  const { copy } = useClipboard()
 
   const { onChangeUpload } = useUploadImage({
     onSuccess: (url) => update({ logo: url }).then(() => refetchUserInfo()),
@@ -102,9 +105,14 @@ export const Profile = (props: ComponentProps<'div'>) => {
         </Label>
         <div>
           <CardTitle>{userInfo?.name}</CardTitle>
-          <CardDescription>
-            {fmt.addr(userInfo?.wallet_address, { len: 8 })}
-          </CardDescription>
+          <Tooltip tip={t('click-to-copy')}>
+            <CardDescription
+              className="hover:underline cursor-pointer"
+              onClick={() => copy(userInfo?.wallet_address ?? '')}
+            >
+              {fmt.addr(userInfo?.wallet_address, { len: 8 })}
+            </CardDescription>
+          </Tooltip>
           <CardDescription className="break-all line-clamp-2">
             {userInfo?.description}
           </CardDescription>

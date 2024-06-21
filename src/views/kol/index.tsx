@@ -1,15 +1,13 @@
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
+
 import { allianceApi } from '@/api/alliance'
 import { AmbassadorCard } from '@/components/ambassador-card'
 import CustomSuspense from '@/components/custom-suspense'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import {
-  MobileQpportunityMoonshot,
-  OpportunityMoonshot,
-} from '@/components/opportunity-moonshot'
+import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
 
 const KOLPage = () => {
   const { t } = useTranslation()

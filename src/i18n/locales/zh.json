@@ -307,13 +307,13 @@
   "platform.airdrop": "可获得平台丰富空投",
   "apply.community": "申请社区合作",
   "community.airdrops": "社群成员可永久获取大量空投",
-  "airdrop.you": "🎁给你的空投",
+  "airdrop.you": "🎁 你的空投",
   "claim.airdrop": "去领取",
   "expired": "已过期",
   "check.wallet.airdrop": "查看可以领取的空投",
   "unfortunately": "很遗憾，查询到您还未拥有任何身份以领取空投",
   "home": "首页",
-  "airdrop": "🎁空投",
+  "airdrop": "🎁 空投",
   "KOL": "KOLs",
   "kol.ambassador": "KOL大使",
   "kol.desc": "当前有$1位KOL大使与Memehub合作，他们将获得大量的代币空投",
@@ -378,5 +378,9 @@
   "reward.time": "时间",
   "reward.username": "用户名",
   "view-more": "查看更多",
-  "deploy.invalid.merkle-root": "获取市场参数失败，请重试"
+  "deploy.invalid.merkle-root": "获取市场参数失败，请重试",
+  "member": "成员",
+  "holder": "持有者",
+  "ambassador": "大使",
+  "aridrop.claim": "🎁 领取空投"
 }

@@ -1,7 +1,7 @@
 import { qs } from '@/hooks/use-fetch'
 import { api } from '..'
 
-import type { ApiResponse, Pagination } from '../types'
+import type { ApiResponse, PaginationRes } from '../types'
 import type {
   UserLoginReq,
   UserLoginRes,
@@ -25,7 +25,7 @@ export const userApi = {
     return api.GET<ApiResponse<UserInfoRes>>('/api/v1/user/users/')
   },
   list<T extends UserListType>(addr: string, req: UserListReq) {
-    return api.GET<ApiResponse<Pagination<UserListRes[T]>>>(
+    return api.GET<ApiResponse<PaginationRes<UserListRes[T]>>>(
       `/api/v1/user/infolist/${addr}/${qs.stringify(req)}`
     )
   },

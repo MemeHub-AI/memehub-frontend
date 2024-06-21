@@ -34,7 +34,7 @@ export const useTokenProgressV2 = (
   const total = formatEther(maxSupply || BI_ZERO)
   const current = formatEther(reserveBalance || BI_ZERO)
   const progress = BigNumber(current).isZero()
-    ? BI_ZERO.toString()
+    ? BigNumber(BI_ZERO.toString()).toFixed(2)
     : BigNumber(current).div(total).multipliedBy(100).toFixed(2)
 
   return {

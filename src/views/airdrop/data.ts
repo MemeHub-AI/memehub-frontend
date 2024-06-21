@@ -1,4 +1,4 @@
-import { AirdropItem } from '@/api/alliance/type'
+import { AirdropItem } from '@/api/airdrop/types'
 
 export const data: AirdropItem[] = [
   {

@@ -12,7 +12,7 @@ export const Logo = ({ className, showMeme = false, ...props }: Props) => {
   return (
     <Link
       href={Routes.Main}
-      className="font-bold inline-flex items-center gap-2"
+      className="font-bold inline-flex items-center gap-2 shrink-0"
     >
       {showMeme && (
         <img src="/images/logo.png" alt="meme" className="w-10 max-sm:w-8" />

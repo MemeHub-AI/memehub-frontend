@@ -14,19 +14,11 @@ import { useTokenProgressV2 } from '@/views/token/hooks/v2/use-token-progress'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
-  imageSize?: number
   descClass?: string
 }
 
 export const TokenCard = (props: Props) => {
-  const {
-    card,
-    className,
-    imageSize = 160,
-    descClass,
-    onClick,
-    ...restProps
-  } = props
+  const { card, className, descClass, onClick, ...restProps } = props
   const router = useRouter()
   const { progress } = useTokenProgressV2(
     card.address as Address,
@@ -49,11 +41,9 @@ export const TokenCard = (props: Props) => {
       <Img
         src={card.image}
         alt="logo"
-        className="shrink-0"
-        width={imageSize}
-        height={imageSize}
+        className="shrink-0 w-32 h-32 xl:w-40 xl:h-40"
       />
-      <div className="py-2 pr-2 w-full flex flex-col justify-between">
+      <div className="py-1.5 xl:py-2 pr-2 w-full flex flex-col justify-between">
         <div className="h-full">
           <CardTitle className="pt-0 text-lg flex items-start justify-between gap-2 ">
             <span className="break-all line-clamp-2">
@@ -63,7 +53,7 @@ export const TokenCard = (props: Props) => {
           </CardTitle>
           <p
             className={cn(
-              'text-zinc-500 text-sm break-all line-clamp-3',
+              'text-zinc-500 text-sm break-all line-clamp-2 xl:line-clamp-3',
               descClass
             )}
           >

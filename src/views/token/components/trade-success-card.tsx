@@ -26,14 +26,20 @@ export const TradeSuccessCard = ({ amount, symbol, diamond }: Props) => {
     const startRect = diamondRef.current.getBoundingClientRect()
     const endRect = rewardButtonEl.getBoundingClientRect()
 
-    console.log('startRect', startRect.x, startRect.y)
-    console.log('endRect', endRect.x, endRect.y)
+    console.log('startRect', startRect.x, startRect.y, startRect)
+    console.log('endRect', endRect.x, endRect.y, endRect)
 
-    // gsap.to(diamondRef.current, {
-    //   x: endRect.x,
-    //   y: endRect.y,
-    //   duration: 5,
-    // })
+    const deltaX = endRect.left - startRect.left
+    const deltaY = endRect.top - startRect.top + 150
+    const tween = gsap.to(diamondRef.current, {
+      x: deltaX,
+      y: deltaY,
+      duration: 2,
+    })
+
+    return () => {
+      tween.kill()
+    }
   }, [rewardButtonEl])
 
   return (
@@ -44,7 +50,7 @@ export const TradeSuccessCard = ({ amount, symbol, diamond }: Props) => {
         onClick={() => toast.dismiss()}
       />
       <div>
-        <h2 className="font-bold text-lg flex items-center gap-2">
+        <h2 className="font-bold text-lg flex items-center gap-2 mt-2">
           <DiamondIcon type="diamond-star" ref={diamondRef} />
           {t('trade.success')}
         </h2>

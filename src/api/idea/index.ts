@@ -1,11 +1,11 @@
-import type { ApiResponse, Pagination } from '../types'
+import type { ApiResponse, PaginationRes } from '../types'
 import { IdeaQuery, IdeaDataList, IdeaBasicInfo, MemeStoryData } from './type'
 import { api } from '..'
 import { qs } from '@/hooks/use-fetch'
 
 export const ideaApi = {
   async getIdeaList(id: string, query: IdeaQuery) {
-    return api.GET<ApiResponse<Pagination<IdeaDataList>>>(
+    return api.GET<ApiResponse<PaginationRes<IdeaDataList>>>(
       `/api/v1/news/idea/${id}/` + qs.stringify(query)
     )
   },

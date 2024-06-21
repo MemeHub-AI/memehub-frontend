@@ -7,9 +7,14 @@ import '@/styles/globals.css'
 import { AppLayout } from '@/components/layouts/app'
 import { AppProviders } from '@/components/app-providers'
 import Script from 'next/script'
+import { useRewardCode } from '@/hooks/use-reward-code'
+import { useStorage } from '@/hooks/use-storage'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation()
+  const rewardCode = useRewardCode()
+  const { getRewardCode, setRewardCode } = useStorage()
+  if (rewardCode && rewardCode !== getRewardCode()) setRewardCode(rewardCode)
 
   return (
     <>

@@ -86,6 +86,7 @@ export const ProfileForm = ({ children }: Props) => {
             error={fields.name.error}
             value={fields.name.value}
             onChange={onChange}
+            className="border-none"
           />
           <FormTextareaField
             label={t('bio')}
@@ -93,6 +94,7 @@ export const ProfileForm = ({ children }: Props) => {
             id={fieldsKeys.bio}
             value={fields.bio.value}
             onChange={onChange}
+            disableFocusBorder
           />
           <DialogFooter className="!justify-start max-sm:flex-row max-sm:gap-3">
             <Button variant="default">{t('confirm')}</Button>

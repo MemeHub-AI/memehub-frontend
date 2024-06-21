@@ -2,6 +2,7 @@ import React, { ComponentProps, ReactDOM, createElement } from 'react'
 
 import { OpportunityMoonshot } from '../opportunity-moonshot'
 import { cn } from '@/lib/utils'
+import { useRouter } from 'next/router'
 
 interface Props extends ComponentProps<'div'> {
   mainClass?: string
@@ -22,6 +23,7 @@ export const PrimaryLayout = (props: Props) => {
     containerClass: aContainerClass,
     ...restAsideProps
   } = asideProps
+  const { query } = useRouter()
 
   return (
     <main
@@ -31,7 +33,6 @@ export const PrimaryLayout = (props: Props) => {
       )}
     >
       <OpportunityMoonshot
-        defalutTab={1}
         className={cn('max-sm:!hidden', aClass)}
         containerClass={cn('!ml-0', aContainerClass)}
         {...restAsideProps}

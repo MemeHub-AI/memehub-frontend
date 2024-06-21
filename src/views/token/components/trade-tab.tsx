@@ -31,8 +31,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     [tab]
   )
   const { query } = useRouter()
-  const { slippage, setSlippage } = useSlippage()
 
+  const { slippage, setSlippage } = useSlippage()
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
   const { isSubmitting, isTraded, buy, sell } = useTradeV2()
@@ -72,7 +72,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       return
     }
 
-    sell(value)
+    sell(value, slippage)
   }
 
   const checkForChain = async () => {
@@ -113,7 +113,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   // Refresh balance when trade completed.
   useEffect(() => {
     if (!isTraded) return
-
     setValue('0')
     refetchNativeBalance()
     refetchTokenBalance()
@@ -184,6 +183,9 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
+          {/* <Button className="!w-full font-bold mt-3" onClick={claim}>
+            {t('aridrop.claim')}
+          </Button> */}
         </Tabs>
       </Card>
     </TradeProvider>

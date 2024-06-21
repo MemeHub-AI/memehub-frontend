@@ -1,5 +1,6 @@
 import { defaultImg } from '@/config/link'
 import { Card } from '../ui/card'
+import { Img } from '../img'
 
 interface AmbassadorCardProps {
   data?: {
@@ -14,17 +15,17 @@ interface AmbassadorCardProps {
 export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
   return (
     <Card
-      className="flex p-4 hover:scale-105"
+      className="flex p-4 hover:scale-102 gap-2"
       shadow={'none'}
       onClick={() => {
-        if (!data?.telegram_url && !data?.twitter_url) return
-        open(data?.telegram_url || data?.twitter_url)
+        if (!data?.twitter_url && !data?.telegram_url) return
+        open(data?.twitter_url || data?.telegram_url)
       }}
     >
-      <img
+      <Img
         src={data?.logo || defaultImg}
         alt="Avatar"
-        className="w-[150px] h-[150px] max-xl:w-[120px] max-xl:h-[120px] max-sm:w-[100px] max-sm:h-[100px]"
+        className="w-24 h-24 xl:w-32 xl:h-32  rounded-full border-2 border-black"
       />
       <div className="ml-2">
         <h2 className="text-2xl max-sm:text-xl">{data?.name}</h2>

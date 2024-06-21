@@ -1,7 +1,10 @@
+import { Fragment } from 'react'
+import clsx from 'clsx'
+
 import { IdeaBasicInfo } from '@/api/idea/type'
 import { Skeleton } from '@/components/ui/skeleton'
 import { fmt } from '@/utils/fmt'
-import clsx from 'clsx'
+import { MemeMarkdown } from './meme-markdown'
 
 interface MemeStoryData {
   data: IdeaBasicInfo
@@ -16,7 +19,7 @@ export const MemeStory = ({ data }: MemeStoryData) => {
       .replaceAll(/<br\s?\/?><br\s?\/?>/g, '')
       .replaceAll(/<br\/>/g, '') || ''
 
-  console.log(content)
+  // console.log(content)
 
   const memeInfo = data?.meme || {}
   const h2List = content.match(/<h2 id="[^"]*">[^<]+<\/h2>/g) || []
@@ -34,14 +37,17 @@ export const MemeStory = ({ data }: MemeStoryData) => {
   return (
     <div className="flex max-sm:flex-col">
       <div className="flex-1 max-sm:order-2">
-        <div
+        {/* <div
           className="pt-5 story"
           dangerouslySetInnerHTML={{ __html: firstContent }}
         ></div>
         <div
           className="my-5 story"
           dangerouslySetInnerHTML={{ __html: laterContent }}
-        ></div>
+        ></div> */}
+
+        <MemeMarkdown className="pt-5" children={firstContent} />
+        <MemeMarkdown className="my-5" children={laterContent} />
       </div>
       {data.category !== '2' ? (
         <div className="mt-5 ml-5 w-[200px] flex-shrink-0 sticky top-[80px] h-min max-sm:order-1 max-sm:static max-sm:ml-0 max-sm:w-auto">
@@ -50,7 +56,9 @@ export const MemeStory = ({ data }: MemeStoryData) => {
           </div>
           <div className="max-sm:grid max-sm:grid-cols-2 max-sm:gap-2 max-sm:mt-2">
             {Object.keys(memeInfo).map((key) => {
-              if (!memeInfo[key] || !memeInfo[key]?.length) return <></>
+              if (!memeInfo[key] || !memeInfo[key]?.length) {
+                return <Fragment key={key} />
+              }
               return (
                 <div
                   key={key}
@@ -66,7 +74,7 @@ export const MemeStory = ({ data }: MemeStoryData) => {
                   <div className="font-bold">
                     {fmt.firstUpperCase(key || '')}
                   </div>
-                  <div>
+                  <div className="break-all">
                     {Array.isArray(memeInfo[key])
                       ? memeInfo[key].join(', ')
                       : memeInfo[key]}
