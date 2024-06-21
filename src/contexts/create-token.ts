@@ -1,23 +1,18 @@
 import { ProviderProps, createContext, createElement, useContext } from 'react'
 
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
-import { useDeployV2 } from '@/views/create/hooks/use-deploy-v2'
+import { useDeploy } from '@/views/create/hooks/use-deploy'
 import { useNewsList } from '@/hooks/use-news-list'
 
 interface Value {
   formData: ReturnType<typeof useCreateTokenForm>
-  deployResult: ReturnType<typeof useDeployV2>
+  deployResult: ReturnType<typeof useDeploy>
   newsListData: ReturnType<typeof useNewsList>
 }
 
 const Context = createContext<Value | null>(null)
 
-export const CreateTokenProvider = ({
-  children,
-  ...props
-}: ProviderProps<Value>) => {
-  return createElement(Context.Provider, props, children)
-}
+export const CreateTokenProvider = Context.Provider
 
 export const useCreateTokenContext = () => {
   const context = useContext(Context)

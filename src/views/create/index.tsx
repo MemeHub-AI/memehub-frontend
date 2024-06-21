@@ -4,14 +4,13 @@ import { CreateTokenMain } from './components/main'
 import { CreateTokenStatusDialog } from './components/dialog'
 import { useCreateTokenForm } from './hooks/use-form'
 import { useNewsList } from '@/hooks/use-news-list'
-import { useAIMemeInfo } from '@/hooks/use-ai-meme-info'
 import { AICreateMemecoinDialogLoading } from '@/components/ai-create-memecoin-dialog/loading'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { useDeployV2 } from './hooks/use-deploy-v2'
 import { CreateTokenProvider } from '@/contexts/create-token'
+import { useDeploy } from './hooks/use-deploy'
 
 export const CreatePage = () => {
-  const deployResult = useDeployV2()
+  const deployResult = useDeploy()
   const [tab, setTab] = useState(0)
   const formData = useCreateTokenForm(deployResult)
   const newsListData = useNewsList({ isOpportunity: tab === 1 })

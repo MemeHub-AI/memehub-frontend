@@ -1,10 +1,10 @@
 import { commonAddr } from '@/contract/address'
 import { v3Addr } from './address'
 
-import { v2BondAbi } from '@/contract/v2/abi/bond'
 import { makeConfig } from '@/utils/contract'
-import { v2DistributorAbi } from '@/contract/v2/abi/distributor'
-import { v2RecommendAbi } from '@/contract/v2/abi/recommend'
+import { v3BondingCurveAbi } from './abi/bonding-curve'
+import { v3DistributorAbi } from './abi/distributor'
+import { v3RecommendAbi } from './abi/recommend'
 
 export const getV3Config = (chainId: number | undefined) => {
   if (!chainId) return
@@ -16,8 +16,8 @@ export const getV3Config = (chainId: number | undefined) => {
 
   return {
     commonAddress,
-    bondingCurveConfig: makeConfig(v2BondAbi, addr.bondingCurve),
-    distributorConfig: makeConfig(v2DistributorAbi, addr.distributor),
-    recommendConfig: makeConfig(v2RecommendAbi, addr.recommend),
+    bondingCurveConfig: makeConfig(v3BondingCurveAbi, addr.bondingCurve),
+    distributorConfig: makeConfig(v3DistributorAbi, addr.distributor),
+    recommendConfig: makeConfig(v3RecommendAbi, addr.recommend),
   }
 }

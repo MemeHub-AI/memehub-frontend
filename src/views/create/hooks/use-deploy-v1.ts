@@ -1,42 +1,23 @@
-import { useAccount, useWriteContract } from 'wagmi'
+import { Config, useAccount } from 'wagmi'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
+import { WriteContractMutate } from 'wagmi/query'
 
-import type { TokenNewReq } from '@/api/token/types'
-
+import type { DeployParams } from './use-deploy'
 import { v1FactoryAbi } from '../../../contract/v1/abi/factory'
-import { useCreateToken } from './use-create-token'
-import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { v1Addr } from '@/contract/v1/address'
 import { v1FactoryParams } from '@/contract/v1/config/factory'
 import { commonAddr } from '@/contract/address'
+import { DEPLOY_FEE } from '@/constants/contract'
 
-let cacheParams: Omit<TokenNewReq, 'hash'>
-
-export const useDeployV1 = () => {
+export const useDeployV1 = (
+  writeContract: WriteContractMutate<Config, unknown>
+) => {
   const { t } = useTranslation()
   const { chainId } = useAccount()
-  const { createTokenData, createTokenError, isCreatingToken, create } =
-    useCreateToken()
 
-  const {
-    data: hash,
-    isPending,
-    error: submitError,
-    writeContract,
-    reset,
-  } = useWriteContract()
-  const {
-    data,
-    error: confirmError,
-    isSuccess,
-    isLoading,
-    isError,
-  } = useWaitForTx({ hash })
-
-  const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
-    cacheParams = params
+  const deployV1 = ({ name, ticker, onSuccess }: DeployParams) => {
     if (!chainId) return
 
     const id = chainId as keyof typeof commonAddr
@@ -60,43 +41,17 @@ export const useDeployV1 = () => {
         args: [
           v1FactoryParams.reserveRatio,
           reserveToken,
-          params.name,
-          params.ticker,
+          name,
+          ticker,
           router,
         ],
-        value: v1FactoryParams.deployFee,
+        value: DEPLOY_FEE.v1,
       },
-      {
-        // Submit hash to backend when contract submit success.
-        onSuccess: (hash) => create({ ...params, hash }),
-      }
+      { onSuccess }
     )
   }
 
-  const retryCreate = () => {
-    if (!cacheParams || !hash) {
-      toast.error(t('cannot-retry'))
-      return
-    }
-
-    create({ ...cacheParams, hash })
-  }
-
   return {
-    data,
-    deployHash: hash,
-    isDeploying: isPending || isLoading || isCreatingToken,
-    isSubmitting: isPending,
-    isConfirming: isLoading,
-    isCreatingToken,
-    isDeploySuccess: isSuccess,
-    isDeployError: isError,
-    submitError,
-    confirmError,
-    createTokenError,
-    createTokenData,
-    deploy,
-    resetDeploy: reset,
-    retryCreate,
+    deployV1,
   }
 }

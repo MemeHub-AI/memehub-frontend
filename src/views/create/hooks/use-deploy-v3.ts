@@ -1,51 +1,57 @@
 import { Config } from 'wagmi'
 import { WriteContractMutate } from 'wagmi/query'
+import { parseEther } from 'viem'
 
 import type { DeployParams } from './use-deploy'
 import { useCreateToken } from './use-create-token'
-import { getBondConfig } from '@/contract/v2/config/bond'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { DEPLOY_FEE } from '@/constants/contract'
+import { getV3Config } from '@/contract/v3/config'
 
-export const useDeployV2 = (
+export const useDeployV3 = (
   writeContract: WriteContractMutate<Config, unknown>
 ) => {
   const { chainId, chainName } = useChainInfo()
   const { getAirdropParams } = useCreateToken()
 
-  const deployV2 = async ({
+  const deployV3 = async ({
     name,
     ticker,
     marketing,
     onSuccess,
   }: DeployParams) => {
-    const config = getBondConfig(chainId)
-    if (!chainId || !config) {
+    const config = getV3Config(chainId)
+    if (!config || !chainId) {
       CONTRACT_ERR.unsupport()
       return
     }
 
-    const [bondConfig, bondParams] = config
     const airdropParams = await getAirdropParams(chainName, marketing)
     if (!airdropParams) {
       CONTRACT_ERR.marketParams()
       return
     }
 
-    console.log('v2 deploy', airdropParams)
+    console.log('v3 deploy', airdropParams)
     writeContract(
       {
-        ...bondConfig,
+        ...config.bondingCurveConfig,
         functionName: 'createToken',
-        args: [{ name, symbol: ticker }, bondParams, airdropParams],
-        value: DEPLOY_FEE.v2,
+        args: [
+          name,
+          ticker,
+          // TODO: add to config.
+          parseEther('10.345'),
+          { ...airdropParams, isDistribution: true },
+        ],
+        value: DEPLOY_FEE.v3,
       },
       { onSuccess }
     )
   }
 
   return {
-    deployV2,
+    deployV3,
   }
 }
