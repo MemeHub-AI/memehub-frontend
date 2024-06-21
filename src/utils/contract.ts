@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { parseEther } from 'viem'
+import { parseEther, Address } from 'viem'
 
 import { TRADE_SERVICE_FEE } from '@/constants/contract'
 
@@ -8,6 +8,14 @@ export const isUserReject = (err: string | unknown) => {
   const e = String(err).toLowerCase()
 
   return e.includes('user rejected') || e.includes('user denied')
+}
+
+// Make a config for contract.
+export const makeConfig = <T = unknown>(abi: T, address: Address) => {
+  return {
+    abi,
+    address,
+  } as const
 }
 
 /**

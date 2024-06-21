@@ -18,24 +18,24 @@ import { Textarea } from '@/components/ui/textarea'
 import { FormLogo } from './logo'
 import { FormChain } from './chain'
 import { PosterForm } from './poster'
-import { DEPLOY_FEE } from '@/contract/v2/config/bond'
 import { fmt } from '@/utils/fmt'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { CoinTypeField } from './coin-type-field'
 import { MarketingField } from './marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { DEPLOY_FEE } from '@/constants/contract'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
   const { deployResult, formData } = useCreateTokenContext()
   const { chain } = useAccount()
 
-  const { url, form, chains, formFields, onSubmit } = formData
+  const { url, form, formFields, onSubmit } = formData
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
 
   const { isDeploying } = deployResult || {}
 
-  const fee = fmt.decimals(formatEther(DEPLOY_FEE), 3)
+  const deployFee = fmt.decimals(formatEther(DEPLOY_FEE.v3))
   const symbol = chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
@@ -222,7 +222,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             </Button>
             {symbol && (
               <p className="text-zinc-400 text-xs">
-                {t('deploy.fee')}: {fee} {symbol}
+                {t('deploy.fee')}: {deployFee} {symbol}
               </p>
             )}
           </div>

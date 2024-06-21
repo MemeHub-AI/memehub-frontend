@@ -35,6 +35,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { slippage, setSlippage } = useSlippage()
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
+  const { setConnectOpen } = useWalletStore()
+  const { tokenInfo } = useTokenContext()
   const { isSubmitting, isTraded, buy, sell } = useTradeV2()
   const {
     nativeBalance,
@@ -42,8 +44,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchNativeBalance,
     refetchTokenBalance,
   } = useTradeInfoV2()
-  const { setConnectOpen } = useWalletStore()
-  const { tokenInfo } = useTokenContext()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''

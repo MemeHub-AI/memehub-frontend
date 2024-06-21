@@ -4,9 +4,10 @@ import { useTranslation } from 'react-i18next'
 import type { TokenNewReq } from '@/api/token/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
-import { DEPLOY_FEE, getBondConfig } from '@/contract/v2/config/bond'
+import { getBondConfig } from '@/contract/v2/config/bond'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { DEPLOY_FEE } from '@/constants/contract'
 
 // Used for retry create.
 let cacheParams: Omit<TokenNewReq, 'hash'>
@@ -63,7 +64,7 @@ export const useDeployV2 = () => {
           bondParams,
           airdropParams,
         ],
-        value: DEPLOY_FEE,
+        value: DEPLOY_FEE.v2,
       },
       { onSuccess: (hash) => create({ ...params, hash }) }
     )
