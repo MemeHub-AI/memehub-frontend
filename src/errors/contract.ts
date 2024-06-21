@@ -16,7 +16,7 @@ export const CONTRACT_ERR = {
   },
 
   // deploy related.
-  unsupport: () => toast.error(t('deploy.unsupport.chain')),
+  unsupportChain: () => toast.error(t('deploy.unsupport.chain')),
   retryCreate: () => toast.error(t('cannot-retry')),
   marketParams: () => toast.error(t('deploy.invalid.merkle-root')),
 
@@ -26,4 +26,7 @@ export const CONTRACT_ERR = {
   amountInvlid: () => toast.error(t('trade.amount.invalid')),
   balanceInvalid: () => toast.error(t('trade.balance.invalid')),
   approve: () => toast.error(t('approve.error')),
+
+  configNotFound: () => toast.error(t('deploy.config.empty')),
+  proofNotFound: () => toast.error(t('deploy.proof.empty')),
 }

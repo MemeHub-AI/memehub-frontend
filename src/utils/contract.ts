@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { parseEther, Address } from 'viem'
+import { Hash, parseEther, Address } from 'viem'
 
 import { TRADE_SERVICE_FEE } from '@/constants/contract'
 
@@ -72,4 +72,9 @@ export const subSlippage = (value: string, slippage: string) => {
     .toFixed(0)
 
   return BigInt(total)
+}
+
+export const parseBytes64 = (input: string | string[]) => {
+  const arr = Array.isArray(input) ? input : [input]
+  return arr.map((s) => '0x' + s) as Hash[]
 }

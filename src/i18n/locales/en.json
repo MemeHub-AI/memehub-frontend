@@ -396,5 +396,10 @@
   "earned": "Earned",
   "username": "username",
   "time": "Time",
-  "no.earned": "No earned"
+  "no.earned": "No earned",
+  "airdrop.claim.failed": "Claim failed",
+  "airdrop.claim.success": "Claim successful!",
+  "airdrop.claiming": "Claiming...",
+  "airdrop.claimed": "Claimed",
+  "deploy.proof.empty": "Cannot find proof"
 }

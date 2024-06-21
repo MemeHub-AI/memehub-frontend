@@ -22,7 +22,7 @@ export const useDeployV2 = (
   }: DeployParams) => {
     const config = getBondConfig(chainId)
     if (!chainId || !config) {
-      CONTRACT_ERR.unsupport()
+      CONTRACT_ERR.unsupportChain()
       return
     }
 

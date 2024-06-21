@@ -21,6 +21,7 @@ import { useTokenContext } from '@/contexts/token'
 import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
 import { useTradeV2 } from '../hooks/v2/use-trade'
 import { useSlippage } from '../hooks/use-slippage'
+import { useAirdrop } from '../hooks/v2/use-airdrop'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -44,6 +45,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchNativeBalance,
     refetchTokenBalance,
   } = useTradeInfoV2()
+  const { canClaim, claim } = useAirdrop()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
@@ -183,9 +185,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
-          {/* <Button className="!w-full font-bold mt-3" onClick={claim}>
-            {t('aridrop.claim')}
-          </Button> */}
+          {canClaim && (
+            <Button className="!w-full font-bold mt-3" onClick={claim}>
+              {t('aridrop.claim')}
+            </Button>
+          )}
         </Tabs>
       </Card>
     </TradeProvider>
