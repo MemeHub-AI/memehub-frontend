@@ -16,5 +16,6 @@ export const useChainInfo = (nameOrId?: string | number) => {
   return {
     chainName: chain?.name || '',
     chainId: Number(chain?.id || 0) as ChainId,
+    chainInfo: chain,
   }
 }

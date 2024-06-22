@@ -9,10 +9,11 @@ import { useTradeContext } from '@/contexts/trade'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useTokenContext } from '@/contexts/token'
 import { Skeleton } from '@/components/ui/skeleton'
+import { tradeBuyItems } from '@/config/trade'
+import { useChainInfo } from '@/hooks/use-chain-info'
+import { TRADE_BUY_ITEMS } from '@/constants/contract'
 
-const buyItems = ['1', '10', '100']
-
-const sellItems = ['10', '25', '75', '100']
+const sellItems = ['25', '50', '75', '100']
 
 interface Props extends ComponentProps<'button'> {
   onItemClick?: (value: string) => void
@@ -25,6 +26,9 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
   const { isBuy, nativeBalance, nativeSymbol, tokenBalance } = useTradeContext()
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
+  const { chainId } = useChainInfo()
+  const buyItems =
+    tradeBuyItems[chainId as keyof typeof tradeBuyItems] ?? TRADE_BUY_ITEMS.eth
 
   const onBuyClick = (value: string) => {
     if (BigNumber(nativeBalance).lte(0)) {
@@ -62,16 +66,7 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
 
   return (
     <div className="flex gap-2 mt-3 flex-wrap">
-      <Button
-        size="xs"
-        shadow="none"
-        variant="outline"
-        onClick={() => onResetClick?.('')}
-        disabled={disabled}
-      >
-        {t('reset')}
-      </Button>
-      {(isBuy ? buyItems : sellItems).map((value, i) => (
+      {(isBuy ? buyItems : sellItems).map((v, i) => (
         <Button
           size="xs"
           shadow="none"
@@ -80,11 +75,11 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
             if (!isConnected) {
               return setConnectOpen(true)
             }
-            isBuy ? onBuyClick(value) : onSellClick(value)
+            isBuy ? onBuyClick(v) : onSellClick(v)
           }}
           disabled={disabled}
         >
-          {value} {isBuy ? tokenInfo?.ticker ?? '' : '%'}
+          {v} {isBuy ? nativeSymbol : '%'}
         </Button>
       ))}
     </div>
