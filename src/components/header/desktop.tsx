@@ -28,10 +28,10 @@ export const HeaderDesktop = (props: Props) => {
 
   return (
     <>
-      <div className="flex items-center lg:gap-3 mr-3 select-none">
+      <div className="flex items-center gap-3 mr-3 select-none">
         <Logo showMeme className="shrink-0" />
-        <nav className="ml-2 xl:ml-[30px] flex items-center">
-          <ul className="flex items-center gap-1 lg:gap-2">
+        <nav className="ml-8 flex items-center">
+          <ul className="flex items-center gap-2">
             {navs.map((n, i) => (
               <li key={i}>
                 <div

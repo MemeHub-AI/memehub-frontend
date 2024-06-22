@@ -4,12 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { allianceApi } from '@/api/alliance'
 import { AmbassadorCard } from '@/components/ambassador-card'
 import CustomSuspense from '@/components/custom-suspense'
-import { PrimaryLayout } from '@/components/layouts/primary'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
-const KOLPage = () => {
+export const Kol = () => {
   const { t } = useTranslation()
 
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
@@ -51,19 +50,16 @@ const KOLPage = () => {
 
   const kols = data?.kol
   return (
-    <PrimaryLayout>
-      <div className="py-5 pr-4 max-sm:pr-0">
-        <h1 className="text-2xl max-sm:flex max-sm:justify-between ">
-          {t('kol.ambassador')}
-          <MobileQpportunityMoonshot>
-            <Button
-              className="md:hidden -translate-y-1 -translate-x-1"
-              size={'icon'}
-            >
-              🔥
-            </Button>
-          </MobileQpportunityMoonshot>
-        </h1>
+    <>
+      <div className="pb-5 pr-4 max-sm:pr-0">
+        <MobileQpportunityMoonshot>
+          <Button
+            className="md:hidden -translate-y-1 -translate-x-1"
+            size={'icon'}
+          >
+            🔥
+          </Button>
+        </MobileQpportunityMoonshot>
         <div className="my-3">
           {t('kol.desc').replace('$1', `${data?.total}` || '-')}
         </div>
@@ -80,7 +76,7 @@ const KOLPage = () => {
         </CustomSuspense>
         {handleLoadStatus()}
       </div>
-    </PrimaryLayout>
+    </>
   )
 }
 
@@ -103,4 +99,4 @@ const CardSkeleton = () => {
   ))
 }
 
-export default KOLPage
+export default Kol

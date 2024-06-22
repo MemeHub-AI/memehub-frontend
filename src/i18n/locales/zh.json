@@ -393,5 +393,8 @@
   "airdrop.claim.failed": "领取失败",
   "airdrop.claim.success": "领取成功！",
   "airdrop.claimed": "已领取",
-  "deploy.proof.empty": "找不到证明"
+  "deploy.proof.empty": "找不到证明",
+  "alliance": "联盟",
+  "alliance.kol": "KOL 大使",
+  "alliance.communities": "社区"
 }

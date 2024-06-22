@@ -401,5 +401,8 @@
   "airdrop.claim.success": "Claim successful!",
   "airdrop.claiming": "Claiming...",
   "airdrop.claimed": "Claimed",
-  "deploy.proof.empty": "Cannot find proof"
+  "deploy.proof.empty": "Cannot find proof",
+  "alliance": "Alliance",
+  "alliance.kol": "KOL Ambassador",
+  "alliance.communities": " COMMUNITIES"
 }

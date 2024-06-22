@@ -1,13 +1,10 @@
 import React, { ComponentProps, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/router'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import { useAccount } from 'wagmi'
 
 import type { Nav } from '.'
 
 import { Button } from '../ui/button'
-import { Routes } from '@/routes'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
@@ -23,9 +20,7 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderMobile = (props: Props) => {
   const { navs, onNavClick } = props
   const { t } = useTranslation()
-  const router = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
-  const { isConnected } = useAccount()
 
   return (
     <>
@@ -35,7 +30,6 @@ export const HeaderMobile = (props: Props) => {
             <Button size="icon-sm">
               <HamburgerMenuIcon />
             </Button>
-            {/* <Logo showMeme /> */}
           </div>
         </SheetTrigger>
 

@@ -1,17 +1,14 @@
-import { allianceApi } from '@/api/alliance'
-import { AmbassadorCard } from '@/components/ambassador-card'
-import CustomSuspense from '@/components/custom-suspense'
-import { PrimaryLayout } from '@/components/layouts/primary'
-import {
-  MobileQpportunityMoonshot,
-  OpportunityMoonshot,
-} from '@/components/opportunity-moonshot'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
-const CommunitiePage = () => {
+import { allianceApi } from '@/api/alliance'
+import { AmbassadorCard } from '@/components/ambassador-card'
+import { CustomSuspense } from '@/components/custom-suspense'
+import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
+import { Button } from '@/components/ui/button'
+import { Skeleton } from '@/components/ui/skeleton'
+
+export const Communities = () => {
   const { t } = useTranslation()
 
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
@@ -51,20 +48,18 @@ const CommunitiePage = () => {
       )
     }
   }
+
   return (
-    <PrimaryLayout>
-      <div className="py-5 pr-4 max-sm:pr-0">
-        <h1 className="text-2xl max-sm:flex max-sm:justify-between ">
-          {t('communitie.ambassador')}
-          <MobileQpportunityMoonshot>
-            <Button
-              className="md:hidden -translate-y-1 -translate-x-1"
-              size={'icon'}
-            >
-              🔥
-            </Button>
-          </MobileQpportunityMoonshot>
-        </h1>
+    <>
+      <div className="pb-5 pr-4 max-sm:pr-0">
+        <MobileQpportunityMoonshot>
+          <Button
+            className="md:hidden -translate-y-1 -translate-x-1"
+            size={'icon'}
+          >
+            🔥
+          </Button>
+        </MobileQpportunityMoonshot>
         <div className="my-3">
           {t('community.desc').replace('$1', `${data?.total}` || '-')}
         </div>
@@ -86,7 +81,7 @@ const CommunitiePage = () => {
         </CustomSuspense>
         {handleLoadStatus()}
       </div>
-    </PrimaryLayout>
+    </>
   )
 }
 
@@ -109,4 +104,4 @@ const CardSkeleton = () => {
   ))
 }
 
-export default CommunitiePage
+export default Communities
