@@ -58,7 +58,7 @@
   "page.prev": "Previous",
   "page.next": "Next",
   "comment": "Comment",
-  "comment.new": "Send comment",
+  "comment.new": "Post a comment",
   "comment.empty": "Please enter comment content",
   "account": "Account",
   "type": "Type",
@@ -223,7 +223,7 @@
   "participate.to": "to get",
   "max": "MAX",
   "rate": "Rate",
-  "ca": "Contract Address",
+  "ca": "CA",
   "total.contributors": "Total Contributors",
   "close.presale": "Close of presale",
   "buying": "Buying...",
@@ -404,5 +404,7 @@
   "deploy.proof.empty": "Cannot find proof",
   "alliance": "Alliance",
   "alliance.kol": "KOL Ambassador",
-  "alliance.communities": " COMMUNITIES"
+  "alliance.communities": " COMMUNITIES",
+  "referral.copy": "Copy Referral Link",
+  "referral.desc": "Share this token with your friends using your special referral link and earn $ of their trading fees"
 }

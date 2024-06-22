@@ -21,7 +21,8 @@ import { useTokenContext } from '@/contexts/token'
 import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
 import { useTradeV2 } from '../hooks/v2/use-trade'
 import { useSlippage } from '../hooks/use-slippage'
-import { useAirdrop } from '../hooks/v2/use-airdrop'
+import { useClipboard } from '@/hooks/use-clipboard'
+import { INVITE_REWARD } from '@/constants/invite'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -45,7 +46,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchNativeBalance,
     refetchTokenBalance,
   } = useTradeInfoV2()
-  const { canClaim, claim } = useAirdrop()
+  const { copy } = useClipboard()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
@@ -137,7 +138,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         className={cn('p-3 gap-4 rounded-lg', className)}
       >
         <Tabs value={tab} onValueChange={setTab}>
-          <TabsList className="grid grid-cols-2 h-11 mb-6">
+          <TabsList className="grid grid-cols-2 h-11 mb-3">
             <TabsTrigger
               className="h-full font-bold"
               value={TradeType.Buy}
@@ -161,7 +162,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             disabled={isSubmitting}
           />
 
-          <div className="flex flex-col my-6">
+          <div className="flex flex-col my-3">
             {/* Input */}
             <TradeInput
               value={value}
@@ -179,17 +180,19 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
           {/* Trade button */}
           <Button
-            className="!w-full font-bold"
+            className="!w-full font-bold bg-lime-green-deep"
             onClick={onTrade}
             disabled={isSubmitting || !value || BigNumber(value).lte(0)}
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
-          {canClaim && (
-            <Button className="!w-full font-bold mt-3" onClick={claim}>
-              {t('aridrop.claim')}
-            </Button>
-          )}
+          <Button className="!w-full font-bold mt-3" onClick={() => copy}>
+            {t('referral.copy')}
+          </Button>
+          <p className="text-xs text-zinc-500 mt-3">
+            {t('referral.desc').split('$')[0]}
+            {INVITE_REWARD}%{t('referral.desc').split('$')[1]}
+          </p>
         </Tabs>
       </Card>
     </TradeProvider>

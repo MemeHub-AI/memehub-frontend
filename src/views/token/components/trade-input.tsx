@@ -34,11 +34,6 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const tokenAmount = fmt.decimals(String(value || 0), 3)
   const tokenAddr = tokenInfo?.address as Address
   const balance = fmt.decimals(isBuy ? nativeBalance : tokenBalance)
-  const amountPair = [
-    [nativeAmount, nativeSymbol],
-    ' ≈ ',
-    [tokenAmount, tokenSymbol],
-  ]
 
   const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (BigNumber(target.value).lt(0)) return
@@ -141,7 +136,11 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         }
         className="text-zinc-500 text-xs flex flex-col pt-1 gap-1"
       >
-        <span>{isBuy ? amountPair.flat() : amountPair.reverse().flat()}</span>
+        <span>
+          {isBuy
+            ? `${nativeAmount} ${nativeSymbol} ≈ ${tokenAmount} ${tokenSymbol}`
+            : `${tokenAmount} ${tokenSymbol} ≈ ${nativeAmount} ${nativeSymbol}`}
+        </span>
         <span>
           {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
         </span>

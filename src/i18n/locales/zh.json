@@ -55,7 +55,7 @@
   "page.prev": "上一页",
   "page.next": "下一页",
   "comment": "评论",
-  "comment.new": "发送评论",
+  "comment.new": "发表评论",
   "comment.empty": "请输入评论内容",
   "account": "帐号",
   "type": "类型",
@@ -396,5 +396,7 @@
   "deploy.proof.empty": "找不到证明",
   "alliance": "联盟",
   "alliance.kol": "KOL 大使",
-  "alliance.communities": "社区"
+  "alliance.communities": "社区",
+  "referral.copy": "复制推荐链接",
+  "referral.desc": "使用您的特殊推荐链接与朋友分享此代币，并获得其交易费用的 $ 提成。"
 }

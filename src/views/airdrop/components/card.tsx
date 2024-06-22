@@ -17,11 +17,13 @@ import { useAirdropInfo } from '../hooks/use-airdrop-info'
 interface Props {
   airdrop: AirdropItem | undefined
   className?: string
+  isTradePage?: boolean
 }
 
-export const AirdropCard = ({ airdrop, className }: Props) => {
+export const AirdropCard = ({ airdrop, className, isTradePage }: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
+  const isPast = utilTime.isPast(airdrop?.create ?? 0)
 
   console.log('id', airdrop)
   const { amountLeft, amountClaimed, isClaimed } = useAirdropInfo(
@@ -53,19 +55,23 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
       shadow="none"
       onClick={onPushToken}
     >
-      <div className="flex justify-between">
-        <span className=" font-bold">
-          {airdrop?.name}
-          {airdrop?.ticker ? `(${airdrop.ticker})` : ''}
-        </span>
-        <span className="text-gray-500">
-          {utilTime.isPast(airdrop!.create) ? (
-            t('expired')
-          ) : (
-            <Countdown targetTimestamp={airdrop!.create * 1000}></Countdown>
-          )}
-        </span>
-      </div>
+      {!isTradePage && (
+        <div className="flex justify-between">
+          <span className=" font-bold">
+            {airdrop?.name}
+            {airdrop?.ticker ? `(${airdrop.ticker})` : ''}
+          </span>
+          <span className="text-gray-500">
+            {isPast ? (
+              t('expired')
+            ) : (
+              <Countdown
+                targetTimestamp={(airdrop?.create ?? 0) * 1000}
+              ></Countdown>
+            )}
+          </span>
+        </div>
+      )}
       <div className="mt-3 flex justify-between gap-4">
         <div className="">
           <div className="flex items-center justify-between rounded bg-lime-green">
@@ -103,13 +109,15 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           </div>
           <Button
             className="mt-3 font-bold"
-            disabled={utilTime.isPast(airdrop!.create) || isClaimed}
+            disabled={isPast || isClaimed}
             onClick={onPushToken}
           >
             {isClaimed ? t('airdrop.claimed') : t('claim.airdrop')}
           </Button>
         </div>
-        <Img src={airdrop?.logo} className="w-36 h-36 xl:w-42 xl:h-42" />
+        {!isTradePage && (
+          <Img src={airdrop?.logo} className="w-36 h-36 xl:w-42 xl:h-42" />
+        )}
       </div>
     </Card>
   )
