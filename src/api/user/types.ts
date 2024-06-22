@@ -32,6 +32,12 @@ export interface UserInfoRes {
   mention_count: number
   is_follower: boolean
   reward_amount: number
+  code: string
+  inviter: null | string
+  inviter_count: {
+    one: number
+    two: number
+  }
 }
 
 export interface UserMyInfoFollow {

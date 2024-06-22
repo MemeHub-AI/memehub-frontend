@@ -6,7 +6,6 @@ import { useApprove } from '@/hooks/use-approve'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { addSlippage, subSlippage } from '@/utils/contract'
 
-// TODO: should dynamic referral
 const referral = zeroAddress
 
 export const useInternelTradeV2 = () => {

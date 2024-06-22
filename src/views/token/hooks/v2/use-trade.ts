@@ -6,14 +6,12 @@ import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 
-import type { UserInfoRes } from '@/api/user/types'
 import { useInternelTradeV2 } from './use-internal-trade'
 import { useUniswapV2 } from '../use-uniswap-v2'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useTradeInfoV2 } from './use-trade-info'
 import { TradeSuccessCard } from '../../components/trade-success-card'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { rewardApi } from '@/api/reward'
 import { useStorage } from '@/hooks/use-storage'
 import { useUserStore } from '@/stores/use-user-store'
 
@@ -50,38 +48,13 @@ export const useTradeV2 = () => {
   const tradeHash = isListed ? uniswapHash : internalHash
   const isSubmitting = isListed ? isUniswapTrading : isInternalTrading
 
-  const modifyUser = async () => {
-    if (getRewardCode()) return
-    const { code } = await rewardApi.modifyUser({
-      invitationCode: getRewardCode() as string,
-    })
-    if (code === 200) return
-  }
-
-  const diamondAdd = async () => {
-    const { data } = await rewardApi.diamondAdd({
-      token_address: token,
-      base_amount: amount,
-      chain,
-      operation: operation,
-    })
-    if (data) {
-      setRewardCount(data.reward_amount)
-      const newUserInfo = {
-        ...userInfo,
-        reward_amount: userInfo!.reward_amount + data.reward_amount,
-      } as UserInfoRes
-      setUserInfo(newUserInfo)
-    }
-  }
-
   const { isLoading, isFetched: isTraded } = useWaitForTx({
     hash: tradeHash,
     onLoading: () => toast.loading(t('tx.waiting')),
     onSuccess: () => {
       toast.dismiss()
-      modifyUser()
-      diamondAdd()
+      // modifyUser()
+      // diamondAdd()
       return toast(
         createElement(TradeSuccessCard, {
           amount: lastTradeAmount,

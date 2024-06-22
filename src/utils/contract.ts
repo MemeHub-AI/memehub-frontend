@@ -1,5 +1,5 @@
 import { BigNumber } from 'bignumber.js'
-import { parseEther } from 'viem'
+import { Hash, parseEther, Address } from 'viem'
 
 import { TRADE_SERVICE_FEE } from '@/constants/contract'
 
@@ -8,6 +8,14 @@ export const isUserReject = (err: string | unknown) => {
   const e = String(err).toLowerCase()
 
   return e.includes('user rejected') || e.includes('user denied')
+}
+
+// Make a config for contract.
+export const makeConfig = <T = unknown>(abi: T, address: Address) => {
+  return {
+    abi,
+    address,
+  } as const
 }
 
 /**
@@ -64,4 +72,9 @@ export const subSlippage = (value: string, slippage: string) => {
     .toFixed(0)
 
   return BigInt(total)
+}
+
+export const parseBytes64 = (input: string | string[]) => {
+  const arr = Array.isArray(input) ? input : [input]
+  return arr.map((s) => '0x' + s) as Hash[]
 }

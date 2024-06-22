@@ -3,11 +3,23 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar'
 
 import { cn } from '@/lib/utils'
 import { ShadowVariantsProps, shadowVariants } from '@/styles/variants'
+import { defaultImg } from '@/config/link'
+import { cva, VariantProps } from 'class-variance-authority'
+
+const avatarVariants = cva('', {
+  variants: {
+    variant: {
+      default: '',
+      border: 'border-2 border-black',
+    },
+  },
+})
 
 interface Props
   extends React.ComponentPropsWithoutRef<typeof AvatarPrimitive.Root>,
-    ShadowVariantsProps {
-  src: string
+    ShadowVariantsProps,
+    VariantProps<typeof avatarVariants> {
+  src?: string
   alt?: string
   size?: number
   fallback?: React.ReactNode
@@ -26,6 +38,7 @@ const Avatar = React.forwardRef<
     size,
     fallbackClass,
     shadow = 'none',
+    variant,
     ...restProps
   } = props
 
@@ -35,12 +48,13 @@ const Avatar = React.forwardRef<
       className={cn(
         'relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full',
         className,
-        shadowVariants({ shadow })
+        shadowVariants({ shadow }),
+        avatarVariants({ variant })
       )}
       style={{ width: size, height: size }}
       {...restProps}
     >
-      <AvatarImage src={src} alt={alt} />
+      <AvatarImage src={src || defaultImg} alt={alt} />
       <AvatarFallback className={fallbackClass} children={fallback} />
     </AvatarPrimitive.Root>
   )

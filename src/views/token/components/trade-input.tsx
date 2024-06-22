@@ -14,6 +14,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
 import { utilLang } from '@/utils/lang'
+import { Img } from '@/components/img'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
   onChange?: (value: string) => void
@@ -26,6 +28,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
   const { tokenDetails, getAmountForBuy, getAmountForSell } = useTradeInfoV2()
+  const { chainInfo } = useChainInfo()
 
   const tokenSymbol = tokenInfo?.ticker || ''
   const tokenAmount = fmt.decimals(String(value || 0), 3)
@@ -110,13 +113,14 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
                 disabled && 'opacity-50'
               )}
             >
-              <span className="mr-2 text-zinc-600">{tokenSymbol}</span>
-              <img
-                loading="lazy"
+              <span className="mr-2 text-zinc-600">
+                {isBuy ? nativeSymbol : tokenSymbol}
+              </span>
+              <Img
+                src={isBuy ? chainInfo?.logo : tokenInfo?.image}
                 width={20}
                 height={20}
                 className="object-contain rounded"
-                src={tokenInfo?.image}
               />
             </div>
           )
@@ -133,9 +137,9 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         className="text-zinc-500 text-xs flex flex-col pt-1 gap-1"
       >
         <span>
-          {[tokenAmount, tokenSymbol, '≈', nativeAmount, nativeSymbol].join(
-            ' '
-          )}
+          {isBuy
+            ? `${nativeAmount} ${nativeSymbol} ≈ ${tokenAmount} ${tokenSymbol}`
+            : `${tokenAmount} ${tokenSymbol} ≈ ${nativeAmount} ${nativeSymbol}`}
         </span>
         <span>
           {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}

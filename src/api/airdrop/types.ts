@@ -18,6 +18,11 @@ export interface AirdropProofReq {
   token_address: string
 }
 
+export interface AirdropProofRes {
+  kol_proof: Hash[]
+  community_proof: Hash[]
+}
+
 export interface IdentityList {
   kol?: Kol
   community?: Community[]

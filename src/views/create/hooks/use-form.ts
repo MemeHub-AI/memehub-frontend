@@ -1,4 +1,3 @@
-import { useDeployV1 } from './use-deploy-v1'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -8,9 +7,11 @@ import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { toast } from 'sonner'
 
+import { useDeploy } from './use-deploy'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { CoinType, Marketing } from '@/api/token/types'
+import { ContractVersion } from '@/enum/contract'
 
 export const formFields = {
   fullname: 'fullname',
@@ -27,7 +28,7 @@ export const formFields = {
 } as const
 
 export const useCreateTokenForm = (
-  useDeployResult: ReturnType<typeof useDeployV1>
+  useDeployResult: ReturnType<typeof useDeploy>
 ) => {
   const { t } = useTranslation()
   const { isConnected, chainId } = useAccount()
@@ -102,6 +103,7 @@ export const useCreateTokenForm = (
       website: values.website as string,
       coin_type: values.coinType as number,
       marketing: values.marketing as Marketing[],
+      version: ContractVersion.V3, // Mark version for create token.
     })
   }
 

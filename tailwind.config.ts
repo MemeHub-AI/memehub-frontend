@@ -61,6 +61,7 @@ const config = {
       },
       colors: {
         'lime-green': '#CBFF08',
+        'lime-green-deep': '#e6fd77',
         'blue-deep': '#2c30ee',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

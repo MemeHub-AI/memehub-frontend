@@ -9,7 +9,6 @@ import { HeaderDesktop } from './desktop'
 import { Routes } from '@/routes'
 
 export interface Nav {
-  id: string
   title: string
   path: string
 }
@@ -20,11 +19,12 @@ export const Header = () => {
   const { query, push } = useRouter()
 
   const navs: Nav[] = [
-    { id: 'home', title: t('home'), path: Routes.Main },
-    { id: 'create', title: t('create'), path: Routes.Create },
-    { id: 'airdrop', title: t('airdrop'), path: Routes.Airdrop },
-    { id: 'KOL', title: t('KOL'), path: Routes.KOL },
-    { id: 'COMMUNITIES', title: t('community'), path: Routes.Community },
+    { title: t('home'), path: Routes.Main },
+    { title: t('create'), path: Routes.Create },
+    { title: t('airdrop'), path: Routes.Airdrop },
+    { title: t('alliance'), path: Routes.Alliance },
+    // { title: t('KOL'), path: Routes.KOL },
+    // { title: t('community'), path: Routes.Community },
   ]
 
   const onNavClick = (n: Nav) => {

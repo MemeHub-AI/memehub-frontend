@@ -9,16 +9,16 @@ import { Dialog } from '@/components/ui/dialog'
 import { useTokenContext } from '@/contexts/token'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { Button } from '@/components/ui/button'
-import { BondingCurveProgress } from './bonding-curve-progress'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Card } from '@/components/ui/card'
+import { Avatar } from '@/components/ui/avatar'
+import { fmt } from '@/utils/fmt'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [details, setDetails] = useState<ReactNode>(null)
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
   const { isCopied, copy } = useClipboard()
-  const hasLink =
-    tokenInfo?.twitter_url || tokenInfo?.telegram_url || tokenInfo?.website
 
   if (isLoadingTokenInfo) {
     return (
@@ -46,7 +46,14 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
 
   return (
     <>
-      <div className={cn('flex gap-3 items-start mt-4', className)}>
+      <Card
+        shadow="none"
+        padding="md"
+        className={cn(
+          'flex gap-3 items-start mt-20 bg-lime-green-deep cursor-default',
+          className
+        )}
+      >
         <Dialog
           open={!!details}
           onOpenChange={() => setDetails(null)}
@@ -55,26 +62,74 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           {details}
         </Dialog>
 
-        <img
-          src={tokenInfo?.image}
-          alt="logo"
-          className="w-36 h-36 object-cover rounded cursor-pointer"
-          onClick={() => {
-            setDetails(
-              <img
-                src={tokenInfo?.image}
-                alt="logo"
-                className="w-full object-contain"
-              />
-            )
-          }}
-        />
-        <div className="break-all line-clamp-[9]">
-          <div className="font-bold leading-none">
+        <div className="relative mt-">
+          <Avatar
+            src={tokenInfo?.image}
+            variant="border"
+            alt="logo"
+            className="w-28 h-28 cursor-pointer absolute -top-1/2 left-1/2 -translate-x-1/2"
+            onClick={() => {
+              setDetails(
+                <img
+                  src={tokenInfo?.image}
+                  alt="logo"
+                  className="w-full object-contain"
+                />
+              )
+            }}
+          />
+          <div className="font-bold leading-none text-center pt-14">
             {tokenInfo?.name}({tokenInfo?.ticker})
           </div>
+          {/* Links */}
+          <div className="flex justify-center items-center my-1">
+            {tokenInfo?.twitter_url && (
+              <Button
+                variant="ghost"
+                size="icon"
+                shadow="none"
+                onClick={() => open(tokenInfo.twitter_url)}
+                title="twitter"
+              >
+                <Twitter size={20} />
+              </Button>
+            )}
+            {tokenInfo?.telegram_url && (
+              <Button
+                variant="ghost"
+                size="icon"
+                shadow="none"
+                onClick={() => open(tokenInfo?.telegram_url)}
+                title="telegram"
+              >
+                <FaTelegramPlane size={20} />
+              </Button>
+            )}
+            {tokenInfo?.website && (
+              <Button
+                variant="ghost"
+                size="icon"
+                shadow="none"
+                onClick={() => open(tokenInfo?.website)}
+                title="website"
+              >
+                <RiGlobalLine size={20} />
+              </Button>
+            )}
+          </div>
+          {/* Contract address */}
           <div
-            className="text-xs text-gray-400 mt-1 break-all cursor-pointer"
+            className="text-sm flex justify-center items-center gap-2 cursor-pointer font-bold"
+            onClick={() => copy(tokenInfo?.address || '')}
+          >
+            <span>{t('ca')}:</span>
+            <span className="truncate">
+              {fmt.addr(tokenInfo?.address || '', { len: 14 })}
+            </span>
+            {isCopied ? <Check size={16} /> : <Copy size={16} />}
+          </div>
+          <div
+            className="text-sm mt-1 break-all cursor-pointer"
             onClick={() => {
               setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)
             }}
@@ -82,60 +137,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             {tokenInfo?.desc}
           </div>
         </div>
-      </div>
-
-      <BondingCurveProgress />
-
-      {/* Contract address */}
-      <div className="text-sm text-zinc-500 flex flex-col items-start mt-2">
-        <h3 className="font-bold text-base text-black">{t('ca')}:</h3>
-        <div
-          className="w-full flex items-center cursor-pointer"
-          onClick={() => copy(tokenInfo?.address || '')}
-        >
-          <span className="truncate">{tokenInfo?.address || ''}</span>
-          {isCopied ? <Check size={16} /> : <Copy size={16} />}
-        </div>
-      </div>
-
-      {/* Twitter/telegram/website */}
-      {hasLink && (
-        <div className="flex justify-between items-center mt-3">
-          {tokenInfo?.twitter_url && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              onClick={() => open(tokenInfo.twitter_url)}
-              title="twitter"
-            >
-              <Twitter />
-            </Button>
-          )}
-          {tokenInfo?.telegram_url && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              onClick={() => open(tokenInfo?.telegram_url)}
-              title="telegram"
-            >
-              <FaTelegramPlane size={24} />
-            </Button>
-          )}
-          {tokenInfo?.website && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              onClick={() => open(tokenInfo?.website)}
-              title="website"
-            >
-              <RiGlobalLine size={24} />
-            </Button>
-          )}
-        </div>
-      )}
+      </Card>
     </>
   )
 }

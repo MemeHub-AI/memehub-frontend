@@ -10,6 +10,7 @@ import { useTokenInfo } from './hooks/use-token-info'
 import { Chart } from '@/components/chart'
 import { TokenInfoHeader } from './components/token-info-header'
 import { cn } from '@/lib/utils'
+import { TradeAirdrop } from './components/trade-airdrop'
 
 export const TokenPage = () => {
   const { isMobile } = useResponsive()
@@ -36,6 +37,7 @@ export const TokenPage = () => {
           {isMobile && <TradeTab />}
           <TokenInfoHeader />
           <Chart />
+          {/* <TradeAirdrop /> */}
           <CommentTradeTab />
         </div>
 

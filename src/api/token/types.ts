@@ -1,3 +1,4 @@
+import { ContractVersion } from '@/enum/contract'
 import type { UserCoinsCreated, UserInfoRes } from '../user/types'
 
 export interface TokenListItem extends UserCoinsCreated {
@@ -19,6 +20,7 @@ export interface TokenNewReq {
   image: string
   hash: string
   chain: string
+  version: ContractVersion
   twitter_url?: string
   telegram_url?: string
   website?: string

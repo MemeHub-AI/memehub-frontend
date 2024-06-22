@@ -53,7 +53,7 @@ export const useCreateToken = () => {
 
   const parsePercent = (p: number) => BigNumber(p).multipliedBy(100).toNumber()
 
-  const updateParams = (
+  const updateAirdropParams = (
     data: AirdropMerkleRootRes,
     params: typeof bondDistributorParams,
     marketing: Marketing[]
@@ -83,7 +83,7 @@ export const useCreateToken = () => {
     return p
   }
 
-  const genAirdropParams = async (
+  const getAirdropParams = async (
     chain: string,
     marketing: Marketing[] | undefined
   ) => {
@@ -94,7 +94,9 @@ export const useCreateToken = () => {
 
     try {
       const { data } = await getMerkleRoot({ chain, type_list })
-      if (data) return updateParams(data, bondDistributorParams, marketing)
+      if (data) {
+        return updateAirdropParams(data, bondDistributorParams, marketing)
+      }
 
       return bondDistributorParams
     } catch (error) {
@@ -115,6 +117,6 @@ export const useCreateToken = () => {
     create,
     update,
     getMerkleRoot,
-    genAirdropParams,
+    getAirdropParams,
   }
 }

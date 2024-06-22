@@ -5,9 +5,11 @@ export enum Routes {
 
   Airdrop = '/airdrop',
 
-  KOL = '/kol',
+  Alliance = 'alliance',
 
-  Community = '/communities',
+  // KOL = '/kol',
+
+  // Community = '/communities',
 
   Account = '/account',
 

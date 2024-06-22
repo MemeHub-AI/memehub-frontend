@@ -3,11 +3,12 @@ import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 
 import { useTokenContext } from '@/contexts/token'
-import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
 import { useHoldersStore } from '@/stores/use-holders-store'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
+import { BondingCurveProgress } from './bonding-curve-progress'
+import { Avatar } from '@/components/ui/avatar'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const router = useRouter()
@@ -27,12 +28,17 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-4 px-1 text-sm mb-1',
+        'flex items-center justify-between gap-1 px-1 text-sm mb-1',
         className
       )}
     >
-      <div className="flex items-center gap-3">
-        <span className="font-bold">
+      <Avatar
+        src={tokenInfo?.image ?? ''}
+        size={26}
+        className="border-2 border-black"
+      />
+      <div className="flex items-center gap-3 ">
+        <span className="font-bold text-blue-600">
           {tokenInfo?.name}({tokenInfo?.ticker})
         </span>
         <span>
@@ -40,7 +46,11 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
           {fmt.decimals(marketCap)}
         </span>
       </div>
-      <div className="flex items-center gap-1">
+
+      <BondingCurveProgress className="ml-2" showDesc={false} />
+
+      {/* Creator */}
+      {/* <div className="flex items-center gap-1">
         <div className="mr-1 font-bold">{t('creator')}:</div>
         <img
           src={tokenInfo?.creator.logo || ''}
@@ -58,7 +68,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         >
           {tokenInfo?.creator.name}
         </span>
-      </div>
+      </div> */}
     </div>
   )
 }

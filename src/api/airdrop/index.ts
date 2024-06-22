@@ -3,6 +3,7 @@ import {
   AirdropMerkleRootReq,
   AirdropMerkleRootRes,
   AirdropProofReq,
+  AirdropProofRes,
   IdentityList,
   AirdropItem,
 } from './types'
@@ -11,7 +12,7 @@ import { api } from '..'
 import { qs } from '@/hooks/use-fetch'
 
 export const airdropApi = {
-  getList(query: PaginationReq) {
+  getList: (query: PaginationReq) => {
     return api.GET<ApiResponse<PaginationRes<AirdropItem>>>(
       '/api/v1/airdrop/airdrop_list' + qs.stringify(query)
     )
@@ -22,9 +23,11 @@ export const airdropApi = {
     )
   },
   getProof: (req: AirdropProofReq) => {
-    return api.GET('/api/v1/airdrop/get_proof/' + qs.stringify(req))
+    return api.GET<ApiResponse<AirdropProofRes>>(
+      '/api/v1/airdrop/get_proof/' + qs.stringify(req)
+    )
   },
-  getIdentityList() {
+  getIdentityList: () => {
     return api.GET<ApiResponse<IdentityList>>('/api/v1/airdrop/identity')
   },
 }
