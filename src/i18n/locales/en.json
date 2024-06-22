@@ -406,5 +406,6 @@
   "alliance.kol": "KOL Ambassador",
   "alliance.communities": " COMMUNITIES",
   "referral.copy": "Copy Referral Link",
-  "referral.desc": "Share this token with your friends using your special referral link and earn $ of their trading fees"
+  "referral.desc": "Share this token with your friends using your special referral link and earn $ of their trading fees",
+  "bonding-curve.desc": "When the market cap reaches {} all the liquidity from the pool will be deposited into dex and burned. Progression increases as the price goes up."
 }

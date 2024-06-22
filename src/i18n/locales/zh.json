@@ -398,5 +398,6 @@
   "alliance.kol": "KOL 大使",
   "alliance.communities": "社区",
   "referral.copy": "复制推荐链接",
-  "referral.desc": "使用您的特殊推荐链接与朋友分享此代币，并获得其交易费用的 $ 提成。"
+  "referral.desc": "使用您的特殊推荐链接与朋友分享此代币，并获得其交易费用的 $ 提成。",
+  "bonding-curve.desc": "当市值达到 {} 美元时，池子中的所有流动性将添加到 dex 并销毁。\n随着价格的上涨，进度也会增加。"
 }

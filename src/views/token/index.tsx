@@ -37,7 +37,7 @@ export const TokenPage = () => {
           {isMobile && <TradeTab />}
           <TokenInfoHeader />
           <Chart />
-          {/* <TradeAirdrop /> */}
+          <TradeAirdrop />
           <CommentTradeTab />
         </div>
 
