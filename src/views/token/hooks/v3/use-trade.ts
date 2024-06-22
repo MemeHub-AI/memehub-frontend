@@ -1,26 +1,25 @@
-import { useState } from 'react'
+import { DexTradeProps } from '../use-trade'
 
-export const useTradeV3 = () => {
-  const [isListed, setIsListed] = useState(false)
+export const useTradeV3 = (dexProps: DexTradeProps) => {
+  const { dexHash, dexBuy, dexSell, dexReset } = dexProps
 
-  const tradeHash = ''
-  const isSubmitting = false
-  const isTrading = false
-  const isTraded = false
+  const tradeHashV3 = dexHash
 
-  const buy = () => {}
+  const isSubmittingV3 = false
 
-  const sell = () => {}
+  const buyV3 = () => {}
 
-  const resetTrade = () => {}
+  const sellV3 = () => {}
+
+  const resetTradeV3 = () => {
+    dexReset()
+  }
 
   return {
-    tradeHash,
-    isSubmitting,
-    isTrading,
-    isTraded,
-    buy,
-    sell,
-    resetTrade,
+    tradeHashV3,
+    isSubmittingV3,
+    buyV3,
+    sellV3,
+    resetTradeV3,
   }
 }

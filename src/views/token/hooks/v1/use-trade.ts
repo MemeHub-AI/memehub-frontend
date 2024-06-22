@@ -3,15 +3,18 @@ import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
+import { useWriteContract } from 'wagmi'
+import { isAddress, parseEther, type Address } from 'viem'
+import { isEmpty } from 'lodash'
 
-import type { Address } from 'viem'
-
-import { useInternalTradeV1 } from './use-internal-trade'
-import { useUniswapV2 } from '../use-uniswap-v2'
+import type { DexTradeProps } from '../use-trade'
 import { useTradeInfoV1 } from './use-trade-info'
-import { useWaitForTx } from '@/hooks/use-wait-for-tx'
+import { CONTRACT_ERR } from '@/errors/contract'
+import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
+import { addServiceFee } from '@/utils/contract'
 
-export const useTradeV1 = () => {
+export const useTradeV1 = (dexProps: DexTradeProps) => {
+  const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
   const { t } = useTranslation()
   const [isInternalTrade, setIsInternalTrade] = useState(true)
   const { query } = useRouter()
@@ -19,87 +22,93 @@ export const useTradeV1 = () => {
 
   const { checkForOverflow } = useTradeInfoV1()
   const {
-    internalHash,
-    isInternalTrading,
-    internalBuy,
-    internalSell,
-    resetInternalTrade,
-  } = useInternalTradeV1()
-  const {
-    uniswapHash,
-    isUniswapTrading,
-    uniswapBuy,
-    uniswapSell,
-    resetUniswapTrade,
-  } = useUniswapV2()
-  const hash = isInternalTrade ? internalHash : uniswapHash
-  const isSubmitting = isInternalTrading || isUniswapTrading
-
-  // Waiting results for contract interaction.
-  const { isLoading, isFetched: isTraded } = useWaitForTx({
-    hash,
-    onLoading: () => toast.loading(t('tx.waiting')),
-    onSuccess: () => toast.success(t('trade.success')),
-    onError: () => toast.error(t('trade.failed')),
-    onFillay: () => {
-      resetTrade()
-      toast.dismiss()
+    data: internalHash,
+    isPending: isInternalTrading,
+    writeContract,
+    reset: resetInternalTrade,
+  } = useWriteContract({
+    mutation: {
+      onMutate: () => toast.loading(t('trade.loading')),
+      onSettled: (_, __, ___, id) => toast.dismiss(id),
+      onError: (e) => CONTRACT_ERR.exec(e),
     },
   })
-  const isTrading = isInternalTrading || isUniswapTrading || isLoading
+  const hash = isInternalTrade ? internalHash : dexHash
+  const isSubmittingV1 = isInternalTrading || isDexTrading
 
-  // Check trade type. internal trade or dex trade.
-  const checkForTrade = async (amount: string) => {
+  const checkForTrade = (amount: string, token: Address) => {
+    if (isEmpty(amount)) {
+      toast.error(t('trade.amount.invalid'))
+      return false
+    }
+    if (!isAddress(token)) {
+      toast.error(t('trade.token.invalid'))
+      return false
+    }
+
+    return true
+  }
+
+  const checkForInternal = async (amount: string) => {
     const { currentMax, isOverflow } = await checkForOverflow(amount)
     const isInternal = !BigNumber(currentMax).eq(0)
 
     return {
       isInternal,
-      isOverflow,
       currentMax,
+      isOverflow,
     }
   }
 
-  const buy = async (amount: string) => {
-    const { currentMax, isInternal, isOverflow } = await checkForTrade(amount)
+  const buyV1 = async (amount: string) => {
+    if (!checkForTrade(amount, token)) return
 
+    const { isInternal, isOverflow, currentMax } = await checkForInternal(
+      amount
+    )
     setIsInternalTrade(isInternal)
 
     // Internal buy but overflow current max value.
     if (isInternal && isOverflow) return currentMax
+    if (!isInternal) return dexBuy(amount, token)
 
-    // Internal buy.
-    if (isInternal) return internalBuy(amount, token)
-
-    // DEX buy.
-    uniswapBuy(amount, token)
+    console.log('v1 internal buy', amount, token)
+    writeContract({
+      abi: v1ContinousTokenAbi,
+      address: token,
+      functionName: 'mint',
+      args: [parseEther(amount)],
+      value: addServiceFee(amount),
+    })
   }
 
-  const sell = async (amount: string) => {
-    const { isInternal } = await checkForTrade(amount)
+  const sellV1 = async (amount: string) => {
+    if (!checkForTrade(amount, token)) return
 
+    const { isInternal } = await checkForInternal(amount)
     setIsInternalTrade(isInternal)
 
-    // Internal sell.
-    if (isInternal) return internalSell(amount, token)
+    if (!isInternal) return dexSell(amount, token)
 
-    // DEX sell.
-    uniswapSell(amount, token)
+    console.log('v1 internal sell', amount, token)
+    writeContract({
+      abi: v1ContinousTokenAbi,
+      address: token,
+      functionName: 'burn',
+      args: [parseEther(amount)],
+    })
   }
 
-  const resetTrade = () => {
+  const resetTradeV1 = () => {
     resetInternalTrade()
-    resetUniswapTrade()
+    dexReset()
   }
 
   return {
-    tradeHash: hash,
-    isSubmitting,
-    isTrading,
-    isTraded,
-    checkForTrade,
-    buy,
-    sell,
-    resetTrade,
+    tradeHashV1: hash,
+    isSubmittingV1,
+    buyV1,
+    sellV1,
+    resetTradeV1,
   }
 }

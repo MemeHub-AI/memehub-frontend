@@ -23,6 +23,8 @@ import { useTradeV2 } from '../hooks/v2/use-trade'
 import { useSlippage } from '../hooks/use-slippage'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { INVITE_REWARD } from '@/constants/invite'
+import { useTrade } from '../hooks/use-trade'
+import { useTradeInfo } from '../hooks/use-trade-info'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -33,20 +35,27 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     [tab]
   )
   const { query } = useRouter()
-
-  const { slippage, setSlippage } = useSlippage()
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
+
+  const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
-  const { isSubmitting, isTraded, buy, sell } = useTradeV2()
+  const { copy } = useClipboard()
+  const { isSubmitting, isTraded, buy, sell } = useTrade()
   const {
     nativeBalance,
     tokenBalance,
     refetchNativeBalance,
     refetchTokenBalance,
-  } = useTradeInfoV2()
-  const { copy } = useClipboard()
+  } = useTradeInfo()
+  // const { isSubmitting, isTraded, buy, sell } = useTradeV2()
+  // const {
+  //   nativeBalance,
+  //   tokenBalance,
+  //   refetchNativeBalance,
+  //   refetchTokenBalance,
+  // } = useTradeInfoV2()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''

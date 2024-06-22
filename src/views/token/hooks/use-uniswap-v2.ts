@@ -20,7 +20,7 @@ export const useUniswapV2 = () => {
     data: hash,
     isPending: isUniswapTrading,
     writeContract,
-    reset: resetUniswapTrade,
+    reset: dexReset,
   } = useWriteContract({
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
@@ -48,7 +48,7 @@ export const useUniswapV2 = () => {
     return true
   }
 
-  const uniswapBuy = (amount: string, token: Address) => {
+  const dexBuy = (amount: string, token: Address) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
@@ -61,7 +61,7 @@ export const useUniswapV2 = () => {
     })
   }
 
-  const uniswapSell = async (amount: string, token: Address) => {
+  const dexSell = async (amount: string, token: Address) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
@@ -83,10 +83,10 @@ export const useUniswapV2 = () => {
   }
 
   return {
-    uniswapHash: hash,
-    isUniswapTrading: isUniswapTrading || isApproving,
-    uniswapBuy,
-    uniswapSell,
-    resetUniswapTrade,
+    dexHash: hash,
+    isDexTrading: isUniswapTrading || isApproving,
+    dexBuy,
+    dexSell,
+    dexReset,
   }
 }

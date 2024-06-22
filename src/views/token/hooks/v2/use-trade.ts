@@ -1,73 +1,43 @@
-import { createElement, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import { Address, formatEther, isAddress } from 'viem'
+import { useState } from 'react'
+import { Address, formatEther, isAddress, parseEther, zeroAddress } from 'viem'
 import { useRouter } from 'next/router'
-import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
+import { useAccount, useWriteContract } from 'wagmi'
 
-import { useInternelTradeV2 } from './use-internal-trade'
-import { useUniswapV2 } from '../use-uniswap-v2'
-import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useTradeInfoV2 } from './use-trade-info'
-import { TradeSuccessCard } from '../../components/trade-success-card'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { useStorage } from '@/hooks/use-storage'
-import { useUserStore } from '@/stores/use-user-store'
+import { DexTradeProps } from '../use-trade'
+import { addSlippage, subSlippage } from '@/utils/contract'
+import { getZapV1Config } from '@/contract/v2/config/zapv1'
+import { useApprove } from '@/hooks/use-approve'
+
+const referral = zeroAddress
 
 // Used for trade success tips.
 let lastTradeAmount = ''
 
-export const useTradeV2 = () => {
-  const { t } = useTranslation()
+export const useTradeV2 = (dexProps: DexTradeProps) => {
+  const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
   const [isListed, setIsListed] = useState(false)
   const { query } = useRouter()
   const token = (query.address ?? '') as Address
-  const chain = query.chain as string
-  const [operation, setOperation] = useState<'buy' | 'sell'>('buy')
-  const [amount, setAmount] = useState<string>('')
-  const [rewardCount, setRewardCount] = useState<number>()
-  const { getRewardCode } = useStorage()
-  const { userInfo, setUserInfo } = useUserStore()
-  const { tokenDetails, checkForToken, getAmountForBuy, getAmountForSell } =
-    useTradeInfoV2()
-  const {
-    internalHash,
-    isInternalTrading,
-    internalBuy,
-    internalSell,
-    resetInternalTrade,
-  } = useInternelTradeV2()
-  const {
-    uniswapHash,
-    isUniswapTrading,
-    uniswapBuy,
-    uniswapSell,
-    resetUniswapTrade,
-  } = useUniswapV2()
-  const tradeHash = isListed ? uniswapHash : internalHash
-  const isSubmitting = isListed ? isUniswapTrading : isInternalTrading
+  const { address, chainId } = useAccount()
+  const { approvalForAll } = useApprove()
 
-  const { isLoading, isFetched: isTraded } = useWaitForTx({
-    hash: tradeHash,
-    onLoading: () => toast.loading(t('tx.waiting')),
-    onSuccess: () => {
-      toast.dismiss()
-      // modifyUser()
-      // diamondAdd()
-      return toast(
-        createElement(TradeSuccessCard, {
-          amount: lastTradeAmount,
-          symbol: tokenDetails?.info.symbol ?? '',
-          diamond: rewardCount?.toString() ?? '',
-        }),
-        { position: 'bottom-left', className: 'w-100' }
-      )
-    },
-    onError: CONTRACT_ERR.tradeFailed,
-    onFillay: () => resetTrade(),
+  const config = getZapV1Config(chainId ?? 0)
+  const { checkForToken, getAmountForBuy, getAmountForSell } = useTradeInfoV2()
+  const {
+    data: internalHash,
+    isPending: isInternalTrading,
+    writeContract,
+    reset: resetInternalTrade,
+  } = useWriteContract({
+    mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
   })
-  const isTrading = isSubmitting || isLoading
+
+  const tradeHashV2 = isListed ? dexHash : internalHash
+  const isSubmittingV2 = isListed ? isDexTrading : isInternalTrading
 
   const checkForTrade = (amount: string) => {
     if (isEmpty(amount)) {
@@ -78,19 +48,18 @@ export const useTradeV2 = () => {
       CONTRACT_ERR.tokenInvalid()
       return false
     }
+    if (!address) return false
+    if (!config) return false
 
     return true
   }
 
-  const buy = async (amount: string, slippage: string) => {
-    setAmount(amount)
-    setOperation('buy')
+  const buyV2 = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
     lastTradeAmount = amount
 
     const [weiNativeAmount] = await getAmountForBuy(token, amount)
     const nativeAmount = BigNumber(formatEther(weiNativeAmount))
-
     if (nativeAmount.lte(0)) {
       CONTRACT_ERR.balanceInvalid()
       return
@@ -100,47 +69,71 @@ export const useTradeV2 = () => {
       token,
       amount
     )
-
     setIsListed(isListed)
 
     if (isOverflow && !isListed) return currentMax
-    if (isListed) return uniswapBuy(amount, token)
+    if (isListed) return dexBuy(amount, token)
 
-    internalBuy(amount, nativeAmount.toFixed(), token, slippage)
+    // We can safely use config here,
+    // because `checkForTrade` already checked.
+    writeContract({
+      ...config!,
+      functionName: 'mintWithEth',
+      args: [token, parseEther(amount), address!, referral],
+      // You don't need `addServiceFee`,
+      // because `value` is includes service fee.
+      value: addSlippage(nativeAmount.toFixed(), slippage),
+    })
   }
 
-  const sell = async (amount: string, slippage: string) => {
-    setAmount(amount)
-    setOperation('sell')
+  const sellV2 = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
 
     const [weiNativeAmount] = await getAmountForSell(token, amount)
     const nativeAmount = BigNumber(formatEther(weiNativeAmount))
-
     if (nativeAmount.lte(0)) {
       CONTRACT_ERR.balanceInvalid()
       return
     }
 
+    // We can safely use config here,
+    // because `checkForTrade` already checked.
+    const isApproved = await approvalForAll(token, config!.address, amount)
+    if (!isApproved) return
+
     const { isListed } = await checkForToken(token, amount)
     setIsListed(isListed)
 
-    if (isListed) return uniswapSell(amount, token)
-    internalSell(amount, nativeAmount.toFixed(), token, slippage)
+    if (isListed) return dexSell(amount, token)
+
+    console.log('v2 internal sell', {
+      amount,
+      slippage,
+      result: formatEther(subSlippage(amount, slippage)),
+    })
+    writeContract({
+      ...config!,
+      functionName: 'burnToEth',
+      args: [
+        token,
+        parseEther(amount),
+        addSlippage(amount, slippage),
+        address!,
+        referral,
+      ],
+    })
   }
 
-  const resetTrade = () => {
+  const resetTradeV2 = () => {
     resetInternalTrade()
-    resetUniswapTrade()
+    dexReset()
   }
 
   return {
-    tradeHash,
-    isSubmitting,
-    isTrading,
-    isTraded,
-    buy,
-    sell,
-    resetTrade,
+    tradeHashV2,
+    isSubmittingV2,
+    buyV2,
+    sellV2,
+    resetTradeV2,
   }
 }
