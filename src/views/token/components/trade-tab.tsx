@@ -18,8 +18,6 @@ import { TradeItems } from './trade-items'
 import { TradeInput } from './trade-input'
 import { TradeType } from '@/api/websocket/types'
 import { useTokenContext } from '@/contexts/token'
-import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
-import { useTradeV2 } from '../hooks/v2/use-trade'
 import { useSlippage } from '../hooks/use-slippage'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { INVITE_REWARD } from '@/constants/invite'
@@ -42,7 +40,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
   const { copy } = useClipboard()
-  const { isSubmitting, isTraded, buy, sell } = useTrade()
+  const { isSubmitting, isTraded, buying, selling } = useTrade()
   const {
     nativeBalance,
     tokenBalance,
@@ -67,24 +65,18 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     //   setValue(nativeBalance)
     //   return
     // }
-    const max = await buy(value, slippage)
 
-    // Internal buy & overflow current max value.
-    if (max) {
-      setValue(max)
-      toast.error(t('trade.limit').replace('{}', max).replace('{}', t('buy')))
-      return
-    }
+    buying(value, slippage, setValue)
   }
 
   const onSell = async () => {
     // Overflow current token balance.
-    if (BigNumber(value).gt(tokenBalance)) {
-      toast.error(t('balance.illegality'))
-      return
-    }
+    // if (BigNumber(value).gt(tokenBalance)) {
+    //   toast.error(t('balance.illegality'))
+    //   return
+    // }
 
-    sell(value, slippage)
+    selling(value, slippage)
   }
 
   const checkForChain = async () => {

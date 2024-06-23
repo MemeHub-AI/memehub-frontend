@@ -7,7 +7,7 @@ import { useWriteContract } from 'wagmi'
 import { isAddress, parseEther, type Address } from 'viem'
 import { isEmpty } from 'lodash'
 
-import type { DexTradeProps } from '../use-trade'
+import type { DexTradeProps } from '../trade-dex/use-dex-trade'
 import { useTradeInfoV1 } from './use-trade-info'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { v1ContinousTokenAbi } from '@/contract/v1/abi/continous-token'
@@ -25,7 +25,7 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
     data: internalHash,
     isPending: isInternalTrading,
     writeContract,
-    reset: resetInternalTrade,
+    reset: internalTradeReset,
   } = useWriteContract({
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
@@ -34,7 +34,7 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
     },
   })
   const hash = isInternalTrade ? internalHash : dexHash
-  const isSubmittingV1 = isInternalTrading || isDexTrading
+  const isSubmitting = isInternalTrading || isDexTrading
 
   const checkForTrade = (amount: string, token: Address) => {
     if (isEmpty(amount)) {
@@ -60,7 +60,11 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
     }
   }
 
-  const buyV1 = async (amount: string) => {
+  const buy = async (
+    amount: string,
+    slippage: string,
+    setValue?: (value: string) => void
+  ) => {
     if (!checkForTrade(amount, token)) return
 
     const { isInternal, isOverflow, currentMax } = await checkForInternal(
@@ -69,7 +73,13 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
     setIsInternalTrade(isInternal)
 
     // Internal buy but overflow current max value.
-    if (isInternal && isOverflow) return currentMax
+    if (isInternal && isOverflow) {
+      setValue?.(currentMax)
+      toast.error(
+        t('trade.limit').replace('{}', currentMax).replace('{}', t('buy'))
+      )
+      return
+    }
     if (!isInternal) return dexBuy(amount, token)
 
     console.log('v1 internal buy', amount, token)
@@ -82,7 +92,7 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
     })
   }
 
-  const sellV1 = async (amount: string) => {
+  const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount, token)) return
 
     const { isInternal } = await checkForInternal(amount)
@@ -99,16 +109,23 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
     })
   }
 
-  const resetTradeV1 = () => {
-    resetInternalTrade()
+  const resetTrade = () => {
+    internalTradeReset()
     dexReset()
   }
 
   return {
+    tradeHash: hash,
+    isSubmitting,
+    buy,
+    sell,
+    resetTrade,
+
+    // alias
     tradeHashV1: hash,
-    isSubmittingV1,
-    buyV1,
-    sellV1,
-    resetTradeV1,
+    isSubmittingV1: isSubmitting,
+    buyV1: buy,
+    sellV1: sell,
+    resetTradeV1: resetTrade,
   }
 }

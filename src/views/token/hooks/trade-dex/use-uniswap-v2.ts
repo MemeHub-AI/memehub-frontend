@@ -4,10 +4,10 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 
-import { uniswapV2Config } from '../../../contract/abi/uniswap-v2'
 import { useApprove } from '@/hooks/use-approve'
 import { commonAddr } from '@/contract/address'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { uniswapV2Config } from '@/contract/abi/uniswap-v2'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
@@ -18,9 +18,9 @@ export const useUniswapV2 = () => {
 
   const {
     data: hash,
-    isPending: isUniswapTrading,
+    isPending: isSubmitting,
     writeContract,
-    reset: dexReset,
+    reset: uniswapV2Reset,
   } = useWriteContract({
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
@@ -48,7 +48,7 @@ export const useUniswapV2 = () => {
     return true
   }
 
-  const dexBuy = (amount: string, token: Address) => {
+  const uniswapV2Buy = (amount: string, token: Address) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
@@ -61,7 +61,7 @@ export const useUniswapV2 = () => {
     })
   }
 
-  const dexSell = async (amount: string, token: Address) => {
+  const uniswapV2Sell = async (amount: string, token: Address) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
@@ -83,10 +83,10 @@ export const useUniswapV2 = () => {
   }
 
   return {
-    dexHash: hash,
-    isDexTrading: isUniswapTrading || isApproving,
-    dexBuy,
-    dexSell,
-    dexReset,
+    uniswapV2Hash: hash,
+    isUniswapV2Trading: isSubmitting || isApproving,
+    uniswapV2Buy,
+    uniswapV2Sell,
+    uniswapV2Reset,
   }
 }

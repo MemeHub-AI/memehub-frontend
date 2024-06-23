@@ -11,6 +11,7 @@ export interface TokenListItem extends UserCoinsCreated {
   create_time: null
   hash: string
   explorer_tx: string
+  version: string
 }
 
 export interface TokenNewReq {

@@ -19,6 +19,7 @@ export const CONTRACT_ERR = {
   configNotFound: () => toast.error(t('deploy.config.empty')),
   proofNotFound: () => toast.error(t('deploy.proof.empty')),
   marketParamsNotFound: () => toast.error(t('deploy.invalid.merkle-root')),
+  versionNotFound: () => toast.error(t('notfound.version')),
 
   // Failed.
   retryCreateFailed: () => toast.error(t('cannot-retry')),

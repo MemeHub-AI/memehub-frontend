@@ -1,5 +1,4 @@
 import { type ComponentProps } from 'react'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 
 import { useTokenContext } from '@/contexts/token'
@@ -11,7 +10,6 @@ import { BondingCurveProgress } from './bonding-curve-progress'
 import { Avatar } from '@/components/ui/avatar'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
-  const router = useRouter()
   const { t } = useTranslation()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
   const { marketCap } = useHoldersStore()
@@ -28,7 +26,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-1 px-1 text-sm mb-1',
+        'flex items-center justify-between gap-1 text-sm mb-1',
         className
       )}
     >

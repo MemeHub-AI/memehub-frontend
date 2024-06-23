@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Progress } from '@/components/ui/progress'
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
-import { useTokenProgressV2 } from '../hooks/v2/use-token-progress'
+import { useTokenProgressV2 } from '../hooks/trade-v2/use-token-progress'
 import { cn } from '@/lib/utils'
 
 interface Props extends ComponentProps<'div'> {

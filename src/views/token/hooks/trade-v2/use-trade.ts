@@ -5,17 +5,15 @@ import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 import { useAccount, useWriteContract } from 'wagmi'
 
+import type { DexTradeProps } from '../trade-dex/use-dex-trade'
 import { useTradeInfoV2 } from './use-trade-info'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { DexTradeProps } from '../use-trade'
 import { addSlippage, subSlippage } from '@/utils/contract'
 import { getZapV1Config } from '@/contract/v2/config/zapv1'
 import { useApprove } from '@/hooks/use-approve'
 
+// TODO: should be dynamic if use v2.
 const referral = zeroAddress
-
-// Used for trade success tips.
-let lastTradeAmount = ''
 
 export const useTradeV2 = (dexProps: DexTradeProps) => {
   const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
@@ -36,8 +34,8 @@ export const useTradeV2 = (dexProps: DexTradeProps) => {
     mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
   })
 
-  const tradeHashV2 = isListed ? dexHash : internalHash
-  const isSubmittingV2 = isListed ? isDexTrading : isInternalTrading
+  const tradeHash = isListed ? dexHash : internalHash
+  const isSubmitting = isListed ? isDexTrading : isInternalTrading
 
   const checkForTrade = (amount: string) => {
     if (isEmpty(amount)) {
@@ -54,9 +52,8 @@ export const useTradeV2 = (dexProps: DexTradeProps) => {
     return true
   }
 
-  const buyV2 = async (amount: string, slippage: string) => {
+  const buy = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    lastTradeAmount = amount
 
     const [weiNativeAmount] = await getAmountForBuy(token, amount)
     const nativeAmount = BigNumber(formatEther(weiNativeAmount))
@@ -86,7 +83,7 @@ export const useTradeV2 = (dexProps: DexTradeProps) => {
     })
   }
 
-  const sellV2 = async (amount: string, slippage: string) => {
+  const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
 
     const [weiNativeAmount] = await getAmountForSell(token, amount)
@@ -124,16 +121,23 @@ export const useTradeV2 = (dexProps: DexTradeProps) => {
     })
   }
 
-  const resetTradeV2 = () => {
+  const resetTrade = () => {
     resetInternalTrade()
     dexReset()
   }
 
   return {
-    tradeHashV2,
-    isSubmittingV2,
-    buyV2,
-    sellV2,
-    resetTradeV2,
+    tradeHash,
+    isSubmitting,
+    buy,
+    sell,
+    resetTrade,
+
+    // alias
+    tradeHashV2: tradeHash,
+    isSubmittingV2: isSubmitting,
+    buyV2: buy,
+    sellV2: sell,
+    resetTradeV2: resetTrade,
   }
 }

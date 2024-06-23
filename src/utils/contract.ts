@@ -21,7 +21,7 @@ export const makeConfig = <T = unknown>(abi: T, address: Address) => {
 /**
  * @example
  * ```
- * addServiceFee('1')
+ * addServiceFee('1') // amount
  * // 1010000000000000000n = 1.01
  * ```
  */
@@ -38,7 +38,7 @@ export const addServiceFee = (amount: string) => {
  * Add slippage to value.
  * @example
  * ```
- * addSlippage('1', '5')
+ * addSlippage('1', '5') // amount, slippage
  * // 1010000000000000000n = 1.05
  * ```
  */
@@ -58,7 +58,7 @@ export const addSlippage = (value: string, slippage: string) => {
  * Subtract slippage from value.
  * @example
  * ```
- * subSlippage('1', '5')
+ * subSlippage('1', '5') // amount, slippage
  * // 1000000000000000000n === 1
  * ```
  */

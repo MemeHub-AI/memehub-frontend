@@ -2,7 +2,7 @@ import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 
-import { useAirdrop } from '../hooks/v2/use-airdrop'
+import { useAirdrop } from '../hooks/trade-v2/use-airdrop'
 import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Img } from '@/components/img'
