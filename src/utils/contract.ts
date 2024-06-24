@@ -1,7 +1,10 @@
 import { BigNumber } from 'bignumber.js'
 import { Hash, parseEther, Address } from 'viem'
+import dayjs from 'dayjs'
 
 import { TRADE_SERVICE_FEE } from '@/constants/contract'
+import { getBlock } from 'wagmi/actions'
+import { wagmiConfig } from '@/config/wagmi'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -39,7 +42,7 @@ export const addServiceFee = (amount: string) => {
  * @example
  * ```
  * addSlippage('1', '5') // amount, slippage
- * // 1010000000000000000n = 1.05
+ * // 1050000000000000000n = 1.05
  * ```
  */
 export const addSlippage = (value: string, slippage: string) => {
@@ -59,7 +62,7 @@ export const addSlippage = (value: string, slippage: string) => {
  * @example
  * ```
  * subSlippage('1', '5') // amount, slippage
- * // 1000000000000000000n === 1
+ * // 950000000000000000n === 0.95
  * ```
  */
 export const subSlippage = (value: string, slippage: string) => {
@@ -74,7 +77,21 @@ export const subSlippage = (value: string, slippage: string) => {
   return BigInt(total)
 }
 
-export const parseBytes64 = (input: string | string[]) => {
+// Add `0x` prefix.
+export const addPrefix0x = (input: string | string[]) => {
   const arr = Array.isArray(input) ? input : [input]
   return arr.map((s) => '0x' + s) as Hash[]
+}
+
+// Get timestamp & plus offset seconds.
+export const getDeadline = async (offset = 50) => {
+  const addOffset = (value: bigint | number) => {
+    return BigNumber(value.toString()).plus(offset).toFixed(0)
+  }
+
+  const ts = await getBlock(wagmiConfig)
+    .then(({ timestamp }) => addOffset(timestamp))
+    .catch(() => addOffset(dayjs().unix())) // Use local timestamp as fallback.
+
+  return BigInt(ts)
 }

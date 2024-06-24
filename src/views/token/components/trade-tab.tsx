@@ -20,14 +20,15 @@ import { TradeType } from '@/api/websocket/types'
 import { useTokenContext } from '@/contexts/token'
 import { useSlippage } from '../hooks/use-slippage'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { INVITE_REWARD } from '@/constants/invite'
+import { INVITE_LINK, INVITE_REWARD } from '@/constants/invite'
 import { useTrade } from '../hooks/use-trade'
 import { useTradeInfo } from '../hooks/use-trade-info'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(String(TradeType.Buy))
-  const [value, setValue] = useState('0')
+  const [value, setValue] = useState('')
   const [isBuy, isSell] = useMemo(
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
@@ -40,6 +41,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
   const { copy } = useClipboard()
+  const { userInfo } = useUserStore()
   const { isSubmitting, isTraded, buying, selling } = useTrade()
   const {
     nativeBalance,
@@ -60,21 +62,21 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const onBuy = async () => {
     // Overflow current wallet balance.
-    // if (BigNumber(value).gt(nativeBalance)) {
-    //   toast.error(t('balance.illegality'))
-    //   setValue(nativeBalance)
-    //   return
-    // }
+    if (BigNumber(value).gt(nativeBalance)) {
+      toast.error(t('balance.illegality'))
+      setValue(nativeBalance)
+      return
+    }
 
     buying(value, slippage, setValue)
   }
 
   const onSell = async () => {
     // Overflow current token balance.
-    // if (BigNumber(value).gt(tokenBalance)) {
-    //   toast.error(t('balance.illegality'))
-    //   return
-    // }
+    if (BigNumber(value).gt(tokenBalance)) {
+      toast.error(t('balance.illegality'))
+      return
+    }
 
     selling(value, slippage)
   }
@@ -117,7 +119,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   // Refresh balance when trade completed.
   useEffect(() => {
     if (!isTraded) return
-    setValue('0')
+    setValue('')
     refetchNativeBalance()
     refetchTokenBalance()
   }, [isTraded])
@@ -187,7 +189,10 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
-          <Button className="!w-full font-bold mt-3" onClick={() => copy}>
+          <Button
+            className="!w-full font-bold mt-3"
+            onClick={() => copy(INVITE_LINK + userInfo?.code)}
+          >
             {t('referral.copy')}
           </Button>
           <p className="text-xs text-zinc-500 mt-3">

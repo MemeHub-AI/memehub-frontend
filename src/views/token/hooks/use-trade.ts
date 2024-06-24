@@ -26,6 +26,8 @@ export const useTrade = () => {
 
   // handling version.
   const trade = useMemo(() => {
+    if (!tokenInfo) return
+
     switch (tokenInfo?.version) {
       case ContractVersion.V1:
         return tradeV1
@@ -37,7 +39,7 @@ export const useTrade = () => {
         CONTRACT_ERR.versionNotFound()
         return
     }
-  }, [tokenInfo?.version])
+  }, [tokenInfo?.version, tradeV1, tradeV2, tradeV3])
 
   const tradeHash = trade?.tradeHash
   const isSubmitting = trade?.isSubmitting

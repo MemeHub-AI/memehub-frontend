@@ -1,33 +1,26 @@
 import { useState } from 'react'
 import { useAccount, useWriteContract } from 'wagmi'
-import { useRouter } from 'next/router'
-import { Address, formatEther, parseEther } from 'viem'
+import { formatEther, isAddress, parseEther, zeroAddress } from 'viem'
+import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
-import dayjs from 'dayjs'
 
 import { DexTradeProps } from '../trade-dex/use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { getV3Config } from '@/contract/v3/config'
-import { addSlippage } from '@/utils/contract'
+import { getDeadline, subSlippage } from '@/utils/contract'
 import { useTradeInfoV3 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
-
-// offset unit is seconds.
-const getDeadline = (offset = 3) => {
-  const ts = BigNumber(dayjs().unix()).plus(offset).toFixed(0)
-  return BigInt(ts)
-}
+import { useTradeSearchParams } from '../use-search-params'
 
 export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
-  const [isListed] = useState(false)
+  const [isListed, setIsListed] = useState(false)
   const { address } = useAccount()
   const { chainId } = useChainInfo()
-  const { query } = useRouter()
-  const token = (query.address ?? '') as Address
-  const config = getV3Config(chainId)
+  const { tokenAddr, referralCode } = useTradeSearchParams()
+  const { bondingCurveConfig } = getV3Config(chainId)
 
-  const { getNativeAmount, getTokenAmount } = useTradeInfoV3()
+  const { getNativeAmount, getTokenAmount, checkForOverflow } = useTradeInfoV3()
   const {
     data: internalHash,
     isPending: isInternalTrading,
@@ -36,47 +29,81 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   } = useWriteContract({
     mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
   })
-  const tradeHash = dexHash || internalHash
-  const isSubmitting = isDexTrading || isInternalTrading
+  const tradeHash = isListed ? dexHash : internalHash
+  const isSubmitting = isListed ? isDexTrading : isInternalTrading
+
+  const checkForTrade = (amount: string) => {
+    if (isEmpty(amount)) {
+      CONTRACT_ERR.amountInvlid()
+      return false
+    }
+    if (!isAddress(tokenAddr)) {
+      CONTRACT_ERR.tokenInvalid()
+      return false
+    }
+    if (!address || !bondingCurveConfig) return false
+
+    return true
+  }
 
   const buy = async (amount: string, slippage: string) => {
-    const slippagedValue = addSlippage(amount, slippage)
+    if (!checkForTrade(amount)) return
 
-    console.log('v3 buy', amount, slippage, getDeadline())
+    const nativeAmount = parseEther(amount)
+    const tokenAmount = formatEther(await getTokenAmount(amount))
+    if (BigNumber(tokenAmount).lte(0)) {
+      CONTRACT_ERR.balanceInvalid()
+      return
+    }
+
+    const { isListed } = await checkForOverflow(amount)
+    setIsListed(isListed)
+
+    if (isListed) return dexBuy(amount, tokenAddr)
     writeContract({
-      ...config!.bondingCurveConfig,
+      ...bondingCurveConfig!,
       functionName: 'mint',
       args: [
-        token,
-        slippagedValue,
-        slippagedValue,
+        tokenAddr,
+        nativeAmount,
+        subSlippage(tokenAmount, slippage),
         address!,
-        getDeadline(),
-        [],
+        await getDeadline(),
+        [zeroAddress, zeroAddress],
       ],
-      value: slippagedValue,
+      value: nativeAmount,
     })
   }
 
   const sell = async (amount: string, slippage: string) => {
-    const nativeAmount = await getNativeAmount(String(2_000))
+    if (!checkForTrade(amount)) return
 
-    console.log('v3 sell', amount, slippage, formatEther(nativeAmount))
+    const nativeAmount = formatEther(await getNativeAmount(amount))
+    if (BigNumber(nativeAmount).lte(0)) {
+      CONTRACT_ERR.balanceInvalid()
+      return
+    }
+
+    const { isListed } = await checkForOverflow(amount)
+    setIsListed(isListed)
+
+    if (isListed) return dexSell(amount, tokenAddr)
     writeContract({
-      ...config!.bondingCurveConfig,
+      ...bondingCurveConfig!,
       functionName: 'burn',
       args: [
-        token,
+        tokenAddr,
         parseEther(amount),
-        addSlippage(formatEther(nativeAmount), slippage),
+        subSlippage(nativeAmount, slippage),
         address!,
-        getDeadline(),
-        [],
+        await getDeadline(),
+        [zeroAddress, zeroAddress],
       ],
     })
   }
 
   const resetTrade = () => {
+    resetInternalTrade()
     dexReset()
   }
 

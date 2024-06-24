@@ -26,8 +26,8 @@ export const TradeSuccessCard = ({ amount, symbol, diamond }: Props) => {
     const startRect = diamondRef.current.getBoundingClientRect()
     const endRect = rewardButtonEl.getBoundingClientRect()
 
-    console.log('startRect', startRect.x, startRect.y, startRect)
-    console.log('endRect', endRect.x, endRect.y, endRect)
+    // console.log('startRect', startRect.x, startRect.y, startRect)
+    // console.log('endRect', endRect.x, endRect.y, endRect)
 
     const deltaX = endRect.left - startRect.left
     const deltaY = endRect.top - startRect.top + 150

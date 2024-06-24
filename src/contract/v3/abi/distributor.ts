@@ -3,7 +3,12 @@ export const v3DistributorAbi = [
     inputs: [
       {
         internalType: 'address',
-        name: '_bond',
+        name: 'bond_',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'sender',
         type: 'address',
       },
     ],
@@ -66,11 +71,6 @@ export const v3DistributorAbi = [
       },
     ],
     name: 'MEMEHUB_InvalidParams',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_NoClaimableOrNotVip',
     type: 'error',
   },
   {
@@ -181,9 +181,9 @@ export const v3DistributorAbi = [
       },
       {
         indexed: false,
-        internalType: 'uint40',
+        internalType: 'uint64',
         name: 'startTime',
-        type: 'uint40',
+        type: 'uint64',
       },
     ],
     name: 'MemeHubCreatedDev',
@@ -320,9 +320,9 @@ export const v3DistributorAbi = [
             type: 'uint176',
           },
           {
-            internalType: 'uint40',
+            internalType: 'uint64',
             name: 'startTime',
-            type: 'uint40',
+            type: 'uint64',
           },
           {
             internalType: 'bool',
@@ -381,9 +381,9 @@ export const v3DistributorAbi = [
         type: 'uint40',
       },
       {
-        internalType: 'uint40',
+        internalType: 'uint64',
         name: 'startTime',
-        type: 'uint40',
+        type: 'uint64',
       },
       {
         internalType: 'bool',

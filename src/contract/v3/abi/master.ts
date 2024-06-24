@@ -34,22 +34,16 @@ export const v3MasterAbi = [
     anonymous: false,
     inputs: [
       {
-        indexed: false,
+        indexed: true,
         internalType: 'contract MEMEHUB_Token',
         name: 'token',
         type: 'address',
       },
       {
         indexed: true,
-        internalType: 'uint256',
-        name: 'poolId',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amountToken',
-        type: 'uint256',
+        internalType: 'address',
+        name: 'pair',
+        type: 'address',
       },
       {
         indexed: false,
@@ -58,10 +52,10 @@ export const v3MasterAbi = [
         type: 'uint256',
       },
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amountToken',
+        type: 'uint256',
       },
     ],
     name: 'MemeHubAddLiquidityDev',
@@ -121,11 +115,6 @@ export const v3MasterAbi = [
     outputs: [
       {
         internalType: 'uint256',
-        name: 'poolId',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
         name: '_amountToken',
         type: 'uint256',
       },
@@ -157,19 +146,6 @@ export const v3MasterAbi = [
     outputs: [
       {
         internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'uniswapV2Factory',
-    outputs: [
-      {
-        internalType: 'contract IUniswapV2Factory',
         name: '',
         type: 'address',
       },

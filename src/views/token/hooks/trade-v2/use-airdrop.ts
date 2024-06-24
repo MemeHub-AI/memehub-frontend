@@ -11,7 +11,7 @@ import { getDistributorConfig } from '@/contract/v2/config/distributor'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { MarketType } from '@/api/token/types'
-import { parseBytes64 } from '@/utils/contract'
+import { addPrefix0x } from '@/utils/contract'
 
 export const useAirdrop = () => {
   const { t } = useTranslation()
@@ -88,8 +88,8 @@ export const useAirdrop = () => {
       functionName: 'claim',
       args: [
         BigInt(distributionId),
-        isKol ? parseBytes64(kol_proof) : [],
-        isCmnt ? parseBytes64(community_proof) : [],
+        isKol ? addPrefix0x(kol_proof) : [],
+        isCmnt ? addPrefix0x(community_proof) : [],
       ],
     })
   }

@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils'
 import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
-import { useTradeInfoV2 } from '../hooks/trade-v2/use-trade-info'
+import { useTradeInfoV3 } from '../hooks/trade-v3/use-trade-info'
 import { utilLang } from '@/utils/lang'
 import { Img } from '@/components/img'
 import { useChainInfo } from '@/hooks/use-chain-info'
@@ -23,15 +23,15 @@ interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
 
 export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
-  const [nativeAmount, setNativeAmount] = useState('0')
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
-  const { tokenDetails, getAmountForBuy, getAmountForSell } = useTradeInfoV2()
+  const { getTotalSupply, getTokenAmount, getNativeAmount } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
 
+  const inputAmount = fmt.decimals(String(value || 0), 3)
+  const [targetAmount, setTargetAmount] = useState('0')
   const tokenSymbol = tokenInfo?.ticker || ''
-  const tokenAmount = fmt.decimals(String(value || 0), 3)
   const tokenAddr = tokenInfo?.address as Address
   const balance = fmt.decimals(isBuy ? nativeBalance : tokenBalance)
 
@@ -45,27 +45,22 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     onChange?.(target.value)
   }
 
-  const calcAmountForBuy = async (value: string) => {
-    // Already checked in `calcAmount`.
-    const total = formatEther(tokenDetails!.info.maxSupply)
-
-    if (BigNumber(value).gt(total)) {
+  const calcAmountForBuy = async () => {
+    const total = formatEther(await getTotalSupply())
+    if (BigNumber(value as string).gt(total)) {
       value = total
       onChange?.(value)
       toast.warning(utilLang.replace(t('trade.limit'), [value, t('trade.buy')]))
     }
 
-    const [weiAmount] = await getAmountForBuy(tokenAddr, value)
-    const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
-
-    setNativeAmount(amount)
+    const tokenAmount = formatEther(await getTokenAmount(value as string))
+    const amount = fmt.decimals(BigNumber(tokenAmount))
+    setTargetAmount(amount)
   }
 
-  const calcAmountForSell = async (value: string) => {
-    // Already checked in `calcAmount`
-    const current = formatEther(tokenDetails!.info.currentSupply)
-
-    if (BigNumber(value).gt(current)) {
+  const calcAmountForSell = async () => {
+    const current = formatEther(await getTotalSupply())
+    if (BigNumber(value as string).gt(current)) {
       value = current
       onChange?.(value)
       toast.warning(
@@ -73,19 +68,18 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
       )
     }
 
-    const [weiAmount] = await getAmountForSell(tokenAddr, value)
-    const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
-
-    setNativeAmount(amount)
+    const nativeAmount = formatEther(await getNativeAmount(value as string))
+    const amount = fmt.decimals(BigNumber(nativeAmount))
+    setTargetAmount(amount)
   }
 
   const calcAmount = () => {
-    if (!tokenAddr || !value || !tokenDetails) {
-      setNativeAmount('0')
+    if (!tokenAddr || !value) {
+      setTargetAmount('0')
       return
     }
-    if (isBuy) return calcAmountForBuy(value as string)
-    if (isSell) return calcAmountForSell(value as string)
+    if (isBuy) return calcAmountForBuy()
+    if (isSell) return calcAmountForSell()
   }
 
   useDebounce(calcAmount, 500, [value, isBuy, isSell, isTraded])
@@ -137,9 +131,8 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         className="text-zinc-500 text-xs flex flex-col pt-1 gap-1"
       >
         <span>
-          {isBuy
-            ? `${nativeAmount} ${nativeSymbol} ≈ ${tokenAmount} ${tokenSymbol}`
-            : `${tokenAmount} ${tokenSymbol} ≈ ${nativeAmount} ${nativeSymbol}`}
+          {inputAmount} {isBuy ? nativeSymbol : tokenSymbol} ≈ {targetAmount}{' '}
+          {isBuy ? tokenSymbol : nativeSymbol}
         </span>
         <span>
           {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}

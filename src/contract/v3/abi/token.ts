@@ -211,70 +211,49 @@ export const v3TokenAbi = [
   },
   {
     inputs: [],
-    name: 'description',
+    name: 'getMetadata',
     outputs: [
       {
-        internalType: 'string',
+        components: [
+          {
+            internalType: 'address',
+            name: 'token',
+            type: 'address',
+          },
+          {
+            internalType: 'string',
+            name: 'name',
+            type: 'string',
+          },
+          {
+            internalType: 'string',
+            name: 'symbol',
+            type: 'string',
+          },
+          {
+            internalType: 'uint8',
+            name: 'decimals',
+            type: 'uint8',
+          },
+          {
+            internalType: 'uint256',
+            name: 'totalSupply',
+            type: 'uint256',
+          },
+          {
+            internalType: 'address',
+            name: 'creator',
+            type: 'address',
+          },
+          {
+            internalType: 'bool',
+            name: 'isGraduated',
+            type: 'bool',
+          },
+        ],
+        internalType: 'struct MEMEHUB_Token.Metadata',
         name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'extended',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getHolders',
-    outputs: [
-      {
-        internalType: 'address[]',
-        name: '',
-        type: 'address[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getHoldersLength',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'holders',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
+        type: 'tuple',
       },
     ],
     stateMutability: 'view',
@@ -296,25 +275,6 @@ export const v3TokenAbi = [
   {
     inputs: [],
     name: 'isGraduated',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'isHolder',
     outputs: [
       {
         internalType: 'bool',
@@ -490,6 +450,19 @@ export const v3TokenAbi = [
       },
     ],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'version',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'pure',
     type: 'function',
   },
 ] as const
