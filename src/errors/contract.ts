@@ -25,6 +25,7 @@ export const CONTRACT_ERR = {
   retryCreateFailed: () => toast.error(t('cannot-retry')),
   tradeFailed: () => toast.error(t('trade.failed')),
   approveFailed: () => toast.error(t('approve.error')),
+  claimFailed: () => toast.error(t('claim.failed')),
 
   // Invalid.
   tokenInvalid: () => toast.error(t('trade.token.invalid')),

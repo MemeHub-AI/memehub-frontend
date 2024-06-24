@@ -273,14 +273,14 @@ export const v3DistributorAbi = [
             type: 'bool',
           },
           {
-            internalType: 'uint8',
+            internalType: 'uint40',
             name: 'distributionRatioKol',
-            type: 'uint8',
+            type: 'uint40',
           },
           {
-            internalType: 'uint8',
+            internalType: 'uint40',
             name: 'distributionRatioCommunity',
-            type: 'uint8',
+            type: 'uint40',
           },
           {
             internalType: 'uint40',

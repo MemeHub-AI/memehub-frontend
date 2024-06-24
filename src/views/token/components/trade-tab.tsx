@@ -49,13 +49,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchNativeBalance,
     refetchTokenBalance,
   } = useTradeInfo()
-  // const { isSubmitting, isTraded, buy, sell } = useTradeV2()
-  // const {
-  //   nativeBalance,
-  //   tokenBalance,
-  //   refetchNativeBalance,
-  //   refetchTokenBalance,
-  // } = useTradeInfoV2()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''

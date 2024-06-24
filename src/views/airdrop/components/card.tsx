@@ -10,9 +10,8 @@ import { AirdropItem } from '@/api/airdrop/types'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { Img } from '@/components/img'
-import { fmt } from '@/utils/fmt'
-import { MarketType } from '@/api/token/types'
 import { useAirdropInfo } from '../hooks/use-airdrop-info'
+import { fmt } from '@/utils/fmt'
 
 interface Props {
   airdrop: AirdropItem | undefined
@@ -21,7 +20,7 @@ interface Props {
 
 export const AirdropCard = ({ airdrop, className }: Props) => {
   const { t } = useTranslation()
-  const router = useRouter()
+  const { query, pathname, ...router } = useRouter()
   const isPast = utilTime.isPast(airdrop?.create ?? 0)
 
   const { amountLeft, amountClaimed, isClaimed } = useAirdropInfo(
@@ -32,17 +31,8 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
   const onPushToken = () => {
     if (!airdrop?.chain || !airdrop?.address) return
 
-    const query: Record<string, string> = {
-      id: airdrop?.distribution_id.toString(),
-    }
-    if (airdrop.kol_name) {
-      query.type_list = MarketType.Kol.toString()
-    } else if (airdrop.community_name) {
-      query.type_list = MarketType.Community.toString()
-    }
-
     router.push({
-      pathname: fmt.toHref(airdrop?.chain, airdrop?.address),
+      pathname: fmt.toHref(airdrop.chain, airdrop.address),
       query,
     })
   }
@@ -94,7 +84,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
               className="w-[30px] h-[30px]"
             />
             <span className="ml-2 text-gray-500">
-              {BigNumber(airdrop?.amount ?? 0).toString()} {airdrop?.ticker}
+              {BigNumber(airdrop?.amount ?? 0).toFormat()} {airdrop?.ticker}
             </span>
           </div>
           <div className="mt-3 flex items-center text-gray-500">

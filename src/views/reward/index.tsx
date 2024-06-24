@@ -12,14 +12,13 @@ import { InviteReward } from './components/invite-reward'
 import { InviteTable } from './components/invite-table'
 import { useUserStore } from '@/stores/use-user-store'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { qs } from '@/hooks/use-fetch'
-import { INVITE_REWARD } from '@/constants/invite'
+import { INVITE_LINK, INVITE_REWARD } from '@/constants/invite'
 
 export const RewardPage = () => {
   const { t } = useTranslation()
   const { isCopied, copy } = useClipboard()
   const { userInfo } = useUserStore()
-  const link = location.origin + qs.stringify({ r: userInfo?.code ?? '' })
+  const link = INVITE_LINK + userInfo?.code ?? ''
 
   return (
     <PrimaryLayout container="div" className="my-4">
