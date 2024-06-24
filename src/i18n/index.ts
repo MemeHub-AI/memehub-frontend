@@ -5,13 +5,13 @@ import ZH from './locales/zh.json'
 import EN from './locales/en.json'
 
 export const resources: Resource = {
-  zh: {
-    translation: ZH,
-    name: '中文',
-  },
   en: {
     name: 'English',
     translation: EN,
+  },
+  zh: {
+    translation: ZH,
+    name: '中文',
   },
 }
 
