@@ -13,6 +13,8 @@ const page = 1
 
 const page_size = 10
 
+const emptyArr = [] as any[]
+
 export const useRewardTable = (columns: ColumnDef<RewardItem>[]) => {
   const { data } = useInfiniteQuery({
     queryKey: [inviteApi.getRewardList.name],
@@ -28,7 +30,7 @@ export const useRewardTable = (columns: ColumnDef<RewardItem>[]) => {
   })
 
   const table = useReactTable({
-    data: data?.list ?? [],
+    data: data?.list ?? emptyArr,
     columns,
     getCoreRowModel: getCoreRowModel(),
   })

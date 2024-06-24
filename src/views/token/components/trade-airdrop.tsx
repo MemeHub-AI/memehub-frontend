@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 
-import { useAirdrop } from '../hooks/trade-v2/use-airdrop'
+import { useAirdrop } from '../hooks/trade-v3/use-airdrop'
 import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Img } from '@/components/img'
@@ -28,7 +28,7 @@ export const TradeAirdrop = () => {
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: [airdropApi.getDetails.name],
+    queryKey: [airdropApi.getDetails.name, chainName, tokenAddr],
     queryFn: () => {
       return airdropApi.getDetails({
         chain: chainName,
@@ -36,9 +36,9 @@ export const TradeAirdrop = () => {
       })
     },
   })
-  const kol = data.find((a) => a.kol_name)
-  const communities = data.find((a) => a.community_name)
-  const isOnlyOne = data.length === 1
+  const kol = data?.find((a) => a.kol_name)
+  const communities = data?.find((a) => a.community_name)
+  const isOnlyOne = data?.length === 1
 
   if (isEmpty(data)) return
 
@@ -52,6 +52,7 @@ export const TradeAirdrop = () => {
             airdrop={kol}
             suffix={t('ambassador')}
             typeList={MarketType.Kol}
+            isKol
           />
         )}
         {communities && (
@@ -60,6 +61,7 @@ export const TradeAirdrop = () => {
             airdrop={communities}
             suffix={t('holder')}
             typeList={MarketType.Community}
+            isCommunity
           />
         )}
       </div>
@@ -71,18 +73,24 @@ interface AirdropCardProps extends ComponentProps<typeof Card> {
   airdrop: AirdropItem
   suffix: string
   typeList: number
+  isKol?: boolean
+  isCommunity?: boolean
 }
 
 const AirdropCard = (props: AirdropCardProps) => {
-  const { className, airdrop, suffix, typeList } = props
+  const { className, airdrop, suffix, typeList, isKol, isCommunity } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
 
-  const { amountLeft, amountClaimed } = useAirdropInfo(
-    airdrop.chain,
-    airdrop.distribution_id
+  const { amountLeft, amountClaimed, isKolClaimed, isCommunityClaimed } =
+    useAirdropInfo(airdrop.chain, airdrop.distribution_id)
+  const canClaim =
+    (isKol && !isKolClaimed) || (isCommunity && !isCommunityClaimed)
+
+  const { isClaiming, claim } = useAirdrop(
+    airdrop.distribution_id,
+    typeList.toString()
   )
-  const { canClaim } = useAirdrop(airdrop.distribution_id, typeList.toString())
 
   return (
     <Card
@@ -120,12 +128,14 @@ const AirdropCard = (props: AirdropCardProps) => {
 
         <div className="flex items-center gap-2">
           <TbUsers size={20} />
-          {amountLeft} / {amountClaimed}
+          {BigNumber(amountClaimed).toFormat()} /{' '}
+          {BigNumber(amountLeft).toFormat()}
         </div>
       </div>
       <Button
         className={cn('mt-3 w-full', canClaim && 'bg-lime-green-deep')}
-        disabled={!canClaim}
+        disabled={!canClaim || isClaiming}
+        onClick={claim}
       >
         {t('claim')}
       </Button>

@@ -1,11 +1,12 @@
-import { useReadContract } from 'wagmi'
+import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/contract'
 import { getV3Config } from '@/contract/v3/config'
 
-export const useAirdropInfo = (chainName?: string, distributionId = 0) => {
+export const useAirdropInfo = (chainName?: string, id = 0) => {
+  const { address } = useAccount()
   const { chainId } = useChainInfo(chainName)
   const { distributorConfig } = getV3Config(chainId)
 
@@ -13,33 +14,42 @@ export const useAirdropInfo = (chainName?: string, distributionId = 0) => {
     ...distributorConfig!,
     functionName: 'getAmountLeft',
     chainId,
-    args: [BigInt(distributionId)],
-    query: { enabled: !!distributionId && !!distributorConfig },
+    args: [BigInt(id)],
+    query: { enabled: !!distributorConfig },
   })
 
   const { data: amountClaimedWei = BI_ZERO } = useReadContract({
     ...distributorConfig!,
     functionName: 'getAmountClaimed',
     chainId,
-    args: [BigInt(distributionId)],
-    query: { enabled: !!distributionId && !!distributorConfig },
+    args: [BigInt(id)],
+    query: { enabled: !!distributorConfig },
   })
   const amountLeft = formatEther(amountLeftWei)
   const amountClaimed = formatEther(amountClaimedWei)
 
-  console.log('airdrop', amountLeft, amountClaimed)
-
-  const { data: isClaimed } = useReadContract({
+  const { data: isKolClaimed } = useReadContract({
     ...distributorConfig!,
-    functionName: 'distributions',
+    functionName: 'isClaimedKOL',
+    args: [BigInt(id), address!],
     chainId,
-    args: [BigInt(distributionId)],
-    query: { enabled: !!distributionId },
+    query: { enabled: !!address },
   })
+
+  const { data: isCommunityClaimed } = useReadContract({
+    ...distributorConfig!,
+    functionName: 'isClaimedCommunity',
+    args: [BigInt(id), address!],
+    chainId,
+    query: { enabled: !!address },
+  })
+
+  console.log('claimed', id, address, isKolClaimed, isCommunityClaimed)
 
   return {
     amountLeft,
     amountClaimed,
-    isClaimed,
+    isKolClaimed,
+    isCommunityClaimed,
   }
 }

@@ -3,6 +3,7 @@ import { BigNumber } from 'bignumber.js'
 import Link from 'next/link'
 import { CheckIcon } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { useAccount } from 'wagmi'
 
 import { RewardRules } from './components/reward-rules'
 import { DiamondIcon } from '@/components/diamond-icon'
@@ -13,12 +14,17 @@ import { InviteTable } from './components/invite-table'
 import { useUserStore } from '@/stores/use-user-store'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { INVITE_LINK, INVITE_REWARD } from '@/constants/invite'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { cn } from '@/lib/utils'
 
 export const RewardPage = () => {
   const { t } = useTranslation()
   const { isCopied, copy } = useClipboard()
   const { userInfo } = useUserStore()
-  const link = INVITE_LINK + userInfo?.code ?? ''
+  const link = INVITE_LINK + (userInfo?.code || '')
+
+  const { isConnected } = useAccount()
+  const { setConnectOpen } = useWalletStore()
 
   return (
     <PrimaryLayout container="div" className="my-4">
@@ -70,17 +76,37 @@ export const RewardPage = () => {
         </div>
         <div className="flex flex-col justify-between">
           <h3 className="font-bold text-lg">{t('reward.invite-friends')}</h3>
-          <div className="border-2 border-black rounded py-1 px-2 mt-1 flex items-center gap-3">
-            <Link
-              href={link}
-              target="_blank"
-              className="text-blue-600 hover:underline line-clamp-1"
-            >
-              {link}
-            </Link>
+          <div
+            className={cn(
+              'border-2 border-black rounded py-1 px-2 mt-1 flex items-center gap-3',
+              !isConnected && 'justify-between'
+            )}
+          >
+            {isConnected ? (
+              <Link
+                href={link}
+                target="_blank"
+                className="text-blue-600 hover:underline line-clamp-1"
+              >
+                {link}
+              </Link>
+            ) : (
+              <span
+                className="text-blue-600 hover:underline cursor-pointer"
+                onClick={() => setConnectOpen(true)}
+              >
+                {t('wallet.connect')}
+              </span>
+            )}
             <div
               className="border-2 border-black rounded py-0.5 px-3 cursor-pointer hover:bg-zinc-100"
-              onClick={() => copy(link)}
+              onClick={() => {
+                if (isConnected) {
+                  copy(link)
+                  return
+                }
+                setConnectOpen(true)
+              }}
             >
               {isCopied ? (
                 <CheckIcon className="mx-2.5" />
