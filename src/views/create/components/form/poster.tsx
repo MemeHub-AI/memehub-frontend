@@ -17,6 +17,8 @@ import { Dialog } from '@/components/ui/dialog'
 import { aiApi } from '@/api/ai'
 import { toast } from 'sonner'
 import { Router } from 'next/router'
+import { useUserStore } from '@/stores/use-user-store'
+import { useWalletStore } from '@/stores/use-wallet-store'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -27,12 +29,19 @@ export const PosterForm = ({ formData }: Props) => {
   const { form, formFields } = formData
   const [showPoster, setShowPoster] = useState(false)
   const [index, setIndex] = useState(0)
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
 
   const { t } = useTranslation()
   const { loadingPoster, setLoadingPoster } = useAimemeInfoStore()
   const createPoster = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
+
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
     if (
       form.getValues(formFields?.fullname) === '' ||
       form.getValues(formFields?.description) === ''

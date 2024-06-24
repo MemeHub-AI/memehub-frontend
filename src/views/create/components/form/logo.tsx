@@ -15,6 +15,8 @@ import { Button } from '@/components/ui/button'
 import { LuRefreshCcw } from 'react-icons/lu'
 import { toast } from 'sonner'
 import { Router } from 'next/router'
+import { useUserStore } from '@/stores/use-user-store'
+import { useWalletStore } from '@/stores/use-wallet-store'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -24,10 +26,17 @@ let memeLogoSign = new AbortController()
 export const FormLogo = ({ formData }: Props) => {
   const { form, formFields } = formData
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
+
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
     if (
       form.getValues(formFields?.fullname) === '' ||
       form.getValues(formFields?.description) === ''

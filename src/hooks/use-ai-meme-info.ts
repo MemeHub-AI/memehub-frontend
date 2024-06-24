@@ -51,8 +51,8 @@ export const useAIMemeInfo = (options?: Options) => {
           abortController.memeInfoSign.signal
         )
         .then(({ data }) => {
-          if (data?.length) {
-            form?.setValue(formFields.logo, data[0])
+          if (data.images?.length) {
+            form?.setValue(formFields.logo, data.images[0])
           }
         })
         .catch(() => {
@@ -125,8 +125,8 @@ export const useAIMemeInfo = (options?: Options) => {
           abortController.memeInfoSign.signal
         )
         .then(({ data }) => {
-          if (data?.length) {
-            form?.setValue(formFields.logo, data[0])
+          if (data.images?.length) {
+            form?.setValue(formFields.logo, data.images[0])
           }
         })
         .catch(() => {

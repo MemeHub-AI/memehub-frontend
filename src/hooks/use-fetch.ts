@@ -24,7 +24,7 @@ export interface FetcherOptions extends Omit<RequestInit, 'body'> {
 export type AliasOptions = Omit<FetcherOptions, 'method'>
 
 export const useFetch = (baseURL: string) => {
-  const { getToken } = useStorage()
+  const { getToken, setToken } = useStorage()
   const throttleToast = useThrottleErr()
 
   // Init headers config.
@@ -76,7 +76,9 @@ export const useFetch = (baseURL: string) => {
       if (isJson(response.headers) && toJson) {
         const data = (await response.json()) as ApiResponse<T>
 
+        if (data.code === ApiCode.AuthError) setToken('')
         if (data.code !== ApiCode.Success) throw data
+
         return data as T
       }
 
