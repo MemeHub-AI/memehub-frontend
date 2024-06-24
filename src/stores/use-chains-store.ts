@@ -8,6 +8,7 @@ interface ChainsStore {
 
   setChains: (chains: ChainData[]) => void
   findChain: (nameOrId: string | number | undefined) => ChainData | undefined
+  findChains: (namOrIds: (string | number | undefined)[]) => ChainData[]
 }
 
 export const useChainsStore = create<ChainsStore>((set, get) => ({
@@ -26,5 +27,15 @@ export const useChainsStore = create<ChainsStore>((set, get) => ({
     const ni = String(nameOrId)
 
     return chains.find((chain) => chain.name === ni || chain.id === ni)
+  },
+  findChains: (nameOrIds) => {
+    const { chains } = get()
+
+    return chains.filter((chain) => {
+      return nameOrIds.some((n) => {
+        const ni = String(n)
+        return chain.id === ni || chain.name === ni
+      })
+    })
   },
 }))

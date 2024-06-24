@@ -235,7 +235,7 @@
   "participartion.in": "You have participated in ",
   "available": " to get ",
   "buy.success": "Purchase success",
-  "claim.success": "Successful claim",
+  "claim.success": "Claim successful!",
   "wait.claim": "Wait to claim the token",
   "participated": "You have participated in total of",
   "participated.to": "and can obtain",
@@ -408,5 +408,6 @@
   "referral.copy": "Copy Referral Link",
   "referral.desc": "Share this token with your friends using your special referral link and earn $ of their trading fees",
   "bonding-curve.desc": "When the market cap reaches {} all the liquidity from the pool will be deposited into dex and burned. Progression increases as the price goes up.",
-  "notfound.version": "Cannot find the version of this token"
+  "notfound.version": "Cannot find the version of this token",
+  "claim.failed": "Claim failed, please try again"
 }

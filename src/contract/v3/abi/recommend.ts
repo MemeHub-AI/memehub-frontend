@@ -3,7 +3,12 @@ export const v3RecommendAbi = [
     inputs: [
       {
         internalType: 'address',
-        name: '_bond',
+        name: 'bond_',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'sender',
         type: 'address',
       },
     ],
@@ -120,6 +125,25 @@ export const v3RecommendAbi = [
     type: 'event',
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'alreadyClaimed',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'bond',
     outputs: [
@@ -148,6 +172,25 @@ export const v3RecommendAbi = [
       },
     ],
     name: 'claimableTokens',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'obtainedAmount',
     outputs: [
       {
         internalType: 'uint256',
