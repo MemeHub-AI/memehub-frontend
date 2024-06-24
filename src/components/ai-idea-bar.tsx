@@ -11,6 +11,8 @@ import { useQuery } from '@tanstack/react-query'
 import { newsApi } from '@/api/news'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { useUserStore } from '@/stores/use-user-store'
 
 interface Props {
   className?: string
@@ -24,14 +26,25 @@ export const AIIdeaBar = (props: Props) => {
   const [value, setValue] = useState('')
   const { push } = useRouter()
 
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
+
   const { data: result } = useQuery({
     queryKey: ['getTrendingIdeas'],
     queryFn: () => {
-      return newsApi.getOpportunity({ page: 1, page_size: 10 })
+      return newsApi.getOpportunity({ page: 1, page_size: 4 })
     },
   })
 
   const data = result?.data
+
+  const onRandom = () => {
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
+    onRandomGen()
+  }
 
   const onGen = () => {
     if (value.trim() === '') {
@@ -68,7 +81,7 @@ export const AIIdeaBar = (props: Props) => {
                   <TooltipTrigger className="block h-full">
                     <div
                       className="bg-black h-full text-white flex items-center px-1.5 cursor-pointer"
-                      onClick={onRandomGen}
+                      onClick={onRandom}
                     >
                       <WiStars size={26} />
                     </div>
@@ -85,7 +98,7 @@ export const AIIdeaBar = (props: Props) => {
       <div className="w-full h-[1px] bg-[#e2e2e2] my-4 max-sm:hidden"></div>
       <div className="flex justify-start px-7 max-md:px-3 max-md:flex-col max-md:items-start max-sm:mt-4">
         <div className="flex-shrink-0">{t('trending.idea')}</div>
-        <div className="grid grid-cols-6 gap-4 ml-5 max-2xl:grid-cols-4 max-xl:grid-cols-2 max-md:ml-0 max-md:mt-2 max-sm:gap-3">
+        <div className="flex flex-wrap max-sm:grid grid-cols-6 gap-8 ml-5 max-2xl:grid-cols-4 max-xl:grid-cols-2 max-md:ml-0 max-md:mt-2 max-sm:gap-3">
           {data?.results?.map((item) => {
             return (
               <div

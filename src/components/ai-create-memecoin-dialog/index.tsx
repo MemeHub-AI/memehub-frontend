@@ -5,6 +5,8 @@ import { Button } from '../ui/button'
 import { Dialog } from '../ui/dialog'
 import { AIMemeInfo } from '@/api/ai/type'
 import { Img } from '@/components/img'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { useUserStore } from '@/stores/use-user-store'
 
 interface Props {
   show: boolean
@@ -16,6 +18,16 @@ interface Props {
 
 export const AICreateMemecoinDialog = (props: Props) => {
   const { show, isRandom, data, onConfirm, onCancel } = props
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
+
+  const confirm = () => {
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
+    onConfirm()
+  }
 
   const handleDialogContent = () => {
     return (
@@ -52,7 +64,7 @@ export const AICreateMemecoinDialog = (props: Props) => {
           </div>
         ) : null}
         <div className="flex gap-10 mt-6 w-max mx-auto max-sm:mt-0">
-          <Button variant="default" size="lg" onClick={onConfirm}>
+          <Button variant="default" size="lg" onClick={confirm}>
             {t('coinfirm')}
           </Button>
           <Button size="lg" onClick={onCancel}>
