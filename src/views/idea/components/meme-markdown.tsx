@@ -70,13 +70,15 @@ export const MemeMarkdown = ({
         'lite-youtube': ({ className, ...props }) => {
           const [isLoading, setIsLoading] = useState(true)
           return (
-            <div className={cn(className, 'relative')}>
+            <div className={cn(className, 'relative mx-auto')}>
               {isLoading && <Loading />}
-              <iframe
-                src={`https://www.youtube-nocookie.com/embed/${props.videoid}?${props.params}`}
-                className="min-w-100 min-h-72 rounded-md my-4 max-sm:min-w-full"
-                onLoad={() => setIsLoading(false)}
-              ></iframe>
+              <center>
+                <iframe
+                  src={`https://www.youtube-nocookie.com/embed/${props.videoid}?${props.params}`}
+                  className="min-w-100 min-h-72 rounded-md my-4 max-sm:min-w-full"
+                  onLoad={() => setIsLoading(false)}
+                ></iframe>
+              </center>
             </div>
           )
         },
