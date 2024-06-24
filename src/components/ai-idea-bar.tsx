@@ -57,7 +57,7 @@ export const AIIdeaBar = (props: Props) => {
   return (
     <div
       className={clsx(
-        'mt-8  bg-slate-100 rounded-sm py-5 my-5 max-md:w-full max-md:py-3  max-md:mt-2',
+        'mt-8  bg-slate-100 rounded-sm py-5 pb-4 my-5 max-md:w-full max-md:py-3  max-md:mt-2',
         className
       )}
     >
@@ -98,7 +98,7 @@ export const AIIdeaBar = (props: Props) => {
       <div className="w-full h-[1px] bg-[#e2e2e2] my-4 max-sm:hidden"></div>
       <div className="flex justify-start px-7 max-md:px-3 max-md:flex-col max-md:items-start max-sm:mt-4">
         <div className="flex-shrink-0">{t('trending.idea')}</div>
-        <div className="grid grid-cols-6 gap-4 ml-5 max-2xl:grid-cols-4 max-xl:grid-cols-2 max-md:ml-0 max-md:mt-2 max-sm:gap-3">
+        <div className="flex flex-wrap max-sm:grid grid-cols-6 gap-6 ml-5 max-2xl:grid-cols-4 max-xl:grid-cols-2 max-md:ml-0 max-md:mt-2 max-sm:gap-3">
           {data?.results?.map((item) => {
             return (
               <div
