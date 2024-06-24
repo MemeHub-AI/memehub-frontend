@@ -11,6 +11,8 @@ import { useQuery } from '@tanstack/react-query'
 import { newsApi } from '@/api/news'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { useUserStore } from '@/stores/use-user-store'
 
 interface Props {
   className?: string
@@ -24,14 +26,25 @@ export const AIIdeaBar = (props: Props) => {
   const [value, setValue] = useState('')
   const { push } = useRouter()
 
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
+
   const { data: result } = useQuery({
     queryKey: ['getTrendingIdeas'],
     queryFn: () => {
-      return newsApi.getOpportunity({ page: 1, page_size: 10 })
+      return newsApi.getOpportunity({ page: 1, page_size: 4 })
     },
   })
 
   const data = result?.data
+
+  const onRandom = () => {
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
+    onRandomGen()
+  }
 
   const onGen = () => {
     if (value.trim() === '') {
@@ -68,7 +81,7 @@ export const AIIdeaBar = (props: Props) => {
                   <TooltipTrigger className="block h-full">
                     <div
                       className="bg-black h-full text-white flex items-center px-1.5 cursor-pointer"
-                      onClick={onRandomGen}
+                      onClick={onRandom}
                     >
                       <WiStars size={26} />
                     </div>

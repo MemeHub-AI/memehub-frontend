@@ -20,7 +20,7 @@ export const Header = () => {
 
   const navs: Nav[] = [
     { title: t('home'), path: Routes.Main },
-    { title: t('create'), path: Routes.Create },
+    // { title: t('create'), path: Routes.Create },
     { title: t('airdrop'), path: Routes.Airdrop },
     { title: t('alliance'), path: Routes.Alliance },
     // { title: t('KOL'), path: Routes.KOL },

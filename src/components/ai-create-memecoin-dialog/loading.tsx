@@ -7,6 +7,8 @@ import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { AIMemeInfo } from '@/api/ai/type'
 import { toast } from 'sonner'
 import { Router } from 'next/router'
+import { useUserInfo } from '@/hooks/use-user-info'
+import { useWalletStore } from '@/stores/use-wallet-store'
 
 interface Props {
   formHook: ReturnType<typeof useCreateTokenForm>
@@ -25,6 +27,8 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     setLoadingPoster,
     setLoadingInfoDialog,
   } = useAimemeInfoStore()
+  const userStore = useUserInfo()
+  const { setConnectOpen } = useWalletStore()
 
   const fetchMemeInfo = async () => {
     if (!loadingInfo) {
@@ -63,7 +67,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
     if (info?.name) {
       formHook.form.setValue(formHook.formFields.fullname, info?.name)
-      formHook.form.setValue(formHook.formFields.symbol, info?.symbol)
+      formHook.form.setValue(formHook.formFields.symbol, info?.symbol!)
     }
 
     if (info?.description) {
@@ -79,6 +83,11 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
   useEffect(() => {
     if (loadingInfoDialog && info?.name !== undefined && !loadingInfo) {
+      if (userStore.userInfo?.id == null) {
+        setLoadingInfoDialog(false)
+        setConnectOpen(true)
+        return
+      }
       fetchMemeInfo()
     }
   }, [loadingInfoDialog])
@@ -98,6 +107,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       Router.events.off('routeChangeStart', cb)
     }
   }, [])
+
   return (
     <Dialog
       open={loadingInfoDialog}

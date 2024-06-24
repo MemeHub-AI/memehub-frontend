@@ -7,6 +7,9 @@ import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
 import { RewardButton } from '../reward-button'
+import { Button } from '../ui/button'
+import { useTranslation } from 'react-i18next'
+import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -16,6 +19,7 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderDesktop = (props: Props) => {
   const { navs, onNavClick } = props
   const router = useRouter()
+  const { t } = useTranslation()
 
   return (
     <>
@@ -45,6 +49,9 @@ export const HeaderDesktop = (props: Props) => {
         {/* <SearchInput /> */}
         <RewardButton />
         <LangSelect className="flex-shrink-0" />
+        <Button onClick={() => router.push(Routes.Create)}>
+          {t('create.token')}
+        </Button>
         <WalletConnect />
       </div>
     </>
