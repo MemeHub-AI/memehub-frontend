@@ -16,7 +16,7 @@ export const useTokenProgressV3 = (
 
   const token = overrideToken ?? tokenAddr
   const chainId = overrideChainId ?? cId
-  const config = getV3Config(cId)
+  const config = getV3Config(chainId)
 
   const {
     data: totalSupply,
