@@ -51,7 +51,7 @@ export const FormLogo = ({ formData }: Props) => {
       )
       .then(({ data }) => {
         if (data) {
-          form.setValue(formFields.logo, data[0])
+          form.setValue(formFields.logo, data.images[0])
         }
       })
       .finally(() => {

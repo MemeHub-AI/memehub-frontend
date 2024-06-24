@@ -17,7 +17,7 @@ export const aiApi = {
   },
 
   getMemeImage: async (data?: AIMemeInfo, signal?: AbortSignal) => {
-    return api.POST<ApiResponse<string[]>>('/ai/meme-logo', {
+    return api.POST<ApiResponse<{ images: string[] }>>('/ai/meme-logo', {
       body: data,
       signal: signal,
     })
