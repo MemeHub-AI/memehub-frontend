@@ -5,7 +5,7 @@ export enum Routes {
 
   Airdrop = '/airdrop',
 
-  Alliance = 'alliance',
+  Alliance = '/alliance',
 
   // KOL = '/kol',
 
