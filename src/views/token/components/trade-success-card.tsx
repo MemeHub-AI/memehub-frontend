@@ -19,16 +19,16 @@ export const TradeSuccessCard = (props: Props) => {
   const { amount, symbol = '', diamond = '', onClose } = props
   const { t } = useTranslation()
   const diamondRef = useRef<HTMLImageElement>(null)
-  const { rewardButtonEl } = useHeaderStore()
+  const { diamondEl: rewardDiamondEl } = useHeaderStore()
   const isZero = BigNumber(amount).lte(0)
 
   useEffect(() => {
-    if (!diamondRef.current || !rewardButtonEl || isZero) {
+    if (!diamondRef.current || !rewardDiamondEl || isZero) {
       return
     }
 
     const startRect = diamondRef.current.getBoundingClientRect()
-    const endRect = rewardButtonEl.getBoundingClientRect()
+    const endRect = rewardDiamondEl.getBoundingClientRect()
 
     // console.log('startRect', startRect.x, startRect.y, startRect)
     // console.log('endRect', endRect.x, endRect.y, endRect)
@@ -44,7 +44,7 @@ export const TradeSuccessCard = (props: Props) => {
     return () => {
       tween.kill()
     }
-  }, [rewardButtonEl])
+  }, [rewardDiamondEl])
 
   return (
     <>

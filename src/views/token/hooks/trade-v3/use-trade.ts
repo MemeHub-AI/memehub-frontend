@@ -17,7 +17,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const [isListed, setIsListed] = useState(false)
   const { address } = useAccount()
   const { chainId } = useChainInfo()
-  const { tokenAddr, referralCode } = useTradeSearchParams()
+  const { tokenAddr } = useTradeSearchParams()
   const { bondingCurveConfig } = getV3Config(chainId)
 
   const { getNativeAmount, getTokenAmount, checkForOverflow } = useTradeInfoV3()

@@ -7,7 +7,7 @@ import { useStorage } from './use-storage'
 import { useUserStore } from '@/stores/use-user-store'
 
 export const useUserInfo = (addr?: string) => {
-  const { setUserInfo } = useUserStore()
+  const { setUserInfo, setRefetchUserInfo } = useUserStore()
   const { getToken } = useStorage()
   const token = getToken() || ''
 
@@ -39,6 +39,7 @@ export const useUserInfo = (addr?: string) => {
 
   // Update latest user info if it's not null.
   useEffect(() => {
+    setRefetchUserInfo(refetchUserInfo)
     if (!userInfo?.data) return
     setUserInfo(userInfo.data)
   }, [userInfo])

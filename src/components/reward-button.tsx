@@ -1,4 +1,4 @@
-import React, { useMemo, type ComponentProps } from 'react'
+import React, { type ComponentProps, useMemo, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils'
 import { DiamondIcon } from './diamond-icon'
 import { useUserStore } from '@/stores/use-user-store'
 import { UserIcon } from './user-icon'
+import { useHeaderStore } from '@/stores/use-header-store'
 
 interface RewardButtonProps extends ComponentProps<typeof Button> {
   showReferral?: boolean
@@ -21,12 +22,19 @@ export const RewardButton = React.forwardRef<
   const { t } = useTranslation()
   const router = useRouter()
   const { userInfo } = useUserStore()
+  const diamondRef = useRef<HTMLImageElement>(null)
+  const { setDiamondEl } = useHeaderStore()
 
   const totalIvite = useMemo(() => {
     const amount1 = userInfo?.inviter_count.one ?? 0
     const amount2 = userInfo?.inviter_count.two ?? 0
     return amount1 + amount2
   }, [userInfo])
+
+  useEffect(() => {
+    if (!diamondRef.current) return
+    setDiamondEl(diamondRef.current)
+  }, [diamondRef.current])
 
   return (
     <Button
@@ -46,7 +54,7 @@ export const RewardButton = React.forwardRef<
         </div>
       )}
       <div className="flex items-center gap-1">
-        <DiamondIcon size={20} />
+        <DiamondIcon size={20} ref={diamondRef} />
         {userInfo?.reward_amount ? userInfo?.reward_amount : t('rewards')}
       </div>
     </Button>

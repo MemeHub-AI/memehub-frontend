@@ -10,6 +10,7 @@ import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { Routes } from '@/routes'
 import { UserCoinsCreated } from '@/api/user/types'
 import { TokenChainSelect } from './chain-select'
+import { TokenSearchInput } from './token-search-input'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -51,19 +52,23 @@ export const TokenCards = (props: Props) => {
 
   return (
     <div className={cn(className)}>
-      {isLoading ? (
-        <Skeleton className="h-9 w-24 mb-4" />
-      ) : (
-        <div
-          className={cn(
-            'flex items-center gap-4 max-sm:justify-between mb-4',
-            total <= 1 && 'hidden'
-          )}
-        >
-          <TokenChainSelect onValueChange={onChange} />
-          {/* <TokenSortSelect /> */}
-        </div>
-      )}
+      <CustomSuspense
+        className="flex justify-between items-center gap-4 max-sm:justify-between mb-4"
+        isPending={isLoading}
+        fallback={
+          <>
+            <Skeleton className="h-9 w-24" />
+            <Skeleton className="h-9 w-40" />
+          </>
+        }
+      >
+        <TokenChainSelect onValueChange={onChange} />
+        {/* <TokenSortSelect /> */}
+        <TokenSearchInput
+          onSearched={(tokens) => setFilteredCards(tokens)}
+          onCleared={() => setFilteredCards(cards)}
+        />
+      </CustomSuspense>
 
       <CustomSuspense
         className={cn(
