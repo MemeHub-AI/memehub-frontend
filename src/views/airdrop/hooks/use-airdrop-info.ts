@@ -44,7 +44,7 @@ export const useAirdropInfo = (chainName?: string, id = 0) => {
     query: { enabled: !!address },
   })
 
-  console.log('claimed', isKolClaimed, isCommunityClaimed)
+  console.log('claimed', id, address, isKolClaimed, isCommunityClaimed)
 
   return {
     amountLeft,
