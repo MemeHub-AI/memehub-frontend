@@ -6,9 +6,11 @@ import type { Nav } from './'
 import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
-import { SearchInput } from '../search-input'
 import { RewardButton } from '../reward-button'
 import { useHeaderStore } from '@/stores/use-header-store'
+import { Button } from '../ui/button'
+import { useTranslation } from 'react-i18next'
+import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -18,6 +20,7 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderDesktop = (props: Props) => {
   const { navs, onNavClick } = props
   const router = useRouter()
+  const { t } = useTranslation()
   const buttonRef = useRef<HTMLButtonElement>(null)
   const { setRewardButtonEl } = useHeaderStore()
 
@@ -51,9 +54,11 @@ export const HeaderDesktop = (props: Props) => {
         </nav>
       </div>
       <div className="flex items-center gap-3">
-        <SearchInput />
         <RewardButton ref={buttonRef} />
         <LangSelect className="flex-shrink-0" />
+        <Button onClick={() => router.push(Routes.Create)}>
+          {t('create.token')}
+        </Button>
         <WalletConnect />
       </div>
     </>

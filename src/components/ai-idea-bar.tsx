@@ -27,7 +27,7 @@ export const AIIdeaBar = (props: Props) => {
   const { data: result } = useQuery({
     queryKey: ['getTrendingIdeas'],
     queryFn: () => {
-      return newsApi.getOpportunity({ page: 1, page_size: 10 })
+      return newsApi.getOpportunity({ page: 1, page_size: 4 })
     },
   })
 
