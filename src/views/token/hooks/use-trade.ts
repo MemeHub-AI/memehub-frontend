@@ -11,6 +11,7 @@ import { useTokenContext } from '@/contexts/token'
 import { ContractVersion } from '@/enum/contract'
 import { useDexTrade } from './trade-dex/use-dex-trade'
 import { useToastDiamond } from '@/hooks/use-toast-diamond'
+import { useInvite } from './trade-v3/use-invite'
 
 // Used for trade success tips.
 let lastTradeAmount = ''
@@ -19,6 +20,7 @@ export const useTrade = () => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
+  const { bindInviter } = useInvite()
 
   const dexTrade = useDexTrade()
   const tradeV1 = useTradeV1(dexTrade)
@@ -48,7 +50,10 @@ export const useTrade = () => {
   const { isLoading, isFetched: isTraded } = useWaitForTx({
     hash: tradeHash,
     onLoading: () => toast.loading(t('tx.waiting')),
-    onSuccess: () => toastDiamond(lastTradeAmount),
+    onSuccess: () => {
+      toastDiamond(lastTradeAmount)
+      bindInviter()
+    },
     onError: CONTRACT_ERR.tradeFailed,
     onFillay: () => resetting(),
   })
