@@ -1,9 +1,8 @@
-import { createElement, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { TradeSuccessCard } from '../components/trade-success-card'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useTradeV1 } from './trade-v1/use-trade'
 import { useTradeV2 } from './trade-v2/use-trade'
@@ -11,6 +10,7 @@ import { useTradeV3 } from './trade-v3/use-trade'
 import { useTokenContext } from '@/contexts/token'
 import { ContractVersion } from '@/enum/contract'
 import { useDexTrade } from './trade-dex/use-dex-trade'
+import { useToastDiamond } from '@/hooks/use-toast-diamond'
 
 // Used for trade success tips.
 let lastTradeAmount = ''
@@ -18,6 +18,7 @@ let lastTradeAmount = ''
 export const useTrade = () => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
+  const { toastDiamond, dismissDiamond } = useToastDiamond()
 
   const dexTrade = useDexTrade()
   const tradeV1 = useTradeV1(dexTrade)
@@ -39,7 +40,7 @@ export const useTrade = () => {
         CONTRACT_ERR.versionNotFound()
         return
     }
-  }, [tokenInfo?.version, tradeV1, tradeV2, tradeV3])
+  }, [tokenInfo?.version, dexTrade, tradeV1, tradeV2, tradeV3])
 
   const tradeHash = trade?.tradeHash
   const isSubmitting = trade?.isSubmitting
@@ -47,17 +48,7 @@ export const useTrade = () => {
   const { isLoading, isFetched: isTraded } = useWaitForTx({
     hash: tradeHash,
     onLoading: () => toast.loading(t('tx.waiting')),
-    onSuccess: () => {
-      toast.dismiss()
-      return toast(
-        createElement(TradeSuccessCard, {
-          amount: lastTradeAmount,
-          symbol: '',
-          diamond: '10',
-        }),
-        { position: 'bottom-left', className: 'w-100' }
-      )
-    },
+    onSuccess: () => toastDiamond(lastTradeAmount),
     onError: CONTRACT_ERR.tradeFailed,
     onFillay: () => resetting(),
   })
@@ -68,15 +59,18 @@ export const useTrade = () => {
     slippage: string,
     setValue?: (value: string) => void
   ) => {
+    lastTradeAmount = amount
     trade?.buy(amount, slippage, setValue)
   }
 
   const selling = (amount: string, slippage: string) => {
+    lastTradeAmount = amount
     trade?.sell(amount, slippage)
   }
 
   const resetting = () => {
     trade?.resetTrade()
+    dismissDiamond()
   }
 
   return {
