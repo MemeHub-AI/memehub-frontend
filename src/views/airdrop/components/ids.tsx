@@ -19,11 +19,13 @@ export const Ids = () => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
-  const { setUserIdentity } = useUserStore()
+  const { setUserIdentity, userInfo } = useUserStore()
 
   const { data } = useQuery({
-    queryKey: [airdropApi.getIdentityList.name],
+    queryKey: [airdropApi.getIdentityList.name, userInfo?.id],
     queryFn: async () => {
+      if (userInfo?.id == null) return Promise.reject()
+
       const { data } = await airdropApi.getIdentityList()
       return data
     },

@@ -46,13 +46,33 @@ export const useCreateTokenForm = (
 
   const validateInput = (v: string) => v.trim().length !== 0
 
+  const isWebsite = (v?: string) => {
+    if (!v) return true
+
+    const pattern = new RegExp(
+      '^(https?:\\/\\/)?' + // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+        '(\\#[-a-z\\d_]*)?$',
+      'i'
+    )
+    return !!pattern.test(v)
+  }
+
   const formSchema = z.object({
     [formFields.fullname]: z.string().refine(validateInput, require),
     [formFields.symbol]: z.string().refine(validateInput, require),
     [formFields.description]: z.string().refine(validateInput, require),
     [formFields.twitter]: z.string().optional(),
     [formFields.telegram]: z.string().optional(),
-    [formFields.website]: z.string().optional(),
+    [formFields.website]: z
+      .string()
+      .optional()
+      .refine(isWebsite, {
+        message: t('url.error'),
+      }),
     [formFields.chainName]: z.string().refine(validateInput, require),
     [formFields.logo]: z.string().refine(validateInput, require),
     [formFields.poster]: z.array(z.string()).optional(),

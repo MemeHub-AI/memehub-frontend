@@ -13,10 +13,12 @@ import { airdropApi } from '@/api/airdrop'
 const Airdrop = () => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
-  const { hasIdentity } = useUserStore()
+  const { hasIdentity, userInfo } = useUserStore()
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryKey: [airdropApi.getList.name],
+    queryKey: [airdropApi.getList.name, userInfo?.id],
     queryFn: async ({ pageParam }) => {
+      if (userInfo?.id == null) return Promise.reject()
+
       const { data } = await airdropApi.getList({ page: pageParam })
       return data
     },
