@@ -23,10 +23,12 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
   const { query, pathname, ...router } = useRouter()
   const isPast = utilTime.isPast(airdrop?.create ?? 0)
 
-  const { amountLeft, amountClaimed, isClaimed } = useAirdropInfo(
-    airdrop?.chain,
-    airdrop?.distribution_id
-  )
+  const { amountLeft, amountClaimed, isKolClaimed, isCommunityClaimed } =
+    useAirdropInfo(airdrop?.chain, airdrop?.distribution_id)
+
+  const isKol = !!airdrop?.kol_name
+  const isCmnt = !!airdrop?.community_name
+  const canClaim = (isKol && !isKolClaimed) || (isCmnt && !isCommunityClaimed)
 
   const onPushToken = () => {
     if (!airdrop?.chain || !airdrop?.address) return
@@ -90,15 +92,16 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           <div className="mt-3 flex items-center text-gray-500">
             <TbUsers size={24} />
             <span className="ml-2">
-              {amountClaimed} / {amountLeft}
+              {BigNumber(amountClaimed).toFormat()} /{' '}
+              {BigNumber(amountLeft).toFormat()}
             </span>
           </div>
           <Button
             className="mt-3 font-bold w-full"
-            disabled={isPast || isClaimed}
+            disabled={isPast || canClaim}
             onClick={onPushToken}
           >
-            {isClaimed ? t('airdrop.claimed') : t('claim.airdrop')}
+            {canClaim ? t('claim.airdrop') : t('airdrop.claimed')}
           </Button>
         </div>
         <Img src={airdrop?.logo} className="w-36 h-36 xl:w-42 xl:h-42" />

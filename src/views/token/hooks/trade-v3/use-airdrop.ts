@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { useAccount, useReadContract, useWriteContract } from 'wagmi'
+import { useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
@@ -15,7 +15,6 @@ import { getV3Config } from '@/contract/v3/config'
 
 export const useAirdrop = (id: number, type_list: string) => {
   const { t } = useTranslation()
-  const { address } = useAccount()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
   const { distributorConfig } = getV3Config(chainId)
@@ -31,16 +30,6 @@ export const useAirdrop = (id: number, type_list: string) => {
       })
     },
   })
-
-  const { data: claimData } = useReadContract({
-    ...distributorConfig!,
-    functionName: 'distributions',
-    args: [BigInt(id!)],
-    query: { enabled: !!distributorConfig && !!id },
-  })
-  const canClaim = !!id && !!type_list && !!claimData
-
-  console.log('is claimd', id, claimData)
 
   const {
     data: hash,
@@ -81,7 +70,7 @@ export const useAirdrop = (id: number, type_list: string) => {
       return
     }
 
-    console.log('proof', { kol_proof, community_proof })
+    console.log('claim airdrop', { kol_proof, community_proof })
 
     writeContract({
       ...distributorConfig,
@@ -97,7 +86,6 @@ export const useAirdrop = (id: number, type_list: string) => {
   return {
     isSubmittingClaim,
     isClaiming,
-    canClaim,
     claim,
     resetClaim,
   }
