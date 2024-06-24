@@ -10,6 +10,7 @@ import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { Routes } from '@/routes'
 import { UserCoinsCreated } from '@/api/user/types'
 import { TokenChainSelect } from './chain-select'
+import { TokenSearchInput } from './token-search-input'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -56,12 +57,16 @@ export const TokenCards = (props: Props) => {
       ) : (
         <div
           className={cn(
-            'flex items-center gap-4 max-sm:justify-between mb-4',
+            'flex justify-between items-center gap-4 max-sm:justify-between mb-4',
             total <= 1 && 'hidden'
           )}
         >
           <TokenChainSelect onValueChange={onChange} />
           {/* <TokenSortSelect /> */}
+          <TokenSearchInput
+            onSearched={(tokens) => setFilteredCards(tokens)}
+            onCleared={() => setFilteredCards(cards)}
+          />
         </div>
       )}
 

@@ -1,13 +1,13 @@
 import { create } from 'zustand'
 
 interface HeaderStore {
-  rewardButtonEl: HTMLButtonElement | null
+  diamondEl: HTMLImageElement | null
 
-  setRewardButtonEl: (el: HTMLButtonElement) => void
+  setDiamondEl: (el: HTMLImageElement) => void
 }
 
 export const useHeaderStore = create<HeaderStore>((set, get) => ({
-  rewardButtonEl: null,
+  diamondEl: null,
 
-  setRewardButtonEl: (el) => set({ rewardButtonEl: el }),
+  setDiamondEl: (diamondEl) => set({ diamondEl }),
 }))

@@ -40,7 +40,7 @@ export const useTrade = () => {
         CONTRACT_ERR.versionNotFound()
         return
     }
-  }, [tokenInfo?.version, dexTrade, tradeV1, tradeV2, tradeV3])
+  }, [tokenInfo?.version, tradeV1, tradeV2, tradeV3])
 
   const tradeHash = trade?.tradeHash
   const isSubmitting = trade?.isSubmitting
