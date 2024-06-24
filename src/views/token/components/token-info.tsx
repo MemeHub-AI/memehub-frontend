@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { Copy, Twitter, Check } from 'lucide-react'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { RiGlobalLine } from 'react-icons/ri'
+import { BigNumber } from 'bignumber.js'
 
 import { cn } from '@/lib/utils'
 import { Dialog } from '@/components/ui/dialog'
@@ -13,6 +14,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
 import { fmt } from '@/utils/fmt'
+import { utilLang } from '@/utils/lang'
+import { LISTED_MARKET_CAP } from '@/constants/trade'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -49,10 +52,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       <Card
         shadow="none"
         padding="md"
-        className={cn(
-          'flex gap-3 items-start mt-20 bg-lime-green-deep cursor-default',
-          className
-        )}
+        className={cn('mt-20 bg-lime-green-deep cursor-default', className)}
       >
         <Dialog
           open={!!details}
@@ -62,12 +62,13 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           {details}
         </Dialog>
 
-        <div className="relative mt-">
+        {/* Logo */}
+        <div className="relative">
           <Avatar
             src={tokenInfo?.image}
             variant="border"
             alt="logo"
-            className="w-28 h-28 cursor-pointer absolute -top-1/2 left-1/2 -translate-x-1/2"
+            className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 "
             onClick={() => {
               setDetails(
                 <img
@@ -78,65 +79,78 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
               )
             }}
           />
-          <div className="font-bold leading-none text-center pt-14">
-            {tokenInfo?.name}({tokenInfo?.ticker})
-          </div>
-          {/* Links */}
-          <div className="flex justify-center items-center my-1">
-            {tokenInfo?.twitter_url && (
-              <Button
-                variant="ghost"
-                size="icon"
-                shadow="none"
-                onClick={() => open(tokenInfo.twitter_url)}
-                title="twitter"
-              >
-                <Twitter size={20} />
-              </Button>
-            )}
-            {tokenInfo?.telegram_url && (
-              <Button
-                variant="ghost"
-                size="icon"
-                shadow="none"
-                onClick={() => open(tokenInfo?.telegram_url)}
-                title="telegram"
-              >
-                <FaTelegramPlane size={20} />
-              </Button>
-            )}
-            {tokenInfo?.website && (
-              <Button
-                variant="ghost"
-                size="icon"
-                shadow="none"
-                onClick={() => open(tokenInfo?.website)}
-                title="website"
-              >
-                <RiGlobalLine size={20} />
-              </Button>
-            )}
-          </div>
-          {/* Contract address */}
-          <div
-            className="text-sm flex justify-center items-center gap-2 cursor-pointer font-bold"
-            onClick={() => copy(tokenInfo?.address || '')}
-          >
-            <span>{t('ca')}:</span>
-            <span className="truncate">
-              {fmt.addr(tokenInfo?.address || '', { len: 14 })}
-            </span>
-            {isCopied ? <Check size={16} /> : <Copy size={16} />}
-          </div>
-          <div
-            className="text-sm mt-1 break-all cursor-pointer"
-            onClick={() => {
-              setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)
-            }}
-          >
-            {tokenInfo?.desc}
-          </div>
         </div>
+
+        {/* Name/symbol */}
+        <div className="font-bold leading-none text-center pt-16">
+          {tokenInfo?.name}({tokenInfo?.ticker})
+        </div>
+
+        {/* Links */}
+        <div className="flex justify-center items-center my-1">
+          {tokenInfo?.twitter_url && (
+            <Button
+              variant="ghost"
+              size="icon"
+              shadow="none"
+              onClick={() => open(tokenInfo.twitter_url)}
+              title="twitter"
+            >
+              <Twitter size={20} />
+            </Button>
+          )}
+          {tokenInfo?.telegram_url && (
+            <Button
+              variant="ghost"
+              size="icon"
+              shadow="none"
+              onClick={() => open(tokenInfo?.telegram_url)}
+              title="telegram"
+            >
+              <FaTelegramPlane size={20} />
+            </Button>
+          )}
+          {tokenInfo?.website && (
+            <Button
+              variant="ghost"
+              size="icon"
+              shadow="none"
+              onClick={() => open(tokenInfo?.website)}
+              title="website"
+            >
+              <RiGlobalLine size={20} />
+            </Button>
+          )}
+        </div>
+
+        {/* Description */}
+        <div
+          className="text-sm mt-1 break-all cursor-pointer"
+          onClick={() => {
+            setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)
+          }}
+        >
+          {tokenInfo?.desc}
+        </div>
+
+        {/* Contract address */}
+        <div
+          className="text-sm flex items-center gap-2 cursor-pointer my-3"
+          onClick={() => copy(tokenInfo?.address || '')}
+        >
+          <span>{t('ca')}:</span>
+          <span className="truncate">
+            {fmt.addr(tokenInfo?.address || '', { len: 14 })}
+          </span>
+          {isCopied ? <Check size={16} /> : <Copy size={16} />}
+        </div>
+
+        {/* Bonding curve description */}
+        <p className="text-xs text-zinc-500">
+          {utilLang.replace(t('bonding-curve.desc'), [
+            '$' + BigNumber(LISTED_MARKET_CAP).toFormat(),
+          ])}
+        </p>
       </Card>
     </>
   )

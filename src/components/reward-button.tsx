@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from 'react'
+import React, { useMemo, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -7,6 +7,7 @@ import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
 import { DiamondIcon } from './diamond-icon'
 import { useUserStore } from '@/stores/use-user-store'
+import { UserIcon } from './user-icon'
 
 interface RewardButtonProps extends ComponentProps<typeof Button> {
   showReferral?: boolean
@@ -16,10 +17,16 @@ export const RewardButton = React.forwardRef<
   HTMLButtonElement,
   RewardButtonProps
 >((props, ref) => {
-  const { showReferral = false, className, ...restProps } = props
+  const { showReferral = true, className, ...restProps } = props
   const { t } = useTranslation()
   const router = useRouter()
   const { userInfo } = useUserStore()
+
+  const totalIvite = useMemo(() => {
+    const amount1 = userInfo?.inviter_count.one ?? 0
+    const amount2 = userInfo?.inviter_count.two ?? 0
+    return amount1 + amount2
+  }, [userInfo])
 
   return (
     <Button
@@ -32,14 +39,15 @@ export const RewardButton = React.forwardRef<
       ref={ref}
       {...restProps}
     >
-      {showReferral && <div>🧑‍🚀 {t('referral')}</div>}
+      {showReferral && (
+        <div className="flex items-center gap-1">
+          <UserIcon size={20} />
+          {totalIvite ? totalIvite : t('referral')}
+        </div>
+      )}
       <div className="flex items-center gap-1">
         <DiamondIcon size={20} />
-        {userInfo?.reward_amount ? (
-          <span>{userInfo?.reward_amount}</span>
-        ) : (
-          <span>{t('rewards')}</span>
-        )}
+        {userInfo?.reward_amount ? userInfo?.reward_amount : t('rewards')}
       </div>
     </Button>
   )

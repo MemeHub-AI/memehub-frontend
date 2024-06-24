@@ -5,8 +5,8 @@ import { useTranslation } from 'react-i18next'
 import { Progress } from '@/components/ui/progress'
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
-import { useTokenProgressV2 } from '../hooks/v2/use-token-progress'
 import { cn } from '@/lib/utils'
+import { useTokenProgressV3 } from '../hooks/trade-v3/use-token-progress'
 
 interface Props extends ComponentProps<'div'> {
   showDesc?: boolean
@@ -15,7 +15,7 @@ interface Props extends ComponentProps<'div'> {
 export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
-  const { total, progress } = useTokenProgressV2()
+  const { total, current, progress } = useTokenProgressV3()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const threshold = BigNumber(total).lte(0)

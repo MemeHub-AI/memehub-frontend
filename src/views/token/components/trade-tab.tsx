@@ -18,54 +18,57 @@ import { TradeItems } from './trade-items'
 import { TradeInput } from './trade-input'
 import { TradeType } from '@/api/websocket/types'
 import { useTokenContext } from '@/contexts/token'
-import { useTradeInfoV2 } from '../hooks/v2/use-trade-info'
-import { useTradeV2 } from '../hooks/v2/use-trade'
 import { useSlippage } from '../hooks/use-slippage'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { INVITE_REWARD } from '@/constants/invite'
+import { INVITE_LINK, INVITE_REWARD } from '@/constants/invite'
+import { useTrade } from '../hooks/use-trade'
+import { useTradeInfo } from '../hooks/use-trade-info'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(String(TradeType.Buy))
-  const [value, setValue] = useState('0')
+  const [value, setValue] = useState('')
   const [isBuy, isSell] = useMemo(
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
   )
   const { query } = useRouter()
-
-  const { slippage, setSlippage } = useSlippage()
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
+
+  const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
-  const { isSubmitting, isTraded, buy, sell } = useTradeV2()
+  const { copy } = useClipboard()
+  const { userInfo } = useUserStore()
+  const { isSubmitting, isTraded, buying, selling } = useTrade()
   const {
     nativeBalance,
     tokenBalance,
     refetchNativeBalance,
     refetchTokenBalance,
-  } = useTradeInfoV2()
-  const { copy } = useClipboard()
+  } = useTradeInfo()
+  // const { isSubmitting, isTraded, buy, sell } = useTradeV2()
+  // const {
+  //   nativeBalance,
+  //   tokenBalance,
+  //   refetchNativeBalance,
+  //   refetchTokenBalance,
+  // } = useTradeInfoV2()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
 
   const onBuy = async () => {
     // Overflow current wallet balance.
-    // if (BigNumber(value).gt(nativeBalance)) {
-    //   toast.error(t('balance.illegality'))
-    //   setValue(nativeBalance)
-    //   return
-    // }
-    const max = await buy(value, slippage)
-
-    // Internal buy & overflow current max value.
-    if (max) {
-      setValue(max)
-      toast.error(t('trade.limit').replace('{}', max).replace('{}', t('buy')))
+    if (BigNumber(value).gt(nativeBalance)) {
+      toast.error(t('balance.illegality'))
+      setValue(nativeBalance)
       return
     }
+
+    buying(value, slippage, setValue)
   }
 
   const onSell = async () => {
@@ -75,7 +78,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       return
     }
 
-    sell(value, slippage)
+    selling(value, slippage)
   }
 
   const checkForChain = async () => {
@@ -116,7 +119,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   // Refresh balance when trade completed.
   useEffect(() => {
     if (!isTraded) return
-    setValue('0')
+    setValue('')
     refetchNativeBalance()
     refetchTokenBalance()
   }, [isTraded])
@@ -186,7 +189,10 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
-          <Button className="!w-full font-bold mt-3" onClick={() => copy}>
+          <Button
+            className="!w-full font-bold mt-3"
+            onClick={() => copy(INVITE_LINK + userInfo?.code)}
+          >
             {t('referral.copy')}
           </Button>
           <p className="text-xs text-zinc-500 mt-3">

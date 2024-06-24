@@ -33,7 +33,7 @@ export const useHolders = () => {
     })
 
   const marketCap = lastJsonMessage?.data?.market_cap || 0
-  const holders = lastJsonMessage?.data?.holders.slice(0, 10) || []
+  const holders = lastJsonMessage?.data?.holders.slice(0, 15) || []
 
   useEffect(() => {
     setMarketCap(marketCap)

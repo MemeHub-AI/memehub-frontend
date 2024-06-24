@@ -22,6 +22,15 @@ export const useWaitForTx = (options: Options) => {
   useEffect(() => {
     const { data, error, isLoading, isFetching, isError, isSuccess } = result
 
+    // console.log('result', {
+    //   data,
+    //   error,
+    //   isLoading,
+    //   isFetching,
+    //   isError,
+    //   isSuccess,
+    // })
+
     if (isLoading) onLoading?.()
     if (isFetching) onFetching?.()
     if (isError) onError?.(error)

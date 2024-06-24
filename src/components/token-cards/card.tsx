@@ -10,7 +10,7 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
-import { useTokenProgressV2 } from '@/views/token/hooks/v2/use-token-progress'
+import { useTokenProgressV3 } from '@/views/token/hooks/trade-v3/use-token-progress'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -20,7 +20,7 @@ interface Props extends ComponentProps<typeof Card> {
 export const TokenCard = (props: Props) => {
   const { card, className, descClass, onClick, ...restProps } = props
   const router = useRouter()
-  const { progress } = useTokenProgressV2(
+  const { progress } = useTokenProgressV3(
     card.address as Address,
     Number(card.chain.id)
   )
