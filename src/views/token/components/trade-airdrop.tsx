@@ -36,9 +36,9 @@ export const TradeAirdrop = () => {
       })
     },
   })
-  const kol = data.find((a) => a.kol_name)
-  const communities = data.find((a) => a.community_name)
-  const isOnlyOne = data.length === 1
+  const kol = data?.find((a) => a.kol_name)
+  const communities = data?.find((a) => a.community_name)
+  const isOnlyOne = data?.length === 1
 
   if (isEmpty(data)) return
 

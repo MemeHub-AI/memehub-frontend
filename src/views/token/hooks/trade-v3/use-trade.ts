@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAccount, useWriteContract } from 'wagmi'
-import { formatEther, isAddress, parseEther, zeroAddress } from 'viem'
+import { Address, formatEther, isAddress, parseEther, zeroAddress } from 'viem'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 
@@ -11,6 +11,7 @@ import { getDeadline, subSlippage } from '@/utils/contract'
 import { useTradeInfoV3 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
@@ -19,6 +20,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
   const { bondingCurveConfig } = getV3Config(chainId)
+  const { userInfo } = useUserStore()
 
   const { getNativeAmount, getTokenAmount, checkForOverflow } = useTradeInfoV3()
   const {
@@ -46,6 +48,14 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     return true
   }
 
+  const getReferrals = () => {
+    const { one, two } = userInfo?.inviter ?? {}
+    const parent = (one || zeroAddress) as Address
+    const gParent = (two || zeroAddress) as Address
+
+    return [parent, gParent] as const
+  }
+
   const buy = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
 
@@ -58,7 +68,9 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
     const { isListed } = await checkForOverflow(amount)
     setIsListed(isListed)
+    const [parent, gParent] = getReferrals()
 
+    console.log('v3 buy', parent, gParent)
     if (isListed) return dexBuy(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
@@ -69,7 +81,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
         subSlippage(tokenAmount, slippage),
         address!,
         await getDeadline(),
-        [zeroAddress, zeroAddress],
+        [parent, gParent],
       ],
       value: nativeAmount,
     })
@@ -86,7 +98,9 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
     const { isListed } = await checkForOverflow(amount)
     setIsListed(isListed)
+    const [parent, gParent] = getReferrals()
 
+    console.log('v3 sell', parent, gParent)
     if (isListed) return dexSell(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
@@ -97,7 +111,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
         subSlippage(nativeAmount, slippage),
         address!,
         await getDeadline(),
-        [zeroAddress, zeroAddress],
+        [parent, gParent],
       ],
     })
   }

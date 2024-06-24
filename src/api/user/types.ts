@@ -33,7 +33,10 @@ export interface UserInfoRes {
   is_follower: boolean
   reward_amount: number
   code: string
-  inviter: null | string
+  inviter: {
+    one: string
+    two: string
+  }
   inviter_count: {
     one: number
     two: number
