@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -7,40 +6,41 @@ import { isEmpty } from 'lodash'
 
 import { airdropApi } from '@/api/airdrop'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { getDistributorConfig } from '@/contract/v2/config/distributor'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { MarketType } from '@/api/token/types'
 import { addPrefix0x } from '@/utils/contract'
+import { useTradeSearchParams } from '../use-search-params'
+import { getV3Config } from '@/contract/v3/config'
 
-export const useAirdrop = () => {
+export const useAirdrop = (id: number, type_list: string) => {
   const { t } = useTranslation()
-  const { chainName, chainId } = useChainInfo()
-  const { query } = useRouter()
   const { address } = useAccount()
-  const distributionId = (query.id ?? '') as string
-  const type_list = (query.type_list ?? '') as string
-  const token_address = (query.address ?? '') as string
-  const config = getDistributorConfig(chainId)
+  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainId } = useChainInfo()
+  const { distributorConfig } = getV3Config(chainId)
 
   const { data: { data } = {} } = useQuery({
-    enabled: !!chainName && !!token_address,
+    enabled: !!chainName && !!type_list && !!tokenAddr,
     queryKey: [airdropApi.getProof.name],
     queryFn: () => {
       return airdropApi.getProof({
         chain: chainName,
         type_list,
-        token_address,
+        token_address: tokenAddr,
       })
     },
   })
 
-  const { data: isClaimed } = useReadContract({
-    ...config!,
-    functionName: 'isClaimed',
-    args: [BigInt(distributionId!), address!],
-    query: { enabled: !!config && !!distributionId && !!address },
+  const { data: claimData } = useReadContract({
+    ...distributorConfig!,
+    functionName: 'distributions',
+    args: [BigInt(id!)],
+    query: { enabled: !!distributorConfig && !!id },
   })
+  const canClaim = !!id && !!type_list && !!claimData
+
+  console.log('is claimd', id, claimData)
 
   const {
     data: hash,
@@ -63,7 +63,7 @@ export const useAirdrop = () => {
   })
 
   const claim = () => {
-    if (!config) {
+    if (!distributorConfig) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -84,10 +84,10 @@ export const useAirdrop = () => {
     console.log('proof', { kol_proof, community_proof })
 
     writeContract({
-      ...config!,
+      ...distributorConfig,
       functionName: 'claim',
       args: [
-        BigInt(distributionId),
+        BigInt(id),
         isKol ? addPrefix0x(kol_proof) : [],
         isCmnt ? addPrefix0x(community_proof) : [],
       ],
@@ -97,7 +97,7 @@ export const useAirdrop = () => {
   return {
     isSubmittingClaim,
     isClaiming,
-    canClaim: !!distributionId && !!type_list && !isClaimed,
+    canClaim,
     claim,
     resetClaim,
   }

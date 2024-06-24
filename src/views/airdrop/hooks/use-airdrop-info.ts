@@ -1,40 +1,40 @@
-import { useAccount, useReadContract } from 'wagmi'
+import { useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 
-import { getDistributorConfig } from '@/contract/v2/config/distributor'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/contract'
+import { getV3Config } from '@/contract/v3/config'
 
 export const useAirdropInfo = (chainName?: string, distributionId = 0) => {
-  const { address } = useAccount()
   const { chainId } = useChainInfo(chainName)
-  const config = getDistributorConfig(chainId)
+  const { distributorConfig } = getV3Config(chainId)
 
-  console.log('id', distributionId, !!distributionId)
   const { data: amountLeftWei = BI_ZERO } = useReadContract({
-    ...config!,
+    ...distributorConfig!,
     functionName: 'getAmountLeft',
     chainId,
     args: [BigInt(distributionId)],
-    query: { enabled: !!distributionId && !!config },
+    query: { enabled: !!distributionId && !!distributorConfig },
   })
 
   const { data: amountClaimedWei = BI_ZERO } = useReadContract({
-    ...config!,
+    ...distributorConfig!,
     functionName: 'getAmountClaimed',
     chainId,
     args: [BigInt(distributionId)],
-    query: { enabled: !!distributionId && !!config },
+    query: { enabled: !!distributionId && !!distributorConfig },
   })
   const amountLeft = formatEther(amountLeftWei)
   const amountClaimed = formatEther(amountClaimedWei)
 
+  console.log('airdrop', amountLeft, amountClaimed)
+
   const { data: isClaimed } = useReadContract({
-    ...config!,
-    functionName: 'isClaimed',
+    ...distributorConfig!,
+    functionName: 'distributions',
     chainId,
-    args: [BigInt(distributionId), address!],
-    query: { enabled: !!distributionId && !!address },
+    args: [BigInt(distributionId)],
+    query: { enabled: !!distributionId },
   })
 
   return {

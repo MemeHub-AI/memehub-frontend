@@ -30,4 +30,9 @@ export const airdropApi = {
   getIdentityList: () => {
     return api.GET<ApiResponse<IdentityList>>('/api/v1/airdrop/identity')
   },
+  getDetails: (req: Omit<AirdropProofReq, 'type_list'>) => {
+    return api.GET<ApiResponse<AirdropItem[]>>(
+      '/api/v1/airdrop/get_airdrop_detail/' + qs.stringify(req)
+    )
+  },
 }

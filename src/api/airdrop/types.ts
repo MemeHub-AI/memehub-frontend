@@ -52,10 +52,10 @@ export interface AirdropItem {
   amount: number
   create: number
   address: string
-  community_name: string
-  community_logo: string
-  kol_name: string
-  kol_logo: string
   chain: string
   distribution_id: number
+  community_name?: string
+  community_logo?: string
+  kol_name?: string
+  kol_logo?: string
 }

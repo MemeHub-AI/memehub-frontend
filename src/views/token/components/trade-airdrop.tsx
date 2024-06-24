@@ -1,6 +1,9 @@
 import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
+import { useQuery } from '@tanstack/react-query'
+import { isEmpty } from 'lodash'
+import { BigNumber } from 'bignumber.js'
 
 import { useAirdrop } from '../hooks/trade-v2/use-airdrop'
 import { cn } from '@/lib/utils'
@@ -10,35 +13,76 @@ import { Countdown } from '@/views/airdrop/components/countdown'
 import { utilTime } from '@/utils/time'
 import { Button } from '@/components/ui/button'
 import { useTokenContext } from '@/contexts/token'
+import { airdropApi } from '@/api/airdrop'
+import { useTradeSearchParams } from '../hooks/use-search-params'
+import { AirdropItem } from '@/api/airdrop/types'
+import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
+import { MarketType } from '@/api/token/types'
 
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
-  const hasKol = true
-  const hasCommunities = true
-  const isOnlyOne = (hasKol && !hasCommunities) || (!hasKol && hasCommunities)
+  const { chainName, tokenAddr } = useTradeSearchParams()
+
+  const {
+    data: { data = [] } = {},
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: [airdropApi.getDetails.name],
+    queryFn: () => {
+      return airdropApi.getDetails({
+        chain: chainName,
+        token_address: tokenAddr,
+      })
+    },
+  })
+  const kol = data.find((a) => a.kol_name)
+  const communities = data.find((a) => a.community_name)
+  const isOnlyOne = data.length === 1
+
+  if (isEmpty(data)) return
 
   return (
     <div className="mt-2.5 gap-4 border-2 border-black rounded-lg pt-3 pb-2">
       <h2 className="font-bold text-lg ml-3 w-fit">{t('airdrop')}</h2>
-
       <div className="flex items-center gap-3">
-        {hasKol && (
-          <AirdropCard className={cn('w-full', isOnlyOne && 'w-1/2')} />
+        {kol && (
+          <AirdropCard
+            className={cn('w-full', isOnlyOne && 'w-1/2')}
+            airdrop={kol}
+            suffix={t('ambassador')}
+            typeList={MarketType.Kol}
+          />
         )}
-        {hasCommunities && (
-          <AirdropCard className={cn('w-full', isOnlyOne && 'w-1/2')} />
+        {communities && (
+          <AirdropCard
+            className={cn('w-full', isOnlyOne && 'w-1/2')}
+            airdrop={communities}
+            suffix={t('holder')}
+            typeList={MarketType.Community}
+          />
         )}
       </div>
     </div>
   )
 }
 
-interface AirdropCardProps extends ComponentProps<typeof Card> {}
+interface AirdropCardProps extends ComponentProps<typeof Card> {
+  airdrop: AirdropItem
+  suffix: string
+  typeList: number
+}
 
-const AirdropCard = ({ className }: AirdropCardProps) => {
+const AirdropCard = (props: AirdropCardProps) => {
+  const { className, airdrop, suffix, typeList } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
-  const { canClaim } = useAirdrop()
+
+  const { amountLeft, amountClaimed } = useAirdropInfo(
+    airdrop.chain,
+    airdrop.distribution_id
+  )
+  const { canClaim } = useAirdrop(airdrop.distribution_id, typeList.toString())
 
   return (
     <Card
@@ -47,10 +91,16 @@ const AirdropCard = ({ className }: AirdropCardProps) => {
       border="none"
       className={cn('cursor-[unset]', className)}
     >
-      <div className="flex items-center gap-24 justify-between">
-        <div className="bg-lime-green flex items-center gap-2 rounded-md">
-          <Img className="w-8 h-8" alt="avatar" />
-          <span>KOL Ambassador</span>
+      <div className="flex items-center gap-2 justify-between">
+        <div className="bg-lime-green flex items-center gap-2 rounded-md pr-2">
+          <Img
+            src={airdrop.kol_logo || airdrop.community_logo}
+            alt="avatar"
+            className="w-10 h-10 rounded-r-none"
+          />
+          <span>
+            {airdrop.kol_name || airdrop.community_name} {suffix}
+          </span>
           <img src="/images/check.png" alt="check" className="w-6 h-6" />
         </div>
         {utilTime.isPast(0) ? (
@@ -63,12 +113,14 @@ const AirdropCard = ({ className }: AirdropCardProps) => {
       <div className="mt-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
-          <span>90000 {tokenInfo?.ticker}</span>
+          <span>
+            {BigNumber(airdrop.amount ?? 0).toFormat()} {tokenInfo?.ticker}
+          </span>
         </div>
 
         <div className="flex items-center gap-2">
           <TbUsers size={20} />
-          10/20
+          {amountLeft} / {amountClaimed}
         </div>
       </div>
       <Button
