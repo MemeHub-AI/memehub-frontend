@@ -144,7 +144,11 @@ export const Profile = (props: ComponentProps<'div'>) => {
         )}
       </CardHeader>
 
-      <CardContent className="px-4 flex items-center gap-2">
+      <CardContent className="px-4 flex flex-col items-start gap-2">
+        <div className="">
+          <p>parent: {fmt.addr(userInfo?.inviter.one, { len: 8 })}</p>
+          <p>grandparent: {fmt.addr(userInfo?.inviter.two, { len: 8 })}</p>
+        </div>
         <RewardButton shadow="none" className="border-none text-lg px-3" />
         <p
           className="text-sm text-blue-600 cursor-pointer hover:underline"
