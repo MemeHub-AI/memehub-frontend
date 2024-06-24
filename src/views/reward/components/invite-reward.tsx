@@ -10,57 +10,57 @@ import { cn } from '@/lib/utils'
 const cards = [
   {
     chain: {
-      logo: '/images/bsc.svg',
+      logo: 'https://storage.memehub.ai/chains/logo/bsc.png',
       name: 'BNB Chain',
       symbol: 'BNB',
     },
-    total: 0.23,
-    unclaimed: 0.23,
-  },
-  {
-    chain: {
-      logo: '/images/bsc.svg',
-      name: 'Scroll',
-      symbol: 'ETH',
-    },
-    total: 0.3,
-    unclaimed: 0.3,
-  },
-  {
-    chain: {
-      logo: '/images/bsc.svg',
-      name: 'Blast',
-      symbol: 'ETH',
-    },
-    total: 0.32,
-    unclaimed: 0.32,
-  },
-  {
-    chain: {
-      logo: '/images/bsc.svg',
-      name: 'Fantom',
-      symbol: 'ETH',
-    },
-    total: 1.23,
-    unclaimed: 1.23,
-  },
-  {
-    chain: {
-      logo: '/images/bsc.svg',
-      name: 'Base',
-      symbol: 'ETH',
-    },
-    total: 10.23,
+    total: 23.23,
     unclaimed: 10.23,
   },
   {
     chain: {
-      logo: '/images/bsc.svg',
+      logo: 'https://storage.memehub.ai/chains/logo/scroll.png',
+      name: 'Scroll',
+      symbol: 'ETH',
+    },
+    total: 3.3,
+    unclaimed: 0.3,
+  },
+  {
+    chain: {
+      logo: 'https://storage.memehub.ai/chains/logo/blast.png',
+      name: 'Blast',
+      symbol: 'ETH',
+    },
+    total: 1.32,
+    unclaimed: 0.32,
+  },
+  {
+    chain: {
+      logo: 'https://storage.memehub.ai/chains/logo/fantom.png',
+      name: 'Fantom',
+      symbol: 'ETH',
+    },
+    total: 1.23,
+    unclaimed: 1,
+  },
+  {
+    chain: {
+      logo: 'https://storage.memehub.ai/chains/logo/base.png',
+      name: 'Base',
+      symbol: 'ETH',
+    },
+    total: 10.23,
+    unclaimed: 4.23,
+  },
+  {
+    chain: {
+      logo: 'https://storage.memehub.ai/chains/logo/zksync.png',
       name: 'zkSync',
       symbol: 'ETH',
     },
-    total: 12.23,
-    unclaimed: 12.23,
+    total: 8.23,
+    unclaimed: 2.23,
   },
 ]
 
