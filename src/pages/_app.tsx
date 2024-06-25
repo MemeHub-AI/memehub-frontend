@@ -11,6 +11,7 @@ import { useRewardCode } from '@/hooks/use-reward-code'
 import { useStorage } from '@/hooks/use-storage'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { qs } from '@/hooks/use-fetch'
 
 let code: string | undefined
 
@@ -21,24 +22,24 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter()
   if (rewardCode && rewardCode !== getRewardCode()) setRewardCode(rewardCode)
 
-  const handleRouteChange = () => {
-    console.log(code)
-
-    if (code && !location.search.includes(`?r=${code}`)) {
+  const handleRouteChange = (url: string) => {
+    if (code && !/(\?|&)r=/.test(location.search)) {
       const url = new URL(location.origin + location.pathname)
+      const query = qs.parse(location.search)
+      Object.keys(query).forEach((key) => {
+        url.searchParams.set(key, query[key])
+      })
       url.searchParams.set('r', code)
       router.replace(url.toString(), undefined, { shallow: true })
     }
+    router.events.off('routeChangeComplete', handleRouteChange)
   }
 
   useEffect(() => {
     code = location.search.match(/r=([^&]+)*/)?.[1]
-    router.events.on('routeChangeComplete', handleRouteChange)
-
-    // 组件卸载时取消监听
-    return () => {
-      router.events.off('routeChangeComplete', handleRouteChange)
-    }
+    router.events.on('routeChangeStart', () => {
+      router.events.on('routeChangeComplete', handleRouteChange)
+    })
   }, [])
 
   return (

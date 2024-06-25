@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, memo } from 'react'
 import clsx from 'clsx'
 
 import { IdeaBasicInfo } from '@/api/idea/type'
@@ -10,7 +10,7 @@ interface MemeStoryData {
   data: IdeaBasicInfo
 }
 
-export const MemeStory = ({ data }: MemeStoryData) => {
+export const MemeStory = memo(({ data }: MemeStoryData) => {
   let content =
     data?.content
       // .replaceAll(/ src=/g, ' data-src1=')
@@ -91,7 +91,7 @@ export const MemeStory = ({ data }: MemeStoryData) => {
       ) : null}
     </div>
   )
-}
+})
 
 const Contentskeleton = () => {
   return (

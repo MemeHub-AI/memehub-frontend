@@ -37,6 +37,10 @@ export const RewardButton = React.forwardRef<
     setDiamondEl(diamondRef.current)
   }, [diamondRef.current])
 
+  if (userInfo?.id == null) {
+    return <></>
+  }
+
   return (
     <Button
       variant="outline"

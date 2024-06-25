@@ -1,4 +1,4 @@
-import React, { useState, type ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { clsx } from 'clsx'
@@ -23,6 +23,7 @@ import { Button } from './ui/button'
 import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
 import { newsApi } from '@/api/news'
 import { useAsideStore } from '@/stores/use-aside-store'
+import { replace } from 'lodash'
 
 interface Props extends ComponentProps<'div'> {
   defalutTab?: number
@@ -41,7 +42,7 @@ export const OpportunityMoonshot = (props: Props) => {
   const { defalutTab = 1, className, listClassName, containerClass } = props
   const storage = useStorage()
   const { t } = useTranslation()
-  const { push, query, ...router } = useRouter()
+  const { push, replace, query, ...router } = useRouter()
   const { tab, setTab } = useAsideStore()
 
   const { data: countryList, isLoading: loadingCountry } = useQuery({
@@ -179,7 +180,13 @@ export const OpportunityMoonshot = (props: Props) => {
               news={news!}
               key={i}
               onClick={() => {
-                push(`${Routes.Idea}/${news?.id}?type=${tab === 1 ? 3 : 1}`)
+                if (router.pathname.startsWith(Routes.Idea)) {
+                  replace(
+                    `${Routes.Idea}/${news?.id}?type=${tab === 1 ? 3 : 1}`
+                  )
+                } else {
+                  push(`${Routes.Idea}/${news?.id}?type=${tab === 1 ? 3 : 1}`)
+                }
               }}
             />
           ))}

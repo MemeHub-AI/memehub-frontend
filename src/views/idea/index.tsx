@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ideaApi } from '@/api/idea'
 import { useRouter } from 'next/router'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { defaultImg } from '@/config/link'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
@@ -26,14 +26,11 @@ const IdeaPage = () => {
   const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
   const defualtTab = Math.min(+type - 1, 1)
 
-  // const [tabIdx, setTab] = useState(defualtTab)
-  // const tabs = [t('ideas'), t('meme.story')]
-
   const { data: basicInfoData } = useQuery({
     queryKey: [ideaApi.getIdeaInfo.name, newsId, type],
     queryFn: () => {
-      if (newsId == undefined || type === undefined) {
-        throw new Error('newsId is undefined')
+      if (newsId == undefined || type == undefined) {
+        return Promise.reject()
       }
 
       if (+type === 3) {

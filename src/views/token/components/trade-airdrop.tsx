@@ -18,18 +18,23 @@ import { useTradeSearchParams } from '../hooks/use-search-params'
 import { AirdropItem } from '@/api/airdrop/types'
 import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
 import { MarketType } from '@/api/token/types'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
+
+  const { userInfo } = useUserStore()
 
   const {
     data: { data = [] } = {},
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: [airdropApi.getDetails.name, chainName, tokenAddr],
+    queryKey: [airdropApi.getDetails.name, chainName, tokenAddr, userInfo?.id],
     queryFn: () => {
+      if (userInfo?.id == null) return Promise.reject()
+
       return airdropApi.getDetails({
         chain: chainName,
         token_address: tokenAddr,
