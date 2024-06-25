@@ -11,13 +11,8 @@ import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useTranslation } from 'react-i18next'
 import { WaterList } from './components/water-list'
-import {
-  MobileQpportunityMoonshot,
-  OpportunityMoonshot,
-} from '@/components/opportunity-moonshot'
-import { cn } from '@/lib/utils'
+import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { MemeStory } from './components/meme-story'
-import { newsApi } from '@/api/news'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { fmt } from '@/utils/fmt'
 

@@ -18,6 +18,8 @@ import clsx from 'clsx'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Img } from '@/components/img'
+import { useUserStore } from '@/stores/use-user-store'
+import { useWalletStore } from '@/stores/use-wallet-store'
 
 interface Props {
   ideaData: IdeaDataList | undefined
@@ -37,8 +39,13 @@ export const TokenInfo = ({ ideaData }: Props) => {
   const uniqueKey = useMemo(nanoid, [])
   const { onIdeaConfirm } = useGenAIIdea()
   const { setFormInfo, setLoadingLogo, setLoadingPoster } = useAimemeInfoStore()
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
 
   const onCreateNow = (item: IdeaDataList) => {
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
     router.push(`${Routes.Create}`)
     setFormInfo({
       name: item?.name,

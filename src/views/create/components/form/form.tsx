@@ -182,11 +182,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                 <FormItem className="flex-1 mr-4">
                   <FormLabel className="font-bold">{t('website')}</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={t('website.placeholder')}
-                      type="url"
-                      {...field}
-                    />
+                    <Input placeholder={t('website.placeholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -199,11 +195,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                 <FormItem className="flex-1 opacity-0">
                   <FormLabel>{t('website')}</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={t('website.placeholder')}
-                      type="url"
-                      {...field}
-                    />
+                    <Input placeholder={t('website.placeholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

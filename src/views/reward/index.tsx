@@ -21,7 +21,7 @@ export const RewardPage = () => {
   const { t } = useTranslation()
   const { isCopied, copy } = useClipboard()
   const { userInfo } = useUserStore()
-  const link = INVITE_LINK + (userInfo?.code || '')
+  const link = window.location.href + (userInfo?.code || '')
 
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
