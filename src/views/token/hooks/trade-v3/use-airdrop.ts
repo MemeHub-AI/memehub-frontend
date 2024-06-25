@@ -1,8 +1,10 @@
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
+import { nanoid } from 'nanoid'
 
 import { airdropApi } from '@/api/airdrop'
 import { useChainInfo } from '@/hooks/use-chain-info'
@@ -18,10 +20,11 @@ export const useAirdrop = (id: number, type_list: string) => {
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
   const { distributorConfig } = getV3Config(chainId)
+  const uniqueKey = useMemo(nanoid, [])
 
   const { data: { data } = {} } = useQuery({
     enabled: !!chainName && !!type_list && !!tokenAddr,
-    queryKey: [airdropApi.getProof.name, chainName, type_list, tokenAddr],
+    queryKey: [airdropApi.getProof.name + uniqueKey],
     queryFn: () => {
       return airdropApi.getProof({
         chain: chainName,
@@ -70,15 +73,11 @@ export const useAirdrop = (id: number, type_list: string) => {
       return
     }
 
-    console.log('claim airdrop', { kol_proof, community_proof })
+    console.log('claim airdrop', id, type_list, { kol_proof, community_proof })
     writeContract({
       ...distributorConfig,
       functionName: 'claim',
-      args: [
-        BigInt(id),
-        isKol ? addPrefix0x(kol_proof) : [],
-        isCmnt ? addPrefix0x(community_proof) : [],
-      ],
+      args: [BigInt(id), addPrefix0x(kol_proof), addPrefix0x(community_proof)],
     })
   }
 

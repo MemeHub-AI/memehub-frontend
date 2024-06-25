@@ -29,7 +29,7 @@ interface Props {
 }
 export const FormChain = ({ formData }: Props) => {
   const { form, formFields, chains } = formData
-  const { switchChain } = useSwitchChain()
+  const { switchChainAsync } = useSwitchChain()
   const { t } = useTranslation()
   const [show, setShow] = useState(false)
   const { findChain } = useChainsStore()
@@ -37,6 +37,15 @@ export const FormChain = ({ formData }: Props) => {
 
   const isSelect = (v: string) => {
     return chains.findIndex((c) => c.name === v) > 6
+  }
+
+  const switchChain = (id: string, name: string) => {
+    switchChainAsync({ chainId: Number(id) })
+      .then(() => {
+        // Only success can change the chain.
+        form?.setValue(formFields?.chainName, name)
+      })
+      .catch(() => {})
   }
 
   // Default select.
@@ -82,10 +91,7 @@ export const FormChain = ({ formData }: Props) => {
                       <RadioGroupItem
                         value={c.name}
                         disabled={!c.is_supported}
-                        onClick={() => {
-                          form?.setValue(formFields?.chainName!, c.name)
-                          switchChain({ chainId: Number(c.id) })
-                        }}
+                        onClick={() => switchChain(c.id, c.name)}
                       >
                         <img
                           src={c.logo}
@@ -119,8 +125,7 @@ export const FormChain = ({ formData }: Props) => {
                         setShow(false)
                         const chain = findChain(v)
                         if (!chain) return
-                        form?.setValue(formFields?.chainName!, chain.name)
-                        switchChain({ chainId: Number(chain.id) })
+                        switchChain(chain.id, chain.name)
                       }}
                     >
                       <SelectTrigger
