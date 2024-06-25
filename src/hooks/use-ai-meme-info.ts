@@ -1,6 +1,8 @@
 import { formFields } from './../views/create/hooks/use-form'
 import { aiApi } from '@/api/ai'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { useUserStore } from '@/stores/use-user-store'
+import { useWalletStore } from '@/stores/use-wallet-store'
 import { useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
@@ -29,8 +31,14 @@ export const useAIMemeInfo = (options?: Options) => {
   const [isLoadingMemeImg, setIsLoadingMemeImg] = useState(false)
   const [isLoadingMemePoster, setIsLoadingMemePoster] = useState(false)
   const { formInfo, setFormInfo } = useAimemeInfoStore()
+  const { userInfo } = useUserStore()
+  const { setConnectOpen } = useWalletStore()
 
   const getAIMemeImg = async () => {
+    if (userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
     setIsLoadingMemeInfo(false)
     setIsLoadingMemeImg(true)
     setIsLoadingMemePoster(true)
@@ -91,6 +99,10 @@ export const useAIMemeInfo = (options?: Options) => {
   }
 
   const getAIMemeInfo = async (title: string) => {
+    if (userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
     setIsLoadingMemeInfo(true)
     setIsLoadingMemeImg(true)
     setIsLoadingMemePoster(true)

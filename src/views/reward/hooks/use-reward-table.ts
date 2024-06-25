@@ -8,6 +8,7 @@ import { first } from 'lodash'
 
 import { inviteApi } from '@/api/invite'
 import { RewardItem } from '@/api/invite/types'
+import { useUserStore } from '@/stores/use-user-store'
 
 const page = 1
 
@@ -16,9 +17,13 @@ const page_size = 10
 const emptyArr = [] as any[]
 
 export const useRewardTable = (columns: ColumnDef<RewardItem>[]) => {
+  const { userInfo } = useUserStore()
   const { data } = useInfiniteQuery({
-    queryKey: [inviteApi.getRewardList.name],
+    queryKey: [inviteApi.getRewardList.name, userInfo?.id],
     queryFn: () => {
+      if (userInfo?.id == null) {
+        return Promise.reject()
+      }
       return inviteApi.getRewardList({ page, page_size })
     },
     initialPageParam: 1,

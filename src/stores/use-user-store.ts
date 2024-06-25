@@ -26,7 +26,7 @@ export const useUserStore = create<UserStore>((set, get) => ({
   setUserIdentity: (userIdentity) => set({ userIdentity }),
   hasIdentity: () => {
     const { kol = false, community = [] } = get().userIdentity || {}
-    return kol && !isEmpty(community)
+    return !!kol || !isEmpty(community)
   },
   setRefetchUserInfo: (refetchUserInfo) => set({ refetchUserInfo }),
 }))

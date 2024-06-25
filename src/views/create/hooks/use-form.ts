@@ -27,6 +27,12 @@ export const formFields = {
   marketing: 'marketing',
 } as const
 
+const enum URL_TYPE {
+  TWITTER = 'https://x.com/',
+  TELEGRAM = 'https://t.me/',
+  WEBSITE = 'https://',
+}
+
 export const useCreateTokenForm = (
   useDeployResult: ReturnType<typeof useDeploy>
 ) => {
@@ -59,6 +65,16 @@ export const useCreateTokenForm = (
       'i'
     )
     return !!pattern.test(v)
+  }
+
+  const handleUrl = (value: string = '', type: URL_TYPE) => {
+    if (value) {
+      if (value.startsWith('@')) {
+        value = value.replace('@', '')
+      }
+      return /^(https|http):\/\//.test(value) ? value : `${type}${value}`
+    }
+    return value
   }
 
   const formSchema = z.object({
@@ -118,9 +134,9 @@ export const useCreateTokenForm = (
       desc: values.description! as string,
       image: (values.logo! as string).replace('mini', 'origin'),
       chain: values.chainName as string,
-      twitter_url: values.twitter as string,
-      telegram_url: values.telegram as string,
-      website: values.website as string,
+      twitter_url: handleUrl(values.twitter, URL_TYPE.TWITTER),
+      telegram_url: handleUrl(values.telegram, URL_TYPE.TELEGRAM),
+      website: handleUrl(values.website, URL_TYPE.WEBSITE),
       coin_type: values.coinType as number,
       marketing: values.marketing as Marketing[],
       version: ContractVersion.V3, // Mark version for create token.

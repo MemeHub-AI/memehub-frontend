@@ -11,6 +11,7 @@ import { Img } from '@/components/img'
 import { CommunityCategory } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
 import { airdropApi } from '@/api/airdrop'
+import { useIds } from '@/hooks/use-ids'
 
 const kolHref = ''
 const communityHref = ''
@@ -19,29 +20,14 @@ export const Ids = () => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
-  const { setUserIdentity, userInfo } = useUserStore()
 
-  const { data } = useQuery({
-    queryKey: [airdropApi.getIdentityList.name, userInfo?.id],
-    queryFn: async () => {
-      if (userInfo?.id == null) return Promise.reject()
+  const { ids } = useIds()
 
-      const { data } = await airdropApi.getIdentityList()
-      return data
-    },
-  })
-  const ids = data
   const communityMap = {
     [CommunityCategory.Chat]: t('member'),
     [CommunityCategory.Nft]: t('holder'),
     [CommunityCategory.Token]: t('holder'),
   }
-
-  useEffect(() => {
-    if (ids) {
-      setUserIdentity(ids)
-    }
-  }, [ids])
 
   const getIdStatus = () => {
     if (!isConnected) {

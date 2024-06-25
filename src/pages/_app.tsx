@@ -9,12 +9,20 @@ import { AppProviders } from '@/components/app-providers'
 import Script from 'next/script'
 import { useRewardCode } from '@/hooks/use-reward-code'
 import { useStorage } from '@/hooks/use-storage'
+import { useEffect } from 'react'
+import { Router } from 'next/router'
 
 export default function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation()
   const rewardCode = useRewardCode()
   const { getRewardCode, setRewardCode } = useStorage()
   if (rewardCode && rewardCode !== getRewardCode()) setRewardCode(rewardCode)
+
+  useEffect(() => {
+    Router.events.on('hashChangeStart', (...ref) => {
+      console.log('ref', ref)
+    })
+  }, [])
 
   return (
     <>
