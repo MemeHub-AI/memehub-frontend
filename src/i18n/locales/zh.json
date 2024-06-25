@@ -406,5 +406,9 @@
   "inviter1": "一级邀请人",
   "inviter2": "二级邀请人",
   "url.error": "请输入正确的网址",
-  "need.name.desc.warning": "需要完善代币名字和描述"
+  "need.name.desc.warning": "需要完善代币名字和描述",
+  "invite.self": "您不能用您自己的邀请链接进行交易",
+  "clear-it": "清除它",
+  "invite.cycle-self": "邀请链接错误",
+  "invite.cycle-sef.desc": "你不能使用你自己的邀请链接进行交易"
 }

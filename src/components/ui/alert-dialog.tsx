@@ -13,6 +13,7 @@ interface Props extends AlertDialogPrimitive.AlertDialogProps {
   triggerProps?: AlertDialogPrimitive.DialogTriggerProps
   footerClass?: string
   showFooter?: boolean
+  confirmText?: string
   onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   onConfirm?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
@@ -31,6 +32,7 @@ const AlertDialog = React.forwardRef<
     triggerProps,
     footerClass,
     showFooter = true,
+    confirmText,
     ...restProps
   } = props
   const { t } = useTranslation()
@@ -56,7 +58,7 @@ const AlertDialog = React.forwardRef<
             )}
           >
             <AlertDialogAction onClick={onConfirm} className="max-sm:flex-1">
-              {t('confirm')}
+              {confirmText ?? t('confirm')}
             </AlertDialogAction>
             <AlertDialogCancel
               onClick={onCancel}

@@ -24,6 +24,7 @@ import { INVITE_LINK, INVITE_REWARD } from '@/constants/invite'
 import { useTrade } from '../hooks/use-trade'
 import { useTradeInfo } from '../hooks/use-trade-info'
 import { useUserStore } from '@/stores/use-user-store'
+import { AlertDialog } from '@/components/ui/alert-dialog'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -36,13 +37,21 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { query } = useRouter()
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
+  const router = useRouter()
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
   const { tokenInfo } = useTokenContext()
   const { copy } = useClipboard()
   const { userInfo } = useUserStore()
-  const { isSubmitting, isTraded, buying, selling } = useTrade()
+  const {
+    isSubmitting,
+    isTraded,
+    inviteSelfOpen,
+    setInviteSelfOpen,
+    buying,
+    selling,
+  } = useTrade()
   const {
     nativeBalance,
     tokenBalance,
@@ -128,6 +137,20 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         tokenBalance,
       }}
     >
+      <AlertDialog
+        open={inviteSelfOpen}
+        onOpenChange={setInviteSelfOpen}
+        title={<span className="text-red-500">{t('invite.cycle-self')}</span>}
+        content={t('invite.cycle-sef.desc')}
+        confirmText={t('clear-it')}
+        onConfirm={() => {
+          if (router.query.r) delete router.query.r
+          router.replace({
+            pathname: router.pathname,
+            query: router.query,
+          })
+        }}
+      />
       <Card
         hover="none"
         shadow="none"

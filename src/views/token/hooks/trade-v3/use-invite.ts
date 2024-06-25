@@ -1,16 +1,16 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { inviteApi } from '@/api/invite'
-import { useUserStore } from '@/stores/use-user-store'
 import { useTradeSearchParams } from '../use-search-params'
+import { useUserInfo } from '@/hooks/use-user-info'
 
 export const useInvite = () => {
-  const { userInfo, refetchUserInfo } = useUserStore()
+  const { userInfo, refetchUserInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
 
   const { data: { data } = {} } = useQuery({
     enabled: !!referralCode,
-    queryKey: [inviteApi.getDetail.name],
+    queryKey: [inviteApi.getDetail.name, referralCode],
     queryFn: () => inviteApi.getDetail(referralCode),
   })
 
@@ -21,16 +21,7 @@ export const useInvite = () => {
   } = useMutation({
     mutationKey: [inviteApi.bindInviter.name],
     mutationFn: async (overrideCode?: string | void) => {
-      // Refresh user invite code. make sure it's the latest.
-      await refetchUserInfo?.()
-
-      console.log(
-        'bind inviter',
-        overrideCode,
-        referralCode,
-        userInfo?.code,
-        userInfo?.inviter
-      )
+      await refetchUserInfo()
 
       const code = overrideCode ?? referralCode
       if (code === userInfo?.code || !!userInfo?.inviter.one) {

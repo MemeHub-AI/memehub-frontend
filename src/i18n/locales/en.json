@@ -414,5 +414,9 @@
   "inviter1": "First-level inviter",
   "inviter2": "Second-level inviter",
   "url.error": "Please enter a valid URL.",
-  "need.name.desc.warning": "Token name and description need to be improved"
+  "need.name.desc.warning": "Token name and description need to be improved",
+  "invite.self": "You cannot trade using your own referral link",
+  "clear-it": "Clear it",
+  "invite.cycle-self": "Invite link invalid",
+  "invite.cycle-sef.desc": "You cannot trade using your own referral link"
 }
