@@ -1,6 +1,7 @@
 import React, { type ComponentProps, useMemo, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
+import { BigNumber } from 'bignumber.js'
 
 import { Button } from './ui/button'
 import { Routes } from '@/routes'
@@ -55,7 +56,9 @@ export const RewardButton = React.forwardRef<
       )}
       <div className="flex items-center gap-1">
         <DiamondIcon size={20} ref={diamondRef} />
-        {userInfo?.reward_amount ? userInfo?.reward_amount : t('rewards')}
+        {userInfo?.reward_amount
+          ? BigNumber(userInfo?.reward_amount).toFormat()
+          : t('rewards')}
       </div>
     </Button>
   )

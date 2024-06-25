@@ -68,7 +68,9 @@ export const TradeSuccessCard = (props: Props) => {
         {!isZero && (
           <p className="text-base">
             {t('trade.success.diamond').split('$')[0]}
-            <span className="text-xl text-blue-600">{diamond}</span>
+            <span className="text-xl text-blue-600">
+              {BigNumber(diamond).toFormat()}
+            </span>
             {t('trade.success.diamond').split('$')[1]}
           </p>
         )}

@@ -55,7 +55,10 @@ export const useTrade = () => {
       bindInviter()
     },
     onError: CONTRACT_ERR.tradeFailed,
-    onFillay: () => resetting(),
+    onFillay: () => {
+      toast.dismiss()
+      resetting()
+    },
   })
   const isTrading = isSubmitting || isLoading
 
