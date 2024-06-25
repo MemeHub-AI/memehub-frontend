@@ -10,21 +10,20 @@ import { inviteApi } from '@/api/invite'
 import { RewardItem } from '@/api/invite/types'
 import { useUserStore } from '@/stores/use-user-store'
 
-const page = 1
-
-const page_size = 10
-
 const emptyArr = [] as any[]
 
 export const useRewardTable = (columns: ColumnDef<RewardItem>[]) => {
   const { userInfo } = useUserStore()
-  const { data } = useInfiniteQuery({
+  const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: [inviteApi.getRewardList.name, userInfo?.id],
-    queryFn: () => {
+    queryFn: ({ pageParam }) => {
       if (userInfo?.id == null) {
         return Promise.reject()
       }
-      return inviteApi.getRewardList({ page, page_size })
+      return inviteApi.getRewardList({
+        page: pageParam,
+        page_size: 10,
+      })
     },
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
@@ -46,7 +45,6 @@ export const useRewardTable = (columns: ColumnDef<RewardItem>[]) => {
     total: data?.total ?? 0,
     ths: table.getHeaderGroups(),
     rows: table.getRowModel().rows,
-    page,
-    page_size,
+    fetchNextPage,
   }
 }

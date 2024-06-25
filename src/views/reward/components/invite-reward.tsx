@@ -103,7 +103,7 @@ const InviteCard = ({ c }: { c: ChainData }) => {
     isClaiming
 
   return (
-    <Card shadow="none" padding="sm">
+    <Card shadow="none" padding="sm" className="cursor-[unset]">
       <div className="flex items-center gap-2">
         <Img src={c.logo} alt="logo" className="w-6 h-6" />
         <p>{c.name}</p>

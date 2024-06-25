@@ -18,13 +18,13 @@ export const useToastDiamond = () => {
     mutationFn: otherApi.getDiamondAmount,
   })
 
-  const toastDiamond = async (amount: string) => {
+  const toastDiamond = async (amount: string, operation: string) => {
     reset()
     const { data } = await mutateAsync({
       token_address: tokenAddr,
       chain: chainName,
       base_amount: amount,
-      operation: TradeType.Buy,
+      operation,
     })
 
     const id = toast(

@@ -13,7 +13,7 @@ import { InviteReward } from './components/invite-reward'
 import { InviteTable } from './components/invite-table'
 import { useUserStore } from '@/stores/use-user-store'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { INVITE_LINK, INVITE_REWARD } from '@/constants/invite'
+import { INVITE_REWARD } from '@/constants/invite'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { cn } from '@/lib/utils'
 

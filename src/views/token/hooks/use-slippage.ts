@@ -3,12 +3,14 @@ import { BigNumber } from 'bignumber.js'
 
 import { useStorage } from '@/hooks/use-storage'
 
-const MIN_SLIPPAGE = '0'
+const DEFAULT_SLIPPAGE = '5'
 
 export const useSlippage = () => {
   const { getSlippage, setSlippage: setCacheSlippage } = useStorage()
-  const cachedSlippage = getSlippage() || MIN_SLIPPAGE
-  const slip = BigNumber(cachedSlippage).isNaN() ? MIN_SLIPPAGE : cachedSlippage
+  const cachedSlippage = getSlippage() || DEFAULT_SLIPPAGE
+  const slip = BigNumber(cachedSlippage).isNaN()
+    ? DEFAULT_SLIPPAGE
+    : cachedSlippage
 
   const [slippage, setSlip] = useState(slip)
 

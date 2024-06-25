@@ -7,6 +7,7 @@ import { gsap } from 'gsap'
 import { utilLang } from '@/utils/lang'
 import { DiamondIcon } from '@/components/diamond-icon'
 import { useHeaderStore } from '@/stores/use-header-store'
+import { fmt } from '@/utils/fmt'
 
 interface Props {
   amount: string
@@ -61,7 +62,7 @@ export const TradeSuccessCard = (props: Props) => {
 
         <p className="text-base my-1">
           {utilLang.replace(t('trade.success.reward'), [
-            BigNumber(amount || 0).toFormat(),
+            fmt.decimals(amount),
             symbol,
           ])}
         </p>

@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { formatEther } from 'viem'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -12,20 +13,31 @@ import { ContractVersion } from '@/enum/contract'
 import { useDexTrade } from './trade-dex/use-dex-trade'
 import { useToastDiamond } from '@/hooks/use-toast-diamond'
 import { useInvite } from './trade-v3/use-invite'
+import { useUserInfo } from '@/hooks/use-user-info'
+import { useTradeSearchParams } from './use-search-params'
+import { useTradeInfoV3 } from './trade-v3/use-trade-info'
+import { TradeType } from '@/enum/trade'
 
 // Used for trade success tips.
-let lastTradeAmount = ''
+const lastTrade = {
+  amount: '',
+  type: '',
+}
 
 export const useTrade = () => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
   const { bindInviter } = useInvite()
+  const { userInfo, refetchUserInfo } = useUserInfo()
+  const { referralCode } = useTradeSearchParams()
+  const [inviteSelfOpen, setInviteSelfOpen] = useState(false)
 
   const dexTrade = useDexTrade()
   const tradeV1 = useTradeV1(dexTrade)
   const tradeV2 = useTradeV2(dexTrade)
   const tradeV3 = useTradeV3(dexTrade)
+  const { getTokenAmount } = useTradeInfoV3()
 
   // handling version.
   const trade = useMemo(() => {
@@ -51,28 +63,49 @@ export const useTrade = () => {
     hash: tradeHash,
     onLoading: () => toast.loading(t('tx.waiting')),
     onSuccess: () => {
-      toastDiamond(lastTradeAmount)
+      toastDiamond(lastTrade.amount, lastTrade.type)
       bindInviter()
     },
     onError: CONTRACT_ERR.tradeFailed,
     onFillay: () => {
       toast.dismiss()
       resetting()
+      refetchUserInfo()
     },
   })
   const isTrading = isSubmitting || isLoading
+
+  const checkForTrade = (amount: string) => {
+    if (userInfo?.code === referralCode) {
+      setInviteSelfOpen(true)
+      return false
+    }
+    return true
+  }
 
   const buying = (
     amount: string,
     slippage: string,
     setValue?: (value: string) => void
   ) => {
-    lastTradeAmount = amount
+    if (!checkForTrade(amount)) return
+
+    // TODO: temp
+    getTokenAmount(amount).then((data) => {
+      lastTrade.amount = formatEther(data)
+      lastTrade.type = TradeType.Buy
+    })
+
+    console.log('trade', amount, slippage)
     trade?.buy(amount, slippage, setValue)
   }
 
   const selling = (amount: string, slippage: string) => {
-    lastTradeAmount = amount
+    if (!checkForTrade(amount)) return
+    lastTrade.amount = amount
+    lastTrade.type = TradeType.Sell
+
+    console.log('sell', amount, slippage)
     trade?.sell(amount, slippage)
   }
 
@@ -89,5 +122,7 @@ export const useTrade = () => {
     buying,
     selling,
     resetting,
+    inviteSelfOpen,
+    setInviteSelfOpen,
   }
 }

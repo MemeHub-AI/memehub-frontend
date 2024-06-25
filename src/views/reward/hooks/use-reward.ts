@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 
 import { getV3Config } from '@/contract/v3/config'
 import { BI_ZERO } from '@/constants/contract'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
 
@@ -14,9 +13,6 @@ export const useReward = (chainId: number) => {
   const { t } = useTranslation()
   const { address } = useAccount()
   const { recommendConfig } = getV3Config(chainId)
-  const { findChain } = useChainsStore()
-
-  console.log('c', findChain(chainId))
 
   const { data: total = BI_ZERO } = useReadContract({
     ...recommendConfig!,
@@ -44,9 +40,13 @@ export const useReward = (chainId: number) => {
   })
   const { isFetching } = useWaitForTx({
     hash,
+    onLoading: () => toast.loading(t('claiming')),
     onSuccess: () => toast.success(t('claim.success')),
     onError: () => CONTRACT_ERR.claimFailed(),
-    onFillay: () => reset(),
+    onFillay: () => {
+      toast.dismiss()
+      reset()
+    },
   })
   const isClaiming = isPending || isFetching
 
