@@ -1,8 +1,8 @@
 import { BigNumber } from 'bignumber.js'
-import { Hash, parseEther, Address } from 'viem'
+import { Hash, parseEther, Address, Log } from 'viem'
 import dayjs from 'dayjs'
 
-import { TRADE_SERVICE_FEE } from '@/constants/contract'
+import { DEPLOY_LOG_TOPIC, TRADE_SERVICE_FEE } from '@/constants/contract'
 import { getBlock } from 'wagmi/actions'
 import { wagmiConfig } from '@/config/wagmi'
 
@@ -94,4 +94,12 @@ export const getDeadline = async (offset = 50) => {
     .catch(() => addOffset(dayjs().unix())) // Use local timestamp as fallback.
 
   return BigInt(ts)
+}
+
+export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
+  const hashAddr = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_TOPIC.v3)
+    ?.topics?.[1]
+  const addr = hashAddr?.replace(/0x0+/, '') ?? ''
+
+  return '0x' + addr
 }

@@ -35,7 +35,16 @@ export const useTradeRecord = () => {
   useEffect(() => {
     if (!lastJsonMessage || !lastJsonMessage.data) return
 
-    setTradeRecords((records) => [...lastJsonMessage.data!, ...records])
+    setTradeRecords((records) => {
+      const merged = [...(lastJsonMessage.data ?? []), ...records]
+
+      return merged.reduce((acc, cur) => {
+        const isExisted = acc.find((r) => r.hash === cur.hash)
+        if (!isExisted) acc.push(cur)
+
+        return acc
+      }, [] as WSTradeRecordMessage[])
+    })
   }, [lastJsonMessage])
 
   return {

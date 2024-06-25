@@ -2,9 +2,9 @@ import { bscTestnet, opBNBTestnet, baseSepolia } from 'wagmi/chains'
 
 const dev = {
   [bscTestnet.id]: {
-    bondingCurve: '0x516Ab20f4Ee93919EDF99E72340bdFcCAaDb100d',
-    distributor: '0x856a0E2e91a73598330335cad3933200E8358D66',
-    recommend: '0xb334FFf966CB179147C4c9f81Ad1a22D31B22161',
+    bondingCurve: '0x1675F736bBB3bD68A26bDE0B7AfE15316CD2E627',
+    distributor: '0x0A5D954f336933481b3EBe3d88c059b36Fd6609d',
+    recommend: '0x3821885f067d359c3c409e450910eE1B029b2c62',
   },
   [opBNBTestnet.id]: {
     bondingCurve: '0x16238150eFd5b9490157f87904A08B4caec0ee27',

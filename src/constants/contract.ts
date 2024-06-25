@@ -8,6 +8,10 @@ export const DEPLOY_FEE = {
   v3: BigInt(2000000000000000),
 }
 
+export const DEPLOY_LOG_TOPIC = {
+  v3: '0x886b351c712b81b632ad4da9dfd5d7210a53e22550bf2c0a2b9826fc5d37e1f1',
+}
+
 export const TRADE_SERVICE_FEE = 1.01 // 1%
 
 export const TRADE_BUY_ITEMS = {

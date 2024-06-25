@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 
 import { tokenApi } from '@/api/token'
 import { TokenCommentListRes } from '@/api/token/types'
+import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 
 export const useComments = (enableFetchComments = true) => {
-  const { query } = useRouter()
+  const { tokenAddr } = useTradeSearchParams()
 
   const {
     data: commentData,
@@ -17,11 +17,10 @@ export const useComments = (enableFetchComments = true) => {
     fetchNextPage,
   } = useInfiniteQuery({
     enabled: enableFetchComments,
-    queryKey: [tokenApi.commentList.name, query.address],
+    queryKey: [tokenApi.commentList.name, tokenAddr],
     refetchOnWindowFocus: false,
+    initialPageParam: 1,
     queryFn: ({ pageParam }) => {
-      const tokenAddr = (query.address || '') as string
-
       if (isEmpty(tokenAddr)) return Promise.reject()
 
       // Claer when query.
@@ -31,7 +30,6 @@ export const useComments = (enableFetchComments = true) => {
         page_size: 25,
       })
     },
-    initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
   })
   // Update a single comment, not the refresh list. so we need this state.
