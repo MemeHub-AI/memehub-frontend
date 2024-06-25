@@ -36,8 +36,9 @@ export const useLogin = () => {
         sign: message,
         timestamp,
       })
-    } catch (error) {
-      throw new Error(String(error))
+    } catch (e) {
+      console.error((e as { message: string }).message)
+      throw e
     }
   }
 
