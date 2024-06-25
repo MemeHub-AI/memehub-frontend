@@ -212,7 +212,7 @@
   "create.ai.poster": "AI genterage",
   "onsubmit.createing.warning": "AI is making disclosure of information",
   "meme.logo": "Meme Logo",
-  "need.base.info.warning": "The name and introduction need to be perfected",
+  "need.base.info.warning": "Token name needs to be improved",
   "process": "",
   "progress": "Progress",
   "swatch.chain": "Need to switch to $1 chain",
@@ -375,7 +375,7 @@
   "connect.wallet.airdrop.link": "View Airdrop List after Connecting Wallet",
   "reward.invite-count": "Total invite",
   "reward.invite-friends": "Invite Friends & Earn Rewards",
-  "reward.diamond-reward": "Diamond rewardå",
+  "reward.diamond-reward": "Diamond reward",
   "copy": "Copy",
   "reward.invite": "Invite reward",
   "reward.invite-desc": "Earn $ from each referrals trading fees. Start sharing and earning today!",
@@ -413,5 +413,6 @@
   "claim.failed": "Claim failed, please try again",
   "inviter1": "First-level inviter",
   "inviter2": "Second-level inviter",
-  "url.error": "Please enter a valid URL."
+  "url.error": "Please enter a valid URL.",
+  "need.name.desc.warning": "Token name and description need to be improved"
 }

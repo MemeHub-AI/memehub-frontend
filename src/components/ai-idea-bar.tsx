@@ -75,22 +75,22 @@ export const AIIdeaBar = (props: Props) => {
             placeholder={t('input.you.idea')}
             className="max-w-[180px] ml-4 max-md:ml-0 items-stretch"
             onChange={({ target }) => setValue(target.value)}
-            endIcon={
-              <TooltipProvider>
-                <Tooltip className="block h-full" tip={t('random.meme')}>
-                  <TooltipTrigger className="block h-full">
-                    <div
-                      className="bg-black h-full text-white flex items-center px-1.5 cursor-pointer"
-                      onClick={onRandom}
-                    >
-                      <WiStars size={26} />
-                    </div>
-                  </TooltipTrigger>
-                </Tooltip>
-              </TooltipProvider>
-            }
+            // endIcon={
+            //   <TooltipProvider>
+            //     <Tooltip className="block h-full" tip={t('random.meme')}>
+            //       <TooltipTrigger className="block h-full">
+            //         <div
+            //           className="bg-black h-full text-white flex items-center px-1.5 cursor-pointer"
+            //           onClick={onRandom}
+            //         >
+            //           <WiStars size={26} />
+            //         </div>
+            //       </TooltipTrigger>
+            //     </Tooltip>
+            //   </TooltipProvider>
+            // }
           />
-          <Button onClick={onGen} className="ml-5">
+          <Button onClick={onGen} className="ml-2">
             {t('ai.generate')}
           </Button>
         </div>

@@ -46,7 +46,7 @@ export const PosterForm = ({ formData }: Props) => {
       form.getValues(formFields?.fullname) === '' ||
       form.getValues(formFields?.description) === ''
     ) {
-      toast.warning(t('need.base.info.warning'))
+      toast.warning(t('need.name.desc.warning'))
       return
     }
 

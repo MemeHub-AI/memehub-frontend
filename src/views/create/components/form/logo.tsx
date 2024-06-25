@@ -37,10 +37,7 @@ export const FormLogo = ({ formData }: Props) => {
       return setConnectOpen(true)
     }
 
-    if (
-      form.getValues(formFields?.fullname) === '' ||
-      form.getValues(formFields?.description) === ''
-    ) {
+    if (form.getValues(formFields?.fullname) === '') {
       toast.warning(t('need.base.info.warning'))
       return
     }

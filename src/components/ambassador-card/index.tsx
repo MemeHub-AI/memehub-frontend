@@ -1,6 +1,7 @@
 import { defaultImg } from '@/config/link'
 import { Card } from '../ui/card'
 import { Img } from '../img'
+import { URL_TYPE, utilsUrl } from '@/utils/url'
 
 interface AmbassadorCardProps {
   data?: {
@@ -19,7 +20,10 @@ export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
       shadow={'none'}
       onClick={() => {
         if (!data?.twitter_url && !data?.telegram_url) return
-        open(data?.twitter_url || data?.telegram_url)
+        open(
+          utilsUrl.mediaUrl(data?.twitter_url, URL_TYPE.TWITTER) ||
+            utilsUrl.mediaUrl(data?.telegram_url, URL_TYPE.TELEGRAM)
+        )
       }}
     >
       <Img
