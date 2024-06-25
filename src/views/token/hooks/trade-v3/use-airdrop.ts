@@ -3,7 +3,6 @@ import { useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
-import { zeroHash } from 'viem'
 
 import { airdropApi } from '@/api/airdrop'
 import { useChainInfo } from '@/hooks/use-chain-info'

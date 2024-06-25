@@ -111,10 +111,10 @@ const AirdropCard = (props: AirdropCardProps) => {
           </span>
           <img src="/images/check.png" alt="check" className="w-6 h-6" />
         </div>
-        {utilTime.isPast(0) ? (
+        {utilTime.isPast(airdrop.create) ? (
           t('expired')
         ) : (
-          <Countdown targetTimestamp={0 * 1000} />
+          <Countdown targetTimestamp={airdrop.create * 1000} />
         )}
       </div>
 
