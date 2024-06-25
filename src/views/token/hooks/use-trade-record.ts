@@ -36,10 +36,14 @@ export const useTradeRecord = () => {
     if (!lastJsonMessage || !lastJsonMessage.data) return
 
     setTradeRecords((records) => {
-      const unique = lastJsonMessage.data?.filter((r) =>
-        records.some((r2) => r.hash !== r2.hash)
-      )
-      return unique ?? []
+      const merged = [...(lastJsonMessage.data ?? []), ...records]
+
+      return merged.reduce((acc, cur) => {
+        const isExisted = acc.find((r) => r.hash === cur.hash)
+        if (!isExisted) acc.push(cur)
+
+        return acc
+      }, [] as WSTradeRecordMessage[])
     })
   }, [lastJsonMessage])
 
