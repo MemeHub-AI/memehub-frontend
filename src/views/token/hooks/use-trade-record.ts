@@ -35,7 +35,12 @@ export const useTradeRecord = () => {
   useEffect(() => {
     if (!lastJsonMessage || !lastJsonMessage.data) return
 
-    setTradeRecords((records) => [...lastJsonMessage.data!, ...records])
+    setTradeRecords((records) => {
+      const unique = lastJsonMessage.data?.filter((r) =>
+        records.some((r2) => r.hash !== r2.hash)
+      )
+      return unique ?? []
+    })
   }, [lastJsonMessage])
 
   return {
