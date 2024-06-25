@@ -1,4 +1,4 @@
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { inviteApi } from '@/api/invite'
 import { useUserStore } from '@/stores/use-user-store'
@@ -8,6 +8,12 @@ export const useInvite = () => {
   const { userInfo, refetchUserInfo } = useUserStore()
   const { referralCode } = useTradeSearchParams()
 
+  const { data: { data } = {} } = useQuery({
+    enabled: !!referralCode,
+    queryKey: [inviteApi.getDetail.name],
+    queryFn: () => inviteApi.getDetail(referralCode),
+  })
+
   const {
     isPending: isBinding,
     mutateAsync: bindInviter,
@@ -15,19 +21,28 @@ export const useInvite = () => {
   } = useMutation({
     mutationKey: [inviteApi.bindInviter.name],
     mutationFn: async (overrideCode?: string | void) => {
+      // Refresh user invite code. make sure it's the latest.
+      await refetchUserInfo?.()
+
+      console.log(
+        'bind inviter',
+        overrideCode,
+        referralCode,
+        userInfo?.code,
+        userInfo?.inviter
+      )
+
       const code = overrideCode ?? referralCode
-      console.log('bind', code, userInfo?.code)
-      if (code === userInfo?.code || userInfo?.inviter) {
+      if (code === userInfo?.code || !!userInfo?.inviter.one) {
         return Promise.resolve()
       }
 
-      const { data } = await inviteApi.bindInviter({ invitationCode: code })
-      await refetchUserInfo?.()
-      return data
+      return inviteApi.bindInviter({ invitationCode: code })
     },
   })
 
   return {
+    inviterInfo: data,
     isBinding,
     bindInviter,
     resetBind,

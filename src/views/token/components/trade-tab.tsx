@@ -182,16 +182,20 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
-          <Button
-            className="!w-full font-bold mt-3"
-            onClick={() => copy(INVITE_LINK + userInfo?.code)}
-          >
-            {t('referral.copy')}
-          </Button>
-          <p className="text-xs text-zinc-500 mt-3">
-            {t('referral.desc').split('$')[0]}
-            {INVITE_REWARD}%{t('referral.desc').split('$')[1]}
-          </p>
+          {isConnected && (
+            <>
+              <Button
+                className="!w-full font-bold mt-3"
+                onClick={() => copy(INVITE_LINK + userInfo?.code)}
+              >
+                {t('referral.copy')}
+              </Button>
+              <p className="text-xs text-zinc-500 mt-3">
+                {t('referral.desc').split('$')[0]}
+                {INVITE_REWARD}%{t('referral.desc').split('$')[1]}
+              </p>
+            </>
+          )}
         </Tabs>
       </Card>
     </TradeProvider>

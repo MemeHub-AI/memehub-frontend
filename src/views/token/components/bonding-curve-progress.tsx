@@ -15,7 +15,7 @@ interface Props extends ComponentProps<'div'> {
 export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
-  const { total, current, progress } = useTokenProgressV3()
+  const { total, progress } = useTokenProgressV3()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const threshold = BigNumber(total).lte(0)

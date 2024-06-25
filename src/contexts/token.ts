@@ -18,9 +18,7 @@ interface Value {
 
 const TokenContext = createContext<Value | null>(null)
 
-export const TokenProvider = ({ children, value }: ProviderProps<Value>) => {
-  return createElement(TokenContext.Provider, { value }, children)
-}
+export const TokenProvider = TokenContext.Provider
 
 export const useTokenContext = () => {
   const context = useContext(TokenContext)
