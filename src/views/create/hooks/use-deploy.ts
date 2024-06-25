@@ -9,6 +9,7 @@ import { ContractVersion } from '@/enum/contract'
 import { useDeployV1 } from './use-deploy-v1'
 import { useDeployV2 } from './use-deploy-v2'
 import { useDeployV3 } from './use-deploy-v3'
+import { getDeployLogAddr } from '@/utils/contract'
 
 export interface DeployParams {
   name: string
@@ -42,6 +43,8 @@ export const useDeploy = () => {
   const { deployV2 } = useDeployV2(writeContract)
   const { deployV3 } = useDeployV3(writeContract)
 
+  const deployLogAddr = getDeployLogAddr(data?.logs ?? [])
+
   const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
     cacheParams = params
     const deployParams = {
@@ -72,6 +75,7 @@ export const useDeploy = () => {
   return {
     data,
     deployHash: hash,
+    deployLogAddr,
     isDeploying: isSubmitting || isConfirming,
     isSubmitting,
     isConfirming,

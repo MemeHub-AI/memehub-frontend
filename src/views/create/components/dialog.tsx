@@ -15,6 +15,7 @@ export const CreateTokenStatusDialog = () => {
   const { t } = useTranslation()
   const {
     deployResult: {
+      deployLogAddr,
       createTokenData,
       createTokenError,
       isSubmitting,
@@ -160,10 +161,14 @@ export const CreateTokenStatusDialog = () => {
             >
               {t('deploy.success.view-list')}
             </Link>
-            {chainName && deployedAddr && (
+            {chainName && (deployedAddr || deployLogAddr) && (
               <Link
                 className="text-blue-600 hover:underline"
-                href={fmt.toHref(Routes.Main, chainName, deployedAddr)}
+                href={fmt.toHref(
+                  Routes.Main,
+                  chainName,
+                  deployedAddr || deployLogAddr || ''
+                )}
                 onClick={resetDeploy}
               >
                 {t('deploy.success.view-details')}
