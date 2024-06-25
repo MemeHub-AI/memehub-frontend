@@ -186,7 +186,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             <>
               <Button
                 className="!w-full font-bold mt-3"
-                onClick={() => copy(INVITE_LINK + userInfo?.code)}
+                onClick={() =>
+                  copy(
+                    location.origin + location.pathname + `?r=${userInfo?.code}`
+                  )
+                }
               >
                 {t('referral.copy')}
               </Button>

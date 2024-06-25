@@ -28,7 +28,7 @@ export const Header = () => {
   ]
 
   const onNavClick = (n: Nav) => {
-    push({ pathname: n.path, query })
+    push({ pathname: n.path })
   }
 
   return (
