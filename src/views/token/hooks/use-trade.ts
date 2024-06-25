@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { formatEther } from 'viem'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -14,9 +15,14 @@ import { useToastDiamond } from '@/hooks/use-toast-diamond'
 import { useInvite } from './trade-v3/use-invite'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
+import { useTradeInfoV3 } from './trade-v3/use-trade-info'
+import { TradeType } from '@/enum/trade'
 
 // Used for trade success tips.
-let lastTradeAmount = ''
+const lastTrade = {
+  amount: '',
+  type: '',
+}
 
 export const useTrade = () => {
   const { t } = useTranslation()
@@ -31,6 +37,7 @@ export const useTrade = () => {
   const tradeV1 = useTradeV1(dexTrade)
   const tradeV2 = useTradeV2(dexTrade)
   const tradeV3 = useTradeV3(dexTrade)
+  const { getTokenAmount } = useTradeInfoV3()
 
   // handling version.
   const trade = useMemo(() => {
@@ -56,7 +63,7 @@ export const useTrade = () => {
     hash: tradeHash,
     onLoading: () => toast.loading(t('tx.waiting')),
     onSuccess: () => {
-      toastDiamond(lastTradeAmount)
+      toastDiamond(lastTrade.amount, lastTrade.type)
       bindInviter()
     },
     onError: CONTRACT_ERR.tradeFailed,
@@ -82,7 +89,12 @@ export const useTrade = () => {
     setValue?: (value: string) => void
   ) => {
     if (!checkForTrade(amount)) return
-    lastTradeAmount = amount
+
+    // TODO: temp
+    getTokenAmount(amount).then((data) => {
+      lastTrade.amount = formatEther(data)
+      lastTrade.type = TradeType.Buy
+    })
 
     console.log('trade', amount, slippage)
     trade?.buy(amount, slippage, setValue)
@@ -90,7 +102,8 @@ export const useTrade = () => {
 
   const selling = (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    lastTradeAmount = amount
+    lastTrade.amount = amount
+    lastTrade.type = TradeType.Sell
 
     console.log('sell', amount, slippage)
     trade?.sell(amount, slippage)
