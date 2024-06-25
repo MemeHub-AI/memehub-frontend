@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
+import { nanoid } from 'nanoid'
 
 import { tokenApi } from '@/api/token'
 import { TokenCommentListRes } from '@/api/token/types'
@@ -8,6 +9,7 @@ import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 
 export const useComments = (enableFetchComments = true) => {
   const { tokenAddr } = useTradeSearchParams()
+  const uniqueId = useMemo(nanoid, [])
 
   const {
     data: commentData,
@@ -17,7 +19,7 @@ export const useComments = (enableFetchComments = true) => {
     fetchNextPage,
   } = useInfiniteQuery({
     enabled: enableFetchComments,
-    queryKey: [tokenApi.commentList.name, tokenAddr],
+    queryKey: [tokenApi.commentList.name + uniqueId, tokenAddr],
     refetchOnWindowFocus: false,
     initialPageParam: 1,
     queryFn: ({ pageParam }) => {
