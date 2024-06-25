@@ -14,7 +14,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip } from '@/components/ui/tooltip'
 import { fmt } from '@/utils/fmt'
 
-const KolPercent = 0.01
+const KolPercent = 0.02
 
 const CommunityName = 'BNB'
 const CommunityPercent = 0.05
@@ -46,7 +46,7 @@ export const MarketingField = () => {
     {
       title: t('marketing.community')
         .replace('{}', fmt.percent(CommunityPercent))
-        .replace('{}', CommunityName),
+        .replace('{}', ''),
       desc: t('marketing.community.desc').replace(
         '{}',
         fmt.percent(CommunityPercent)

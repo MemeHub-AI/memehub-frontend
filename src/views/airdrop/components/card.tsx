@@ -31,7 +31,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
   const canClaim = (isKol && !isKolClaimed) || (isCmnt && !isCommunityClaimed)
 
   const onPushToken = () => {
-    if (!airdrop?.chain || !airdrop?.address) return
+    if (!airdrop?.chain || !airdrop?.address || isPast) return
 
     router.push({
       pathname: fmt.toHref(airdrop.chain, airdrop.address),
@@ -98,7 +98,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           </div>
           <Button
             className="mt-3 font-bold w-full"
-            disabled={isPast || canClaim}
+            disabled={isPast || !canClaim}
             onClick={onPushToken}
           >
             {canClaim ? t('claim.airdrop') : t('airdrop.claimed')}

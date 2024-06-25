@@ -12,8 +12,8 @@ import { airdropApi } from '@/api/airdrop'
 
 const Airdrop = () => {
   const { t } = useTranslation()
-  const { isConnected } = useAccount()
   const { hasIdentity, userInfo } = useUserStore()
+
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: [airdropApi.getList.name, userInfo?.id],
     queryFn: async ({ pageParam }) => {
@@ -59,7 +59,7 @@ const Airdrop = () => {
       <div className="py-5">
         <Ids></Ids>
         <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
-        {isConnected && hasIdentity() ? (
+        {hasIdentity() ? (
           <>
             <CustomSuspense
               isPending={isLoading}

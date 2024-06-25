@@ -53,6 +53,8 @@ export const useTradeV2 = (dexProps: DexTradeProps) => {
   }
 
   const buy = async (amount: string, slippage: string) => {
+    console.log(amount)
+
     if (!checkForTrade(amount)) return
 
     const [weiNativeAmount] = await getAmountForBuy(token, amount)

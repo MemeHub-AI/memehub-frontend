@@ -75,6 +75,10 @@ export const PosterForm = ({ formData }: Props) => {
   }
 
   const fetchMemePoster = () => {
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
     memePosterSign.abort()
     memePosterSign = new AbortController()
     aiApi
@@ -178,11 +182,11 @@ export const PosterForm = ({ formData }: Props) => {
         }}
       />
       <Dialog open={showPoster} onOpenChange={() => setShowPoster(false)}>
-        <div className="flex flex-col px-5 mt-5">
-          <div className="absolute top-[50%] translate-y-[-50%] left-2 cursor-pointer">
+        <div className="flex flex-col px-5 mt-5 max-sm:px-2 max-sm:mt-4">
+          <div className="absolute top-[50%] translate-y-[-50%] left-2 max-sm:left-1 cursor-pointer">
             <FaChevronLeft size={26} onClick={onLeft}></FaChevronLeft>
           </div>
-          <div className="absolute top-[50%] translate-y-[-50%] right-2 cursor-pointer">
+          <div className="absolute top-[50%] translate-y-[-50%] right-2 max-sm:right-1 cursor-pointer">
             <FaChevronRight size={26} onClick={onRight}></FaChevronRight>
           </div>
           <img
@@ -193,8 +197,10 @@ export const PosterForm = ({ formData }: Props) => {
             }
             alt="Poster"
             className={cn(
-              index < 2 ? 'w-[422px] h-[645px]' : 'w-[422px] h-[295px]',
-              'rounded-md mb-4 select-none'
+              index < 2
+                ? 'w-[422px] h-[645px] max-h-[70vh] max-sm:h-[85%]'
+                : 'w-[422px] h-[295px] max-h-[70vh] max-sm:h-[85%]',
+              'rounded-md mb-4 select-none object-cover'
             )}
           />
           <div className="flex justify-center">

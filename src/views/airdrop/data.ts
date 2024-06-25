@@ -14,6 +14,7 @@ export const data: AirdropItem[] = [
       'https://s3.ap-east-1.amazonaws.com/storage.memehub.ai/uploads/G4vXfXG1_400x400424b42288e48d04a1036a479d6e080cc.jpg',
     kol_name: '',
     kol_logo: '',
+    distribution_id: 0,
   },
   {
     chain: 'bsc_testnet',
@@ -27,6 +28,7 @@ export const data: AirdropItem[] = [
     kol_logo: 'https://storage.memehub.ai/memeai/txt2img-4016103056.png',
     community_name: '',
     community_logo: '',
+    distribution_id: 0,
   },
   {
     chain: 'bsc_testnet',
@@ -40,5 +42,6 @@ export const data: AirdropItem[] = [
     kol_logo: 'https://storage.memehub.ai/memeai/txt2img-4016103056.png',
     community_name: '',
     community_logo: '',
+    distribution_id: 0,
   },
 ]
