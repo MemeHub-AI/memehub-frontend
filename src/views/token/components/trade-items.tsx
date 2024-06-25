@@ -31,10 +31,10 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
     tradeBuyItems[chainId as keyof typeof tradeBuyItems] ?? TRADE_BUY_ITEMS.eth
 
   const onBuyClick = (value: string) => {
-    if (BigNumber(nativeBalance).lte(0)) {
-      toast.warning(t('trade.balance.zero'))
-      return
-    }
+    // if (BigNumber(nativeBalance).lte(0)) {
+    //   toast.warning(t('trade.balance.zero'))
+    //   return
+    // }
     // if (BigNumber(value).gt(nativeBalance)) {
     //   setValue(nativeBalance)
     //   return
@@ -72,9 +72,6 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
           shadow="none"
           key={i}
           onClick={() => {
-            if (!isConnected) {
-              return setConnectOpen(true)
-            }
             isBuy ? onBuyClick(v) : onSellClick(v)
           }}
           disabled={disabled}
