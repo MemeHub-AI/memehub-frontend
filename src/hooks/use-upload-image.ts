@@ -6,14 +6,13 @@ import { useTranslation } from 'react-i18next'
 
 import { otherApi } from '@/api/other'
 import { useStorage } from './use-storage'
+import { MAX_IMAGE_MB } from '@/constants/upload'
 
 interface Options {
   onSuccess?: (url: string) => void
   onError?: (reason: string) => void
   onFinally?: () => void
 }
-
-const MAX_KB = 300
 
 export const useUploadImage = (options?: Options) => {
   const { onSuccess, onError, onFinally } = options || {}
@@ -52,10 +51,10 @@ export const useUploadImage = (options?: Options) => {
 
     const file = first(e.target.files)!
     const formData = new FormData()
-    const kbSize = file.size / 1024
+    const mb = file.size / 1024 / 1024
 
-    if (kbSize > MAX_KB) {
-      toast.error(`${t('upload.large')}: ${MAX_KB}kb`)
+    if (mb > MAX_IMAGE_MB) {
+      toast.error(`${t('upload.large')}: ${MAX_IMAGE_MB} mb`)
       return
     }
 
