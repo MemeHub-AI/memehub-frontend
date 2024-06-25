@@ -13,12 +13,12 @@ import {
   TableFooter,
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-
 import { RewardItem } from '@/api/invite/types'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { Img } from '@/components/img'
 import { DiamondIcon } from '@/components/diamond-icon'
 import { useRewardTable } from '../hooks/use-reward-table'
+import { fmt } from '@/utils/fmt'
 
 enum RewardType {
   Token = 1,
@@ -37,7 +37,7 @@ export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
         const { chain, earned, category } = row.original
         return (
           <div className="flex items-center gap-1">
-            <span>{earned}</span>
+            <span>{fmt.decimals(earned)}</span>
             {category === RewardType.Diamond ? (
               <DiamondIcon size={20} />
             ) : (
@@ -57,11 +57,7 @@ export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
     },
   ]
 
-  const { ths, rows, page_size } = useRewardTable(columns)
-
-  const onViewMore = () => {}
-
-  console.log('table refresh')
+  const { ths, rows, total, fetchNextPage } = useRewardTable(columns)
 
   return (
     <>
@@ -111,11 +107,11 @@ export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
             </tr>
           )}
         </TableBody>
-        {rows.length > page_size && (
+        {rows.length < total && (
           <TableFooter className="bg-transparent text-center">
-            <TableRow onClick={onViewMore}>
+            <TableRow onClick={() => fetchNextPage()}>
               <TableCell
-                colSpan={ths.length}
+                colSpan={ths[0]?.headers.length}
                 className="text-blue-600 cursor-pointer hover:underline"
               >
                 {t('view-more')}...
