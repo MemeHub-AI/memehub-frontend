@@ -30,6 +30,7 @@ export const TokenCards = (props: Props) => {
     onFetchNext,
   } = props
   const { t } = useTranslation()
+  const [chianTag, setChainTag] = useState('all')
   const [filteredCards, setFilteredCards] = useState(cards)
 
   const { noMore } = useScrollLoad({
@@ -38,6 +39,8 @@ export const TokenCards = (props: Props) => {
   })
 
   const onChange = (chainId: string) => {
+    setChainTag(chainId)
+
     if (chainId === 'all') {
       setFilteredCards(cards)
       return
@@ -65,6 +68,7 @@ export const TokenCards = (props: Props) => {
         <TokenChainSelect onValueChange={onChange} />
         {/* <TokenSortSelect /> */}
         <TokenSearchInput
+          chianTag={chianTag}
           onSearched={(tokens) => setFilteredCards(tokens)}
           onCleared={() => setFilteredCards(cards)}
         />

@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useTranslation } from 'react-i18next'
 import { useDebounce } from 'react-use'
 import { useMutation } from '@tanstack/react-query'
-import { isEmpty } from 'lodash'
+import { chain, isEmpty } from 'lodash'
 
 import { Input } from '../ui/input'
 import { cn } from '@/lib/utils'
@@ -11,6 +11,7 @@ import { tokenApi } from '@/api/token'
 import { TokenListItem } from '@/api/token/types'
 
 interface Props extends ComponentProps<typeof Input> {
+  chianTag: string
   onSearched: (tokens: TokenListItem[]) => void
   onCleared?: () => void
 }
@@ -33,7 +34,10 @@ export const TokenSearchInput = (props: Props) => {
       page_size: 50,
       token: value,
     })
-    const tokens = data.results ?? []
+    const tokens =
+      props.chianTag === 'all'
+        ? data?.results ?? []
+        : data?.results?.filter((c) => c.chain.id === props.chianTag) ?? []
 
     onSearched(tokens)
   }
@@ -45,6 +49,10 @@ export const TokenSearchInput = (props: Props) => {
       onCleared?.()
     }
   }, [value])
+
+  useEffect(() => {
+    setValue('')
+  }, [props.chianTag])
 
   return (
     <Input
