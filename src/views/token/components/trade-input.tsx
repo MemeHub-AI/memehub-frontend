@@ -37,7 +37,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
 
   const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (BigNumber(target.value).lt(0)) return
-    if (BigNumber(balance).lte(0)) return
+    // if (BigNumber(balance).lte(0)) return
     // if (BigNumber(target.value).gt(balance)) {
     //   return onChange?.(balance)
     // }

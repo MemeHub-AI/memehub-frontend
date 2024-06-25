@@ -1,7 +1,7 @@
 import { api } from '..'
 import { qs } from '@/hooks/use-fetch'
 
-import { RewardItem } from './types'
+import { RewardDetailRes, RewardItem } from './types'
 import { ApiResponse, PaginationReq, PaginationRes } from '../types'
 
 export const inviteApi = {
@@ -9,6 +9,9 @@ export const inviteApi = {
     return api.GET<ApiResponse<PaginationRes<RewardItem>>>(
       '/api/v1/user/invite/list/' + qs.stringify(req)
     )
+  },
+  getDetail(code: string) {
+    return api.GET<ApiResponse<RewardDetailRes>>(`/api/v1/user/invite/${code}/`)
   },
   bindInviter(req: { invitationCode: string }) {
     return api.POST<ApiResponse>('/api/v1/user/invite/', { body: req })

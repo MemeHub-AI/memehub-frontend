@@ -7,6 +7,7 @@ import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { useTokenProgressV3 } from '../hooks/trade-v3/use-token-progress'
+import { useBondingCurveProgressStore } from '@/stores/use-bonding-curve-progress'
 
 interface Props extends ComponentProps<'div'> {
   showDesc?: boolean
@@ -15,7 +16,7 @@ interface Props extends ComponentProps<'div'> {
 export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
-  const { total, current, progress } = useTokenProgressV3()
+  const { total, progress } = useTokenProgressV3()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const threshold = BigNumber(total).lte(0)

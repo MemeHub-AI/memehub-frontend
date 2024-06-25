@@ -9,18 +9,22 @@ import { useStorage } from './use-storage'
 import { MAX_IMAGE_MB } from '@/constants/upload'
 
 interface Options {
+  inputEl?: HTMLInputElement | null
   onSuccess?: (url: string) => void
   onError?: (reason: string) => void
   onFinally?: () => void
 }
 
 export const useUploadImage = (options?: Options) => {
-  const { onSuccess, onError, onFinally } = options || {}
+  const { inputEl, onSuccess, onError, onFinally } = options || {}
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
   const { getToken } = useStorage()
 
-  const clearFile = () => setFile(null)
+  const clearFile = () => {
+    setFile(null)
+    if (inputEl) inputEl.value = ''
+  }
 
   const { data, mutateAsync } = useMutation({
     mutationKey: [otherApi.uploadImage.name],

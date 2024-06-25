@@ -82,11 +82,7 @@ export const Kol = () => {
 
 const CardSkeleton = () => {
   return Array.from({ length: 3 }).map((_, i) => (
-    <div
-      className="flex items-center
-     gap-4 relative"
-      key={i}
-    >
+    <div className="flex items-center gap-4 relative" key={i}>
       <Skeleton className="w-20 h-20 flex-shrink-0 rounded-full" />
 
       <div className="w-full my-2 flex flex-col gap-2 mr-2">

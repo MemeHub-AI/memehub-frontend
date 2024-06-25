@@ -22,7 +22,7 @@ export const useTokenProgressV3 = (
     data: totalSupply,
     isLoading: isLoadingProgress,
     isFetching: isFetchingProgress,
-    refetch: refetchProgress,
+    refetch: refetchTotal,
   } = useReadContract({
     ...config.bondingCurveConfig!,
     functionName: 'maxSupply_',
@@ -30,12 +30,15 @@ export const useTokenProgressV3 = (
     query: { enabled: !!config },
   })
 
-  const { data: details = [] } = useReadContract({
+  const { data: details = [], refetch: refetchPools } = useReadContract({
     ...config.bondingCurveConfig!,
     functionName: 'pools_',
     chainId,
     args: [token],
-    query: { enabled: !!config?.bondingCurveConfig },
+    query: {
+      enabled: !!config?.bondingCurveConfig,
+      refetchInterval: 10_000, // refresh each 10s.
+    },
   })
   const [
     ,
@@ -54,6 +57,11 @@ export const useTokenProgressV3 = (
     BigNumber(total).isZero() || BigNumber(current).isZero()
       ? BigNumber(BI_ZERO.toString()).toFixed(2)
       : BigNumber(total).minus(current).div(total).multipliedBy(100).toFixed(2)
+
+  const refetchProgress = () => {
+    refetchTotal()
+    refetchPools()
+  }
 
   return {
     total,
