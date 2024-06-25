@@ -12,6 +12,7 @@ import { ContractVersion } from '@/enum/contract'
 import { useDexTrade } from './trade-dex/use-dex-trade'
 import { useToastDiamond } from '@/hooks/use-toast-diamond'
 import { useInvite } from './trade-v3/use-invite'
+import { useUserInfo } from '@/hooks/use-user-info'
 
 // Used for trade success tips.
 let lastTradeAmount = ''
@@ -21,6 +22,7 @@ export const useTrade = () => {
   const { tokenInfo } = useTokenContext()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
   const { bindInviter } = useInvite()
+  const { refetchUserInfo } = useUserInfo()
 
   const dexTrade = useDexTrade()
   const tradeV1 = useTradeV1(dexTrade)
@@ -58,6 +60,7 @@ export const useTrade = () => {
     onFillay: () => {
       toast.dismiss()
       resetting()
+      refetchUserInfo()
     },
   })
   const isTrading = isSubmitting || isLoading
