@@ -192,7 +192,10 @@ export const PosterForm = ({ formData }: Props) => {
                 ?.[index]?.replace('mini', 'origin') as string
             }
             alt="Poster"
-            className="w-full rounded-md mb-4 select-none"
+            className={cn(
+              index < 2 ? 'w-[422px] h-[645px]' : 'w-[422px] h-[295px]',
+              'rounded-md mb-4 select-none'
+            )}
           />
           <div className="flex justify-center">
             {(form?.getValues(formFields?.poster!) as string[])?.map(

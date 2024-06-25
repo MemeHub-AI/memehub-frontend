@@ -7,10 +7,10 @@ import CustomSuspense from '@/components/custom-suspense'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const Kol = () => {
   const { t } = useTranslation()
-
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: [allianceApi.getKols.name],
     queryFn: async ({ pageParam }) => {
@@ -74,7 +74,7 @@ export const Kol = () => {
             return <AmbassadorCard key={kol!.id} data={kol}></AmbassadorCard>
           })}
         </CustomSuspense>
-        {handleLoadStatus()}
+        {/* {handleLoadStatus()} */}
       </div>
     </>
   )

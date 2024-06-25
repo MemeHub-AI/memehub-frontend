@@ -13,8 +13,12 @@ interface MemeStoryData {
 export const MemeStory = ({ data }: MemeStoryData) => {
   let content =
     data?.content
-      .replaceAll(/ src=/g, ' data-src1=')
-      .replaceAll(/ data-src=/g, ' src=')
+      // .replaceAll(/ src=/g, ' data-src1=')
+      // .replaceAll(/ data-src=/g, ' src=')
+      .replaceAll(
+        /(<img[^>]+)src="([^"]+)"([^>]+)data-src="([^"]+)"/g,
+        '$1src="$4"$3data-src="$2"'
+      )
       .replaceAll(/(\&nbsp\;)/g, '')
       .replaceAll(/<br\s?\/?><br\s?\/?>/g, '')
       .replaceAll(/<br\/>/g, '') || ''

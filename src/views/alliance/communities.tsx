@@ -7,6 +7,7 @@ import { CustomSuspense } from '@/components/custom-suspense'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const Communities = () => {
   const { t } = useTranslation()
@@ -79,7 +80,7 @@ export const Communities = () => {
             )
           })}
         </CustomSuspense>
-        {handleLoadStatus()}
+        {/* {handleLoadStatus()} */}
       </div>
     </>
   )

@@ -411,5 +411,6 @@
   "notfound.version": "Cannot find the version of this token",
   "claim.failed": "Claim failed, please try again",
   "inviter1": "First-level inviter",
-  "inviter2": "Second-level inviter"
+  "inviter2": "Second-level inviter",
+  "url.error": "Please enter a valid URL."
 }
