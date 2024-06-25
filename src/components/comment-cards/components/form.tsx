@@ -1,4 +1,4 @@
-import React, { useMemo, type ComponentProps } from 'react'
+import React, { useMemo, useRef, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { ImageIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash'
@@ -25,7 +25,10 @@ export const CommentForm = (props: Props) => {
   const { fields, updateField } = useFields({
     comment: createField({}),
   })
-  const { url, file, onChangeUpload, clearFile } = useUploadImage()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { url, file, onChangeUpload, clearFile } = useUploadImage({
+    inputEl: inputRef.current,
+  })
   // Generate unique id.
   const inputId = useMemo(nanoid, [])
   const textareaId = useMemo(nanoid, [])
@@ -81,6 +84,7 @@ export const CommentForm = (props: Props) => {
         {file && <p>{file?.name}</p>}
         <ImageUpload
           id={inputId}
+          ref={inputRef}
           onChange={onChangeUpload}
           className="hidden"
         />

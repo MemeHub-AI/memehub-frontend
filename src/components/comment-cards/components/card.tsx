@@ -15,7 +15,7 @@ import { Dialog } from '@/components/ui/dialog'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { UserListRes, UserListType } from '@/api/user/types'
-import Img from '@/components/img'
+import { Img } from '@/components/img'
 
 interface Props extends ComponentProps<'div'> {
   c: UserListRes[UserListType.Replies]
