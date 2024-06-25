@@ -71,11 +71,13 @@ export const useTrade = () => {
     setValue?: (value: string) => void
   ) => {
     lastTradeAmount = amount
+    console.log('trade', amount, slippage)
     trade?.buy(amount, slippage, setValue)
   }
 
   const selling = (amount: string, slippage: string) => {
     lastTradeAmount = amount
+    console.log('sell', amount, slippage)
     trade?.sell(amount, slippage)
   }
 
