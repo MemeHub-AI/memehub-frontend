@@ -102,6 +102,7 @@ export const AIIdeaBar = (props: Props) => {
           {data?.results?.map((item) => {
             return (
               <div
+                key={item.id}
                 className="flex items-center cursor-pointer"
                 onClick={() => {
                   push(`${Routes.Idea}/${item.id}?type=2`)
