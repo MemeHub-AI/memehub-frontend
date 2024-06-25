@@ -7,6 +7,7 @@ import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { useTokenProgressV3 } from '../hooks/trade-v3/use-token-progress'
+import { useBondingCurveProgressStore } from '@/stores/use-bonding-curve-progress'
 
 interface Props extends ComponentProps<'div'> {
   showDesc?: boolean
