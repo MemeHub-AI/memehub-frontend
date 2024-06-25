@@ -1,5 +1,6 @@
-import { useWriteContract } from 'wagmi'
+import { useAccount, useBalance, useWriteContract } from 'wagmi'
 import { Hash } from 'viem'
+import { BigNumber } from 'bignumber.js'
 
 import type { Marketing, TokenNewReq } from '@/api/token/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
@@ -10,6 +11,7 @@ import { useDeployV1 } from './use-deploy-v1'
 import { useDeployV2 } from './use-deploy-v2'
 import { useDeployV3 } from './use-deploy-v3'
 import { getDeployLogAddr } from '@/utils/contract'
+import { DEPLOY_FEE } from '@/constants/contract'
 
 export interface DeployParams {
   name: string
@@ -24,6 +26,9 @@ let cacheParams: Omit<TokenNewReq, 'hash'>
 export const useDeploy = () => {
   const { createTokenData, createTokenError, isCreatingToken, create } =
     useCreateToken()
+  const { address } = useAccount()
+  const { data: balanceData } = useBalance({ address })
+  const balance = String(balanceData?.value ?? 0)
 
   const {
     data: hash,
@@ -50,6 +55,11 @@ export const useDeploy = () => {
     const deployParams = {
       ...params,
       onSuccess: (hash: string) => create({ ...params, hash }),
+    }
+
+    if (BigNumber(balance).lt(DEPLOY_FEE.v3.toString())) {
+      CONTRACT_ERR.balanceInvalid()
+      return
     }
 
     if (params.version === ContractVersion.V1) {
