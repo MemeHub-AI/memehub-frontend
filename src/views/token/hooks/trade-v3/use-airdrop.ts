@@ -21,7 +21,7 @@ export const useAirdrop = (id: number, type_list: string) => {
 
   const { data: { data } = {} } = useQuery({
     enabled: !!chainName && !!type_list && !!tokenAddr,
-    queryKey: [airdropApi.getProof.name],
+    queryKey: [airdropApi.getProof.name, chainName, type_list, tokenAddr],
     queryFn: () => {
       return airdropApi.getProof({
         chain: chainName,
@@ -71,7 +71,6 @@ export const useAirdrop = (id: number, type_list: string) => {
     }
 
     console.log('claim airdrop', { kol_proof, community_proof })
-
     writeContract({
       ...distributorConfig,
       functionName: 'claim',

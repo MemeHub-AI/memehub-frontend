@@ -144,14 +144,26 @@ export const Profile = (props: ComponentProps<'div'>) => {
         )}
       </CardHeader>
 
-      <CardContent className="px-4 flex items-center gap-2">
-        <RewardButton shadow="none" className="border-none text-lg px-3" />
-        <p
-          className="text-sm text-blue-600 cursor-pointer hover:underline"
-          onClick={() => router.push(Routes.Reward)}
-        >
-          {t('reward.rule')}
-        </p>
+      <CardContent className="px-4 flex flex-col items-start gap-2 pb-3">
+        <div className="flex items-center flex-wrap gap-2">
+          <RewardButton shadow="none" className="border-none text-lg px-3" />
+          <p
+            className="text-sm text-blue-600 cursor-pointer hover:underline"
+            onClick={() => router.push(Routes.Reward)}
+          >
+            {t('reward.rule')}
+          </p>
+        </div>
+        <div className="text-sm text-zinc-500 cursor-pointer">
+          <p onClick={() => copy(userInfo?.inviter.one ?? '')}>
+            <span className="font-bold">{t('inviter1')}: </span>
+            {fmt.addr(userInfo?.inviter.one, { len: 8 })}
+          </p>
+          <p onClick={() => copy(userInfo?.inviter.two ?? '')}>
+            <span className="font-bold">{t('inviter2')}: </span>
+            {fmt.addr(userInfo?.inviter.two, { len: 8 })}
+          </p>
+        </div>
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex justify-between">

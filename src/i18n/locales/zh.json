@@ -402,5 +402,7 @@
   "bonding-curve.desc": "当市值达到 {} 美元时，池子中的所有流动性将添加到 dex 并销毁。\n随着价格的上涨，进度也会增加。",
   "notfound.version": "找不到此代币的版本",
   "claim.failed": "领取失败，请重试",
+  "inviter1": "一级邀请人",
+  "inviter2": "二级邀请人",
   "url.error": "请输入正确的网址"
 }
