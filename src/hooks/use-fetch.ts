@@ -1,7 +1,6 @@
-import { toast } from 'sonner'
-
 import { useStorage } from './use-storage'
 import { ApiCode, ApiResponse } from '@/api/types'
+import { REQUEST_ERR } from '@/errors/request'
 
 export enum CommonHeaders {
   ContentType = 'Content-Type',
@@ -25,7 +24,6 @@ export type AliasOptions = Omit<FetcherOptions, 'method'>
 
 export const useFetch = (baseURL: string) => {
   const { getToken, setToken } = useStorage()
-  const throttleToast = useThrottleErr()
 
   // Init headers config.
   const initHeaders = ({ requireAuth = true, headers }: FetcherOptions) => {
@@ -84,18 +82,13 @@ export const useFetch = (baseURL: string) => {
 
       // Response success.
       return response as T
-    } catch (error) {
-      let err = '[Request Error]: '
-
-      if (error instanceof Response) {
-        err += `${error.status} ${error.statusText}`
-      } else {
-        err += (error as Error)?.message
+    } catch (e) {
+      if (e instanceof Response) {
+        REQUEST_ERR.responseErr(e)
+      } else if (e instanceof Error) {
+        REQUEST_ERR.error(e)
       }
-
-      console.error(error)
-      throttleToast(err)
-      return error as T
+      throw e
     }
   }
 
@@ -115,19 +108,6 @@ export const useFetch = (baseURL: string) => {
     PATCH: <T>(path: string, options?: AliasOptions) => {
       return fetcher<T>(path, { ...options, method: 'PATCH' })
     },
-  }
-}
-
-// Merge multiple error within `delay` time.
-const useThrottleErr = (delay = 300) => {
-  let lastTime = 0
-
-  return (e: string) => {
-    const now = Date.now()
-    if (now - lastTime > delay) {
-      lastTime = now
-      toast.error(e)
-    }
   }
 }
 

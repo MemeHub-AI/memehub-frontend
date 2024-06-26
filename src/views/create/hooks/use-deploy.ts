@@ -1,8 +1,9 @@
+import { useMemo } from 'react'
 import { useAccount, useBalance, useWriteContract } from 'wagmi'
 import { Hash } from 'viem'
 import { BigNumber } from 'bignumber.js'
 
-import type { Marketing, TokenNewReq } from '@/api/token/types'
+import { Marketing, TokenNewReq } from '@/api/token/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -44,11 +45,14 @@ export const useDeploy = () => {
     isSuccess,
     isError,
   } = useWaitForTx({ hash })
+  const deployLogAddr = useMemo(
+    () => getDeployLogAddr(data?.logs ?? []),
+    [data]
+  )
+
   const { deployV1 } = useDeployV1(writeContract)
   const { deployV2 } = useDeployV2(writeContract)
   const { deployV3 } = useDeployV3(writeContract)
-
-  const deployLogAddr = getDeployLogAddr(data?.logs ?? [])
 
   const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
     cacheParams = params
