@@ -24,6 +24,7 @@ import { INVITE_LINK, INVITE_REWARD } from '@/constants/invite'
 import { useTrade } from '../hooks/use-trade'
 import { useTradeInfo } from '../hooks/use-trade-info'
 import { useUserStore } from '@/stores/use-user-store'
+import { useToastDiamond } from '@/hooks/use-toast-diamond'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -49,6 +50,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchNativeBalance,
     refetchTokenBalance,
   } = useTradeInfo()
+  const { toastDiamond, dismissDiamond } = useToastDiamond()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
@@ -186,11 +188,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             <>
               <Button
                 className="!w-full font-bold mt-3"
-                onClick={() =>
+                onClick={() => {
                   copy(
                     location.origin + location.pathname + `?r=${userInfo?.code}`
                   )
-                }
+                }}
               >
                 {t('referral.copy')}
               </Button>
