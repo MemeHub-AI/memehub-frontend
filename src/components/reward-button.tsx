@@ -1,7 +1,6 @@
 import React, { type ComponentProps, useMemo, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
-import { BigNumber } from 'bignumber.js'
 
 import { Button } from './ui/button'
 import { Routes } from '@/routes'
@@ -10,6 +9,7 @@ import { DiamondIcon } from './diamond-icon'
 import { useUserStore } from '@/stores/use-user-store'
 import { UserIcon } from './user-icon'
 import { useHeaderStore } from '@/stores/use-header-store'
+import CountUp from 'react-countup'
 
 interface RewardButtonProps extends ComponentProps<typeof Button> {
   showReferral?: boolean
@@ -60,9 +60,11 @@ export const RewardButton = React.forwardRef<
       )}
       <div className="flex items-center gap-1">
         <DiamondIcon size={20} ref={diamondRef} />
-        {userInfo?.reward_amount
-          ? BigNumber(userInfo?.reward_amount).toFormat()
-          : t('rewards')}
+        {userInfo?.reward_amount ? (
+          <CountUp end={userInfo?.reward_amount}></CountUp>
+        ) : (
+          t('rewards')
+        )}
       </div>
     </Button>
   )

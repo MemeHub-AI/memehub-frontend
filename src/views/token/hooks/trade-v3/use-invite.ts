@@ -21,7 +21,7 @@ export const useInvite = () => {
   } = useMutation({
     mutationKey: [inviteApi.bindInviter.name],
     mutationFn: async (overrideCode?: string | void) => {
-      await refetchUserInfo()
+      // await refetchUserInfo()
 
       const code = overrideCode ?? referralCode
       if (code === userInfo?.code || !!userInfo?.inviter.one) {

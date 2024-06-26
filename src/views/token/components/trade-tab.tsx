@@ -25,7 +25,6 @@ import { useTradeInfo } from '../hooks/use-trade-info'
 import { useUserStore } from '@/stores/use-user-store'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { TradeType } from '@/constants/trade'
-import { useToastDiamond } from '@/hooks/use-toast-diamond'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -59,7 +58,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchNativeBalance,
     refetchTokenBalance,
   } = useTradeInfo()
-  const { toastDiamond, dismissDiamond } = useToastDiamond()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
