@@ -31,6 +31,7 @@ export const airdropApi = {
     return api.GET<ApiResponse<IdentityList>>('/api/v1/airdrop/identity')
   },
   getDetails: (req: Omit<AirdropProofReq, 'type_list'>) => {
+    return Promise.resolve({ data: null, code: 200, message: 'ok' })
     return api.GET<ApiResponse<AirdropItem[]>>(
       '/api/v1/airdrop/get_airdrop_detail/' + qs.stringify(req)
     )
