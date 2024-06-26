@@ -1,4 +1,4 @@
-import { ContractVersion } from '@/enum/contract'
+import { ContractVersion } from '@/constants/contract'
 import type { UserCoinsCreated, UserInfoRes } from '../user/types'
 
 export interface TokenListItem extends UserCoinsCreated {

@@ -6,12 +6,12 @@ import type { Marketing, TokenNewReq } from '@/api/token/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { ContractVersion } from '@/enum/contract'
 import { useDeployV1 } from './use-deploy-v1'
 import { useDeployV2 } from './use-deploy-v2'
 import { useDeployV3 } from './use-deploy-v3'
-import { getDeployLogAddr } from '@/utils/contract'
-import { DEPLOY_FEE } from '@/constants/contract'
+import { getDeployLogAddr, versionOf } from '@/utils/contract'
+import { ContractVersion, DEPLOY_FEE } from '@/constants/contract'
+import { logger } from '@/utils/log'
 
 export interface DeployParams {
   name: string
@@ -52,25 +52,23 @@ export const useDeploy = () => {
 
   const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
     cacheParams = params
+
     const deployParams = {
       ...params,
       onSuccess: (hash: string) => create({ ...params, hash }),
     }
+
+    const vIs = versionOf(params.version)
 
     if (BigNumber(balance).lt(DEPLOY_FEE.v3.toString())) {
       CONTRACT_ERR.balanceInvalid()
       return
     }
 
-    if (params.version === ContractVersion.V1) {
-      return deployV1(deployParams)
-    }
-    if (params.version === ContractVersion.V2) {
-      return deployV2(deployParams)
-    }
-    if (params.version === ContractVersion.V3) {
-      return deployV3(deployParams)
-    }
+    logger('deploy', deployParams)
+    if (vIs(ContractVersion.V1)) return deployV1(deployParams)
+    if (vIs(ContractVersion.V2)) return deployV2(deployParams)
+    if (vIs(ContractVersion.V3)) return deployV3(deployParams)
   }
 
   const retryCreate = () => {

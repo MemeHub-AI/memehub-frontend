@@ -1,9 +1,13 @@
 import { BigNumber } from 'bignumber.js'
 import { Hash, parseEther, Address, Log } from 'viem'
 import dayjs from 'dayjs'
-
-import { DEPLOY_LOG_TOPIC, TRADE_SERVICE_FEE } from '@/constants/contract'
 import { getBlock } from 'wagmi/actions'
+
+import {
+  ContractVersion,
+  DEPLOY_LOG_TOPIC,
+  TRADE_SERVICE_FEE,
+} from '@/constants/contract'
 import { wagmiConfig } from '@/config/wagmi'
 
 // Whether user rejected error.
@@ -102,4 +106,18 @@ export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
   const addr = hashAddr?.replace(/0x0+/, '') ?? ''
 
   return '0x' + addr
+}
+
+/**
+ * @example
+ * ```
+ * const vIs = versionOf('V3.0.1')
+ * // false
+ * if (vIs(ContractVersion.V2)) {...}
+ * // true
+ * if (vIs(ContractVersion.V3)) {...}
+ * ```
+ */
+export const versionOf = (originVersion: string) => {
+  return (v: string) => originVersion.startsWith(v)
 }
