@@ -30,7 +30,7 @@ export const Communities = () => {
   const communities = data?.communities
 
   const handleLoadStatus = () => {
-    if (isFetching && !data?.total) {
+    if (isFetching && data?.total) {
       return (
         <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
           {t('loading')}
@@ -80,7 +80,7 @@ export const Communities = () => {
             )
           })}
         </CustomSuspense>
-        {/* {handleLoadStatus()} */}
+        {handleLoadStatus()}
       </div>
     </>
   )

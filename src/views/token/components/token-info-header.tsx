@@ -26,7 +26,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   return (
     <div
       className={cn(
-        'flex items-center justify-between gap-1 text-sm mb-1',
+        'flex items-center justify-between gap-1 text-sm mb-1 max-sm:mt-4',
         className
       )}
     >

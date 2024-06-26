@@ -28,7 +28,7 @@ export const Kol = () => {
   })
 
   const handleLoadStatus = () => {
-    if (isFetching && !data?.total) {
+    if (isFetching && data?.total) {
       return (
         <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
           {t('loading')}
@@ -74,7 +74,7 @@ export const Kol = () => {
             return <AmbassadorCard key={kol!.id} data={kol}></AmbassadorCard>
           })}
         </CustomSuspense>
-        {/* {handleLoadStatus()} */}
+        {handleLoadStatus()}
       </div>
     </>
   )
