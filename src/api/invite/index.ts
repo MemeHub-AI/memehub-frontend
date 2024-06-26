@@ -16,4 +16,9 @@ export const inviteApi = {
   bindInviter(req: { invitationCode: string }) {
     return api.POST<ApiResponse>('/api/v1/user/invite/', { body: req })
   },
+  getCanBind(req: { invitationCode: string }) {
+    return api.POST<ApiResponse<boolean>>('/api/v1/user/invite/relation/', {
+      body: req,
+    })
+  },
 }
