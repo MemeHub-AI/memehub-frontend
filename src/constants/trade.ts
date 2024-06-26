@@ -4,3 +4,5 @@ export enum TradeType {
 }
 
 export const LISTED_MARKET_CAP = 30_000
+
+export const DEADLINE_SECONDS = 60 * 5 // 5 minutes

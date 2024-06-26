@@ -3,12 +3,9 @@ import { Hash, parseEther, Address, Log } from 'viem'
 import dayjs from 'dayjs'
 import { getBlock } from 'wagmi/actions'
 
-import {
-  ContractVersion,
-  DEPLOY_LOG_TOPIC,
-  TRADE_SERVICE_FEE,
-} from '@/constants/contract'
+import { DEPLOY_LOG_TOPIC, TRADE_SERVICE_FEE } from '@/constants/contract'
 import { wagmiConfig } from '@/config/wagmi'
+import { DEADLINE_SECONDS } from '@/constants/trade'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -88,9 +85,9 @@ export const addPrefix0x = (input: string | string[]) => {
 }
 
 // Get timestamp & plus offset seconds.
-export const getDeadline = async (offset = 50) => {
+export const getDeadline = async () => {
   const addOffset = (value: bigint | number) => {
-    return BigNumber(value.toString()).plus(offset).toFixed(0)
+    return BigNumber(value.toString()).plus(DEADLINE_SECONDS).toFixed(0)
   }
 
   const ts = await getBlock(wagmiConfig)

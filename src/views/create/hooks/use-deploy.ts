@@ -62,12 +62,12 @@ export const useDeploy = () => {
       onSuccess: (hash: string) => create({ ...params, hash }),
     }
 
-    const vIs = versionOf(params.version)
-
     if (BigNumber(balance).lt(DEPLOY_FEE.v3.toString())) {
       CONTRACT_ERR.balanceInvalid()
       return
     }
+
+    const vIs = versionOf(params.version)
 
     logger('deploy', deployParams)
     if (vIs(ContractVersion.V1)) return deployV1(deployParams)

@@ -12,9 +12,10 @@ export const getV3Config = (chainId: number | undefined) => {
 
   const id = chainId as keyof typeof v3Addr
   const addr = v3Addr[id]
+
   const commonAddress = commonAddr[id]
   const params = v3Params[id]
-  if (!addr || !commonAddress) return {}
+  if (!addr || !commonAddress || !params) return {}
 
   return {
     commonAddress,
