@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
 import {
-  TradeType,
   type CreateInfoLog,
   type TradeInfoLog,
   type WSMessageBase,
@@ -23,6 +22,7 @@ import {
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
 import { Avatar } from '@/components/ui/avatar'
+import { TradeType } from '@/constants/trade'
 
 const toastBase = (children: ReactNode) => {
   toast.dismiss()

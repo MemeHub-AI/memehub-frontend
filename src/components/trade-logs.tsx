@@ -6,7 +6,6 @@ import { useRouter } from 'next/router'
 import { useTradeLogs } from '@/hooks/use-trade-logs'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
-import { TradeType } from '@/api/websocket/types'
 import { fmt } from '@/utils/fmt'
 import { Avatar } from './ui/avatar'
 import {
@@ -16,6 +15,7 @@ import {
 } from '@/components/ui/hover-card'
 import { Button } from './ui/button'
 import { CirclePing } from './circle-ping'
+import { TradeType } from '@/constants/trade'
 
 export const TradeLogs = () => {
   const { t } = useTranslation()

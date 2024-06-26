@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 
 import { otherApi } from '@/api/other'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
-import { TradeType } from '@/enum/trade'
 import { TradeSuccessCard } from '@/views/token/components/trade-success-card'
 import { useTokenContext } from '@/contexts/token'
 

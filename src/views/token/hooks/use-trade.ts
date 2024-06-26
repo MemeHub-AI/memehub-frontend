@@ -15,10 +15,10 @@ import { useInvite } from './trade-v3/use-invite'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
 import { useTradeInfoV3 } from './trade-v3/use-trade-info'
-import { TradeType } from '@/enum/trade'
 import { ContractVersion } from '@/constants/contract'
 import { logger } from '@/utils/log'
 import { versionOf } from '@/utils/contract'
+import { TradeType } from '@/constants/trade'
 
 // Used for trade success tips.
 const lastTrade = {

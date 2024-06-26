@@ -19,11 +19,11 @@ import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { Avatar } from '@/components/ui/avatar'
 import { useTradeRecord } from '../hooks/use-trade-record'
-import { TradeType } from '@/api/websocket/types'
 import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'
 import { utilLang } from '@/utils/lang'
+import { TradeType } from '@/constants/trade'
 
 export const TradeTable = () => {
   const { t, i18n } = useTranslation()
