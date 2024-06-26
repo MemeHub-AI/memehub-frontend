@@ -31,12 +31,12 @@ export const NewsCard = ({ news, onClick }: Props) => {
         <div
           className={clsx(
             'font-bold leading-4 text-sm ',
-            news.title.length < 12 ? 'w-[80%] truncate block' : 'line-clamp-4'
+            news.title?.length < 12 ? 'w-[80%] truncate block' : 'line-clamp-4'
           )}
         >
           {news?.title}
         </div>
-        {news.title.length < 31 ? (
+        {news.title?.length < 31 ? (
           <p
             className={clsx(
               'mt-5 text-sm leading-4 text-gray-500 line-clamp-4'

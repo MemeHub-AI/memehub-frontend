@@ -22,6 +22,12 @@ export const MainPage = () => {
   } = useGenAIIdea()
 
   return (
+    <main className="flex justify-center items-center h-body">
+      <h1 className="text-2xl font-bold">Coming Soon</h1>
+    </main>
+  )
+
+  return (
     <main className="min-h-main px-6 flex max-sm:px-3 max-sm:pt-0 gap-6">
       <OpportunityMoonshot
         defalutTab={1}

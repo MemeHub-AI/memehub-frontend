@@ -27,7 +27,7 @@ export const HeaderDesktop = (props: Props) => {
       <div className="flex items-center gap-4">
         <Logo showMeme />
       </div>
-      <div className="flex items-center gap-3">
+      {/* <div className="flex items-center gap-3">
         <nav className="flex items-center gap-3">
           <ul className="flex items-center gap-3">
             {navs.map((n, i) => (
@@ -50,7 +50,7 @@ export const HeaderDesktop = (props: Props) => {
         ) : null}
         <LangSelect className="flex-shrink-0" />
         <WalletConnect />
-      </div>
+      </div> */}
     </>
   )
 }
