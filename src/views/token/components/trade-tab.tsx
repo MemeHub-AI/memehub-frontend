@@ -27,6 +27,7 @@ import { AlertDialog } from '@/components/ui/alert-dialog'
 import { TradeType } from '@/constants/trade'
 import { useToastDiamond } from '@/hooks/use-toast-diamond'
 import { useStorage } from '@/hooks/use-storage'
+import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -39,6 +40,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { query, ...router } = useRouter()
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
+  const { isClaimingAirdrop } = useAirdropStore()
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
@@ -58,6 +60,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
+  const disabled = isSubmitting || isClaimingAirdrop
 
   const onBuy = async () => {
     // Overflow current wallet balance.
@@ -167,14 +170,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             <TabsTrigger
               className="h-full font-bold"
               value={TradeType.Buy}
-              disabled={isSubmitting}
+              disabled={disabled}
             >
               {t('trade.buy')}
             </TabsTrigger>
             <TabsTrigger
               className="h-full font-bold"
               value={TradeType.Sell}
-              disabled={isSubmitting}
+              disabled={disabled}
             >
               {t('trade.sell')}
             </TabsTrigger>
@@ -184,20 +187,16 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <SlippageButton
             value={slippage}
             onChange={setSlippage}
-            disabled={isSubmitting}
+            disabled={disabled}
           />
 
           <div className="flex flex-col my-3">
             {/* Input */}
-            <TradeInput
-              value={value}
-              onChange={setValue}
-              disabled={isSubmitting}
-            />
+            <TradeInput value={value} onChange={setValue} disabled={disabled} />
 
             {/* Items button */}
             <TradeItems
-              disabled={isSubmitting}
+              disabled={disabled}
               onResetClick={setValue}
               onItemClick={setValue}
             />
@@ -207,7 +206,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <Button
             className="!w-full font-bold bg-lime-green-deep"
             onClick={onTrade}
-            disabled={isSubmitting || !value || BigNumber(value).lte(0)}
+            disabled={disabled || !value || BigNumber(value).lte(0)}
           >
             {isSubmitting ? t('trading') : t('trade')}
           </Button>
