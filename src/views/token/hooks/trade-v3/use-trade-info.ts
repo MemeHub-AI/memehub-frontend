@@ -80,20 +80,21 @@ export const useTradeInfoV3 = () => {
   }
 
   const checkForOverflow = async (amount: string) => {
-    const [totalSupply, [, leftSupply = BI_ZERO]] = await Promise.all([
-      getTotalSupply(),
-      getDetails(),
-    ])
+    const [amonutForBuy, totalSupply, [, leftSupply = BI_ZERO]] =
+      await Promise.all([
+        getTokenAmount(amount),
+        getTotalSupply(),
+        getDetails(),
+      ])
     const total = formatEther(totalSupply)
-    const currentLeft = formatEther(leftSupply)
-    const current = BigNumber(total).minus(currentLeft).toFixed()
-    const isOverflow = BigNumber(amount).gt(currentLeft)
-    const isListed = BigNumber(currentLeft).eq(0)
+    const current = formatEther(leftSupply)
+    const tokenAmount = formatEther(amonutForBuy)
+    const isOverflow = BigNumber(tokenAmount).gte(current)
+    const isListed = BigNumber(current).eq(0)
 
     return {
       total,
       current,
-      currentLeft,
       isOverflow,
       isListed,
     }

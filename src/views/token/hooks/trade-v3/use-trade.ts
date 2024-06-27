@@ -33,7 +33,8 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
   })
   const tradeHash = isListed ? dexHash : internalHash
-  const isSubmitting = isListed ? isDexTrading : isInternalTrading
+  // const isSubmitting = isListed ? isDexTrading : isInternalTrading
+  const isSubmitting = false
 
   const checkForTrade = (amount: string) => {
     if (isEmpty(amount)) {
@@ -63,17 +64,17 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       return
     }
 
-    const { isListed, isOverflow, currentLeft } = await checkForOverflow(amount)
+    const { isListed, isOverflow, current } = await checkForOverflow(amount)
     setIsListed(isListed)
 
     if (isOverflow) {
-      calcLastBuy(currentLeft).then((value) => {
+      calcLastBuy(current).then((value) => {
         setValue?.(formatEther(value))
       })
       return
     }
 
-    console.log('v3 buy', getReferrals(), currentLeft)
+    console.log('v3 buy', getReferrals(), current)
     if (isListed) return dexBuy(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
@@ -102,7 +103,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     const { isListed } = await checkForOverflow(amount)
     setIsListed(isListed)
 
-    console.log('v3 sell', getReferrals())
+    console.log('v3 sell', await getReferrals())
     if (isListed) return dexSell(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
