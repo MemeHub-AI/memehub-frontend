@@ -1,5 +1,6 @@
 import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
+import { BigNumber } from 'bignumber.js'
 
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/contract'
@@ -25,8 +26,9 @@ export const useAirdropInfo = (chainName?: string, id = 0) => {
     args: [BigInt(id)],
     query: { enabled: !!distributorConfig },
   })
-  const amountLeft = formatEther(amountLeftWei)
-  const amountClaimed = formatEther(amountClaimedWei)
+  const left = formatEther(amountLeftWei)
+  const claimed = formatEther(amountClaimedWei)
+  const total = BigNumber(left).plus(claimed)
 
   const { data: isKolClaimed } = useReadContract({
     ...distributorConfig!,
@@ -45,8 +47,9 @@ export const useAirdropInfo = (chainName?: string, id = 0) => {
   })
 
   return {
-    amountLeft,
-    amountClaimed,
+    total,
+    left,
+    claimed,
     isKolClaimed,
     isCommunityClaimed,
   }
