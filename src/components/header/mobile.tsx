@@ -11,6 +11,9 @@ import { LangSelect } from '../lang-select'
 import { WalletConnect } from '../wallet-connect'
 import { WalletDisconnector } from '../wallet-connect/components/disconnector'
 import { SearchInput } from '../search-input'
+import { useRouter } from 'next/router'
+import { Routes } from '@/routes'
+import RewardButton from '../reward-button'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -20,6 +23,7 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderMobile = (props: Props) => {
   const { navs, onNavClick } = props
   const { t } = useTranslation()
+  const router = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
 
   return (
@@ -70,20 +74,18 @@ export const HeaderMobile = (props: Props) => {
         </SheetContent>
       </Sheet>
 
-      <div className="flex items-center gap-3">
-        <SearchInput />
-        <div className="flex items-center">
-          {/* {isConnected && router.pathname !== Routes.Create && (
-          <Button
-            className="mx-3 max-sm:mx-1.5"
-            onClick={() => router.push(Routes.Create)}
-            size="sm"
-          >
-            {t('token.create')}
-          </Button>
-        )} */}
-          <WalletConnect />
-        </div>
+      {/* <SearchInput /> */}
+      <div className="flex justify-between items-center gap-3 ml-1">
+        <RewardButton className="max-sm:ml-2 max-sm:px-2" />
+        <Button
+          variant="outline"
+          className="mx-3 max-sm:mx-0"
+          size={'sm'}
+          onClick={() => router.push(Routes.Create)}
+        >
+          {t('create.token')}
+        </Button>
+        <WalletConnect />
       </div>
     </>
   )

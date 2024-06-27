@@ -109,7 +109,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             </div>
 
             {/* Chain / coinType */}
-            <div className="h-[150px] flex flex-col justify-between">
+            <div className="h-[150px] flex flex-col justify-between max-sm:flex-row max-sm:h-min max-sm:justify-start max-sm:gap-4 max-sm:flex-wrap">
               <FormChain formData={formData} />
               <CoinTypeField />
             </div>
@@ -188,19 +188,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={form?.control}
-              name={formFields?.website!}
-              render={({ field }) => (
-                <FormItem className="flex-1 opacity-0">
-                  <FormLabel>{t('website')}</FormLabel>
-                  <FormControl>
-                    <Input placeholder={t('website.placeholder')} {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex-1"></div>
           </div>
 
           {/* Submit button */}

@@ -150,7 +150,9 @@ export const CommentCard = (props: Props) => {
             <Dialog
               open={open}
               onOpenChange={setOpen}
-              contentProps={{ className: 'p-0 w-[50vw] border-none' }}
+              contentProps={{
+                className: 'p-0 w-[50vw] border-none max-sm:w-[85vw]',
+              }}
             >
               <Img
                 src={c.img}
@@ -163,7 +165,7 @@ export const CommentCard = (props: Props) => {
             <Img
               src={c.img}
               alt="img"
-              className="rounded max-w-64 cursor-pointer"
+              className="rounded mt-1 max-w-64 cursor-pointer"
               onClick={() => setOpen(true)}
             />
           </>

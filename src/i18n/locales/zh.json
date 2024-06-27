@@ -410,5 +410,8 @@
   "invite.self": "您不能用您自己的邀请链接进行交易",
   "clear-it": "清除它",
   "invite.cycle-self": "邀请链接错误",
-  "invite.cycle-sef.desc": "你不能使用你自己的邀请链接进行交易"
+  "invite.cycle-sef.desc": "你不能使用你自己的邀请链接进行交易",
+  "request-err.network": "网络错误，请检查您的网络",
+  "kline": "K线",
+  "token.info": "代币信息"
 }

@@ -54,7 +54,7 @@ export const Kol = () => {
       <div className="pb-5 pr-4 max-sm:pr-0">
         <MobileQpportunityMoonshot>
           <Button
-            className="md:hidden -translate-y-1 -translate-x-1"
+            className="md:hidden -translate-y-1 -translate-x-1 max-sm:-translate-y-0 max-sm:-translate-x-0 max-sm:hidden"
             size={'icon'}
           >
             🔥

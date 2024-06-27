@@ -84,7 +84,7 @@ export const CommentCards = (props: Props) => {
 
       {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
       <CustomSuspense
-        className="flex flex-col w-[30rem]"
+        className="flex flex-col w-[30rem] max-sm:w-full"
         isPending={isLoading}
         fallback={<CardSkeleton />}
         nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}

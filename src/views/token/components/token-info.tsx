@@ -16,12 +16,14 @@ import { Avatar } from '@/components/ui/avatar'
 import { fmt } from '@/utils/fmt'
 import { utilLang } from '@/utils/lang'
 import { LISTED_MARKET_CAP } from '@/constants/trade'
+import { useResponsive } from '@/hooks/use-responsive'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [details, setDetails] = useState<ReactNode>(null)
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
   const { isCopied, copy } = useClipboard()
+  const { isMobile } = useResponsive()
 
   if (isLoadingTokenInfo) {
     return (
@@ -52,7 +54,10 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       <Card
         shadow="none"
         padding="md"
-        className={cn('mt-20 bg-lime-green-deep cursor-default', className)}
+        className={cn(
+          'mt-20 bg-lime-green-deep cursor-default max-sm:mt-14',
+          className
+        )}
       >
         <Dialog
           open={!!details}
@@ -82,12 +87,12 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </div>
 
         {/* Name/symbol */}
-        <div className="font-bold leading-none text-center pt-16">
+        <div className="font-bold leading-none text-center pt-16 max-sm:pt-14">
           {tokenInfo?.name}({tokenInfo?.ticker})
         </div>
 
         {/* Links */}
-        <div className="flex justify-center items-center my-1">
+        <div className="flex justify-center items-center my-1 max-sm:m-0">
           {tokenInfo?.twitter_url && (
             <Button
               variant="ghost"
@@ -124,8 +129,16 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </div>
 
         {/* Description */}
+
         <div
-          className="text-sm mt-1 break-all cursor-pointer"
+          className={cn(
+            'text-sm mt-1 break-all cursor-pointer',
+            tokenInfo?.twitter_url ||
+              tokenInfo?.telegram_url ||
+              tokenInfo?.website
+              ? 'max-sm:mt-0'
+              : ''
+          )}
           onClick={() => {
             setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)
           }}
@@ -134,19 +147,20 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </div>
 
         {/* Contract address */}
-        <div
-          className="text-sm flex items-center gap-2 cursor-pointer my-3"
-          onClick={() => copy(tokenInfo?.address || '')}
-        >
-          <span>{t('ca')}:</span>
-          <span className="truncate">
-            {fmt.addr(tokenInfo?.address || '', { len: 14 })}
-          </span>
-          {isCopied ? <Check size={16} /> : <Copy size={16} />}
-        </div>
-
+        {!isMobile && (
+          <div
+            className="text-sm flex items-center gap-2 cursor-pointer my-3"
+            onClick={() => copy(tokenInfo?.address || '')}
+          >
+            <span>{t('ca')}:</span>
+            <span className="truncate">
+              {fmt.addr(tokenInfo?.address || '', { len: 14 })}
+            </span>
+            {isCopied ? <Check size={16} /> : <Copy size={16} />}
+          </div>
+        )}
         {/* Bonding curve description */}
-        <p className="text-xs text-zinc-500">
+        <p className="text-xs text-zinc-500 max-sm:mt-2">
           {utilLang.replace(t('bonding-curve.desc'), [
             '$' + BigNumber(LISTED_MARKET_CAP).toFormat(),
           ])}

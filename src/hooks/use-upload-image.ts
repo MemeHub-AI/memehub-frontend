@@ -54,6 +54,11 @@ export const useUploadImage = (options?: Options) => {
     }
 
     const file = first(e.target.files)!
+
+    if (!file.size) {
+      return
+    }
+
     const formData = new FormData()
     const mb = file.size / 1024 / 1024
 
