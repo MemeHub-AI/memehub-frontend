@@ -35,10 +35,9 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
   )
-  const { query } = useRouter()
+  const { query, ...router } = useRouter()
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
-  const router = useRouter()
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
@@ -148,11 +147,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         }
         confirmText={t('clear-it')}
         onConfirm={() => {
-          if (router.query.r) delete router.query.r
-          router.replace({
-            pathname: router.pathname,
-            query: router.query,
-          })
+          query.r = ''
+          router.replace({ pathname: router.pathname, query })
         }}
       />
       <Card

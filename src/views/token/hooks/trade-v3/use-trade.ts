@@ -33,8 +33,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
   })
   const tradeHash = isListed ? dexHash : internalHash
-  // const isSubmitting = isListed ? isDexTrading : isInternalTrading
-  const isSubmitting = false
+  const isSubmitting = isListed ? isDexTrading : isInternalTrading
 
   const checkForTrade = (amount: string) => {
     if (isEmpty(amount)) {
