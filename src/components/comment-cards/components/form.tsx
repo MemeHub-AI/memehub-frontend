@@ -42,7 +42,7 @@ export const CommentForm = (props: Props) => {
   const onSubmit = () => {
     const comment = fields.comment.value.trim()
 
-    if (isEmpty(comment)) {
+    if (isEmpty(comment) && isEmpty(url)) {
       return toast.error(t('comment.empty'))
     }
 
