@@ -24,15 +24,15 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { userInfo } = useUserStore()
   const { inviterInfo } = useInvite()
 
-  const getReferrals = () => {
-    const { one, two } = userInfo?.inviter ?? {}
-    const parent = (one ||
-      inviterInfo?.wallet_address ||
-      zeroAddress) as Address
-    const gParent = (two || inviterInfo?.inviter.one || zeroAddress) as Address
+  // const getReferrals = () => {
+  //   const { one, two } = userInfo?.inviter ?? {}
+  //   const parent = (one ||
+  //     inviterInfo?.wallet_address ||
+  //     zeroAddress) as Address
+  //   const gParent = (two || inviterInfo?.inviter.one || zeroAddress) as Address
 
-    return [parent, gParent] as const
-  }
+  //   return [parent, gParent] as const
+  // }
 
   const { getNativeAmount, getTokenAmount, checkForOverflow } = useTradeInfoV3()
   const {
@@ -73,7 +73,6 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     const { isListed } = await checkForOverflow(amount)
     setIsListed(isListed)
 
-    console.log('v3 buy', getReferrals())
     if (isListed) return dexBuy(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
@@ -84,7 +83,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
         subSlippage(tokenAmount, slippage),
         address!,
         await getDeadline(),
-        getReferrals(),
+        [zeroAddress, zeroAddress],
       ],
       value: nativeAmount,
     })
@@ -102,7 +101,6 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     const { isListed } = await checkForOverflow(amount)
     setIsListed(isListed)
 
-    console.log('v3 sell', getReferrals())
     if (isListed) return dexSell(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
@@ -113,7 +111,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
         subSlippage(nativeAmount, slippage),
         address!,
         await getDeadline(),
-        getReferrals(),
+        [zeroAddress, zeroAddress],
       ],
     })
   }
