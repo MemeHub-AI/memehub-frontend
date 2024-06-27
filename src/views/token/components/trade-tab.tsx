@@ -45,14 +45,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { tokenInfo } = useTokenContext()
   const { copy } = useClipboard()
   const { userInfo } = useUserStore()
-  const {
-    isSubmitting,
-    isTraded,
-    inviteSelfOpen,
-    setInviteSelfOpen,
-    buying,
-    selling,
-  } = useTrade()
+  const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
+    useTrade()
   const {
     nativeBalance,
     tokenBalance,
@@ -140,10 +134,18 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       }}
     >
       <AlertDialog
-        open={inviteSelfOpen}
-        onOpenChange={setInviteSelfOpen}
-        title={<span className="text-red-500">{t('invite.cycle-self')}</span>}
-        content={t('invite.cycle-sef.desc')}
+        open={inviteOpen}
+        onOpenChange={setInviteOpen}
+        title={<span className="text-red-500">{t('invite.invalid')}</span>}
+        content={
+          <div>
+            <p>{t('invite.invalid.desc')}</p>
+            <ul>
+              <li>- {t('invite.invalid.reason1')}</li>
+              <li>- {t('invite.invalid.reason2')}</li>
+            </ul>
+          </div>
+        }
         confirmText={t('clear-it')}
         onConfirm={() => {
           if (router.query.r) delete router.query.r

@@ -13,9 +13,6 @@ export const inviteApi = {
   getDetail(code: string) {
     return api.GET<ApiResponse<RewardDetailRes>>(`/api/v1/user/invite/${code}/`)
   },
-  bindInviter(req: { invitationCode: string }) {
-    return api.POST<ApiResponse>('/api/v1/user/invite/', { body: req })
-  },
   getCanBind(req: { invitationCode: string }) {
     return api.POST<ApiResponse<boolean>>('/api/v1/user/invite/relation/', {
       body: req,

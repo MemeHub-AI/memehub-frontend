@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAccount, useWriteContract } from 'wagmi'
-import { Address, formatEther, isAddress, parseEther, zeroAddress } from 'viem'
+import { formatEther, isAddress, parseEther } from 'viem'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 
@@ -11,8 +11,7 @@ import { getDeadline, subSlippage } from '@/utils/contract'
 import { useTradeInfoV3 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
-import { useUserStore } from '@/stores/use-user-store'
-import { useInvite } from './use-invite'
+import { useInvite } from '../use-invite'
 
 export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
@@ -21,20 +20,10 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
   const { bondingCurveConfig } = getV3Config(chainId)
-  const { userInfo } = useUserStore()
-  const { inviterInfo } = useInvite()
+  const { getReferrals } = useInvite()
 
-  const getReferrals = () => {
-    const { one, two } = userInfo?.inviter ?? {}
-    const parent = (one ||
-      inviterInfo?.wallet_address ||
-      zeroAddress) as Address
-    const gParent = (two || inviterInfo?.inviter.one || zeroAddress) as Address
-
-    return [parent, gParent] as const
-  }
-
-  const { getNativeAmount, getTokenAmount, checkForOverflow } = useTradeInfoV3()
+  const { getNativeAmount, getTokenAmount, checkForOverflow, calcLastBuy } =
+    useTradeInfoV3()
   const {
     data: internalHash,
     isPending: isInternalTrading,
@@ -78,7 +67,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     setIsListed(isListed)
 
     if (isOverflow) {
-      getNativeAmount(currentLeft).then((value) => {
+      calcLastBuy(currentLeft).then((value) => {
         setValue?.(formatEther(value))
       })
       return
@@ -95,7 +84,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
         subSlippage(tokenAmount, slippage),
         address!,
         await getDeadline(),
-        getReferrals(),
+        await getReferrals(),
       ],
       value: nativeAmount,
     })
@@ -124,7 +113,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
         subSlippage(nativeAmount, slippage),
         address!,
         await getDeadline(),
-        getReferrals(),
+        await getReferrals(),
       ],
     })
   }

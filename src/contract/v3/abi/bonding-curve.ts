@@ -88,7 +88,7 @@ export const v3BondingCurveAbi = [
         type: 'uint256',
       },
     ],
-    name: 'MemeHubContinuousBurnDev',
+    name: 'MemeHubContinuousBurn',
     type: 'event',
   },
   {
@@ -131,7 +131,7 @@ export const v3BondingCurveAbi = [
         type: 'address',
       },
     ],
-    name: 'MemeHubContinuousMintDev',
+    name: 'MemeHubContinuousMint',
     type: 'event',
   },
   {
@@ -162,7 +162,7 @@ export const v3BondingCurveAbi = [
         type: 'string',
       },
     ],
-    name: 'MemeHubDeployTokenDev',
+    name: 'MemeHubDeployToken',
     type: 'event',
   },
   {
@@ -510,6 +510,19 @@ export const v3BondingCurveAbi = [
   },
   {
     inputs: [],
+    name: 'getDistributor',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'getMaxSupply',
     outputs: [
       {
@@ -573,15 +586,23 @@ export const v3BondingCurveAbi = [
             name: 'headmaster',
             type: 'address',
           },
-          {
-            internalType: 'bool',
-            name: 'isGraduable',
-            type: 'bool',
-          },
         ],
         internalType: 'struct MEMEHUB_BondingCurve.Pool',
         name: '',
         type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getRecommend',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -758,11 +779,6 @@ export const v3BondingCurveAbi = [
         internalType: 'address',
         name: 'headmaster',
         type: 'address',
-      },
-      {
-        internalType: 'bool',
-        name: 'isGraduable',
-        type: 'bool',
       },
     ],
     stateMutability: 'view',
