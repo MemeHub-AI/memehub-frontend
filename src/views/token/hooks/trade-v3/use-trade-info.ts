@@ -51,7 +51,13 @@ export const useTradeInfoV3 = () => {
       return BI_ZERO
     })
 
-    return value
+    const offsetFee1 = 0.99
+    const offsetFee2 = 0.98 // Add a little, make sure not overflow.
+
+    // Use offset fee, fill the service fee.
+    return BigInt(
+      BigNumber(value.toString()).div(offsetFee1).div(offsetFee2).toFixed()
+    )
   }
 
   const getTokenAmount = async (amount: string) => {
@@ -95,6 +101,7 @@ export const useTradeInfoV3 = () => {
     return {
       total,
       current,
+      currentLeft,
       isOverflow,
       isListed,
     }

@@ -60,7 +60,11 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     return true
   }
 
-  const buy = async (amount: string, slippage: string) => {
+  const buy = async (
+    amount: string,
+    slippage: string,
+    setValue?: (v: string) => void
+  ) => {
     if (!checkForTrade(amount)) return
 
     const nativeAmount = parseEther(amount)
@@ -70,10 +74,17 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       return
     }
 
-    const { isListed } = await checkForOverflow(amount)
+    const { isListed, isOverflow, currentLeft } = await checkForOverflow(amount)
     setIsListed(isListed)
 
-    console.log('v3 buy', getReferrals())
+    if (isOverflow) {
+      getNativeAmount(currentLeft).then((value) => {
+        setValue?.(formatEther(value))
+      })
+      return
+    }
+
+    console.log('v3 buy', getReferrals(), currentLeft)
     if (isListed) return dexBuy(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
