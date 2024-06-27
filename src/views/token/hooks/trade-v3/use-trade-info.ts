@@ -40,7 +40,6 @@ export const useTradeInfoV3 = () => {
 
   const getNativeAmount = async (amount: string) => {
     if (!bondingCurveConfig) return BI_ZERO
-
     const value = await readContract(wagmiConfig, {
       ...bondingCurveConfig,
       functionName: 'calcAmountOutFromToken',
@@ -50,17 +49,7 @@ export const useTradeInfoV3 = () => {
       console.error(e.message)
       return BI_ZERO
     })
-
-    const offsetFee1 = 0.99
-    const offsetFee2 = 0.98 // Add a little, make sure not overflow.
-
-    // Use offset fee, fill the service fee.
-    const v = BigNumber(formatEther(value))
-      .div(offsetFee1)
-      .div(offsetFee2)
-      .toFixed()
-
-    return parseEther(v)
+    return BigInt(value)
   }
 
   const getTokenAmount = async (amount: string) => {
@@ -110,6 +99,18 @@ export const useTradeInfoV3 = () => {
     }
   }
 
+  // Calc the last buy order price.
+  const calcLastBuy = async (currentLeft: string) => {
+    const nativeAmount = formatEther(await getNativeAmount(currentLeft))
+    const offsetFee1 = 0.99
+    const offsetFee2 = 0.98 // Add a little, make sure not overflow.
+    const amount = BigNumber(nativeAmount.toString())
+      .div(offsetFee1)
+      .div(offsetFee2)
+      .toFixed()
+    return parseEther(amount)
+  }
+
   return {
     getTotalSupply,
     getDetails,
@@ -117,5 +118,6 @@ export const useTradeInfoV3 = () => {
     getTokenAmount,
     getPrice,
     checkForOverflow,
+    calcLastBuy,
   }
 }

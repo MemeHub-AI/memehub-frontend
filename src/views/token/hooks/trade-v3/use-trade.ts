@@ -22,7 +22,8 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { bondingCurveConfig } = getV3Config(chainId)
   const { getReferrals } = useInvite()
 
-  const { getNativeAmount, getTokenAmount, checkForOverflow } = useTradeInfoV3()
+  const { getNativeAmount, getTokenAmount, checkForOverflow, calcLastBuy } =
+    useTradeInfoV3()
   const {
     data: internalHash,
     isPending: isInternalTrading,
@@ -66,7 +67,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     setIsListed(isListed)
 
     if (isOverflow) {
-      getNativeAmount(currentLeft).then((value) => {
+      calcLastBuy(currentLeft).then((value) => {
         setValue?.(formatEther(value))
       })
       return
