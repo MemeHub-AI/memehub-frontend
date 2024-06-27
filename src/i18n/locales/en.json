@@ -421,5 +421,9 @@
   "invite.cycle-sef.desc": "You cannot trade using your own referral link",
   "request-err.network": "Network error, please check it",
   "kline": "Price",
-  "token.info": "Info"
+  "token.info": "Info",
+  "invite.invalid": "Referral link error",
+  "invite.invalid.desc": "You cannot use this referral link for trading, which may be due to the following reasons:",
+  "invite.invalid.reason1": "This is your own referral link",
+  "invite.invalid.reason2": "This referral link has caused a circular invitation"
 }

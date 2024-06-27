@@ -47,7 +47,9 @@ const AlertDialog = React.forwardRef<
       <AlertDialogContent className="max-sm:w-[90%]" ref={ref}>
         <AlertDialogHeader>
           <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
+          {description && (
+            <AlertDialogDescription>{description}</AlertDialogDescription>
+          )}
         </AlertDialogHeader>
         {content}
         {showFooter && (

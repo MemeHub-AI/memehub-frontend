@@ -18,6 +18,7 @@ import { ContractVersion } from '@/constants/contract'
 import { logger } from '@/utils/log'
 import { versionOf } from '@/utils/contract'
 import { TradeType } from '@/constants/trade'
+import { useInvite } from './use-invite'
 
 // Used for trade success tips.
 const lastTrade = {
@@ -31,7 +32,8 @@ export const useTrade = () => {
   const { toastDiamond, dismissDiamond } = useToastDiamond()
   const { userInfo, refetchUserInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
-  const [inviteSelfOpen, setInviteSelfOpen] = useState(false)
+  const [inviteOpen, setInviteOpen] = useState(false)
+  const { getInviterInfo, getCanBind } = useInvite()
 
   const dexTrade = useDexTrade()
   const tradeV1 = useTradeV1(dexTrade)
@@ -70,11 +72,20 @@ export const useTrade = () => {
   })
   const isTrading = isSubmitting || isLoading
 
-  const checkForTrade = (amount: string) => {
+  const checkForTrade = async (amount: string) => {
+    // Cannot use self code to trade.
     if (userInfo?.code === referralCode) {
-      setInviteSelfOpen(true)
+      setInviteOpen(true)
       return false
     }
+
+    // Backend check must be `true`.
+    const canBind = await getCanBind(referralCode)
+    if (!canBind) {
+      setInviteOpen(true)
+      return false
+    }
+
     return true
   }
 
@@ -117,7 +128,7 @@ export const useTrade = () => {
     buying,
     selling,
     resetting,
-    inviteSelfOpen,
-    setInviteSelfOpen,
+    inviteOpen,
+    setInviteOpen,
   }
 }
