@@ -12,6 +12,15 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { holders } = useHolders()
 
+  const isBc = (str: string) => {
+    return str.toLowerCase().includes('bonding')
+  }
+
+  const isCreator = (str: string) => {
+    str = str.toLowerCase()
+    return str.includes('dev') || str.includes('cretor')
+  }
+
   return (
     <>
       <h3 className={cn('font-bold my-2', className)}>{t('holders')}</h3>
@@ -34,8 +43,8 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
                 >
                   {fmt.addr(r.address)}
                 </Link>
-                {/* {r.isBondingCurve && ` 💰 (${t('bonding-curve')})`} */}
-                {/* {r.isDev && ` 🧑‍💻 (${t('dev')})`} */}
+                {isBc(r.contract_flag ?? '') && `💰(${t('bonding-curve')})`}
+                {isCreator(r.contract_flag ?? '') && `🧑‍💻(${t('creator')})`}
               </p>
               <span>{fmt.percent(r.percentage)}</span>
             </li>
