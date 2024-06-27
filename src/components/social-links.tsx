@@ -35,7 +35,7 @@ export const SocialLinks = ({
           size={size}
           variant="ghost"
           shadow="none"
-          className="w-full gap-2 justify-start items-start"
+          className="w-full gap-2 justify-start items-start max-sm:px-0 max-sm:py-2"
           onClick={() => {
             if (l.link) open(l.link)
           }}

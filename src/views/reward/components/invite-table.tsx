@@ -64,7 +64,7 @@ export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
       <h2 className={cn('font-bold text-2xl mb-2', className)}>
         {t('reward.record')}
       </h2>
-      <Table containerClass="border-2 border-black rounded-md px-2 w-4/5 2xl:w-3/5">
+      <Table containerClass="border-2 border-black rounded-md px-2 w-4/5 2xl:w-3/5 w-full">
         <TableHeader>
           {ths.map((headerGroup) => (
             <TableRow key={headerGroup.id}>

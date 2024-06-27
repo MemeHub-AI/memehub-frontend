@@ -34,7 +34,7 @@ export const CreateTokenMain = (props: Props) => {
   return (
     <div
       className={cn(
-        'w-96 pr-6 max-md:w-[480px] max-sm:w-full max-sm:px-4  max-sm:mb-5',
+        'w-96 pr-6 max-md:w-[480px] max-sm:w-full max-sm:px-0  max-sm:mb-5',
         className
       )}
     >

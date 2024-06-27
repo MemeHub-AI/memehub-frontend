@@ -30,8 +30,10 @@ export const WalletDisconnector = (props: Props) => {
         className="gap-2 justify-start"
         {...restProps}
       >
-        {children}
-        <LogOut size={16} className="ml-1 shrink-0" />
+        <LogOut
+          size={16}
+          className="ml-1 shrink-0 max-sm:ml-[2px]  max-sm:mr-[3px] "
+        />
         {t('disconnect')}
       </Button>
       <AlertDialog

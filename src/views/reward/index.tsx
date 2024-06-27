@@ -42,7 +42,7 @@ export const RewardPage = () => {
       </div>
 
       {/* Diamond / invite count / invite link */}
-      <div className="flex items-stretch gap-4 xl:gap-8 mt-2">
+      <div className="flex items-stretch gap-4 xl:gap-8 mt-2 flex-wrap">
         <div className="flex flex-col justify-between">
           <h3 className="font-bold text-lg">{t('reward.diamond-reward')}</h3>
           <div className="flex items-center gap-2">

@@ -11,9 +11,12 @@ import { Chart } from '@/components/chart'
 import { TokenInfoHeader } from './components/token-info-header'
 import { cn } from '@/lib/utils'
 import { TradeAirdrop } from './components/trade-airdrop'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useTranslation } from 'react-i18next'
 
 export const TokenPage = () => {
   const { isMobile } = useResponsive()
+  const { t } = useTranslation()
   const { tokenInfo, isLoadingTokenInfo, isFetchingTokenInfo, refetchInfo } =
     useTokenInfo()
 
@@ -36,7 +39,18 @@ export const TokenPage = () => {
         <div className="flex flex-col flex-1">
           {isMobile && <TradeTab />}
           <TokenInfoHeader />
-          <Chart />
+          <Tabs defaultValue="chart">
+            <TabsList className="grid w-full grid-cols-2 mt-1">
+              <TabsTrigger value="chart">{t('kline')}</TabsTrigger>
+              <TabsTrigger value="info">{t('token.info')}</TabsTrigger>
+            </TabsList>
+            <TabsContent value="chart">
+              <Chart />
+            </TabsContent>
+            <TabsContent value="info">
+              <TokenInfo />
+            </TabsContent>
+          </Tabs>
           <TradeAirdrop />
           <CommentTradeTab />
         </div>

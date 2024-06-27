@@ -419,5 +419,7 @@
   "clear-it": "Clear it",
   "invite.cycle-self": "Invite link invalid",
   "invite.cycle-sef.desc": "You cannot trade using your own referral link",
-  "request-err.network": "Network error, please check it"
+  "request-err.network": "Network error, please check it",
+  "kline": "Price",
+  "token.info": "Info"
 }

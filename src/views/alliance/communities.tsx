@@ -7,7 +7,6 @@ import { CustomSuspense } from '@/components/custom-suspense'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useUserStore } from '@/stores/use-user-store'
 
 export const Communities = () => {
   const { t } = useTranslation()
@@ -55,7 +54,7 @@ export const Communities = () => {
       <div className="pb-5 pr-4 max-sm:pr-0">
         <MobileQpportunityMoonshot>
           <Button
-            className="md:hidden -translate-y-1 -translate-x-1"
+            className="md:hidden -translate-y-1 -translate-x-1 max-sm:-translate-x-0 max-sm:-translate-y-0  max-sm:hidden"
             size={'icon'}
           >
             🔥
