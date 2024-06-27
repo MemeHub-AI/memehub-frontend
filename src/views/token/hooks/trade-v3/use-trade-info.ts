@@ -45,6 +45,7 @@ export const useTradeInfoV3 = () => {
       ...bondingCurveConfig,
       functionName: 'calcAmountOutFromToken',
       args: [tokenAddr, parseEther(amount)],
+      chainId,
     }).catch((e) => {
       console.error(e.message)
       return BI_ZERO
@@ -76,6 +77,7 @@ export const useTradeInfoV3 = () => {
       ...bondingCurveConfig,
       functionName: 'calcPrice',
       args: [tokenAddr],
+      chainId,
     })
   }
 
