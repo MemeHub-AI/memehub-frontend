@@ -62,7 +62,7 @@ export const useTrade = () => {
     onLoading: () => toast.loading(t('tx.waiting')),
     onSuccess: () => {
       toastDiamond(lastTrade.amount, lastTrade.type)
-      bindInviter()
+      // bindInviter()
     },
     onError: CONTRACT_ERR.tradeFailed,
     onFillay: () => {

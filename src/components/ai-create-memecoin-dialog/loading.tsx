@@ -94,7 +94,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
   useEffect(() => {
     const cb = () => {
-      memeInfoSign.abort()
+      memeInfoSign.abort('')
       setLoadingInfoDialog(false)
       setLoadingInfo(false)
       setLoadingPoster(false)

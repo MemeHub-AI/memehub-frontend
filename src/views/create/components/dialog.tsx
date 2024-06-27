@@ -161,7 +161,7 @@ export const CreateTokenStatusDialog = () => {
             >
               {t('deploy.success.view-list')}
             </Link>
-            {chainName && (deployedAddr || deployLogAddr) && (
+            {/* {chainName && (deployedAddr || deployLogAddr) && (
               <Link
                 className="text-blue-600 hover:underline"
                 href={fmt.toHref(
@@ -173,7 +173,7 @@ export const CreateTokenStatusDialog = () => {
               >
                 {t('deploy.success.view-details')}
               </Link>
-            )}
+            )} */}
             <Link
               className="text-blue-600 hover:underline"
               href={explorerUrl}

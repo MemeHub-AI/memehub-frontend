@@ -1,5 +1,6 @@
 import React, { useState, type ComponentProps } from 'react'
 import { useAccount } from 'wagmi'
+import { useTranslation } from 'react-i18next'
 
 import { WalletAccount } from './components/account'
 import { WalletConnector } from './components/connector'
@@ -9,7 +10,6 @@ import { useStorage } from '@/hooks/use-storage'
 import { useLogin } from '@/hooks/use-login'
 import { AlertDialog } from '../ui/alert-dialog'
 import { Button } from '../ui/button'
-import { useTranslation } from 'react-i18next'
 
 interface Props extends ComponentProps<'div'> {}
 
@@ -21,7 +21,10 @@ export const WalletConnect = (props: Props) => {
   const { signLogin, logout } = useLogin()
   const [open, setOpen] = useState(false)
 
-  useWatchAccount(() => setOpen(true))
+  useWatchAccount((prevAddr, addr) => {
+    console.log('account change', prevAddr, addr)
+    setOpen(true)
+  })
 
   if (open) {
     return (
