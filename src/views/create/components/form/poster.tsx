@@ -109,13 +109,8 @@ export const PosterForm = ({ formData }: Props) => {
   }, [loadingPoster])
 
   useEffect(() => {
-    const cb = () => {
-      memePosterSign.abort()
-    }
-    Router.events.on('routeChangeStart', cb)
-
     return () => {
-      Router.events.off('routeChangeStart', cb)
+      memePosterSign.abort('')
     }
   }, [])
   return (

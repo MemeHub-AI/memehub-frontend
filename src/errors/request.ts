@@ -28,6 +28,10 @@ export const REQUEST_ERR = {
       return
     }
 
+    if (m.includes('aborted')) {
+      return
+    }
+
     loggerError(m)
   },
 }

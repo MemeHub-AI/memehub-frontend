@@ -72,12 +72,8 @@ export const FormLogo = ({ formData }: Props) => {
   }, [loadingLogo])
 
   useEffect(() => {
-    const cb = () => {
-      memeLogoSign.abort()
-    }
-    Router.events.on('routeChangeStart', cb)
     return () => {
-      Router.events.off('routeChangeStart', cb)
+      memeLogoSign.abort('')
     }
   }, [])
 

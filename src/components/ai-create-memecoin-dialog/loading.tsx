@@ -54,7 +54,6 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
         fetchMemeImage(data)
       }
     } catch (e) {
-      toast.error(t('create.info.error'))
     } finally {
       toast.dismiss()
       setLoadingInfoDialog(false)
@@ -93,18 +92,13 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
   }, [loadingInfoDialog])
 
   useEffect(() => {
-    const cb = () => {
-      memeInfoSign.abort()
+    return () => {
+      toast.dismiss()
+      memeInfoSign?.abort('')
       setLoadingInfoDialog(false)
       setLoadingInfo(false)
       setLoadingPoster(false)
       setLoadingLogo(false)
-    }
-    Router.events.on('routeChangeStart', cb)
-
-    return () => {
-      toast.dismiss()
-      Router.events.off('routeChangeStart', cb)
     }
   }, [])
 
