@@ -8,11 +8,16 @@ import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
 import { BondingCurveProgress } from './bonding-curve-progress'
 import { Avatar } from '@/components/ui/avatar'
+import { useClipboard } from '@/hooks/use-clipboard'
+import { Check, Copy } from 'lucide-react'
+import { useResponsive } from '@/hooks/use-responsive'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
   const { marketCap } = useHoldersStore()
+  const { isCopied, copy } = useClipboard()
+  const { isMobile } = useResponsive()
 
   if (isLoadingTokenInfo) {
     return (
@@ -24,31 +29,43 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   }
 
   return (
-    <div
-      className={cn(
-        'flex items-center justify-between gap-1 text-sm mb-1 max-sm:mt-4',
-        className
-      )}
-    >
-      <Avatar
-        src={tokenInfo?.image ?? ''}
-        size={26}
-        className="border-2 border-black"
-      />
-      <div className="flex items-center gap-3 ">
-        <span className="font-bold text-blue-600">
-          {tokenInfo?.name}({tokenInfo?.ticker})
-        </span>
+    <div className="flex items-center max-sm:flex-col max-sm:items-start mb-1 max-sm:gap-1">
+      <div
+        className={cn(
+          'flex items-center justify-between gap-1 text-sm max-sm:mb-1 max-sm:mt-4 max-sm:flex-col max-sm:items-start',
+          className
+        )}
+      >
+        <div className="flex items-center">
+          <Avatar
+            src={tokenInfo?.image ?? ''}
+            size={26}
+            className="border-2 border-black"
+          />
+          <span className="ml-1 font-bold text-blue-600">
+            {tokenInfo?.name}({tokenInfo?.ticker})
+          </span>
+        </div>
         <span>
           <span className="font-bold">{t('market-cap')}: </span>$
           {fmt.decimals(marketCap)}
         </span>
-      </div>
 
-      <BondingCurveProgress className="ml-2" showDesc={false} />
+        {isMobile && (
+          <div
+            className="text-sm flex items-center gap-2 cursor-pointer"
+            onClick={() => copy(tokenInfo?.address || '')}
+          >
+            <span>{t('ca')}:</span>
+            <span className="truncate">
+              {fmt.addr(tokenInfo?.address || '', { len: 14 })}
+            </span>
+            {isCopied ? <Check size={16} /> : <Copy size={16} />}
+          </div>
+        )}
 
-      {/* Creator */}
-      {/* <div className="flex items-center gap-1">
+        {/* Creator */}
+        {/* <div className="flex items-center gap-1">
         <div className="mr-1 font-bold">{t('creator')}:</div>
         <img
           src={tokenInfo?.creator.logo || ''}
@@ -67,6 +84,11 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
           {tokenInfo?.creator.name}
         </span>
       </div> */}
+      </div>
+      <BondingCurveProgress
+        className="ml-2 w-full max-sm:ml-0"
+        showDesc={false}
+      />
     </div>
   )
 }

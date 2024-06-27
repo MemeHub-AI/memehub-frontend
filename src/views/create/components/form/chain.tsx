@@ -99,6 +99,7 @@ export const FormChain = ({ formData }: Props) => {
                           about={c.name}
                           className={cn(
                             'w-[27px] h-[27px] block rounded-full overflow-hidden',
+                            'max-sm:w-[24px] max-sm:h-[24px]',
                             !c.is_supported && 'opacity-50 cursor-not-allowed'
                           )}
                         />

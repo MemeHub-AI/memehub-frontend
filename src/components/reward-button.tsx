@@ -10,6 +10,7 @@ import { DiamondIcon } from './diamond-icon'
 import { useUserStore } from '@/stores/use-user-store'
 import { UserIcon } from './user-icon'
 import { useHeaderStore } from '@/stores/use-header-store'
+import { useResponsive } from '@/hooks/use-responsive'
 
 interface RewardButtonProps extends ComponentProps<typeof Button> {
   showReferral?: boolean
@@ -21,10 +22,12 @@ export const RewardButton = React.forwardRef<
 >((props, ref) => {
   const { showReferral = true, className, ...restProps } = props
   const { t } = useTranslation()
-  const router = useRouter()
   const { userInfo } = useUserStore()
-  const diamondRef = useRef<HTMLImageElement>(null)
   const { setDiamondEl } = useHeaderStore()
+  const { isMobile } = useResponsive()
+
+  const diamondRef = useRef<HTMLImageElement>(null)
+  const router = useRouter()
 
   const totalIvite = useMemo(() => {
     const amount1 = userInfo?.inviter_count.one ?? 0
@@ -50,6 +53,7 @@ export const RewardButton = React.forwardRef<
       )}
       onClick={() => router.push(Routes.Reward)}
       ref={ref}
+      size={isMobile ? 'sm' : 'default'}
       {...restProps}
     >
       {showReferral && (

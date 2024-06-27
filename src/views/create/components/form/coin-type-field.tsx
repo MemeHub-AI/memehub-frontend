@@ -65,7 +65,7 @@ export const CoinTypeField = () => {
               defaultValue={CoinType.Normal.toString()}
               onValueChange={field.onChange}
             >
-              <SelectTrigger className="w-4/6" shadow="none">
+              <SelectTrigger className="w-min" shadow="none">
                 {types.find((t) => t.value === Number(field.value))?.title}
               </SelectTrigger>
               <SelectContent viewportClass="p-0 max-w-80">
