@@ -23,9 +23,8 @@ export const DEPLOY_FEE = {
 
 export const DEPLOY_VERSION = ContractVersion.V3d0d1
 
-export const DEPLOY_LOG_TOPIC = {
-  v3: '0x886b351c712b81b632ad4da9dfd5d7210a53e22550bf2c0a2b9826fc5d37e1f1',
-}
+export const DEPLOY_LOG_TOPIC =
+  '0x556e2663f9312acdff6b3f6554a68d7f1b6e64a832778c7abac899b58961bb4e'
 /******************** Deploy related ********************/
 
 /******************** Trade related ********************/
