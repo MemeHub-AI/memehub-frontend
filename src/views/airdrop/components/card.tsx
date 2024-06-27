@@ -23,8 +23,10 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
   const { query, pathname, ...router } = useRouter()
   const isPast = utilTime.isPast(airdrop?.create ?? 0)
 
-  const { amountLeft, amountClaimed, isKolClaimed, isCommunityClaimed } =
-    useAirdropInfo(airdrop?.chain, airdrop?.distribution_id)
+  const { total, claimed, isKolClaimed, isCommunityClaimed } = useAirdropInfo(
+    airdrop?.chain,
+    airdrop?.distribution_id
+  )
 
   const isKol = !!airdrop?.kol_name
   const isCmnt = !!airdrop?.community_name
@@ -92,8 +94,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           <div className="mt-3 flex items-center text-gray-500">
             <TbUsers size={24} />
             <span className="ml-2">
-              {BigNumber(amountClaimed).toFormat()} /{' '}
-              {BigNumber(amountLeft).toFormat()}
+              {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
             </span>
           </div>
           <Button

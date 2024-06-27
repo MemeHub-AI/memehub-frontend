@@ -87,8 +87,12 @@ const AirdropCard = (props: AirdropCardProps) => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
 
-  const { amountLeft, amountClaimed, isKolClaimed, isCommunityClaimed } =
-    useAirdropInfo(airdrop.chain, airdrop.distribution_id)
+  console.log('airdrop id', airdrop.distribution_id)
+
+  const { total, claimed, isKolClaimed, isCommunityClaimed } = useAirdropInfo(
+    airdrop.chain,
+    airdrop.distribution_id
+  )
   const canClaim =
     (isKol && !isKolClaimed) || (isCommunity && !isCommunityClaimed)
 
@@ -133,8 +137,7 @@ const AirdropCard = (props: AirdropCardProps) => {
 
         <div className="flex items-center gap-2">
           <TbUsers size={20} />
-          {BigNumber(amountClaimed).toFormat()} /{' '}
-          {BigNumber(amountLeft).toFormat()}
+          {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
         </div>
       </div>
       <Button

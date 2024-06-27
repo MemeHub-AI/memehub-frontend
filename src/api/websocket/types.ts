@@ -1,3 +1,4 @@
+import { TradeType } from '@/constants/trade'
 import { TokenListItem } from '../token/types'
 
 export interface WSMessageBase<T = null> {
@@ -10,11 +11,6 @@ export enum WSMessageType {
   Message = 'message',
   Error = 'error',
   Heartbeat = 'heartbeat',
-}
-
-export enum TradeType {
-  Buy = 'buy',
-  Sell = 'sell',
 }
 
 export interface WSTradeLogMessage {

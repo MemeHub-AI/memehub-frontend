@@ -2,7 +2,7 @@ import { bscTestnet, opBNBTestnet } from 'wagmi/chains'
 import { Hash, parseEther, zeroHash } from 'viem'
 
 const bondingCurve = {
-  addPoolEthAmount: parseEther('10.345'),
+  addPoolEthAmount: parseEther('10.543536923122173709'),
 }
 
 const distributor = {

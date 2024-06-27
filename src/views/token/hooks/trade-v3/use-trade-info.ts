@@ -20,7 +20,7 @@ export const useTradeInfoV3 = () => {
       functionName: 'maxSupply_',
       chainId,
     }).catch((e) => {
-      console.error(e)
+      console.error(e.message)
       return BI_ZERO
     })
   }
@@ -33,7 +33,7 @@ export const useTradeInfoV3 = () => {
       args: [token],
       chainId,
     }).catch((e) => {
-      console.error(e)
+      console.error(e.message)
       return [] as const
     })
   }
@@ -45,12 +45,19 @@ export const useTradeInfoV3 = () => {
       ...bondingCurveConfig,
       functionName: 'calcAmountOutFromToken',
       args: [tokenAddr, parseEther(amount)],
+      chainId,
     }).catch((e) => {
       console.error(e.message)
       return BI_ZERO
     })
 
-    return value
+    const offsetFee1 = 0.99
+    const offsetFee2 = 0.98 // Add a little, make sure not overflow.
+
+    // Use offset fee, fill the service fee.
+    return BigInt(
+      BigNumber(value.toString()).div(offsetFee1).div(offsetFee2).toFixed()
+    )
   }
 
   const getTokenAmount = async (amount: string) => {
@@ -76,6 +83,7 @@ export const useTradeInfoV3 = () => {
       ...bondingCurveConfig,
       functionName: 'calcPrice',
       args: [tokenAddr],
+      chainId,
     })
   }
 
@@ -93,6 +101,7 @@ export const useTradeInfoV3 = () => {
     return {
       total,
       current,
+      currentLeft,
       isOverflow,
       isListed,
     }

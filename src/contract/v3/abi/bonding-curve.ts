@@ -11,6 +11,16 @@ export const v3BondingCurveAbi = [
   },
   {
     inputs: [],
+    name: 'MEMEHUB_InvalidSell',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_setClaimableTokensFailure',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'MemeHub_AlreadyGraduated',
     type: 'error',
   },
@@ -113,6 +123,12 @@ export const v3BondingCurveAbi = [
         internalType: 'uint256',
         name: 'amountOut',
         type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'referrer',
+        type: 'address',
       },
     ],
     name: 'MemeHubContinuousMintDev',
@@ -362,7 +378,7 @@ export const v3BondingCurveAbi = [
     outputs: [
       {
         internalType: 'uint256',
-        name: 'lastPrice',
+        name: '',
         type: 'uint256',
       },
     ],
@@ -557,6 +573,11 @@ export const v3BondingCurveAbi = [
             name: 'headmaster',
             type: 'address',
           },
+          {
+            internalType: 'bool',
+            name: 'isGraduable',
+            type: 'bool',
+          },
         ],
         internalType: 'struct MEMEHUB_BondingCurve.Pool',
         name: '',
@@ -738,6 +759,11 @@ export const v3BondingCurveAbi = [
         name: 'headmaster',
         type: 'address',
       },
+      {
+        internalType: 'bool',
+        name: 'isGraduable',
+        type: 'bool',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
@@ -887,6 +913,19 @@ export const v3BondingCurveAbi = [
       },
     ],
     name: 'setOwner',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'contract MEMEHUB_Recommend',
+        name: '_recommend',
+        type: 'address',
+      },
+    ],
+    name: 'setRecommend',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

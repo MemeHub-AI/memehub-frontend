@@ -1,10 +1,11 @@
 import { BigNumber } from 'bignumber.js'
 import { Hash, parseEther, Address, Log } from 'viem'
 import dayjs from 'dayjs'
+import { getBlock } from 'wagmi/actions'
 
 import { DEPLOY_LOG_TOPIC, TRADE_SERVICE_FEE } from '@/constants/contract'
-import { getBlock } from 'wagmi/actions'
 import { wagmiConfig } from '@/config/wagmi'
+import { DEADLINE_SECONDS } from '@/constants/trade'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -84,9 +85,9 @@ export const addPrefix0x = (input: string | string[]) => {
 }
 
 // Get timestamp & plus offset seconds.
-export const getDeadline = async (offset = 50) => {
+export const getDeadline = async () => {
   const addOffset = (value: bigint | number) => {
-    return BigNumber(value.toString()).plus(offset).toFixed(0)
+    return BigNumber(value.toString()).plus(DEADLINE_SECONDS).toFixed(0)
   }
 
   const ts = await getBlock(wagmiConfig)
@@ -102,4 +103,18 @@ export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
   const addr = hashAddr?.replace(/0x0+/, '') ?? ''
 
   return '0x' + addr
+}
+
+/**
+ * @example
+ * ```
+ * const vIs = versionOf('V3.0.1')
+ * // false
+ * if (vIs(ContractVersion.V2)) {...}
+ * // true
+ * if (vIs(ContractVersion.V3)) {...}
+ * ```
+ */
+export const versionOf = (originVersion: string) => {
+  return (v: string) => originVersion.startsWith(v)
 }

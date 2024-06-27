@@ -9,14 +9,16 @@ import { useTradeV1 } from './trade-v1/use-trade'
 import { useTradeV2 } from './trade-v2/use-trade'
 import { useTradeV3 } from './trade-v3/use-trade'
 import { useTokenContext } from '@/contexts/token'
-import { ContractVersion } from '@/enum/contract'
 import { useDexTrade } from './trade-dex/use-dex-trade'
 import { useToastDiamond } from '@/hooks/use-toast-diamond'
 import { useInvite } from './trade-v3/use-invite'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
 import { useTradeInfoV3 } from './trade-v3/use-trade-info'
-import { TradeType } from '@/enum/trade'
+import { ContractVersion } from '@/constants/contract'
+import { logger } from '@/utils/log'
+import { versionOf } from '@/utils/contract'
+import { TradeType } from '@/constants/trade'
 
 // Used for trade success tips.
 const lastTrade = {
@@ -43,17 +45,13 @@ export const useTrade = () => {
   const trade = useMemo(() => {
     if (!tokenInfo) return
 
-    switch (tokenInfo?.version) {
-      case ContractVersion.V1:
-        return tradeV1
-      case ContractVersion.V2:
-        return tradeV2
-      case ContractVersion.V3:
-        return tradeV3
-      default:
-        CONTRACT_ERR.versionNotFound()
-        return
-    }
+    const vIs = versionOf(tokenInfo.version)
+
+    if (vIs(ContractVersion.V1)) return tradeV1
+    if (vIs(ContractVersion.V2)) return tradeV2
+    if (vIs(ContractVersion.V3)) return tradeV3
+
+    CONTRACT_ERR.versionNotFound()
   }, [tokenInfo?.version, tradeV1, tradeV2, tradeV3])
 
   const tradeHash = trade?.tradeHash
@@ -96,7 +94,7 @@ export const useTrade = () => {
       lastTrade.type = TradeType.Buy
     })
 
-    console.log('trade', amount, slippage)
+    logger('buy', amount, slippage)
     trade?.buy(amount, slippage, setValue)
   }
 
@@ -105,7 +103,7 @@ export const useTrade = () => {
     lastTrade.amount = amount
     lastTrade.type = TradeType.Sell
 
-    console.log('sell', amount, slippage)
+    logger('sell', amount, slippage)
     trade?.sell(amount, slippage)
   }
 

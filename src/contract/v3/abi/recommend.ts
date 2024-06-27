@@ -1,17 +1,6 @@
 export const v3RecommendAbi = [
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'bond_',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
-      },
-    ],
+    inputs: [],
     stateMutability: 'nonpayable',
     type: 'constructor',
   },
@@ -42,7 +31,7 @@ export const v3RecommendAbi = [
   },
   {
     inputs: [],
-    name: 'MemeHub_IllegalBond',
+    name: 'MemeHub_IllegalValue',
     type: 'error',
   },
   {
@@ -145,19 +134,6 @@ export const v3RecommendAbi = [
   },
   {
     inputs: [],
-    name: 'bond',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'claimTokens',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -249,7 +225,7 @@ export const v3RecommendAbi = [
     ],
     name: 'setClaimableTokens',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {

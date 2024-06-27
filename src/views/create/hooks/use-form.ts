@@ -11,8 +11,8 @@ import { useDeploy } from './use-deploy'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { CoinType, Marketing } from '@/api/token/types'
-import { ContractVersion } from '@/enum/contract'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
+import { DEPLOY_VERSION } from '@/constants/contract'
 
 export const formFields = {
   fullname: 'fullname',
@@ -124,7 +124,7 @@ export const useCreateTokenForm = (
       website: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
       coin_type: values.coinType as number,
       marketing: values.marketing as Marketing[],
-      version: ContractVersion.V3, // Mark version for create token.
+      version: DEPLOY_VERSION,
     })
   }
 
