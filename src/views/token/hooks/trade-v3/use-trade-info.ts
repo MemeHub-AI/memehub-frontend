@@ -20,7 +20,7 @@ export const useTradeInfoV3 = () => {
       functionName: 'maxSupply_',
       chainId,
     }).catch((e) => {
-      console.error(e)
+      console.error(e.message)
       return BI_ZERO
     })
   }
@@ -33,7 +33,7 @@ export const useTradeInfoV3 = () => {
       args: [token],
       chainId,
     }).catch((e) => {
-      console.error(e)
+      console.error(e.message)
       return [] as const
     })
   }
@@ -89,6 +89,8 @@ export const useTradeInfoV3 = () => {
     const current = BigNumber(total).minus(currentLeft).toFixed()
     const isOverflow = BigNumber(amount).gt(currentLeft)
     const isListed = BigNumber(currentLeft).eq(0)
+
+    console.log('check', total, currentLeft)
 
     return {
       total,

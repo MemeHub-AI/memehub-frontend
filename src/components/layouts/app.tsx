@@ -26,7 +26,7 @@ dayjs.locale(dayjsEn)
 BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_DOWN })
 
 export const AppLayout = ({ children }: ComponentProps<'div'>) => {
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { isNotMounted } = useMounted()
   const { initLang } = useLang()
 
@@ -47,6 +47,10 @@ export const AppLayout = ({ children }: ComponentProps<'div'>) => {
   return (
     <>
       <Header />
+      <div className="bg-yellow-400 text-center font-bold sticky top-16 text-sm">
+        {t('testnote')}
+      </div>
+
       {children}
       {/* <Footer /> */}
       <Toaster theme="light" richColors />
