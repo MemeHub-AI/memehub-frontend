@@ -26,6 +26,7 @@ import { useUserStore } from '@/stores/use-user-store'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { TradeType } from '@/constants/trade'
 import { useToastDiamond } from '@/hooks/use-toast-diamond'
+import { useStorage } from '@/hooks/use-storage'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -53,6 +54,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchTokenBalance,
   } = useTradeInfo()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
+  const { setInviteCode } = useStorage()
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
@@ -147,8 +149,12 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         }
         confirmText={t('clear-it')}
         onConfirm={() => {
+          // Clear invite code
           query.r = ''
-          router.replace({ pathname: router.pathname, query })
+          setInviteCode('')
+          router.replace({ pathname: router.pathname, query }, undefined, {
+            shallow: true,
+          })
         }}
       />
       <Card
