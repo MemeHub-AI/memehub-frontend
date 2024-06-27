@@ -20,7 +20,9 @@ export const useDeployV3 = (
   const { bondingCurveConfig, bondingCurveParams, distributorParams } =
     getV3Config(chainId)
 
-  const parsePercent = (p: number) => BigNumber(p).multipliedBy(100).toNumber()
+  const parsePercent = (p: number) => {
+    return BigNumber(p).multipliedBy(100).multipliedBy(100).toNumber()
+  }
 
   const updateAirdropParams = (
     data: AirdropMerkleRootRes,

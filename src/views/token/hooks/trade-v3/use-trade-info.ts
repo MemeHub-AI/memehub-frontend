@@ -20,7 +20,7 @@ export const useTradeInfoV3 = () => {
       functionName: 'maxSupply_',
       chainId,
     }).catch((e) => {
-      console.error(e)
+      console.error(e.message)
       return BI_ZERO
     })
   }
@@ -33,7 +33,7 @@ export const useTradeInfoV3 = () => {
       args: [token],
       chainId,
     }).catch((e) => {
-      console.error(e)
+      console.error(e.message)
       return [] as const
     })
   }
