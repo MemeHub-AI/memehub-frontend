@@ -89,12 +89,13 @@ export const useTrade = () => {
     return true
   }
 
-  const buying = (
+  const buying = async (
     amount: string,
     slippage: string,
     setValue?: (value: string) => void
   ) => {
-    if (!checkForTrade(amount)) return
+    const isValid = await checkForTrade(amount)
+    if (!isValid) return
 
     // TODO: temp
     getTokenAmount(amount).then((data) => {
@@ -106,8 +107,9 @@ export const useTrade = () => {
     trade?.buy(amount, slippage, setValue)
   }
 
-  const selling = (amount: string, slippage: string) => {
-    if (!checkForTrade(amount)) return
+  const selling = async (amount: string, slippage: string) => {
+    const isValid = await checkForTrade(amount)
+    if (!isValid) return
     lastTrade.amount = amount
     lastTrade.type = TradeType.Sell
 
