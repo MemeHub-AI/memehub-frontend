@@ -55,9 +55,12 @@ export const useTradeInfoV3 = () => {
     const offsetFee2 = 0.98 // Add a little, make sure not overflow.
 
     // Use offset fee, fill the service fee.
-    return BigInt(
-      BigNumber(value.toString()).div(offsetFee1).div(offsetFee2).toFixed()
-    )
+    const v = BigNumber(formatEther(value))
+      .div(offsetFee1)
+      .div(offsetFee2)
+      .toFixed()
+
+    return parseEther(v)
   }
 
   const getTokenAmount = async (amount: string) => {
