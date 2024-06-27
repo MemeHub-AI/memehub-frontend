@@ -39,18 +39,21 @@ export const TokenPage = () => {
         <div className="flex flex-col flex-1">
           {isMobile && <TradeTab />}
           <TokenInfoHeader />
-          <Tabs defaultValue="chart">
-            <TabsList className="grid w-full grid-cols-2 mt-1">
-              <TabsTrigger value="chart">{t('kline')}</TabsTrigger>
-              <TabsTrigger value="info">{t('token.info')}</TabsTrigger>
-            </TabsList>
-            <TabsContent value="chart">
-              <Chart />
-            </TabsContent>
-            <TabsContent value="info">
-              <TokenInfo />
-            </TabsContent>
-          </Tabs>
+          {!isMobile && <Chart />}
+          {isMobile && (
+            <Tabs defaultValue="chart">
+              <TabsList className="grid w-full grid-cols-2 mt-1">
+                <TabsTrigger value="chart">{t('kline')}</TabsTrigger>
+                <TabsTrigger value="info">{t('token.info')}</TabsTrigger>
+              </TabsList>
+              <TabsContent value="chart">
+                <Chart />
+              </TabsContent>
+              <TabsContent value="info">
+                <TokenInfo />
+              </TabsContent>
+            </Tabs>
+          )}
           <TradeAirdrop />
           <CommentTradeTab />
         </div>

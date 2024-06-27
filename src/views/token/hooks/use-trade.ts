@@ -11,7 +11,6 @@ import { useTradeV3 } from './trade-v3/use-trade'
 import { useTokenContext } from '@/contexts/token'
 import { useDexTrade } from './trade-dex/use-dex-trade'
 import { useToastDiamond } from '@/hooks/use-toast-diamond'
-import { useInvite } from './trade-v3/use-invite'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
 import { useTradeInfoV3 } from './trade-v3/use-trade-info'
@@ -30,7 +29,6 @@ export const useTrade = () => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
-  const {} = useInvite()
   const { userInfo, refetchUserInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
   const [inviteSelfOpen, setInviteSelfOpen] = useState(false)
