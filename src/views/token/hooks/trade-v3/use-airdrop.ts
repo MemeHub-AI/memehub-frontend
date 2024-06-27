@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
@@ -14,6 +14,7 @@ import { MarketType } from '@/api/token/types'
 import { addPrefix0x } from '@/utils/contract'
 import { useTradeSearchParams } from '../use-search-params'
 import { getV3Config } from '@/contract/v3/config'
+import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const useAirdrop = (id: number, type_list: string) => {
   const { t } = useTranslation()
@@ -21,6 +22,7 @@ export const useAirdrop = (id: number, type_list: string) => {
   const { chainId } = useChainInfo()
   const { distributorConfig } = getV3Config(chainId)
   const uniqueKey = useMemo(nanoid, [])
+  const { setIsCalimingAirdrop } = useAirdropStore()
 
   const { data: { data } = {} } = useQuery({
     enabled: !!chainName && !!type_list && !!tokenAddr,
@@ -46,13 +48,14 @@ export const useAirdrop = (id: number, type_list: string) => {
       onError: (e) => CONTRACT_ERR.exec(e),
     },
   })
-  const { isFetching: isClaiming } = useWaitForTx({
+  const { isFetching: isWaitingClaim } = useWaitForTx({
     hash,
     onLoading: () => toast.loading(t('tx.waiting')),
     onError: () => toast.error(t('airdrop.claim.failed')),
     onSuccess: () => toast.success(t('airdrop.claim.success')),
     onFillay: () => toast.dismiss(),
   })
+  const isClaiming = isSubmittingClaim || isWaitingClaim
 
   const claim = () => {
     if (!distributorConfig) {
@@ -80,6 +83,10 @@ export const useAirdrop = (id: number, type_list: string) => {
       args: [BigInt(id), addPrefix0x(kol_proof), addPrefix0x(community_proof)],
     })
   }
+
+  useEffect(() => {
+    setIsCalimingAirdrop(isClaiming)
+  }, [isClaiming])
 
   return {
     isSubmittingClaim,

@@ -23,7 +23,6 @@ import { useUserStore } from '@/stores/use-user-store'
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
-
   const { userInfo } = useUserStore()
 
   const {

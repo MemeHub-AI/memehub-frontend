@@ -13,16 +13,14 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { qs } from '@/hooks/use-fetch'
 
-let code: string | undefined
-
 export default function App({ Component, pageProps }: AppProps) {
   const { t } = useTranslation()
-  const rewardCode = useRewardCode()
-  const { getRewardCode, setRewardCode } = useStorage()
-  const router = useRouter()
-  if (rewardCode && rewardCode !== getRewardCode()) setRewardCode(rewardCode)
+  const { getInviteCode, setInviteCode } = useStorage()
+  const { query, ...router } = useRouter()
 
   const handleRouteChange = (url: string) => {
+    const code = getInviteCode()
+
     if (code && !/(\?|&)r=/.test(location.search)) {
       const url = new URL(location.origin + location.pathname)
       const query = qs.parse(location.search)
@@ -36,7 +34,9 @@ export default function App({ Component, pageProps }: AppProps) {
   }
 
   useEffect(() => {
-    code = location.search.match(/r=([^&]+)*/)?.[1]
+    const inviteCode = location.search.match(/r=([^&]+)*/)?.[1] ?? ''
+
+    setInviteCode(inviteCode)
     router.events.on('routeChangeStart', () => {
       router.events.on('routeChangeComplete', handleRouteChange)
     })

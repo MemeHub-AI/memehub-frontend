@@ -103,7 +103,7 @@ export const useTradeInfoV3 = () => {
   // Calc the last buy order price.
   const calcLastBuy = async (currentLeft: string) => {
     const nativeAmount = formatEther(await getNativeAmount(currentLeft))
-    const offsetFee1 = 0.99
+    const offsetFee1 = 0.98
     const offsetFee2 = 0.98 // Add a little, make sure not overflow.
     const amount = BigNumber(nativeAmount.toString())
       .div(offsetFee1)

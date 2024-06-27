@@ -48,7 +48,7 @@ export const useStorage = (useSession = false) => {
     getSlippage: () => get('slippage'),
     setSlippage: (v: string) => set('slippage', v),
 
-    getRewardCode: () => get('reward_code'),
-    setRewardCode: (v: string) => set('reward_code', v),
+    getInviteCode: () => get('invite_code'),
+    setInviteCode: (v: string) => set('invite_code', v),
   }
 }

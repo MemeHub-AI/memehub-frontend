@@ -62,6 +62,7 @@ export interface WSTradeInfoMessage {
   holders: {
     address: string
     percentage: string
+    contract_flag: string | null
     scan_url: string
   }[]
 }

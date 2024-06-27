@@ -21,12 +21,7 @@ export const useUploadImage = (options?: Options) => {
   const [file, setFile] = useState<File | null>(null)
   const { getToken } = useStorage()
 
-  const clearFile = () => {
-    setFile(null)
-    if (inputEl) inputEl.value = ''
-  }
-
-  const { data, mutateAsync } = useMutation({
+  const { data, mutateAsync, reset } = useMutation({
     mutationKey: [otherApi.uploadImage.name],
     mutationFn: otherApi.uploadImage,
     onMutate: () => toast.loading(t('uploading')),
@@ -70,6 +65,12 @@ export const useUploadImage = (options?: Options) => {
     formData.append('avatar', file)
     setFile(file)
     mutateAsync(formData)
+  }
+
+  const clearFile = () => {
+    setFile(null)
+    reset()
+    if (inputEl) inputEl.value = ''
   }
 
   return {

@@ -6,6 +6,7 @@ import { BigNumber } from 'bignumber.js'
 import { useRouter } from 'next/router'
 import { useAccount, useSwitchChain } from 'wagmi'
 import { isEmpty } from 'lodash'
+import { useDebounce } from 'react-use'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -26,6 +27,8 @@ import { useUserStore } from '@/stores/use-user-store'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { TradeType } from '@/constants/trade'
 import { useToastDiamond } from '@/hooks/use-toast-diamond'
+import { useStorage } from '@/hooks/use-storage'
+import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -35,10 +38,10 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
   )
-  const { query } = useRouter()
+  const { query, ...router } = useRouter()
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId } = useAccount()
-  const router = useRouter()
+  const { isClaimingAirdrop } = useAirdropStore()
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
@@ -54,9 +57,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchTokenBalance,
   } = useTradeInfo()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
+  const { setInviteCode } = useStorage()
+  const [isBalanceOverflow, setIsBalanceOverflow] = useState(false)
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
+  const disabled = isSubmitting || isClaimingAirdrop
+  const disableTrade =
+    disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
 
   const onBuy = async () => {
     // Overflow current wallet balance.
@@ -114,6 +122,16 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     isBuy ? onBuy() : onSell()
   }
 
+  const checkForOverflow = () => {
+    if (isBuy) {
+      setIsBalanceOverflow(BigNumber(value).gt(nativeBalance))
+    } else {
+      setIsBalanceOverflow(BigNumber(value).gt(tokenBalance))
+    }
+  }
+
+  useDebounce(checkForOverflow, 300, [value])
+
   // Refresh balance when trade completed.
   useEffect(() => {
     if (!isTraded) return
@@ -148,10 +166,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         }
         confirmText={t('clear-it')}
         onConfirm={() => {
-          if (router.query.r) delete router.query.r
-          router.replace({
-            pathname: router.pathname,
-            query: router.query,
+          // Clear invite code
+          query.r = ''
+          setInviteCode('')
+          router.replace({ pathname: router.pathname, query }, undefined, {
+            shallow: true,
           })
         }}
       />
@@ -165,14 +184,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             <TabsTrigger
               className="h-full font-bold"
               value={TradeType.Buy}
-              disabled={isSubmitting}
+              disabled={disabled}
             >
               {t('trade.buy')}
             </TabsTrigger>
             <TabsTrigger
               className="h-full font-bold"
               value={TradeType.Sell}
-              disabled={isSubmitting}
+              disabled={disabled}
             >
               {t('trade.sell')}
             </TabsTrigger>
@@ -182,20 +201,16 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <SlippageButton
             value={slippage}
             onChange={setSlippage}
-            disabled={isSubmitting}
+            disabled={disabled}
           />
 
           <div className="flex flex-col my-3">
             {/* Input */}
-            <TradeInput
-              value={value}
-              onChange={setValue}
-              disabled={isSubmitting}
-            />
+            <TradeInput value={value} onChange={setValue} disabled={disabled} />
 
             {/* Items button */}
             <TradeItems
-              disabled={isSubmitting}
+              disabled={disabled}
               onResetClick={setValue}
               onItemClick={setValue}
             />
@@ -205,9 +220,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <Button
             className="!w-full font-bold bg-lime-green-deep"
             onClick={onTrade}
-            disabled={isSubmitting || !value || BigNumber(value).lte(0)}
+            disabled={disableTrade}
           >
-            {isSubmitting ? t('trading') : t('trade')}
+            {isBalanceOverflow
+              ? t('balance.insufficient')
+              : isSubmitting
+              ? t('trading')
+              : t('trade')}
           </Button>
           {isConnected && (
             <>
