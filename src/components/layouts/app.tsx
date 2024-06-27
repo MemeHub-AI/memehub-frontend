@@ -47,10 +47,9 @@ export const AppLayout = ({ children }: ComponentProps<'div'>) => {
   return (
     <>
       <Header />
-      <div className="bg-yellow-400 text-center font-bold sticky top-16 text-sm">
+      <div className="bg-yellow-400 text-center font-bold sticky top-16 text-sm z-10">
         {t('testnote')}
       </div>
-
       {children}
       {/* <Footer /> */}
       <Toaster theme="light" richColors />
