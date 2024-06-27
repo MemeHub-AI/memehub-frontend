@@ -16,6 +16,9 @@ export const useInvite = () => {
   } = useMutation({
     mutationKey: [inviteApi.getDetail],
     mutationFn: async (code?: string) => {
+      // don't check if no any code.
+      if (!code && !referralCode) return Promise.resolve()
+
       const { data } = await inviteApi
         .getDetail(code ?? referralCode)
         .catch(() => ({ data: null }))
@@ -30,6 +33,8 @@ export const useInvite = () => {
   } = useMutation({
     mutationKey: [inviteApi.getCanBind.name],
     mutationFn: async (code?: string) => {
+      // don't check if no any code.
+      if (!code && !referralCode) return true
       const { data } = await inviteApi
         .getCanBind({ invitationCode: code ?? referralCode })
         .catch(() => ({ data: false }))
