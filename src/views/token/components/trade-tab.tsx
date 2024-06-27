@@ -6,6 +6,7 @@ import { BigNumber } from 'bignumber.js'
 import { useRouter } from 'next/router'
 import { useAccount, useSwitchChain } from 'wagmi'
 import { isEmpty } from 'lodash'
+import { useDebounce } from 'react-use'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -57,10 +58,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   } = useTradeInfo()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
   const { setInviteCode } = useStorage()
+  const [isBalanceOverflow, setIsBalanceOverflow] = useState(false)
 
   const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const disabled = isSubmitting || isClaimingAirdrop
+  const disableTrade =
+    disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
 
   const onBuy = async () => {
     // Overflow current wallet balance.
@@ -117,6 +121,16 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
     isBuy ? onBuy() : onSell()
   }
+
+  const checkForOverflow = () => {
+    if (isBuy) {
+      setIsBalanceOverflow(BigNumber(value).gt(nativeBalance))
+    } else {
+      setIsBalanceOverflow(BigNumber(value).gt(tokenBalance))
+    }
+  }
+
+  useDebounce(checkForOverflow, 300, [value])
 
   // Refresh balance when trade completed.
   useEffect(() => {
@@ -206,9 +220,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <Button
             className="!w-full font-bold bg-lime-green-deep"
             onClick={onTrade}
-            disabled={disabled || !value || BigNumber(value).lte(0)}
+            disabled={disableTrade}
           >
-            {isSubmitting ? t('trading') : t('trade')}
+            {isBalanceOverflow
+              ? t('balance.insufficient')
+              : isSubmitting
+              ? t('trading')
+              : t('trade')}
           </Button>
           {isConnected && (
             <>
