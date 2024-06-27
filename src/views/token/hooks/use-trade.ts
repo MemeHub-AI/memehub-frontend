@@ -30,7 +30,7 @@ export const useTrade = () => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
-  const { bindInviter } = useInvite()
+  const {} = useInvite()
   const { userInfo, refetchUserInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
   const [inviteSelfOpen, setInviteSelfOpen] = useState(false)
@@ -62,7 +62,6 @@ export const useTrade = () => {
     onLoading: () => toast.loading(t('tx.waiting')),
     onSuccess: () => {
       toastDiamond(lastTrade.amount, lastTrade.type)
-      bindInviter()
     },
     onError: CONTRACT_ERR.tradeFailed,
     onFillay: () => {
