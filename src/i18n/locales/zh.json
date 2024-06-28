@@ -419,5 +419,10 @@
   "balance.insufficient": "余额不足",
   "airdrop.claim": "领取",
   "hours": "小时",
-  "airdrop.go-burn": "前往销毁"
+  "airdrop.go-burn": "前往销毁",
+  "airdrop.burn": "销毁",
+  "burning": "销毁中...",
+  "airdrop.burn.failed": "销毁失败",
+  "airdrop.burn.success": "销毁成功！",
+  "trade.failed-airdrop": "你目前无法卖出这些代币"
 }

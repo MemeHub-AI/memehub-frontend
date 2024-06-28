@@ -427,5 +427,10 @@
   "balance.insufficient": "Balance insufficient",
   "airdrop.claim": "Claim",
   "hours": "Hours",
-  "airdrop.go-burn": "Go to burn"
+  "airdrop.go-burn": "Go to burn",
+  "airdrop.burn": "Burn",
+  "burning": "Burning...",
+  "airdrop.burn.failed": "Burn failed",
+  "airdrop.burn.success": "Burn successful!",
+  "trade.failed-airdrop": "You are currently unable to sell these tokens"
 }

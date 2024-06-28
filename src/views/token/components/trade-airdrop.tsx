@@ -93,7 +93,7 @@ const AirdropCard = (props: AirdropCardProps) => {
       airdrop.distribution_id
     )
 
-  const { isClaiming, claim } = useAirdrop(
+  const { isClaiming, claim, burn } = useAirdrop(
     airdrop.distribution_id,
     typeList.toString(),
     refetchIsClaimed
@@ -140,13 +140,23 @@ const AirdropCard = (props: AirdropCardProps) => {
           {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
         </div>
       </div>
-      <Button
-        className={cn('mt-3 w-full', !isClaimed && 'bg-lime-green-deep')}
-        disabled={disabled}
-        onClick={claim}
-      >
-        {isClaimed ? t('claimed') : t('airdrop.claim')}
-      </Button>
+      <div className="mt-3 flex justify-between gap-4">
+        <Button
+          className={cn('flex-1', !isClaimed && 'bg-lime-green-deep')}
+          disabled={disabled}
+          onClick={claim}
+        >
+          {isClaimed ? t('claimed') : t('airdrop.claim')}
+        </Button>
+        {/* <Button
+          className={cn('flex-1')}
+          variant="destructive"
+          disabled={isClaimed || isClaiming}
+          onClick={burn}
+        >
+          {t('airdrop.burn')}
+        </Button> */}
+      </div>
     </Card>
   )
 }

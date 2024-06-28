@@ -93,10 +93,10 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
             disabled={isClaimed}
             onClick={onPushToken}
           >
-            {isExpired
-              ? t('airdrop.go-burn')
-              : isClaimed
+            {isClaimed
               ? t('airdrop.claimed')
+              : isExpired
+              ? t('airdrop.go-burn')
               : t('claim.airdrop')}
           </Button>
         </div>
