@@ -16,7 +16,11 @@ import { useTradeSearchParams } from '../use-search-params'
 import { getV3Config } from '@/contract/v3/config'
 import { useAirdropStore } from '@/stores/use-airdrop'
 
-export const useAirdrop = (id: number, type_list: string) => {
+export const useAirdrop = (
+  id: number,
+  type_list: string,
+  onClaimed?: () => void
+) => {
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
@@ -24,7 +28,8 @@ export const useAirdrop = (id: number, type_list: string) => {
   const uniqueKey = useMemo(nanoid, [])
   const { setIsCalimingAirdrop } = useAirdropStore()
 
-  const { data: { data } = {} } = useQuery({
+  // Query airdrop details.
+  const { data: { data } = {}, refetch } = useQuery({
     enabled: !!chainName && !!type_list && !!tokenAddr,
     queryKey: [airdropApi.getProof.name + uniqueKey],
     queryFn: () => {
@@ -53,7 +58,12 @@ export const useAirdrop = (id: number, type_list: string) => {
     onLoading: () => toast.loading(t('tx.waiting')),
     onError: () => toast.error(t('airdrop.claim.failed')),
     onSuccess: () => toast.success(t('airdrop.claim.success')),
-    onFillay: () => toast.dismiss(),
+    onFillay: () => {
+      toast.dismiss()
+      resetClaim()
+      refetch()
+      onClaimed?.()
+    },
   })
   const isClaiming = isSubmittingClaim || isWaitingClaim
 
@@ -76,11 +86,11 @@ export const useAirdrop = (id: number, type_list: string) => {
       return
     }
 
-    console.log('claim airdrop', id, type_list, { kol_proof, community_proof })
     writeContract({
       ...distributorConfig,
       functionName: 'claim',
       args: [BigInt(id), addPrefix0x(kol_proof), addPrefix0x(community_proof)],
+      chainId,
     })
   }
 

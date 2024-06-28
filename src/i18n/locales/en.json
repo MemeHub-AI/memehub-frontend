@@ -426,5 +426,6 @@
   "invite.invalid.desc": "You cannot use this referral link for trading, which may be due to the following reasons:",
   "invite.invalid.reason1": "This is your own referral link",
   "invite.invalid.reason2": "This referral link has caused a circular invitation",
-  "balance.insufficient": "Balance insufficient"
+  "balance.insufficient": "Balance insufficient",
+  "airdrop.claim": "Claim"
 }

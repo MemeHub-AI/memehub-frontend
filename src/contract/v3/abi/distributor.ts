@@ -94,6 +94,11 @@ export const v3DistributorAbi = [
     type: 'error',
   },
   {
+    inputs: [],
+    name: 'MEMEHUB_Unqualified',
+    type: 'error',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -155,6 +160,18 @@ export const v3DistributorAbi = [
         type: 'uint256',
       },
       {
+        indexed: true,
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+      {
         indexed: false,
         internalType: 'address',
         name: 'account',
@@ -186,7 +203,7 @@ export const v3DistributorAbi = [
         type: 'uint64',
       },
     ],
-    name: 'MemeHubCreatedDev',
+    name: 'MemeHubCreated',
     type: 'event',
   },
   {
@@ -414,6 +431,19 @@ export const v3DistributorAbi = [
         internalType: 'bytes32',
         name: 'merkleRootCommunity',
         type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'duration',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',

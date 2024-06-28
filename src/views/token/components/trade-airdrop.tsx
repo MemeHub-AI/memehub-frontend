@@ -86,18 +86,17 @@ const AirdropCard = (props: AirdropCardProps) => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
 
-  console.log('airdrop id', airdrop.distribution_id)
-
-  const { total, claimed, isKolClaimed, isCommunityClaimed } = useAirdropInfo(
-    airdrop.chain,
-    airdrop.distribution_id
-  )
-  const canClaim =
-    (isKol && !isKolClaimed) || (isCommunity && !isCommunityClaimed)
+  const { total, claimed, isClaimed, durationSeconds, refetchIsClaimed } =
+    useAirdropInfo(
+      isKol ? MarketType.Kol : MarketType.Community,
+      airdrop.chain,
+      airdrop.distribution_id
+    )
 
   const { isClaiming, claim } = useAirdrop(
     airdrop.distribution_id,
-    typeList.toString()
+    typeList.toString(),
+    refetchIsClaimed
   )
 
   return (
@@ -119,7 +118,7 @@ const AirdropCard = (props: AirdropCardProps) => {
           </span>
           <img src="/images/check.png" alt="check" className="w-6 h-6" />
         </div>
-        {utilTime.isPast(airdrop.create) ? (
+        {utilTime.isPast(airdrop.create, durationSeconds) ? (
           t('expired')
         ) : (
           <Countdown targetTimestamp={airdrop.create * 1000} />
@@ -140,11 +139,11 @@ const AirdropCard = (props: AirdropCardProps) => {
         </div>
       </div>
       <Button
-        className={cn('mt-3 w-full', canClaim && 'bg-lime-green-deep')}
-        disabled={!canClaim || isClaiming}
+        className={cn('mt-3 w-full', !isClaimed && 'bg-lime-green-deep')}
+        disabled={isClaimed || isClaiming}
         onClick={claim}
       >
-        {t('claim')}
+        {isClaimed ? t('claimed') : t('airdrop.claim')}
       </Button>
     </Card>
   )

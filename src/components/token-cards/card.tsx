@@ -41,7 +41,7 @@ export const TokenCard = (props: Props) => {
       <Img
         src={card.image}
         alt="logo"
-        className="shrink-0 w-32 h-32 xl:w-40 xl:h-40"
+        className="shrink-0 w-32 h-32 xl:w-40 xl:h-40 rounded-r-none"
       />
       <div className="py-1.5 xl:py-2 pr-2 w-full flex flex-col justify-between">
         <div className="h-full">
