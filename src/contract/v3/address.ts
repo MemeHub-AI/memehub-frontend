@@ -7,8 +7,8 @@ const dev = {
     recommend: '0x3eA475f1B0B92DD315da2793BcFCFdCbB4006886',
   },
   [opBNBTestnet.id]: {
-    bondingCurve: '0x58B29FC37C9d11d7F1dA0b5e1fA5D7495e8295C6',
-    distributor: '0x9C1f8dfB0C9E335cbBB4E4DEAAAf79eb16689FaA',
+    bondingCurve: '0xD9F08c5803bbC46D406f802BA57d4506140edf3C',
+    distributor: '0xB42C6f9e47A695460BccfC5291a3daA60f5D0d27',
     recommend: '0x884B7a0044Eda9b3573409047e1a18a67f365E57',
   },
 } as const
