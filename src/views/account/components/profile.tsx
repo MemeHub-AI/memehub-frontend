@@ -52,7 +52,11 @@ export const Profile = (props: ComponentProps<'div'>) => {
   })
 
   return (
-    <Card className={cn('w-aside', className)} hover="none" shadow="none">
+    <Card
+      className={cn('w-aside max-sm:w-full', className)}
+      hover="none"
+      shadow="none"
+    >
       {/* Zoom in avatar dialog if is other user. */}
       <Dialog
         open={open}

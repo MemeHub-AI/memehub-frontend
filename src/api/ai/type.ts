@@ -8,6 +8,7 @@ export interface AIMemeInfo {
 
 export interface AIMemeInfoQuery {
   input: string
+  type?: 1 | 0
 }
 
 export interface AIMemeImageQuery extends AIMemeInfo {}

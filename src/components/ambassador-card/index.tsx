@@ -33,7 +33,7 @@ export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
       />
       <div className="ml-2">
         <h2 className="text-2xl max-sm:text-xl">{data?.name}</h2>
-        <div className="mt-2 line-clamp-4 max-sm:line-clamp-3">
+        <div className="mt-2 line-clamp-4 max-sm:line-clamp-3 break-all">
           {data?.description}
         </div>
       </div>
