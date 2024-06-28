@@ -1,56 +1,108 @@
+import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
-import { formatEther } from 'viem'
-import { BigNumber } from 'bignumber.js'
 
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { BI_ZERO } from '@/constants/contract'
 import { getV3Config } from '@/contract/v3/config'
+import { MarketType } from '@/api/token/types'
+import { BI_ZERO } from '@/constants/contract'
 
-export const useAirdropInfo = (chainName?: string, id = 0) => {
+export const useAirdropInfo = (
+  type: MarketType,
+  chainName?: string,
+  id?: number | null
+) => {
+  id = id ?? 0 // Adapt null
+
   const { address } = useAccount()
   const { chainId } = useChainInfo(chainName)
-  const { distributorConfig } = getV3Config(chainId)
 
-  const { data: amountLeftWei = BI_ZERO } = useReadContract({
+  const { isKol, distributorConfig } = useMemo(() => {
+    const { distributorConfig } = getV3Config(chainId)
+    return {
+      isKol: type === MarketType.Kol,
+      isCommunity: type === MarketType.Community,
+      distributorConfig,
+    }
+  }, [type, chainId])
+
+  const { data: airdropInfo = [], refetch } = useReadContract({
     ...distributorConfig!,
-    functionName: 'getAmountLeft',
-    chainId,
+    functionName: 'distributions',
     args: [BigInt(id)],
+    chainId,
     query: { enabled: !!distributorConfig },
   })
 
-  const { data: amountClaimedWei = BI_ZERO } = useReadContract({
+  const { total, claimed } = useMemo(() => {
+    const [
+      ,
+      kolCount = 0,
+      communityCount = 0,
+      claimedKolCount = 0,
+      claimedCommunityCount = 0,
+    ] = airdropInfo
+
+    return {
+      total: isKol ? kolCount : communityCount,
+      claimed: isKol ? claimedKolCount : claimedCommunityCount,
+    }
+  }, [airdropInfo])
+
+  const { data: duration = BI_ZERO } = useReadContract({
     ...distributorConfig!,
-    functionName: 'getAmountClaimed',
+    functionName: 'duration',
     chainId,
-    args: [BigInt(id)],
     query: { enabled: !!distributorConfig },
   })
-  const left = formatEther(amountLeftWei)
-  const claimed = formatEther(amountClaimedWei)
-  const total = BigNumber(left).plus(claimed)
+  const durationSeconds = Number(duration)
 
-  const { data: isKolClaimed } = useReadContract({
+  // Only query if type is kol.
+  const {
+    data: isKolClaimed,
+    isFetching: isFetchingKol,
+    refetch: refetchKol,
+  } = useReadContract({
     ...distributorConfig!,
     functionName: 'isClaimedKOL',
     args: [BigInt(id), address!],
     chainId,
-    query: { enabled: !!address },
+    query: {
+      enabled: !!address && type === MarketType.Kol,
+    },
   })
 
-  const { data: isCommunityClaimed } = useReadContract({
+  // Only query if type is community.
+  const {
+    data: isCommunityClaimed,
+    isFetching: isFetchingCommunity,
+    refetch: refetchCommunity,
+  } = useReadContract({
     ...distributorConfig!,
     functionName: 'isClaimedCommunity',
     args: [BigInt(id), address!],
     chainId,
-    query: { enabled: !!address },
+    query: {
+      enabled: !!address && type === MarketType.Community,
+    },
   })
+
+  const isClaimed = useMemo(() => {
+    return isKol ? isKolClaimed : isCommunityClaimed
+  }, [isKolClaimed, isCommunityClaimed])
+
+  const refetchIsClaimed = () => {
+    refetchKol()
+    refetchCommunity()
+  }
 
   return {
     total,
-    left,
     claimed,
-    isKolClaimed,
-    isCommunityClaimed,
+    durationSeconds,
+    isClaimed,
+    isFetchingKol,
+    isFetchingCommunity,
+    refetch,
+    refetchIsClaimed,
   }
 }

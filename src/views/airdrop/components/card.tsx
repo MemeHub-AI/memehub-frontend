@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils'
 import { Img } from '@/components/img'
 import { useAirdropInfo } from '../hooks/use-airdrop-info'
 import { fmt } from '@/utils/fmt'
+import { MarketType } from '@/api/token/types'
 
 interface Props {
   airdrop: AirdropItem | undefined
@@ -21,19 +22,17 @@ interface Props {
 export const AirdropCard = ({ airdrop, className }: Props) => {
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
-  const isPast = utilTime.isPast(airdrop?.create ?? 0)
+  const isKol = !!airdrop?.kol_name
 
-  const { total, claimed, isKolClaimed, isCommunityClaimed } = useAirdropInfo(
+  const { total, claimed, isClaimed, durationSeconds } = useAirdropInfo(
+    isKol ? MarketType.Kol : MarketType.Community,
     airdrop?.chain,
     airdrop?.distribution_id
   )
-
-  const isKol = !!airdrop?.kol_name
-  const isCmnt = !!airdrop?.community_name
-  const canClaim = (isKol && !isKolClaimed) || (isCmnt && !isCommunityClaimed)
+  const isPast = utilTime.isPast(airdrop?.create ?? 0, durationSeconds)
 
   const onPushToken = () => {
-    if (!airdrop?.chain || !airdrop?.address || isPast) return
+    if (!airdrop?.chain || !airdrop?.address) return
 
     router.push({
       pathname: fmt.toHref(airdrop.chain, airdrop.address),
@@ -99,10 +98,10 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           </div>
           <Button
             className="mt-3 font-bold w-full"
-            disabled={isPast || !canClaim}
+            disabled={isPast || isClaimed}
             onClick={onPushToken}
           >
-            {canClaim ? t('claim.airdrop') : t('airdrop.claimed')}
+            {isClaimed ? t('airdrop.claimed') : t('claim.airdrop')}
           </Button>
         </div>
         <Img src={airdrop?.logo} className="w-36 h-36 xl:w-42 xl:h-42" />

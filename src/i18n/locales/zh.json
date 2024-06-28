@@ -418,5 +418,6 @@
   "invite.invalid.desc": "你不能使用这个推荐链接进行交易，可能是以下原因造成的：",
   "invite.invalid.reason1": "这是您自己的推荐链接",
   "invite.invalid.reason2": "此推荐链接已引起循环邀请",
-  "balance.insufficient": "余额不足"
+  "balance.insufficient": "余额不足",
+  "airdrop.claim": "领取"
 }
