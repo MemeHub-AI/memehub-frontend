@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
 
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Kol } from './kol'
 import { Communities } from './communities'
-import { useRouter } from 'next/router'
 
 enum Tab {
   Kol = 'kol',
