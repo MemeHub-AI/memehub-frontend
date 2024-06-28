@@ -16,13 +16,13 @@ export const Countdown = ({
   const { t } = useTranslation()
   const [countdown, setCountdown] = useState('')
   const [isExpired, setIsExpired] = useState(false)
-  const targetTime = useMemo(
-    () => dayjs.unix(createdAt).add(duration, 'second'),
-    [createdAt, duration]
-  )
+  const targetTime = useMemo(() => {
+    const createTime = dayjs.unix(createdAt).add(duration, 'second')
+    return createTime
+  }, [createdAt, duration])
 
   const updateCountdown = () => {
-    if (isExpired) return
+    if (createdAt <= 0 || duration <= 0) return
 
     const currentTime = dayjs()
     const diff = targetTime.diff(currentTime, 'second')
@@ -43,7 +43,7 @@ export const Countdown = ({
 
   useEffect(() => {
     updateCountdown()
-  }, [])
+  }, [createdAt, duration])
 
   if (isExpired) {
     return <p className="text-zinc-500">{t('expired')}</p>

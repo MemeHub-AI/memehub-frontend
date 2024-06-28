@@ -66,9 +66,7 @@ export const useAirdropInfo = (
     functionName: 'isClaimedKOL',
     args: [BigInt(id), address!],
     chainId,
-    query: {
-      enabled: !!address && type === MarketType.Kol,
-    },
+    query: { enabled: !!address && type === MarketType.Kol },
   })
 
   // Only query if type is community.
@@ -81,9 +79,7 @@ export const useAirdropInfo = (
     functionName: 'isClaimedCommunity',
     args: [BigInt(id), address!],
     chainId,
-    query: {
-      enabled: !!address && type === MarketType.Community,
-    },
+    query: { enabled: !!address && type === MarketType.Community },
   })
 
   const isClaimed = useMemo(() => {
