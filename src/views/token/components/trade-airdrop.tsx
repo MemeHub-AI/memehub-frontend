@@ -86,17 +86,26 @@ const AirdropCard = (props: AirdropCardProps) => {
   const { tokenInfo } = useTokenContext()
   const [isExpired, setIsExpired] = useState(false)
 
-  const { total, claimed, isClaimed, durationSeconds, refetchIsClaimed } =
-    useAirdropInfo(
-      isKol ? MarketType.Kol : MarketType.Community,
-      airdrop.chain,
-      airdrop.distribution_id
-    )
+  const {
+    total,
+    claimed,
+    isClaimed,
+    durationSeconds,
+    refetch,
+    refetchIsClaimed,
+  } = useAirdropInfo(
+    isKol ? MarketType.Kol : MarketType.Community,
+    airdrop.chain,
+    airdrop.distribution_id
+  )
 
   const { isClaiming, claim, burn } = useAirdrop(
     airdrop.distribution_id,
     typeList.toString(),
-    refetchIsClaimed
+    () => {
+      refetch()
+      refetchIsClaimed()
+    }
   )
 
   const disabled = isClaimed || isClaiming || isExpired
