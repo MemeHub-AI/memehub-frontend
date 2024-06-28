@@ -427,5 +427,6 @@
   "contract.err.amount": "金额无效",
   "contract.err.balance": "余额错误",
   "airdrop.claimed.hide": "隐藏已领取的",
-  "dex": "DEX"
+  "dex": "DEX",
+  "listed": "已发射"
 }

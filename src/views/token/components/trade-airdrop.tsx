@@ -1,4 +1,4 @@
-import React, { ComponentProps, useState } from 'react'
+import React, { ComponentProps, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { useQuery } from '@tanstack/react-query'
@@ -39,9 +39,14 @@ export const TradeAirdrop = () => {
       })
     },
   })
-  const kol = data?.find((a) => a.kol_name)
-  const communities = data?.find((a) => a.community_name)
-  const isOnlyOne = data?.length === 1
+  const [kol, communities, isOnlyOne] = useMemo(
+    () => [
+      data?.find((a) => a.kol_name),
+      data?.find((a) => a.community_name),
+      data?.length === 1,
+    ],
+    [data]
+  )
 
   if (isEmpty(data)) return
 
@@ -103,7 +108,6 @@ const AirdropCard = (props: AirdropCardProps) => {
       refetchIsClaimed()
     }
   )
-
   const disabled = isClaimed || isClaiming || isExpired
 
   return (

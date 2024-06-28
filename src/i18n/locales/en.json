@@ -435,5 +435,6 @@
   "contract.err.amount": "Amount is invalid",
   "contract.err.balance": "Balance is invalid",
   "airdrop.claimed.hide": "Hide already claiemd",
-  "dex": "DEX"
+  "dex": "DEX",
+  "listed": "Listed"
 }
