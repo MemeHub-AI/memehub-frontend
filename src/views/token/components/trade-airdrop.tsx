@@ -119,7 +119,7 @@ const AirdropCard = (props: AirdropCardProps) => {
           <img src="/images/check.png" alt="check" className="w-6 h-6" />
         </div>
         {utilTime.isPast(airdrop.create, durationSeconds) ? (
-          t('expired')
+          <span className="text-zinc-500">{t('expired')}</span>
         ) : (
           <Countdown targetTimestamp={airdrop.create * 1000} />
         )}

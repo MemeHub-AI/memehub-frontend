@@ -258,8 +258,6 @@
   "all": "All",
   "addr.empty": "Cannot find contract address",
   "claimed": "Claimed",
-  "launchpad": "Launchpad",
-  "launchpad.trump": "Trump Laumchpad",
   "tx.record": "Transaction record",
   "create.token": "Start Coin",
   "random.meme": "Random MemeCoin",
