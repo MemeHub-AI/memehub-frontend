@@ -111,7 +111,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
     // Token address is invalid.
     if (isEmpty(token) || !isAddress(token)) {
-      toast.error(t('trade.token.invalid'))
+      toast.error(t('contract.err.token-addr'))
       return
     }
 

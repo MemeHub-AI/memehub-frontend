@@ -13,8 +13,6 @@ export enum Routes {
 
   Account = '/account',
 
-  Launchpad = '/launchpad',
-
   Idea = '/idea',
 
   Reward = '/reward',

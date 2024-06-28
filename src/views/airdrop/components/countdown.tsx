@@ -1,47 +1,53 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+import dayjs from 'dayjs'
+import { useTranslation } from 'react-i18next'
 
 interface CountdownProps {
-  targetTimestamp: number
+  createdAt: number
+  duration: number
+  onExpired?: () => void
 }
 
-export const Countdown = ({ targetTimestamp }: CountdownProps) => {
-  const [countdown, setCountdown] = useState({
-    hours: '00',
-    minutes: '00',
-    seconds: '00',
-  })
+export const Countdown = ({
+  createdAt,
+  duration,
+  onExpired,
+}: CountdownProps) => {
+  const { t } = useTranslation()
+  const [countdown, setCountdown] = useState('')
+  const [isExpired, setIsExpired] = useState(false)
+  const targetTime = useMemo(
+    () => dayjs.unix(createdAt).add(duration, 'second'),
+    [createdAt, duration]
+  )
 
-  const formatNumber = (num: number) => {
-    return num < 10 ? `0${num}` : `${num}`
+  const updateCountdown = () => {
+    if (isExpired) return
+
+    const currentTime = dayjs()
+    const diff = targetTime.diff(currentTime, 'second')
+    const h = String(Math.floor(diff / 3600)).padStart(2, '0')
+    const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0')
+    const s = String(diff % 60).padStart(2, '0')
+
+    const formattedCountdown = `${h}: ${m}: ${s}`
+    setCountdown(formattedCountdown)
+
+    if (diff <= 0) {
+      setIsExpired(true)
+      onExpired?.()
+      return
+    }
+    setTimeout(updateCountdown, 1000)
   }
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      const currentTimestamp = Date.now()
-      const endTime = 48 * 60 * 60 * 1000
-      const timeDifference = currentTimestamp - targetTimestamp
-
-      const hours = formatNumber(Math.floor((endTime - timeDifference) / (1000 * 60 * 60)))
-      const minutes = formatNumber(
-        Math.floor(((endTime - timeDifference) % (1000 * 60 * 60)) / (1000 * 60))
-      )
-      const seconds = formatNumber(
-        Math.floor(((endTime - timeDifference) % (1000 * 60)) / 1000)
-      )
-      setCountdown({ hours, minutes, seconds })
-      if (timeDifference <= 0) {
-        clearInterval(intervalId)
-      }
-    }, 1000)
-
-    return () => clearInterval(intervalId)
+    updateCountdown()
   }, [])
 
-  return (
-    <div>
-      <p className="text-[#CF1322] font-bold">
-        {countdown.hours}:{countdown.minutes}:{countdown.seconds}
-      </p>
-    </div>
-  )
+  if (isExpired) {
+    return <p className="text-zinc-500">{t('expired')}</p>
+  }
+
+  return <p className="text-red-600 font-bold">{countdown}</p>
 }

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { BigNumber } from 'bignumber.js'
@@ -5,7 +6,6 @@ import { useRouter } from 'next/router'
 
 import { Card } from '@/components/ui/card'
 import { Countdown } from './countdown'
-import { utilTime } from '@/utils/time'
 import { AirdropItem } from '@/api/airdrop/types'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -23,13 +23,13 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
   const isKol = !!airdrop?.kol_name
+  const [isExpired, setIsExpired] = useState(false)
 
   const { total, claimed, isClaimed, durationSeconds } = useAirdropInfo(
     isKol ? MarketType.Kol : MarketType.Community,
     airdrop?.chain,
     airdrop?.distribution_id
   )
-  const isPast = utilTime.isPast(airdrop?.create ?? 0, durationSeconds)
 
   const onPushToken = () => {
     if (!airdrop?.chain || !airdrop?.address) return
@@ -51,15 +51,11 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           {airdrop?.name}
           {airdrop?.ticker ? `(${airdrop.ticker})` : ''}
         </span>
-        <span className="text-gray-500">
-          {isPast ? (
-            t('expired')
-          ) : (
-            <Countdown
-              targetTimestamp={(airdrop?.create ?? 0) * 1000}
-            ></Countdown>
-          )}
-        </span>
+        <Countdown
+          createdAt={airdrop?.create ?? 0}
+          duration={durationSeconds}
+          onExpired={() => setIsExpired(true)}
+        />
       </div>
       <div className="mt-3 flex justify-between gap-4">
         <div className="">
@@ -81,30 +77,30 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
             />
           </div>
           <div className="mt-3 flex items-center">
-            <img
-              src="/images/gift.png"
-              alt="gift"
-              className="w-[30px] h-[30px]"
-            />
+            <img src="/images/gift.png" alt="gift" className="w-6 h-6" />
             <span className="ml-2 text-gray-500">
               {BigNumber(airdrop?.amount ?? 0).toFormat()} {airdrop?.ticker}
             </span>
           </div>
           <div className="mt-3 flex items-center text-gray-500">
-            <TbUsers size={24} />
+            <TbUsers size={20} />
             <span className="ml-2">
               {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
             </span>
           </div>
           <Button
             className="mt-3 font-bold w-full"
-            disabled={isPast || isClaimed}
+            disabled={isClaimed}
             onClick={onPushToken}
           >
-            {isClaimed ? t('airdrop.claimed') : t('claim.airdrop')}
+            {isClaimed
+              ? t('airdrop.claimed')
+              : isExpired
+              ? t('airdrop.go-burn')
+              : t('claim.airdrop')}
           </Button>
         </div>
-        <Img src={airdrop?.logo} className="w-36 h-36 xl:w-42 xl:h-42" />
+        <Img src={airdrop?.logo} className="w-40 h-40" />
       </div>
     </Card>
   )
