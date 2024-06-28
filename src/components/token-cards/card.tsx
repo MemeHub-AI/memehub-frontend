@@ -1,9 +1,9 @@
 import React, { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { Address } from 'viem'
+import { useTranslation } from 'react-i18next'
 
 import type { UserCoinsCreated } from '@/api/user/types'
-
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
@@ -20,10 +20,13 @@ interface Props extends ComponentProps<typeof Card> {
 export const TokenCard = (props: Props) => {
   const { card, className, descClass, onClick, ...restProps } = props
   const router = useRouter()
+  const { t } = useTranslation()
+
   const { progress } = useTokenProgressV3(
     card.address as Address,
     Number(card.chain.id)
   )
+  const isListed = card.status === 3
 
   return (
     <Card
@@ -37,7 +40,11 @@ export const TokenCard = (props: Props) => {
       }}
       {...restProps}
     >
-      {/* Token logo */}
+      {isListed && (
+        <div className="absolute left-0 top-0 bg-lime-green px-1.5 text-sm">
+          {t('listed')}
+        </div>
+      )}
       <Img
         src={card.image}
         alt="logo"
