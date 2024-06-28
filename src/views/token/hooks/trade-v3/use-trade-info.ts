@@ -100,16 +100,14 @@ export const useTradeInfoV3 = () => {
     }
   }
 
-  // Calc the last buy order price.
-  const calcLastBuy = async (currentLeft: string) => {
-    const nativeAmount = formatEther(await getNativeAmount(currentLeft))
-    const offsetFee1 = 0.98
-    const offsetFee2 = 0.98 // Add a little, make sure not overflow.
-    const amount = BigNumber(nativeAmount.toString())
-      .div(offsetFee1)
-      .div(offsetFee2)
-      .toFixed()
-    return parseEther(amount)
+  const getLastOrderAmount = async (currentLeft: string, token = tokenAddr) => {
+    const amount = await readContract(wagmiConfig, {
+      ...bondingCurveConfig!,
+      functionName: 'calcAmountOutFromTokenCutOff',
+      args: [token, parseEther(currentLeft)],
+    }).catch(() => BI_ZERO)
+
+    return formatEther(amount)
   }
 
   return {
@@ -119,6 +117,6 @@ export const useTradeInfoV3 = () => {
     getTokenAmount,
     getPrice,
     checkForOverflow,
-    calcLastBuy,
+    getLastOrderAmount,
   }
 }
