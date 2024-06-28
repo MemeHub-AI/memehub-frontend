@@ -24,6 +24,7 @@ interface Props
   size?: number
   fallback?: React.ReactNode
   fallbackClass?: string
+  imgClass?: string
 }
 
 const Avatar = React.forwardRef<
@@ -37,6 +38,7 @@ const Avatar = React.forwardRef<
     alt,
     size,
     fallbackClass,
+    imgClass,
     shadow = 'none',
     variant,
     ...restProps
@@ -54,7 +56,11 @@ const Avatar = React.forwardRef<
       style={{ width: size, height: size }}
       {...restProps}
     >
-      <AvatarImage src={src || defaultImg} alt={alt} />
+      <AvatarImage
+        src={src || defaultImg}
+        alt={alt}
+        className={cn('object-cover', imgClass)}
+      />
       <AvatarFallback className={fallbackClass} children={fallback} />
     </AvatarPrimitive.Root>
   )

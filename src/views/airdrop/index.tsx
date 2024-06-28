@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useAccount } from 'wagmi'
 
 import { Ids } from './components/ids'
 import { PrimaryLayout } from '@/components/layouts/primary'
@@ -55,28 +54,26 @@ const Airdrop = () => {
   }
 
   return (
-    <PrimaryLayout>
-      <div className="py-5">
-        <Ids></Ids>
-        <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
-        {hasIdentity() ? (
-          <>
-            <CustomSuspense
-              isPending={isLoading}
-              fallback={<div></div>}
-              nullback={<div className="mt-3">{t('no.airdrop')}</div>}
-              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max"
-            >
-              {airdrops?.map((airdrop, i) => (
-                <AirdropCard key={i} airdrop={airdrop} />
-              ))}
-            </CustomSuspense>
-            {handleLoadStatus()}
-          </>
-        ) : (
-          <AirdropSkeleton />
-        )}
-      </div>
+    <PrimaryLayout container="div" className="py-5">
+      <Ids />
+      <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
+      {hasIdentity() ? (
+        <>
+          <CustomSuspense
+            isPending={isLoading}
+            fallback={<div>loading...</div>}
+            nullback={<div className="mt-3">{t('no.airdrop')}</div>}
+            className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max"
+          >
+            {airdrops?.map((airdrop, i) => (
+              <AirdropCard key={i} airdrop={airdrop} />
+            ))}
+          </CustomSuspense>
+          {handleLoadStatus()}
+        </>
+      ) : (
+        <AirdropSkeleton />
+      )}
     </PrimaryLayout>
   )
 }
