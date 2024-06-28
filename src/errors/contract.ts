@@ -3,32 +3,53 @@ import { t } from 'i18next'
 
 import { isUserReject } from '@/utils/contract'
 
+const ERR = {
+  sell: 'MEMEHUB_InvalidSell'.toLowerCase(),
+  burn: 'MEMEHUB_AlreadyBurn'.toLowerCase(),
+}
+
 export const CONTRACT_ERR = {
   // Execute contract error.
   exec: (err: unknown, showToast = true) => {
     const e = err as { message?: string }
+    if (!e?.message) return
 
-    if (!e.message) return
-    if (isUserReject(e?.message)) return
-    if (showToast) toast.error(e?.message)
+    const msg = (e.message ?? '').toLowerCase()
 
-    console.error(e?.message)
+    // Cannot to sell.
+    if (msg.includes(ERR.sell)) {
+      toast.error(t('contract.err.sell'))
+      return
+    }
+
+    // Already burned.
+    if (msg.includes(ERR.burn)) {
+      toast.error(t('contract.err.burn'))
+      return
+    }
+
+    // User reject.
+    if (isUserReject(msg)) return
+
+    // Toast all other error.
+    if (showToast) toast.error(msg)
+    console.error(msg)
   },
 
   // Not found.
-  configNotFound: () => toast.error(t('deploy.config.empty')),
-  proofNotFound: () => toast.error(t('deploy.proof.empty')),
-  marketParamsNotFound: () => toast.error(t('deploy.invalid.merkle-root')),
-  versionNotFound: () => toast.error(t('notfound.version')),
+  configNotFound: () => toast.error(t('contract.err.config-not-found')),
+  proofNotFound: () => toast.error(t('contract.err.proof-not-found')),
+  marketParamsNotFound: () => toast.error(t('contract.err.market-not-found')),
+  versionNotFound: () => toast.error(t('contract.err.version-not-found')),
 
   // Failed.
-  retryCreateFailed: () => toast.error(t('cannot-retry')),
-  tradeFailed: () => toast.error(t('trade.failed')),
-  approveFailed: () => toast.error(t('approve.error')),
-  claimFailed: () => toast.error(t('claim.failed')),
+  retryCreateFailed: () => toast.error(t('contract.err.try-create')),
+  tradeFailed: () => toast.error(t('contract.err.trade')),
+  approveFailed: () => toast.error(t('contract.err.approve')),
+  claimFailed: () => toast.error(t('contract.err.claim')),
 
   // Invalid.
-  tokenInvalid: () => toast.error(t('trade.token.invalid')),
-  amountInvlid: () => toast.error(t('trade.amount.invalid')),
-  balanceInvalid: () => toast.error(t('trade.balance.invalid')),
+  tokenInvalid: () => toast.error(t('contract.err.token-addr')),
+  amountInvlid: () => toast.error(t('contract.err.amount')),
+  balanceInvalid: () => toast.error(t('contract.err.balance')),
 }

@@ -10,7 +10,6 @@ import { DEADLINE_SECONDS } from '@/constants/trade'
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
   const e = String(err).toLowerCase()
-
   return e.includes('user rejected') || e.includes('user denied')
 }
 
