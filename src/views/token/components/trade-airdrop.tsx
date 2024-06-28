@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { useQuery } from '@tanstack/react-query'
@@ -10,7 +10,6 @@ import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Img } from '@/components/img'
 import { Countdown } from '@/views/airdrop/components/countdown'
-import { utilTime } from '@/utils/time'
 import { Button } from '@/components/ui/button'
 import { useTokenContext } from '@/contexts/token'
 import { airdropApi } from '@/api/airdrop'
@@ -85,6 +84,7 @@ const AirdropCard = (props: AirdropCardProps) => {
   const { className, airdrop, suffix, typeList, isKol, isCommunity } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
+  const [isExpired, setIsExpired] = useState(false)
 
   const { total, claimed, isClaimed, durationSeconds, refetchIsClaimed } =
     useAirdropInfo(
@@ -98,6 +98,8 @@ const AirdropCard = (props: AirdropCardProps) => {
     typeList.toString(),
     refetchIsClaimed
   )
+
+  const disabled = isClaimed || isClaiming || isExpired
 
   return (
     <Card
@@ -118,11 +120,11 @@ const AirdropCard = (props: AirdropCardProps) => {
           </span>
           <img src="/images/check.png" alt="check" className="w-6 h-6" />
         </div>
-        {utilTime.isPast(airdrop.create, durationSeconds) ? (
-          <span className="text-zinc-500">{t('expired')}</span>
-        ) : (
-          <Countdown targetTimestamp={airdrop.create * 1000} />
-        )}
+        <Countdown
+          createdAt={airdrop.create ?? 0}
+          duration={durationSeconds}
+          onExpired={() => setIsExpired(true)}
+        />
       </div>
 
       <div className="mt-3 flex items-center justify-between">
@@ -140,7 +142,7 @@ const AirdropCard = (props: AirdropCardProps) => {
       </div>
       <Button
         className={cn('mt-3 w-full', !isClaimed && 'bg-lime-green-deep')}
-        disabled={isClaimed || isClaiming}
+        disabled={disabled}
         onClick={claim}
       >
         {isClaimed ? t('claimed') : t('airdrop.claim')}

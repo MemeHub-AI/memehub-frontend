@@ -417,5 +417,7 @@
   "invite.invalid.reason1": "这是您自己的推荐链接",
   "invite.invalid.reason2": "此推荐链接已引起循环邀请",
   "balance.insufficient": "余额不足",
-  "airdrop.claim": "领取"
+  "airdrop.claim": "领取",
+  "hours": "小时",
+  "airdrop.go-burn": "前往销毁"
 }

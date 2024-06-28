@@ -425,5 +425,7 @@
   "invite.invalid.reason1": "This is your own referral link",
   "invite.invalid.reason2": "This referral link has caused a circular invitation",
   "balance.insufficient": "Balance insufficient",
-  "airdrop.claim": "Claim"
+  "airdrop.claim": "Claim",
+  "hours": "Hours",
+  "airdrop.go-burn": "Go to burn"
 }
