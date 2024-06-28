@@ -32,7 +32,7 @@ export const useAirdrop = (
   // Query airdrop details.
   const { data: { data } = {}, refetch } = useQuery({
     enabled: !!chainName && !!type_list && !!tokenAddr,
-    queryKey: [airdropApi.getProof.name + uniqueKey],
+    queryKey: [airdropApi.getProof.name + uniqueKey, type_list, tokenAddr],
     queryFn: () => {
       return airdropApi.getProof({
         chain: chainName,

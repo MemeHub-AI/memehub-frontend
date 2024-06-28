@@ -93,11 +93,7 @@ const AirdropCard = (props: AirdropCardProps) => {
     durationSeconds,
     refetch,
     refetchIsClaimed,
-  } = useAirdropInfo(
-    isKol ? MarketType.Kol : MarketType.Community,
-    airdrop.chain,
-    airdrop.distribution_id
-  )
+  } = useAirdropInfo(typeList, airdrop.chain, airdrop.distribution_id)
 
   const { isClaiming, claim, burn } = useAirdrop(
     airdrop.distribution_id,

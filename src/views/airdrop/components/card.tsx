@@ -13,6 +13,7 @@ import { Img } from '@/components/img'
 import { useAirdropInfo } from '../hooks/use-airdrop-info'
 import { fmt } from '@/utils/fmt'
 import { MarketType } from '@/api/token/types'
+import { useAirdropContext } from '@/contexts/airdrop'
 
 interface Props {
   airdrop: AirdropItem | undefined
@@ -24,6 +25,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
   const { query, pathname, ...router } = useRouter()
   const isKol = !!airdrop?.kol_name
   const [isExpired, setIsExpired] = useState(false)
+  const { hideClaimed: showClaimed } = useAirdropContext()
 
   const { total, claimed, isClaimed, durationSeconds } = useAirdropInfo(
     isKol ? MarketType.Kol : MarketType.Community,
@@ -39,6 +41,9 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
       query,
     })
   }
+
+  // Hide already claimed airdrop.
+  if (!showClaimed && isClaimed) return
 
   return (
     <Card

@@ -425,5 +425,6 @@
   "contract.err.claim": "领取失败，请重试",
   "contract.err.token-addr": "代币地址无效",
   "contract.err.amount": "金额无效",
-  "contract.err.balance": "余额错误"
+  "contract.err.balance": "余额错误",
+  "airdrop.claimed.hide": "隐藏已领取的"
 }

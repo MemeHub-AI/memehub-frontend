@@ -433,5 +433,6 @@
   "contract.err.claim": "Claim failed, please try again",
   "contract.err.token-addr": "Token address is invalid",
   "contract.err.amount": "Amount is invalid",
-  "contract.err.balance": "Balance is invalid"
+  "contract.err.balance": "Balance is invalid",
+  "airdrop.claimed.hide": "Hide already claiemd"
 }

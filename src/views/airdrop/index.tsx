@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
@@ -8,10 +9,14 @@ import { AirdropCard } from './components/card'
 import { data } from './data'
 import { useUserStore } from '@/stores/use-user-store'
 import { airdropApi } from '@/api/airdrop'
+import { Switch } from '@/components/ui/switch'
+import { Label } from '@/components/ui/label'
+import { AirdropProvider } from '@/contexts/airdrop'
 
 const Airdrop = () => {
   const { t } = useTranslation()
   const { hasIdentity, userInfo } = useUserStore()
+  const [checked, setChecked] = useState(true)
 
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: [airdropApi.getList.name, userInfo?.id],
@@ -54,27 +59,38 @@ const Airdrop = () => {
   }
 
   return (
-    <PrimaryLayout container="div" className="py-5">
-      <Ids />
-      <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
-      {hasIdentity() ? (
-        <>
-          <CustomSuspense
-            isPending={isLoading}
-            fallback={<div>loading...</div>}
-            nullback={<div className="mt-3">{t('no.airdrop')}</div>}
-            className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max"
-          >
-            {airdrops?.map((airdrop, i) => (
-              <AirdropCard key={i} airdrop={airdrop} />
-            ))}
-          </CustomSuspense>
-          {handleLoadStatus()}
-        </>
-      ) : (
-        <AirdropSkeleton />
-      )}
-    </PrimaryLayout>
+    <AirdropProvider value={{ hideClaimed: checked }}>
+      <PrimaryLayout container="div" className="py-5">
+        <Ids />
+        <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
+        <div className="flex gap-2 items-center mt-3">
+          <Switch
+            id="airdrop-switch"
+            checked={checked}
+            onCheckedChange={setChecked}
+          />
+          <Label htmlFor="airdrop-switch">{t('airdrop.claimed.hide')}</Label>
+        </div>
+
+        {hasIdentity() ? (
+          <>
+            <CustomSuspense
+              isPending={isLoading}
+              fallback={<div>loading...</div>}
+              nullback={<div className="mt-3">{t('no.airdrop')}</div>}
+              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max"
+            >
+              {airdrops?.map((airdrop, i) => (
+                <AirdropCard key={i} airdrop={airdrop} />
+              ))}
+            </CustomSuspense>
+            {handleLoadStatus()}
+          </>
+        ) : (
+          <AirdropSkeleton />
+        )}
+      </PrimaryLayout>
+    </AirdropProvider>
   )
 }
 
