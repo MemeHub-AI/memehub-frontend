@@ -12,13 +12,26 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { holders } = useHolders()
 
-  const isBc = (str: string) => {
-    return str.toLowerCase().includes('bonding')
-  }
+  const getLabel = (flag: string) => {
+    // Bonding curve.
+    if (flag.includes('bonding')) {
+      return `(💰${t('bonding-curve')})`
+    }
 
-  const isCreator = (str: string) => {
-    str = str.toLowerCase()
-    return str.includes('dev') || str.includes('cretor')
+    // Creator or dev.
+    if (flag.includes('dev') || flag.includes('cretor')) {
+      return `(🧑‍💻${t('creator')})`
+    }
+
+    // Dex.
+    if (flag.includes('dex')) {
+      return `(👑${t('dex')})`
+    }
+
+    // Airdrop.
+    if (flag.includes('air')) {
+      return `(${t('airdrop')})`
+    }
   }
 
   return (
@@ -43,8 +56,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
                 >
                   {fmt.addr(r.address)}
                 </Link>
-                {isBc(r.contract_flag ?? '') && `💰(${t('bonding-curve')})`}
-                {isCreator(r.contract_flag ?? '') && `🧑‍💻(${t('creator')})`}
+                {getLabel(r.contract_flag?.toLowerCase() ?? '')}
               </p>
               <span>{fmt.percent(r.percentage)}</span>
             </li>
