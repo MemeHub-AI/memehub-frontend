@@ -122,6 +122,7 @@ export interface UserCoinsCreated {
   market_cap: number
   total_replies: number
   chain: Chain
+  status: number
 }
 
 export interface UserReplies {

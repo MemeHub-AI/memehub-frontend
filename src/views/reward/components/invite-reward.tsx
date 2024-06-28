@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 
@@ -11,63 +11,7 @@ import { useRewardList } from '../hooks/use-reward-list'
 import { ChainData } from '@/api/chain/type'
 import { fmt } from '@/utils/fmt'
 import { useReward } from '../hooks/use-reward'
-
-const cards = [
-  {
-    chain: {
-      logo: 'https://storage.memehub.ai/chains/logo/bsc.png',
-      name: 'BNB Chain',
-      symbol: 'BNB',
-    },
-    total: 23.23,
-    unclaimed: 10.23,
-  },
-  {
-    chain: {
-      logo: 'https://storage.memehub.ai/chains/logo/scroll.png',
-      name: 'Scroll',
-      symbol: 'ETH',
-    },
-    total: 3.3,
-    unclaimed: 0.3,
-  },
-  {
-    chain: {
-      logo: 'https://storage.memehub.ai/chains/logo/blast.png',
-      name: 'Blast',
-      symbol: 'ETH',
-    },
-    total: 1.32,
-    unclaimed: 0.32,
-  },
-  {
-    chain: {
-      logo: 'https://storage.memehub.ai/chains/logo/fantom.png',
-      name: 'Fantom',
-      symbol: 'ETH',
-    },
-    total: 1.23,
-    unclaimed: 1,
-  },
-  {
-    chain: {
-      logo: 'https://storage.memehub.ai/chains/logo/base.png',
-      name: 'Base',
-      symbol: 'ETH',
-    },
-    total: 10.23,
-    unclaimed: 4.23,
-  },
-  {
-    chain: {
-      logo: 'https://storage.memehub.ai/chains/logo/zksync.png',
-      name: 'zkSync',
-      symbol: 'ETH',
-    },
-    total: 8.23,
-    unclaimed: 2.23,
-  },
-]
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const InviteReward = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
@@ -97,6 +41,9 @@ const InviteCard = ({ c }: { c: ChainData }) => {
   const { totalAmount, unclaimedAmount, isClaiming, claimReward } = useReward(
     Number(c.id)
   )
+  const { findChain } = useChainsStore()
+  const chain = useMemo(() => findChain(c.id), [c])
+
   const disabeld =
     BigNumber(totalAmount).isZero() ||
     BigNumber(unclaimedAmount).isZero() ||
@@ -112,8 +59,7 @@ const InviteCard = ({ c }: { c: ChainData }) => {
       <div className="mt-3">
         <p>{t('reward.invite.total-earned')}</p>
         <span className="text-2xl font-bold">{fmt.decimals(totalAmount)}</span>
-        {/* TODO: should be dynamic */}
-        <span className="ml-2">BNB</span>
+        <span className="ml-2">{chain?.native.symbol}</span>
       </div>
 
       <div className="mt-3">
@@ -121,7 +67,7 @@ const InviteCard = ({ c }: { c: ChainData }) => {
         <span className="text-2xl font-bold">
           {fmt.decimals(unclaimedAmount)}
         </span>
-        <span className="ml-2">BNB</span>
+        <span className="ml-2">{chain?.native.symbol}</span>
       </div>
 
       <Button

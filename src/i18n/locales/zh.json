@@ -426,5 +426,7 @@
   "contract.err.token-addr": "代币地址无效",
   "contract.err.amount": "金额无效",
   "contract.err.balance": "余额错误",
-  "airdrop.claimed.hide": "隐藏已领取的"
+  "airdrop.claimed.hide": "隐藏已领取的",
+  "dex": "DEX",
+  "listed": "已发射"
 }

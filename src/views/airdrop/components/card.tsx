@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { BigNumber } from 'bignumber.js'
@@ -24,7 +23,6 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
   const isKol = !!airdrop?.kol_name
-  const [isExpired, setIsExpired] = useState(false)
   const { hideClaimed } = useAirdropContext()
 
   const { total, claimed, isClaimed, durationSeconds } = useAirdropInfo(
@@ -58,7 +56,6 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
         <Countdown
           createdAt={airdrop?.create ?? 0}
           duration={durationSeconds}
-          onExpired={() => setIsExpired(true)}
         />
       </div>
       <div className="mt-3 flex justify-between gap-4">
@@ -77,7 +74,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
             <img
               src="/images/check.png"
               alt="Avatar"
-              className="w-[40px] h-[40px] p-2"
+              className="w-10 h-10 p-2"
             />
           </div>
           <div className="mt-3 flex items-center">
@@ -97,11 +94,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
             disabled={isClaimed}
             onClick={onPushToken}
           >
-            {isClaimed
-              ? t('airdrop.claimed')
-              : isExpired
-              ? t('airdrop.go-burn')
-              : t('claim.airdrop')}
+            {isClaimed ? t('airdrop.claimed') : t('claim.airdrop')}
           </Button>
         </div>
         <Img src={airdrop?.logo} className="w-40 h-40" />
