@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import Link from 'next/link'
@@ -9,8 +8,6 @@ import { useWalletStore } from '@/stores/use-wallet-store'
 import { CheckIcon } from '@/components/check-icon'
 import { Img } from '@/components/img'
 import { CommunityCategory } from '@/api/airdrop/types'
-import { useUserStore } from '@/stores/use-user-store'
-import { airdropApi } from '@/api/airdrop'
 import { useIds } from '@/hooks/use-ids'
 
 const kolHref = ''
@@ -20,7 +17,6 @@ export const Ids = () => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
   const { setConnectOpen } = useWalletStore()
-
   const { ids } = useIds()
 
   const communityMap = {
@@ -32,7 +28,7 @@ export const Ids = () => {
   const getIdStatus = () => {
     if (!isConnected) {
       return (
-        <div className="mt-3 flex items-center">
+        <div className="my-3 flex items-center">
           <Button size="lg" onClick={() => setConnectOpen(true)}>
             {t('connect.wallet')}
           </Button>
@@ -43,7 +39,7 @@ export const Ids = () => {
 
     if (ids?.kol == null && !ids?.community) {
       return (
-        <div className="mt-3 flex items-center">
+        <div className="my-3 flex items-center">
           <img src="/images/no-airdrop.png" alt="empty" />
           <span>{t('unfortunately')}</span>
         </div>
@@ -51,7 +47,7 @@ export const Ids = () => {
     }
 
     return (
-      <div className="mt-2 flex gap-4 flex-wrap">
+      <div className="my-3 flex gap-4 flex-wrap">
         {ids?.kol && (
           <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
             <Img
@@ -89,16 +85,18 @@ export const Ids = () => {
     <>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
-      <div className="mt-4">
-        <Link
-          href={kolHref}
-          target="_blank"
-          className="text-blue-700 cursor-pointer"
-        >
-          {t('apply.kol')}
-        </Link>
-        <span className="ml-2">{t('platform.airdrop')}</span>
-      </div>
+      {!ids?.kol && (
+        <div>
+          <Link
+            href={kolHref}
+            target="_blank"
+            className="text-blue-700 cursor-pointer"
+          >
+            {t('apply.kol')}
+          </Link>
+          <span className="ml-2">{t('platform.airdrop')}</span>
+        </div>
+      )}
       <div className="mt-1">
         <Link
           href={communityHref}
