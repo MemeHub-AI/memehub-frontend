@@ -41,6 +41,10 @@ export interface UserInfoRes {
     one: number
     two: number
   }
+  role?: {
+    kol: boolean
+    community: boolean
+  }
 }
 
 export interface UserMyInfoFollow {

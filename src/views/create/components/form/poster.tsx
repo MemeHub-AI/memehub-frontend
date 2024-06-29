@@ -38,6 +38,10 @@ export const PosterForm = ({ formData }: Props) => {
     e.stopPropagation()
     e.preventDefault()
 
+    if (loadingPoster) {
+      return
+    }
+
     if (userStore.userInfo?.id == null) {
       return setConnectOpen(true)
     }
@@ -115,7 +119,7 @@ export const PosterForm = ({ formData }: Props) => {
     Router.events.on('routeChangeStart', cb)
 
     return () => {
-      Router.events.off('routeChangeStart', cb)
+      memePosterSign.abort('')
     }
   }, [])
   return (
@@ -126,20 +130,26 @@ export const PosterForm = ({ formData }: Props) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel className="mr-2 font-bold">
-                {loadingPoster ? (
-                  t('ai.poster.tip')
-                ) : field.value?.length ? (
-                  <>
-                    {t('ai.poster')}{' '}
-                    <Button onClick={createPoster} className="ml-3">
-                      <LuRefreshCcw className="mr-1"></LuRefreshCcw>{' '}
-                      {t('switch.ai.poster')}
-                    </Button>
-                  </>
-                ) : (
-                  t('ai.poster')
-                )}
+              <FormLabel className="font-bold">
+                <div className="flex items-center">
+                  {loadingPoster ? (
+                    t('ai.poster.tip')
+                  ) : (
+                    <>
+                      {t('ai.poster')}
+                      <LuRefreshCcw
+                        className={cn(
+                          'ml-2',
+                          loadingPoster ? 'animate-spin' : 'cursor-pointer'
+                        )}
+                        title="Regenerate"
+                        onClick={createPoster}
+                      >
+                        {t('create.ai.poster')}
+                      </LuRefreshCcw>
+                    </>
+                  )}
+                </div>
               </FormLabel>
               <FormControl>
                 {loadingPoster ? (
@@ -168,13 +178,7 @@ export const PosterForm = ({ formData }: Props) => {
                       })}
                     </div>
                   </>
-                ) : (
-                  <div>
-                    <Button onClick={createPoster}>
-                      {t('create.ai.poster')}
-                    </Button>
-                  </div>
-                )}
+                ) : null}
               </FormControl>
               <FormMessage />
             </FormItem>

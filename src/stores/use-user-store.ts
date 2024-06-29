@@ -6,6 +6,7 @@ import type { IdentityList } from '@/api/airdrop/types'
 
 interface UserStore {
   userInfo: UserInfoRes | null
+  oldUserInfo: UserInfoRes | null
   userIdentity: IdentityList | null
 
   setUserInfo: (userInfo: UserInfoRes | null) => void
@@ -15,10 +16,13 @@ interface UserStore {
 
 export const useUserStore = create<UserStore>((set, get) => ({
   userInfo: null,
+  oldUserInfo: null,
   userIdentity: null,
   refetchUserInfo: null,
 
-  setUserInfo: (userInfo) => set({ userInfo }),
+  setUserInfo: (userInfo) => {
+    set({ userInfo, oldUserInfo: get().userInfo })
+  },
   setUserIdentity: (userIdentity) => set({ userIdentity }),
   hasIdentity: () => {
     const { kol = false, community = [] } = get().userIdentity || {}
