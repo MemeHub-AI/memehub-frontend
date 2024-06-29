@@ -43,8 +43,8 @@ export const useAIMemeInfo = (options?: Options) => {
     setIsLoadingMemeImg(true)
     setIsLoadingMemePoster(true)
 
-    abortController.memeImageSign.abort()
-    abortController.memePosterSign.abort()
+    abortController.memeImageSign.abort('')
+    abortController.memePosterSign.abort('')
 
     abortController.memeImageSign = new AbortController()
     abortController.memePosterSign = new AbortController()
@@ -107,9 +107,9 @@ export const useAIMemeInfo = (options?: Options) => {
     setIsLoadingMemeImg(true)
     setIsLoadingMemePoster(true)
 
-    abortController.memeInfoSign.abort()
-    abortController.memeImageSign.abort()
-    abortController.memePosterSign.abort()
+    abortController.memeInfoSign.abort('')
+    abortController.memeImageSign.abort('')
+    abortController.memePosterSign.abort('')
 
     abortController.memeInfoSign = new AbortController()
     abortController.memeImageSign = new AbortController()

@@ -79,7 +79,7 @@ export const PosterForm = ({ formData }: Props) => {
       return setConnectOpen(true)
     }
 
-    memePosterSign.abort()
+    memePosterSign.abort('')
     memePosterSign = new AbortController()
     aiApi
       .getMemePoster(
@@ -110,7 +110,7 @@ export const PosterForm = ({ formData }: Props) => {
 
   useEffect(() => {
     const cb = () => {
-      memePosterSign.abort()
+      memePosterSign.abort('')
     }
     Router.events.on('routeChangeStart', cb)
 
