@@ -13,13 +13,15 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { holders } = useHolders()
 
   const getLabel = (flag: string) => {
+    flag = flag.toLowerCase()
+
     // Bonding curve.
     if (flag.includes('bonding')) {
       return `(💰${t('bonding-curve')})`
     }
 
     // Creator or dev.
-    if (flag.includes('dev') || flag.includes('cretor')) {
+    if (flag.includes('dev') || flag.includes('creator')) {
       return `(🧑‍💻${t('creator')})`
     }
 
@@ -56,7 +58,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
                 >
                   {fmt.addr(r.address)}
                 </Link>
-                {getLabel(r.contract_flag?.toLowerCase() ?? '')}
+                {getLabel(r.contract_flag ?? '')}
               </p>
               <span>{fmt.percent(r.percentage)}</span>
             </li>
