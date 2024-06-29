@@ -142,9 +142,11 @@ export const TradeTable = () => {
           </TableCell>
         </TableRow> */}
       </Table>
-      <div className="underline text-center mt-1 cursor-pointer">
+      {/* <div className="underline text-center mt-1 cursor-pointer" onClick={() => {
+
+      }}>
         {t('loading.more')}
-      </div>
+      </div> */}
     </>
   )
 }
