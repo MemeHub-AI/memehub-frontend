@@ -413,7 +413,7 @@
   "burning": "销毁中...",
   "airdrop.burn.failed": "销毁失败",
   "airdrop.burn.success": "销毁成功！",
-  "contract.err.sell": "无法出售这些代币",
+  "contract.err.sell": "池中余额不足，您无法出售那么多代币",
   "contract.err.burn": "已经销毁过了",
   "contract.err.config-not-found": "找不到对应的合约配置",
   "contract.err.proof-not-found": "找不到证明",
