@@ -9,7 +9,7 @@ import {
 import { useDatafeed } from './use-datafeed'
 import { useChartStore } from '@/stores/use-chart-store'
 import { useChartUtils } from './use-chart-utils'
-import { useChartConfig } from './use-chart-config'
+import { CHART_CONFIG } from '@/config/chart'
 
 export interface ChartOptions {
   symbol: string
@@ -23,7 +23,6 @@ export const useChart = () => {
   const { chart, setChart, setChartEl } = useChartStore()
   const { createDatafeed, removeDatafeed } = useDatafeed()
   const { parseInterval } = useChartUtils()
-  const { chartConfig, chartOverrides } = useChartConfig()
 
   const createChart = (container: HTMLDivElement, options: ChartOptions) => {
     const { symbol, interval } = options || {}
@@ -31,7 +30,7 @@ export const useChart = () => {
     setChartEl(container)
     try {
       const chart = new (widget || window.TradingView.widget)({
-        ...chartConfig,
+        ...CHART_CONFIG.options,
         container,
         symbol,
         interval: parseInterval(interval) as ResolutionString,
@@ -43,7 +42,7 @@ export const useChart = () => {
 
       chart.onChartReady(() => {
         setChart(chart)
-        chart.applyOverrides(chartOverrides)
+        chart.applyOverrides(CHART_CONFIG.overrides)
       })
     } catch (error) {
       console.error('[createChart Erorr]:', error)

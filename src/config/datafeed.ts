@@ -2,7 +2,7 @@ import {
   DatafeedConfiguration,
   LibrarySymbolInfo,
   ResolutionString,
-} from '../../../../public/js/charting_library/charting_library'
+} from '../../public/js/charting_library/charting_library'
 
 const readyConfig: DatafeedConfiguration = {
   supported_resolutions: [
@@ -19,7 +19,7 @@ const readyConfig: DatafeedConfiguration = {
   supports_timescale_marks: true,
 }
 
-const symbolInfoConfig: LibrarySymbolInfo = {
+const symbolInfo: LibrarySymbolInfo = {
   name: 'PEPE',
   type: 'crypto',
   session: '24x7',
@@ -36,15 +36,12 @@ const symbolInfoConfig: LibrarySymbolInfo = {
   has_seconds: true,
   has_ticks: true,
   has_intraday: true,
-  visible_plots_set: 'ohlcv',
+  visible_plots_set: 'ohlc',
   volume_precision: 18,
   currency_code: 'PEPE',
 }
 
-export const useDatafeedConfig = () => {
-  return {
-    readyConfig,
-    resolutions: readyConfig.supported_resolutions,
-    symbolInfoConfig,
-  }
+export const DATAFEED_CONFIG = {
+  readyConfig,
+  symbolInfo,
 }
