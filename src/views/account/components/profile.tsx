@@ -158,16 +158,6 @@ export const Profile = (props: ComponentProps<'div'>) => {
             {t('reward.rule')}
           </p>
         </div>
-        <div className="text-sm text-zinc-500 cursor-pointer">
-          <p onClick={() => copy(userInfo?.inviter.one ?? '')}>
-            <span className="font-bold">{t('inviter1')}: </span>
-            {fmt.addr(userInfo?.inviter.one, { len: 8 })}
-          </p>
-          <p onClick={() => copy(userInfo?.inviter.two ?? '')}>
-            <span className="font-bold">{t('inviter2')}: </span>
-            {fmt.addr(userInfo?.inviter.two, { len: 8 })}
-          </p>
-        </div>
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex justify-between">
