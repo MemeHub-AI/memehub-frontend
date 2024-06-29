@@ -20,28 +20,29 @@ const readyConfig: DatafeedConfiguration = {
 }
 
 const symbolInfo: LibrarySymbolInfo = {
-  name: 'PEPE',
+  pricescale: 100,
+  minmov: 1,
+  visible_plots_set: 'ohlcv',
+
+  name: 'Memehub',
   type: 'crypto',
   session: '24x7',
-  full_name: 'PEPE',
-  description: 'PEPE',
+  full_name: 'Memehub',
+  description: 'Memehub',
   exchange: 'Memehub',
   listed_exchange: 'Memehub',
   format: 'price',
   timezone: 'Etc/UTC',
   supported_resolutions: readyConfig.supported_resolutions!,
-  pricescale: 100,
-  minmov: 1,
   has_weekly_and_monthly: true,
   has_seconds: true,
   has_ticks: true,
   has_intraday: true,
-  visible_plots_set: 'ohlc',
   volume_precision: 18,
-  currency_code: 'PEPE',
+  currency_code: 'Memehub',
 }
 
-export const DATAFEED_CONFIG = {
+export const datafeedConfig = {
   readyConfig,
   symbolInfo,
 }

@@ -50,6 +50,7 @@ const options: TVChartOptions = {
   // @ts-ignore
   custom_formatters: {
     priceFormatterFactory: (symbolInfo, minTick) => {
+      console.log('mintick', minTick)
       return {
         format: (price) => fmt.decimals(price, 4),
       }
@@ -60,9 +61,10 @@ const options: TVChartOptions = {
 const overrides: Partial<ChartPropertiesOverrides> = {
   'paneProperties.vertGridProperties.color': 'rgba(255,255,255,0)',
   'paneProperties.horzGridProperties.color': 'rgba(255,255,255,0)',
+  'mainSeriesProperties.minTick': '1000000000,1,false',
 }
 
-export const CHART_CONFIG = {
+export const chartConfig = {
   options,
   overrides,
 }

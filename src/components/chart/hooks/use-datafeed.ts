@@ -10,7 +10,7 @@ import { useDatafeedCache } from './use-datafeed-cache'
 import { useDatafeedWebsocket } from './use-datafeed-websocket'
 import { useChartUtils } from './use-chart-utils'
 import { useStorage } from '@/hooks/use-storage'
-import { DATAFEED_CONFIG } from '@/config/datafeed'
+import { datafeedConfig } from '@/config/datafeed'
 
 export const useDatafeed = () => {
   const { query } = useRouter()
@@ -29,7 +29,7 @@ export const useDatafeed = () => {
   const createDatafeed = () => {
     return {
       onReady: (callback) => {
-        setTimeout(() => callback(DATAFEED_CONFIG.readyConfig))
+        setTimeout(() => callback(datafeedConfig.readyConfig))
       },
       searchSymbols(_, __, ___, ____) {},
       async resolveSymbol(symbolName, onResolve, onError, extension) {
@@ -40,7 +40,7 @@ export const useDatafeed = () => {
         const bars = formatBars(data)
         const lastBar = last(bars)
         const symbolInfo: LibrarySymbolInfo = {
-          ...DATAFEED_CONFIG.symbolInfo,
+          ...datafeedConfig.symbolInfo,
           name: symbolName,
           full_name: symbolName,
           description: symbolName,
