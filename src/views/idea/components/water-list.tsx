@@ -68,7 +68,6 @@ export const WaterList = ({ newsId, type }: Props) => {
   })
 
   useEffect(() => {
-    // 检查是否滚动到底部
     if (
       window.innerHeight +
         document.documentElement.scrollTop -
@@ -79,7 +78,6 @@ export const WaterList = ({ newsId, type }: Props) => {
       !isFetchNextPageError &&
       Number(waterfallList?.total) > Number(waterfallList?.current)
     ) {
-      // 加载下一页的数据
       fetchNextPage()
     }
   }, [y])

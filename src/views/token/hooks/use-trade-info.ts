@@ -24,7 +24,11 @@ export const useTradeInfo = () => {
     data: nativeData,
     isFetching: isFetchingNativeBalance,
     refetch: refetchNativeBalance,
-  } = useBalance({ address, chainId })
+  } = useBalance({
+    address,
+    chainId,
+    query: { refetchInterval: 5_000 },
+  })
   const {
     data: tokenData,
     isFetching: isFetchingTokenBalance,
@@ -35,7 +39,10 @@ export const useTradeInfo = () => {
     functionName: 'balanceOf',
     chainId,
     args: [address!],
-    query: { enabled: !!address && !!tokenConfig },
+    query: {
+      enabled: !!address && !!tokenConfig,
+      refetchInterval: 5_000,
+    },
   })
   const nativeBalance = formatEther(nativeData?.value ?? BigInt(0))
   const tokenBalance = formatEther(tokenData ?? BigInt(0))

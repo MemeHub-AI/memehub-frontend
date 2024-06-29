@@ -31,7 +31,7 @@ export const useLogin = () => {
       }
 
       return login({
-        wallet_address: (overrideAddr || address)?.toLowerCase() as Address,
+        wallet_address: (overrideAddr || address) as Address,
         chain_id: String(overrideChainId || chainId),
         sign: message,
         timestamp,

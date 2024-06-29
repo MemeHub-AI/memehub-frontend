@@ -20,7 +20,7 @@ export const useSign = () => {
 
   const signAsync = async (salt = '') => {
     return signMessageAsync({
-      account: address?.toLowerCase() as Address,
+      account: address as Address,
       connector,
       message: `Signin at ${salt}`,
     })
