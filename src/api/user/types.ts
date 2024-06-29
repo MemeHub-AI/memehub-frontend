@@ -159,6 +159,7 @@ export interface UserFollow {
   logo: string
   follower_count: number
   user: User
+  is_follower: boolean
 }
 
 export interface UserCoinsHeld {

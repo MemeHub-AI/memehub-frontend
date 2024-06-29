@@ -48,10 +48,20 @@ export const FollowCard = ({ card }: Props) => {
         onClick={(e) => {
           e.stopPropagation()
           const addr = (query.address || '') as string
-          userInfo?.is_follower ? unfollow(addr) : follow(addr)
+          card.is_follower || userInfo?.is_follower
+            ? unfollow(
+                card.user.wallet_address != null
+                  ? `${card.user.wallet_address}`
+                  : addr
+              )
+            : follow(addr)
+
+          refetchUserInfo()
         }}
       >
-        {userInfo?.is_follower ? `- ${t('unfollow')}` : `+ ${t('follow')}`}
+        {card.is_follower || userInfo?.is_follower
+          ? `${t('unfollow')}`
+          : `${t('follow')}`}
       </Button>
     </Card>
   )
