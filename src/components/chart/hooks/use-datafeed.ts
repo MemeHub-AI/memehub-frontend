@@ -44,8 +44,6 @@ export const useDatafeed = () => {
           full_name: symbolName,
           description: symbolName,
           pricescale: formatPricescale(lastBar?.open),
-          // pricescale: 100,
-          // minmov: 1,
         }
 
         cache.setBars(bars)

@@ -51,7 +51,7 @@ const chartConfig: TVChartOptions = {
   custom_formatters: {
     priceFormatterFactory: (symbolInfo, minTick) => {
       return {
-        format: (price) => fmt.decimals(price, 8),
+        format: (price) => fmt.decimals(price, 4),
       }
     },
   },
