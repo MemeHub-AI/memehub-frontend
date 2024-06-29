@@ -11,6 +11,7 @@ import { useUserStore } from '@/stores/use-user-store'
 import { UserIcon } from './user-icon'
 import { useHeaderStore } from '@/stores/use-header-store'
 import { useResponsive } from '@/hooks/use-responsive'
+import Countup from 'react-countup'
 
 interface RewardButtonProps extends ComponentProps<typeof Button> {
   showReferral?: boolean
@@ -22,7 +23,7 @@ export const RewardButton = React.forwardRef<
 >((props, ref) => {
   const { showReferral = true, className, ...restProps } = props
   const { t } = useTranslation()
-  const { userInfo } = useUserStore()
+  const { userInfo, oldUserInfo } = useUserStore()
   const { setDiamondEl } = useHeaderStore()
   const { isMobile } = useResponsive()
 
@@ -64,9 +65,14 @@ export const RewardButton = React.forwardRef<
       )}
       <div className="flex items-center gap-1">
         <DiamondIcon size={20} ref={diamondRef} />
-        {userInfo?.reward_amount
-          ? BigNumber(userInfo?.reward_amount).toFormat()
-          : t('rewards')}
+        {userInfo?.reward_amount ? (
+          <Countup
+            start={oldUserInfo?.reward_amount}
+            end={userInfo?.reward_amount}
+          ></Countup>
+        ) : (
+          t('rewards')
+        )}
       </div>
     </Button>
   )

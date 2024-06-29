@@ -30,7 +30,7 @@ export const useTrade = () => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const { toastDiamond, dismissDiamond } = useToastDiamond()
-  const { userInfo, refetchUserInfo } = useUserInfo()
+  const { userInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
   const [inviteOpen, setInviteOpen] = useState(false)
   const { getInviterInfo, getCanBind } = useInvite()
@@ -67,7 +67,6 @@ export const useTrade = () => {
     onFillay: () => {
       toast.dismiss()
       resetting()
-      refetchUserInfo()
     },
   })
   const isTrading = isSubmitting || isLoading

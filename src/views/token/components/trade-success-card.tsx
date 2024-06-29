@@ -7,6 +7,9 @@ import { gsap } from 'gsap'
 import { utilLang } from '@/utils/lang'
 import { useHeaderStore } from '@/stores/use-header-store'
 import { fmt } from '@/utils/fmt'
+import { useUserStore } from '@/stores/use-user-store'
+import { userApi } from '@/api/user'
+import { useAccount } from 'wagmi'
 
 interface Props {
   amount: string
@@ -19,6 +22,16 @@ export const TradeSuccessCard = (props: Props) => {
   const { amount, symbol = '', diamond = '', onClose } = props
   const { t } = useTranslation()
   const isZero = BigNumber(amount).lte(0)
+  const { setUserInfo } = useUserStore()
+  const { address } = useAccount()
+
+  const onEnd = async () => {
+    try {
+      const { data } = await userApi.getInfo(address!)
+      setUserInfo(data)
+    } catch {}
+  }
+
   return (
     <>
       <IoMdClose
@@ -33,7 +46,7 @@ export const TradeSuccessCard = (props: Props) => {
             alt="diamond"
             className={'w-6 h-6'}
           />
-          <DiamondIcon isZero={isZero} />
+          <DiamondIcon isZero={isZero} onEnd={onEnd} />
           <DiamondIcon isZero={isZero} delay={0.05} />
           <DiamondIcon isZero={isZero} delay={0.1} />
           <DiamondIcon isZero={isZero} delay={0.15} />
@@ -64,9 +77,10 @@ export const TradeSuccessCard = (props: Props) => {
 interface DiamondIconProps {
   isZero: boolean
   delay?: number
+  onEnd?: () => void
 }
 
-const DiamondIcon = ({ isZero, delay = 0 }: DiamondIconProps) => {
+const DiamondIcon = ({ isZero, delay = 0, onEnd }: DiamondIconProps) => {
   const diamondRef = useRef<HTMLImageElement>(null)
   const { diamondEl: rewardDiamondEl } = useHeaderStore()
 
@@ -93,6 +107,7 @@ const DiamondIcon = ({ isZero, delay = 0 }: DiamondIconProps) => {
       delay,
     })
     tween.eventCallback('onComplete', () => {
+      onEnd?.()
       setTimeout(() => {
         diamondRef.current?.remove()
       }, 300)
