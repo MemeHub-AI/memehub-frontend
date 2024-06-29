@@ -68,6 +68,9 @@ dependencies:
   '@tanstack/react-table':
     specifier: ^8.17.3
     version: 8.17.3(react-dom@18.3.1)(react@18.3.1)
+  '@types/react-countup':
+    specifier: ^4.3.1
+    version: 4.3.1(react@18.3.1)
   add:
     specifier: ^2.0.6
     version: 2.0.6
@@ -113,6 +116,9 @@ dependencies:
   react-copy-to-clipboard:
     specifier: ^5.1.0
     version: 5.1.0(react@18.3.1)
+  react-countup:
+    specifier: ^6.5.3
+    version: 6.5.3(react@18.3.1)
   react-dom:
     specifier: ^18
     version: 18.3.1(react@18.3.1)
@@ -4246,6 +4252,15 @@ packages:
       '@types/react': 18.3.2
     dev: true
 
+  /@types/react-countup@4.3.1(react@18.3.1):
+    resolution: {integrity: sha512-8KwOdVVKhMOdtXJoOg3YXZwWxnFnZtPojNs/DZRlhHTpOYIb1If+9+rVPnwnXDhNhphj5diUCds9E26VtVK8IA==}
+    deprecated: This is a stub types definition. react-countup provides its own type definitions, so you do not need this installed.
+    dependencies:
+      react-countup: 6.5.3(react@18.3.1)
+    transitivePeerDependencies:
+      - react
+    dev: false
+
   /@types/react-dom@18.3.0:
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
     dependencies:
@@ -5489,6 +5504,10 @@ packages:
       parse-json: 5.2.0
       path-type: 4.0.0
       typescript: 5.4.5
+    dev: false
+
+  /countup.js@2.8.0:
+    resolution: {integrity: sha512-f7xEhX0awl4NOElHulrl4XRfKoNH3rB+qfNSZZyjSZhaAoUk6elvhH+MNxMmlmuUJ2/QNTWPSA7U4mNtIAKljQ==}
     dev: false
 
   /crc-32@1.2.2:
@@ -8739,6 +8758,15 @@ packages:
     dependencies:
       copy-to-clipboard: 3.3.3
       prop-types: 15.8.1
+      react: 18.3.1
+    dev: false
+
+  /react-countup@6.5.3(react@18.3.1):
+    resolution: {integrity: sha512-udnqVQitxC7QWADSPDOxVWULkLvKUWrDapn5i53HE4DPRVgs+Y5rr4bo25qEl8jSh+0l2cToJgGMx+clxPM3+w==}
+    peerDependencies:
+      react: '>= 16.3.0'
+    dependencies:
+      countup.js: 2.8.0
       react: 18.3.1
     dev: false
 
