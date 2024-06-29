@@ -24,6 +24,8 @@ import { CoinTypeField } from './coin-type-field'
 import { MarketingField } from './marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { DEPLOY_FEE } from '@/constants/contract'
+import { LuRefreshCcw } from 'react-icons/lu'
+import { Description } from './desc'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
@@ -119,23 +121,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           <MarketingField />
 
           {/* Description */}
-          <FormField
-            control={form?.control}
-            name={formFields?.description!}
-            render={({ field }) => (
-              <FormItem className="max-w-[500px]">
-                <FormLabel className="font-bold">*{t('description')}</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder={t('description.placeholder')}
-                    rows={5}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <Description formData={formData} />
 
           {/* Poster */}
           <PosterForm formData={formData}></PosterForm>

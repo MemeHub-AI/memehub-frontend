@@ -7,10 +7,12 @@ import { CustomSuspense } from '@/components/custom-suspense'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const Communities = () => {
   const { t } = useTranslation()
 
+  const { userInfo } = useUserStore()
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: [allianceApi.getCommunity.name],
     queryFn: async ({ pageParam }) => {
@@ -63,7 +65,9 @@ export const Communities = () => {
         <div className="my-3">
           {t('community.desc').replace('$1', `${data?.total}` || '-')}
         </div>
-        <Button>{t('apply.community')}</Button>
+        {userInfo?.role?.community ? null : (
+          <Button>{t('apply.community')}</Button>
+        )}
         <CustomSuspense
           className="mt-5 gap-4 w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"
           isPending={isLoading}
