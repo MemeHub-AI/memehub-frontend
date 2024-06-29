@@ -38,11 +38,11 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
 
   const checkForTrade = (amount: string, token: Address) => {
     if (isEmpty(amount)) {
-      toast.error(t('trade.amount.invalid'))
+      toast.error(t('contract.err.amount'))
       return false
     }
     if (!isAddress(token)) {
-      toast.error(t('trade.token.invalid'))
+      toast.error(t('contract.err.token-addr'))
       return false
     }
 

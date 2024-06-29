@@ -12,6 +12,7 @@ import { CommunityCategory } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
 import { airdropApi } from '@/api/airdrop'
 import { useIds } from '@/hooks/use-ids'
+import { cn } from '@/lib/utils'
 
 const kolHref = ''
 const communityHref = ''
@@ -19,6 +20,7 @@ const communityHref = ''
 export const Ids = () => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
+  const { userInfo } = useUserStore()
   const { setConnectOpen } = useWalletStore()
 
   const { ids } = useIds()
@@ -89,26 +91,30 @@ export const Ids = () => {
     <>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
-      <div className="mt-4">
-        <Link
-          href={kolHref}
-          target="_blank"
-          className="text-blue-700 cursor-pointer"
-        >
-          {t('apply.kol')}
-        </Link>
-        <span className="ml-2">{t('platform.airdrop')}</span>
-      </div>
-      <div className="mt-1">
-        <Link
-          href={communityHref}
-          target="_blank"
-          className="text-blue-700 cursor-pointer"
-        >
-          {t('apply.community')}
-        </Link>
-        <span className="ml-2">{t('community.airdrops')}</span>
-      </div>
+      {userInfo?.role?.kol ? null : (
+        <div className="mt-4">
+          <Link
+            href={kolHref}
+            target="_blank"
+            className="text-blue-700 cursor-pointer"
+          >
+            {t('apply.kol')}
+          </Link>
+          <span className="ml-2">{t('platform.airdrop')}</span>
+        </div>
+      )}
+      {userInfo?.role?.community ? null : (
+        <div className={cn(userInfo?.role?.kol ? 'mt-4' : 'mt-1')}>
+          <Link
+            href={communityHref}
+            target="_blank"
+            className="text-blue-700 cursor-pointer"
+          >
+            {t('apply.community')}
+          </Link>
+          <span className="ml-2">{t('community.airdrops')}</span>
+        </div>
+      )}
     </>
   )
 }

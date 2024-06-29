@@ -1,5 +1,6 @@
 import React, { useState, type ComponentProps } from 'react'
 import { useAccount } from 'wagmi'
+import { useTranslation } from 'react-i18next'
 
 import { WalletAccount } from './components/account'
 import { WalletConnector } from './components/connector'
@@ -9,7 +10,6 @@ import { useStorage } from '@/hooks/use-storage'
 import { useLogin } from '@/hooks/use-login'
 import { AlertDialog } from '../ui/alert-dialog'
 import { Button } from '../ui/button'
-import { useTranslation } from 'react-i18next'
 
 interface Props extends ComponentProps<'div'> {}
 

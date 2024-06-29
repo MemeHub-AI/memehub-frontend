@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
@@ -16,15 +16,21 @@ import { useTradeSearchParams } from '../use-search-params'
 import { getV3Config } from '@/contract/v3/config'
 import { useAirdropStore } from '@/stores/use-airdrop'
 
-export const useAirdrop = (id: number, type_list: string) => {
+export const useAirdrop = (
+  id: number,
+  type_list: string,
+  onFinlly?: () => void
+) => {
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
   const { distributorConfig } = getV3Config(chainId)
   const uniqueKey = useMemo(nanoid, [])
   const { setIsCalimingAirdrop } = useAirdropStore()
+  const [isClaim, setIsCalim] = useState(false)
 
-  const { data: { data } = {} } = useQuery({
+  // Query airdrop details.
+  const { data: { data } = {}, refetch } = useQuery({
     enabled: !!chainName && !!type_list && !!tokenAddr,
     queryKey: [airdropApi.getProof.name + uniqueKey],
     queryFn: () => {
@@ -40,10 +46,10 @@ export const useAirdrop = (id: number, type_list: string) => {
     data: hash,
     isPending: isSubmittingClaim,
     writeContract,
-    reset: resetClaim,
+    reset,
   } = useWriteContract({
     mutation: {
-      onMutate: () => toast.loading(t('claiming')),
+      onMutate: () => toast.loading(isClaim ? t('claiming') : t('burning')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
       onError: (e) => CONTRACT_ERR.exec(e),
     },
@@ -51,9 +57,20 @@ export const useAirdrop = (id: number, type_list: string) => {
   const { isFetching: isWaitingClaim } = useWaitForTx({
     hash,
     onLoading: () => toast.loading(t('tx.waiting')),
-    onError: () => toast.error(t('airdrop.claim.failed')),
-    onSuccess: () => toast.success(t('airdrop.claim.success')),
-    onFillay: () => toast.dismiss(),
+    onError: () =>
+      toast.error(
+        isClaim ? t('airdrop.claim.failed') : t('airdrop.burn.failed')
+      ),
+    onSuccess: () =>
+      toast.success(
+        isClaim ? t('airdrop.claim.success') : t('airdrop.burn.success')
+      ),
+    onFillay: () => {
+      toast.dismiss()
+      reset()
+      refetch()
+      onFinlly?.()
+    },
   })
   const isClaiming = isSubmittingClaim || isWaitingClaim
 
@@ -76,11 +93,22 @@ export const useAirdrop = (id: number, type_list: string) => {
       return
     }
 
-    console.log('claim airdrop', id, type_list, { kol_proof, community_proof })
+    setIsCalim(true)
     writeContract({
       ...distributorConfig,
       functionName: 'claim',
       args: [BigInt(id), addPrefix0x(kol_proof), addPrefix0x(community_proof)],
+      chainId,
+    })
+  }
+
+  const burn = () => {
+    setIsCalim(false)
+    writeContract({
+      ...distributorConfig!,
+      functionName: 'burnToken',
+      args: [BigInt(id)],
+      chainId,
     })
   }
 
@@ -92,6 +120,7 @@ export const useAirdrop = (id: number, type_list: string) => {
     isSubmittingClaim,
     isClaiming,
     claim,
-    resetClaim,
+    burn,
+    resetClaim: reset,
   }
 }

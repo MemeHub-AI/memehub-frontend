@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { useQuery } from '@tanstack/react-query'
@@ -10,7 +10,6 @@ import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Img } from '@/components/img'
 import { Countdown } from '@/views/airdrop/components/countdown'
-import { utilTime } from '@/utils/time'
 import { Button } from '@/components/ui/button'
 import { useTokenContext } from '@/contexts/token'
 import { airdropApi } from '@/api/airdrop'
@@ -85,20 +84,31 @@ const AirdropCard = (props: AirdropCardProps) => {
   const { className, airdrop, suffix, typeList, isKol, isCommunity } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
+  const [isExpired, setIsExpired] = useState(false)
 
-  console.log('airdrop id', airdrop.distribution_id)
-
-  const { total, claimed, isKolClaimed, isCommunityClaimed } = useAirdropInfo(
+  const {
+    total,
+    claimed,
+    isClaimed,
+    durationSeconds,
+    refetch,
+    refetchIsClaimed,
+  } = useAirdropInfo(
+    isKol ? MarketType.Kol : MarketType.Community,
     airdrop.chain,
     airdrop.distribution_id
   )
-  const canClaim =
-    (isKol && !isKolClaimed) || (isCommunity && !isCommunityClaimed)
 
-  const { isClaiming, claim } = useAirdrop(
+  const { isClaiming, claim, burn } = useAirdrop(
     airdrop.distribution_id,
-    typeList.toString()
+    typeList.toString(),
+    () => {
+      refetch()
+      refetchIsClaimed()
+    }
   )
+
+  const disabled = isClaimed || isClaiming || isExpired
 
   return (
     <Card
@@ -119,11 +129,11 @@ const AirdropCard = (props: AirdropCardProps) => {
           </span>
           <img src="/images/check.png" alt="check" className="w-6 h-6" />
         </div>
-        {utilTime.isPast(airdrop.create) ? (
-          t('expired')
-        ) : (
-          <Countdown targetTimestamp={airdrop.create * 1000} />
-        )}
+        <Countdown
+          createdAt={airdrop.create ?? 0}
+          duration={durationSeconds}
+          onExpired={() => setIsExpired(true)}
+        />
       </div>
 
       <div className="mt-3 flex items-center justify-between">
@@ -139,13 +149,23 @@ const AirdropCard = (props: AirdropCardProps) => {
           {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
         </div>
       </div>
-      <Button
-        className={cn('mt-3 w-full', canClaim && 'bg-lime-green-deep')}
-        disabled={!canClaim || isClaiming}
-        onClick={claim}
-      >
-        {t('claim')}
-      </Button>
+      <div className="mt-3 flex justify-between gap-4">
+        <Button
+          className={cn('flex-1', !isClaimed && 'bg-lime-green-deep')}
+          disabled={disabled}
+          onClick={claim}
+        >
+          {isClaimed ? t('claimed') : t('airdrop.claim')}
+        </Button>
+        {/* <Button
+          className={cn('flex-1')}
+          variant="destructive"
+          disabled={isClaimed || isClaiming}
+          onClick={burn}
+        >
+          {t('airdrop.burn')}
+        </Button> */}
+      </div>
     </Card>
   )
 }

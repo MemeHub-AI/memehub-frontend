@@ -12,7 +12,7 @@ interface Props
   indicatorClass?: string
   withLabel?: boolean
   labelClass?: string
-  value?: string
+  value?: string | number
 }
 
 const Progress = React.forwardRef<

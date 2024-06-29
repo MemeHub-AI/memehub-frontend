@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { Address } from 'viem'
 import { useAccount, useSignMessage } from 'wagmi'
 
 export const useSign = () => {
@@ -18,9 +19,8 @@ export const useSign = () => {
   })
 
   const signAsync = async (salt = '') => {
-    console.log('sign')
     return signMessageAsync({
-      account: address,
+      account: address?.toLowerCase() as Address,
       connector,
       message: `Signin at ${salt}`,
     })

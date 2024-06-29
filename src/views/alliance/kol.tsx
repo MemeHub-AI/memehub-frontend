@@ -11,6 +11,7 @@ import { useUserStore } from '@/stores/use-user-store'
 
 export const Kol = () => {
   const { t } = useTranslation()
+  const { userInfo } = useUserStore()
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: [allianceApi.getKols.name],
     queryFn: async ({ pageParam }) => {
@@ -63,7 +64,8 @@ export const Kol = () => {
         <div className="my-3">
           {t('kol.desc').replace('$1', `${data?.total}` || '-')}
         </div>
-        <Button>{t('apply.kol')}</Button>
+
+        {userInfo?.role?.kol ? null : <Button>{t('apply.kol')}</Button>}
         <CustomSuspense
           className="mt-5 grid grid-cols-3 gap-4 w-full max-xl:grid-cols-2 max-md:grid-cols-1"
           isPending={isLoading}
@@ -96,3 +98,21 @@ const CardSkeleton = () => {
 }
 
 export default Kol
+
+// Trump President
+// Baby Trump
+// Trump Politics
+// Trump Us
+// Controversy Trump
+// Trump Controversy
+// Politics Trump
+// Trump Businessman
+// Trump Businessman
+
+// Kennedy Eagle
+// John f. kennedy Maga
+// John f. Lino
+// Kooky Kennedy
+// Lol John f. kennedy
+// Tiger Kennedy
+// John f. Rabbit

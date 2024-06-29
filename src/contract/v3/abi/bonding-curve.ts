@@ -373,6 +373,30 @@ export const v3BondingCurveAbi = [
         name: 'token',
         type: 'address',
       },
+      {
+        internalType: 'uint256',
+        name: 'amountIn',
+        type: 'uint256',
+      },
+    ],
+    name: 'calcAmountOutFromTokenCutOff',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'amountOut',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'contract MEMEHUB_Token',
+        name: 'token',
+        type: 'address',
+      },
     ],
     name: 'calcPrice',
     outputs: [
