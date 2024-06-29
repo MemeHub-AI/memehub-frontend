@@ -18,7 +18,7 @@ export const useUser = (options?: Options) => {
   const { onUpdateSuccess, onFollowSuccess, onFollowFinlly } = options || {}
   const { t } = useTranslation()
   const { setUserInfo } = useUserStore()
-  const { setToken, removeToken } = useStorage()
+  const { setToken } = useStorage()
 
   // Login/register a user.
   const { isPending: isLoggingIn, mutateAsync: login } = useMutation({
@@ -92,7 +92,7 @@ export const useUser = (options?: Options) => {
     isFollowing,
     isUnfollowing,
     login,
-    logout: removeToken,
+    logout: () => setToken(''),
     update,
     follow,
     unfollow,
