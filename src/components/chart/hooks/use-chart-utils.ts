@@ -49,10 +49,11 @@ export const useChartUtils = () => {
     if (!price) return 100
 
     const decimal = price.toString().split('.')[1]
-    const len = decimal?.length ?? 0
-    if (len <= 2) return 100
+    const decimalLen = decimal?.length ?? 0
+    if (decimalLen <= 2) return 100
 
-    return Number('1'.padEnd(len + 1, '0'))
+    const pricescale = '1'.padEnd(decimalLen + 1, '0')
+    return Number(pricescale)
   }
 
   return {

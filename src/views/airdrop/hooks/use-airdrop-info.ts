@@ -1,10 +1,13 @@
 import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
+import { readContract } from 'wagmi/actions'
+import { Address } from 'viem'
 
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getV3Config } from '@/contract/v3/config'
 import { MarketType } from '@/api/token/types'
 import { BI_ZERO } from '@/constants/contract'
+import { wagmiConfig } from '@/config/wagmi'
 
 export const useAirdropInfo = (
   type: MarketType,
@@ -90,6 +93,15 @@ export const useAirdropInfo = (
     refetchKol()
     refetchCommunity()
   }
+
+  const { data: isBurned } = useReadContract({
+    ...distributorConfig!,
+    chainId,
+    functionName: 'isBurn',
+    args: [BigInt(id)],
+  })
+
+  console.log('isBurned', isBurned)
 
   return {
     total,
