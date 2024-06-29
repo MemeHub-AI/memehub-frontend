@@ -9,9 +9,6 @@ export enum ContractVersion {
   V2 = 'V2',
 
   V3 = 'V3',
-
-  // d === dot
-  V3d0d1 = 'V3.0.1',
 }
 
 /******************** Deploy related ********************/
@@ -21,7 +18,7 @@ export const DEPLOY_FEE = {
   v3: BigInt(2000000000000000),
 }
 
-export const DEPLOY_VERSION = ContractVersion.V3d0d1
+export const DEPLOY_VERSION = ContractVersion.V3
 
 export const DEPLOY_LOG_TOPIC =
   '0x556e2663f9312acdff6b3f6554a68d7f1b6e64a832778c7abac899b58961bb4e'

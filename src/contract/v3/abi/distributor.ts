@@ -472,16 +472,16 @@ export const v3DistributorAbi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'distributionId',
+        name: '',
         type: 'uint256',
       },
     ],
-    name: 'getAmountLeft',
+    name: 'isBurn',
     outputs: [
       {
-        internalType: 'uint256',
+        internalType: 'bool',
         name: '',
-        type: 'uint256',
+        type: 'bool',
       },
     ],
     stateMutability: 'view',

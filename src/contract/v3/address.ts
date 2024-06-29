@@ -2,9 +2,9 @@ import { bscTestnet, opBNBTestnet } from 'wagmi/chains'
 
 const dev = {
   [bscTestnet.id]: {
-    bondingCurve: '0xE9AdAc9b4c9e9b1811C9Ad97fF6FfEa3cf392267',
-    distributor: '0x07d190D2b5bBfab0bdDcf2C1F4Abd9dC03858eBf',
-    recommend: '0x3eA475f1B0B92DD315da2793BcFCFdCbB4006886',
+    bondingCurve: '0xfc056f46f12c73eCEA186106f2E830864E739cf8',
+    distributor: '0x659e859F60ea89F568530504E0A14A1e383a1081',
+    recommend: '0x715cAB9d65673BA3BF4541f35F5B113947083627',
   },
   [opBNBTestnet.id]: {
     bondingCurve: '0x89C87817990F50b520f960C28b73e225E8C1Bbfc',
