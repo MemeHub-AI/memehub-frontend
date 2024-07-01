@@ -50,7 +50,6 @@ export const useDatafeed = () => {
           full_name: symbolName,
           description: symbolName,
           pricescale: formatPricescale(lastBar?.open),
-          volume_precision: formatVolumePrecision(lastBar?.volume),
         }
 
         cache.setBars(bars)

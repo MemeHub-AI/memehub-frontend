@@ -50,9 +50,20 @@ const options: TVChartOptions = {
   // @ts-ignore
   custom_formatters: {
     priceFormatterFactory: (symbolInfo, minTick) => {
-      return {
-        format: (price) => fmt.decimals(price, 4),
+      if (symbolInfo?.format === 'price') {
+        return {
+          format: (price) => fmt.decimals(price, 4),
+        }
       }
+      return null
+    },
+    studyFormatterFactory: (format) => {
+      if (format.type === 'volume') {
+        return {
+          format: (value) => fmt.decimals(value, 4),
+        }
+      }
+      return null
     },
   },
 }
