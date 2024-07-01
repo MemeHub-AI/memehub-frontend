@@ -63,7 +63,7 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
       <div className="flex items-center gap-2">
         <Avatar src={c.coin.image} fallback={c.coin.ticker.charAt(0)} />
         <div className="flex flex-col justify-between">
-          <p className="font-bold line-clamp-1">
+          <p className="font-bold break-all line-clamp-1">
             {c.coin.name}({c.coin.ticker})
           </p>
           <p className="text-zinc-500 text-sm">
