@@ -1,13 +1,8 @@
-import {
-  type ProviderProps,
-  createContext,
-  createElement,
-  useContext,
-} from 'react'
+import { createContext, useContext } from 'react'
 
 import type { UserInfoRes } from '@/api/user/types'
 
-import { ERR } from '@/errors'
+import { CONTEXT_ERR } from '@/errors/context'
 import { VoidFn } from '@/utils/types'
 
 interface Value {
@@ -19,16 +14,13 @@ interface Value {
 
 const AccountContext = createContext<Value | null>(null)
 
-export const AccountProvider = ({ children, value }: ProviderProps<Value>) => {
-  return createElement(AccountContext.Provider, { value }, children)
-}
+export const AccountProvider = AccountContext.Provider
 
 export const useAccountContext = () => {
-  const context = useContext(AccountContext)
-
-  if (!context) {
-    throw ERR.notFound(AccountProvider.name)
+  const ctx = useContext(AccountContext)
+  if (!ctx) {
+    throw CONTEXT_ERR.notFound('AccountProvider')
   }
 
-  return context
+  return ctx
 }

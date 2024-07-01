@@ -1,13 +1,8 @@
-import {
-  type ProviderProps,
-  createContext,
-  createElement,
-  useContext,
-} from 'react'
+import { createContext, useContext } from 'react'
 
 import type { TokenListItem } from '@/api/token/types'
 
-import { ERR } from '@/errors'
+import { CONTEXT_ERR } from '@/errors/context'
 
 interface Value {
   tokenInfo: TokenListItem | undefined
@@ -21,11 +16,10 @@ const TokenContext = createContext<Value | null>(null)
 export const TokenProvider = TokenContext.Provider
 
 export const useTokenContext = () => {
-  const context = useContext(TokenContext)
-
-  if (!context) {
-    throw ERR.notFound(TokenProvider.name)
+  const ctx = useContext(TokenContext)
+  if (!ctx) {
+    throw CONTEXT_ERR.notFound('TokenProvider')
   }
 
-  return context
+  return ctx
 }

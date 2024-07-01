@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 
-import { ERR } from '@/errors'
+import { CONTEXT_ERR } from '@/errors/context'
 import { UserListType } from '@/api/user/types'
 
 interface Value {
@@ -14,7 +14,9 @@ export const FollowTabProvider = Context.Provider
 
 export const useFollowTabContext = () => {
   const ctx = useContext(Context)
+  if (!ctx) {
+    throw CONTEXT_ERR.notFound('FollowTabProvider')
+  }
 
-  if (!ctx) throw ERR.notFound('FollowTabProvider')
   return ctx
 }
