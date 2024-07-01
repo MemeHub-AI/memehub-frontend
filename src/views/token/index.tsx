@@ -38,8 +38,10 @@ export const TokenPage = () => {
         {/* Left */}
         <div className="flex flex-col flex-1">
           {isMobile && <TradeTab />}
+
           <TokenInfoHeader />
           {!isMobile && <Chart />}
+
           {isMobile && (
             <Tabs defaultValue="chart">
               <TabsList className="grid w-full grid-cols-2 mt-1">

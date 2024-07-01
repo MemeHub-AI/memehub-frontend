@@ -1,33 +1,37 @@
-import React, { useEffect, useRef, memo } from 'react'
-import { useRouter } from 'next/router'
+import React, { useEffect, useRef, memo, useState } from 'react'
 import { isEmpty } from 'lodash'
 
 import type { ClassValue } from 'class-variance-authority/types'
-
 import { useChart } from './hooks/use-chart'
 import { useTokenContext } from '@/contexts/token'
-import { useChartStore } from '@/stores/use-chart-store'
 import { useStorage } from '@/hooks/use-storage'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
+import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { isListed } from '@/utils/token'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
+import { DexToolsChart } from '../dextools-chart'
+
+enum ChartType {
+  Memehub,
+  Dex,
+}
 
 export const Chart = memo(() => {
   const chartRef = useRef<HTMLDivElement>(null)
-  const { query } = useRouter()
-  const chain = (query.chain || '') as string
-  const addr = (query.address || '') as string
+  const { chainName, tokenAddr } = useTradeSearchParams()
   const { tokenInfo } = useTokenContext()
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
-  const { chart } = useChartStore()
+  const [tab, setTab] = useState(ChartType.Memehub)
 
   useEffect(() => {
-    if (!chartRef.current || isEmpty(addr) || !tokenInfo) return
+    if (!chartRef.current || isEmpty(tokenAddr) || !tokenInfo) return
 
     createChart(chartRef.current, {
       symbol: tokenInfo.ticker,
-      interval: getInterval(chain, addr) || '1m',
-      tokenAddr: addr,
+      interval: getInterval(chainName, tokenAddr) || '1m',
+      tokenAddr,
     })
 
     return removeChart
@@ -35,6 +39,33 @@ export const Chart = memo(() => {
 
   return (
     <>
+      {/* <Tabs
+        value={tab.toString()}
+        onValueChange={(v) => setTab(v as unknown as ChartType)}
+      >
+        <TabsList>
+          <TabsTrigger value={ChartType.Memehub.toString()}>
+            memehub chart
+          </TabsTrigger>
+        </TabsList>
+        <TabsList>
+          <TabsTrigger value={ChartType.Dex.toString()}>dex chart</TabsTrigger>
+        </TabsList>
+        <div
+          className={cn(
+            'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
+            'rounded-md overflow-hidden max-sm:mt-3',
+            isCreating && 'scale-0 absolute'
+          )}
+        >
+          <TabsContent value={ChartType.Memehub.toString()}>
+            <div ref={chartRef}></div>
+          </TabsContent>
+          <TabsContent value={ChartType.Dex.toString()}>
+            <DexToolsChart />
+          </TabsContent>
+        </div>
+      </Tabs> */}
       <div
         ref={chartRef}
         className={cn(
@@ -43,6 +74,7 @@ export const Chart = memo(() => {
           isCreating && 'scale-0 absolute'
         )}
       ></div>
+
       <ChartSkeleton className={!isCreating && 'scale-0 absolute'} />
     </>
   )

@@ -1,4 +1,4 @@
-import { bscTestnet, opBNBTestnet, bsc } from 'wagmi/chains'
+import { bscTestnet, opBNBTestnet, bsc, blast } from 'wagmi/chains'
 
 import { dotenv } from '@/utils/env'
 
@@ -21,6 +21,11 @@ const prod = {
     distributor: '0x3E5063Efc490D12C5bF4C0b28122aD376891CDF6',
     recommend: '0x2654cBEFb82410B5E2Df17750d0B936A827386cf',
   },
+  [blast.id]: {
+    bondingCurve: '0xfDF4c56346A294A4e924005eeFA4da4247753B6C',
+    distributor: '0x88Bc6da007fC3f9e086686362d51800c4F54228a',
+    recommend: '0x20a52a42047617EcdFDafd34f7f4163D4f3925CD',
+  },
 }
 
-export const v3Addr = prod
+export const v3Addr = { ...dev, ...prod }

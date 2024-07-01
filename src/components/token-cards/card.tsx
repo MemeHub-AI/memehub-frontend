@@ -11,6 +11,9 @@ import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
 import { useTokenProgressV3 } from '@/views/token/hooks/trade-v3/use-token-progress'
+import { isListed } from '@/utils/token'
+import { Badge } from '../ui/badge'
+import { Avatar } from '../ui/avatar'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -26,7 +29,7 @@ export const TokenCard = (props: Props) => {
     card.address as Address,
     Number(card.chain.id)
   )
-  const isListed = card.status === 3
+  const isLitedToken = isListed(card.status)
 
   return (
     <Card
@@ -40,11 +43,15 @@ export const TokenCard = (props: Props) => {
       }}
       {...restProps}
     >
-      {isListed && (
-        <div className="absolute left-0 top-0 bg-lime-green px-1.5 text-sm">
+      {isLitedToken && (
+        <Badge
+          variant="success"
+          className="absolute left-0 top-0 rounded-l-none rounded-tr-none"
+        >
           {t('listed')}
-        </div>
+        </Badge>
       )}
+
       <Img
         src={card.image}
         alt="logo"
@@ -56,24 +63,28 @@ export const TokenCard = (props: Props) => {
             <span className="break-all line-clamp-2">
               {card?.name} {card?.ticker && `(${card?.ticker})`}
             </span>
-            <img src={card.chain.logo} alt="chain" className="w-5 mt-1" />
+            <Avatar
+              src={card.chain.logo}
+              alt="logo"
+              size={20}
+              className="mt-1"
+            />
           </CardTitle>
           <p
             className={cn(
               'text-zinc-500 text-sm break-all line-clamp-2 xl:line-clamp-3',
+              isLitedToken && 'line-clamp-4 xl:line-clamp-5',
               descClass
             )}
           >
             {card?.desc}
           </p>
         </div>
-        <div>
-          <Progress
-            className="h-4 self-end w-full mt-1"
-            indicatorClass="bg-green-500"
-            value={progress}
-          />
-        </div>
+        <Progress
+          className="h-5 self-end w-full"
+          indicatorClass="bg-green-500"
+          value={isLitedToken ? 100 : progress}
+        />
       </div>
     </Card>
   )
