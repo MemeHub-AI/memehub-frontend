@@ -50,7 +50,6 @@ const options: TVChartOptions = {
   // @ts-ignore
   custom_formatters: {
     priceFormatterFactory: (symbolInfo, minTick) => {
-      console.log('mintick', minTick)
       return {
         format: (price) => fmt.decimals(price, 4),
       }

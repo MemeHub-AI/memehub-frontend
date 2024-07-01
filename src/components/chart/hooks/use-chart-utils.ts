@@ -1,3 +1,4 @@
+import { fmt } from '@/utils/fmt'
 import type { Bar } from '../../../../public/js/charting_library/charting_library'
 
 type BarBase = {
@@ -56,10 +57,16 @@ export const useChartUtils = () => {
     return Number(pricescale)
   }
 
+  const formatVolumePrecision = (volume: number | undefined) => {
+    if (!volume) return 2
+    return fmt.decimals(volume).length
+  }
+
   return {
     parseInterval,
     formatInterval,
     formatBars,
     formatPricescale,
+    formatVolumePrecision,
   }
 }
