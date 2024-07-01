@@ -21,7 +21,12 @@ export const useUploadImage = (options?: Options) => {
   const [file, setFile] = useState<File | null>(null)
   const { getToken } = useStorage()
 
-  const { data, mutateAsync, reset } = useMutation({
+  const {
+    data,
+    isPending: isUploading,
+    mutateAsync,
+    reset,
+  } = useMutation({
     mutationKey: [otherApi.uploadImage.name],
     mutationFn: otherApi.uploadImage,
     onMutate: () => toast.loading(t('uploading')),
@@ -76,6 +81,7 @@ export const useUploadImage = (options?: Options) => {
   return {
     url: data?.data?.image_url ?? '',
     file,
+    isUploading,
     onChangeUpload,
     clearFile,
   }
