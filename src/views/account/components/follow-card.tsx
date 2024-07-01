@@ -15,14 +15,15 @@ import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'div'> {
   card: UserFollow
+  refetchList?: () => void
 }
 
-export const FollowCard = ({ card }: Props) => {
+export const FollowCard = ({ card, refetchList }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { refetchUserInfo, userInfo } = useAccountContext()
   const { follow, unfollow } = useUser({
-    onFollowSuccess: refetchUserInfo,
+    onFollowSuccess: card.is_follower ? refetchList : refetchUserInfo,
   })
 
   return (
@@ -48,15 +49,14 @@ export const FollowCard = ({ card }: Props) => {
         onClick={(e) => {
           e.stopPropagation()
           const addr = (query.address || '') as string
-          card.is_follower || userInfo?.is_follower
-            ? unfollow(
-                card.user.wallet_address != null
-                  ? `${card.user.wallet_address}`
-                  : addr
-              )
-            : follow(addr)
-
-          refetchUserInfo()
+          if (card.is_follower || userInfo?.is_follower) {
+            return unfollow(
+              card.user.wallet_address != null
+                ? `${card.user.wallet_address}`
+                : addr
+            )
+          }
+          follow(addr)
         }}
       >
         {card.is_follower || userInfo?.is_follower
