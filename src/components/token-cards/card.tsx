@@ -13,6 +13,7 @@ import { Img } from '@/components/img'
 import { useTokenProgressV3 } from '@/views/token/hooks/trade-v3/use-token-progress'
 import { isListed } from '@/utils/token'
 import { Badge } from '../ui/badge'
+import { Avatar } from '../ui/avatar'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -62,7 +63,12 @@ export const TokenCard = (props: Props) => {
             <span className="break-all line-clamp-2">
               {card?.name} {card?.ticker && `(${card?.ticker})`}
             </span>
-            <img src={card.chain.logo} alt="chain" className="w-5 mt-1" />
+            <Avatar
+              src={card.chain.logo}
+              alt="logo"
+              size={20}
+              className="mt-1"
+            />
           </CardTitle>
           <p
             className={cn(

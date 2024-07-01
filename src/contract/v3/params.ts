@@ -1,8 +1,12 @@
-import { bsc, bscTestnet, opBNBTestnet } from 'wagmi/chains'
+import { bsc, blast, bscTestnet, opBNBTestnet } from 'wagmi/chains'
 import { Hash, parseEther, zeroHash } from 'viem'
 
-const bondingCurve = {
+const bnbBondingCurve = {
   addPoolEthAmount: parseEther('10.543536923122173709'),
+}
+
+const ethBondingCurve = {
+  addPoolEthAmount: parseEther('2.108707384624434741'),
 }
 
 const distributor = {
@@ -17,15 +21,19 @@ const distributor = {
 
 export const v3Params = {
   [bscTestnet.id]: {
-    bondingCurve,
+    bondingCurve: bnbBondingCurve,
     distributor,
   },
   [opBNBTestnet.id]: {
-    bondingCurve,
+    bondingCurve: bnbBondingCurve,
     distributor,
   },
   [bsc.id]: {
-    bondingCurve,
+    bondingCurve: bnbBondingCurve,
+    distributor,
+  },
+  [blast.id]: {
+    bondingCurve: ethBondingCurve,
     distributor,
   },
 }
