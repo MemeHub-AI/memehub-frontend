@@ -20,7 +20,7 @@ export const DexToolsChart = ({
     const query = qs.stringify({
       theme: 'light',
       chartType: '1',
-      chartResolution: '1',
+      chartResolution: '30',
       drawingToolbars: false,
     })
 
