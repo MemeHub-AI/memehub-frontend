@@ -440,5 +440,8 @@
   "contract.err.gas-estimate": "Failed to estimate gas. Please try again",
   "token.already-listed": "Successfully launched on the DEX",
   "chart.memehub": "Memehub chart",
-  "chart.dex": "DEX chart"
+  "chart.dex": "DEX chart",
+  "burn": "Burn",
+  "burn.token,desc": "There are $1 TrumpCat that have expired and remain unclaimed. You have the option to choose to destroy them",
+  "burn.button": "🔥Burn $1"
 }
