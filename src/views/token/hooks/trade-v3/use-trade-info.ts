@@ -1,6 +1,7 @@
 import { readContract } from 'wagmi/actions'
-import { formatEther, parseEther } from 'viem'
+import { formatEther, parseEther, zeroAddress } from 'viem'
 import { BigNumber } from 'bignumber.js'
+import { last } from 'lodash'
 
 import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
@@ -25,7 +26,7 @@ export const useTradeInfoV3 = () => {
     })
   }
 
-  const getDetails = (token = tokenAddr) => {
+  const getDetails = async (token = tokenAddr) => {
     if (!bondingCurveConfig) return [] as const
     return readContract(wagmiConfig, {
       ...bondingCurveConfig,
@@ -100,6 +101,11 @@ export const useTradeInfoV3 = () => {
     }
   }
 
+  const checkForListed = async () => {
+    const headmaster = last(await getDetails())
+    return !!(headmaster && headmaster !== zeroAddress)
+  }
+
   const getLastOrderAmount = async (currentLeft: string, token = tokenAddr) => {
     const amount = await readContract(wagmiConfig, {
       ...bondingCurveConfig!,
@@ -117,6 +123,7 @@ export const useTradeInfoV3 = () => {
     getTokenAmount,
     getPrice,
     checkForOverflow,
+    checkForListed,
     getLastOrderAmount,
   }
 }

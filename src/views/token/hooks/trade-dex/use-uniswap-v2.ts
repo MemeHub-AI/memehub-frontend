@@ -3,11 +3,13 @@ import { isAddress, parseEther, type Address } from 'viem'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
+import dayjs from 'dayjs'
 
 import { useApprove } from '@/hooks/use-approve'
 import { commonAddr } from '@/contract/address'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { uniswapV2Config } from '@/contract/abi/uniswap-v2'
+import { logger } from '@/utils/log'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
@@ -52,11 +54,16 @@ export const useUniswapV2 = () => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
-    console.log('uniswap buy', amount, token)
+    logger('uniswap buy', amount, token)
     writeContract({
       ...uniswapV2Config,
       functionName: 'swapExactETHForTokens',
-      args: [BigInt(0), [reserveToken, token], address!, BigInt(Date.now())],
+      args: [
+        BigInt(0),
+        [reserveToken, token],
+        address!,
+        BigInt(dayjs().unix()),
+      ],
       value: parseEther(amount),
     })
   }
@@ -68,7 +75,7 @@ export const useUniswapV2 = () => {
     const isApproved = await approvalForAll(token, reserveToken, amount)
     if (!isApproved) return
 
-    console.log('uniswap sell', amount, token)
+    logger('uniswap sell', amount, token)
     writeContract({
       ...uniswapV2Config,
       functionName: 'swapExactTokensForETH',
@@ -77,7 +84,7 @@ export const useUniswapV2 = () => {
         BigInt(0),
         [token, reserveToken],
         address!,
-        BigInt(Date.now()),
+        BigInt(dayjs().unix()),
       ],
     })
   }

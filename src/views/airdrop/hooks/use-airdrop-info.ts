@@ -101,8 +101,6 @@ export const useAirdropInfo = (
     args: [BigInt(id)],
   })
 
-  console.log('isBurned', isBurned)
-
   return {
     total,
     claimed,
