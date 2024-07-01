@@ -23,4 +23,4 @@ const prod = {
   },
 }
 
-export const v3Addr = dotenv.isProd ? prod : dev
+export const v3Addr = prod
