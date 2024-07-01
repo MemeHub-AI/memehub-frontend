@@ -7,7 +7,7 @@ export const useRewardList = () => {
   const { chains, findChains } = useChainsStore()
   const rewardList = useMemo(
     () => findChains(wagmiConfig.chains.map((c) => c.id)),
-    [wagmiConfig]
+    [wagmiConfig, chains] // Must include chains.
   )
 
   return {

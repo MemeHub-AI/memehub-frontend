@@ -14,13 +14,13 @@ export const useReward = (chainId: number) => {
   const { address } = useAccount()
   const { recommendConfig } = getV3Config(chainId)
 
-  const { data: total = BI_ZERO } = useReadContract({
+  const { data: total = BI_ZERO, refetch: refetchAmount } = useReadContract({
     ...recommendConfig!,
     functionName: 'obtainedAmount',
     args: [address!],
     query: { enabled: !!recommendConfig && !!address },
   })
-  const { data: claimed = BI_ZERO } = useReadContract({
+  const { data: claimed = BI_ZERO, refetch: refetchClaimed } = useReadContract({
     ...recommendConfig!,
     functionName: 'alreadyClaimed',
     args: [address!],
@@ -29,6 +29,8 @@ export const useReward = (chainId: number) => {
   const totalAmount = formatEther(total)
   const claimedAmount = formatEther(claimed)
   const unclaimedAmount = BigNumber(totalAmount).minus(claimedAmount).toFixed()
+  const isClaimed =
+    BigNumber(totalAmount).isZero() || BigNumber(unclaimedAmount).isZero()
 
   const {
     data: hash,
@@ -46,6 +48,8 @@ export const useReward = (chainId: number) => {
     onFillay: () => {
       toast.dismiss()
       reset()
+      refetchAmount()
+      refetchClaimed()
     },
   })
   const isClaiming = isPending || isFetching
@@ -68,6 +72,7 @@ export const useReward = (chainId: number) => {
     claimedAmount,
     unclaimedAmount,
     isClaiming,
+    isClaimed,
     claimReward,
   }
 }

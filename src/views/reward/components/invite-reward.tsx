@@ -1,6 +1,5 @@
 import React, { ComponentProps, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { BigNumber } from 'bignumber.js'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -38,16 +37,12 @@ export const InviteReward = ({ className }: ComponentProps<'h2'>) => {
 
 const InviteCard = ({ c }: { c: ChainData }) => {
   const { t } = useTranslation()
-  const { totalAmount, unclaimedAmount, isClaiming, claimReward } = useReward(
-    Number(c.id)
-  )
+  const { totalAmount, unclaimedAmount, isClaiming, isClaimed, claimReward } =
+    useReward(Number(c.id))
   const { findChain } = useChainsStore()
   const chain = useMemo(() => findChain(c.id), [c])
 
-  const disabeld =
-    BigNumber(totalAmount).isZero() ||
-    BigNumber(unclaimedAmount).isZero() ||
-    isClaiming
+  const disabeld = isClaiming || isClaimed
 
   return (
     <Card shadow="none" padding="sm" className="cursor-[unset]">

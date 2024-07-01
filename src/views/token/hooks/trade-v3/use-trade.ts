@@ -26,6 +26,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     getNativeAmount,
     getTokenAmount,
     checkForOverflow,
+    checkForListed,
     getLastOrderAmount,
   } = useTradeInfoV3()
   const {
@@ -60,6 +61,10 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   ) => {
     if (!checkForTrade(amount)) return
 
+    const isListed = await checkForListed()
+    setIsListed(isListed)
+    if (isListed) return dexBuy(amount, tokenAddr)
+
     const nativeAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
     if (BigNumber(tokenAmount).lte(0)) {
@@ -67,8 +72,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       return
     }
 
-    const { isListed, isOverflow, current } = await checkForOverflow(amount)
-    setIsListed(isListed)
+    const { isOverflow, current } = await checkForOverflow(amount)
 
     if (isOverflow) {
       getLastOrderAmount(current).then((value) => {
@@ -78,7 +82,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     }
 
     console.log('v3 buy', getReferrals(), current)
-    if (isListed) return dexBuy(amount, tokenAddr)
+
     writeContract({
       ...bondingCurveConfig!,
       chainId,
@@ -98,17 +102,17 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
 
+    const isListed = await checkForListed()
+    setIsListed(isListed)
+    if (isListed) return dexSell(amount, tokenAddr)
+
     const nativeAmount = formatEther(await getNativeAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {
       CONTRACT_ERR.balanceInvalid()
       return
     }
 
-    const { isListed } = await checkForOverflow(amount)
-    setIsListed(isListed)
-
     console.log('v3 sell', await getReferrals())
-    if (isListed) return dexSell(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
       chainId,
