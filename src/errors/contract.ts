@@ -4,6 +4,7 @@ import { t } from 'i18next'
 import { isUserReject } from '@/utils/contract'
 
 const ERR = {
+  estimateGas: 'gap tip',
   sell: 'MEMEHUB_InvalidSell'.toLowerCase(),
   burn: 'MEMEHUB_AlreadyBurn'.toLowerCase(),
 }
@@ -15,6 +16,12 @@ export const CONTRACT_ERR = {
     if (!e?.message) return
 
     const msg = (e.message ?? '').toLowerCase()
+
+    // Cannot estimate gas.
+    if (msg.includes(ERR.estimateGas)) {
+      toast.error(t('contract.err.gas-estimate'))
+      return
+    }
 
     // Cannot to sell.
     if (msg.includes(ERR.sell)) {
