@@ -12,19 +12,20 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
 import { Routes } from '@/routes'
+import { useFollowTabContext } from '@/contexts/follow-tab'
 
 interface Props extends ComponentProps<'div'> {
   card: UserFollow
-  refetchList?: () => void
 }
 
-export const FollowCard = ({ card, refetchList }: Props) => {
+export const FollowCard = ({ card }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
-  const { refetchUserInfo, userInfo } = useAccountContext()
-  console.log('refetch', card.is_follower)
+  const { userInfo, refetchUserInfo } = useAccountContext()
+  const { refetchFollows } = useFollowTabContext()
+
   const { follow, unfollow } = useUser({
-    onFollowSuccess: card.is_follower ? refetchList : refetchUserInfo,
+    onFollowSuccess: refetchFollows,
   })
 
   return (
@@ -57,7 +58,7 @@ export const FollowCard = ({ card, refetchList }: Props) => {
                 : addr
             )
           }
-          follow(addr)
+          follow(card.user.wallet_address)
         }}
       >
         {card.is_follower || userInfo?.is_follower
