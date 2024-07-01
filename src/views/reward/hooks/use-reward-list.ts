@@ -1,12 +1,17 @@
-import { bscTestnet, opBNBTestnet } from 'wagmi/chains'
+import { useMemo } from 'react'
 
 import { useChainsStore } from '@/stores/use-chains-store'
+import { wagmiConfig } from '@/config/wagmi'
 
 export const useRewardList = () => {
-  const { findChains } = useChainsStore()
-  const rewardList = findChains([bscTestnet.id, opBNBTestnet.id])
+  const { chains, findChains } = useChainsStore()
+  const rewardList = useMemo(
+    () => findChains(wagmiConfig.chains.map((c) => c.id)),
+    [wagmiConfig]
+  )
 
   return {
     rewardList,
+    isLoading: !chains,
   }
 }

@@ -15,7 +15,7 @@ import { useChainsStore } from '@/stores/use-chains-store'
 
 export const InviteReward = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
-  const { rewardList } = useRewardList()
+  const { isLoading, rewardList } = useRewardList()
 
   return (
     <>
