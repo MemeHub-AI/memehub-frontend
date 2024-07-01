@@ -1,4 +1,6 @@
-import { bscTestnet, opBNBTestnet } from 'wagmi/chains'
+import { bscTestnet, opBNBTestnet, bsc } from 'wagmi/chains'
+
+import { dotenv } from '@/utils/env'
 
 const dev = {
   [bscTestnet.id]: {
@@ -13,4 +15,12 @@ const dev = {
   },
 } as const
 
-export const v3Addr = dev
+const prod = {
+  [bsc.id]: {
+    bondingCurve: '0x293f06b08e5463EcD90EA81cA245a7C329e091ee',
+    distributor: '0x3E5063Efc490D12C5bF4C0b28122aD376891CDF6',
+    recommend: '0x2654cBEFb82410B5E2Df17750d0B936A827386cf',
+  },
+}
+
+export const v3Addr = dotenv.isProd ? prod : dev
