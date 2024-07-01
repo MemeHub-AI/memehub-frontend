@@ -26,7 +26,6 @@ import { useTradeInfo } from '../hooks/use-trade-info'
 import { useUserStore } from '@/stores/use-user-store'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { TradeType } from '@/constants/trade'
-import { useToastDiamond } from '@/hooks/use-toast-diamond'
 import { useStorage } from '@/hooks/use-storage'
 import { useAirdropStore } from '@/stores/use-airdrop'
 
@@ -56,7 +55,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     refetchNativeBalance,
     refetchTokenBalance,
   } = useTradeInfo()
-  const { toastDiamond, dismissDiamond } = useToastDiamond()
   const { setInviteCode } = useStorage()
   const [isBalanceOverflow, setIsBalanceOverflow] = useState(false)
 
@@ -67,7 +65,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
 
   const onBuy = async () => {
-    // Overflow current wallet balance.
+    // Check native token balance.
     if (BigNumber(value).gt(nativeBalance)) {
       toast.error(t('balance.illegality'))
       setValue(nativeBalance)
@@ -78,7 +76,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   }
 
   const onSell = async () => {
-    // Overflow current token balance.
+    // Check token balance.
     if (BigNumber(value).gt(tokenBalance)) {
       toast.error(t('balance.illegality'))
       return
@@ -103,19 +101,19 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   }
 
   const onTrade = async () => {
-    // Wallet is not connect.
+    // Check wallet connect.
     if (!isConnected) {
       setConnectOpen(true)
       return
     }
 
-    // Token address is invalid.
+    // Check token addr.
     if (isEmpty(token) || !isAddress(token)) {
       toast.error(t('contract.err.token-addr'))
       return
     }
 
-    // Chain is not correct.
+    // Check chain.
     const isValidChain = await checkForChain()
     if (!isValidChain) return
 
