@@ -29,6 +29,7 @@ export const FollowTab = () => {
     following,
     isLoading: isLoadingFollowing,
     isFetching: isFetchingFollowing,
+    refetch: refetchFollowing,
   } = useUserList(UserListType.Following)
 
   // Mobile tabs.
@@ -74,6 +75,7 @@ export const FollowTab = () => {
             <FollowingCards
               cards={following.list}
               total={followers.total}
+              refetchList={refetchFollowing}
               isLoading={isLoadingFollowing}
               isPending={isFetchingFollowing}
             />
@@ -113,6 +115,7 @@ export const FollowTab = () => {
           cards={following.list}
           total={following.total}
           isLoading={isLoadingFollowing}
+          refetchList={refetchFollowing}
           isPending={isFetchingFollowing}
         />
       </TabsContent>
