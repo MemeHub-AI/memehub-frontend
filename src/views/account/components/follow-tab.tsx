@@ -24,6 +24,7 @@ export const FollowTab = () => {
     followers,
     isLoading: isLoadingFollowers,
     isFetching: isFetchingFollowers,
+    refetch: refetchFollowers,
   } = useUserList(UserListType.Followers)
   const {
     following,
@@ -108,6 +109,7 @@ export const FollowTab = () => {
           total={followers.total}
           isLoading={isLoadingFollowers}
           isPending={isFetchingFollowers}
+          refetchList={refetchFollowers}
         />
       </TabsContent>
       <TabsContent value={UserListType.Following.toString()}>
@@ -115,8 +117,8 @@ export const FollowTab = () => {
           cards={following.list}
           total={following.total}
           isLoading={isLoadingFollowing}
-          refetchList={refetchFollowing}
           isPending={isFetchingFollowing}
+          refetchList={refetchFollowing}
         />
       </TabsContent>
     </Tabs>

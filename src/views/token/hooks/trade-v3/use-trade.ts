@@ -81,6 +81,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     if (isListed) return dexBuy(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
+      chainId,
       functionName: 'mint',
       args: [
         tokenAddr,
@@ -110,6 +111,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     if (isListed) return dexSell(amount, tokenAddr)
     writeContract({
       ...bondingCurveConfig!,
+      chainId,
       functionName: 'burn',
       args: [
         tokenAddr,

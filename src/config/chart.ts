@@ -2,7 +2,7 @@ import {
   ChartPropertiesOverrides,
   ChartingLibraryWidgetOptions,
   TradingTerminalWidgetOptions,
-} from '../../../../public/js/charting_library/charting_library'
+} from '../../public/js/charting_library/charting_library'
 import { fmt } from '@/utils/fmt'
 
 type TVChartOptions = Omit<
@@ -10,7 +10,7 @@ type TVChartOptions = Omit<
   'container' | 'datafeed' | 'interval' | 'localets' | 'locale'
 >
 
-const chartConfig: TVChartOptions = {
+const options: TVChartOptions = {
   library_path: 'js/charting_library/',
   disabled_features: [
     // Header
@@ -50,21 +50,31 @@ const chartConfig: TVChartOptions = {
   // @ts-ignore
   custom_formatters: {
     priceFormatterFactory: (symbolInfo, minTick) => {
-      return {
-        format: (price) => fmt.decimals(price, 4),
+      if (symbolInfo?.format === 'price') {
+        return {
+          format: (price) => fmt.decimals(price, 4),
+        }
       }
+      return null
+    },
+    studyFormatterFactory: (format) => {
+      if (format.type === 'volume') {
+        return {
+          format: (value) => fmt.decimals(value, 4),
+        }
+      }
+      return null
     },
   },
 }
 
-const chartOverrides: Partial<ChartPropertiesOverrides> = {
+const overrides: Partial<ChartPropertiesOverrides> = {
   'paneProperties.vertGridProperties.color': 'rgba(255,255,255,0)',
   'paneProperties.horzGridProperties.color': 'rgba(255,255,255,0)',
+  'mainSeriesProperties.minTick': '1000000000,1,false',
 }
 
-export const useChartConfig = () => {
-  return {
-    chartConfig,
-    chartOverrides,
-  }
+export const chartConfig = {
+  options,
+  overrides,
 }

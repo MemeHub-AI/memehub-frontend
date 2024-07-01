@@ -78,6 +78,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
       setTargetAmount('0')
       return
     }
+    if (BigNumber(value.toString()).lte(0)) return
     if (isBuy) return calcAmountForBuy()
     if (isSell) return calcAmountForSell()
   }

@@ -22,6 +22,7 @@ export const FollowCard = ({ card, refetchList }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { refetchUserInfo, userInfo } = useAccountContext()
+  console.log('refetch', card.is_follower)
   const { follow, unfollow } = useUser({
     onFollowSuccess: card.is_follower ? refetchList : refetchUserInfo,
   })

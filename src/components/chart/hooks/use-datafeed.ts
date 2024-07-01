@@ -6,11 +6,11 @@ import type {
   LibrarySymbolInfo,
 } from '../../../../public/js/charting_library/charting_library'
 
-import { useDatafeedConfig } from './use-datafeed-config'
 import { useDatafeedCache } from './use-datafeed-cache'
 import { useDatafeedWebsocket } from './use-datafeed-websocket'
 import { useChartUtils } from './use-chart-utils'
 import { useStorage } from '@/hooks/use-storage'
+import { datafeedConfig } from '@/config/datafeed'
 
 export const useDatafeed = () => {
   const { query } = useRouter()
@@ -19,17 +19,23 @@ export const useDatafeed = () => {
 
   const { getInterval, setInterval } = useStorage()
   const interval = getInterval(chain, addr) || '1m'
-  const { readyConfig, symbolInfoConfig } = useDatafeedConfig()
   const cache = useDatafeedCache()
   const { listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket({
       onReconnect: () => listenAsync({ interval, token_address: addr }),
     })
-  const { formatInterval, formatBars, formatPricescale } = useChartUtils()
+  const {
+    formatInterval,
+    formatBars,
+    formatPricescale,
+    formatVolumePrecision,
+  } = useChartUtils()
 
   const createDatafeed = () => {
     return {
-      onReady: (callback) => setTimeout(() => callback(readyConfig)),
+      onReady: (callback) => {
+        setTimeout(() => callback(datafeedConfig.readyConfig))
+      },
       searchSymbols(_, __, ___, ____) {},
       async resolveSymbol(symbolName, onResolve, onError, extension) {
         const { data } = await listenAsync({
@@ -39,7 +45,7 @@ export const useDatafeed = () => {
         const bars = formatBars(data)
         const lastBar = last(bars)
         const symbolInfo: LibrarySymbolInfo = {
-          ...symbolInfoConfig,
+          ...datafeedConfig.symbolInfo,
           name: symbolName,
           full_name: symbolName,
           description: symbolName,
