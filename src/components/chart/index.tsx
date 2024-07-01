@@ -65,10 +65,13 @@ export const Chart = memo(() => {
           >
             <TabsContent
               value={ChartType.Memehub.toString()}
-              className="h-full"
+              className="h-full mt-0"
               ref={chartRef}
             ></TabsContent>
-            <TabsContent value={ChartType.Dex.toString()} className="h-full">
+            <TabsContent
+              value={ChartType.Dex.toString()}
+              className="h-full mt-0"
+            >
               <DexToolsChart className="h-full w-full" />
             </TabsContent>
           </div>
