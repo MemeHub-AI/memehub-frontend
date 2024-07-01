@@ -10,10 +10,11 @@ interface Props {
   total: number
   isLoading: boolean
   isPending?: boolean
+  refetchList: () => void
 }
 
 export const FollowingCards = (props: Props) => {
-  const { cards, total, isLoading, isPending } = props
+  const { cards, total, isLoading, isPending, refetchList } = props
   const { t } = useTranslation()
 
   return (
@@ -24,7 +25,7 @@ export const FollowingCards = (props: Props) => {
       nullback={<p className="text-zinc-500">{t('follow.no-following')}</p>}
     >
       {cards.map((f, i) => (
-        <FollowCard card={f} key={i} />
+        <FollowCard card={f} key={i} refetchList={refetchList} />
       ))}
     </CustomSuspense>
   )

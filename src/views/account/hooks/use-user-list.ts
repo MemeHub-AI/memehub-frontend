@@ -33,6 +33,7 @@ export const useUserList = (type: UserListType) => {
     isLoading,
     isFetching,
     fetchNextPage,
+    refetch,
   } = useInfiniteQuery({
     queryKey: [userApi.list.name, tokenAddr, type],
     queryFn: ({ pageParam }) => {
@@ -74,5 +75,6 @@ export const useUserList = (type: UserListType) => {
     isLoading,
     isFetching,
     fetchNextPage,
+    refetch,
   }
 }

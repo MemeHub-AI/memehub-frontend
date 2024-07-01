@@ -39,9 +39,9 @@ export const userApi = {
       `/api/v1/user/users/${addr}/followers/`
     )
   },
-  unfollow(addr: string) {
+  unfollow(id: string) {
     return api.DELETE<ApiResponse<UserInfoRes>>(
-      `/api/v1/user/users/${addr}/followers/`
+      `/api/v1/user/users/${id}/followers/`
     )
   },
 }
