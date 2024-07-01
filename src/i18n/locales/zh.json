@@ -244,7 +244,7 @@
   "purchase.number.max": "最多参与 ",
   "chain.empty": "找不到原生代币或路由地址",
   "trade.buy": "买",
-  "trade.sell": "出售",
+  "trade.sell": "卖",
   "all": "所有",
   "addr.empty": "找不到合约地址",
   "not.involved": "购买阶段已经结束，但你没有参与购买",
@@ -429,5 +429,6 @@
   "airdrop.claimed.hide": "隐藏已领取的",
   "dex": "DEX",
   "listed": "已发射",
-  "contract.err.gas-estimate": "预估 Gas 失败，请重试"
+  "contract.err.gas-estimate": "预估 Gas 失败，请重试",
+  "token.already-listed": "已成功发射到去中心化交易所"
 }

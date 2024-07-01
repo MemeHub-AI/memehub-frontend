@@ -8,10 +8,12 @@ export const resources: Resource = {
   en: {
     name: 'English',
     translation: EN,
+    iso31661: 'en',
   },
   zh: {
     translation: ZH,
     name: '中文',
+    iso31661: 'cn',
   },
 }
 

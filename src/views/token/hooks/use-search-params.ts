@@ -4,7 +4,7 @@ import { Address } from 'viem'
 export const useTradeSearchParams = () => {
   const { query } = useRouter()
 
-  const chainName = (query.chain ?? '') as Address
+  const chainName = (query.chain ?? '') as string
   const tokenAddr = (query.address ?? '') as Address
   const referralCode = (query.r ?? '') as string
 

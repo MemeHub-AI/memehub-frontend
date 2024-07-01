@@ -17,6 +17,8 @@ import { fmt } from '@/utils/fmt'
 import { utilLang } from '@/utils/lang'
 import { LISTED_MARKET_CAP } from '@/constants/trade'
 import { useResponsive } from '@/hooks/use-responsive'
+import { Badge } from '@/components/ui/badge'
+import { isListed } from '@/utils/token'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -84,6 +86,14 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
               )
             }}
           />
+          {isListed(tokenInfo?.status) && (
+            <Badge
+              variant="success"
+              className="absolute -bottom-14 left-1/2 -translate-x-1/2 border-black"
+            >
+              {t('listed')}
+            </Badge>
+          )}
         </div>
 
         {/* Name/symbol */}

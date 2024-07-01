@@ -7,6 +7,8 @@ import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { useTokenProgressV3 } from '../hooks/trade-v3/use-token-progress'
+import { isListed } from '@/utils/token'
+import { Badge } from '@/components/ui/badge'
 
 interface Props extends ComponentProps<'div'> {
   showDesc?: boolean
@@ -23,12 +25,20 @@ export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
     : ` ${fmt.decimals(total, 3)} ${nativeSymbol} `
 
   return (
-    <div className={cn('flex-1', className)}>
+    <div className={cn('flex-1 relative', className)}>
       <Progress
         className="h-6 border-2 border-black rounded-md"
-        indicatorClass="bg-lime-green "
-        value={progress}
+        indicatorClass="bg-lime-green"
+        value={isListed(tokenInfo?.status) ? 100 : progress}
       />
+      {isListed(tokenInfo?.status) && (
+        <Badge
+          variant="success"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-3 whitespace-nowrap"
+        >
+          {t('token.already-listed')}
+        </Badge>
+      )}
       {showDesc && (
         <div className="text-zinc-400 text-xs mt-2">
           {t('bonding-curve.token').replace('{}', threshold)}
