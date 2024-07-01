@@ -107,6 +107,7 @@ export const CreateTokenStatusDialog = () => {
     )
   }
 
+  // Submit token info
   if (isCreatingToken) {
     return (
       <AlertDialog
