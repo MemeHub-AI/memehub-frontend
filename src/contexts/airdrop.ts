@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 
-import { ERR } from '@/errors'
+import { CONTEXT_ERR } from '@/errors/context'
 
 interface Value {
   hideClaimed: boolean
@@ -12,7 +12,9 @@ export const AirdropProvider = Context.Provider
 
 export const useAirdropContext = () => {
   const ctx = useContext(Context)
+  if (!ctx) {
+    throw CONTEXT_ERR.notFound('AirdropProvider')
+  }
 
-  if (!ctx) throw ERR.notFound('AirdropProvider')
   return ctx
 }

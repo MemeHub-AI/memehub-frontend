@@ -26,12 +26,13 @@ export const CommentForm = (props: Props) => {
     comment: createField({}),
   })
   const inputRef = useRef<HTMLInputElement>(null)
-  const { url, file, onChangeUpload, clearFile } = useUploadImage({
+  const { url, file, isUploading, onChangeUpload, clearFile } = useUploadImage({
     inputEl: inputRef.current,
   })
   // Generate unique id.
   const inputId = useMemo(nanoid, [])
   const textareaId = useMemo(nanoid, [])
+  const disabled = isCommenting || isUploading
 
   const onChange = ({
     target,
@@ -66,18 +67,18 @@ export const CommentForm = (props: Props) => {
         value={fields.comment.value}
         onChange={onChange}
         rows={4}
-        disabled={isCommenting}
+        disabled={disabled}
       />
 
       <div className="flex items-center gap-2">
-        <Button className="px-10" disabled={isCommenting}>
+        <Button className="px-10" disabled={disabled}>
           {t('comment')}
         </Button>
         <Label
           htmlFor={inputId}
           variant="icon"
           className={cn(shadowVariants(), 'shadow')}
-          disabled={isCommenting}
+          disabled={disabled}
         >
           <ImageIcon className="cursor-pointer" />
         </Label>
@@ -85,6 +86,7 @@ export const CommentForm = (props: Props) => {
         <ImageUpload
           id={inputId}
           ref={inputRef}
+          disabled={disabled}
           onChange={onChangeUpload}
           className="hidden"
         />

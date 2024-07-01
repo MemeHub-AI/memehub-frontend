@@ -1,11 +1,6 @@
-import {
-  createContext,
-  createElement,
-  useContext,
-  type ProviderProps,
-} from 'react'
+import { createContext, useContext } from 'react'
 
-import { ERR } from '@/errors'
+import { CONTEXT_ERR } from '@/errors/context'
 
 interface Value {
   isBuy: boolean
@@ -18,16 +13,13 @@ interface Value {
 
 const TradeContext = createContext<Value | null>(null)
 
-export const TradeProvider = ({ children, value }: ProviderProps<Value>) => {
-  return createElement(TradeContext.Provider, { value }, children)
-}
+export const TradeProvider = TradeContext.Provider
 
 export const useTradeContext = () => {
-  const context = useContext(TradeContext)
-
-  if (!context) {
-    throw ERR.notFound(TradeProvider.name)
+  const ctx = useContext(TradeContext)
+  if (!ctx) {
+    throw CONTEXT_ERR.notFound('TradeProvider')
   }
 
-  return context
+  return ctx
 }

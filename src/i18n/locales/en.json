@@ -381,8 +381,8 @@
   "holder": "Holder",
   "ambassador": "Ambassador",
   "aridrop.claim": "🎁 Claim Airdrop",
-  "reward.direct-invite-count": "Direct Referrals",
-  "reward.indirect-invite-count": "Second-degree Referrals",
+  "reward.direct-invite-count": "First-level referral",
+  "reward.indirect-invite-count": "Second-level referral",
   "reward.record": "Reward records",
   "earned": "Earned",
   "username": "username",
@@ -434,7 +434,7 @@
   "contract.err.token-addr": "Token address is invalid",
   "contract.err.amount": "Amount is invalid",
   "contract.err.balance": "Balance is invalid",
-  "airdrop.claimed.hide": "Hide already claiemd",
+  "airdrop.claimed.hide": "Hide already claimed",
   "dex": "DEX",
   "listed": "Listed"
 }
