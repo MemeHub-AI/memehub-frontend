@@ -1,11 +1,13 @@
+import { zeroAddress } from 'viem'
+
 import { commonAddr } from '@/contract/address'
 import { v3Addr } from './address'
-
 import { makeConfig } from '@/utils/contract'
 import { v3BondingCurveAbi } from './abi/bonding-curve'
 import { v3DistributorAbi } from './abi/distributor'
 import { v3RecommendAbi } from './abi/recommend'
 import { v3Params } from './params'
+import { v3TokenAbi } from './abi/token'
 
 export const getV3Config = (chainId: number | undefined) => {
   if (!chainId) return {}
@@ -27,5 +29,8 @@ export const getV3Config = (chainId: number | undefined) => {
     distributorParams: params.distributor,
 
     recommendConfig: makeConfig(v3RecommendAbi, addr.recommend),
+
+    // Please use token addr to instead `zeroAddress`.
+    tokenConfig: makeConfig(v3TokenAbi, zeroAddress),
   }
 }
