@@ -438,5 +438,7 @@
   "dex": "DEX",
   "listed": "Listed",
   "contract.err.gas-estimate": "Failed to estimate gas. Please try again",
-  "token.already-listed": "Successfully launched on the DEX"
+  "token.already-listed": "Successfully launched on the DEX",
+  "chart.memehub": "Memehub chart",
+  "chart.dex": "DEX chart"
 }
