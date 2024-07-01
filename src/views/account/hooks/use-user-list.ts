@@ -32,6 +32,7 @@ export const useUserList = (type: UserListType) => {
     data = { list: [], total: 0 },
     isLoading,
     isFetching,
+    isFetched,
     fetchNextPage,
     refetch,
   } = useInfiniteQuery({
@@ -54,7 +55,8 @@ export const useUserList = (type: UserListType) => {
 
   // Set list mapping.
   useEffect(() => {
-    if (isEmpty(data?.list)) return
+    // if (isEmpty(data?.list)) return
+    if (!isFetched) return
     setListMap((prev) => ({
       ...prev,
       [type]: {
