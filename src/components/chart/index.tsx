@@ -71,6 +71,7 @@ export const Chart = memo(() => {
             <TabsContent
               value={ChartType.Dex.toString()}
               className="h-full mt-0"
+              forceMount // Keep mount when switch tab.
             >
               <DexToolsChart className="h-full w-full" />
             </TabsContent>

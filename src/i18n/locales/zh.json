@@ -429,7 +429,7 @@
   "airdrop.claimed.hide": "隐藏已领取的",
   "dex": "DEX",
   "contract.err.gas-estimate": "预估 Gas 失败，请重试",
-  "token.already-listed": "已成功发射到去中心化交易所",
+  "token.already-listed": "已从 Memehub 毕业登上了 DEX",
   "chart.memehub": "Memehub 图表",
   "chart.dex": "DEX 图表",
   "token.graduated": "已毕业"
