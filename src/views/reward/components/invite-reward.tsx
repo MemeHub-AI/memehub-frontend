@@ -25,7 +25,10 @@ export const InviteReward = ({ className }: ComponentProps<'h2'>) => {
         isPending={false}
         fallback={<>Waiting for fill</>}
         container="div"
-        className="grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 2xl:w-3/4"
+        className={cn(
+          'grid gap-3 grid-cols-2 md:grid-cols-3 lg:grid-cols-4',
+          '2xl:grid-cols-5 2xl:max-w-256'
+        )}
       >
         {rewardList.map((r, i) => (
           <InviteCard key={i} c={r} />
