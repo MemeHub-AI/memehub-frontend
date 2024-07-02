@@ -48,10 +48,10 @@ export const commonAddr = {
     reserveToken: '0x07B9c47452C41e8E00f98aC4c075F5c443281d2A',
     router: '0xd38fd047a692c0ae627929a88e5f435d5f777efa',
   },
-  [zkSyncSepoliaTestnet.id]: {
-    reserveToken: '0x000000000000000000000000000000000000800A',
-    router: '',
-  },
+  // [zkSyncSepoliaTestnet.id]: {
+  //   reserveToken: '0x000000000000000000000000000000000000800A',
+  //   router: '',
+  // },
 
   // mainnet.
   [mainnet.id]: {
@@ -78,12 +78,12 @@ export const commonAddr = {
     reserveToken: '0x4300000000000000000000000000000000000004',
     router: '0xBB66Eb1c5e875933D44DAe661dbD80e5D9B03035',
   },
-  [fantom.id]: {
-    reserveToken: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
-    router: '',
-  },
-  [zkSync.id]: {
-    reserveToken: '0x000000000000000000000000000000000000800A',
-    router: '',
-  },
+  // [fantom.id]: {
+  //   reserveToken: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',
+  //   router: '',
+  // },
+  // [zkSync.id]: {
+  //   reserveToken: '0x000000000000000000000000000000000000800A',
+  //   router: '',
+  // },
 } as const

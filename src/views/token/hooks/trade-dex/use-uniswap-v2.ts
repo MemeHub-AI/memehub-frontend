@@ -16,7 +16,8 @@ export const useUniswapV2 = () => {
   const { address, chainId } = useAccount()
   const { isApproving, approvalForAll } = useApprove()
 
-  const { reserveToken } = commonAddr[chainId as keyof typeof commonAddr] || {}
+  const { reserveToken, router } =
+    commonAddr[chainId as keyof typeof commonAddr] || {}
 
   const {
     data: hash,
@@ -57,13 +58,14 @@ export const useUniswapV2 = () => {
     logger('uniswap buy', amount, token)
     writeContract({
       ...uniswapV2Config,
+      address: router,
       chainId,
       functionName: 'swapExactETHForTokens',
       args: [
         BigInt(0),
         [reserveToken, token],
         address!,
-        BigInt(dayjs().unix()),
+        BigInt(dayjs().unix() + 60),
       ],
       value: parseEther(amount),
     })
@@ -79,6 +81,7 @@ export const useUniswapV2 = () => {
     logger('uniswap sell', amount, token)
     writeContract({
       ...uniswapV2Config,
+      address: router,
       chainId,
       functionName: 'swapExactTokensForETH',
       args: [
@@ -86,7 +89,7 @@ export const useUniswapV2 = () => {
         BigInt(0),
         [token, reserveToken],
         address!,
-        BigInt(dayjs().unix()),
+        BigInt(dayjs().unix() + 60),
       ],
     })
   }
