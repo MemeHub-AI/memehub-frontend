@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { User } from 'lucide-react'
+import { ChevronDown, User } from 'lucide-react'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { WalletDisconnector } from './disconnector'
@@ -22,6 +22,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { fmt } from '@/utils/fmt'
+import { cn } from '@/lib/utils'
 
 export const WalletAccount = () => {
   const { t } = useTranslation()
@@ -78,18 +80,23 @@ export const WalletAccount = () => {
       )
     } else {
       return (
-        <HoverCard openDelay={100}>
-          <HoverCardTrigger>
-            <Avatar
-              src={userInfo?.logo || ''}
-              fallback={userInfo?.wallet_address.slice(-4)}
-              size={isMobile ? 32 : 36}
-              className="rounded-lg cursor-pointer select-none"
-              fallbackClass="rounded-lg text-xs"
-              shadow="default"
-            />
+        <HoverCard openDelay={100} onOpenChange={setOpen}>
+          <HoverCardTrigger asChild>
+            <Button className="flex items-center px-1 gap-1">
+              <Avatar
+                src={userInfo?.logo || ''}
+                fallback={fmt.addr(userInfo?.wallet_address)}
+                size={28}
+                className="border-2 border-black"
+              />
+              <p>{fmt.addr(userInfo?.wallet_address)}</p>
+              <ChevronDown
+                size={18}
+                className={cn('duration-300', open && ' rotate-180')}
+              />
+            </Button>
           </HoverCardTrigger>
-          <HoverCardContent className="flex flex-col mr-5 p-1 w-40">
+          <HoverCardContent className="flex flex-col p-1 w-40">
             <Button
               className="w-full gap-2 justify-start"
               variant="ghost"
