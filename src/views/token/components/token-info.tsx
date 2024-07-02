@@ -91,7 +91,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
               variant="success"
               className="absolute -bottom-14 left-1/2 -translate-x-1/2 border-black"
             >
-              {t('listed')}
+              {t('token.graduated')}
             </Badge>
           )}
         </div>

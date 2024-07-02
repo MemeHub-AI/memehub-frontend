@@ -428,9 +428,9 @@
   "contract.err.balance": "余额错误",
   "airdrop.claimed.hide": "隐藏已领取的",
   "dex": "DEX",
-  "listed": "已发射",
   "contract.err.gas-estimate": "预估 Gas 失败，请重试",
   "token.already-listed": "已成功发射到去中心化交易所",
   "chart.memehub": "Memehub 图表",
-  "chart.dex": "DEX 图表"
+  "chart.dex": "DEX 图表",
+  "token.graduated": "已毕业"
 }
