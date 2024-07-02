@@ -6,6 +6,7 @@ const baseWidth = {
   100: '28rem',
   128: '32rem',
   42: '10.5rem',
+  256: '64rem',
 }
 
 const baseHeight = {
