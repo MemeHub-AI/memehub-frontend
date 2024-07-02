@@ -158,7 +158,8 @@ const Burn = (props: BurmProps) => {
 
     if (diff <= 0) {
       setIsExpired(true)
-      return
+    } else {
+      setIsExpired(false)
     }
   }
 
