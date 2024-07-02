@@ -57,6 +57,7 @@ export const useUniswapV2 = () => {
     logger('uniswap buy', amount, token)
     writeContract({
       ...uniswapV2Config,
+      chainId,
       functionName: 'swapExactETHForTokens',
       args: [
         BigInt(0),
@@ -78,6 +79,7 @@ export const useUniswapV2 = () => {
     logger('uniswap sell', amount, token)
     writeContract({
       ...uniswapV2Config,
+      chainId,
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),

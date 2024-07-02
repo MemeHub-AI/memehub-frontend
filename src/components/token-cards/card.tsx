@@ -48,7 +48,7 @@ export const TokenCard = (props: Props) => {
           variant="success"
           className="absolute left-0 top-0 rounded-l-none rounded-tr-none"
         >
-          {t('listed')}
+          {t('token.graduated')}
         </Badge>
       )}
 

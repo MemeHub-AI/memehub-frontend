@@ -428,11 +428,11 @@
   "contract.err.balance": "余额错误",
   "airdrop.claimed.hide": "隐藏已领取的",
   "dex": "DEX",
-  "listed": "已发射",
   "contract.err.gas-estimate": "预估 Gas 失败，请重试",
-  "token.already-listed": "已成功发射到去中心化交易所",
+  "token.already-listed": "已从 Memehub 毕业登上了 DEX",
   "chart.memehub": "Memehub 图表",
   "chart.dex": "DEX 图表",
+  "token.graduated": "已毕业",
   "burn": "燃烧代币",
   "burn.token,desc": "当前有$1 TrumpCat到期未领取，  你可以选择将他们销毁",
   "burn.button": "🔥燃烧$1"
