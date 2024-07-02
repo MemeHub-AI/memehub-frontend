@@ -16,12 +16,14 @@ export const useReward = (chainId: number) => {
 
   const { data: total = BI_ZERO, refetch: refetchAmount } = useReadContract({
     ...recommendConfig!,
+    chainId,
     functionName: 'obtainedAmount',
     args: [address!],
     query: { enabled: !!recommendConfig && !!address },
   })
   const { data: claimed = BI_ZERO, refetch: refetchClaimed } = useReadContract({
     ...recommendConfig!,
+    chainId,
     functionName: 'alreadyClaimed',
     args: [address!],
     query: { enabled: !!recommendConfig && !!address },
