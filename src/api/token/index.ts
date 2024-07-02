@@ -40,9 +40,7 @@ export const tokenApi = {
   addComment(req: TokenAddCommentReq) {
     return api.POST<ApiResponse<TokenCommentListRes>>(
       '/api/v1/coin/comments/',
-      {
-        body: req,
-      }
+      { body: req }
     )
   },
   like(addr: string) {

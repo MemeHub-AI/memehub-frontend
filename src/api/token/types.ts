@@ -80,6 +80,7 @@ export interface TokenAddCommentReq {
   content: string
   img?: string
   related_comments: string[]
+  chain: string
 }
 
 export interface CreateTokenResult {
