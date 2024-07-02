@@ -1,12 +1,10 @@
-import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
-import type { Address } from 'viem'
 
 import { tokenApi } from '@/api/token'
+import { useTradeSearchParams } from './use-search-params'
 
 export const useTokenInfo = () => {
-  const { query } = useRouter()
-  const tokenAddr = (query.address || '') as Address
+  const { chainName, tokenAddr } = useTradeSearchParams()
 
   const {
     data: { data: tokenInfo } = {},
@@ -18,7 +16,7 @@ export const useTokenInfo = () => {
   } = useQuery({
     enabled: !!tokenAddr,
     queryKey: [tokenApi.details.name, tokenAddr],
-    queryFn: () => tokenApi.details(tokenAddr),
+    queryFn: () => tokenApi.details(chainName, tokenAddr),
     refetchOnWindowFocus: false,
   })
 

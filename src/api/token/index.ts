@@ -3,7 +3,6 @@ import { qs } from '@/hooks/use-fetch'
 
 import type {
   TokenNewReq,
-  TokenNewRes,
   TokenUpdateReq,
   TokenListItem,
   TokenCommentListRes,
@@ -28,8 +27,10 @@ export const tokenApi = {
       body: req,
     })
   },
-  details(addr: string) {
-    return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${addr}/`)
+  details(chain: string, addr: string) {
+    return api.GET<ApiResponse<TokenListItem>>(
+      `/api/v1/coin/coins/${chain}/${addr}`
+    )
   },
   commentList(addr: string, req: PaginationReq) {
     return api.GET<ApiResponse<PaginationRes<TokenCommentListRes>>>(
