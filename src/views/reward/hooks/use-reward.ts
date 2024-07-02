@@ -1,4 +1,9 @@
-import { useAccount, useReadContract, useWriteContract } from 'wagmi'
+import {
+  useAccount,
+  useReadContract,
+  useSwitchChain,
+  useWriteContract,
+} from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { toast } from 'sonner'
@@ -11,8 +16,9 @@ import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useReward = (chainId: number) => {
   const { t } = useTranslation()
-  const { address } = useAccount()
+  const { address, chainId: accountChainId } = useAccount()
   const { recommendConfig } = getV3Config(chainId)
+  const { switchChainAsync } = useSwitchChain()
 
   const { data: total = BI_ZERO, refetch: refetchAmount } = useReadContract({
     ...recommendConfig!,
@@ -56,9 +62,13 @@ export const useReward = (chainId: number) => {
   })
   const isClaiming = isPending || isFetching
 
-  const claimReward = () => {
+  const claimReward = async () => {
     if (!recommendConfig) {
       CONTRACT_ERR.configNotFound()
+      return
+    }
+    if (accountChainId !== chainId) {
+      await switchChainAsync({ chainId }).catch(() => {})
       return
     }
 

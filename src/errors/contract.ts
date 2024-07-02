@@ -54,6 +54,7 @@ export const CONTRACT_ERR = {
   tradeFailed: () => toast.error(t('contract.err.trade')),
   approveFailed: () => toast.error(t('contract.err.approve')),
   claimFailed: () => toast.error(t('contract.err.claim')),
+  chainChangeFailed: () => toast.error(t('contract.err.chain-failed')),
 
   // Invalid.
   tokenInvalid: () => toast.error(t('contract.err.token-addr')),

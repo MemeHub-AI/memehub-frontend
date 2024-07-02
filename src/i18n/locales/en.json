@@ -446,5 +446,6 @@
   "burn.button": "🔥Burn $1",
   "pool": "Pool",
   "holder.burning": "Burning",
-  "reward.title": "Memehub Reward"
+  "reward.title": "Memehub Reward",
+  "contract.err.chain-failed": "Switch chain failed"
 }
