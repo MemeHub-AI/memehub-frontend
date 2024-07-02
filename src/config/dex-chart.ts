@@ -1,4 +1,4 @@
-export const dexChartBaseUrl = 'https://www.dextools.io/widget-chart'
+export const dexChartBaseUrl = 'https://dexscreener.com'
 
 export const dexChainMap = {
   bsc: 'bnb',
