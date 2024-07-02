@@ -32,9 +32,9 @@ export const tokenApi = {
       `/api/v1/coin/coins/${chain}/${addr}`
     )
   },
-  commentList(addr: string, req: PaginationReq) {
+  commentList(chain: string, addr: string, req: PaginationReq) {
     return api.GET<ApiResponse<PaginationRes<TokenCommentListRes>>>(
-      `/api/v1/coin/comments/${addr}/` + qs.stringify(req)
+      `/api/v1/coin/comments/${chain}/${addr}/` + qs.stringify(req)
     )
   },
   addComment(req: TokenAddCommentReq) {

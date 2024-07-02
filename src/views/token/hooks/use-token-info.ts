@@ -15,7 +15,7 @@ export const useTokenInfo = () => {
     refetch: refetchInfo,
   } = useQuery({
     enabled: !!tokenAddr,
-    queryKey: [tokenApi.details.name, tokenAddr],
+    queryKey: [tokenApi.details.name, chainName, tokenAddr],
     queryFn: () => tokenApi.details(chainName, tokenAddr),
     refetchOnWindowFocus: false,
   })

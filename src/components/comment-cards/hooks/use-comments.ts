@@ -8,7 +8,7 @@ import { TokenCommentListRes } from '@/api/token/types'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 
 export const useComments = (enableFetchComments = true) => {
-  const { tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTradeSearchParams()
   const uniqueId = useMemo(nanoid, [])
 
   const {
@@ -19,7 +19,7 @@ export const useComments = (enableFetchComments = true) => {
     fetchNextPage,
   } = useInfiniteQuery({
     enabled: enableFetchComments,
-    queryKey: [tokenApi.commentList.name + uniqueId, tokenAddr],
+    queryKey: [tokenApi.commentList.name + uniqueId, chainName, tokenAddr],
     refetchOnWindowFocus: false,
     initialPageParam: 1,
     queryFn: ({ pageParam }) => {
@@ -27,7 +27,7 @@ export const useComments = (enableFetchComments = true) => {
 
       // Claer when query.
       setComments([])
-      return tokenApi.commentList(tokenAddr, {
+      return tokenApi.commentList(chainName, tokenAddr, {
         page: pageParam,
         page_size: 25,
       })
