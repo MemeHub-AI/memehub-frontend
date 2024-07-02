@@ -308,7 +308,7 @@
   "platform.airdrop": "Opportunity to receive abundant platform airdrops",
   "apply.community": "Apply for Community Collaboration",
   "community.airdrops": "Community members can permanently receive a large number of airdrops",
-  "airdrop.you": "🎁 Airdrop for you",
+  "airdrop.you": "🎁 Airdrops for you",
   "claim.airdrop": "Go to Claim",
   "expired": "Expired",
   "check.wallet.airdrop": "View available airdrops to claim",
@@ -443,5 +443,7 @@
   "token.graduated": "Graduated",
   "burn": "Burn",
   "burn.token,desc": "There are $1 TrumpCat that have expired and remain unclaimed. You have the option to choose to destroy them",
-  "burn.button": "🔥Burn $1"
+  "burn.button": "🔥Burn $1",
+  "pool": "Pool",
+  "holder.burning": "Burning"
 }

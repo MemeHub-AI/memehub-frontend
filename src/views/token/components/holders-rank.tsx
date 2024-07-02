@@ -1,6 +1,7 @@
 import React, { type ComponentProps } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+import { zeroAddress } from 'viem'
 
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
@@ -12,12 +13,18 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { holders } = useHolders()
 
-  const getLabel = (flag: string) => {
-    flag = flag.toLowerCase()
+  const getLabel = (holder: (typeof holders)[number]) => {
+    const { contract_flag, address } = holder
+    const flag = (contract_flag || '').toLowerCase()
+
+    // Zero addr.
+    if (address === zeroAddress) {
+      return `🔥${t('holder.burning')}`
+    }
 
     // Bonding curve.
     if (flag.includes('bonding')) {
-      return `(💰${t('bonding-curve')})`
+      return `(💰${t('pool')})`
     }
 
     // Creator or dev.
@@ -58,7 +65,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
                 >
                   {fmt.addr(r.address)}
                 </Link>
-                {getLabel(r.contract_flag ?? '')}
+                {getLabel(r)}
               </p>
               <span>{fmt.percent(r.percentage)}</span>
             </li>
