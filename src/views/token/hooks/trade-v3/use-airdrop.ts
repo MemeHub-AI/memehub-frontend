@@ -1,6 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useWriteContract } from 'wagmi'
+import {
+  useChainId,
+  useReadContract,
+  useSwitchChain,
+  useWriteContract,
+} from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
@@ -24,10 +29,13 @@ export const useAirdrop = (
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
+  const clientChianId = useChainId()
   const { distributorConfig } = getV3Config(chainId)
   const uniqueKey = useMemo(nanoid, [])
   const { setIsCalimingAirdrop } = useAirdropStore()
+  const { switchChain } = useSwitchChain()
   const [isClaim, setIsCalim] = useState(false)
+  const [isBurning, setBurning] = useState(false)
 
   // Query airdrop details.
   const { data: { data } = {}, refetch } = useQuery({
@@ -39,6 +47,16 @@ export const useAirdrop = (
         type_list,
         token_address: tokenAddr,
       })
+    },
+  })
+
+  const { data: isBurn } = useReadContract({
+    ...distributorConfig!,
+    functionName: 'isBurn',
+    args: [BigInt(id)],
+    chainId,
+    query: {
+      refetchInterval: 5_000,
     },
   })
 
@@ -54,6 +72,7 @@ export const useAirdrop = (
       onError: (e) => CONTRACT_ERR.exec(e),
     },
   })
+
   const { isFetching: isWaitingClaim } = useWaitForTx({
     hash,
     onLoading: () => toast.loading(t('tx.waiting')),
@@ -67,12 +86,13 @@ export const useAirdrop = (
       ),
     onFillay: () => {
       toast.dismiss()
+      setBurning(false)
       reset()
       refetch()
       onFinlly?.()
     },
   })
-  const isClaiming = isSubmittingClaim || isWaitingClaim
+  const isClaiming = isSubmittingClaim || isWaitingClaim || isBurning
 
   const claim = () => {
     if (!distributorConfig) {
@@ -103,7 +123,10 @@ export const useAirdrop = (
   }
 
   const burn = () => {
-    setIsCalim(false)
+    if (chainId !== clientChianId) {
+      return switchChain({ chainId })
+    }
+    setBurning(true)
     writeContract({
       ...distributorConfig!,
       functionName: 'burnToken',
@@ -119,6 +142,7 @@ export const useAirdrop = (
   return {
     isSubmittingClaim,
     isClaiming,
+    isBurn,
     claim,
     burn,
     resetClaim: reset,

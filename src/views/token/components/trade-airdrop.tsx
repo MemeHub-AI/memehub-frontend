@@ -1,4 +1,4 @@
-import React, { ComponentProps, useMemo, useState } from 'react'
+import React, { ComponentProps, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { useQuery } from '@tanstack/react-query'
@@ -18,17 +18,16 @@ import { AirdropItem } from '@/api/airdrop/types'
 import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
 import { MarketType } from '@/api/token/types'
 import { useUserStore } from '@/stores/use-user-store'
+import { useInterval } from 'react-use'
+import dayjs from 'dayjs'
+import { useAccount } from 'wagmi'
 
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { userInfo } = useUserStore()
 
-  const {
-    data: { data = [] } = {},
-    isFetching,
-    refetch,
-  } = useQuery({
+  const { data: { data = [] } = {} } = useQuery({
     queryKey: [airdropApi.getDetails.name, chainName, tokenAddr, userInfo?.id],
     queryFn: () => {
       if (userInfo?.id == null) return Promise.reject()
@@ -48,30 +47,164 @@ export const TradeAirdrop = () => {
     [data]
   )
 
+  const burnTotal = () => {
+    if (kol && communities) {
+      return BigNumber(kol.amount).plus(BigNumber(communities.amount))
+    } else if (kol) {
+      return BigNumber(kol.amount)
+    } else if (communities) {
+      return BigNumber(communities.amount)
+    }
+  }
+
   if (isEmpty(data)) return
 
   return (
-    <div className="mt-2.5 gap-4 border-2 border-black rounded-lg pt-3 pb-2">
-      <h2 className="font-bold text-lg ml-3 w-fit">{t('airdrop')}</h2>
-      <div className="flex items-center gap-3">
-        {kol && (
-          <AirdropCard
-            className={cn('w-full', isOnlyOne && 'w-1/2')}
-            airdrop={kol}
-            suffix={t('ambassador')}
-            typeList={MarketType.Kol}
-            isKol
-          />
-        )}
-        {communities && (
-          <AirdropCard
-            className={cn('w-full', isOnlyOne && 'w-1/2')}
-            airdrop={communities}
-            suffix={t('holder')}
-            typeList={MarketType.Community}
-            isCommunity
-          />
-        )}
+    <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
+      <div className="mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 flex-1">
+        <h2 className="font-bold text-lg ml-4 w-fit">{t('airdrop')}</h2>
+        <div className="flex items-center flex-wrap max-sm:flex-col px-1">
+          {kol && (
+            <AirdropCard
+              className={cn(
+                'w-[50%]',
+                !communities ? '!w-full' : '',
+                isOnlyOne && 'w-1/2 max-sm:w-full'
+              )}
+              airdrop={kol}
+              suffix={t('ambassador')}
+              typeList={MarketType.Kol}
+              isKol
+            />
+          )}
+          {communities && (
+            <AirdropCard
+              className={cn(
+                'w-[50%]',
+                !kol ? '!w-full' : '',
+                isOnlyOne && 'w-1/2 max-sm:w-full'
+              )}
+              airdrop={communities}
+              suffix={t('holder')}
+              typeList={MarketType.Community}
+              isCommunity
+            />
+          )}
+          {communities && communities ? (
+            <Burn
+              airdrop={kol! || communities!}
+              suffix={t('ambassador')}
+              typeList={MarketType.Kol}
+              className={'border-none w-[50%] mt-0'}
+              burnNumber={burnTotal()}
+              onburn={() => {}}
+            />
+          ) : null}
+        </div>
+      </div>
+      {!communities || !communities ? (
+        <Burn
+          airdrop={kol! || communities!}
+          suffix={t('ambassador')}
+          typeList={MarketType.Kol}
+          className="flex-1 p-1 max-sm:pb-3"
+          burnNumber={burnTotal()}
+          onburn={() => {}}
+        />
+      ) : null}
+    </div>
+  )
+}
+
+interface BurmProps {
+  className?: string
+  burnNumber?: BigNumber
+  airdrop: AirdropItem
+  suffix: string
+  typeList: number
+  isKol?: boolean
+  isCommunity?: boolean
+  onburn: () => void
+}
+
+const Burn = (props: BurmProps) => {
+  const { className, typeList, airdrop, burnNumber } = props
+  const { t } = useTranslation()
+  const { tokenInfo } = useTokenContext()
+  const { address } = useAccount()
+  const [isExpired, setIsExpired] = useState(false)
+
+  const { total, claimed, durationSeconds, refetch, refetchIsClaimed } =
+    useAirdropInfo(typeList, airdrop.chain, airdrop.distribution_id)
+  const m = BigNumber(total).minus(claimed).div(100).multipliedBy(burnNumber!)
+
+  const burnText = `${m?.toFormat()} ${tokenInfo?.ticker}`
+
+  const {
+    isClaiming: isBurning,
+    isBurn,
+    burn,
+  } = useAirdrop(airdrop.distribution_id, typeList.toString(), () => {
+    refetch()
+    refetchIsClaimed()
+  })
+
+  const countdown = () => {
+    const currentTime = dayjs()
+    const diff = dayjs
+      .unix(airdrop.create)
+      .add(durationSeconds, 'second')
+      .diff(currentTime, 'second')
+
+    if (diff <= 0) {
+      setIsExpired(true)
+      return
+    }
+  }
+
+  useInterval(countdown, 1000)
+
+  useEffect(() => {
+    countdown()
+  }, [])
+
+  // if (tokenInfo?.creator.wallet_address !== address) {
+  //   return <div className="flex-1"></div>
+  // }
+
+  if (!isExpired || isBurn) {
+    return <div className="flex-1"></div>
+  }
+
+  return (
+    <div
+      className={cn(
+        'mt-2.5 gap-4 border-2 border-black rounded-lg pt-3 pb-2 relative max-sm:mt-0',
+        className
+      )}
+    >
+      <div className="px-3 flex flex-col justify-between">
+        <div>
+          <div className="hidden"></div>
+          <h2 className="font-bold text-lg w-fit">{t('burn')}</h2>
+          <div className="flex h-[120px] items-center">
+            <div className="mr-[120px]">
+              {t('burn.token,desc').replace('$1', burnText)}
+            </div>
+            <img
+              src="/images/burn.png"
+              alt="burn"
+              className="w-[120px] h-[120px] ml-2 absolute top-0 right-4"
+            />
+          </div>
+        </div>
+        <Button
+          className={cn('w-full', 'bg-lime-green-deep')}
+          disabled={isBurning}
+          onBlur={burn}
+        >
+          {t('burn.button').replace('$1', burnText)}
+        </Button>
       </div>
     </div>
   )
@@ -115,7 +248,7 @@ const AirdropCard = (props: AirdropCardProps) => {
       padding="md"
       shadow="none"
       border="none"
-      className={cn('cursor-[unset]', className)}
+      className={cn('cursor-[unset] pb-0', className)}
     >
       <div className="flex items-center gap-2 justify-between">
         <div className="bg-lime-green flex items-center gap-2 rounded-md pr-2">
@@ -149,7 +282,7 @@ const AirdropCard = (props: AirdropCardProps) => {
           {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
         </div>
       </div>
-      <div className="mt-3 flex justify-between gap-4">
+      <div className="mt-4 flex justify-between gap-4">
         <Button
           className={cn('flex-1', !isClaimed && 'bg-lime-green-deep')}
           disabled={disabled}

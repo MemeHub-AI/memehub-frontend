@@ -440,5 +440,8 @@
   "token.already-listed": "Already graduated from Memehub and boarded DEX",
   "chart.memehub": "Memehub chart",
   "chart.dex": "DEX chart",
-  "token.graduated": "Graduated"
+  "token.graduated": "Graduated",
+  "burn": "Burn",
+  "burn.token,desc": "There are $1 TrumpCat that have expired and remain unclaimed. You have the option to choose to destroy them",
+  "burn.button": "🔥Burn $1"
 }
