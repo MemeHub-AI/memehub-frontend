@@ -438,5 +438,6 @@
   "burn.button": "🔥燃烧$1",
   "pool": "池子",
   "holder.burning": "黑洞",
-  "reward.title": "Memehub 奖励"
+  "reward.title": "Memehub 奖励",
+  "contract.err.chain-failed": "切换链失败"
 }
