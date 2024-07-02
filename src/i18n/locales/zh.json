@@ -437,5 +437,6 @@
   "burn.token,desc": "当前有$1 TrumpCat到期未领取，  你可以选择将他们销毁",
   "burn.button": "🔥燃烧$1",
   "pool": "池子",
-  "holder.burning": "黑洞"
+  "holder.burning": "黑洞",
+  "reward.title": "Memehub 奖励"
 }
