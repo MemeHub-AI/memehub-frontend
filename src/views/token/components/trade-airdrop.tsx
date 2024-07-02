@@ -140,14 +140,14 @@ const Burn = (props: BurmProps) => {
 
   const burnText = `${m?.toFormat()} ${tokenInfo?.ticker}`
 
-  const {
-    isClaiming: isBurning,
-    isBurn,
-    burn,
-  } = useAirdrop(airdrop.distribution_id, typeList.toString(), () => {
-    refetch()
-    refetchIsClaimed()
-  })
+  const { isBurning, isBurn, burn } = useAirdrop(
+    airdrop.distribution_id,
+    typeList.toString(),
+    () => {
+      refetch()
+      refetchIsClaimed()
+    }
+  )
 
   const countdown = () => {
     const currentTime = dayjs()
@@ -201,7 +201,7 @@ const Burn = (props: BurmProps) => {
         <Button
           className={cn('w-full', 'bg-lime-green-deep')}
           disabled={isBurning}
-          onBlur={burn}
+          onClick={burn}
         >
           {t('burn.button').replace('$1', burnText)}
         </Button>

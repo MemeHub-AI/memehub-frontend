@@ -50,7 +50,7 @@ export const useAirdrop = (
     },
   })
 
-  const { data: isBurn } = useReadContract({
+  const { data: isBurn, refetch: refetchIsBurn } = useReadContract({
     ...distributorConfig!,
     functionName: 'isBurn',
     args: [BigInt(id)],
@@ -68,7 +68,10 @@ export const useAirdrop = (
   } = useWriteContract({
     mutation: {
       onMutate: () => toast.loading(isClaim ? t('claiming') : t('burning')),
-      onSettled: (_, __, ___, id) => toast.dismiss(id),
+      onSettled: (_, __, ___, id) => {
+        toast.dismiss(id)
+        setBurning(false)
+      },
       onError: (e) => CONTRACT_ERR.exec(e),
     },
   })
@@ -85,8 +88,9 @@ export const useAirdrop = (
         isClaim ? t('airdrop.claim.success') : t('airdrop.burn.success')
       ),
     onFillay: () => {
-      toast.dismiss()
       setBurning(false)
+      toast.dismiss()
+      refetchIsBurn()
       reset()
       refetch()
       onFinlly?.()
@@ -126,6 +130,7 @@ export const useAirdrop = (
     if (chainId !== clientChianId) {
       return switchChain({ chainId })
     }
+
     setBurning(true)
     writeContract({
       ...distributorConfig!,
@@ -143,6 +148,7 @@ export const useAirdrop = (
     isSubmittingClaim,
     isClaiming,
     isBurn,
+    isBurning,
     claim,
     burn,
     resetClaim: reset,
