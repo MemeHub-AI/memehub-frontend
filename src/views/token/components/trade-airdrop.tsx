@@ -47,16 +47,6 @@ export const TradeAirdrop = () => {
     [data]
   )
 
-  const burnTotal = () => {
-    if (kol && communities) {
-      return BigNumber(kol.amount).plus(BigNumber(communities.amount))
-    } else if (kol) {
-      return BigNumber(kol.amount)
-    } else if (communities) {
-      return BigNumber(communities.amount)
-    }
-  }
-
   if (isEmpty(data)) return
 
   return (
@@ -90,25 +80,25 @@ export const TradeAirdrop = () => {
               isCommunity
             />
           )}
-          {communities && communities ? (
+          {isOnlyOne || (kol && communities) ? (
             <Burn
+              kol={kol}
+              communities={communities}
               airdrop={kol! || communities!}
               suffix={t('ambassador')}
-              typeList={MarketType.Kol}
               className={'border-none w-[50%] mt-0'}
-              burnNumber={burnTotal()}
               onburn={() => {}}
             />
           ) : null}
         </div>
       </div>
-      {!communities || !communities ? (
+      {!kol && !communities ? (
         <Burn
+          kol={kol}
+          communities={communities}
           airdrop={kol! || communities!}
           suffix={t('ambassador')}
-          typeList={MarketType.Kol}
           className="flex-1 p-1 max-sm:pb-3"
-          burnNumber={burnTotal()}
           onburn={() => {}}
         />
       ) : null}
@@ -121,28 +111,53 @@ interface BurmProps {
   burnNumber?: BigNumber
   airdrop: AirdropItem
   suffix: string
-  typeList: number
   isKol?: boolean
   isCommunity?: boolean
+  kol: AirdropItem | undefined
+  communities: AirdropItem | undefined
   onburn: () => void
 }
 
 const Burn = (props: BurmProps) => {
-  const { className, typeList, airdrop, burnNumber } = props
+  const { className, airdrop, kol, communities } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const { address } = useAccount()
   const [isExpired, setIsExpired] = useState(false)
 
+  const burnTotal = () => {
+    if (kol && communities) {
+      return BigNumber(kol.amount)
+        .multipliedBy(BigNumber(total).minus(claimed).div(100))
+        .plus(
+          BigNumber(communities.amount).multipliedBy(
+            BigNumber(communityTotal).minus(communityClaimed).div(100)
+          )
+        )
+    } else if (kol) {
+      return BigNumber(kol.amount).multipliedBy(
+        BigNumber(total).minus(claimed).div(100)
+      )
+    } else if (communities) {
+      return BigNumber(communities.amount).multipliedBy(
+        BigNumber(communityTotal).minus(communityClaimed).div(100)
+      )
+    }
+  }
   const { total, claimed, durationSeconds, refetch, refetchIsClaimed } =
-    useAirdropInfo(typeList, airdrop.chain, airdrop.distribution_id)
-  const m = BigNumber(total).minus(claimed).div(100).multipliedBy(burnNumber!)
+    useAirdropInfo(MarketType.Kol, airdrop.chain, airdrop.distribution_id)
 
-  const burnText = `${m?.toFormat()} ${tokenInfo?.ticker}`
+  const { total: communityTotal, claimed: communityClaimed } = useAirdropInfo(
+    MarketType.Community,
+    airdrop.chain,
+    airdrop.distribution_id
+  )
+
+  const burnText = `${burnTotal()?.toFormat()} ${tokenInfo?.ticker}`
 
   const { isBurning, isBurn, burn } = useAirdrop(
     airdrop.distribution_id,
-    typeList.toString(),
+    MarketType.Kol.toString(),
     () => {
       refetch()
       refetchIsClaimed()
@@ -189,7 +204,7 @@ const Burn = (props: BurmProps) => {
           <div className="hidden"></div>
           <h2 className="font-bold text-lg w-fit">{t('burn')}</h2>
           <div className="flex h-[120px] items-center">
-            <div className="mr-[120px]">
+            <div className="mr-[125px]">
               {t('burn.token,desc').replace('$1', burnText)}
             </div>
             <img

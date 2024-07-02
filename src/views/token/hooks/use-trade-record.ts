@@ -9,13 +9,17 @@ import {
   isUpdateMessage,
   wsApiURL,
 } from '@/api/websocket'
-import { WSMessageBase, WSTradeRecordMessage } from '@/api/websocket/types'
+import {
+  WSMessageBase,
+  WSMessageType,
+  WSTradeRecordMessage,
+} from '@/api/websocket/types'
 
 export const useTradeRecord = () => {
   const { query } = useRouter()
   const [tradeRecords, setTradeRecords] = useState<WSTradeRecordMessage[]>([])
 
-  const { lastJsonMessage, sendJsonMessage } = useWebSocket<
+  const { lastJsonMessage, sendJsonMessage, getWebSocket } = useWebSocket<
     WSMessageBase<WSTradeRecordMessage[] | null>
   >(wsApiURL.tradeRecord, {
     heartbeat,
@@ -34,6 +38,10 @@ export const useTradeRecord = () => {
 
   useEffect(() => {
     if (!lastJsonMessage || !lastJsonMessage.data) return
+
+    if (lastJsonMessage.type === WSMessageType.ConnectInvalid) {
+      return getWebSocket()?.close()
+    }
 
     setTradeRecords((records) => {
       const merged = [...(lastJsonMessage.data ?? []), ...records]

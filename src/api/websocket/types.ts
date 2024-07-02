@@ -5,12 +5,14 @@ export interface WSMessageBase<T = null> {
   type: string
   message: string
   data: T
+  channel_name: string
 }
 
 export enum WSMessageType {
   Message = 'message',
   Error = 'error',
   Heartbeat = 'heartbeat',
+  ConnectInvalid = 'connect_invalid',
 }
 
 export interface WSTradeLogMessage {
