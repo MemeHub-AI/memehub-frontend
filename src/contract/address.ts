@@ -64,7 +64,7 @@ export const commonAddr = {
   },
   [bsc.id]: {
     reserveToken: '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c',
-    router: '0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24',
+    router: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
   },
   [opBNB.id]: {
     reserveToken: '0x4200000000000000000000000000000000000006',
