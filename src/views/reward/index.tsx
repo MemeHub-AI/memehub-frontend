@@ -28,7 +28,7 @@ export const RewardPage = () => {
 
   return (
     <PrimaryLayout container="div" className="my-4">
-      {/* <h2 className="font-bold text-2xl mb-2">{t('reward.diamond')}</h2> */}
+      <h2 className="font-bold text-2xl mb-2">{t('reward.title')}</h2>
       {/* Descriptions */}
       <div className="">
         <p>{t('reward.desc1')}</p>

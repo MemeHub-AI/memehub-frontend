@@ -4,6 +4,8 @@ import { first, isEmpty } from 'lodash'
 interface FmtAddrOptions {
   len?: number
   separator?: string
+  preLen?: number
+  sufLen?: number
 }
 
 interface FmtProgressOptions {
@@ -13,9 +15,11 @@ interface FmtProgressOptions {
 export const fmt = {
   addr: (address?: string, options?: FmtAddrOptions) => {
     if (!address || !address.trim()) return ''
-    const { len = 4, separator = '...' } = options || {}
+    const { len = 4, separator = '...', preLen, sufLen } = options || {}
+    const prefix = address.slice(0, preLen ?? len)
+    const suffix = address.slice(-(sufLen ?? len))
 
-    return `${address.slice(0, len)}${separator}${address.slice(-len)}`
+    return `${prefix}${separator}${suffix}`
   },
   progress: (value?: number, options?: FmtProgressOptions) => {
     const { toFixed } = options || {}
