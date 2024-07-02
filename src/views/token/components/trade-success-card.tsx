@@ -1,15 +1,16 @@
-import React, { forwardRef, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 import { IoMdClose } from 'react-icons/io'
 import { gsap } from 'gsap'
+import { useAccount } from 'wagmi'
+import { isEmpty } from 'lodash'
 
 import { utilLang } from '@/utils/lang'
 import { useHeaderStore } from '@/stores/use-header-store'
 import { fmt } from '@/utils/fmt'
 import { useUserStore } from '@/stores/use-user-store'
 import { userApi } from '@/api/user'
-import { useAccount } from 'wagmi'
 
 interface Props {
   amount: string
@@ -21,9 +22,10 @@ interface Props {
 export const TradeSuccessCard = (props: Props) => {
   const { amount, symbol = '', diamond = '', onClose } = props
   const { t } = useTranslation()
-  const isZero = BigNumber(amount).lte(0)
   const { setUserInfo } = useUserStore()
   const { address } = useAccount()
+
+  const isZero = BigNumber(diamond).lte(0) || isEmpty(diamond)
 
   const onEnd = async () => {
     try {
@@ -46,11 +48,15 @@ export const TradeSuccessCard = (props: Props) => {
             alt="diamond"
             className={'w-6 h-6'}
           />
-          <DiamondIcon isZero={isZero} onEnd={onEnd} />
-          <DiamondIcon isZero={isZero} delay={0.05} />
-          <DiamondIcon isZero={isZero} delay={0.1} />
-          <DiamondIcon isZero={isZero} delay={0.15} />
-          <DiamondIcon isZero={isZero} delay={0.2} />
+          {!isZero && (
+            <>
+              <DiamondIcon isZero={isZero} onEnd={onEnd} />
+              <DiamondIcon isZero={isZero} delay={0.05} />
+              <DiamondIcon isZero={isZero} delay={0.1} />
+              <DiamondIcon isZero={isZero} delay={0.15} />
+              <DiamondIcon isZero={isZero} delay={0.2} />
+            </>
+          )}
           {t('trade.success')}
         </h2>
 
@@ -90,10 +96,6 @@ const DiamondIcon = ({ isZero, delay = 0, onEnd }: DiamondIconProps) => {
     }
     const startRect = diamondRef.current.getBoundingClientRect()
     const endRect = rewardDiamondEl.getBoundingClientRect()
-
-    // console.log('startRect', startRect.x, startRect.y, startRect)
-    // console.log('endRect', endRect.x, endRect.y, endRect)
-    console.log(startRect, endRect)
 
     const deltaX = endRect.left - startRect.left
     const deltaY = innerHeight - startRect.top + endRect.top - innerHeight
