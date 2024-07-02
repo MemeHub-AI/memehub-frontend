@@ -89,7 +89,9 @@ export const WalletAccount = () => {
                 size={28}
                 className="border-2 border-black"
               />
-              <p>{fmt.addr(userInfo?.wallet_address)}</p>
+              <p>
+                {fmt.addr(userInfo?.wallet_address, { preLen: 2, sufLen: 4 })}
+              </p>
               <ChevronDown
                 size={18}
                 className={cn('duration-300', open && ' rotate-180')}
