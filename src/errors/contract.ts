@@ -43,20 +43,28 @@ export const CONTRACT_ERR = {
     console.error(msg)
   },
 
-  // Not found.
+  // Uniswap trade error.
+  uniswap: (msg: string) => {
+    if (isUserReject(msg)) return
+
+    toast.error(msg)
+    console.error(msg)
+  },
+
+  // Not found error.
   configNotFound: () => toast.error(t('contract.err.config-not-found')),
   proofNotFound: () => toast.error(t('contract.err.proof-not-found')),
   marketParamsNotFound: () => toast.error(t('contract.err.market-not-found')),
   versionNotFound: () => toast.error(t('contract.err.version-not-found')),
 
-  // Failed.
+  // Failed error.
   retryCreateFailed: () => toast.error(t('contract.err.try-create')),
   tradeFailed: () => toast.error(t('contract.err.trade')),
   approveFailed: () => toast.error(t('contract.err.approve')),
   claimFailed: () => toast.error(t('contract.err.claim')),
   chainChangeFailed: () => toast.error(t('contract.err.chain-failed')),
 
-  // Invalid.
+  // Invalid error.
   tokenInvalid: () => toast.error(t('contract.err.token-addr')),
   amountInvlid: () => toast.error(t('contract.err.amount')),
   balanceInvalid: () => toast.error(t('contract.err.balance')),
