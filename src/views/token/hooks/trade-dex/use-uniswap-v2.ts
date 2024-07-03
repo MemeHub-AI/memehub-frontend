@@ -7,10 +7,10 @@ import dayjs from 'dayjs'
 
 import { useApprove } from '@/hooks/use-approve'
 import { commonAddr } from '@/contract/address'
-import { CONTRACT_ERR } from '@/errors/contract'
 import { uniswapV2Config } from '@/contract/abi/uniswap-v2'
 import { logger } from '@/utils/log'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { UNISWAP_ERR } from '@/errors/uniswap'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
@@ -30,7 +30,7 @@ export const useUniswapV2 = () => {
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: (e) => CONTRACT_ERR.uniswap(e.message),
+      onError: (e) => UNISWAP_ERR.exec(e.message),
     },
   })
 

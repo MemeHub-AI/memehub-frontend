@@ -5,8 +5,8 @@ import { isUserReject } from '@/utils/contract'
 
 const ERR = {
   estimateGas: 'gap tip',
-  sell: 'MEMEHUB_InvalidSell'.toLowerCase(),
-  burn: 'MEMEHUB_AlreadyBurn'.toLowerCase(),
+  invalidSell: 'MEMEHUB_InvalidSell'.toLowerCase(),
+  isBurned: 'MEMEHUB_AlreadyBurn'.toLowerCase(),
 }
 
 export const CONTRACT_ERR = {
@@ -24,13 +24,13 @@ export const CONTRACT_ERR = {
     }
 
     // Cannot to sell.
-    if (msg.includes(ERR.sell)) {
+    if (msg.includes(ERR.invalidSell)) {
       toast.error(t('contract.err.sell'))
       return
     }
 
     // Already burned.
-    if (msg.includes(ERR.burn)) {
+    if (msg.includes(ERR.isBurned)) {
       toast.error(t('contract.err.burn'))
       return
     }
@@ -40,14 +40,6 @@ export const CONTRACT_ERR = {
 
     // Toast all other error.
     if (showToast) toast.error(msg)
-    console.error(msg)
-  },
-
-  // Uniswap trade error.
-  uniswap: (msg: string) => {
-    if (isUserReject(msg)) return
-
-    toast.error(msg)
     console.error(msg)
   },
 
