@@ -448,5 +448,6 @@
   "holder.burning": "Burning",
   "reward.title": "Memehub Reward",
   "contract.err.chain-failed": "Switch chain failed",
-  "uniswap.err.insufficient-amount": "Insufficent remain quantity"
+  "uniswap.err.insufficient-amount": "Insufficent remain quantity",
+  "signing": "Signing..."
 }

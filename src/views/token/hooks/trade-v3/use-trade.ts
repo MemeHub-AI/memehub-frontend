@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { useAccount, useWriteContract } from 'wagmi'
 import { formatEther, isAddress, parseEther } from 'viem'
 import { isEmpty } from 'lodash'

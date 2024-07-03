@@ -440,5 +440,6 @@
   "holder.burning": "黑洞",
   "reward.title": "Memehub 奖励",
   "contract.err.chain-failed": "切换链失败",
-  "uniswap.err.insufficient-amount": "剩余数量不足"
+  "uniswap.err.insufficient-amount": "剩余数量不足",
+  "signing": "签名中..."
 }

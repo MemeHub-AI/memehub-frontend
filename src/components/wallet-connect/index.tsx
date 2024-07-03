@@ -18,7 +18,7 @@ export const WalletConnect = (props: Props) => {
   const { isConnected } = useAccount()
   const { userInfo } = useUserStore()
   const { getToken } = useStorage()
-  const { signLogin, logout } = useLogin()
+  const { isLoggingIn, signLogin, logout } = useLogin()
   const [open, setOpen] = useState(false)
 
   useWatchAccount(() => setOpen(true))
@@ -31,6 +31,7 @@ export const WalletConnect = (props: Props) => {
         title={t('sign.loading')}
         content={
           <Button
+            disabled={isLoggingIn}
             onClick={() => {
               logout()
               signLogin()
@@ -38,7 +39,7 @@ export const WalletConnect = (props: Props) => {
                 .catch(() => {})
             }}
           >
-            {t('sign')}
+            {isLoggingIn ? t('signing') : t('sign')}
           </Button>
         }
       />
