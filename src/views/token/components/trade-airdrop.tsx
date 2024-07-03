@@ -128,19 +128,21 @@ const Burn = (props: BurmProps) => {
   const burnTotal = () => {
     if (kol && communities) {
       return BigNumber(kol.amount)
-        .multipliedBy(BigNumber(total).minus(claimed).div(100))
+        .multipliedBy(BigNumber(total).minus(claimed).div(total))
         .plus(
           BigNumber(communities.amount).multipliedBy(
-            BigNumber(communityTotal).minus(communityClaimed).div(100)
+            BigNumber(communityTotal)
+              .minus(communityClaimed)
+              .div(communityTotal)
           )
         )
     } else if (kol) {
       return BigNumber(kol.amount).multipliedBy(
-        BigNumber(total).minus(claimed).div(100)
+        BigNumber(total).minus(claimed).div(total)
       )
     } else if (communities) {
       return BigNumber(communities.amount).multipliedBy(
-        BigNumber(communityTotal).minus(communityClaimed).div(100)
+        BigNumber(communityTotal).minus(communityClaimed).div(communityTotal)
       )
     }
   }
