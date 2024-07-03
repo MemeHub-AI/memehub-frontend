@@ -21,11 +21,13 @@ import { useUserStore } from '@/stores/use-user-store'
 import { useInterval } from 'react-use'
 import dayjs from 'dayjs'
 import { useAccount } from 'wagmi'
+import { useResponsive } from '@/hooks/use-responsive'
 
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { userInfo } = useUserStore()
+  const { isMobile } = useResponsive()
 
   const { data: { data = [] } = {} } = useQuery({
     queryKey: [airdropApi.getDetails.name, chainName, tokenAddr, userInfo?.id],
@@ -52,7 +54,14 @@ export const TradeAirdrop = () => {
   return (
     <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
       <div className="mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 flex-1">
-        <h2 className="font-bold text-lg ml-4 w-fit">{t('airdrop')}</h2>
+        <div className="flex">
+          <h2 className="flex-1 font-bold text-lg ml-4 w-fit">
+            {t('airdrop')}
+          </h2>
+          <h2 className="flex-1 font-bold text-lg ml-2 w-fit max-sm:hidden">
+            {t('burn')}
+          </h2>
+        </div>
         <div className="flex items-center flex-wrap max-sm:flex-col px-1 max-sm:gap-3">
           {kol && (
             <AirdropCard
@@ -83,10 +92,14 @@ export const TradeAirdrop = () => {
           {isOnlyOne || (kol && communities) ? (
             <Burn
               kol={kol}
+              showTitle={!isOnlyOne || isMobile}
               communities={communities}
               airdrop={kol! || communities!}
               suffix={t('ambassador')}
-              className={'border-none w-[50%]  max-sm:w-full mt-0'}
+              className={cn(
+                'border-none w-[50%]  max-sm:w-full mt-0',
+                isOnlyOne && !isMobile && 'pt-0'
+              )}
               onburn={() => {}}
             />
           ) : null}
@@ -113,13 +126,14 @@ interface BurmProps {
   suffix: string
   isKol?: boolean
   isCommunity?: boolean
+  showTitle?: boolean
   kol: AirdropItem | undefined
   communities: AirdropItem | undefined
   onburn: () => void
 }
 
 const Burn = (props: BurmProps) => {
-  const { className, airdrop, kol, communities } = props
+  const { className, airdrop, kol, communities, showTitle } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const { address } = useAccount()
@@ -204,15 +218,20 @@ const Burn = (props: BurmProps) => {
       <div className="px-3 flex flex-col justify-between">
         <div>
           <div className="hidden"></div>
-          <h2 className="font-bold text-lg w-fit">{t('burn')}</h2>
-          <div className="flex h-[120px] items-center">
-            <div className="mr-[125px]">
+          {showTitle && (
+            <h2 className="font-bold text-lg w-fit">{t('burn')}</h2>
+          )}
+          <div className="flex min-h-[115px] items-center">
+            <div className="mr-[125px] max-sm:pb-2">
               {t('burn.token,desc').replace('$1', burnText)}
             </div>
             <img
               src="/images/burn.png"
               alt="burn"
-              className="w-[120px] h-[120px] ml-2 absolute top-0 right-4"
+              className={cn(
+                'w-[120px] h-[120px] ml-2 absolute top-0 right-4',
+                !showTitle && '!-top-5'
+              )}
             />
           </div>
         </div>

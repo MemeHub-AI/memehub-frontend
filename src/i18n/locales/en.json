@@ -442,7 +442,7 @@
   "chart.dex": "DEX chart",
   "token.graduated": "Graduated",
   "burn": "Burn",
-  "burn.token,desc": "There are $1 TrumpCat that have expired and remain unclaimed. You have the option to choose to destroy them",
+  "burn.token,desc": "There are $1 expired and unclaimed. You can choose to destroy them.",
   "burn.button": "🔥Burn $1",
   "pool": "Pool",
   "holder.burning": "Burning",
