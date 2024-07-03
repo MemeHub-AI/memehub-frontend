@@ -22,7 +22,12 @@ export const useDatafeed = () => {
   const cache = useDatafeedCache()
   const { listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket({
-      onReconnect: () => listenAsync({ interval, token_address: addr }),
+      onReconnect: () =>
+        listenAsync({
+          interval,
+          token_address: addr,
+          chain: query.chain as string,
+        }),
     })
   const {
     formatInterval,
@@ -41,6 +46,7 @@ export const useDatafeed = () => {
         const { data } = await listenAsync({
           interval,
           token_address: addr,
+          chain: query.chain as string,
         })
         const bars = formatBars(data)
         const lastBar = last(bars)
@@ -71,6 +77,7 @@ export const useDatafeed = () => {
           const { data } = await listenAsync({
             interval,
             token_address: addr,
+            chain: query.chain as string,
           })
           const bars = formatBars(data)
           !isEmpty(bars) && cache.setLastBar(last(bars))
@@ -84,6 +91,7 @@ export const useDatafeed = () => {
           token_address: addr,
           start: period.from,
           limit: period.countBack,
+          chain: query.chain as string,
         })
         const bars = formatBars(data)
 

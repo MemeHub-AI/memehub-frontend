@@ -22,10 +22,14 @@ export const useHolders = () => {
       heartbeat,
       onOpen: () => {
         const token_address = query.address || ''
+        const chain = query.chain || ''
+
         if (isEmpty(token_address)) return
+        if (isEmpty(chain)) return
+
         sendJsonMessage({
           type: 'message',
-          data: { token_address },
+          data: { token_address, chain },
         })
       },
       filter: ({ data }) => isSuccessMessage(data) || isUpdateMessage(data),
