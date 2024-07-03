@@ -138,11 +138,11 @@ const Burn = (props: BurmProps) => {
         )
     } else if (kol) {
       return BigNumber(kol.amount).multipliedBy(
-        BigNumber(total).minus(claimed).div(100)
+        BigNumber(total).minus(claimed).div(total)
       )
     } else if (communities) {
       return BigNumber(communities.amount).multipliedBy(
-        BigNumber(communityTotal).minus(communityClaimed).div(100)
+        BigNumber(communityTotal).minus(communityClaimed).div(communityTotal)
       )
     }
   }
