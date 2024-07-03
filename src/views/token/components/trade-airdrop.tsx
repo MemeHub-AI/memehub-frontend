@@ -56,7 +56,7 @@ export const TradeAirdrop = () => {
       <div
         className={cn(
           'mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 flex-1',
-          isOnlyOne && 'flex'
+          isOnlyOne && 'flex max-sm:flex-col'
         )}
       >
         <div className={isOnlyOne ? 'flex-1' : ''}>
@@ -87,23 +87,22 @@ export const TradeAirdrop = () => {
             )}
           </div>
         </div>
-        <div className={isOnlyOne ? 'flex-1' : 'mt-2'}>
-          {isOnlyOne || (kol && communities) ? (
-            <Burn
-              kol={kol}
-              communities={communities}
-              airdrop={kol! || communities!}
-              suffix={t('ambassador')}
-              className={cn(
-                'border-none w-[50%]  max-sm:w-full mt-0',
-                isOnlyOne && !isMobile && 'pt-0',
-                isOnlyOne && 'w-full',
-                !isOnlyOne && 'px-1'
-              )}
-              onburn={() => {}}
-            />
-          ) : null}
-        </div>
+        {isOnlyOne || (kol && communities) ? (
+          <Burn
+            kol={kol}
+            communities={communities}
+            airdrop={kol! || communities!}
+            suffix={t('ambassador')}
+            className={cn(
+              'border-none w-[50%]  max-sm:w-full mt-0',
+              isOnlyOne && !isMobile && 'pt-0',
+              isOnlyOne && 'w-full',
+              !isOnlyOne && 'px-1',
+              isOnlyOne ? 'flex-1' : 'mt-2'
+            )}
+            onburn={() => {}}
+          />
+        ) : null}
       </div>
       {!kol && !communities ? (
         <Burn
@@ -208,7 +207,7 @@ const Burn = (props: BurmProps) => {
   // }
 
   if (!isExpired || isBurn) {
-    return <div className="flex-1"></div>
+    return <div className="flex-1 max-sm:hidden"></div>
   }
 
   return (
