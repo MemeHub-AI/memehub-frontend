@@ -9,9 +9,9 @@ import { useStorage } from '@/hooks/use-storage'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
-import { isListed } from '@/utils/token'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs'
 import { DexToolsChart } from '../dextools-chart'
+import { usePools } from '@/views/token/hooks/use-pools'
 
 enum ChartType {
   Memehub,
@@ -26,8 +26,7 @@ export const Chart = memo(() => {
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
   const [tab, setTab] = useState(ChartType.Dex)
-
-  const isListedToken = isListed(tokenInfo?.status)
+  const { isGrauated } = usePools(tokenInfo?.address)
 
   useEffect(() => {
     if (!chartRef.current || isEmpty(tokenAddr) || !tokenInfo) return
@@ -43,7 +42,7 @@ export const Chart = memo(() => {
 
   return (
     <>
-      {isListedToken ? (
+      {isGrauated ? (
         <Tabs
           value={tab.toString()}
           onValueChange={(v) => setTab(v as unknown as ChartType)}

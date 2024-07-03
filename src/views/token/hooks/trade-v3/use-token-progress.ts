@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useReadContract } from 'wagmi'
 import { BigNumber } from 'bignumber.js'
 import { Address, formatEther } from 'viem'
@@ -6,6 +7,7 @@ import { getV3Config } from '@/contract/v3/config'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { BI_ZERO } from '@/constants/contract'
+import { usePools } from '../use-pools'
 
 export const useTokenProgressV3 = (
   overrideToken?: Address,
@@ -16,7 +18,7 @@ export const useTokenProgressV3 = (
 
   const token = overrideToken ?? tokenAddr
   const chainId = overrideChainId ?? cId
-  const config = getV3Config(chainId)
+  const { bondingCurveConfig } = getV3Config(chainId)
 
   const {
     data: totalSupply,
@@ -24,39 +26,31 @@ export const useTokenProgressV3 = (
     isFetching: isFetchingProgress,
     refetch: refetchTotal,
   } = useReadContract({
-    ...config.bondingCurveConfig!,
+    ...bondingCurveConfig!,
+    chainId,
     functionName: 'maxSupply_',
-    chainId,
-    query: { enabled: !!config },
+    query: { enabled: !!bondingCurveConfig },
   })
-
-  const { data: details = [], refetch: refetchPools } = useReadContract({
-    ...config.bondingCurveConfig!,
-    functionName: 'pools_',
-    chainId,
-    args: [token],
-    query: {
-      enabled: !!config?.bondingCurveConfig,
-      refetchInterval: 10_000, // refresh each 10s.
-    },
-  })
-  const [
-    ,
-    tokenReserve,
-    vTokenReserve,
-    ethReserve,
-    vEthReserve,
-    addPoolEthAmount,
-    creator,
-    headmaster,
-  ] = details
+  const { tokenReserve, isGrauated, refetchPools } = usePools(token, chainId)
 
   const total = formatEther(totalSupply || BI_ZERO)
   const current = formatEther(tokenReserve || BI_ZERO)
-  const progress =
-    BigNumber(total).isZero() || BigNumber(current).isZero()
-      ? BigNumber(BI_ZERO.toString()).toFixed(2)
-      : BigNumber(total).minus(current).div(total).multipliedBy(100).toFixed(2)
+
+  const progress = useMemo(() => {
+    if (isGrauated) return '100.00'
+
+    // Is zero.
+    if (BigNumber(total).isZero()) {
+      return BigNumber(BI_ZERO.toString()).toFixed(2)
+    }
+
+    // Calc progress.
+    return BigNumber(total)
+      .minus(current)
+      .div(total)
+      .multipliedBy(100)
+      .toFixed(2)
+  }, [total, current, isGrauated])
 
   const refetchProgress = () => {
     refetchTotal()
@@ -69,6 +63,7 @@ export const useTokenProgressV3 = (
     progress,
     isLoadingProgress,
     isFetchingProgress,
+    isGrauated,
     refetchProgress,
   }
 }

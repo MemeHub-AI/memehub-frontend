@@ -18,7 +18,7 @@ import { utilLang } from '@/utils/lang'
 import { LISTED_MARKET_CAP } from '@/constants/trade'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Badge } from '@/components/ui/badge'
-import { isListed } from '@/utils/token'
+import { usePools } from '../hooks/use-pools'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -26,6 +26,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
+  const { isGrauated } = usePools(tokenInfo?.address)
 
   if (isLoadingTokenInfo) {
     return (
@@ -86,7 +87,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
               )
             }}
           />
-          {isListed(tokenInfo?.status) && (
+          {isGrauated && (
             <Badge
               variant="success"
               className="absolute -bottom-14 left-1/2 -translate-x-1/2 border-black"

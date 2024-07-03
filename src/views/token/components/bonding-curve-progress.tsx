@@ -7,7 +7,6 @@ import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { useTokenProgressV3 } from '../hooks/trade-v3/use-token-progress'
-import { isListed } from '@/utils/token'
 import { Badge } from '@/components/ui/badge'
 
 interface Props extends ComponentProps<'div'> {
@@ -17,7 +16,7 @@ interface Props extends ComponentProps<'div'> {
 export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
-  const { total, progress } = useTokenProgressV3()
+  const { total, progress, isGrauated } = useTokenProgressV3()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const threshold = BigNumber(total).lte(0)
@@ -29,9 +28,9 @@ export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
       <Progress
         className="h-6 border-2 border-black rounded-md"
         indicatorClass="bg-lime-green"
-        value={isListed(tokenInfo?.status) ? 100 : progress}
+        value={isGrauated ? 100 : progress}
       />
-      {isListed(tokenInfo?.status) && (
+      {isGrauated && (
         <Badge
           variant="success"
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-3 whitespace-nowrap"
