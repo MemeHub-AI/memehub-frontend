@@ -53,52 +53,52 @@ export const TradeAirdrop = () => {
 
   return (
     <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
-      <div className="mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 flex-1">
-        <div className="flex">
+      <div
+        className={cn(
+          'mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 flex-1',
+          isOnlyOne && 'flex'
+        )}
+      >
+        <div className={isOnlyOne ? 'flex-1' : ''}>
           <h2 className="flex-1 font-bold text-lg ml-4 w-fit">
             {t('airdrop')}
           </h2>
-          <h2 className="flex-1 font-bold text-lg ml-2 w-fit max-sm:hidden">
-            {t('burn')}
-          </h2>
+          <div className="flex items-center flex-wrap max-sm:flex-col max-sm:gap-3">
+            {kol && (
+              <AirdropCard
+                className={cn(
+                  'w-[50%] max-sm:w-full',
+                  !communities ? 'w-full' : ''
+                )}
+                airdrop={kol}
+                suffix={t('ambassador')}
+                typeList={MarketType.Kol}
+                isKol
+              />
+            )}
+            {communities && (
+              <AirdropCard
+                className={cn('w-[50%] max-sm:w-full', !kol ? 'w-full' : '')}
+                airdrop={communities}
+                suffix={t('holder')}
+                typeList={MarketType.Community}
+                isCommunity
+              />
+            )}
+          </div>
         </div>
-        <div className="flex items-center flex-wrap max-sm:flex-col px-1 max-sm:gap-3">
-          {kol && (
-            <AirdropCard
-              className={cn(
-                'w-[50%] max-sm:w-full',
-                !communities ? 'w-full' : '',
-                isOnlyOne && 'w-1/2 max-sm:!w-full'
-              )}
-              airdrop={kol}
-              suffix={t('ambassador')}
-              typeList={MarketType.Kol}
-              isKol
-            />
-          )}
-          {communities && (
-            <AirdropCard
-              className={cn(
-                'w-[50%] max-sm:w-full',
-                !kol ? 'w-full' : '',
-                isOnlyOne && 'w-1/2 max-sm:!w-full'
-              )}
-              airdrop={communities}
-              suffix={t('holder')}
-              typeList={MarketType.Community}
-              isCommunity
-            />
-          )}
+        <div className={isOnlyOne ? 'flex-1' : 'mt-2'}>
           {isOnlyOne || (kol && communities) ? (
             <Burn
               kol={kol}
-              showTitle={!isOnlyOne || isMobile}
               communities={communities}
               airdrop={kol! || communities!}
               suffix={t('ambassador')}
               className={cn(
                 'border-none w-[50%]  max-sm:w-full mt-0',
-                isOnlyOne && !isMobile && 'pt-0'
+                isOnlyOne && !isMobile && 'pt-0',
+                isOnlyOne && 'w-full',
+                !isOnlyOne && 'px-1'
               )}
               onburn={() => {}}
             />
@@ -126,14 +126,13 @@ interface BurmProps {
   suffix: string
   isKol?: boolean
   isCommunity?: boolean
-  showTitle?: boolean
   kol: AirdropItem | undefined
   communities: AirdropItem | undefined
   onburn: () => void
 }
 
 const Burn = (props: BurmProps) => {
-  const { className, airdrop, kol, communities, showTitle } = props
+  const { className, airdrop, kol, communities } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const { address } = useAccount()
@@ -181,6 +180,10 @@ const Burn = (props: BurmProps) => {
   )
 
   const countdown = () => {
+    if (!airdrop.create || !durationSeconds) {
+      return
+    }
+
     const currentTime = dayjs()
     const diff = dayjs
       .unix(airdrop.create)
@@ -218,20 +221,16 @@ const Burn = (props: BurmProps) => {
       <div className="px-3 flex flex-col justify-between">
         <div>
           <div className="hidden"></div>
-          {showTitle && (
-            <h2 className="font-bold text-lg w-fit">{t('burn')}</h2>
-          )}
-          <div className="flex min-h-[115px] items-center">
+
+          <h2 className="font-bold text-lg w-fit">{t('burn')}</h2>
+          <div className="flex min-h-[106px] items-center">
             <div className="mr-[125px] max-sm:pb-2">
               {t('burn.token,desc').replace('$1', burnText)}
             </div>
             <img
               src="/images/burn.png"
               alt="burn"
-              className={cn(
-                'w-[120px] h-[120px] ml-2 absolute top-0 right-4',
-                !showTitle && '!-top-5'
-              )}
+              className={cn('w-[120px] h-[120px] ml-2 absolute top-0 right-4')}
             />
           </div>
         </div>
