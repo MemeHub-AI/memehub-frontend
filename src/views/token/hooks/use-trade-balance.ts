@@ -4,13 +4,15 @@ import { useAccount, useBalance, useReadContract } from 'wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getV3Config } from '@/contract/v3/config'
 import { useTradeSearchParams } from './use-search-params'
+import { BI_ZERO } from '@/constants/contract'
 
-export const useTradeInfo = () => {
+export const useTradeBalance = () => {
   const { address } = useAccount()
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
   const { tokenConfig } = getV3Config(chainId)
 
+  // Native token balance.
   const {
     data: nativeData,
     isFetching: isFetchingNativeBalance,
@@ -20,6 +22,8 @@ export const useTradeInfo = () => {
     chainId,
     query: { refetchInterval: 5_000 },
   })
+
+  // Token balance.
   const {
     data: tokenData,
     isFetching: isFetchingTokenBalance,
@@ -35,17 +39,20 @@ export const useTradeInfo = () => {
       refetchInterval: 5_000,
     },
   })
-  const nativeBalance = formatEther(nativeData?.value ?? BigInt(0))
-  const tokenBalance = formatEther(tokenData ?? BigInt(0))
+
+  const nativeBalance = formatEther(nativeData?.value ?? BI_ZERO)
+  const tokenBalance = formatEther(tokenData ?? BI_ZERO)
   const isFetchingBalance = isFetchingNativeBalance || isFetchingTokenBalance
+
+  const refetchBalance = () => {
+    refetchNativeBalance()
+    refetchTokenBalance()
+  }
 
   return {
     nativeBalance,
     tokenBalance,
-    isFetchingNativeBalance,
-    isFetchingTokenBalance,
     isFetchingBalance,
-    refetchNativeBalance,
-    refetchTokenBalance,
+    refetchBalance,
   }
 }
