@@ -17,6 +17,7 @@ export interface DatafeedOnEvents {
   listen: DatafeedEventBase<'listen', DatafeedBar[]>
   update: DatafeedEventBase<'update', DatafeedBar[]>
   history: DatafeedEventBase<'history', DatafeedBar[]>
+  connect_invalid: DatafeedEventBase<'connect_invalid'>
 }
 
 export interface DatafeedEmitListen {
