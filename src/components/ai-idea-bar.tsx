@@ -13,6 +13,7 @@ import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUserStore } from '@/stores/use-user-store'
+import { isEmpty } from 'lodash'
 
 interface Props {
   className?: string
@@ -47,7 +48,7 @@ export const AIIdeaBar = (props: Props) => {
   }
 
   const onGen = () => {
-    if (value.trim() === '') {
+    if (isEmpty(value.trim())) {
       toast.error(t('input.you.idea'))
       return
     }
@@ -70,7 +71,13 @@ export const AIIdeaBar = (props: Props) => {
           />
           <div>{t('ai.generate.bio')}</div>
         </div>
-        <div className="flex items-stretch max-md:mt-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            onGen()
+          }}
+          className="flex items-stretch max-md:mt-4"
+        >
           <Input
             placeholder={t('input.you.idea')}
             className="max-w-[180px] ml-4 max-md:ml-0 items-stretch"
@@ -90,10 +97,8 @@ export const AIIdeaBar = (props: Props) => {
             //   </TooltipProvider>
             // }
           />
-          <Button onClick={onGen} className="ml-2">
-            {t('ai.generate')}
-          </Button>
-        </div>
+          <Button className="ml-2">{t('ai.craete')}</Button>
+        </form>
       </div>
       <div className="w-full h-[1px] bg-[#e2e2e2] my-4 max-sm:hidden"></div>
       <div className="flex justify-start px-7 max-md:px-3 max-md:flex-col max-md:items-start max-sm:mt-4">

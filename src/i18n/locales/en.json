@@ -449,5 +449,6 @@
   "reward.title": "Memehub Reward",
   "contract.err.chain-failed": "Switch chain failed",
   "uniswap.err.insufficient-amount": "Insufficent remain quantity",
-  "signing": "Signing..."
+  "signing": "Signing...",
+  "ai.craete": "AI Create"
 }
