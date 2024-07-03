@@ -16,11 +16,29 @@ import { shadowVariants } from '@/styles/variants'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   isCommenting?: boolean
+  showEmptyTips?: boolean
+  showCancel?: boolean
+  buttonText?: string
+  buttonClass?: string
+  autoFocus?: boolean
   onComment?: (content: string, mentions: [], image?: string) => void
+  onCommentClick?: () => void
+  onCancel?: () => void
 }
 
 export const CommentForm = (props: Props) => {
-  const { className, isCommenting, onComment } = props
+  const {
+    className,
+    isCommenting,
+    showEmptyTips = true,
+    showCancel = false,
+    buttonText,
+    buttonClass,
+    onComment,
+    onCommentClick,
+    onCancel,
+    autoFocus,
+  } = props
   const { t } = useTranslation()
   const { fields, updateField } = useFields({
     comment: createField({}),
@@ -42,9 +60,9 @@ export const CommentForm = (props: Props) => {
 
   const onSubmit = () => {
     const comment = fields.comment.value.trim()
-
     if (isEmpty(comment) && isEmpty(url)) {
-      return toast.error(t('comment.empty'))
+      if (showEmptyTips) toast.error(t('comment.empty'))
+      return
     }
 
     onComment?.(comment, [], url)
@@ -68,12 +86,27 @@ export const CommentForm = (props: Props) => {
         onChange={onChange}
         rows={4}
         disabled={disabled}
+        autoFocus={autoFocus}
       />
 
       <div className="flex items-center gap-2">
-        <Button className="px-10" disabled={disabled}>
-          {t('comment')}
+        <Button
+          className={cn('px-10', buttonClass)}
+          disabled={disabled}
+          onClick={onCommentClick}
+        >
+          {buttonText ?? t('comment')}
         </Button>
+        {showCancel && (
+          <Button
+            type="button"
+            className="px-10"
+            disabled={disabled}
+            onClick={onCancel}
+          >
+            {t('cancel')}
+          </Button>
+        )}
         <Label
           htmlFor={inputId}
           variant="icon"

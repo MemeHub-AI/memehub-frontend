@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react'
-import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { CircleAlert } from 'lucide-react'
+import { useRouter } from 'next/router'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
@@ -28,6 +28,7 @@ export const CreateTokenStatusDialog = () => {
       retryCreate,
     },
   } = useCreateTokenContext()
+  const router = useRouter()
 
   const chainName = createTokenData?.chain?.name || ''
   const deployedAddr = createTokenData?.address || ''
@@ -150,40 +151,34 @@ export const CreateTokenStatusDialog = () => {
     return (
       <AlertDialog
         open={isDeploySuccess}
-        title={t('deploy.success')}
         onCancel={resetDeploy}
-        onConfirm={resetDeploy}
-        description={
-          <span className="flex flex-col gap-2 w-fit">
-            <Link
-              className="text-blue-600 hover:underline"
-              href={Routes.Main}
-              onClick={resetDeploy}
-            >
-              {t('deploy.success.view-list')}
-            </Link>
-            {chainName && (deployedAddr || deployLogAddr) && (
-              <Link
-                className="text-blue-600 hover:underline"
-                href={fmt.toHref(
-                  Routes.Main,
-                  chainName,
-                  deployedAddr || deployLogAddr || ''
-                )}
-                onClick={resetDeploy}
-              >
-                {t('deploy.success.view-details')}
-              </Link>
-            )}
-            <Link
-              className="text-blue-600 hover:underline"
-              href={explorerUrl}
-              target="_blank"
-              onClick={resetDeploy}
-            >
-              {t('deploy.success.view-hash')}
-            </Link>
-          </span>
+        onConfirm={() => {
+          resetDeploy()
+          router.push(
+            fmt.toHref(
+              Routes.Main,
+              chainName,
+              deployedAddr || deployLogAddr || ''
+            )
+          )
+        }}
+        showCancel={false}
+        confirmText={t('go-to.buy')}
+        align="center"
+        title={
+          <>
+            <p>{t('deploy.success').split('$')[0]}</p>
+            <p>{t('deploy.success').split('$')[1]}</p>
+          </>
+        }
+        content={
+          <div className="flex items-center justify-center my-8">
+            <img
+              src="/images/create-success.png"
+              alt="poster"
+              className="w-32"
+            />
+          </div>
         }
       />
     )

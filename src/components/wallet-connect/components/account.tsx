@@ -85,7 +85,7 @@ export const WalletAccount = () => {
             <Button className="flex items-center px-1 gap-1">
               <Avatar
                 src={userInfo?.logo || ''}
-                fallback={fmt.addr(userInfo?.wallet_address)}
+                fallback={userInfo?.wallet_address.slice(-2)}
                 size={28}
                 className="border-2 border-black"
               />

@@ -24,10 +24,10 @@ import { INVITE_REWARD } from '@/constants/invite'
 import { useTrade } from '../hooks/use-trade'
 import { useTradeBalance } from '../hooks/use-trade-balance'
 import { useUserStore } from '@/stores/use-user-store'
-import { AlertDialog } from '@/components/ui/alert-dialog'
 import { TradeType } from '@/constants/trade'
-import { useStorage } from '@/hooks/use-storage'
 import { useAirdropStore } from '@/stores/use-airdrop'
+import { InviteTipsDialog } from './invite-tips-dialog'
+import { TradeCommentDialog } from './trade-comment-dialog'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -50,7 +50,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
     useTrade()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
-  const { setInviteCode } = useStorage()
+
   const [isBalanceOverflow, setIsBalanceOverflow] = useState(false)
 
   const token = (query.address || '') as Address
@@ -143,29 +143,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         tokenBalance,
       }}
     >
-      <AlertDialog
-        open={inviteOpen}
-        onOpenChange={setInviteOpen}
-        title={<span className="text-red-500">{t('invite.invalid')}</span>}
-        content={
-          <div>
-            <p>{t('invite.invalid.desc')}</p>
-            <ul>
-              <li>- {t('invite.invalid.reason1')}</li>
-              <li>- {t('invite.invalid.reason2')}</li>
-            </ul>
-          </div>
-        }
-        confirmText={t('clear-it')}
-        onConfirm={() => {
-          // Clear invite code
-          query.r = ''
-          setInviteCode('')
-          router.replace({ pathname: router.pathname, query }, undefined, {
-            shallow: true,
-          })
-        }}
-      />
+      <InviteTipsDialog open={inviteOpen} onOpenChange={setInviteOpen} />
+
       <Card
         hover="none"
         shadow="none"
@@ -209,17 +188,18 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           </div>
 
           {/* Trade button */}
-          <Button
-            className="!w-full font-bold bg-lime-green-deep"
-            onClick={onTrade}
-            disabled={disableTrade}
-          >
-            {isBalanceOverflow
-              ? t('balance.insufficient')
-              : isSubmitting
-              ? t('trading')
-              : t('trade')}
-          </Button>
+          <TradeCommentDialog onTrade={onTrade}>
+            <Button
+              className="!w-full font-bold bg-lime-green-deep"
+              disabled={disableTrade}
+            >
+              {isBalanceOverflow
+                ? t('balance.insufficient')
+                : isSubmitting
+                ? t('trading')
+                : t('trade')}
+            </Button>
+          </TradeCommentDialog>
           {isConnected && (
             <>
               <Button
