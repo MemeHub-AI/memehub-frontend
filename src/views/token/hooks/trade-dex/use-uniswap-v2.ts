@@ -7,13 +7,15 @@ import dayjs from 'dayjs'
 
 import { useApprove } from '@/hooks/use-approve'
 import { commonAddr } from '@/contract/address'
-import { CONTRACT_ERR } from '@/errors/contract'
 import { uniswapV2Config } from '@/contract/abi/uniswap-v2'
 import { logger } from '@/utils/log'
+import { useChainInfo } from '@/hooks/use-chain-info'
+import { UNISWAP_ERR } from '@/errors/uniswap'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
-  const { address, chainId } = useAccount()
+  const { address } = useAccount()
+  const { chainId } = useChainInfo()
   const { isApproving, approvalForAll } = useApprove()
 
   const { reserveToken, router } =
@@ -28,7 +30,7 @@ export const useUniswapV2 = () => {
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: (e) => CONTRACT_ERR.exec(e),
+      onError: (e) => UNISWAP_ERR.exec(e.message),
     },
   })
 
@@ -55,11 +57,18 @@ export const useUniswapV2 = () => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
-    logger('uniswap buy', amount, token)
+    logger('uniswap buy', {
+      amount,
+      token,
+      address,
+      chainId,
+      router,
+      reserveToken,
+    })
     writeContract({
       ...uniswapV2Config,
-      address: router,
       chainId,
+      address: router,
       functionName: 'swapExactETHForTokens',
       args: [
         BigInt(0),
@@ -75,14 +84,21 @@ export const useUniswapV2 = () => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
-    const isApproved = await approvalForAll(token, reserveToken, amount)
+    const isApproved = await approvalForAll(token, router, amount)
     if (!isApproved) return
 
-    logger('uniswap sell', amount, token)
+    logger('uniswap sell', {
+      amount,
+      token,
+      address,
+      chainId,
+      router,
+      reserveToken,
+    })
     writeContract({
       ...uniswapV2Config,
-      address: router,
       chainId,
+      address: router,
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),

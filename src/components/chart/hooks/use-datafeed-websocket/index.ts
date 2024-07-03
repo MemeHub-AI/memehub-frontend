@@ -20,13 +20,15 @@ const heartbetaMessage = {
   data: null,
 }
 
-const heartbeatFreq = 10 // unit is seconds
-
 interface Options {
   onReconnect?: (e: Event) => void
+  reconnectDelay?: number
 }
 
-export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
+export const useDatafeedWebsocket = ({
+  onReconnect,
+  reconnectDelay = 500,
+}: Options = {}) => {
   const emitter = useEmitter<DatafeedOnEvents, DatafeedEmitEvents>()
   const wsRef = useRef<WebSocket>()
   const timerRef = useRef<number>()
@@ -34,10 +36,9 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
 
   // Keep heartbeat.
   const onOpen = () => {
-    sendMessage(heartbetaMessage)
     timerRef.current = window.setInterval(() => {
       sendMessage(heartbetaMessage)
-    }, heartbeatFreq * 1000)
+    }, 10_000) // Each 10s.
   }
 
   // Emit listened events.
@@ -65,7 +66,8 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
         resolve(e)
       })
       wsRef.current.addEventListener('close', (e) => {
-        chart && onReconnect?.(e) // Reconnect if chart exist.
+        if (!chart) return
+        setTimeout(() => onReconnect?.(e), reconnectDelay)
       })
       wsRef.current.addEventListener('error', reject)
       wsRef.current.addEventListener('message', onMessage)
@@ -121,6 +123,7 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
   }
 
   return {
+    emitter,
     connect,
     disconenct,
     listenAsync,

@@ -5,8 +5,8 @@ import { isUserReject } from '@/utils/contract'
 
 const ERR = {
   estimateGas: 'gap tip',
-  sell: 'MEMEHUB_InvalidSell'.toLowerCase(),
-  burn: 'MEMEHUB_AlreadyBurn'.toLowerCase(),
+  invalidSell: 'MEMEHUB_InvalidSell'.toLowerCase(),
+  isBurned: 'MEMEHUB_AlreadyBurn'.toLowerCase(),
 }
 
 export const CONTRACT_ERR = {
@@ -24,13 +24,13 @@ export const CONTRACT_ERR = {
     }
 
     // Cannot to sell.
-    if (msg.includes(ERR.sell)) {
+    if (msg.includes(ERR.invalidSell)) {
       toast.error(t('contract.err.sell'))
       return
     }
 
     // Already burned.
-    if (msg.includes(ERR.burn)) {
+    if (msg.includes(ERR.isBurned)) {
       toast.error(t('contract.err.burn'))
       return
     }
@@ -43,20 +43,20 @@ export const CONTRACT_ERR = {
     console.error(msg)
   },
 
-  // Not found.
+  // Not found error.
   configNotFound: () => toast.error(t('contract.err.config-not-found')),
   proofNotFound: () => toast.error(t('contract.err.proof-not-found')),
   marketParamsNotFound: () => toast.error(t('contract.err.market-not-found')),
   versionNotFound: () => toast.error(t('contract.err.version-not-found')),
 
-  // Failed.
+  // Failed error.
   retryCreateFailed: () => toast.error(t('contract.err.try-create')),
   tradeFailed: () => toast.error(t('contract.err.trade')),
   approveFailed: () => toast.error(t('contract.err.approve')),
   claimFailed: () => toast.error(t('contract.err.claim')),
   chainChangeFailed: () => toast.error(t('contract.err.chain-failed')),
 
-  // Invalid.
+  // Invalid error.
   tokenInvalid: () => toast.error(t('contract.err.token-addr')),
   amountInvlid: () => toast.error(t('contract.err.amount')),
   balanceInvalid: () => toast.error(t('contract.err.balance')),

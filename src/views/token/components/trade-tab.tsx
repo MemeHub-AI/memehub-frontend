@@ -22,7 +22,7 @@ import { useSlippage } from '../hooks/use-slippage'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { INVITE_REWARD } from '@/constants/invite'
 import { useTrade } from '../hooks/use-trade'
-import { useTradeInfo } from '../hooks/use-trade-info'
+import { useTradeBalance } from '../hooks/use-trade-balance'
 import { useUserStore } from '@/stores/use-user-store'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { TradeType } from '@/constants/trade'
@@ -49,12 +49,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { userInfo } = useUserStore()
   const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
     useTrade()
-  const {
-    nativeBalance,
-    tokenBalance,
-    refetchNativeBalance,
-    refetchTokenBalance,
-  } = useTradeInfo()
+  const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
   const { setInviteCode } = useStorage()
   const [isBalanceOverflow, setIsBalanceOverflow] = useState(false)
 
@@ -134,8 +129,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   useEffect(() => {
     if (!isTraded) return
     setValue('')
-    refetchNativeBalance()
-    refetchTokenBalance()
+    refetchBalance()
   }, [isTraded])
 
   return (

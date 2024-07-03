@@ -1,5 +1,4 @@
 import { isEmpty, last } from 'lodash'
-import { useRouter } from 'next/router'
 
 import type {
   IBasicDataFeed,
@@ -11,22 +10,20 @@ import { useDatafeedWebsocket } from './use-datafeed-websocket'
 import { useChartUtils } from './use-chart-utils'
 import { useStorage } from '@/hooks/use-storage'
 import { datafeedConfig } from '@/config/datafeed'
+import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 
 export const useDatafeed = () => {
-  const { query } = useRouter()
-  const chain = (query.chain || '') as string
-  const addr = (query.address || '') as string
-
+  const { chainName, tokenAddr } = useTradeSearchParams()
   const { getInterval, setInterval } = useStorage()
-  const interval = getInterval(chain, addr) || '1m'
+  const interval = getInterval(chainName, tokenAddr) || '1m'
   const cache = useDatafeedCache()
-  const { listenAsync, historyAsync, onUpdate, disconenct } =
+  const { emitter, listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket({
       onReconnect: () =>
         listenAsync({
           interval,
-          token_address: addr,
-          chain: query.chain as string,
+          token_address: tokenAddr,
+          chain: chainName,
         }),
     })
   const {
@@ -40,13 +37,14 @@ export const useDatafeed = () => {
     return {
       onReady: (callback) => {
         setTimeout(() => callback(datafeedConfig.readyConfig))
+        emitter.on('connect_invalid', disconenct)
       },
       searchSymbols(_, __, ___, ____) {},
       async resolveSymbol(symbolName, onResolve, onError, extension) {
         const { data } = await listenAsync({
           interval,
-          token_address: addr,
-          chain: query.chain as string,
+          token_address: tokenAddr,
+          chain: chainName,
         })
         const bars = formatBars(data)
         const lastBar = last(bars)
@@ -67,7 +65,7 @@ export const useDatafeed = () => {
 
         if (period.firstDataRequest) {
           const cachedBars = cache.getBars() || []
-          const cachedInterval = getInterval(chain, addr)
+          const cachedInterval = getInterval(chainName, tokenAddr)
           // Have cached bars & interval no change, use cache.
           if (!isEmpty(cachedBars) && cachedInterval === interval) {
             onResult(cachedBars, { noData: false })
@@ -76,22 +74,22 @@ export const useDatafeed = () => {
 
           const { data } = await listenAsync({
             interval,
-            token_address: addr,
-            chain: query.chain as string,
+            token_address: tokenAddr,
+            chain: chainName,
           })
           const bars = formatBars(data)
           !isEmpty(bars) && cache.setLastBar(last(bars))
-          setInterval(chain, addr, interval)
+          setInterval(chainName, tokenAddr, interval)
           onResult(bars, { noData: isEmpty(data) })
           return
         }
 
         const { data } = await historyAsync({
           interval,
-          token_address: addr,
+          token_address: tokenAddr,
           start: period.from,
           limit: period.countBack,
-          chain: query.chain as string,
+          chain: chainName,
         })
         const bars = formatBars(data)
 

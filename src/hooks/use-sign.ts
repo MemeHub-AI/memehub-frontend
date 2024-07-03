@@ -9,7 +9,7 @@ export const useSign = () => {
   const [isSigned, setIsSigned] = useState(false)
   const { address, connector } = useAccount()
 
-  const { signMessageAsync } = useSignMessage({
+  const { isPending: isSigning, signMessageAsync } = useSignMessage({
     mutation: {
       onMutate: () => toast.loading(t('sign.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
@@ -28,6 +28,7 @@ export const useSign = () => {
 
   return {
     isSigned,
+    isSigning,
     signAsync,
   }
 }

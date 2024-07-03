@@ -9,8 +9,8 @@ import { useUser } from './use-user'
 export const useLogin = () => {
   const { t } = useTranslation()
   const { address, chainId } = useAccount()
-  const { signAsync } = useSign()
-  const { login, logout } = useUser()
+  const { isSigning, signAsync } = useSign()
+  const { isLoggingIn, login, logout } = useUser()
 
   const signLogin = async (
     overrideAddr?: Address,
@@ -43,6 +43,7 @@ export const useLogin = () => {
   }
 
   return {
+    isLoggingIn: isLoggingIn || isSigning,
     signLogin,
     logout,
   }
