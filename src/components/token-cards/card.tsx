@@ -11,7 +11,6 @@ import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
 import { useTokenProgressV3 } from '@/views/token/hooks/trade-v3/use-token-progress'
-import { isListed } from '@/utils/token'
 import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
 
@@ -25,11 +24,10 @@ export const TokenCard = (props: Props) => {
   const router = useRouter()
   const { t } = useTranslation()
 
-  const { progress } = useTokenProgressV3(
+  const { progress, isGrauated } = useTokenProgressV3(
     card.address as Address,
     Number(card.chain.id)
   )
-  const isLitedToken = isListed(card.status)
 
   return (
     <Card
@@ -43,7 +41,7 @@ export const TokenCard = (props: Props) => {
       }}
       {...restProps}
     >
-      {isLitedToken && (
+      {isGrauated && (
         <Badge
           variant="success"
           className="absolute left-0 top-0 rounded-l-none rounded-tr-none"
@@ -73,7 +71,7 @@ export const TokenCard = (props: Props) => {
           <p
             className={cn(
               'text-zinc-500 text-sm break-all line-clamp-2 xl:line-clamp-3',
-              isLitedToken && 'line-clamp-4 xl:line-clamp-5',
+              isGrauated && 'line-clamp-4 xl:line-clamp-5',
               descClass
             )}
           >
@@ -83,7 +81,7 @@ export const TokenCard = (props: Props) => {
         <Progress
           className="h-5 self-end w-full"
           indicatorClass="bg-green-500"
-          value={isLitedToken ? 100 : progress}
+          value={isGrauated ? 100 : progress}
         />
       </div>
     </Card>
