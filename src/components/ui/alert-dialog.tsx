@@ -7,7 +7,7 @@ import { buttonVariants } from '@/components/ui/button'
 import { shadowVariants } from '@/styles/variants'
 
 interface Props extends AlertDialogPrimitive.AlertDialogProps {
-  title: React.ReactNode
+  title?: React.ReactNode
   description?: React.ReactNode
   content?: React.ReactNode
   triggerProps?: AlertDialogPrimitive.DialogTriggerProps
@@ -49,16 +49,18 @@ const AlertDialog = React.forwardRef<
         </AlertDialogTrigger>
       )}
       <AlertDialogContent className="max-sm:w-[90%]" ref={ref}>
-        <AlertDialogHeader>
-          <AlertDialogTitle
-            className={cn(align === 'center' && '!text-center')}
-          >
-            {title}
-          </AlertDialogTitle>
-          {description && (
-            <AlertDialogDescription>{description}</AlertDialogDescription>
-          )}
-        </AlertDialogHeader>
+        {title && (
+          <AlertDialogHeader>
+            <AlertDialogTitle
+              className={cn(align === 'center' && '!text-center')}
+            >
+              {title}
+            </AlertDialogTitle>
+            {description && (
+              <AlertDialogDescription>{description}</AlertDialogDescription>
+            )}
+          </AlertDialogHeader>
+        )}
         {content}
         {showFooter && (
           <AlertDialogFooter

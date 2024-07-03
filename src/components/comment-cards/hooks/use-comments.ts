@@ -6,10 +6,12 @@ import { nanoid } from 'nanoid'
 import { tokenApi } from '@/api/token'
 import { TokenCommentListRes } from '@/api/token/types'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useCommentsStore } from '@/stores/use-comments'
 
 export const useComments = (enableFetchComments = true) => {
   const { chainName, tokenAddr } = useTradeSearchParams()
   const uniqueId = useMemo(nanoid, [])
+  const { setRefetchComments } = useCommentsStore()
 
   const {
     data: commentData,
@@ -44,6 +46,10 @@ export const useComments = (enableFetchComments = true) => {
   const updateComment = (data: (typeof comments)[number]) => {
     setComments((old) => old.map((c) => (c.id === data.id ? data : c)))
   }
+
+  useEffect(() => {
+    setRefetchComments(refetchComments)
+  }, [refetchComments])
 
   // Listen comment list.
   useEffect(() => {
