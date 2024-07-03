@@ -13,7 +13,9 @@ interface Props extends AlertDialogPrimitive.AlertDialogProps {
   triggerProps?: AlertDialogPrimitive.DialogTriggerProps
   footerClass?: string
   showFooter?: boolean
+  showCancel?: boolean
   confirmText?: string
+  align?: 'left' | 'center' | 'right'
   onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   onConfirm?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
@@ -32,6 +34,8 @@ const AlertDialog = React.forwardRef<
     triggerProps,
     footerClass,
     showFooter = true,
+    showCancel = true,
+    align = 'left',
     confirmText,
     ...restProps
   } = props
@@ -46,7 +50,11 @@ const AlertDialog = React.forwardRef<
       )}
       <AlertDialogContent className="max-sm:w-[90%]" ref={ref}>
         <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
+          <AlertDialogTitle
+            className={cn(align === 'center' && '!text-center')}
+          >
+            {title}
+          </AlertDialogTitle>
           {description && (
             <AlertDialogDescription>{description}</AlertDialogDescription>
           )}
@@ -56,18 +64,22 @@ const AlertDialog = React.forwardRef<
           <AlertDialogFooter
             className={cn(
               'sm:justify-start max-sm:flex max-sm:flex-row max-sm:gap-4',
-              footerClass
+              footerClass,
+              // Add `mr-3` offset, because button have shadow.
+              align === 'center' && '!justify-center mr-3'
             )}
           >
             <AlertDialogAction onClick={onConfirm} className="max-sm:flex-1">
               {confirmText ?? t('confirm')}
             </AlertDialogAction>
-            <AlertDialogCancel
-              onClick={onCancel}
-              className="max-sm:mt-0 max-sm:flex-1"
-            >
-              {t('cancel')}
-            </AlertDialogCancel>
+            {showCancel && (
+              <AlertDialogCancel
+                onClick={onCancel}
+                className="max-sm:mt-0 max-sm:flex-1"
+              >
+                {t('cancel')}
+              </AlertDialogCancel>
+            )}
           </AlertDialogFooter>
         )}
       </AlertDialogContent>

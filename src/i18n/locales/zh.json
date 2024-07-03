@@ -95,7 +95,7 @@
   "submit.error": "提交失败：",
   "deploying": "部署中...",
   "user-rejected": "您拒绝了本次操作",
-  "deploy.success": "恭喜！\n您的代币创建成功！",
+  "deploy.success": "恭喜你，$ meme币创建成功  ",
   "hash": "哈希",
   "view.hash": "查看哈希",
   "view.details": "查看详情",
@@ -170,7 +170,7 @@
   "ai.generate.bio": "生成一个爆炸性的Memecoin",
   "input.you.idea": "输入你的想法",
   "coinfirm": "确定",
-  "ai.creating": "MemeHub AI正在生成Memecoin",
+  "ai.creating": "Memehub AI 正在为您创建meme币，$这可能是一项伟大事业的开端。",
   "wait": "请稍等一会",
   "create.memecoin.with.ai.1": "主题是$1?",
   "create.memecoin.with.ai": "使用AI创造一个Memecoin",
@@ -442,5 +442,6 @@
   "contract.err.chain-failed": "切换链失败",
   "uniswap.err.insufficient-amount": "剩余数量不足",
   "signing": "签名中...",
-  "ai.craete": "AI 创建"
+  "ai.craete": "AI 创建",
+  "go-to.buy": "前往购买"
 }

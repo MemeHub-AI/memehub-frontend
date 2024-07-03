@@ -42,8 +42,6 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       formHook.form.setValue(formHook.formFields.symbol, '')
       formHook.form.setValue(formHook.formFields.description, '')
 
-      toast.loading(t('create.info.loading'))
-
       const { data } = await aiApi.getMemeInfo(
         {
           input: info!.name!,
@@ -108,8 +106,12 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       onOpenChange={() => setLoadingInfoDialog(false)}
     >
       <div className="mt-4 text-center">
-        <h1 className="text-xl text-center">{t('ai.creating')}</h1>
-        <h1 className="text-xl text-center">{t('wait')}</h1>
+        <h2 className="text-xl text-center">
+          {t('ai.creating').split('$')[0]}
+        </h2>
+        <h2 className="text-xl text-center">
+          {t('ai.creating').split('$')[1]}
+        </h2>
       </div>
       <div>
         <img
