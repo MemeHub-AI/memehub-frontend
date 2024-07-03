@@ -36,7 +36,6 @@ export const useDatafeedWebsocket = ({
 
   // Keep heartbeat.
   const onOpen = () => {
-    sendMessage(heartbetaMessage)
     timerRef.current = window.setInterval(() => {
       sendMessage(heartbetaMessage)
     }, 10_000) // Each 10s.
