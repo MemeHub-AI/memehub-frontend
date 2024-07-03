@@ -58,7 +58,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         shadow="none"
         padding="md"
         className={cn(
-          'mt-20 bg-lime-green-deep cursor-default max-sm:mt-14',
+          'mt-20 bg-lime-green-deep cursor-default max-sm:mt-14 relative',
           className
         )}
       >
@@ -69,6 +69,12 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         >
           {details}
         </Dialog>
+
+        {/* Chain logo */}
+        <div className="absolute left-2 top-2 flex items-center gap-1">
+          <Avatar src={tokenInfo?.chain.logo} size={20} />
+          <p className="text-sm max-w-20 break-all">{tokenInfo?.chain.name}</p>
+        </div>
 
         {/* Logo */}
         <div className="relative">
@@ -140,15 +146,13 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </div>
 
         {/* Description */}
-
         <div
           className={cn(
             'text-sm mt-1 break-all cursor-pointer',
-            tokenInfo?.twitter_url ||
+            (tokenInfo?.twitter_url ||
               tokenInfo?.telegram_url ||
-              tokenInfo?.website
-              ? 'max-sm:mt-0'
-              : ''
+              tokenInfo?.website) &&
+              'max-sm:mt-0'
           )}
           onClick={() => {
             setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)
