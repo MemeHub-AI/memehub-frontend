@@ -22,7 +22,12 @@ export const useDatafeed = () => {
   const cache = useDatafeedCache()
   const { listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket({
-      onReconnect: () => listenAsync({ interval, token_address: addr }),
+      onReconnect: () =>
+        listenAsync({
+          interval,
+          token_address: addr,
+          chain: query.chain as string,
+        }),
     })
   const {
     formatInterval,

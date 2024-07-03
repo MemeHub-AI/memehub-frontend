@@ -53,13 +53,13 @@ export const TradeAirdrop = () => {
     <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
       <div className="mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 flex-1">
         <h2 className="font-bold text-lg ml-4 w-fit">{t('airdrop')}</h2>
-        <div className="flex items-center flex-wrap max-sm:flex-col px-1">
+        <div className="flex items-center flex-wrap max-sm:flex-col px-1 max-sm:gap-3">
           {kol && (
             <AirdropCard
               className={cn(
-                'w-[50%]',
-                !communities ? '!w-full' : '',
-                isOnlyOne && 'w-1/2 max-sm:w-full'
+                'w-[50%] max-sm:w-full',
+                !communities ? 'w-full' : '',
+                isOnlyOne && 'w-1/2 max-sm:!w-full'
               )}
               airdrop={kol}
               suffix={t('ambassador')}
@@ -70,9 +70,9 @@ export const TradeAirdrop = () => {
           {communities && (
             <AirdropCard
               className={cn(
-                'w-[50%]',
-                !kol ? '!w-full' : '',
-                isOnlyOne && 'w-1/2 max-sm:w-full'
+                'w-[50%] max-sm:w-full',
+                !kol ? 'w-full' : '',
+                isOnlyOne && 'w-1/2 max-sm:!w-full'
               )}
               airdrop={communities}
               suffix={t('holder')}
@@ -86,7 +86,7 @@ export const TradeAirdrop = () => {
               communities={communities}
               airdrop={kol! || communities!}
               suffix={t('ambassador')}
-              className={'border-none w-[50%] mt-0'}
+              className={'border-none w-[50%]  max-sm:w-full mt-0'}
               onburn={() => {}}
             />
           ) : null}
