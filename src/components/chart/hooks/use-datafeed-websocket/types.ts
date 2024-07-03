@@ -22,6 +22,7 @@ export interface DatafeedOnEvents {
 export interface DatafeedEmitListen {
   interval: string
   token_address: string
+  chain: string
 }
 
 export interface DatafeedEmitHistory extends DatafeedEmitListen {
