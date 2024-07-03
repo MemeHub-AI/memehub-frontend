@@ -17,10 +17,8 @@ interface Props {
 }
 
 export const CreateTokenMain = (props: Props) => {
-  const { className, tab, setTab } = props
+  const { className } = props
   const { t } = useTranslation()
-
-  const { formData, deployResult } = useCreateTokenContext()
 
   const {
     show,

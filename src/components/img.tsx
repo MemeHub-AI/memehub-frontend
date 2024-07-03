@@ -7,13 +7,20 @@ interface Props extends ComponentProps<'img'> {
   rounded?: boolean
 }
 
-export const Img = ({ src, className, rounded = true, ...props }: Props) => {
+export const Img = ({
+  src,
+  className,
+  rounded = true,
+  title,
+  ...props
+}: Props) => {
   const [placeholder, setPlacehoder] = useState(true)
 
   return (
     <img
       src={src || defaultImg}
       loading="lazy"
+      title={title}
       onLoad={() => setPlacehoder(false)}
       className={cn(
         'object-cover bg-no-repeat bg-cover',

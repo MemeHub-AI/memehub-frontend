@@ -41,6 +41,7 @@ const Avatar = React.forwardRef<
     imgClass,
     shadow = 'none',
     variant,
+    title,
     ...restProps
   } = props
 
@@ -59,6 +60,7 @@ const Avatar = React.forwardRef<
       <AvatarImage
         src={src || defaultImg}
         alt={alt}
+        title={title}
         className={cn('object-cover', imgClass)}
       />
       <AvatarFallback className={fallbackClass} children={fallback} />

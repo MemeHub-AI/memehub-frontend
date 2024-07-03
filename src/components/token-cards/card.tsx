@@ -13,6 +13,12 @@ import { Img } from '@/components/img'
 import { useTokenProgressV3 } from '@/views/token/hooks/trade-v3/use-token-progress'
 import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '../ui/tooltip'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -49,10 +55,10 @@ export const TokenCard = (props: Props) => {
           {t('token.graduated')}
         </Badge>
       )}
-
       <Img
         src={card.image}
         alt="logo"
+        title={card.name}
         className="shrink-0 w-32 h-32 xl:w-40 xl:h-40 rounded-r-none"
       />
       <div className="py-1.5 xl:py-2 pr-2 w-full flex flex-col justify-between">
@@ -66,6 +72,7 @@ export const TokenCard = (props: Props) => {
               alt="logo"
               size={20}
               className="mt-1"
+              title={card.chain.name}
             />
           </CardTitle>
           <p
