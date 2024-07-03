@@ -169,7 +169,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           >
             <span>{t('ca')}:</span>
             <span className="truncate">
-              {fmt.addr(tokenInfo?.address || '', { len: 14 })}
+              {fmt.addr(tokenInfo?.address || '', { len: 12 })}
             </span>
             {isCopied ? <Check size={16} /> : <Copy size={16} />}
           </div>
