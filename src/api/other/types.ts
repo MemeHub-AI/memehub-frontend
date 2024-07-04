@@ -1,6 +1,6 @@
 export interface DiamondAddReq {
   token_address: string
-  base_amount: string
+  quote_amount: string
   chain: string
   operation: string
 }

@@ -39,7 +39,7 @@ export const useTrade = () => {
   const tradeV1 = useTradeV1(dexTrade)
   const tradeV2 = useTradeV2(dexTrade)
   const tradeV3 = useTradeV3(dexTrade)
-  const { getTokenAmount } = useTradeInfoV3()
+  const { getNativeAmount } = useTradeInfoV3()
 
   // handling version.
   const trade = useMemo(() => {
@@ -89,31 +89,31 @@ export const useTrade = () => {
   }
 
   const buying = async (
-    amount: string,
+    reserveAmount: string,
     slippage: string,
     setValue?: (value: string) => void
   ) => {
-    const isValid = await checkForTrade(amount)
+    const isValid = await checkForTrade(reserveAmount)
     if (!isValid) return
 
-    // TODO: temp
-    getTokenAmount(amount).then((data) => {
-      lastTrade.amount = formatEther(data)
-      lastTrade.type = TradeType.Buy
-    })
+    lastTrade.amount = reserveAmount
+    lastTrade.type = TradeType.Buy
 
-    logger('buy', amount, slippage)
-    trade?.buy(amount, slippage, setValue)
+    logger('buy', reserveAmount, slippage)
+    trade?.buy(reserveAmount, slippage, setValue)
   }
 
-  const selling = async (amount: string, slippage: string) => {
-    const isValid = await checkForTrade(amount)
+  const selling = async (tokenAmount: string, slippage: string) => {
+    const isValid = await checkForTrade(tokenAmount)
     if (!isValid) return
-    lastTrade.amount = amount
-    lastTrade.type = TradeType.Sell
 
-    logger('sell', amount, slippage)
-    trade?.sell(amount, slippage)
+    getNativeAmount(tokenAmount).then((amount) => {
+      lastTrade.amount = formatEther(amount)
+      lastTrade.type = TradeType.Sell
+    })
+
+    logger('sell', tokenAmount, slippage)
+    trade?.sell(tokenAmount, slippage)
   }
 
   const resetting = () => {
