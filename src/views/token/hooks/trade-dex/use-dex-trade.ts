@@ -1,6 +1,6 @@
 import { Hash } from 'viem'
 
-import { useUniswapV2 } from './use-uniswap-v2'
+import { useUniswapV2 } from './use-uniswapv2'
 
 export interface DexTradeProps {
   dexHash: Hash | undefined
