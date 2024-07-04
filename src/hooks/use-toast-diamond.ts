@@ -4,15 +4,15 @@ import { toast } from 'sonner'
 
 import { otherApi } from '@/api/other'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
-import { TradeSuccessCard } from '@/views/token/components/trade-success-card'
 import { useTokenContext } from '@/contexts/token'
 import { TxSuccess } from '@/components/toast/tx-success'
-
-interface Options {
-  txUrl: string
-  isBuy: boolean
+import { TradeType } from '@/constants/trade'
+export interface Options {
+  nativeAmount: string
   tokenAmount: string
-  nativeTokenAmount: string
+  type: string
+  hash?: `0x${string}`
+  txUrl: string
 }
 
 export const useToastDiamond = () => {
@@ -30,7 +30,7 @@ export const useToastDiamond = () => {
     operation: string,
     options: Options
   ) => {
-    const { txUrl, isBuy, tokenAmount, nativeTokenAmount } = options
+    const { txUrl, type, tokenAmount, nativeAmount } = options
     reset()
     const { data } = await mutateAsync({
       token_address: tokenAddr,
@@ -41,20 +41,22 @@ export const useToastDiamond = () => {
 
     const id = toast(
       createElement(TxSuccess, {
-        isBuy: isBuy,
+        isBuy: type === TradeType.Buy,
         txUrl: txUrl,
         tokenAmount,
-        nativeTokenAmount,
+        nativeTokenAmount: nativeAmount,
         diamondQuantity: data?.reward_amount,
       }),
-      { position: 'bottom-left', className: 'w-100' }
+      { position: 'bottom-left', className: 'w-100', duration: 120_000 }
     )
     setToastId(id)
 
     return id
   }
 
-  const dismissDiamond = () => toast.dismiss(toastId)
+  const dismissDiamond = () => {
+    // toast.dismiss(toastId)
+  }
 
   return {
     toastDiamond,
