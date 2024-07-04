@@ -76,7 +76,7 @@ export const fmt = {
 
     const decimalIndex = value.toFixed(roundMode).indexOf('.')
     if (decimalIndex !== -1) {
-      const decimalPart = value.toFixed(roundMode).slice(decimalIndex + 1)
+      const decimalPart = value.toFixed().slice(decimalIndex + 1)
       const zeroLen = decimalPart.match(/^0*/)?.[0].length ?? 0
       const lastNumbers = decimalPart.replace(/^0+/, '')
       const slicedLastNum = lastNumbers.slice(0, fixed)
