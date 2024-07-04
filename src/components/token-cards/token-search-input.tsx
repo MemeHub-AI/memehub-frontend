@@ -3,7 +3,7 @@ import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useTranslation } from 'react-i18next'
 import { useDebounce } from 'react-use'
 import { useMutation } from '@tanstack/react-query'
-import { chain, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 
 import { Input } from '../ui/input'
 import { cn } from '@/lib/utils'
@@ -55,20 +55,27 @@ export const TokenSearchInput = (props: Props) => {
   }, [props.chianTag])
 
   return (
-    <Input
-      className={cn('shadow-offset h-9 select-none', className)}
-      value={value}
-      onChange={({ target }) => setValue(target.value)}
-      placeholder={t('search.placeholder')}
-      startIcon={
-        <MagnifyingGlassIcon
-          width={18}
-          height={18}
-          className="cursor-pointer ml-2"
-          onClick={onSearch}
-        />
-      }
-    />
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSearch()
+      }}
+    >
+      <Input
+        className={cn('shadow-offset h-9 select-none', className)}
+        value={value}
+        onChange={({ target }) => setValue(target.value)}
+        placeholder={t('search.placeholder')}
+        startIcon={
+          <MagnifyingGlassIcon
+            width={18}
+            height={18}
+            className="cursor-pointer ml-2"
+            onClick={onSearch}
+          />
+        }
+      />
+    </form>
   )
 }
 

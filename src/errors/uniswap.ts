@@ -12,7 +12,7 @@ export const UNISWAP_ERR = {
     msg = msg.toLowerCase()
 
     if (msg.includes(ERR.insufficientAmount)) {
-      toast.error(t('uniswap.err.insufficient-amount'))
+      toast.error(t('uniswapv2.err.insufficient-amount'))
       return
     }
 
@@ -21,4 +21,8 @@ export const UNISWAP_ERR = {
     toast.error(msg)
     console.error(msg)
   },
+
+  reserveNotFound: () => toast.error(t('uniswapv2.err.reserve-not-found')),
+
+  reserveAmonutInvalid: () => toast.error(t('uniswapv2.err.reserve-amount')),
 }

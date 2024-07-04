@@ -21,7 +21,7 @@ export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const threshold = BigNumber(total).lte(0)
     ? t('threshold')
-    : ` ${fmt.decimals(total, 3)} ${nativeSymbol} `
+    : ` ${fmt.decimals(total, { fixed: 3 })} ${nativeSymbol} `
 
   return (
     <div className={cn('flex-1 relative', className)}>
