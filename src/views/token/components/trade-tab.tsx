@@ -156,7 +156,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         shadow="none"
         className={cn('p-3 gap-4 rounded-lg', className)}
       >
-        <Tabs value={tab} onValueChange={setTab}>
+        <Tabs
+          value={tab}
+          onValueChange={(v) => {
+            setValue('')
+            setTab(v)
+          }}
+        >
           <TabsList className="grid grid-cols-2 h-11 mb-3">
             <TabsTrigger
               className="h-full font-bold"

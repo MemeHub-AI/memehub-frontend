@@ -1,5 +1,6 @@
 import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Check, Copy } from 'lucide-react'
 
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
@@ -9,8 +10,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { BondingCurveProgress } from './bonding-curve-progress'
 import { Avatar } from '@/components/ui/avatar'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { Check, Copy } from 'lucide-react'
 import { useResponsive } from '@/hooks/use-responsive'
+import { usePools } from '../hooks/use-pools'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -18,6 +19,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { marketCap } = useHoldersStore()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
+  const { isGrauated } = usePools()
 
   if (isLoadingTokenInfo) {
     return (

@@ -35,7 +35,7 @@ export const useToastDiamond = () => {
     const { data } = await mutateAsync({
       token_address: tokenAddr,
       chain: chainName,
-      base_amount: amount,
+      quote_amount: amount,
       operation,
     })
 
