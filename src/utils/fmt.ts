@@ -12,6 +12,11 @@ interface FmtProgressOptions {
   toFixed?: number
 }
 
+interface DecimalsOptions {
+  fixed?: number
+  round?: boolean
+}
+
 export const fmt = {
   addr: (address?: string, options?: FmtAddrOptions) => {
     if (!address || !address.trim()) return ''
@@ -57,27 +62,32 @@ export const fmt = {
 
     return args.join('/')
   },
-  decimals(value?: number | string | BigNumber, fixed = 2) {
+  decimals(value?: number | string | BigNumber, options?: DecimalsOptions) {
+    const { fixed = 2, round = false } = options ?? {}
     if (!value) return '0'
 
+    const roundMode = round ? BigNumber.ROUND_HALF_UP : BigNumber.ROUND_DOWN
     value = value instanceof BigNumber ? value : BigNumber(value)
-    if (value.gte(1)) return value.toFixed(fixed)
+
+    if (value.gte(1)) {
+      return value.toFixed(fixed, roundMode)
+    }
     if (value.lte(0)) return '0'
 
-    const decimalIndex = value.toFixed().indexOf('.')
+    const decimalIndex = value.toFixed(roundMode).indexOf('.')
     if (decimalIndex !== -1) {
-      const decimalPart = value.toFixed().slice(decimalIndex + 1)
+      const decimalPart = value.toFixed(roundMode).slice(decimalIndex + 1)
       const zeroLen = decimalPart.match(/^0*/)?.[0].length ?? 0
       const lastNumbers = decimalPart.replace(/^0+/, '')
       const slicedLastNum = lastNumbers.slice(0, fixed)
       const result = `0.0{${zeroLen}}${slicedLastNum}`
 
-      if (zeroLen < 2) return value.toFixed(fixed)
-      if (zeroLen === 2) return value.toFixed(++fixed)
+      if (zeroLen < 2) return value.toFixed(fixed, roundMode)
+      if (zeroLen === 2) return value.toFixed(fixed + 1, roundMode)
 
       return result
     } else {
-      return BigNumber(value).toFixed()
+      return BigNumber(value).toFixed(roundMode)
     }
   },
   replaceHTMLCode(content: string) {

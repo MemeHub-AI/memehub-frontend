@@ -38,7 +38,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { getReserveAmount, getTokenAmount: getTokenAmount2 } =
     useUniswapV2Info()
 
-  const inputAmount = fmt.decimals(String(value || 0), 3)
+  const inputAmount = fmt.decimals(String(value || 0), { fixed: 3 })
   const [targetAmount, setTargetAmount] = useState('0')
   const tokenSymbol = tokenInfo?.ticker || ''
   const tokenAddr = tokenInfo?.address as Address

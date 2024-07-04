@@ -102,10 +102,11 @@ export const TradeTable = () => {
                   {isBuy ? t('trade.buy') : t('trade.sell')}
                 </TableCell>
                 <TableCell className="max-sm:text-xs">
-                  {fmt.decimals(r.base_amount)} {r.base_symbol}
+                  {fmt.decimals(r.base_amount, { round: true })} {r.base_symbol}
                 </TableCell>
                 <TableCell className="max-sm:text-xs">
-                  {fmt.decimals(r.quote_amount)} {r.quote_symbol}
+                  {fmt.decimals(r.quote_amount, { round: true })}{' '}
+                  {r.quote_symbol}
                 </TableCell>
                 <TableCell className="max-sm:text-xs w-48">
                   {showAge
