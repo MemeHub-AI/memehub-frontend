@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import {
+  useAccount,
   useChainId,
   useReadContract,
   useSwitchChain,
@@ -29,7 +30,7 @@ export const useAirdrop = (
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
-  const clientChianId = useChainId()
+  const { chainId: clientChianId } = useAccount()
   const { distributorConfig } = getV3Config(chainId)
   const uniqueKey = useMemo(nanoid, [])
   const { setIsCalimingAirdrop } = useAirdropStore()
@@ -72,7 +73,13 @@ export const useAirdrop = (
         toast.dismiss(id)
         setBurning(false)
       },
-      onError: (e) => CONTRACT_ERR.exec(e),
+      onError: (e) => {
+        CONTRACT_ERR.exec(e)
+        setBurning(false)
+      },
+      onSuccess: () => {
+        setBurning(false)
+      },
     },
   })
 
@@ -127,6 +134,8 @@ export const useAirdrop = (
   }
 
   const burn = () => {
+    console.log(chainId !== clientChianId, chainId, clientChianId)
+
     if (chainId !== clientChianId) {
       return switchChain({ chainId })
     }
