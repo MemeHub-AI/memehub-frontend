@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { useAccount } from 'wagmi'
 import { useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -26,7 +25,6 @@ export const useAirdrop = (
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
-  const { chainId: clientChianId } = useAccount()
   const { distributorConfig } = getV3Config(chainId)
   const uniqueKey = useMemo(nanoid, [])
   const { setIsCalimingAirdrop } = useAirdropStore()

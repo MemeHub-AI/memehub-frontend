@@ -16,6 +16,8 @@ import { useTradeInfoV3 } from '../hooks/trade-v3/use-trade-info'
 import { utilLang } from '@/utils/lang'
 import { Img } from '@/components/img'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { usePools } from '../hooks/use-pools'
+import { useUniswapV2Info } from '../hooks/trade-dex/use-uniswapv2-info'
 
 interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
   onChange?: (value: string) => void
@@ -28,6 +30,9 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
   const { getTotalSupply, getTokenAmount, getNativeAmount } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
+  const { isGrauated } = usePools(tokenInfo?.address)
+  const { getReserveAmount, getTokenAmount: getTokenAmount2 } =
+    useUniswapV2Info()
 
   const inputAmount = fmt.decimals(String(value || 0), 3)
   const [targetAmount, setTargetAmount] = useState('0')
@@ -53,8 +58,10 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
       toast.warning(utilLang.replace(t('trade.limit'), [value, t('trade.buy')]))
     }
 
-    const tokenAmount = formatEther(await getTokenAmount(value as string))
-    const amount = fmt.decimals(BigNumber(tokenAmount))
+    const tokenAmount = await (isGrauated
+      ? getTokenAmount2(value as string)
+      : getTokenAmount(value as string))
+    const amount = fmt.decimals(BigNumber(formatEther(tokenAmount)))
     setTargetAmount(amount)
   }
 
@@ -68,8 +75,10 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
       )
     }
 
-    const nativeAmount = formatEther(await getNativeAmount(value as string))
-    const amount = fmt.decimals(BigNumber(nativeAmount))
+    const nativeAmount = await (isGrauated
+      ? getReserveAmount(value as string)
+      : getNativeAmount(value as string))
+    const amount = fmt.decimals(BigNumber(formatEther(nativeAmount)))
     setTargetAmount(amount)
   }
 
