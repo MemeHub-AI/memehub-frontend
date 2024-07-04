@@ -1,11 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import {
-  useChainId,
-  useReadContract,
-  useSwitchChain,
-  useWriteContract,
-} from 'wagmi'
+import { useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
@@ -20,6 +15,7 @@ import { addPrefix0x } from '@/utils/contract'
 import { useTradeSearchParams } from '../use-search-params'
 import { getV3Config } from '@/contract/v3/config'
 import { useAirdropStore } from '@/stores/use-airdrop'
+import { useCheckChain } from '@/hooks/use-check-chain'
 
 export const useAirdrop = (
   id: number,
@@ -29,13 +25,12 @@ export const useAirdrop = (
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
-  const clientChianId = useChainId()
   const { distributorConfig } = getV3Config(chainId)
   const uniqueKey = useMemo(nanoid, [])
   const { setIsCalimingAirdrop } = useAirdropStore()
-  const { switchChain } = useSwitchChain()
   const [isClaim, setIsCalim] = useState(false)
   const [isBurning, setBurning] = useState(false)
+  const { checkForChain } = useCheckChain()
 
   // Query airdrop details.
   const { data: { data } = {}, refetch } = useQuery({
@@ -98,7 +93,9 @@ export const useAirdrop = (
   })
   const isClaiming = isSubmittingClaim || isWaitingClaim || isBurning
 
-  const claim = () => {
+  const claim = async () => {
+    const isValidChain = await checkForChain(chainId)
+    if (!isValidChain) return
     if (!distributorConfig) {
       CONTRACT_ERR.configNotFound()
       return
@@ -126,10 +123,9 @@ export const useAirdrop = (
     })
   }
 
-  const burn = () => {
-    if (chainId !== clientChianId) {
-      return switchChain({ chainId })
-    }
+  const burn = async () => {
+    const isValidChain = await checkForChain(chainId)
+    if (!isValidChain) return
 
     setBurning(true)
     writeContract({
