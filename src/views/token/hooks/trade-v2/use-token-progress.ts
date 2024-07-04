@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js'
 
 import { getBondConfig } from '@/contract/v2/config/bond'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { BI_ZERO } from '@/constants/contract'
+import { BI_ZERO } from '@/constants/number'
 
 export const useTokenProgressV2 = (
   overrideToken?: string,

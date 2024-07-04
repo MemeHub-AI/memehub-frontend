@@ -5,7 +5,7 @@ import { wagmiConfig } from '@/config/wagmi'
 import { uniswapV2Config } from '@/contract/abi/uniswap-v2'
 import { commonAddr } from '@/contract/address'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { BI_ZERO } from '@/constants/contract'
+import { BI_ZERO } from '@/constants/number'
 
 export const useUniswapV2Info = () => {
   const { chainId } = useChainInfo()

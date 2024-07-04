@@ -9,7 +9,7 @@ import { v1FactoryAbi } from '../../../contract/v1/abi/factory'
 import { v1Addr } from '@/contract/v1/address'
 import { v1FactoryParams } from '@/contract/v1/config/factory'
 import { commonAddr } from '@/contract/address'
-import { DEPLOY_FEE } from '@/constants/contract'
+import { DEPLOY_FEE } from '@/constants/deploy'
 
 export const useDeployV1 = (
   writeContract: WriteContractMutate<Config, unknown>

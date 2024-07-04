@@ -8,7 +8,7 @@ import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getTokenConfig } from '@/contract/v2/config/token'
 import { getBondConfig } from '@/contract/v2/config/bond'
-import { BI_ZERO, BI_ZERO_TUPLE } from '@/constants/contract'
+import { BI_ZERO, BI_ZERO_TUPLE } from '@/constants/number'
 import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useTradeInfoV2 = () => {

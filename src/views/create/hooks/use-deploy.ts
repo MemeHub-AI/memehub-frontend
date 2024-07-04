@@ -11,7 +11,7 @@ import { useDeployV1 } from './use-deploy-v1'
 import { useDeployV2 } from './use-deploy-v2'
 import { useDeployV3 } from './use-deploy-v3'
 import { getDeployLogAddr, versionOf } from '@/utils/contract'
-import { ContractVersion, DEPLOY_FEE } from '@/constants/contract'
+import { ContractVersion, DEPLOY_FEE } from '@/constants/deploy'
 import { logger } from '@/utils/log'
 
 export interface DeployParams {

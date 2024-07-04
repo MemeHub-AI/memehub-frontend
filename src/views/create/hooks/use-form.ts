@@ -12,7 +12,7 @@ import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { CoinType, Marketing } from '@/api/token/types'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
-import { DEPLOY_VERSION } from '@/constants/contract'
+import { DEPLOY_VERSION } from '@/constants/deploy'
 
 export const formFields = {
   fullname: 'fullname',

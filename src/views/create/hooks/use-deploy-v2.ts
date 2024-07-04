@@ -8,7 +8,7 @@ import { useCreateToken } from './use-create-token'
 import { bondDistributorParams, getBondConfig } from '@/contract/v2/config/bond'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { DEPLOY_FEE } from '@/constants/contract'
+import { DEPLOY_FEE } from '@/constants/deploy'
 import { AirdropMerkleRootRes } from '@/api/airdrop/types'
 import { MarketType, Marketing } from '@/api/token/types'
 
