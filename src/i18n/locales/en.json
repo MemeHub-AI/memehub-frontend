@@ -464,5 +464,8 @@
   "tx.success": "Congratulations! Successful transaction",
   "buy.toast": "Buy",
   "acquired": "Acquired",
-  "sell.toast": "Sell"
+  "sell.toast": "Sell",
+  "uniswapv2.err.insufficient-amount": "Insufficent remain quantity",
+  "uniswapv2.err.reserve-not-found": "Cannot find reserve token",
+  "uniswapv2.err.reserve-amount": "Reserve token amount invalid"
 }
