@@ -454,5 +454,13 @@
   "ai.creating2": "",
   "go-to.buy": "Go to buy",
   "chart.no-data": "Buy and become the first holder",
-  "contract.err.exec": "Contract execute error, please try again"
+  "contract.err.exec": "Contract execute error, please try again",
+  "tx": "View TX",
+  "tx.submit": "Transaction submission in progress...",
+  "slippage.low.tips": "Please increase the slippage and try again",
+  "tx.fail": "Transaction failed",
+  "tx.success": "Congratulations! Successful transaction",
+  "buy.toast": "Buy",
+  "acquired": "Acquired",
+  "sell.toast": "Sell"
 }

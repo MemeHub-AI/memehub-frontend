@@ -445,5 +445,13 @@
   "ai.craete": "AI 创建",
   "go-to.buy": "前往购买",
   "chart.no-data": "购买并成为第一个持有者",
-  "contract.err.exec": "合约执行错误，请重试"
+  "contract.err.exec": "合约执行错误，请重试",
+  "tx": "区块链记录",
+  "tx.submit": "交易提交中...",
+  "slippage.low.tips": "请提高滑点重试",
+  "tx.fail": "交易失败",
+  "tx.success": "恭喜你交易成功",
+  "buy.toast": "买入",
+  "acquired": "获得了",
+  "sell.toast": "卖出"
 }

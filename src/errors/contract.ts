@@ -2,17 +2,23 @@ import { toast } from 'sonner'
 import { t } from 'i18next'
 
 import { isUserReject } from '@/utils/contract'
+import { SlippageError } from '@/components/toast/slippage-error'
+import { createElement } from 'react'
+import { buttonLeft } from '@/config/toast'
 
 const ERR = {
   estimateGas: 'gap tip',
   invalidSell: 'MEMEHUB_InvalidSell'.toLowerCase(),
   isBurned: 'MEMEHUB_AlreadyBurn'.toLowerCase(),
+  transactionExecutionError: 'TransactionExecutionError',
 }
 
 export const CONTRACT_ERR = {
   // Execute contract error.
   exec: (err: unknown, showToast = true) => {
     const e = err as { message?: string }
+    console.log(err)
+
     if (!e?.message) return
 
     const msg = (e.message ?? '').toLowerCase()
@@ -20,6 +26,11 @@ export const CONTRACT_ERR = {
     // Cannot estimate gas.
     if (msg.includes(ERR.estimateGas)) {
       toast.error(t('contract.err.gas-estimate'))
+      return
+    }
+
+    if (msg.includes(ERR.transactionExecutionError)) {
+      toast.message(createElement(SlippageError), buttonLeft)
       return
     }
 
