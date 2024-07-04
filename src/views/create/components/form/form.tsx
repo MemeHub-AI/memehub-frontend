@@ -22,7 +22,7 @@ import { useCreateTokenContext } from '@/contexts/create-token'
 import { CoinTypeField } from './coin-type-field'
 import { MarketingField } from './marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { DEPLOY_FEE } from '@/constants/contract'
+import { DEPLOY_FEE } from '@/constants/deploy'
 import { Description } from './desc'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {

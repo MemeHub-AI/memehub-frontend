@@ -3,7 +3,8 @@ import { Hash, parseEther, Address, Log } from 'viem'
 import dayjs from 'dayjs'
 import { getBlock } from 'wagmi/actions'
 
-import { DEPLOY_LOG_TOPIC, TRADE_SERVICE_FEE } from '@/constants/contract'
+import { DEPLOY_LOG_TOPIC } from '@/constants/deploy'
+import { TRADE_SERVICE_FEE } from '@/constants/trade'
 import { wagmiConfig } from '@/config/wagmi'
 import { DEADLINE_SECONDS } from '@/constants/trade'
 

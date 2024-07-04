@@ -6,7 +6,7 @@ import { Address } from 'viem'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getV3Config } from '@/contract/v3/config'
 import { MarketType } from '@/api/token/types'
-import { BI_ZERO } from '@/constants/contract'
+import { BI_ZERO } from '@/constants/number'
 import { wagmiConfig } from '@/config/wagmi'
 
 export const useAirdropInfo = (
