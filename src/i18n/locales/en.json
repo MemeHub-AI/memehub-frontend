@@ -293,7 +293,7 @@
   "deploy.backend.submitting.desc": "Submitting information, please wait...",
   "create.info.error": "Failed to generate MEME information",
   "trade.balance.zero": "You currently have no balance",
-  "view.profile": "View profile",
+  "view.profile": "My Profile",
   "klink": "",
   "token.detail": "Token detail",
   "login.addr.empty": "Cannot find your wallet address",

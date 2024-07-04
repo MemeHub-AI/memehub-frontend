@@ -268,7 +268,7 @@ const AirdropCard = (props: AirdropCardProps) => {
     refetchIsClaimed,
   } = useAirdropInfo(typeList, airdrop.chain, airdrop.distribution_id)
 
-  const { isClaiming, claim, burn } = useAirdrop(
+  const { isClaiming, claim } = useAirdrop(
     airdrop.distribution_id,
     typeList.toString(),
     () => {

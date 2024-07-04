@@ -98,9 +98,9 @@ export const WalletAccount = () => {
               />
             </Button>
           </HoverCardTrigger>
-          <HoverCardContent className="flex flex-col p-1 w-40">
+          <HoverCardContent className="flex flex-col p-1 w-32">
             <Button
-              className="w-full gap-2 justify-start"
+              className="w-full gap-2 justify-start px-2"
               variant="ghost"
               shadow="none"
               onClick={() => {

@@ -27,12 +27,12 @@ export const WalletDisconnector = (props: Props) => {
         shadow="none"
         size={isMobile ? 'icon-sm' : 'default'}
         onClick={() => setOpen(true)}
-        className="gap-2 justify-start"
+        className="gap-2 !px-2 justify-start max-sm:!px-0"
         {...restProps}
       >
         <LogOut
           size={16}
-          className="ml-1 shrink-0 max-sm:ml-[2px]  max-sm:mr-[3px] "
+          className="ml-[4px] mr-[2px] shrink-0 max-sm:ml-[3px] max-sm:mr-[2px]"
         />
         {t('disconnect')}
       </Button>
