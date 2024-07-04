@@ -6,6 +6,14 @@ import { otherApi } from '@/api/other'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { TradeSuccessCard } from '@/views/token/components/trade-success-card'
 import { useTokenContext } from '@/contexts/token'
+import { TxSuccess } from '@/components/toast/tx-success'
+
+interface Options {
+  txUrl: string
+  isBuy: boolean
+  tokenAmount: string
+  nativeTokenAmount: string
+}
 
 export const useToastDiamond = () => {
   const [toastId, setToastId] = useState<string | number>('')
@@ -17,7 +25,12 @@ export const useToastDiamond = () => {
     mutationFn: otherApi.getDiamondAmount,
   })
 
-  const toastDiamond = async (amount: string, operation: string) => {
+  const toastDiamond = async (
+    amount: string,
+    operation: string,
+    options: Options
+  ) => {
+    const { txUrl, isBuy, tokenAmount, nativeTokenAmount } = options
     reset()
     const { data } = await mutateAsync({
       token_address: tokenAddr,
@@ -27,11 +40,12 @@ export const useToastDiamond = () => {
     })
 
     const id = toast(
-      createElement(TradeSuccessCard, {
-        amount,
-        symbol: tokenInfo?.ticker,
-        diamond: data?.reward_amount.toString(),
-        onClose: () => toast.dismiss(id),
+      createElement(TxSuccess, {
+        isBuy: isBuy,
+        txUrl: txUrl,
+        tokenAmount,
+        nativeTokenAmount,
+        diamondQuantity: data?.reward_amount,
       }),
       { position: 'bottom-left', className: 'w-100' }
     )

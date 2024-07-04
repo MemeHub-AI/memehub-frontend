@@ -16,6 +16,7 @@ import { useTradeSearchParams } from '../use-search-params'
 import { getV3Config } from '@/contract/v3/config'
 import { useAirdropStore } from '@/stores/use-airdrop'
 import { useCheckChain } from '@/hooks/use-check-chain'
+import { buttonLeft } from '@/config/toast'
 
 export const useAirdrop = (
   id: number,
@@ -62,7 +63,8 @@ export const useAirdrop = (
     reset,
   } = useWriteContract({
     mutation: {
-      onMutate: () => toast.loading(isClaim ? t('claiming') : t('burning')),
+      onMutate: () =>
+        toast.loading(isClaim ? t('claiming') : t('burning'), buttonLeft),
       onSettled: (_, __, ___, id) => {
         toast.dismiss(id)
         setBurning(false)
@@ -79,14 +81,18 @@ export const useAirdrop = (
 
   const { isFetching: isWaitingClaim } = useWaitForTx({
     hash,
-    onLoading: () => toast.loading(t('tx.waiting')),
+    onLoading: () => {
+      toast.loading(t('tx.waiting'), buttonLeft)
+    },
     onError: () =>
       toast.error(
-        isClaim ? t('airdrop.claim.failed') : t('airdrop.burn.failed')
+        isClaim ? t('airdrop.claim.failed') : t('airdrop.burn.failed'),
+        buttonLeft
       ),
     onSuccess: () =>
       toast.success(
-        isClaim ? t('airdrop.claim.success') : t('airdrop.burn.success')
+        isClaim ? t('airdrop.claim.success') : t('airdrop.burn.success'),
+        buttonLeft
       ),
     onFillay: () => {
       setBurning(false)

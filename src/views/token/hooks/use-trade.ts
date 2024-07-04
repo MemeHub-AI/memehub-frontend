@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { createElement, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { formatEther } from 'viem'
@@ -19,6 +19,9 @@ import { logger } from '@/utils/log'
 import { versionOf } from '@/utils/contract'
 import { TradeType } from '@/constants/trade'
 import { useInvite } from './use-invite'
+import { buttonLeft } from '@/config/toast'
+import { AiOutlineLoading3Quarters } from 'react-icons/ai'
+import { TxLoading } from '@/components/toast/tx-loading'
 
 // Used for trade success tips.
 const lastTrade = {
@@ -57,11 +60,18 @@ export const useTrade = () => {
   const tradeHash = trade?.tradeHash
   const isSubmitting = trade?.isSubmitting
 
+  const txUrl = `${tokenInfo?.chain.explorer}/tx/${tradeHash}`
   const { isLoading, isFetched: isTraded } = useWaitForTx({
     hash: tradeHash,
-    onLoading: () => toast.loading(t('tx.waiting')),
+    onLoading: () =>
+      toast.message(createElement(TxLoading, { txUrl }), buttonLeft),
     onSuccess: () => {
-      toastDiamond(lastTrade.amount, lastTrade.type)
+      toastDiamond(lastTrade.amount, lastTrade.type, {
+        txUrl,
+        isBuy: lastTrade.type === TradeType.Buy,
+        tokenAmount: lastTrade.amount,
+        nativeTokenAmount: `${lastTrade} ${tokenInfo?.ticker}`,
+      })
     },
     onError: CONTRACT_ERR.tradeFailed,
     onFillay: () => {
@@ -69,6 +79,7 @@ export const useTrade = () => {
       resetting()
     },
   })
+
   const isTrading = isSubmitting || isLoading
 
   const checkForTrade = async (amount: string) => {

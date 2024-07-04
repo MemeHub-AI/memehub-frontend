@@ -22,17 +22,8 @@ interface Props {
 export const TradeSuccessCard = (props: Props) => {
   const { amount, symbol = '', diamond = '', onClose } = props
   const { t } = useTranslation()
-  const { setUserInfo } = useUserStore()
-  const { address } = useAccount()
 
   const isZero = BigNumber(diamond).lte(0) || isEmpty(diamond)
-
-  const onEnd = async () => {
-    try {
-      const { data } = await userApi.getInfo(address!)
-      setUserInfo(data)
-    } catch {}
-  }
 
   return (
     <>
@@ -48,15 +39,6 @@ export const TradeSuccessCard = (props: Props) => {
             alt="diamond"
             className={'w-6 h-6'}
           />
-          {!isZero && (
-            <>
-              <DiamondIcon isZero={isZero} onEnd={onEnd} />
-              <DiamondIcon isZero={isZero} delay={0.05} />
-              <DiamondIcon isZero={isZero} delay={0.1} />
-              <DiamondIcon isZero={isZero} delay={0.15} />
-              <DiamondIcon isZero={isZero} delay={0.2} />
-            </>
-          )}
           {t('trade.success')}
         </h2>
 
@@ -77,63 +59,6 @@ export const TradeSuccessCard = (props: Props) => {
         )}
       </div>
     </>
-  )
-}
-
-interface DiamondIconProps {
-  isZero: boolean
-  delay?: number
-  onEnd?: () => void
-}
-
-const DiamondIcon = ({ isZero, delay = 0, onEnd }: DiamondIconProps) => {
-  const diamondRef = useRef<HTMLImageElement>(null)
-  const { diamondEl: rewardDiamondEl } = useHeaderStore()
-
-  const motion = () => {
-    if (!diamondRef.current || !rewardDiamondEl || isZero) {
-      return
-    }
-    const startRect = diamondRef.current.getBoundingClientRect()
-    const endRect = rewardDiamondEl.getBoundingClientRect()
-
-    const deltaX = endRect.left - startRect.left
-    const deltaY = innerHeight - startRect.top + endRect.top - innerHeight
-
-    console.log(
-      `deltaX: ${deltaX}`,
-      `endRect.left: ${endRect.left}`,
-      `startRect.left: ${startRect.left}`
-    )
-
-    const tween = gsap.to(diamondRef.current, {
-      x: deltaX,
-      y: deltaY,
-      width: 20,
-      height: 20,
-      duration: 2,
-      delay,
-    })
-    tween.eventCallback('onComplete', () => {
-      onEnd?.()
-      setTimeout(() => {
-        diamondRef.current?.remove()
-      }, 300)
-    })
-    return tween
-  }
-
-  useEffect(() => {
-    setTimeout(() => motion(), 350)
-  }, [rewardDiamondEl])
-
-  return (
-    <img
-      ref={diamondRef}
-      src={`/images/reward/diamond.png`}
-      alt="diamond"
-      className={'w-6 h-6 absolute'}
-    />
   )
 }
 
