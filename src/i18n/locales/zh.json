@@ -440,10 +440,12 @@
   "holder.burning": "黑洞",
   "reward.title": "Memehub 奖励",
   "contract.err.chain-failed": "切换链失败",
-  "uniswap.err.insufficient-amount": "剩余数量不足",
   "signing": "签名中...",
   "ai.craete": "AI 创建",
   "go-to.buy": "前往购买",
   "chart.no-data": "购买并成为第一个持有者",
-  "contract.err.exec": "合约执行错误，请重试"
+  "contract.err.exec": "合约执行错误，请重试",
+  "uniswapv2.err.insufficient-amount": "剩余数量不足",
+  "uniswapv2.err.reserve-not-found": "找不到储备代币",
+  "uniswapv2.err.reserve-amount": "储备代币金额无效"
 }

@@ -28,7 +28,11 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
-  const { getTotalSupply, getTokenAmount, getNativeAmount } = useTradeInfoV3()
+  const {
+    getMaxSupply: getTotalSupply,
+    getTokenAmount,
+    getNativeAmount,
+  } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
   const { isGrauated } = usePools(tokenInfo?.address)
   const { getReserveAmount, getTokenAmount: getTokenAmount2 } =

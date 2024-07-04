@@ -1,5 +1,6 @@
+import { useReadContract } from 'wagmi'
 import { readContract } from 'wagmi/actions'
-import { formatEther, parseEther, zeroAddress } from 'viem'
+import { Address, formatEther, parseEther, zeroAddress } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { last } from 'lodash'
 
@@ -9,12 +10,22 @@ import { getV3Config } from '@/contract/v3/config'
 import { BI_ZERO } from '@/constants/contract'
 import { useTradeSearchParams } from '../use-search-params'
 
-export const useTradeInfoV3 = () => {
+export const useTradeInfoV3 = (overrideToken?: Address) => {
   const { chainId } = useChainInfo()
-  const { tokenAddr } = useTradeSearchParams()
-  const { bondingCurveConfig } = getV3Config(chainId)
+  const { tokenAddr: queryToken } = useTradeSearchParams()
+  const { bondingCurveConfig, tokenConfig } = getV3Config(chainId)
+  const tokenAddr = overrideToken ?? queryToken
 
-  const getTotalSupply = async () => {
+  const { data = BI_ZERO } = useReadContract({
+    ...tokenConfig!,
+    address: tokenAddr,
+    chainId,
+    functionName: 'totalSupply',
+    query: { enabled: !!tokenConfig && !!tokenAddr },
+  })
+  const totalSupply = BigNumber(formatEther(data)).toFixed()
+
+  const getMaxSupply = async () => {
     if (!bondingCurveConfig) return BI_ZERO
     return readContract(wagmiConfig, {
       ...bondingCurveConfig,
@@ -82,11 +93,7 @@ export const useTradeInfoV3 = () => {
 
   const checkForOverflow = async (amount: string) => {
     const [amonutForBuy, totalSupply, [, leftSupply = BI_ZERO]] =
-      await Promise.all([
-        getTokenAmount(amount),
-        getTotalSupply(),
-        getDetails(),
-      ])
+      await Promise.all([getTokenAmount(amount), getMaxSupply(), getDetails()])
     const total = formatEther(totalSupply)
     const current = formatEther(leftSupply)
     const tokenAmount = formatEther(amonutForBuy)
@@ -117,7 +124,8 @@ export const useTradeInfoV3 = () => {
   }
 
   return {
-    getTotalSupply,
+    totalSupply,
+    getMaxSupply,
     getDetails,
     getNativeAmount,
     getTokenAmount,
