@@ -1,20 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-<<<<<<< HEAD
 import { useReadContract, useWriteContract } from 'wagmi'
-=======
-import {
-  useAccount,
-  useChainId,
-  useReadContract,
-  useSwitchChain,
-  useWriteContract,
-} from 'wagmi'
->>>>>>> 296df5d (feat: UI)
-import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { isEmpty } from 'lodash'
 import { nanoid } from 'nanoid'
+import { useTranslation } from 'react-i18next'
 
 import { airdropApi } from '@/api/airdrop'
 import { useChainInfo } from '@/hooks/use-chain-info'
@@ -35,10 +25,6 @@ export const useAirdrop = (
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
-<<<<<<< HEAD
-=======
-  const { chainId: clientChianId } = useAccount()
->>>>>>> 296df5d (feat: UI)
   const { distributorConfig } = getV3Config(chainId)
   const uniqueKey = useMemo(nanoid, [])
   const { setIsCalimingAirdrop } = useAirdropStore()
