@@ -6,7 +6,7 @@ interface ChartStore {
   chart: IChartingLibraryWidget | null
   chartEl: HTMLDivElement | null
 
-  setChart: (chart: IChartingLibraryWidget) => void
+  setChart: (chart: IChartingLibraryWidget | null) => void
   setChartEl: (chartEl: HTMLDivElement) => void
 }
 
