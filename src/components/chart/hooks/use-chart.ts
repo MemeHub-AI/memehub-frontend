@@ -44,6 +44,7 @@ export const useChart = () => {
         setChart(chart)
         chart.applyOverrides(chartConfig.overrides)
       })
+      return chart
     } catch (error) {
       console.error('[createChart Erorr]:', error)
     } finally {
@@ -54,6 +55,7 @@ export const useChart = () => {
   const removeChart = () => {
     removeDatafeed()
     chart?.remove()
+    setChart(null)
   }
 
   return {

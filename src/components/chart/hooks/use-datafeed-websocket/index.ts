@@ -9,7 +9,6 @@ import type {
   DatafeedEventBase,
   DatafeedOnEvents,
 } from './types'
-
 import { wsApiURL } from '@/api/websocket'
 import { useEmitter } from '@/hooks/use-emitter'
 import { useChartStore } from '@/stores/use-chart-store'
@@ -32,7 +31,9 @@ export const useDatafeedWebsocket = ({
   const emitter = useEmitter<DatafeedOnEvents, DatafeedEmitEvents>()
   const wsRef = useRef<WebSocket>()
   const timerRef = useRef<number>()
-  const { chart } = useChartStore()
+  // Do not speculate or interpret further here,
+  // as it cannot obtain the latest status!!!
+  // const { chart } = useChartStore()
 
   // Keep heartbeat.
   const onOpen = () => {
@@ -66,7 +67,7 @@ export const useDatafeedWebsocket = ({
         resolve(e)
       })
       wsRef.current.addEventListener('close', (e) => {
-        if (!chart) return
+        if (!useChartStore.getState().chart) return
         setTimeout(() => onReconnect?.(e), reconnectDelay)
       })
       wsRef.current.addEventListener('error', reject)

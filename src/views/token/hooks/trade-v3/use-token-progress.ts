@@ -37,12 +37,10 @@ export const useTokenProgressV3 = (
   const current = formatEther(tokenReserve || BI_ZERO)
 
   const progress = useMemo(() => {
-    if (isGrauated) return '100.00'
-
-    // Is zero.
     if (BigNumber(total).isZero()) {
       return BigNumber(BI_ZERO.toString()).toFixed(2)
     }
+    if (isGrauated) return '100.00'
 
     // Calc progress.
     return BigNumber(total)
