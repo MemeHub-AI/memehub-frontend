@@ -7,11 +7,18 @@ import { useComment } from '@/components/comment-cards/hooks/use-comment'
 import { useCommentsStore } from '@/stores/use-comments'
 
 interface Props {
-  children: ReactNode
+  open?: boolean
+  onOpenChange?: (value: boolean) => void
+  children?: ReactNode
   onTrade?: () => void
 }
 
-export const TradeCommentDialog = ({ children, onTrade }: Props) => {
+export const TradeCommentDialog = ({
+  children,
+  open,
+  onOpenChange,
+  onTrade,
+}: Props) => {
   const { t } = useTranslation()
   const closeRef = useRef<HTMLButtonElement | null>(null)
   const { addComment } = useComment()
@@ -24,6 +31,8 @@ export const TradeCommentDialog = ({ children, onTrade }: Props) => {
 
   return (
     <AlertDialog
+      open={open}
+      onOpenChange={onOpenChange}
       showFooter={false}
       content={
         <>
