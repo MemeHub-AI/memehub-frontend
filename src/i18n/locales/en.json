@@ -453,5 +453,6 @@
   "ai.craete": "AI Create",
   "ai.creating2": "",
   "go-to.buy": "Go to buy",
-  "chart.no-data": "Buy and become the first holder"
+  "chart.no-data": "Buy and become the first holder",
+  "contract.err.exec": "Contract execute error, please try again"
 }

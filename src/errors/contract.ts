@@ -39,7 +39,7 @@ export const CONTRACT_ERR = {
     if (isUserReject(msg)) return
 
     // Toast all other error.
-    if (showToast) toast.error(msg)
+    if (showToast) toast.error(t('contract.err.exec'))
     console.error(msg)
   },
 

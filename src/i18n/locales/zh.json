@@ -444,5 +444,6 @@
   "signing": "签名中...",
   "ai.craete": "AI 创建",
   "go-to.buy": "前往购买",
-  "chart.no-data": "购买并成为第一个持有者"
+  "chart.no-data": "购买并成为第一个持有者",
+  "contract.err.exec": "合约执行错误，请重试"
 }
