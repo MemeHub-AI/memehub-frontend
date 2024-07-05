@@ -56,7 +56,7 @@ export const TokenCards = (props: Props) => {
   return (
     <div className={cn(className)}>
       <CustomSuspense
-        className="flex justify-between items-center gap-4 max-sm:justify-between mb-4"
+        className="flex justify-between items-start gap-4 max-sm:justify-between mb-4"
         isPending={isLoading}
         fallback={
           <>
