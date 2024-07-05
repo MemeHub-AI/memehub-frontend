@@ -7,18 +7,17 @@ import type { DeployParams } from './use-deploy'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { DEPLOY_FEE } from '@/constants/deploy'
 import { getV3Config } from '@/contract/v3/config'
 import { AirdropMerkleRootRes } from '@/api/airdrop/types'
 import { MarketType, Marketing } from '@/api/token/types'
 
 export const useDeployV3 = (
-  writeContract: WriteContractMutate<Config, unknown>
+  writeContract: WriteContractMutate<Config, unknown>,
+  fee: bigint
 ) => {
   const { chainId, chainName } = useChainInfo()
   const { getMerkleRoot } = useCreateToken()
-  const { bondingCurveConfig, bondingCurveParams, distributorParams } =
-    getV3Config(chainId)
+  const { bondingCurveConfig, distributorParams } = getV3Config(chainId)
 
   const parsePercent = (p: number) => {
     return BigNumber(p).multipliedBy(100).multipliedBy(100).toNumber()
@@ -83,7 +82,7 @@ export const useDeployV3 = (
     marketing,
     onSuccess,
   }: DeployParams) => {
-    if (!bondingCurveConfig || !bondingCurveParams || !chainId) {
+    if (!bondingCurveConfig || !chainId || !chainName) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -99,13 +98,8 @@ export const useDeployV3 = (
       {
         ...bondingCurveConfig,
         functionName: 'createToken',
-        args: [
-          name,
-          ticker,
-          bondingCurveParams.addPoolEthAmount,
-          airdropParams,
-        ],
-        value: DEPLOY_FEE.v3,
+        args: [name, ticker, airdropParams],
+        value: fee,
       },
       { onSuccess }
     )

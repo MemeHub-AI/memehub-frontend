@@ -7,6 +7,7 @@ import { commonAddr } from '@/contract/address'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 import { BI_ZERO } from '@/constants/number'
+import { uniswapV2LPAbi } from '@/contract/uniswapv2/abi/lp'
 
 export const useUniswapV2Info = (poolAddr?: Address | undefined) => {
   const { chainId } = useChainInfo()
