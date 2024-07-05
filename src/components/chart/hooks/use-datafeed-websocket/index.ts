@@ -98,7 +98,7 @@ export const useDatafeedWebsocket = ({
     return withPromise<DatafeedEventBase<'listen', DatafeedBar[]>>(
       async (resolve, reject) => {
         emitter.on('listen', (v) => v.data && resolve(v))
-        sendMessage({ type: 'listen', data: { ...data, limit: 20 } })
+        sendMessage({ type: 'listen', data: data })
       }
     )
   }

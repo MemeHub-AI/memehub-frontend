@@ -123,3 +123,17 @@
   margin: 15px 0;
   border-radius: 4px;
 }
+
+.moving-element {
+  animation: moveRight 0.4s linear ;
+}
+
+@keyframes moveRight {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}

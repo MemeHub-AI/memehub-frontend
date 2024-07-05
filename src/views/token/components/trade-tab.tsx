@@ -45,7 +45,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   )
   const { query, ...router } = useRouter()
   const { switchChainAsync } = useSwitchChain()
-  const { isConnected, chainId } = useAccount()
+  const { isConnected, chainId, address } = useAccount()
   const { isClaimingAirdrop } = useAirdropStore()
 
   const { slippage, setSlippage } = useSlippage()
@@ -200,18 +200,27 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           </div>
 
           {/* Trade button */}
-          <TradeCommentDialog onTrade={onTrade}>
+          {isConnected ? (
+            <TradeCommentDialog onTrade={onTrade}>
+              <Button
+                className="!w-full font-bold bg-lime-green-deep"
+                disabled={disableTrade}
+              >
+                {isBalanceOverflow
+                  ? t('balance.insufficient')
+                  : isSubmitting
+                  ? t('trading')
+                  : t('trade')}
+              </Button>
+            </TradeCommentDialog>
+          ) : (
             <Button
               className="!w-full font-bold bg-lime-green-deep"
-              disabled={disableTrade}
+              onClick={() => setConnectOpen(true)}
             >
-              {isBalanceOverflow
-                ? t('balance.insufficient')
-                : isSubmitting
-                ? t('trading')
-                : t('trade')}
+              {t('connect.wallet')}
             </Button>
-          </TradeCommentDialog>
+          )}
           {isConnected && (
             <>
               <Button

@@ -7,7 +7,7 @@ interface Props {
 
 export const Container = ({ className, children }: Props) => {
   return (
-    <div className={cn('w-full relative text-[15px]', className)}>
+    <div className={cn('w-full relative text-[15px] min-h-[107px]', className)}>
       {children}
     </div>
   )

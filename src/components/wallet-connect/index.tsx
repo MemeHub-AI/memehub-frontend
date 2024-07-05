@@ -1,5 +1,5 @@
-import React, { useState, type ComponentProps } from 'react'
-import { useAccount } from 'wagmi'
+import React, { useEffect, useState, type ComponentProps } from 'react'
+import { useAccount, useDisconnect } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 
 import { WalletAccount } from './components/account'
