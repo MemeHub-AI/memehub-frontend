@@ -2,10 +2,11 @@ import { readContract } from 'wagmi/actions'
 import { parseEther } from 'viem'
 
 import { wagmiConfig } from '@/config/wagmi'
-import { uniswapV2Config } from '@/contract/abi/uniswap-v2'
 import { commonAddr } from '@/contract/address'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/contract'
+import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
+import { uniswapV2LPAbi } from '@/contract/uniswapv2/abi/lp'
 
 export const useUniswapV2Info = () => {
   const { chainId } = useChainInfo()
@@ -13,7 +14,7 @@ export const useUniswapV2Info = () => {
 
   const getReserveAmount = async (amountIn: string) => {
     return await readContract(wagmiConfig, {
-      ...uniswapV2Config,
+      abi: uniswapV2RouterAbi,
       address: router,
       chainId,
       functionName: 'getAmountOut',
@@ -26,7 +27,7 @@ export const useUniswapV2Info = () => {
 
   const getTokenAmount = async (amountOut: string) => {
     const amount = await readContract(wagmiConfig, {
-      ...uniswapV2Config,
+      abi: uniswapV2RouterAbi,
       address: router,
       chainId,
       functionName: 'getAmountIn',

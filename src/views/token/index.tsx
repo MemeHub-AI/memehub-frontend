@@ -1,4 +1,5 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { TradeTab } from './components/trade-tab'
 import { TokenInfo } from './components/token-info'
@@ -12,7 +13,6 @@ import { TokenInfoHeader } from './components/token-info-header'
 import { cn } from '@/lib/utils'
 import { TradeAirdrop } from './components/trade-airdrop'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useTranslation } from 'react-i18next'
 
 export const TokenPage = () => {
   const { isMobile } = useResponsive()
