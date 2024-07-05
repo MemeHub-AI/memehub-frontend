@@ -18,19 +18,19 @@ const dev = {
 
   // dev mainnet.
   [bsc.id]: {
-    bondingCurve: '0x293f06b08e5463EcD90EA81cA245a7C329e091ee',
-    distributor: '0x3E5063Efc490D12C5bF4C0b28122aD376891CDF6',
-    recommend: '0x2654cBEFb82410B5E2Df17750d0B936A827386cf',
+    bondingCurve: '0x6445AaFCf697D18aEFf2c8B54a65c390751aad60',
+    distributor: '0x9E004ee0abBB11a2756A684C4B543A4eDb675313',
+    recommend: '0x526A198E880beDeF856c584BFa94E353C7612f79',
   },
   [blast.id]: {
-    bondingCurve: '0xfDF4c56346A294A4e924005eeFA4da4247753B6C',
-    distributor: '0x88Bc6da007fC3f9e086686362d51800c4F54228a',
-    recommend: '0x20a52a42047617EcdFDafd34f7f4163D4f3925CD',
+    bondingCurve: '0x04E43A46CF810Afd193Aeab29C2124F94B42d66D',
+    distributor: '0x74Db74A3A9c75bD040ed4693DDfe2d7Af78BDDfC',
+    recommend: '0xF395F9243cdb7316130257bF263dc145AD972a66',
   },
   [base.id]: {
-    bondingCurve: '0x8e0cbA0e741f9e10250cE58EA9969721dA67b675',
-    distributor: '0xfB3De63c7C7368E92e06f86BfCd088e5dF091aEd',
-    recommend: '0x0A6b36C71365FBB58C14cE786142437D6e063099',
+    bondingCurve: '0x0525D602F0c7ACEB8da7489441420CcDa5B305f3',
+    distributor: '0x115dae585eA9A1654393BCDE0A31eD0b7B3C9818',
+    recommend: '0xB964Cb749f80079F7285b488e59B21D12E194b97',
   },
 } as const
 
