@@ -16,7 +16,7 @@ import {
 import {
   heartbeat,
   isSuccessMessage,
-  isUpdateMessage,
+  isDisconnectMessage,
   wsApiURL,
 } from '@/api/websocket'
 import { Routes } from '@/routes'
@@ -145,7 +145,7 @@ export const useTradeLogs = () => {
     // Not a success or update message, return it.
     if (
       !isSuccessMessage(lastJsonMessage) &&
-      !isUpdateMessage(lastJsonMessage)
+      !isDisconnectMessage(lastJsonMessage)
     ) {
       return
     }
