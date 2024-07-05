@@ -7,10 +7,10 @@ import dayjs from 'dayjs'
 
 import { useApprove } from '@/hooks/use-approve'
 import { commonAddr } from '@/contract/address'
-import { uniswapV2Config } from '@/contract/abi/uniswap-v2'
 import { logger } from '@/utils/log'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { UNISWAP_ERR } from '@/errors/uniswap'
+import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
@@ -66,9 +66,9 @@ export const useUniswapV2 = () => {
       reserveToken,
     })
     writeContract({
-      ...uniswapV2Config,
-      chainId,
+      abi: uniswapV2RouterAbi,
       address: router,
+      chainId,
       functionName: 'swapExactETHForTokens',
       args: [
         BigInt(0),
@@ -96,9 +96,9 @@ export const useUniswapV2 = () => {
       reserveToken,
     })
     writeContract({
-      ...uniswapV2Config,
-      chainId,
+      abi: uniswapV2RouterAbi,
       address: router,
+      chainId,
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),

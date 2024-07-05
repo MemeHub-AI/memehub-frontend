@@ -1,6 +1,4 @@
-import { uniswapV2Addr } from '../address'
-
-export const uniswapV2Abi = [
+export const uniswapV2RouterAbi = [
   {
     inputs: [
       { internalType: 'address', name: '_factory', type: 'address' },
@@ -356,8 +354,3 @@ export const uniswapV2Abi = [
   },
   { stateMutability: 'payable', type: 'receive' },
 ] as const
-
-export const uniswapV2Config = {
-  abi: uniswapV2Abi,
-  address: uniswapV2Addr,
-} as const
