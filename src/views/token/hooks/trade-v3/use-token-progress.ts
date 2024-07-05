@@ -6,7 +6,7 @@ import { Address, formatEther } from 'viem'
 import { getV3Config } from '@/contract/v3/config'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
-import { BI_ZERO } from '@/constants/contract'
+import { BI_ZERO } from '@/constants/number'
 import { usePools } from '../use-pools'
 
 export const useTokenProgressV3 = (

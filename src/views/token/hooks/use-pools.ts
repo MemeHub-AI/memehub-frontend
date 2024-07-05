@@ -3,7 +3,7 @@ import { Address, zeroAddress } from 'viem'
 
 import { getV3Config } from '@/contract/v3/config'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { BI_ZERO } from '@/constants/contract'
+import { BI_ZERO } from '@/constants/number'
 
 export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
   const { chainId } = useChainInfo()
