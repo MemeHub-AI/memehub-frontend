@@ -4,50 +4,61 @@ import { toast } from 'sonner'
 
 import { otherApi } from '@/api/other'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
-import { useTokenContext } from '@/contexts/token'
-import { TxSuccess } from '@/components/toast/tx-success'
 import { TradeType } from '@/constants/trade'
+import { TxStatus } from '@/components/toast/tx-status'
+
 export interface Options {
   nativeAmount: string
   tokenAmount: string
   type: string
   hash?: `0x${string}`
   txUrl: string
+  setLoading?: (loading: boolean) => void
 }
 
-export const useToastDiamond = () => {
+export const useTradeToast = () => {
   const [toastId, setToastId] = useState<string | number>('')
   const { chainName, tokenAddr } = useTradeSearchParams()
-  const { tokenInfo } = useTokenContext()
 
   const { mutateAsync, reset } = useMutation({
     mutationKey: [otherApi.getDiamondAmount.name],
     mutationFn: otherApi.getDiamondAmount,
   })
 
-  const toastDiamond = async (
-    amount: string,
-    operation: string,
-    options: Options
-  ) => {
-    const { txUrl, type, tokenAmount, nativeAmount } = options
+  const showToast = async (options: Options) => {
+    const { txUrl, type, tokenAmount, nativeAmount, hash, setLoading } = options
     reset()
+
+    console.log(JSON.stringify(options))
+
     const { data } = await mutateAsync({
       token_address: tokenAddr,
       chain: chainName,
-      quote_amount: amount,
-      operation,
+      quote_amount: parseFloat(nativeAmount).toString(),
+      operation: type,
     })
 
+    setLoading(false)
+
     const id = toast(
-      createElement(TxSuccess, {
+      createElement(TxStatus, {
         isBuy: type === TradeType.Buy,
         txUrl: txUrl,
         tokenAmount,
+        hash: hash,
         nativeTokenAmount: nativeAmount,
         diamondQuantity: data?.reward_amount,
+        getToastId: () => id,
       }),
-      { position: 'bottom-left', className: 'w-100', duration: 120_000 }
+      {
+        position: 'bottom-left',
+        className: 'w-100 moving-element',
+        duration: 1200_000,
+        style: {
+          transition:
+            'transformY 0s,transformX .4s,opacity .4s,height .4s,box-shadow .2s',
+        },
+      }
     )
     setToastId(id)
 
@@ -55,11 +66,11 @@ export const useToastDiamond = () => {
   }
 
   const dismissDiamond = () => {
-    // toast.dismiss(toastId)
+    toast.dismiss(toastId)
   }
 
   return {
-    toastDiamond,
+    showToast,
     dismissDiamond,
   }
 }
