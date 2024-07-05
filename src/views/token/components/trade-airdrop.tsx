@@ -4,6 +4,9 @@ import { TbUsers } from 'react-icons/tb'
 import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
+import { useInterval } from 'react-use'
+import dayjs from 'dayjs'
+import { useAccount } from 'wagmi'
 
 import { useAirdrop } from '../hooks/trade-v3/use-airdrop'
 import { cn } from '@/lib/utils'
@@ -18,9 +21,6 @@ import { AirdropItem } from '@/api/airdrop/types'
 import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
 import { MarketType } from '@/api/token/types'
 import { useUserStore } from '@/stores/use-user-store'
-import { useInterval } from 'react-use'
-import dayjs from 'dayjs'
-import { useAccount } from 'wagmi'
 import { useResponsive } from '@/hooks/use-responsive'
 
 export const TradeAirdrop = () => {
@@ -134,40 +134,22 @@ const Burn = (props: BurmProps) => {
   const { className, airdrop, kol, communities } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
-  const { address } = useAccount()
   const [isExpired, setIsExpired] = useState(false)
 
-  const burnTotal = () => {
-    if (kol && communities) {
-      return BigNumber(kol.amount)
-        .multipliedBy(BigNumber(total).minus(claimed).div(total))
-        .plus(
-          BigNumber(communities.amount).multipliedBy(
-            BigNumber(communityTotal)
-              .minus(communityClaimed)
-              .div(communityTotal)
-          )
-        )
-    } else if (kol) {
-      return BigNumber(kol.amount).multipliedBy(
-        BigNumber(total).minus(claimed).div(total)
-      )
-    } else if (communities) {
-      return BigNumber(communities.amount).multipliedBy(
-        BigNumber(communityTotal).minus(communityClaimed).div(communityTotal)
-      )
-    }
-  }
-  const { total, claimed, durationSeconds, refetch, refetchIsClaimed } =
-    useAirdropInfo(MarketType.Kol, airdrop.chain, airdrop.distribution_id)
-
-  const { total: communityTotal, claimed: communityClaimed } = useAirdropInfo(
+  const {
+    durationSeconds,
+    remain: remainKol,
+    refetch,
+    refetchIsClaimed,
+  } = useAirdropInfo(MarketType.Kol, airdrop.chain, airdrop.distribution_id)
+  const { remain: remainCommunity } = useAirdropInfo(
     MarketType.Community,
     airdrop.chain,
     airdrop.distribution_id
   )
 
-  const burnText = `${burnTotal()?.toFormat()} ${tokenInfo?.ticker}`
+  const remain = Math.min(remainKol, remainCommunity)
+  const burnText = `${BigNumber(remain).toFormat()} ${tokenInfo?.ticker}`
 
   const { isBurning, isBurn, burn } = useAirdrop(
     airdrop.distribution_id,

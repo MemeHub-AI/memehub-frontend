@@ -139,6 +139,19 @@ export const v3BondingCurveAbi = [
     inputs: [
       {
         indexed: true,
+        internalType: 'uint256',
+        name: 'flag',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubContractDeploy',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: 'contract MEMEHUB_Token',
         name: 'token',
         type: 'address',
