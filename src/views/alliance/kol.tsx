@@ -67,7 +67,7 @@ export const Kol = () => {
 
         {userInfo?.role?.kol ? null : <Button>{t('apply.kol')}</Button>}
         <CustomSuspense
-          className="mt-5 grid grid-cols-3 gap-4 w-full max-xl:grid-cols-2 max-md:grid-cols-1"
+          className="mt-5 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 w-full"
           isPending={isLoading}
           fallback={<CardSkeleton></CardSkeleton>}
           nullback={<div className="mt-4">{t('no.kol')}</div>}
