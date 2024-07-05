@@ -3,13 +3,18 @@ import useWebSocket from 'react-use-websocket'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 
-import type { WSMessageBase, WSTradeInfoMessage } from '@/api/websocket/types'
+import {
+  WSMessageType,
+  type WSMessageBase,
+  type WSTradeInfoMessage,
+} from '@/api/websocket/types'
 
 import {
   heartbeat,
   isSuccessMessage,
-  isUpdateMessage,
+  isDisconnectMessage,
   wsApiURL,
+  isUpdateMessage,
 } from '@/api/websocket'
 import { useHoldersStore } from '@/stores/use-holders-store'
 
@@ -17,7 +22,7 @@ export const useHolders = () => {
   const { query } = useRouter()
   const { setHolders, setMarketCap } = useHoldersStore()
 
-  const { lastJsonMessage, sendJsonMessage } =
+  const { lastJsonMessage, sendJsonMessage, getWebSocket } =
     useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(wsApiURL.tokenInfo, {
       heartbeat,
       onOpen: () => {
@@ -32,7 +37,10 @@ export const useHolders = () => {
           data: { token_address, chain },
         })
       },
-      filter: ({ data }) => isSuccessMessage(data) || isUpdateMessage(data),
+      filter: ({ data }) =>
+        isSuccessMessage(data) ||
+        isUpdateMessage(data) ||
+        isDisconnectMessage(data),
       shouldReconnect: () => true,
     })
 
@@ -40,6 +48,9 @@ export const useHolders = () => {
   const holders = lastJsonMessage?.data?.holders.slice(0, 15) || []
 
   useEffect(() => {
+    if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {
+      return getWebSocket()?.close()
+    }
     setMarketCap(marketCap)
     setHolders(holders)
   }, [lastJsonMessage])
