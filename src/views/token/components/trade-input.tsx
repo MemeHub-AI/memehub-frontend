@@ -36,7 +36,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { chainInfo } = useChainInfo()
   const { isGrauated } = usePools(tokenInfo?.address)
   const { getReserveAmount, getTokenAmount: getTokenAmount2 } =
-    useUniswapV2Info()
+    useUniswapV2Info(tokenInfo?.pool_address as Address)
 
   const inputAmount = fmt.decimals(String(value || 0), { fixed: 3 })
   const [targetAmount, setTargetAmount] = useState('0')

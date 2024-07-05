@@ -8,10 +8,10 @@ import { useCreateToken } from './use-create-token'
 import { bondDistributorParams, getBondConfig } from '@/contract/v2/config/bond'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { DEPLOY_FEE } from '@/constants/deploy'
 import { AirdropMerkleRootRes } from '@/api/airdrop/types'
 import { MarketType, Marketing } from '@/api/token/types'
 
+/** Depreacted */
 export const useDeployV2 = (
   writeContract: WriteContractMutate<Config, unknown>
 ) => {
@@ -78,7 +78,7 @@ export const useDeployV2 = (
     onSuccess,
   }: DeployParams) => {
     const config = getBondConfig(chainId)
-    if (!chainId || !config) {
+    if (!chainId || !config || !chainName) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -96,7 +96,7 @@ export const useDeployV2 = (
         ...bondConfig,
         functionName: 'createToken',
         args: [{ name, symbol: ticker }, bondParams, airdropParams],
-        value: DEPLOY_FEE.v2,
+        // value: DEPLOY_FEE.v2,
       },
       { onSuccess }
     )

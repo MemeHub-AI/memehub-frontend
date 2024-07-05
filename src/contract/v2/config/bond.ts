@@ -4,8 +4,6 @@ import { BigNumber } from 'bignumber.js'
 import { v2BondAbi } from '../abi/bond'
 import { getV2Addr } from '.'
 
-// export const DEPLOY_FEE = BigInt(1500000000000000) // 0.0015 native token
-
 const stepRanges = [
   7e25, 7.68e25, 8.36e25, 9.04e25, 9.72e25, 1.04e26, 1.108e26, 1.176e26,
   1.244e26, 1.312e26, 1.38e26, 1.448e26, 1.516e26, 1.584e26, 1.652e26, 1.72e26,

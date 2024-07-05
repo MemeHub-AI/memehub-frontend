@@ -22,7 +22,6 @@ import { useCreateTokenContext } from '@/contexts/create-token'
 import { CoinTypeField } from './coin-type-field'
 import { MarketingField } from './marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { DEPLOY_FEE } from '@/constants/deploy'
 import { Description } from './desc'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
@@ -33,9 +32,8 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { url, form, formFields, onSubmit, chains } = formData
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
 
-  const { isDeploying } = deployResult || {}
+  const { isDeploying, deployFee } = deployResult || {}
 
-  const deployFee = fmt.decimals(formatEther(DEPLOY_FEE.v3))
   const chainSymbol = chains.find(
     (c) => c.name === form.getValues(formFields.chainName)
   )?.native.symbol
@@ -190,7 +188,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             </Button>
             {symbol && (
               <p className="text-zinc-400 text-xs">
-                {t('deploy.fee')}: ~{deployFee} {symbol}
+                {t('deploy.fee')}: ~{fmt.decimals(deployFee)} {symbol}
               </p>
             )}
           </div>

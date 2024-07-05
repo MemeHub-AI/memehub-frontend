@@ -71,4 +71,6 @@ export const CONTRACT_ERR = {
   tokenInvalid: () => toast.error(t('contract.err.token-addr')),
   amountInvlid: () => toast.error(t('contract.err.amount')),
   balanceInvalid: () => toast.error(t('contract.err.balance')),
+  balanceInsufficient: () =>
+    toast.error(t('contract.err.balance-insufficient')),
 }

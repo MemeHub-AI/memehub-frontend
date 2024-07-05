@@ -28,9 +28,9 @@ const dev = {
     recommend: '0x20a52a42047617EcdFDafd34f7f4163D4f3925CD',
   },
   [base.id]: {
-    bondingCurve: '0xfDF4c56346A294A4e924005eeFA4da4247753B6C',
-    distributor: '0x88Bc6da007fC3f9e086686362d51800c4F54228a',
-    recommend: '0x20a52a42047617EcdFDafd34f7f4163D4f3925CD',
+    bondingCurve: '0x8e0cbA0e741f9e10250cE58EA9969721dA67b675',
+    distributor: '0xfB3De63c7C7368E92e06f86BfCd088e5dF091aEd',
+    recommend: '0x0A6b36C71365FBB58C14cE786142437D6e063099',
   },
 } as const
 
