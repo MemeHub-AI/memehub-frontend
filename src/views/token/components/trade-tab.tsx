@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { isAddress } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
-import { useAccount } from 'wagmi'
+import { useAccount, useSwitchChain } from 'wagmi'
 import { isEmpty } from 'lodash'
 import { useDebounce } from 'react-use'
 
@@ -35,6 +35,7 @@ import { InviteTipsDialog } from './invite-tips-dialog'
 import { TradeCommentDialog } from './trade-comment-dialog'
 import { useCheckChain } from '@/hooks/use-check-chain'
 import { useTradeSearchParams } from '../hooks/use-search-params'
+import { useRouter } from 'next/router'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -46,7 +47,9 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
   )
-  const { isConnected } = useAccount()
+  const { query, ...router } = useRouter()
+  const { switchChainAsync } = useSwitchChain()
+  const { isConnected, chainId, address } = useAccount()
   const { isClaimingAirdrop } = useAirdropStore()
   const { tokenAddr } = useTradeSearchParams()
 
@@ -187,22 +190,27 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           </div>
 
           {/* Trade button */}
-
-          <Button
-            className="!w-full font-bold bg-lime-green-deep"
-            disabled={disableTrade}
-            onClick={async () => {
-              const isValidChain = await checkForChain(tokenInfo?.chain.id)
-              if (!isValidChain) return
-              setCommentOpen(true)
-            }}
-          >
-            {isBalanceOverflow
-              ? t('balance.insufficient')
-              : isSubmitting
-              ? t('trading')
-              : t('trade')}
-          </Button>
+          {isConnected ? (
+            <TradeCommentDialog onTrade={onTrade}>
+              <Button
+                className="!w-full font-bold bg-lime-green-deep"
+                disabled={disableTrade}
+              >
+                {isBalanceOverflow
+                  ? t('balance.insufficient')
+                  : isSubmitting
+                  ? t('trading')
+                  : t('trade')}
+              </Button>
+            </TradeCommentDialog>
+          ) : (
+            <Button
+              className="!w-full font-bold bg-lime-green-deep"
+              onClick={() => setConnectOpen(true)}
+            >
+              {t('connect.wallet')}
+            </Button>
+          )}
           {isConnected && (
             <>
               <Button

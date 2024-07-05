@@ -13,11 +13,18 @@ interface Props {
   tokenAmount: string
   nativeTokenAmount: string
   diamondQuantity: number
+  toastId: string | number
 }
 
 export const TxSuccess = (props: Props) => {
-  const { isBuy, nativeTokenAmount, tokenAmount, txUrl, diamondQuantity } =
-    props
+  const {
+    toastId,
+    isBuy,
+    nativeTokenAmount,
+    tokenAmount,
+    txUrl,
+    diamondQuantity,
+  } = props
   const { t } = useTranslation()
   const isZero = BigNumber(diamondQuantity).lte(0)
   const { setUserInfo } = useUserStore()
@@ -31,14 +38,15 @@ export const TxSuccess = (props: Props) => {
   }
   return (
     <Container>
-      <CloseButton></CloseButton>
+      <CloseButton toastId={toastId}></CloseButton>
       <div className="font-bold mr-2">{t('tx.success')}</div>
-      <div className="my-2">
-        {isBuy ? t('buy.toast') : t('sell.toast')} {tokenAmount} for{' '}
-        {nativeTokenAmount}
+      <div className="my-1">
+        {isBuy ? t('buy.toast') : t('sell.toast')}{' '}
+        {isBuy ? nativeTokenAmount : tokenAmount} for{' '}
+        {isBuy ? tokenAmount : nativeTokenAmount}
       </div>
       {!isZero ? (
-        <div className="flex items-center gap-1 mb-2">
+        <div className="flex items-center gap-1 mb-1">
           {t('acquired')}
           <span className="text-blue-600 text-xl">
             {BigNumber(diamondQuantity).toFormat()}
@@ -61,9 +69,12 @@ export const TxSuccess = (props: Props) => {
           </div>
         </div>
       ) : null}
-      <div className="text-blue-600 cursor-pointer" onClick={() => open(txUrl)}>
+      <span
+        className="text-blue-600 cursor-pointer"
+        onClick={() => open(txUrl)}
+      >
         {t('tx')}
-      </div>
+      </span>
     </Container>
   )
 }

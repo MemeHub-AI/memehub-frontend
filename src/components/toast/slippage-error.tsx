@@ -4,25 +4,26 @@ import { Container } from './container'
 
 interface Props {
   txUrl: string
+  toastId: string | number
 }
 
-export const SlippageError = ({ txUrl }: Props) => {
+export const SlippageError = ({ txUrl, toastId }: Props) => {
   const { t } = useTranslation()
   return (
     <Container>
-      <CloseButton></CloseButton>
+      <CloseButton toastId={toastId}></CloseButton>
       <div className="font-bold">{t('tx.fail')}</div>
       <div className="flex justify-between">
         <div>
           <div className="my-2">{t('slippage.low.tips')}</div>
-          <div
+          <span
             className="text-blue-600 cursor-pointer"
             onClick={() => {
               open(txUrl)
             }}
           >
             {t('tx')}
-          </div>
+          </span>
         </div>
         <img
           src="/images/error.png"

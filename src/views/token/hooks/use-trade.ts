@@ -1,6 +1,5 @@
-import { createElement, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { formatEther } from 'viem'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
@@ -10,7 +9,7 @@ import { useTradeV2 } from './trade-v2/use-trade'
 import { useTradeV3 } from './trade-v3/use-trade'
 import { useTokenContext } from '@/contexts/token'
 import { useDexTrade } from './trade-dex/use-dex-trade'
-import { Options, useToastDiamond } from '@/hooks/use-toast-diamond'
+import { Options, useTradeToast } from '@/hooks/use-trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
 import { useTradeInfoV3 } from './trade-v3/use-trade-info'
@@ -19,28 +18,24 @@ import { logger } from '@/utils/log'
 import { versionOf } from '@/utils/contract'
 import { TradeType } from '@/constants/trade'
 import { useInvite } from './use-invite'
-import { buttonLeft } from '@/config/toast'
-import { AiOutlineLoading3Quarters } from 'react-icons/ai'
-import { TxLoading } from '@/components/toast/tx-loading'
-import BigNumber from 'bignumber.js'
 import { fmt } from '@/utils/fmt'
 
 // Used for trade success tips.
-const lastTrade = {
-  amount: '',
+const lastTrade: Options = {
+  tokenAmount: '',
+  nativeAmount: '',
   type: '',
+  txUrl: '',
 }
 
-const txRecords = [] as Options[]
-
 export const useTrade = () => {
-  const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
-  const { toastDiamond, dismissDiamond } = useToastDiamond()
+  const { showToast } = useTradeToast()
   const { userInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
   const [inviteOpen, setInviteOpen] = useState(false)
   const { getInviterInfo, getCanBind } = useInvite()
+  const [loading, setLoading] = useState(false)
 
   const dexTrade = useDexTrade()
   const tradeV1 = useTradeV1(dexTrade)
@@ -48,7 +43,6 @@ export const useTrade = () => {
   const tradeV3 = useTradeV3(dexTrade)
   const { getNativeAmount, getTokenAmount } = useTradeInfoV3()
 
-  // handling version.
   const trade = useMemo(() => {
     if (!tokenInfo) return
 
@@ -63,65 +57,7 @@ export const useTrade = () => {
 
   const tradeHash = trade?.tradeHash
   const isSubmitting = trade?.isSubmitting
-
-  const txUrl = `${tokenInfo?.chain.explorer}/tx/${tradeHash}`
-  const { isLoading, isFetched: isTraded } = useWaitForTx({
-    hash: tradeHash,
-    onLoading: async () => {
-      let nativeAmount = ''
-      let tokenAmount = ''
-      if (lastTrade.type === TradeType.Buy) {
-        let amount = await getTokenAmount(lastTrade.amount)
-        tokenAmount = `${fmt.decimals(formatEther(amount))} ${
-          tokenInfo?.ticker
-        }`
-        nativeAmount = `${fmt.decimals(lastTrade.amount, 3)} ${
-          tokenInfo?.chain.native.symbol
-        }`
-      } else {
-        let amount = await getNativeAmount(lastTrade.amount)
-        nativeAmount = `${fmt.decimals(formatEther(amount), 3)} ${
-          tokenInfo?.chain.native.symbol
-        }`
-        tokenAmount = `${fmt.decimals(lastTrade.amount)} ${tokenInfo?.ticker}`
-      }
-      txRecords.push({
-        hash: tradeHash,
-        nativeAmount,
-        tokenAmount,
-        type: lastTrade.type,
-        txUrl,
-      })
-      toast.message(createElement(TxLoading, { txUrl }), buttonLeft)
-    },
-    onSuccess: () => {
-      toast.dismiss()
-      const txRecord = txRecords.find((r) => r.hash === tradeHash)
-      console.log('txRecord', txRecord)
-
-      if (txRecord) {
-        toastDiamond(lastTrade.amount, lastTrade.type, txRecord)
-      } else {
-        console.log('txRecord not found')
-      }
-    },
-    onError: () => {
-      CONTRACT_ERR.tradeFailed()
-    },
-    onFillay: () => {
-      removeRecord()
-      resetting()
-    },
-  })
-
-  const removeRecord = () => {
-    const i = txRecords.findIndex((r) => r.hash === tradeHash)
-    if (i !== -1) {
-      txRecords.splice(i, 1)
-    }
-  }
-
-  const isTrading = isSubmitting || isLoading
+  const isTrading = isSubmitting || loading
 
   const checkForTrade = async (amount: string) => {
     // Cannot use self code to trade.
@@ -145,10 +81,24 @@ export const useTrade = () => {
     slippage: string,
     setValue?: (value: string) => void
   ) => {
-    const isValid = await checkForTrade(reserveAmount)
-    if (!isValid) return
+    setLoading(true)
+    try {
+      const isValid = await checkForTrade(reserveAmount)
+      if (!isValid) {
+        setLoading(false)
+        return
+      }
+    } catch {
+      setLoading(false)
+    }
 
-    lastTrade.amount = reserveAmount
+    const amount = await getTokenAmount(reserveAmount)
+    lastTrade.tokenAmount = `${fmt.decimals(formatEther(amount))} ${
+      tokenInfo?.ticker
+    }`
+    lastTrade.nativeAmount = `${fmt.decimals(reserveAmount, 3)} ${
+      tokenInfo?.chain.native.symbol
+    }`
     lastTrade.type = TradeType.Buy
 
     logger('buy', reserveAmount, slippage)
@@ -156,13 +106,23 @@ export const useTrade = () => {
   }
 
   const selling = async (tokenAmount: string, slippage: string) => {
-    const isValid = await checkForTrade(tokenAmount)
-    if (!isValid) return
+    setLoading(true)
+    try {
+      const isValid = await checkForTrade(tokenAmount)
+      if (!isValid) {
+        setLoading(false)
+        return
+      }
+    } catch {
+      setLoading(false)
+    }
 
-    getNativeAmount(tokenAmount).then((amount) => {
-      lastTrade.amount = formatEther(amount)
-      lastTrade.type = TradeType.Sell
-    })
+    const amount = await getNativeAmount(tokenAmount)
+    lastTrade.nativeAmount = `${fmt.decimals(formatEther(amount), 3)} ${
+      tokenInfo?.chain.native.symbol
+    }`
+    lastTrade.tokenAmount = `${fmt.decimals(tokenAmount)} ${tokenInfo?.ticker}`
+    lastTrade.type = TradeType.Sell
 
     logger('sell', tokenAmount, slippage)
     trade?.sell(tokenAmount, slippage)
@@ -170,14 +130,24 @@ export const useTrade = () => {
 
   const resetting = () => {
     trade?.resetTrade()
-    dismissDiamond()
   }
+
+  useEffect(() => {
+    if (!trade?.tradeHash) return
+    resetting()
+    showToast({
+      ...lastTrade,
+      txUrl: `${tokenInfo?.chain.explorer}/tx/${trade.tradeHash}`,
+      hash: trade.tradeHash,
+      setLoading: () => setLoading(false),
+    })
+  }, [trade])
 
   return {
     tradeHash,
     isSubmitting,
     isTrading,
-    isTraded,
+    isTraded: false,
     buying,
     selling,
     resetting,
