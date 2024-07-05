@@ -9,6 +9,10 @@ const ethBondingCurve = {
   addPoolEthAmount: parseEther('2.108707384624434741'),
 }
 
+const baseBondingCurve = {
+  addPoolEthAmount: parseEther('0.090015754923413566'),
+}
+
 const distributor = {
   isDistribution: false,
   distributionRatioKol: 0,
@@ -37,7 +41,7 @@ export const v3Params = {
     distributor,
   },
   [base.id]: {
-    bondingCurve: ethBondingCurve,
+    bondingCurve: baseBondingCurve,
     distributor,
   },
 }

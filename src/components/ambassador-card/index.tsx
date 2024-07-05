@@ -32,8 +32,15 @@ export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
         className="w-24 h-24 xl:w-32 xl:h-32 rounded-full border-2 border-black"
       />
       <div className="ml-2">
-        <h2 className="text-2xl max-sm:text-xl">{data?.name}</h2>
-        <div className="mt-2 break-all line-clamp-2">{data?.description}</div>
+        <h2
+          className="text-2xl max-sm:text-xl break-all line-clamp-2"
+          title={data?.name}
+        >
+          {data?.name}
+        </h2>
+        <div className="mt-2 break-all line-clamp-2" title={data?.description}>
+          {data?.description}
+        </div>
       </div>
     </Card>
   )

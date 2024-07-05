@@ -7,7 +7,7 @@ import { last } from 'lodash'
 import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getV3Config } from '@/contract/v3/config'
-import { BI_ZERO } from '@/constants/contract'
+import { BI_ZERO } from '@/constants/number'
 import { useTradeSearchParams } from '../use-search-params'
 
 export const useTradeInfoV3 = (overrideToken?: Address) => {

@@ -12,6 +12,7 @@ export interface TokenListItem extends UserCoinsCreated {
   hash: string
   explorer_tx: string
   version: string
+  pool_address: null | string
 }
 
 export interface TokenNewReq {

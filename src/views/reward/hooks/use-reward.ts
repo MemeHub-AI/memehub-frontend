@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
 import { getV3Config } from '@/contract/v3/config'
-import { BI_ZERO } from '@/constants/contract'
+import { BI_ZERO } from '@/constants/number'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
 
