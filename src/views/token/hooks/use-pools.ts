@@ -28,10 +28,10 @@ export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
     vEthReserve = BI_ZERO,
     addPoolEthAmount = BI_ZERO,
     creator,
-    headmaster,
+    headmaster = zeroAddress,
   ] = pools
 
-  const isGrauated = !!(headmaster && headmaster !== zeroAddress)
+  const isGrauated = headmaster !== zeroAddress
 
   return {
     token,
