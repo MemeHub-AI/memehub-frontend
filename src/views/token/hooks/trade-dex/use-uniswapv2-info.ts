@@ -6,8 +6,8 @@ import { wagmiConfig } from '@/config/wagmi'
 import { commonAddr } from '@/contract/address'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
-import { BI_ZERO } from '@/constants/number'
 import { uniswapV2LPAbi } from '@/contract/uniswapv2/abi/lp'
+import { BI_ZERO } from '@/constants/number'
 
 export const useUniswapV2Info = (poolAddr?: Address | undefined) => {
   const { chainId } = useChainInfo()
@@ -19,8 +19,7 @@ export const useUniswapV2Info = (poolAddr?: Address | undefined) => {
     functionName: 'getReserves',
     query: { enabled: !!poolAddr },
   })
-  const [reserveIn, reserveOut] = reserves
-  console.log('reserve', reserveIn, reserveOut)
+  const [reserveOut, reserveIn] = reserves
 
   const getReserveAmount = (amountOut: string) => {
     return readContract(wagmiConfig, {
