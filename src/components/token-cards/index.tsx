@@ -70,7 +70,7 @@ export const TokenCards = (props: Props) => {
         <TokenSearchInput
           chianTag={chianTag}
           onSearched={(tokens) => setFilteredCards(tokens)}
-          onCleared={() => setFilteredCards(cards)}
+          onCleared={() => setFilteredCards(cards.filter((c) => c.chain.id === chianTag))}
         />
       </CustomSuspense>
 
