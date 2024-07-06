@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from 'react'
+import React, { Fragment, type ComponentProps } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { zeroAddress } from 'viem'
@@ -54,22 +54,26 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
           fallback={<HolderRankSkeleton />}
           nullback={<p>{t('no.holders')}</p>}
         >
-          {holders?.map((r, i) => (
-            <li key={i} className="flex items-center justify-between">
-              <p>
-                {i + 1}.{' '}
-                <Link
-                  href={r.scan_url}
-                  target="_blank"
-                  className="hover:text-black hover:underline transition-all cursor-pointer"
-                >
-                  {fmt.addr(r.address)}
-                </Link>
-                {getLabel(r)}
-              </p>
-              <span>{fmt.percent(r.percentage)}</span>
-            </li>
-          ))}
+          {holders?.map((r, i) => {
+            // Exclude airdrop.
+            if (r.contract_flag?.includes('Air')) return null
+            return (
+              <li key={i} className="flex items-center justify-between">
+                <p>
+                  {i + 1}.{' '}
+                  <Link
+                    href={r.scan_url}
+                    target="_blank"
+                    className="hover:text-black hover:underline transition-all cursor-pointer"
+                  >
+                    {fmt.addr(r.address)}
+                  </Link>
+                  {getLabel(r)}
+                </p>
+                <span>{fmt.percent(r.percentage)}</span>
+              </li>
+            )
+          })}
         </CustomSuspense>
       </div>
     </>
