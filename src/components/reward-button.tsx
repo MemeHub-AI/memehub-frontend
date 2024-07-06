@@ -67,6 +67,7 @@ export const RewardButton = React.forwardRef<
         <DiamondIcon size={20} ref={diamondRef} />
         {userInfo?.reward_amount ? (
           <Countup
+            decimals={userInfo?.reward_amount < 100 ? 2 : 0}
             start={oldUserInfo?.reward_amount}
             end={userInfo?.reward_amount}
           ></Countup>
