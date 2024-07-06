@@ -19,7 +19,7 @@ export const useUniswapV2Info = (poolAddr?: Address | undefined) => {
     functionName: 'getReserves',
     query: { enabled: !!poolAddr },
   })
-  const [reserveOut, reserveIn] = reserves
+  const [reserveIn, reserveOut] = reserves
 
   const getReserveAmount = (amountOut: string) => {
     return readContract(wagmiConfig, {

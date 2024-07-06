@@ -1,5 +1,5 @@
 import { useAccount, useWriteContract } from 'wagmi'
-import { isAddress, parseEther, type Address } from 'viem'
+import { formatEther, isAddress, parseEther, type Address } from 'viem'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
@@ -65,6 +65,7 @@ export const useUniswapV2 = () => {
       chainId,
       router,
       reserveToken,
+      slippaged: formatEther(subSlippage(amount, slippage)),
     })
     writeContract({
       abi: uniswapV2RouterAbi,
@@ -99,6 +100,7 @@ export const useUniswapV2 = () => {
       chainId,
       router,
       reserveToken,
+      slippaged: formatEther(subSlippage(amount, slippage)),
     })
     writeContract({
       abi: uniswapV2RouterAbi,
