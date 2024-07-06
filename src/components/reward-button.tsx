@@ -45,6 +45,15 @@ export const RewardButton = React.forwardRef<
     return <></>
   }
 
+  const getMoney = () => {
+    const money = userInfo?.reward_amount.toString()
+    if (money.length > 4) {
+      return money.substring(0, 4) + '...';
+    } else {
+      return money;
+    }
+  }
+
   return (
     <Button
       variant="outline"
@@ -72,7 +81,7 @@ export const RewardButton = React.forwardRef<
             end={userInfo?.reward_amount}
           ></Countup>
         ) : (
-          t('rewards')
+          showReferral ? t('rewards') : t(getMoney())
         )}
       </div>
     </Button>
