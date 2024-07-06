@@ -34,12 +34,19 @@ export const TokenSearchInput = (props: Props) => {
       page_size: 50,
       token: value,
     })
+
     const tokens =
       props.chianTag === 'all'
         ? data?.results ?? []
         : data?.results?.filter((c) => c.chain.id === props.chianTag) ?? []
 
-    onSearched(tokens)
+    const result = tokens.filter(
+      (c) =>
+        c.name.toLowerCase().includes(value.toLowerCase())
+        || c.ticker.toLowerCase().includes(value.toLowerCase())
+    )
+
+    onSearched(result)
   }
 
   useDebounce(onSearch, 500, [value])

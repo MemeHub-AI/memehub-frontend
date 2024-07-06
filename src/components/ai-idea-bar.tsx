@@ -67,7 +67,7 @@ export const AIIdeaBar = (props: Props) => {
           <img
             src="/images/ai.png"
             alt="img"
-            className="w-[60px] h-[60px] rounded-sm mr-5"
+            className="w-[30px] h-[30px] rounded-sm mr-5"
           />
           <div>{t('ai.generate.bio')}</div>
         </div>
