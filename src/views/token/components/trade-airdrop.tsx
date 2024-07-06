@@ -25,8 +25,6 @@ export const TradeAirdrop = () => {
 
   const { data, communities, isOnlyOne, kol } = airdrop
 
-  console.log(kol)
-
   const kolAirdropInfo = useAirdropInfo(
     MarketType.Kol,
     kol?.chain,
@@ -38,14 +36,18 @@ export const TradeAirdrop = () => {
     communities?.distribution_id
   )
 
-  const kolAirdrop = useAirdrop(kol?.distribution_id!, kol?.chain!, () => {
-    kolAirdropInfo?.refetch()
-    kolAirdropInfo?.refetchIsClaimed()
-  })
+  const kolAirdrop = useAirdrop(
+    kol?.distribution_id!,
+    `${kol?.airdrop_type}`,
+    () => {
+      kolAirdropInfo?.refetch()
+      kolAirdropInfo?.refetchIsClaimed()
+    }
+  )
 
   const communitiesAirdrop = useAirdrop(
     communities?.distribution_id!,
-    communities?.chain!,
+    `${communities?.airdrop_type}`,
     () => {
       communitiesAirdropInfo?.refetch()
       communitiesAirdropInfo?.refetchIsClaimed()
