@@ -466,5 +466,6 @@
   "acquired": "Acquired",
   "sell.toast": "Sell",
   "uniswapv2.err.pool-addr": "Cannot find pool address",
-  "contract.err.balance-insufficient": "insufficient balance"
+  "contract.err.balance-insufficient": "insufficient balance",
+  "chart": "Chart"
 }

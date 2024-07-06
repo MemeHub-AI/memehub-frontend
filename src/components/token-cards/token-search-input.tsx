@@ -27,19 +27,26 @@ export const TokenSearchInput = (props: Props) => {
   })
 
   const onSearch = async () => {
-    if (isEmpty(value.trim())) return
+    if (isEmpty(value.trim())) return 
 
     const { data } = await mutateAsync({
       page: 1,
       page_size: 50,
       token: value,
     })
+
     const tokens =
       props.chianTag === 'all'
         ? data?.results ?? []
         : data?.results?.filter((c) => c.chain.id === props.chianTag) ?? []
 
-    onSearched(tokens)
+    const result = tokens.filter(
+      (c) =>
+        c.name.toLowerCase().trim().includes(value.trim().toLowerCase())
+        || c.ticker.toLowerCase().trim().includes(value.trim().toLowerCase())
+    )
+
+    onSearched(result)
   }
 
   useDebounce(onSearch, 500, [value])

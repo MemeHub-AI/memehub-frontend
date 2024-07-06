@@ -36,7 +36,7 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
         <TabsTrigger value={Tab.Comments}>{t('comments')}</TabsTrigger>
         <TabsTrigger value={Tab.Trades}>{t('trades')}</TabsTrigger>
       </TabsList>
-      <TabsContent value={Tab.Comments} className="mt-2 max-sm:mt-2">
+      <TabsContent value={Tab.Comments} className="mt-2 max-sm:mt-1">
         <CommentCards
           cards={comments}
           total={total}
@@ -48,7 +48,7 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
           onUnlikeSuccess={updateComment}
         />
       </TabsContent>
-      <TabsContent value={Tab.Trades} className="max-sm:mt-1">
+      <TabsContent value={Tab.Trades} className="max-sm:mt-2">
         <TradeTable />
       </TabsContent>
     </Tabs>
