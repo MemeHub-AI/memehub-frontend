@@ -39,7 +39,8 @@ export const FollowTab = () => {
       const isFollowers = tab === UserListType.Followers
       return (
         <Dialog>
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between"
+            style={{ margin: "0 10px 10px 10px" }}>
             <DialogTrigger asChild>
               <Button
                 variant="outline"

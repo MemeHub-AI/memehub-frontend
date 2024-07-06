@@ -40,7 +40,9 @@ export const AccountPage = () => {
           )}
         >
           <Profile />
-          <FollowTab />
+          <div className='max-sm:hidden'>
+            <FollowTab />
+          </div>
         </aside>
 
         {/* Right tabs */}
