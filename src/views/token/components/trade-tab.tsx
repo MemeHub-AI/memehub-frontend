@@ -1,9 +1,4 @@
-import React, {
-  type ComponentProps,
-  useState,
-  useMemo,
-  useEffect,
-} from 'react'
+import React, { type ComponentProps, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isAddress } from 'viem'
 import { toast } from 'sonner'
@@ -189,24 +184,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           </div>
 
           {/* Trade button */}
-<<<<<<< HEAD
-
-          <Button
-            className="!w-full font-bold bg-lime-green-deep"
-            disabled={disableTrade}
-            onClick={async () => {
-              const isValidChain = await checkForChain(tokenInfo?.chain.id)
-              if (!isValidChain) return
-              setCommentOpen(true)
-            }}
-          >
-            {isBalanceOverflow
-              ? t('balance.insufficient')
-              : isSubmitting
-              ? t('trading')
-              : t('trade')}
-          </Button>
-=======
           {isConnected ? (
             <TradeCommentDialog onTrade={onTrade}>
               <Button
@@ -228,7 +205,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               {t('connect.wallet')}
             </Button>
           )}
->>>>>>> bd84241 (feat: Optimize the popup animation)
           {isConnected && (
             <>
               <Button
