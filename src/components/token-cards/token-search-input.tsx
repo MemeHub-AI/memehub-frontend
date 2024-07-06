@@ -27,7 +27,7 @@ export const TokenSearchInput = (props: Props) => {
   })
 
   const onSearch = async () => {
-    if (isEmpty(value.trim())) return
+    if (isEmpty(value.trim())) return 
 
     const { data } = await mutateAsync({
       page: 1,
@@ -42,8 +42,8 @@ export const TokenSearchInput = (props: Props) => {
 
     const result = tokens.filter(
       (c) =>
-        c.name.toLowerCase().includes(value.toLowerCase())
-        || c.ticker.toLowerCase().includes(value.toLowerCase())
+        c.name.toLowerCase().trim().includes(value.trim().toLowerCase())
+        || c.ticker.toLowerCase().trim().includes(value.trim().toLowerCase())
     )
 
     onSearched(result)
