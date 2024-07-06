@@ -54,9 +54,7 @@ export const useDeploy = () => {
     writeContract,
     reset: resetDeploy,
   } = useWriteContract({
-    mutation: {
-      onError: (e) => CONTRACT_ERR.exec(e),
-    },
+    mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
   })
   const {
     data,

@@ -15,9 +15,9 @@ export const useDeployV3 = (
   writeContract: WriteContractMutate<Config, unknown>,
   fee: bigint
 ) => {
-  const { chainId, chainName } = useChainInfo()
+  const { chainId, chainName, walletChainId } = useChainInfo()
   const { getMerkleRoot } = useCreateToken()
-  const { bondingCurveConfig, distributorParams } = getV3Config(chainId)
+  const { bondingCurveConfig, distributorParams } = getV3Config(walletChainId)
 
   const parsePercent = (p: number) => {
     return BigNumber(p).multipliedBy(100).multipliedBy(100).toNumber()
@@ -97,6 +97,7 @@ export const useDeployV3 = (
     writeContract(
       {
         ...bondingCurveConfig,
+        chainId: walletChainId,
         functionName: 'createToken',
         args: [name, ticker, airdropParams],
         value: fee,
