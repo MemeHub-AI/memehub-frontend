@@ -34,6 +34,11 @@ export const FollowTab = () => {
     refetch: refetchFollowing,
   } = useUserList(UserListType.Following)
 
+  const refetchFollows = () => {
+    refetchFollowers()
+    refetchFollowing()
+  }
+
   const renderTabs = () => {
     if (isMobile) {
       const isFollowers = tab === UserListType.Followers
@@ -87,7 +92,14 @@ export const FollowTab = () => {
     }
 
     return (
-      <Tabs value={tab.toString()} onValueChange={(t) => setTab(Number(t))}>
+      <Tabs
+        value={tab.toString()}
+        onValueChange={(t) => {
+          setTab(Number(t))
+          refetchFollowers()
+          refetchFollowing()
+        }}
+      >
         <TabsList className="w-full">
           <TabsTrigger
             value={UserListType.Following.toString()}
@@ -124,13 +136,7 @@ export const FollowTab = () => {
   }
 
   return (
-    <FollowTabProvider
-      value={{
-        tab,
-        refetchFollows:
-          tab === UserListType.Followers ? refetchFollowers : refetchFollowing,
-      }}
-    >
+    <FollowTabProvider value={{ tab, refetchFollows }}>
       {/* adapt mobile */}
       {renderTabs()}
     </FollowTabProvider>
