@@ -87,7 +87,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             src={tokenInfo?.image}
             variant="border"
             alt="logo"
-            className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2"
+            className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white"
             onClick={() => {
               setDetails(
                 <img
