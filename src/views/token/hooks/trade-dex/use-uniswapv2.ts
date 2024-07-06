@@ -12,12 +12,16 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { UNISWAP_ERR } from '@/errors/uniswap'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 import { subSlippage } from '@/utils/contract'
+import { useUniswapV2Info } from './use-uniswapv2-info'
+import { useTokenContext } from '@/contexts/token'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
   const { address } = useAccount()
   const { chainId } = useChainInfo()
   const { isApproving, approvalForAll } = useApprove()
+  const { tokenInfo } = useTokenContext()
+  const { getReserveAmount } = useUniswapV2Info(tokenInfo?.pool_address)
 
   const { reserveToken, router } =
     commonAddr[chainId as keyof typeof commonAddr] || {}
@@ -93,6 +97,8 @@ export const useUniswapV2 = () => {
     const isApproved = await approvalForAll(token, router, amount)
     if (!isApproved) return
 
+    const reserveAmount = formatEther(await getReserveAmount(amount))
+
     logger('uniswap sell', {
       amount,
       token,
@@ -100,7 +106,8 @@ export const useUniswapV2 = () => {
       chainId,
       router,
       reserveToken,
-      slippaged: formatEther(subSlippage(amount, slippage)),
+      reserveAmount,
+      slippaged: formatEther(subSlippage(reserveAmount, slippage)),
     })
     writeContract({
       abi: uniswapV2RouterAbi,
@@ -109,7 +116,7 @@ export const useUniswapV2 = () => {
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),
-        subSlippage(amount, slippage),
+        subSlippage(reserveAmount, slippage),
         [token, reserveToken],
         address!,
         BigInt(dayjs().unix() + 60),
