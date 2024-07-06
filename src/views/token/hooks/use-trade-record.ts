@@ -6,8 +6,9 @@ import { isEmpty } from 'lodash'
 import {
   heartbeat,
   isSuccessMessage,
-  isUpdateMessage,
+  isDisconnectMessage,
   wsApiURL,
+  isUpdateMessage,
 } from '@/api/websocket'
 import {
   WSMessageBase,
@@ -35,16 +36,18 @@ export const useTradeRecord = () => {
         data: { token_address, chain },
       })
     },
-    filter: ({ data }) => isSuccessMessage(data) || isUpdateMessage(data),
+    filter: ({ data }) =>
+      isSuccessMessage(data) ||
+      isUpdateMessage(data) ||
+      isDisconnectMessage(data),
     shouldReconnect: () => true,
   })
 
   useEffect(() => {
-    if (!lastJsonMessage || !lastJsonMessage.data) return
-
-    if (lastJsonMessage.type === WSMessageType.ConnectInvalid) {
+    if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {
       return getWebSocket()?.close()
     }
+    if (!lastJsonMessage || !lastJsonMessage.data) return
 
     setTradeRecords((records) => {
       const merged = [...(lastJsonMessage.data ?? []), ...records]

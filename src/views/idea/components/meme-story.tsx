@@ -81,7 +81,7 @@ export const MemeStory = memo(({ data }: MemeStoryData) => {
                   <div className="break-all">
                     {Array.isArray(memeInfo[key])
                       ? memeInfo[key].join(', ')
-                      : memeInfo[key]}
+                      : memeInfo[key].replace(/[{}]/g, '')}
                   </div>
                 </div>
               )

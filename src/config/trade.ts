@@ -10,27 +10,38 @@ import {
   polygon,
 } from 'wagmi/chains'
 
-import { TRADE_BUY_ITEMS } from '@/constants/contract'
+const items = {
+  eth: ['0.05', '0.1', '0.2', '0.5'],
+  bnb: ['0.2', '0.5', '1', '2'],
+  zk: ['500', '1000', '3000', '5000'],
+  ftm: ['150', '300', '600', '1000'],
+  matic: ['150', '300', '600', '1000'],
+
+  btc: ['0.004', '0.008', '0.016', '0.03'],
+} as const
 
 // Special match, if non-ETH.
 export const tradeBuyItems = {
   // BSC
-  [bscTestnet.id]: TRADE_BUY_ITEMS.bnb,
-  [bsc.id]: TRADE_BUY_ITEMS.bnb,
+  [bscTestnet.id]: items.bnb,
+  [bsc.id]: items.bnb,
 
   // zkSync
-  [zkSync.id]: TRADE_BUY_ITEMS.zk,
-  [zkSyncSepoliaTestnet.id]: TRADE_BUY_ITEMS.zk,
+  [zkSync.id]: items.zk,
+  [zkSyncSepoliaTestnet.id]: items.zk,
 
   // Fantom
-  [fantom.id]: TRADE_BUY_ITEMS.ftm,
-  [fantomTestnet.id]: TRADE_BUY_ITEMS.ftm,
+  [fantom.id]: items.ftm,
+  [fantomTestnet.id]: items.ftm,
 
   // Polygon
-  [polygon.id]: TRADE_BUY_ITEMS.matic,
-  [polygonAmoy.id]: TRADE_BUY_ITEMS.matic,
-  [polygonZkEvmCardona.id]: TRADE_BUY_ITEMS.matic,
+  [polygon.id]: items.matic,
+  [polygonAmoy.id]: items.matic,
+  [polygonZkEvmCardona.id]: items.matic,
 
   // BTC
   // [btc.id]: TRADE_BUY_ITEMS.btc,
 }
+
+// By default, use eth.
+export const tradeDefaultItems = items.eth

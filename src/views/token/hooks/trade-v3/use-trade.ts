@@ -12,6 +12,9 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
 import { usePools } from '../use-pools'
+import { utilLang } from '@/utils/lang'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
@@ -21,6 +24,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { bondingCurveConfig } = getV3Config(chainId)
   const { getReferrals } = useInvite()
   const { isGrauated } = usePools(tokenAddr, chainId)
+  const { t } = useTranslation()
 
   const {
     getNativeAmount,
@@ -73,6 +77,9 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     if (isOverflow) {
       getLastOrderAmount(current).then((value) => {
         setValue?.(value)
+        toast.warning(
+          utilLang.replace(t('trade.limit'), [value, t('trade.buy')])
+        )
       })
       return
     }

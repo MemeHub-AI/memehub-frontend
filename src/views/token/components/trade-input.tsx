@@ -28,13 +28,17 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
-  const { getTotalSupply, getTokenAmount, getNativeAmount } = useTradeInfoV3()
+  const {
+    getMaxSupply: getTotalSupply,
+    getTokenAmount,
+    getNativeAmount,
+  } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
   const { isGrauated } = usePools(tokenInfo?.address)
   const { getReserveAmount, getTokenAmount: getTokenAmount2 } =
-    useUniswapV2Info()
+    useUniswapV2Info(tokenInfo?.pool_address as Address)
 
-  const inputAmount = fmt.decimals(String(value || 0), 3)
+  const inputAmount = fmt.decimals(String(value || 0), { fixed: 3 })
   const [targetAmount, setTargetAmount] = useState('0')
   const tokenSymbol = tokenInfo?.ticker || ''
   const tokenAddr = tokenInfo?.address as Address

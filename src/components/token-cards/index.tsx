@@ -56,7 +56,7 @@ export const TokenCards = (props: Props) => {
   return (
     <div className={cn(className)}>
       <CustomSuspense
-        className="flex justify-between items-center gap-4 max-sm:justify-between mb-4"
+        className="flex justify-between items-start gap-4 max-sm:justify-between mb-4"
         isPending={isLoading}
         fallback={
           <>
@@ -70,7 +70,7 @@ export const TokenCards = (props: Props) => {
         <TokenSearchInput
           chianTag={chianTag}
           onSearched={(tokens) => setFilteredCards(tokens)}
-          onCleared={() => setFilteredCards(cards)}
+          onCleared={() => setFilteredCards(cards.filter((c) => c.chain.id === chianTag))}
         />
       </CustomSuspense>
 
@@ -93,16 +93,19 @@ export const TokenCards = (props: Props) => {
       >
         {!!cards.length &&
           filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
-        {isPending && (
-          <p className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
-            {t('loading')}
-          </p>
-        )}
-        {noMore && (
-          <p className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
-            {t('nomore')}
-          </p>
-        )}
+        <div>
+          {isPending && (
+            <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
+              {t('loading')}
+            </div>
+          )}
+          {noMore && (
+            <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
+              {t('nomore')}
+            </div>
+          )}
+        </div>
+
       </CustomSuspense>
     </div>
   )

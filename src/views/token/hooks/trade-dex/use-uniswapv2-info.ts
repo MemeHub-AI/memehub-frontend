@@ -1,39 +1,50 @@
+import { useReadContract } from 'wagmi'
 import { readContract } from 'wagmi/actions'
-import { parseEther } from 'viem'
+import { Address, parseEther } from 'viem'
 
 import { wagmiConfig } from '@/config/wagmi'
-import { uniswapV2Config } from '@/contract/abi/uniswap-v2'
 import { commonAddr } from '@/contract/address'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { useTradeSearchParams } from '../use-search-params'
-import { BI_ZERO_TUPLE } from '@/constants/contract'
+import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
+import { uniswapV2LPAbi } from '@/contract/uniswapv2/abi/lp'
+import { BI_ZERO } from '@/constants/number'
 
-export const useUniswapV2Info = () => {
+export const useUniswapV2Info = (poolAddr?: Address | undefined) => {
   const { chainId } = useChainInfo()
-  const { router, reserveToken } =
-    commonAddr[chainId as keyof typeof commonAddr] || {}
-  const { tokenAddr } = useTradeSearchParams()
+  const { router } = commonAddr[chainId as keyof typeof commonAddr] || {}
 
-  const getReserveAmount = async (amountIn: string) => {
-    const [amount] = await readContract(wagmiConfig, {
-      ...uniswapV2Config,
+  const { data: reserves = [BI_ZERO, BI_ZERO, 0] as const } = useReadContract({
+    abi: uniswapV2LPAbi,
+    address: poolAddr,
+    functionName: 'getReserves',
+    query: { enabled: !!poolAddr },
+  })
+  const [reserveOut, reserveIn] = reserves
+
+  const getReserveAmount = (amountOut: string) => {
+    return readContract(wagmiConfig, {
+      abi: uniswapV2RouterAbi,
       address: router,
       chainId,
-      functionName: 'getAmountsIn',
-      args: [parseEther(amountIn), [reserveToken, tokenAddr]],
-    }).catch(() => BI_ZERO_TUPLE)
-    return amount
+      functionName: 'getAmountIn',
+      args: [parseEther(amountOut), reserveIn, reserveOut],
+    }).catch((e: Error) => {
+      console.error(e.message)
+      return BI_ZERO
+    })
   }
 
-  const getTokenAmount = async (amountOut: string) => {
-    const [amount] = await readContract(wagmiConfig, {
-      ...uniswapV2Config,
+  const getTokenAmount = (amountIn: string) => {
+    return readContract(wagmiConfig, {
+      abi: uniswapV2RouterAbi,
       address: router,
       chainId,
-      functionName: 'getAmountsIn',
-      args: [parseEther(amountOut), [tokenAddr, reserveToken]],
-    }).catch(() => BI_ZERO_TUPLE)
-    return amount
+      functionName: 'getAmountOut',
+      args: [parseEther(amountIn), reserveIn, reserveOut],
+    }).catch((e: Error) => {
+      console.error(e.message)
+      return BI_ZERO
+    })
   }
 
   return {

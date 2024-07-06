@@ -167,7 +167,7 @@
   "approving": "正在授权代币...",
   "approve.success": "授权成功！",
   "ai.generate": "AI生成",
-  "ai.generate.bio": "生成一个爆炸性的Memecoin",
+  "ai.generate.bio": "生成一个爆炸性的meme币关于: ",
   "input.you.idea": "输入你的想法",
   "coinfirm": "确定",
   "ai.creating": "Memehub AI 正在为您创建meme币，$这可能是一项伟大事业的开端。",
@@ -440,12 +440,14 @@
   "holder.burning": "黑洞",
   "reward.title": "Memehub 奖励",
   "contract.err.chain-failed": "切换链失败",
-  "uniswap.err.insufficient-amount": "剩余数量不足",
   "signing": "签名中...",
   "ai.craete": "AI 创建",
   "go-to.buy": "前往购买",
   "chart.no-data": "购买并成为第一个持有者",
   "contract.err.exec": "合约执行错误，请重试",
+  "uniswapv2.err.insufficient-amount": "剩余数量不足",
+  "uniswapv2.err.reserve-not-found": "找不到储备代币",
+  "uniswapv2.err.reserve-amount": "储备代币金额无效",
   "tx": "区块链记录",
   "tx.submit": "交易提交中...",
   "slippage.low.tips": "请提高滑点重试",
@@ -453,5 +455,7 @@
   "tx.success": "恭喜你交易成功",
   "buy.toast": "买入",
   "acquired": "获得了",
-  "sell.toast": "卖出"
+  "sell.toast": "卖出",
+  "uniswapv2.err.pool-addr": "找不到LP地址",
+  "contract.err.balance-insufficient": "余额不足"
 }

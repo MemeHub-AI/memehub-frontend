@@ -9,8 +9,8 @@ import { v1FactoryAbi } from '../../../contract/v1/abi/factory'
 import { v1Addr } from '@/contract/v1/address'
 import { v1FactoryParams } from '@/contract/v1/config/factory'
 import { commonAddr } from '@/contract/address'
-import { DEPLOY_FEE } from '@/constants/contract'
 
+/** Depreacted */
 export const useDeployV1 = (
   writeContract: WriteContractMutate<Config, unknown>
 ) => {
@@ -45,7 +45,7 @@ export const useDeployV1 = (
           ticker,
           router,
         ],
-        value: DEPLOY_FEE.v1,
+        // value: DEPLOY_FEE.v1,
       },
       { onSuccess }
     )

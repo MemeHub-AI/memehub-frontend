@@ -52,7 +52,7 @@ const options: TVChartOptions = {
     priceFormatterFactory: (symbolInfo, minTick) => {
       if (symbolInfo?.format === 'price') {
         return {
-          format: (price) => fmt.decimals(price, 4),
+          format: (price) => fmt.decimals(price, { fixed: 4 }),
         }
       }
       return null
@@ -60,7 +60,7 @@ const options: TVChartOptions = {
     studyFormatterFactory: (format) => {
       if (format.type === 'volume') {
         return {
-          format: (value) => fmt.decimals(value, 4),
+          format: (value) => fmt.decimals(value, { fixed: 4 }),
         }
       }
       return null

@@ -32,19 +32,27 @@ export const WalletAccount = () => {
   const { isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
 
+  const getUsername = () => {
+    const username = userInfo?.name
+    if (username) {
+      if (username.length > 4) {
+        return userInfo?.name.substring(0, 4) + '...';
+      } else {
+        return username;
+      }
+    } else {
+      return '登录';
+    }
+  }
+
   const getComp = () => {
     if (isMobile) {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Avatar
-              src={userInfo?.logo || ''}
-              fallback={userInfo?.wallet_address.slice(-4)}
-              size={isMobile ? 32 : 36}
-              className="rounded-lg cursor-pointer select-none"
-              fallbackClass="rounded-lg text-xs"
-              shadow="default"
-            />
+            <Button className='text-wrap h-9 w-12 p-2 text-xs'>
+              {getUsername()}
+            </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem className="pb-0">

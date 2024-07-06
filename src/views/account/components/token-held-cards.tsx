@@ -38,12 +38,15 @@ export const TokenHeldCards = (props: Props) => {
       {cards?.map((c, i) => (
         <HeldCard c={c} key={i} />
       ))}
-      {isPending && (
-        <p className="text-zinc-500 text-center col-span-3">{t('loading')}</p>
-      )}
-      {noMore && (
-        <p className="text-zinc-500 text-center col-span-3">{t('nomore')}</p>
-      )}
+      <div>
+        {isPending && (
+          <div className="text-zinc-500 text-center col-span-3">{t('loading')}</div>
+        )}
+        {noMore && (
+          <div className="text-zinc-500 text-center col-span-3">{t('nomore')}</div>
+        )}
+      </div>
+
     </CustomSuspense>
   )
 }

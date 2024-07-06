@@ -4,7 +4,10 @@ export const useCheckChain = () => {
   const { switchChainAsync } = useSwitchChain()
   const accountChainId = useChainId()
 
-  const checkForChain = async (chainId: number) => {
+  const checkForChain = async (chainId: number | string | undefined) => {
+    if (!chainId) return false
+
+    chainId = +chainId
     if (accountChainId === chainId) return true
 
     try {

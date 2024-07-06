@@ -6,7 +6,7 @@ import { Address, formatEther } from 'viem'
 import { getV3Config } from '@/contract/v3/config'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
-import { BI_ZERO } from '@/constants/contract'
+import { BI_ZERO } from '@/constants/number'
 import { usePools } from '../use-pools'
 
 export const useTokenProgressV3 = (
@@ -37,10 +37,9 @@ export const useTokenProgressV3 = (
   const current = formatEther(tokenReserve || BI_ZERO)
 
   const progress = useMemo(() => {
-    if (BigNumber(total).isZero()) {
-      return BigNumber(BI_ZERO.toString()).toFixed(2)
-    }
+    if (BigNumber(total).isZero()) return '0.00'
     if (isGrauated) return '100.00'
+    if (!isGrauated && BigNumber(current).isZero()) return '0.00'
 
     // Calc progress.
     return BigNumber(total)

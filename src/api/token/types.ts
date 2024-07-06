@@ -1,3 +1,5 @@
+import { Address } from 'viem'
+
 import { ContractVersion } from '@/constants/contract'
 import type { UserCoinsCreated, UserInfoRes } from '../user/types'
 
@@ -12,6 +14,7 @@ export interface TokenListItem extends UserCoinsCreated {
   hash: string
   explorer_tx: string
   version: string
+  pool_address: null | Address
 }
 
 export interface TokenNewReq {

@@ -6,17 +6,17 @@ export const v3BondingCurveAbi = [
   },
   {
     inputs: [],
+    name: 'MEMEHUB_CallerNotEOA',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'MEMEHUB_InvalidParamsReferrers',
     type: 'error',
   },
   {
     inputs: [],
     name: 'MEMEHUB_InvalidSell',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_setClaimableTokensFailure',
     type: 'error',
   },
   {
@@ -139,6 +139,19 @@ export const v3BondingCurveAbi = [
     inputs: [
       {
         indexed: true,
+        internalType: 'uint256',
+        name: 'flag',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubContractDeploy',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: 'contract MEMEHUB_Token',
         name: 'token',
         type: 'address',
@@ -198,19 +211,6 @@ export const v3BondingCurveAbi = [
   },
   {
     inputs: [],
-    name: 'DECIMALS',
-    outputs: [
-      {
-        internalType: 'uint8',
-        name: '',
-        type: 'uint8',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'FEE_DENOMINATOR',
     outputs: [
       {
@@ -251,6 +251,19 @@ export const v3BondingCurveAbi = [
   {
     inputs: [],
     name: 'TOTAL_SUPPLY',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'addPoolETHAmount_',
     outputs: [
       {
         internalType: 'uint256',
@@ -420,11 +433,6 @@ export const v3BondingCurveAbi = [
         internalType: 'string',
         name: 'symbol',
         type: 'string',
-      },
-      {
-        internalType: 'uint256',
-        name: 'addPoolETHAmount',
-        type: 'uint256',
       },
       {
         components: [
@@ -841,6 +849,26 @@ export const v3BondingCurveAbi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'rescueToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'addPoolETHAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'setAddPoolETHAmount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -912,21 +940,13 @@ export const v3BondingCurveAbi = [
         name: 'initVirtualEthReserve',
         type: 'uint256',
       },
-    ],
-    name: 'setInitVirtualEthReserve',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
       {
         internalType: 'uint256',
         name: 'initVirtualTokenReserve',
         type: 'uint256',
       },
     ],
-    name: 'setInitVirtualTokenReserve',
+    name: 'setInitVirtualEthReserve',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -995,5 +1015,9 @@ export const v3BondingCurveAbi = [
     ],
     stateMutability: 'pure',
     type: 'function',
+  },
+  {
+    stateMutability: 'payable',
+    type: 'receive',
   },
 ] as const

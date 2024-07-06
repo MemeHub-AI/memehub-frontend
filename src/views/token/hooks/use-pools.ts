@@ -3,6 +3,7 @@ import { Address, zeroAddress } from 'viem'
 
 import { getV3Config } from '@/contract/v3/config'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { BI_ZERO } from '@/constants/number'
 
 export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
   const { chainId } = useChainInfo()
@@ -21,16 +22,16 @@ export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
   })
   const [
     token,
-    tokenReserve,
-    vTokenReserve,
-    ethReserve,
-    vEthReserve,
-    addPoolEthAmount,
+    tokenReserve = BI_ZERO,
+    vTokenReserve = BI_ZERO,
+    ethReserve = BI_ZERO,
+    vEthReserve = BI_ZERO,
+    addPoolEthAmount = BI_ZERO,
     creator,
-    headmaster,
+    headmaster = zeroAddress,
   ] = pools
 
-  const isGrauated = !!(headmaster && headmaster !== zeroAddress)
+  const isGrauated = headmaster !== zeroAddress
 
   return {
     token,

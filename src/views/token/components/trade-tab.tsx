@@ -1,15 +1,8 @@
-import React, {
-  type ComponentProps,
-  useState,
-  useMemo,
-  useEffect,
-  createElement,
-} from 'react'
+import React, { type ComponentProps, useState, useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Address, isAddress } from 'viem'
+import { isAddress } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
-import { useRouter } from 'next/router'
 import { useAccount, useSwitchChain } from 'wagmi'
 import { isEmpty } from 'lodash'
 import { useDebounce } from 'react-use'
@@ -34,11 +27,16 @@ import { TradeType } from '@/constants/trade'
 import { useAirdropStore } from '@/stores/use-airdrop'
 import { InviteTipsDialog } from './invite-tips-dialog'
 import { TradeCommentDialog } from './trade-comment-dialog'
+import { useCheckChain } from '@/hooks/use-check-chain'
+import { useTradeSearchParams } from '../hooks/use-search-params'
+import { useRouter } from 'next/router'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(String(TradeType.Buy))
   const [value, setValue] = useState('')
+  const [isBalanceOverflow, setIsBalanceOverflow] = useState(false)
+  const [commentOpen, setCommentOpen] = useState(false)
   const [isBuy, isSell] = useMemo(
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
@@ -47,6 +45,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { switchChainAsync } = useSwitchChain()
   const { isConnected, chainId, address } = useAccount()
   const { isClaimingAirdrop } = useAirdropStore()
+  const { tokenAddr } = useTradeSearchParams()
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
@@ -56,10 +55,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
     useTrade()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
+  const { checkForChain } = useCheckChain()
 
-  const [isBalanceOverflow, setIsBalanceOverflow] = useState(false)
-
-  const token = (query.address || '') as Address
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const disabled = isSubmitting || isClaimingAirdrop
   const disableTrade =
@@ -86,21 +83,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     selling(value, slippage)
   }
 
-  const checkForChain = async () => {
-    if (!chainId || !tokenInfo?.chain.id) return false
-
-    const tokenChainId = Number(tokenInfo?.chain.id)
-    if (chainId === tokenChainId) return true
-
-    try {
-      await switchChainAsync({ chainId: tokenChainId })
-      return true
-    } catch (error) {
-      toast.error(t('chain-error'))
-      return false
-    }
-  }
-
   const onTrade = async () => {
     // Check wallet connect.
     if (!isConnected) {
@@ -109,14 +91,10 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     }
 
     // Check token addr.
-    if (isEmpty(token) || !isAddress(token)) {
+    if (isEmpty(tokenAddr) || !isAddress(tokenAddr)) {
       toast.error(t('contract.err.token-addr'))
       return
     }
-
-    // Check chain.
-    const isValidChain = await checkForChain()
-    if (!isValidChain) return
 
     isBuy ? onBuy() : onSell()
   }
@@ -150,6 +128,12 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       }}
     >
       <InviteTipsDialog open={inviteOpen} onOpenChange={setInviteOpen} />
+
+      <TradeCommentDialog
+        open={commentOpen}
+        onOpenChange={setCommentOpen}
+        onTrade={onTrade}
+      />
 
       <Card
         hover="none"
