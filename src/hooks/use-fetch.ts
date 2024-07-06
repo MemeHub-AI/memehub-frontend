@@ -74,7 +74,6 @@ export const useFetch = (baseURL: string) => {
       if (isJson(response.headers) && toJson) {
         const data = (await response.json()) as ApiResponse<T>
 
-        if (data.code === ApiCode.AuthError) setToken('')
         if (data.code !== ApiCode.Success) throw data
 
         return data as T

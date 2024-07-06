@@ -25,8 +25,6 @@ export const TradeAirdrop = () => {
 
   const { data, communities, isOnlyOne, kol } = airdrop
 
-  console.log(kol)
-
   const kolAirdropInfo = useAirdropInfo(
     MarketType.Kol,
     kol?.chain,

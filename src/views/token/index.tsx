@@ -1,5 +1,4 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { TokenProvider } from '@/contexts/token'
@@ -10,7 +9,6 @@ import { TokenMobile } from './mobile'
 
 export const TokenPage = () => {
   const { isMobile } = useResponsive()
-  const { t } = useTranslation()
   const {
     tokenInfo,
     isLoadingTokenInfo,
