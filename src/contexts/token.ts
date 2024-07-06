@@ -1,17 +1,11 @@
+import { useTokenInfo } from './../views/token/hooks/use-token-info'
 import { createContext, useContext } from 'react'
-
-import type { TokenListItem } from '@/api/token/types'
 
 import { CONTEXT_ERR } from '@/errors/context'
 
-interface Value {
-  tokenInfo: TokenListItem | undefined
-  isLoadingTokenInfo: boolean
-  isFetchingTokenInfo: boolean
-  refetchInfo: Function
-}
+type Context = Omit<ReturnType<typeof useTokenInfo>, 'isRefetchingTokenInfo'>
 
-const TokenContext = createContext<Value | null>(null)
+const TokenContext = createContext<Context | null>(null)
 
 export const TokenProvider = TokenContext.Provider
 

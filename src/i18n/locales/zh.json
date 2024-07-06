@@ -458,5 +458,6 @@
   "sell.toast": "卖出",
   "uniswapv2.err.pool-addr": "找不到LP地址",
   "contract.err.balance-insufficient": "余额不足",
-  "token.graduated-desc": "恭喜，此代币已成功毕业"
+  "token.graduated-desc": "恭喜，此代币已成功毕业",
+  "chart": "K线"
 }

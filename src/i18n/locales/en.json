@@ -467,5 +467,6 @@
   "sell.toast": "Sell",
   "uniswapv2.err.pool-addr": "Cannot find pool address",
   "contract.err.balance-insufficient": "insufficient balance",
-  "token.graduated-desc": "Congratulations, this token has successfully graduated"
+  "token.graduated-desc": "Congratulations, this token has successfully graduated",
+  "chart": "Chart"
 }
