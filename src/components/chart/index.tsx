@@ -10,10 +10,13 @@ import { Skeleton } from '../ui/skeleton'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { DexToolsChart } from '../dextools-chart'
 import { usePools } from '@/views/token/hooks/use-pools'
+<<<<<<< HEAD
 import { datafeedConfig } from '@/config/datafeed'
 import { Button } from '../ui/button'
 import { useChartUtils } from './hooks/use-chart-utils'
 import { useChartStore } from '@/stores/use-chart-store'
+=======
+>>>>>>> 0db1a2f (feat: hide memehub chart if graduated)
 
 export const Chart = memo(() => {
   const chartRef = useRef<HTMLDivElement>(null)
