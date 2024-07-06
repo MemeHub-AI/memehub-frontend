@@ -82,21 +82,17 @@ export const useTrade = () => {
     setValue?: (value: string) => void
   ) => {
     setLoading(true)
-    try {
-      const isValid = await checkForTrade(reserveAmount)
-      if (!isValid) {
-        setLoading(false)
-        return
-      }
-    } catch {
+    const isValid = await checkForTrade(reserveAmount)
+    if (!isValid) {
       setLoading(false)
+      return
     }
 
     const amount = await getTokenAmount(reserveAmount)
     lastTrade.tokenAmount = `${fmt.decimals(formatEther(amount))} ${
       tokenInfo?.ticker
     }`
-    lastTrade.nativeAmount = `${fmt.decimals(reserveAmount, 3)} ${
+    lastTrade.nativeAmount = `${fmt.decimals(reserveAmount, { fixed: 3 })} ${
       tokenInfo?.chain.native.symbol
     }`
     lastTrade.type = TradeType.Buy
@@ -107,20 +103,16 @@ export const useTrade = () => {
 
   const selling = async (tokenAmount: string, slippage: string) => {
     setLoading(true)
-    try {
-      const isValid = await checkForTrade(tokenAmount)
-      if (!isValid) {
-        setLoading(false)
-        return
-      }
-    } catch {
+    const isValid = await checkForTrade(tokenAmount)
+    if (!isValid) {
       setLoading(false)
+      return
     }
 
     const amount = await getNativeAmount(tokenAmount)
-    lastTrade.nativeAmount = `${fmt.decimals(formatEther(amount), 3)} ${
-      tokenInfo?.chain.native.symbol
-    }`
+    lastTrade.nativeAmount = `${fmt.decimals(formatEther(amount), {
+      fixed: 3,
+    })} ${tokenInfo?.chain.native.symbol}`
     lastTrade.tokenAmount = `${fmt.decimals(tokenAmount)} ${tokenInfo?.ticker}`
     lastTrade.type = TradeType.Sell
 
