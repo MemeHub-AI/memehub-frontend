@@ -32,19 +32,31 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
     <div className="flex items-center max-sm:flex-col max-sm:items-start mb-1 max-sm:gap-1">
       <div
         className={cn(
-          'flex items-center justify-between gap-1 text-sm max-sm:mb-1 max-sm:mt-4 max-sm:flex-col max-sm:items-start',
+          'max-sm:w-full flex items-center justify-between gap-1 text-sm max-sm:mb-1 max-sm:mt-0 max-sm:flex-col max-sm:items-start',
           className
         )}
       >
-        <div className="flex items-center">
-          <Avatar
-            src={tokenInfo?.image ?? ''}
-            size={26}
-            className="border-2 border-black"
-          />
-          <span className="ml-1 font-bold text-blue-600">
-            {tokenInfo?.name}({tokenInfo?.ticker})
-          </span>
+        <div className="max-sm:flex max-sm:w-full max-sm:justify-between">
+          <div className="flex items-center">
+            <Avatar
+              src={tokenInfo?.image ?? ''}
+              size={26}
+              className="border-2 border-black"
+            />
+            <span className="ml-1 font-bold text-blue-600">
+              {tokenInfo?.name}({tokenInfo?.ticker})
+            </span>
+          </div>
+          <div className="sm:hidden flex items-center">
+            <img
+              src={tokenInfo?.chain.logo}
+              alt={tokenInfo?.chain.name}
+              className="w-[25px] h-[25px]"
+            />
+            <span className="ml-1">
+              {fmt.firstUpperCase(tokenInfo?.chain.name)}
+            </span>
+          </div>
         </div>
         <span>
           <span className="font-bold">{t('market-cap')}: </span>$

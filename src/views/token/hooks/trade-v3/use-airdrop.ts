@@ -19,7 +19,7 @@ import { useCheckChain } from '@/hooks/use-check-chain'
 import { buttonLeft } from '@/config/toast'
 
 export const useAirdrop = (
-  id: number,
+  id: number = 0,
   type_list: string,
   onFinlly?: () => void
 ) => {

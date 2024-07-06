@@ -457,5 +457,6 @@
   "acquired": "获得了",
   "sell.toast": "卖出",
   "uniswapv2.err.pool-addr": "找不到LP地址",
-  "contract.err.balance-insufficient": "余额不足"
+  "contract.err.balance-insufficient": "余额不足",
+  "chart": "K线"
 }
