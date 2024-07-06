@@ -11,6 +11,7 @@ import { logger } from '@/utils/log'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { UNISWAP_ERR } from '@/errors/uniswap'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
+import { subSlippage } from '@/utils/contract'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
@@ -53,7 +54,7 @@ export const useUniswapV2 = () => {
     return true
   }
 
-  const uniswapV2Buy = (amount: string, token: Address) => {
+  const uniswapV2Buy = (amount: string, token: Address, slippage: string) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
@@ -71,7 +72,7 @@ export const useUniswapV2 = () => {
       chainId,
       functionName: 'swapExactETHForTokens',
       args: [
-        BigInt(0),
+        subSlippage(amount, slippage),
         [reserveToken, token],
         address!,
         BigInt(dayjs().unix() + 60),
@@ -80,7 +81,11 @@ export const useUniswapV2 = () => {
     })
   }
 
-  const uniswapV2Sell = async (amount: string, token: Address) => {
+  const uniswapV2Sell = async (
+    amount: string,
+    token: Address,
+    slippage: string
+  ) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
@@ -102,7 +107,7 @@ export const useUniswapV2 = () => {
       functionName: 'swapExactTokensForETH',
       args: [
         parseEther(amount),
-        BigInt(0),
+        subSlippage(amount, slippage),
         [token, reserveToken],
         address!,
         BigInt(dayjs().unix() + 60),
