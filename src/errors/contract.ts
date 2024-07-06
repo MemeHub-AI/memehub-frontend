@@ -1,24 +1,23 @@
+import { createElement } from 'react'
 import { toast } from 'sonner'
 import { t } from 'i18next'
+import { lowerCase } from 'lodash'
 
 import { isUserReject } from '@/utils/contract'
 import { SlippageError } from '@/components/toast/slippage-error'
-import { createElement } from 'react'
 import { buttonLeft } from '@/config/toast'
 
 const ERR = {
   estimateGas: 'gap tip',
-  invalidSell: 'MEMEHUB_InvalidSell'.toLowerCase(),
-  isBurned: 'MEMEHUB_AlreadyBurn'.toLowerCase(),
-  transactionExecutionError: 'TransactionExecutionError',
+  invalidSell: lowerCase('MEMEHUB_InvalidSell'),
+  isBurned: lowerCase('MEMEHUB_AlreadyBurn'),
+  transactionExecutionError: lowerCase('TransactionExecutionError'),
 }
 
 export const CONTRACT_ERR = {
   // Execute contract error.
   exec: (err: unknown, showToast = true) => {
     const e = err as { message?: string }
-    console.log(err)
-
     if (!e?.message) return
 
     const msg = (e.message ?? '').toLowerCase()
