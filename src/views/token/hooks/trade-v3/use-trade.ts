@@ -63,7 +63,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     setValue?: (v: string) => void
   ) => {
     if (!checkForTrade(amount)) return
-    if (isGrauated) return dexBuy(amount, tokenAddr)
+    if (isGrauated) return dexBuy(amount, tokenAddr, slippage)
 
     const nativeAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
@@ -104,7 +104,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGrauated) return dexSell(amount, tokenAddr)
+    if (isGrauated) return dexSell(amount, tokenAddr, slippage)
 
     const nativeAmount = formatEther(await getNativeAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {
