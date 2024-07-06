@@ -41,7 +41,7 @@ export const WalletAccount = () => {
         return username;
       }
     } else {
-      return '登录';
+      return t('login');
     }
   }
 

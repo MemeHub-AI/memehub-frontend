@@ -44,33 +44,33 @@ export const HeaderMobile = (props: Props) => {
         <SheetContent
           onOpenAutoFocus={(e) => e.preventDefault()}
           showClose={false}
-          side="left"
-          className="pt-4 px-3"
+          side="bottom"
+          className="pt-4 px-3 rounded-t-lg"
         >
           <div className="flex items-center gap-2">
-            <Logo showMeme />
-            <LangSelect className="ml-3 h-7" />
+            {/* <Logo showMeme />
+            <LangSelect className="ml-3 h-7" /> */}
           </div>
-          <ul className="flex flex-col gap-3 mt-3">
+          <ul className="flex flex-col gap-3 mt-3 mb-1">
             {navs.map((n, i) => (
               <li key={i}>
-                <Button
+                <div
                   className="w-full justify-start"
-                  variant="outline"
                   onClick={() => {
                     onNavClick?.(n)
                     closeRef.current?.click()
                   }}
                 >
                   {n.title}
-                </Button>
+                </div>
               </li>
             ))}
           </ul>
+          <LangSelect className="h-7 mb-9 size-fit w-full justify-start" />
           <WalletDisconnector
             size="sm"
             variant="destructive"
-            className="absolute bottom-4 left-4 right-4 inline-flex items-center gap-2"
+            className="absolute bottom-4 left-3 right-3 inline-flex items-center gap-2"
             onConfirm={() => closeRef.current?.click()}
           >
             <span>{t('disconnect')}</span>
@@ -85,9 +85,9 @@ export const HeaderMobile = (props: Props) => {
           size={'sm'}
           onClick={() => router.push(Routes.Airdrop)}
         >
-          <img src='/images/gift.png' className='w-5'/>
+          <img src='/images/gift.png' className='w-5' />
         </Button>
-        <RewardButton className="max-sm:px-2" showReferral={false}/>
+        <RewardButton className="max-sm:px-2" showReferral={false} />
         <Button
           variant="outline"
           className="mx-3 max-sm:mx-0"

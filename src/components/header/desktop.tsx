@@ -27,21 +27,25 @@ export const HeaderDesktop = (props: Props) => {
         <Logo showMeme className="shrink-0" />
         <nav className="ml-8 flex items-center">
           <ul className="flex items-center gap-2">
-            {navs.map((n, i) => (
-              <li key={i}>
-                <div
-                  className={clsx(
-                    'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
-                    'hover:border-black text-nowrap font-bold xl:px-4',
-                    router.pathname === n.path &&
+            {navs.map((n, i) => {
+              if(n.path === Routes.Moonshot || n.path === Routes.ClassicMeme)
+                return
+              return (
+                <li key={i}>
+                  <div
+                    className={clsx(
+                      'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
+                      'hover:border-black text-nowrap font-bold xl:px-4',
+                      router.pathname === n.path &&
                       'bg-black text-white border-black'
-                  )}
-                  onClick={() => onNavClick?.(n)}
-                >
-                  {n.title}
-                </div>
-              </li>
-            ))}
+                    )}
+                    onClick={() => onNavClick?.(n)}
+                  >
+                    {n.title}
+                  </div>
+                </li>
+              )
+            })}
           </ul>
         </nav>
       </div>
