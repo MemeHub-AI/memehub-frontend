@@ -24,5 +24,6 @@ export const useChainInfo = (nameOrId?: string | number) => {
     chainInfo: chain,
     chainName,
     chainId,
+    walletChainId: accountChainId,
   }
 }
