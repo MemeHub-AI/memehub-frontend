@@ -185,18 +185,21 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
           {/* Trade button */}
           {isConnected ? (
-            <TradeCommentDialog onTrade={onTrade}>
-              <Button
-                className="!w-full font-bold bg-lime-green-deep"
-                disabled={disableTrade}
-              >
-                {isBalanceOverflow
-                  ? t('balance.insufficient')
-                  : isSubmitting
-                  ? t('trading')
-                  : t('trade')}
-              </Button>
-            </TradeCommentDialog>
+            <Button
+              className="!w-full font-bold bg-lime-green-deep"
+              disabled={disableTrade}
+              onClick={async () => {
+                const isValidChain = await checkForChain(tokenInfo?.chain.id)
+                if (!isValidChain) return
+                setCommentOpen(true)
+              }}
+            >
+              {isBalanceOverflow
+                ? t('balance.insufficient')
+                : isSubmitting
+                ? t('trading')
+                : t('trade')}
+            </Button>
           ) : (
             <Button
               className="!w-full font-bold bg-lime-green-deep"

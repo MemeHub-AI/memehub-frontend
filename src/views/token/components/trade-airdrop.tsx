@@ -1,12 +1,10 @@
-import React, { ComponentProps, useEffect, useMemo, useState } from 'react'
+import React, { ComponentProps, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
-import { useQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'react-use'
 import dayjs from 'dayjs'
-import { useAccount } from 'wagmi'
 
 import { useAirdrop } from '../hooks/trade-v3/use-airdrop'
 import { cn } from '@/lib/utils'
@@ -15,47 +13,54 @@ import { Img } from '@/components/img'
 import { Countdown } from '@/views/airdrop/components/countdown'
 import { Button } from '@/components/ui/button'
 import { useTokenContext } from '@/contexts/token'
-import { airdropApi } from '@/api/airdrop'
-import { useTradeSearchParams } from '../hooks/use-search-params'
 import { AirdropItem } from '@/api/airdrop/types'
 import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
 import { MarketType } from '@/api/token/types'
-import { useUserStore } from '@/stores/use-user-store'
 import { useResponsive } from '@/hooks/use-responsive'
 
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
-  const { chainName, tokenAddr } = useTradeSearchParams()
-  const { userInfo } = useUserStore()
   const { isMobile } = useResponsive()
+  const { airdrop } = useTokenContext()
 
-  const { data: { data = [] } = {} } = useQuery({
-    queryKey: [airdropApi.getDetails.name, chainName, tokenAddr, userInfo?.id],
-    queryFn: () => {
-      if (userInfo?.id == null) return Promise.reject()
+  const { data, communities, isOnlyOne, kol } = airdrop
 
-      return airdropApi.getDetails({
-        chain: chainName,
-        token_address: tokenAddr,
-      })
-    },
-  })
-  const [kol, communities, isOnlyOne] = useMemo(
-    () => [
-      data?.find((a) => a.kol_name),
-      data?.find((a) => a.community_name),
-      data?.length === 1,
-    ],
-    [data]
+  const kolAirdropInfo = useAirdropInfo(
+    MarketType.Kol,
+    kol?.chain,
+    kol?.distribution_id
+  )
+  const communitiesAirdropInfo = useAirdropInfo(
+    MarketType.Community,
+    communities?.chain,
+    communities?.distribution_id
+  )
+
+  const kolAirdrop = useAirdrop(
+    kol?.distribution_id!,
+    `${kol?.airdrop_type}`,
+    () => {
+      kolAirdropInfo?.refetch()
+      kolAirdropInfo?.refetchIsClaimed()
+    }
+  )
+
+  const communitiesAirdrop = useAirdrop(
+    communities?.distribution_id!,
+    `${communities?.airdrop_type}`,
+    () => {
+      communitiesAirdropInfo?.refetch()
+      communitiesAirdropInfo?.refetchIsClaimed()
+    }
   )
 
   if (isEmpty(data)) return
 
   return (
-    <div className="flex gap-4 max-sm:flex-col max-sm:gap-2">
+    <div className="flex gap-4 max-sm:flex-col max-sm:gap-0">
       <div
         className={cn(
-          'mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 flex-1',
+          'mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 max-sm:pt-2 flex-1',
           isOnlyOne && 'flex max-sm:flex-col'
         )}
       >
@@ -70,24 +75,24 @@ export const TradeAirdrop = () => {
                   'w-[50%] max-sm:w-full',
                   !communities ? 'w-full' : ''
                 )}
-                airdrop={kol}
                 suffix={t('ambassador')}
-                typeList={MarketType.Kol}
-                isKol
+                airdrop={kolAirdrop}
+                airdropInfo={kolAirdropInfo}
+                baseInfo={kol}
               />
             )}
             {communities && (
               <AirdropCard
                 className={cn('w-[50%] max-sm:w-full', !kol ? 'w-full' : '')}
-                airdrop={communities}
                 suffix={t('holder')}
-                typeList={MarketType.Community}
-                isCommunity
+                airdrop={communitiesAirdrop}
+                airdropInfo={communitiesAirdropInfo}
+                baseInfo={communities}
               />
             )}
           </div>
         </div>
-        {isOnlyOne || (kol && communities) ? (
+        {(isOnlyOne || (kol && communities)) && !isMobile ? (
           <Burn
             kol={kol}
             communities={communities}
@@ -104,13 +109,13 @@ export const TradeAirdrop = () => {
           />
         ) : null}
       </div>
-      {!kol && !communities ? (
+      {(!kol && !communities) || isMobile ? (
         <Burn
           kol={kol}
           communities={communities}
           airdrop={kol! || communities!}
           suffix={t('ambassador')}
-          className="flex-1 p-1 max-sm:pb-3"
+          className="flex-1 p-1 max-sm:pb-3 max-sm:mt-2.5"
           onburn={() => {}}
         />
       ) : null}
@@ -228,36 +233,20 @@ const Burn = (props: BurmProps) => {
 }
 
 interface AirdropCardProps extends ComponentProps<typeof Card> {
-  airdrop: AirdropItem
   suffix: string
-  typeList: number
-  isKol?: boolean
-  isCommunity?: boolean
+  airdropInfo: ReturnType<typeof useAirdropInfo>
+  airdrop: ReturnType<typeof useAirdrop>
+  baseInfo: AirdropItem
 }
 
 const AirdropCard = (props: AirdropCardProps) => {
-  const { className, airdrop, suffix, typeList, isKol, isCommunity } = props
+  const { className, baseInfo, airdrop, suffix, airdropInfo } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const [isExpired, setIsExpired] = useState(false)
+  const { isClaiming, claim } = airdrop
+  const { isClaimed, durationSeconds, claimed, total } = airdropInfo
 
-  const {
-    total,
-    claimed,
-    isClaimed,
-    durationSeconds,
-    refetch,
-    refetchIsClaimed,
-  } = useAirdropInfo(typeList, airdrop.chain, airdrop.distribution_id)
-
-  const { isClaiming, claim } = useAirdrop(
-    airdrop.distribution_id,
-    typeList.toString(),
-    () => {
-      refetch()
-      refetchIsClaimed()
-    }
-  )
   const disabled = isClaimed || isClaiming || isExpired
 
   return (
@@ -270,17 +259,17 @@ const AirdropCard = (props: AirdropCardProps) => {
       <div className="flex items-center gap-2 justify-between">
         <div className="bg-lime-green flex items-center gap-2 rounded-md pr-2">
           <Img
-            src={airdrop.kol_logo || airdrop.community_logo}
+            src={baseInfo.kol_logo || baseInfo.community_logo}
             alt="avatar"
             className="w-10 h-10 rounded-r-none"
           />
           <span>
-            {airdrop.kol_name || airdrop.community_name} {suffix}
+            {baseInfo.kol_name || baseInfo.community_name} {suffix}
           </span>
           <img src="/images/check.png" alt="check" className="w-6 h-6" />
         </div>
         <Countdown
-          createdAt={airdrop.create ?? 0}
+          createdAt={baseInfo.create ?? 0}
           duration={durationSeconds}
           onExpired={() => setIsExpired(true)}
         />
@@ -290,7 +279,7 @@ const AirdropCard = (props: AirdropCardProps) => {
         <div className="flex items-center gap-2">
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
           <span>
-            {BigNumber(airdrop.amount ?? 0).toFormat()} {tokenInfo?.ticker}
+            {BigNumber(baseInfo.amount ?? 0).toFormat()} {tokenInfo?.ticker}
           </span>
         </div>
 
@@ -301,7 +290,7 @@ const AirdropCard = (props: AirdropCardProps) => {
       </div>
       <div className="mt-4 flex justify-between gap-4">
         <Button
-          className={cn('flex-1', !isClaimed && 'bg-lime-green-deep')}
+          className={cn('flex-1 relative', !isClaimed && 'bg-lime-green-deep')}
           disabled={disabled}
           onClick={claim}
         >
