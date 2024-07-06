@@ -38,6 +38,7 @@ export const useAirdrop = (
     enabled: !!chainName && !!type_list && !!tokenAddr,
     queryKey: [airdropApi.getProof.name + uniqueKey, type_list, tokenAddr],
     queryFn: () => {
+      if (type_list == 'undefined') return Promise.reject()
       return airdropApi.getProof({
         chain: chainName,
         type_list,

@@ -58,4 +58,5 @@ export interface AirdropItem {
   community_logo?: string
   kol_name?: string
   kol_logo?: string
+  airdrop_type: number
 }
