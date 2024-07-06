@@ -13,7 +13,6 @@ const readyConfig: DatafeedConfiguration = {
     '1h',
     '4h',
     '1d',
-    '1m',
   ] as ResolutionString[],
   supports_marks: true,
   supports_timescale_marks: true,

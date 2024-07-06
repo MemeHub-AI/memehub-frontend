@@ -24,14 +24,14 @@ export const useChartUtils = () => {
   }
 
   /** `1` => `1m` */
-  const formatInterval = (tvInterval?: string) => {
+  const formatInterval = (tvInterval?: string, lower = true) => {
     if (!tvInterval || !tvInterval.trim()) return '1m'
     const num = Number(tvInterval)
     if (num < 60) return `${tvInterval}m`
     if (num === 60) return '1h'
     if (num === 240) return '4h'
 
-    return tvInterval.toLowerCase()
+    return lower ? tvInterval.toLowerCase() : tvInterval
   }
 
   const formatBars = (list: BarBase[]) => {

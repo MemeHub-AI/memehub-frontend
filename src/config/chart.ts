@@ -14,7 +14,7 @@ const options: TVChartOptions = {
   library_path: 'js/charting_library/',
   disabled_features: [
     // Header
-    // 'header_widget',
+    'header_widget',
     // 'header_resolutions',
     'header_symbol_search',
     'header_compare',
