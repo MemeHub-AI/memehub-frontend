@@ -4,10 +4,10 @@ import { Address, parseEther } from 'viem'
 
 import { wagmiConfig } from '@/config/wagmi'
 import { commonAddr } from '@/contract/address'
-import { useChainInfo } from '@/hooks/use-chain-info'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 import { uniswapV2LPAbi } from '@/contract/uniswapv2/abi/lp'
 import { BI_ZERO } from '@/constants/number'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const useUniswapV2Info = (poolAddr?: Address | undefined) => {
   const { chainId } = useChainInfo()
