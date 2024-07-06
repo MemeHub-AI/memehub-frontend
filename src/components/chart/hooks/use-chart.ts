@@ -11,7 +11,7 @@ import { useChartStore } from '@/stores/use-chart-store'
 import { useChartUtils } from './use-chart-utils'
 import { chartConfig } from '@/config/chart'
 
-export interface ChartOptions {
+interface ChartOptions {
   symbol: string
   interval: string
   tokenAddr: string

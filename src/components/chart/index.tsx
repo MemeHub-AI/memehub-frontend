@@ -10,6 +10,10 @@ import { Skeleton } from '../ui/skeleton'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { DexToolsChart } from '../dextools-chart'
 import { usePools } from '@/views/token/hooks/use-pools'
+import { datafeedConfig } from '@/config/datafeed'
+import { Button } from '../ui/button'
+import { useChartUtils } from './hooks/use-chart-utils'
+import { useChartStore } from '@/stores/use-chart-store'
 
 export const Chart = memo(() => {
   const chartRef = useRef<HTMLDivElement>(null)
@@ -18,6 +22,10 @@ export const Chart = memo(() => {
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
   const { isGrauated } = usePools(tokenInfo?.address)
+  const { formatInterval } = useChartUtils()
+  const { chart } = useChartStore()
+  const [, update] = useState(false)
+  const activeChart = chart?.activeChart()
 
   useEffect(() => {
     if (!chartRef.current || isEmpty(tokenAddr) || !tokenInfo) return
@@ -43,7 +51,28 @@ export const Chart = memo(() => {
         {isGrauated ? (
           <DexToolsChart className="w-full h-full" />
         ) : (
-          <div ref={chartRef} className="w-full h-full"></div>
+          <>
+            {datafeedConfig.readyConfig.supported_resolutions?.map((r) => (
+              <Button
+                key={r}
+                size="sm"
+                shadow="none"
+                variant="ghost"
+                className={cn(
+                  activeChart?.resolution() === r && 'text-blue-600'
+                )}
+                onClick={() => {
+                  activeChart?.setResolution(r)
+                  // Refresh component, because `setResolution` does not refresh
+                  update((v) => !v)
+                }}
+              >
+                {formatInterval(r, false)}
+              </Button>
+            ))}
+            <hr />
+            <div ref={chartRef} className="w-full h-full"></div>
+          </>
         )}
       </div>
 
