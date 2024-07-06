@@ -29,8 +29,6 @@ export const useTradeToast = () => {
     const { txUrl, type, tokenAmount, nativeAmount, hash, setLoading } = options
     reset()
 
-    console.log(JSON.stringify(options))
-
     const { data } = await mutateAsync({
       token_address: tokenAddr,
       chain: chainName,
