@@ -389,7 +389,7 @@
   "alliance.communities": "社区",
   "referral.copy": "复制推荐链接",
   "referral.desc": "使用您的特殊推荐链接与朋友分享此代币，并获得其交易费用的 $ 提成。",
-  "bonding-curve.desc": "当市值达到 {} 美元时，池子中的所有流动性将添加到 dex 并销毁。\n随着价格的上涨，进度也会增加。",
+  "bonding-curve.desc": "当市值达到 ≈{} 美元时，池子中的所有流动性将添加到 dex 并销毁。\n随着价格的上涨，进度也会增加。",
   "inviter1": "一级邀请人",
   "inviter2": "二级邀请人",
   "url.error": "请输入正确的网址",
@@ -457,5 +457,6 @@
   "acquired": "获得了",
   "sell.toast": "卖出",
   "uniswapv2.err.pool-addr": "找不到LP地址",
-  "contract.err.balance-insufficient": "余额不足"
+  "contract.err.balance-insufficient": "余额不足",
+  "token.graduated-desc": "恭喜，此代币已成功毕业"
 }
