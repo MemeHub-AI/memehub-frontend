@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { isAddress } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
-import { useAccount, useSwitchChain } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { isEmpty } from 'lodash'
 import { useDebounce } from 'react-use'
 
@@ -29,7 +29,6 @@ import { InviteTipsDialog } from './invite-tips-dialog'
 import { TradeCommentDialog } from './trade-comment-dialog'
 import { useCheckChain } from '@/hooks/use-check-chain'
 import { useTradeSearchParams } from '../hooks/use-search-params'
-import { useRouter } from 'next/router'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
