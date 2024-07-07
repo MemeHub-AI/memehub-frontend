@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from 'react'
+import React, { useEffect, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { clsx } from 'clsx'
@@ -24,9 +24,10 @@ import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
 import { newsApi } from '@/api/news'
 import { useAsideStore } from '@/stores/use-aside-store'
 import { replace } from 'lodash'
+import { useResponsive } from '@/hooks/use-responsive'
 
 interface Props extends ComponentProps<'div'> {
-  defalutTab?: number
+  defalutTab?: string | string[] | number
   listClassName?: string
   containerClass?: string
 }
@@ -44,6 +45,7 @@ export const OpportunityMoonshot = (props: Props) => {
   const { t } = useTranslation()
   const { push, replace, query, ...router } = useRouter()
   const { tab, setTab } = useAsideStore()
+  const { isPad } = useResponsive()
 
   const { data: countryList, isLoading: loadingCountry } = useQuery({
     queryKey: [newsApi.getCountry.name],
@@ -79,7 +81,23 @@ export const OpportunityMoonshot = (props: Props) => {
 
   const onChangeTab = (idx: number) => {
     setTab(idx)
+    
+    if(isPad) {
+      if(idx === 0) 
+        push(Routes.Moonshot)
+      else if(idx === 1)
+        push(Routes.ClassicMeme)
+    }
   }
+
+  useEffect(() => {
+    if(!defalutTab) return
+    if (defalutTab === '1') {
+      setTab(Tab.Moonshot)
+    } else if (defalutTab === '2') {
+      setTab(Tab.Classic)
+    }
+  }, [defalutTab])
 
   return (
     <div
