@@ -9,6 +9,9 @@ import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
 import { useAirdrop } from './trade-v3/use-airdrop'
 import { MarketType } from '@/api/token/types'
 import { ApiCode, ApiResponse } from '@/api/types'
+import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
+import { useAirdrop } from './trade-v3/use-airdrop'
+import { MarketType } from '@/api/token/types'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
