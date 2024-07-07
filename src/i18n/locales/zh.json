@@ -468,5 +468,6 @@
   "token.404.title": "很抱歉，我们找不到这个代币任何信息",
   "token.invalid.token": "很抱歉，您访问的路径\"{}\"有误",
   "token.not-found": "无效代币",
-  "token.not-found-desc": "抱歉，这是一个错误的代币，我们无法找到他的信息"
+  "token.not-found-desc": "抱歉，这是一个错误的代币，我们无法找到他的信息",
+  "Languages": "语言"
 }

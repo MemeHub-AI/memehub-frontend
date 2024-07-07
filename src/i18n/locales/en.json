@@ -477,5 +477,7 @@
   "token.404.title": "Sorry, but we cannot find any information about this token",
   "token.invalid.token": "Sorry, but the \"{}\" path you accessed is incorrect",
   "token.not-found": "Invalid token",
-  "token.not-found-desc": "Sorry, but this is an incorrect token and we are unable to find any information about it"
+  "token.not-found-desc": "Sorry, but this is an incorrect token and we are unable to find any information about it",
+  "Languages": "Languages",
+  "English": "English"
 }
