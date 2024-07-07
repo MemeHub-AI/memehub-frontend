@@ -48,9 +48,9 @@ export const RewardButton = React.forwardRef<
   const getMoney = () => {
     const money = userInfo?.reward_amount.toString()
     if (money.length > 4) {
-      return money.substring(0, 4) + '...';
+      return money.substring(0, 4) + '...'
     } else {
-      return money;
+      return money
     }
   }
 
@@ -58,7 +58,7 @@ export const RewardButton = React.forwardRef<
     <Button
       variant="outline"
       className={cn(
-        'bg-lime-green text-blue-deep hover:bg-lime-500 font-bold gap-2 select-none',
+        'bg-lime-green text-blue-deep hover:bg-lime-500 font-bold select-none',
         className
       )}
       onClick={() => router.push(Routes.Reward)}
@@ -67,21 +67,23 @@ export const RewardButton = React.forwardRef<
       {...restProps}
     >
       {showReferral && (
-        <div className="flex items-center gap-1">
-          <UserIcon size={20} />
+        <div className="flex items-center mr-2">
+          <UserIcon size={20} className="mr-1" />
           {totalIvite ? totalIvite : t('referral')}
         </div>
       )}
-      <div className="flex items-center gap-1">
-        <DiamondIcon size={20} ref={diamondRef} />
+      <div className="flex items-center">
+        <DiamondIcon size={20} ref={diamondRef} className="mr-1" />
         {userInfo?.reward_amount ? (
           <Countup
             decimals={userInfo?.reward_amount < 100 ? 2 : 0}
             start={oldUserInfo?.reward_amount}
             end={userInfo?.reward_amount}
           ></Countup>
+        ) : showReferral ? (
+          t('rewards')
         ) : (
-          showReferral ? t('rewards') : t(getMoney())
+          t(getMoney())
         )}
       </div>
     </Button>
