@@ -37,7 +37,6 @@ export const MainPage = () => {
           isPending={isFetching}
           onFetchNext={fetchNextPage}
         />
-
         <AICreateMemecoinDialog
           show={show}
           isRandom={isRandom}

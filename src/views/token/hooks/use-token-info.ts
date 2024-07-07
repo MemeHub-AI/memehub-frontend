@@ -6,6 +6,9 @@ import { useTradeSearchParams } from './use-search-params'
 import { airdropApi } from '@/api/airdrop'
 import { useUserStore } from '@/stores/use-user-store'
 import { ApiCode, ApiResponse } from '@/api/types'
+import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
+import { useAirdrop } from './trade-v3/use-airdrop'
+import { MarketType } from '@/api/token/types'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -52,6 +55,35 @@ export const useTokenInfo = () => {
     [data]
   )
 
+  const kolAirdropInfo = useAirdropInfo(
+    MarketType.Kol,
+    kol?.chain,
+    kol?.distribution_id
+  )
+  const communitiesAirdropInfo = useAirdropInfo(
+    MarketType.Community,
+    communities?.chain,
+    communities?.distribution_id
+  )
+
+  const kolAirdrop = useAirdrop(
+    kol?.distribution_id!,
+    `${kol?.airdrop_type}`,
+    () => {
+      kolAirdropInfo?.refetch()
+      kolAirdropInfo?.refetchIsClaimed()
+    }
+  )
+
+  const communitiesAirdrop = useAirdrop(
+    communities?.distribution_id!,
+    `${communities?.airdrop_type}`,
+    () => {
+      communitiesAirdropInfo?.refetch()
+      communitiesAirdropInfo?.refetchIsClaimed()
+    }
+  )
+
   return {
     tokenInfo,
     isLoadingTokenInfo,
@@ -64,6 +96,10 @@ export const useTokenInfo = () => {
       kol,
       communities,
       isOnlyOne,
+      kolAirdropInfo,
+      communitiesAirdropInfo,
+      kolAirdrop,
+      communitiesAirdrop,
     },
   }
 }

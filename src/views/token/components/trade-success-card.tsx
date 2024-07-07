@@ -33,7 +33,7 @@ export const TradeSuccessCard = (props: Props) => {
         onClick={onClose}
       />
       <div>
-        <h2 className="relative font-bold text-lg flex items-center gap-2 mt-2">
+        <h2 className="relative font-bold text-lg flex items-center mt-2">
           <img
             src={`/images/reward/diamond-star.png`}
             alt="diamond"
@@ -42,14 +42,14 @@ export const TradeSuccessCard = (props: Props) => {
           {t('trade.success')}
         </h2>
 
-        <p className="text-base my-1">
+        <p className="text-base my-1 max-sm:ml-3">
           {utilLang.replace(t('trade.success.reward'), [
             fmt.decimals(amount),
             symbol,
           ])}
         </p>
         {!isZero && (
-          <p className="text-base">
+          <p className="text-base max-sm:ml-3">
             {t('trade.success.diamond').split('$')[0]}
             <span className="text-xl text-blue-600">
               {BigNumber(diamond).toFormat()}

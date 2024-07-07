@@ -32,7 +32,7 @@ export const TokenCard = (props: Props) => {
   return (
     <Card
       className={cn(
-        'flex items-stretch overflow-hidden gap-2 relative',
+        'flex items-stretch overflow-hidden gap-2 relative max-sm:gap-0',
         className
       )}
       onClick={(e) => {
@@ -44,7 +44,7 @@ export const TokenCard = (props: Props) => {
       {isGrauated && (
         <Badge
           variant="success"
-          className="absolute left-0 top-0 rounded-l-none rounded-tr-none"
+          className="absolute left-0 top-0 rounded-l-none rounded-tr-none mr-2"
         >
           {t('token.graduated')}
         </Badge>
@@ -53,7 +53,7 @@ export const TokenCard = (props: Props) => {
         src={card.image}
         alt="logo"
         title={card.name}
-        className="shrink-0 w-32 h-32 xl:w-40 xl:h-40 rounded-r-none"
+        className="shrink-0 w-32 h-32 xl:w-40 xl:h-40 rounded-r-none max-sm:mr-2"
       />
       <div className="py-1.5 xl:py-2 pr-2 w-full flex flex-col justify-between">
         <div className="h-full">

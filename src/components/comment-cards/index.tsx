@@ -130,17 +130,17 @@ export const CommentCards = (props: Props) => {
 const CardSkeleton = () => {
   return Array.from({ length: 3 }).map((_, i) => (
     <div className="border-b-2 flex flex-col p-4 relative" key={i}>
-      <div className="flex gap-2 items-stretch">
+      <div className="flex items-stretch">
         <Skeleton className="rounded-full w-8 h-8" />
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-between ml-2">
           <Skeleton className="w-16 h-4" />
           <Skeleton className="w-20 h-3" />
         </div>
       </div>
       <Skeleton className="h-4 w-1/2 mt-3" />
-      <div className="flex gap-2 mt-2 absolute right-0 top-0">
+      <div className="flex mt-2 absolute right-0 top-0">
         <Skeleton className="h-5 w-8" />
-        <Skeleton className="h-5 w-8" />
+        <Skeleton className="h-5 w-8 ml-2" />
       </div>
     </div>
   ))

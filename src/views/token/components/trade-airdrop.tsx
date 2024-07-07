@@ -23,36 +23,16 @@ export const TradeAirdrop = () => {
   const { isMobile } = useResponsive()
   const { airdrop } = useTokenContext()
 
-  const { data, communities, isOnlyOne, kol } = airdrop
-
-  const kolAirdropInfo = useAirdropInfo(
-    MarketType.Kol,
-    kol?.chain,
-    kol?.distribution_id
-  )
-  const communitiesAirdropInfo = useAirdropInfo(
-    MarketType.Community,
-    communities?.chain,
-    communities?.distribution_id
-  )
-
-  const kolAirdrop = useAirdrop(
-    kol?.distribution_id!,
-    `${kol?.airdrop_type}`,
-    () => {
-      kolAirdropInfo?.refetch()
-      kolAirdropInfo?.refetchIsClaimed()
-    }
-  )
-
-  const communitiesAirdrop = useAirdrop(
-    communities?.distribution_id!,
-    `${communities?.airdrop_type}`,
-    () => {
-      communitiesAirdropInfo?.refetch()
-      communitiesAirdropInfo?.refetchIsClaimed()
-    }
-  )
+  const {
+    data,
+    communities,
+    isOnlyOne,
+    kol,
+    kolAirdrop,
+    kolAirdropInfo,
+    communitiesAirdrop,
+    communitiesAirdropInfo,
+  } = airdrop
 
   if (isEmpty(data)) return
 
@@ -65,10 +45,10 @@ export const TradeAirdrop = () => {
         )}
       >
         <div className={isOnlyOne ? 'flex-1' : ''}>
-          <h2 className="flex-1 font-bold text-lg ml-4 w-fit">
+          <h2 className="flex-1 font-bold text-lg ml-4 w-fit max-sm:ml-3">
             {t('airdrop')}
           </h2>
-          <div className="flex items-center flex-wrap max-sm:flex-col max-sm:gap-3">
+          <div className="flex items-center flex-wrap max-sm:flex-col max-sm:gap-0">
             {kol && (
               <AirdropCard
                 className={cn(
@@ -83,7 +63,11 @@ export const TradeAirdrop = () => {
             )}
             {communities && (
               <AirdropCard
-                className={cn('w-[50%] max-sm:w-full', !kol ? 'w-full' : '')}
+                className={cn(
+                  'w-[50%] max-sm:w-full max-sm:mt-3',
+                  !kol ? 'w-full' : '',
+                  isOnlyOne && 'max-sm:mt-0'
+                )}
                 suffix={t('holder')}
                 airdrop={communitiesAirdrop}
                 airdropInfo={communitiesAirdropInfo}
@@ -257,16 +241,16 @@ const AirdropCard = (props: AirdropCardProps) => {
       className={cn('cursor-[unset] pb-0', className)}
     >
       <div className="flex items-center gap-2 justify-between">
-        <div className="bg-lime-green flex items-center gap-2 rounded-md pr-2">
+        <div className="bg-lime-green flex items-center  rounded-md pr-2">
           <Img
             src={baseInfo.kol_logo || baseInfo.community_logo}
             alt="avatar"
             className="w-10 h-10 rounded-r-none"
           />
-          <span>
+          <span className="ml-2">
             {baseInfo.kol_name || baseInfo.community_name} {suffix}
           </span>
-          <img src="/images/check.png" alt="check" className="w-6 h-6" />
+          <img src="/images/check.png" alt="check" className="w-6 h-6 ml-2" />
         </div>
         <Countdown
           createdAt={baseInfo.create ?? 0}
@@ -276,19 +260,21 @@ const AirdropCard = (props: AirdropCardProps) => {
       </div>
 
       <div className="mt-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
-          <span>
+          <span className="ml-2">
             {BigNumber(baseInfo.amount ?? 0).toFormat()} {tokenInfo?.ticker}
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center">
           <TbUsers size={20} />
-          {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
+          <span className="ml-2">
+            {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
+          </span>
         </div>
       </div>
-      <div className="mt-4 flex justify-between gap-4">
+      <div className="mt-4 flex justify-between">
         <Button
           className={cn('flex-1 relative', !isClaimed && 'bg-lime-green-deep')}
           disabled={disabled}

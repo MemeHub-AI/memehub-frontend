@@ -59,13 +59,13 @@ export const TradeTable = () => {
                 {/* Date field */}
                 {i === ths.length - 2 ? (
                   <div
-                    className="flex items-center gap-1 cursor-pointer hover:text-black"
+                    className="flex items-center cursor-pointer hover:text-black"
                     onClick={() => {
                       setShowAge(!showAge)
                       setTableShowAge(String(!showAge))
                     }}
                   >
-                    <span>{t}</span>
+                    <span className="ml-1">{t}</span>
                     <ArrowLeftRight size={12} />
                   </div>
                 ) : (
@@ -84,7 +84,7 @@ export const TradeTable = () => {
                 className="border-b-black !border-b-2 last:!border-b-0"
               >
                 <TableCell
-                  className="font-bold inline-flex items-center gap-1 cursor-pointer hover:underline my-2 px-3"
+                  className="font-bold inline-flex items-center cursor-pointer hover:underline my-2 px-3"
                   onClick={() => {
                     router.push(`${Routes.Account}/${r.account.wallet_address}`)
                   }}
@@ -94,7 +94,9 @@ export const TradeTable = () => {
                     size={24}
                     fallback={r.account.name.charAt(0)}
                   />
-                  <span className="max-w-20 truncate">{r.account.name}</span>
+                  <span className="ml-1 max-w-20 truncate">
+                    {r.account.name}
+                  </span>
                 </TableCell>
                 <TableCell
                   className={cn(isBuy ? 'text-green-500' : 'text-red-500')}

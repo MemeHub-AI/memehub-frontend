@@ -96,10 +96,10 @@ export const ProfileForm = ({ children }: Props) => {
             onChange={onChange}
             disableFocusBorder
           />
-          <DialogFooter className="!justify-start max-sm:flex-row max-sm:gap-3">
+          <DialogFooter className="!justify-start max-sm:flex-row max-sm:gap-0">
             <Button variant="default">{t('confirm')}</Button>
             <DialogClose ref={closeRef} asChild>
-              <Button variant="outline" type="button">
+              <Button variant="outline" type="button" className="max-sm:ml-3">
                 {t('cancel')}
               </Button>
             </DialogClose>
