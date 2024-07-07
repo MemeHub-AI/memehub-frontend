@@ -25,7 +25,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
   const currentLang = getLang()
   return (
     <div>
-      <div className='max-sm:hidden'>
+      <div className='max-lg:hidden'>
         <HoverCard openDelay={100}>
           <HoverCardTrigger className="p-0">
             <Button size="icon" className={cn(className)}>

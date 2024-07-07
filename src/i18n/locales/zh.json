@@ -459,5 +459,6 @@
   "uniswapv2.err.pool-addr": "找不到LP地址",
   "contract.err.balance-insufficient": "余额不足",
   "login": "登录",
-  "chart": "K线"
+  "chart": "K线",
+  "Languages": "语言"
 }

@@ -468,5 +468,7 @@
   "uniswapv2.err.pool-addr": "Cannot find pool address",
   "contract.err.balance-insufficient": "insufficient balance",
   "login": "login",
-  "chart": "Chart"
+  "chart": "Chart",
+  "Languages": "Languages",
+  "English": "English"
 }
