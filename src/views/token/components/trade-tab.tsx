@@ -41,15 +41,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
   )
-  const { query, ...router } = useRouter()
-  const { switchChainAsync } = useSwitchChain()
-  const { isConnected, chainId, address } = useAccount()
+  const { query } = useRouter()
+  const { isConnected } = useAccount()
   const { isClaimingAirdrop } = useAirdropStore()
   const { tokenAddr } = useTradeSearchParams()
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
-  const { tokenInfo } = useTokenContext()
+  const { tokenInfo, isNotFound } = useTokenContext()
   const { copy } = useClipboard()
   const { userInfo } = useUserStore()
   const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
@@ -58,7 +57,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { checkForChain } = useCheckChain()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
-  const disabled = isSubmitting || isClaimingAirdrop
+  const disabled = isSubmitting || isClaimingAirdrop || isNotFound
   const disableTrade =
     disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
 

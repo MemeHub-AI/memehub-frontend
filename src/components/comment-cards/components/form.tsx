@@ -13,6 +13,7 @@ import { Label } from '@/components/ui/label'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
 import { shadowVariants } from '@/styles/variants'
+import { useTokenContext } from '@/contexts/token'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   isCommenting?: boolean
@@ -50,7 +51,8 @@ export const CommentForm = (props: Props) => {
   // Generate unique id.
   const inputId = useMemo(nanoid, [])
   const textareaId = useMemo(nanoid, [])
-  const disabled = isCommenting || isUploading
+  const { isNotFound } = useTokenContext()
+  const disabled = isCommenting || isUploading || isNotFound
 
   const onChange = ({
     target,

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, memo, useState } from 'react'
 import { isEmpty } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 import type { ClassValue } from 'class-variance-authority/types'
 import { useChart } from './hooks/use-chart'
@@ -16,9 +17,10 @@ import { useChartUtils } from './hooks/use-chart-utils'
 import { useChartStore } from '@/stores/use-chart-store'
 
 export const Chart = memo(() => {
+  const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
   const { chainName, tokenAddr } = useTradeSearchParams()
-  const { tokenInfo } = useTokenContext()
+  const { tokenInfo, isNotFound } = useTokenContext()
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
   const { isGrauated } = usePools(tokenInfo?.address)
@@ -28,7 +30,9 @@ export const Chart = memo(() => {
   const activeChart = chart?.activeChart()
 
   useEffect(() => {
-    if (!chartRef.current || isEmpty(tokenAddr) || !tokenInfo) return
+    if (!chartRef.current || isEmpty(tokenAddr) || !tokenInfo || isNotFound) {
+      return
+    }
 
     createChart(chartRef.current, {
       symbol: tokenInfo.ticker,
@@ -38,6 +42,19 @@ export const Chart = memo(() => {
 
     return removeChart
   }, [tokenInfo])
+
+  if (isNotFound) {
+    return (
+      <div
+        className={cn(
+          'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
+          'rounded-md overflow-hidden max-sm:mt-3 flex justify-center items-center'
+        )}
+      >
+        <p className='font-bold'>{t('token.not-found-desc')}</p>
+      </div>
+    )
+  }
 
   return (
     <>
