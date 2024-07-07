@@ -460,5 +460,9 @@
   "contract.err.balance-insufficient": "余额不足",
   "login": "登录",
   "chart": "K线",
-  "token.graduated-desc": "恭喜，此代币已成功毕业"
+  "token.graduated-desc": "恭喜，此代币已成功毕业",
+  "404.title": "我们迷路了",
+  "404.desc1": "您访问的页面不存在",
+  "404.desc2": "让我们通过以下按钮回到正确的位置",
+  "goto.home": "回到首页"
 }

@@ -469,5 +469,9 @@
   "contract.err.balance-insufficient": "insufficient balance",
   "login": "login",
   "chart": "Chart",
-  "token.graduated-desc": "Congratulations, this token has successfully graduated"
+  "token.graduated-desc": "Congratulations, this token has successfully graduated",
+  "404.title": "We are lost",
+  "404.desc1": "The page you are trying to access does not exist",
+  "404.desc2": "Let's get back to the right place by clicking the button below",
+  "goto.home": "Back home"
 }
