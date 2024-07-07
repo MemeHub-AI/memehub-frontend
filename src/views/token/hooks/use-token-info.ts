@@ -1,10 +1,11 @@
+import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { tokenApi } from '@/api/token'
 import { useTradeSearchParams } from './use-search-params'
 import { airdropApi } from '@/api/airdrop'
 import { useUserStore } from '@/stores/use-user-store'
-import { useMemo } from 'react'
+import { ApiCode, ApiResponse } from '@/api/types'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -21,8 +22,10 @@ export const useTokenInfo = () => {
       })
     },
   })
+
   const {
     data: { data: tokenInfo } = {},
+    error,
     isLoading: isLoadingTokenInfo,
     isFetching: isFetchingTokenInfo,
     isRefetching: isRefetchingTokenInfo,
@@ -33,7 +36,12 @@ export const useTokenInfo = () => {
     queryKey: [tokenApi.details.name, chainName, tokenAddr],
     queryFn: () => tokenApi.details(chainName, tokenAddr),
     refetchOnWindowFocus: false,
+    retry: (count, e?: ApiResponse) => {
+      if (e?.code === ApiCode.NotFound) return false
+      return count < 2
+    },
   })
+  const isNotFound = error?.code === ApiCode.NotFound
 
   const [kol, communities, isOnlyOne] = useMemo(
     () => [
@@ -49,6 +57,7 @@ export const useTokenInfo = () => {
     isLoadingTokenInfo,
     isFetchingTokenInfo,
     isRefetchingTokenInfo,
+    isNotFound,
     refetchInfo,
     airdrop: {
       data,
