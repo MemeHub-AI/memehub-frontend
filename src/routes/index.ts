@@ -17,7 +17,8 @@ export enum Routes {
 
   Reward = '/reward',
 
-  Moonshot = '/moonmeme/moonshot',
+  Moonshot = '/moonshot/1',
 
-  ClassicMeme = '/moonmeme/classic_meme'
+  ClassicMeme = '/moonshot/2',
+
 }

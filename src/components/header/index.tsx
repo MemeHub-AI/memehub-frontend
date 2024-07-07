@@ -20,8 +20,8 @@ export const Header = () => {
 
   const navs: Nav[] = [
     { title: t('home'), path: Routes.Main },
-    { title: t('🔥Next moonshot'), path: Routes.Moonshot },
-    { title: t('💡Classic meme'), path: Routes.ClassicMeme },
+    { title: t('next.moonshot'), path: Routes.Moonshot },
+    { title: t('classic.meme'), path: Routes.ClassicMeme },
     // { title: t('create'), path: Routes.Create },
     { title: t('airdrop'), path: Routes.Airdrop },
     { title: t('alliance'), path: Routes.Alliance },
