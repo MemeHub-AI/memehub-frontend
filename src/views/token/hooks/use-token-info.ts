@@ -5,14 +5,10 @@ import { tokenApi } from '@/api/token'
 import { useTradeSearchParams } from './use-search-params'
 import { airdropApi } from '@/api/airdrop'
 import { useUserStore } from '@/stores/use-user-store'
-<<<<<<< HEAD
-import { ApiCode, ApiResponse } from '@/api/types'
-=======
-import { useMemo } from 'react'
->>>>>>> 47524a6 (feat: UI)
 import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
 import { useAirdrop } from './trade-v3/use-airdrop'
 import { MarketType } from '@/api/token/types'
+import { ApiCode, ApiResponse } from '@/api/types'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
