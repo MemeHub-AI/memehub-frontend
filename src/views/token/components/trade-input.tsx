@@ -110,9 +110,9 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         disabled={disabled}
         endIcon={
           isLoadingTokenInfo ? (
-            <div className="flex items-center gap-1 mr-2">
+            <div className="flex items-center mr-2">
               <Skeleton className="w-12 h-4" />
-              <Skeleton className="w-6 h-6" />
+              <Skeleton className="w-6 h-6 ml-1" />
             </div>
           ) : (
             <div
@@ -142,13 +142,13 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
             <Skeleton className="w-24 h-4" />
           </>
         }
-        className="text-zinc-500 text-xs flex flex-col pt-1 gap-1"
+        className="text-zinc-500 text-xs flex flex-col pt-1 "
       >
         <span>
           {inputAmount} {isBuy ? nativeSymbol : tokenSymbol} ≈ {targetAmount}{' '}
           {isBuy ? tokenSymbol : nativeSymbol}
         </span>
-        <span>
+        <span className="mt-1">
           {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
         </span>
       </CustomSuspense>

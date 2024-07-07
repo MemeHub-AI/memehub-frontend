@@ -101,7 +101,7 @@ export const fmt = {
       '&nbsp;': ' ',
     } as Record<string, string>
 
-    return content.replaceAll(reg, (match) => {
+    return content.replace(reg, (match) => {
       return map[match] as string
     })
   },

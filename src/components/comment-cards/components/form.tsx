@@ -89,7 +89,7 @@ export const CommentForm = (props: Props) => {
         autoFocus={autoFocus}
       />
 
-      <div className="flex items-center gap-2">
+      <div className="flex items-center">
         <Button
           className={cn('px-10', buttonClass)}
           disabled={disabled}
@@ -100,7 +100,7 @@ export const CommentForm = (props: Props) => {
         {showCancel && (
           <Button
             type="button"
-            className="px-10"
+            className="px-10 ml-2"
             disabled={disabled}
             onClick={onCancel}
           >
@@ -110,20 +110,20 @@ export const CommentForm = (props: Props) => {
         <Label
           htmlFor={inputId}
           variant="icon"
-          className={cn(shadowVariants(), 'shadow')}
+          className={cn(shadowVariants(), 'shadow ml-2 flex-shrink-0')}
           disabled={disabled}
         >
           <ImageIcon className="cursor-pointer" />
         </Label>
-        {file && <p>{file?.name}</p>}
         <ImageUpload
           id={inputId}
           ref={inputRef}
           disabled={disabled}
           onChange={onChangeUpload}
-          className="hidden"
+          className="hidden ml-2"
         />
       </div>
+      {file && <p className="truncate text-gray-500">{file?.name}</p>}
     </form>
   )
 }

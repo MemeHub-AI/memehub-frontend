@@ -48,7 +48,7 @@ export const NewsCard = ({ news, onClick }: Props) => {
                 : 'line-clamp-2'
             )}
           >
-            {fmt.replaceHTMLCode(news?.content?.replaceAll('\n', ''))}
+            {fmt.replaceHTMLCode(news?.content?.replace(/n/g, ''))}
           </p>
         ) : null}
       </div>

@@ -9,6 +9,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  transpilePackages: ['@tanstack/query-core'],
 }
 
 export default withSentryConfig(nextConfig, {
