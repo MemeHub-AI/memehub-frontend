@@ -50,7 +50,8 @@ const IdeaPage = () => {
   const memeInfo = {
     name: basicInfo?.title,
     image: basicInfo?.logo,
-    description: basicInfo?.description,
+    description: basicInfo?.content,
+    background: basicInfo?.description,
   }
 
   const onConfirm = () => {
@@ -88,8 +89,7 @@ const IdeaPage = () => {
             <MobileQpportunityMoonshot
               defalutTab={defualtTab}
               className="max-md:!hidden max-sm:!px-0 "
-            >
-            </MobileQpportunityMoonshot>
+            ></MobileQpportunityMoonshot>
           </div>
         </div>
         {/* {+type === 2 ? (

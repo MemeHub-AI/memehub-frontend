@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 
@@ -13,6 +13,8 @@ import { MarketType, Marketing } from '@/api/token/types'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip } from '@/components/ui/tooltip'
 import { fmt } from '@/utils/fmt'
+import { Dialog } from '@/components/ui/dialog'
+import { DialogContent, DialogTitle } from '@radix-ui/react-dialog'
 
 const KolPercent = 0.02
 
@@ -90,9 +92,7 @@ export const MarketingField = () => {
               </FormControl>
               <FormLabel className="flex items-center !mt-0 gap-1">
                 {m.title}
-                <Tooltip tip={m.desc}>
-                  <InfoCircledIcon className="cursor-pointer" />
-                </Tooltip>
+                <DialogMarketing type={m.value}></DialogMarketing>
               </FormLabel>
             </FormItem>
           )}
@@ -103,3 +103,122 @@ export const MarketingField = () => {
 }
 
 export default MarketingField
+
+interface DialogProps {
+  type: MarketType
+}
+
+const kol = {
+  airdropCount: 2,
+  total: 100,
+  perCount: 0.002,
+  destroyed: 48,
+}
+
+const community = {
+  airdropCount: 5,
+  total: 500,
+  perCount: 0.001,
+  destroyed: 48,
+}
+
+export const DialogMarketing = ({ type }: DialogProps) => {
+  const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+
+  return (
+    <>
+      <InfoCircledIcon
+        className="cursor-pointer"
+        onClick={(e) => {
+          setOpen(true)
+          e.stopPropagation()
+          e.preventDefault()
+        }}
+      />
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTitle className="flex justify-center">
+          <span className="!text-xl">
+            {type === MarketType.Kol
+              ? t('kol.marketing')
+              : t('community.marketing')}
+          </span>
+        </DialogTitle>
+
+        <DialogContent>
+          <img
+            src="/images/airdrop-desc.png"
+            alt="Airdrop"
+            className="w-[125px] h-[125px] mb-5 mx-auto"
+          />
+
+          {type === MarketType.Kol ? (
+            <>
+              <p
+                className="mb-3"
+                dangerouslySetInnerHTML={{
+                  __html: t('airdrop.kol.desc1')
+                    .replace(
+                      '$1',
+                      `<span className="font-bold">${kol.airdropCount}</span>`
+                    )
+                    .replace(
+                      '$2',
+                      `<span className="font-bold">${kol.total}</span>`
+                    )
+                    .replace(
+                      '$3',
+                      `<span className="font-bold">${kol.perCount}</span>`
+                    ),
+                }}
+              ></p>
+              <p
+                className="mb-3"
+                dangerouslySetInnerHTML={{
+                  __html: t('airdrop.kol.desc2').replace(
+                    '$1',
+                    `<span className="font-bold">${kol.destroyed}</span>`
+                  ),
+                }}
+              ></p>
+              <p className="mb-3">{t('airdrop.kol.desc3')}</p>
+              <p>{t('airdrop.kol.desc4')}</p>
+            </>
+          ) : (
+            <>
+              <p
+                className="mb-3"
+                dangerouslySetInnerHTML={{
+                  __html: t('airdrop.community.desc1')
+                    .replace(
+                      '$1',
+                      `<span className="font-bold">${community.airdropCount}</span>`
+                    )
+                    .replace(
+                      '$2',
+                      `<span className="font-bold">${community.total}</span>`
+                    )
+                    .replace(
+                      '$3',
+                      `<span className="font-bold">${community.perCount}</span>`
+                    ),
+                }}
+              ></p>
+              <p
+                className="mb-3"
+                dangerouslySetInnerHTML={{
+                  __html: t('airdrop.community.desc2').replace(
+                    '$1',
+                    `<span className="font-bold">${community.destroyed}</span>`
+                  ),
+                }}
+              ></p>
+              <p className="mb-3">{t('airdrop.community.desc3')}</p>
+              <p>{t('airdrop.community.desc4')}</p>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </>
+  )
+}

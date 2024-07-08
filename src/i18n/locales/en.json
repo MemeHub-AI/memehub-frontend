@@ -397,7 +397,7 @@
   "alliance.communities": " COMMUNITIES",
   "referral.copy": "Copy Referral Link",
   "referral.desc": "Share this token with your friends using your special referral link and earn $ of their trading fees",
-  "bonding-curve.desc": "When the market cap reaches ≈{} all the liquidity from the pool will be deposited into dex and burned. Progression increases as the price goes up.",
+  "bonding-curve.desc": "When the market cap reaches ≈${} all the liquidity from the pool will be deposited into dex and burned. Progression increases as the price goes up.",
   "inviter1": "First-level inviter",
   "inviter2": "Second-level inviter",
   "url.error": "Please enter a valid URL.",
@@ -479,5 +479,16 @@
   "token.not-found-desc": "Sorry, but this is an incorrect token and we are unable to find any information about it",
   "Languages": "Languages",
   "English": "English",
-  "uniswapv2.err.amount": "Amount invalid"
+  "uniswapv2.err.amount": "Amount invalid",
+  "trade.tab": "Buy/Sell",
+  "kol.marketing": "Airdrops to KOL ambassadors",
+  "community.marketing": "Airdrops to the communities",
+  "airdrop.kol.desc1": "Memehub will airdop $1% of the tokens to $2 KOL ambassadors, with each person receiving $3%.",
+  "airdrop.kol.desc2": "If not claimed within $1 hours, all airdropped tokens will be destroyed. ",
+  "airdrop.kol.desc3": "This will bring extensive influence to your Memecoin.",
+  "airdrop.kol.desc4": "Don't worry about KOLs selling, because the funds brought in by purchases far exceed the sales from the airdropped tokens.",
+  "airdrop.community.desc1": "Memehub will airdop $1% of the tokens to $2 to members of many well-known communities, with each person receiving $3%.",
+  "airdrop.community.desc2": "If not claimed within $1 hours, all airdropped tokens will be destroyed.",
+  "airdrop.community.desc3": "This will bring extensive influence to your Memecoin.",
+  "airdrop.community.desc4": "Don't worry about memebers selling, because the funds brought in by purchases far exceed the sales from the airdropped tokens."
 }
