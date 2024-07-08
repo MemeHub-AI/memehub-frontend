@@ -45,6 +45,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       const { data } = await aiApi.getMemeInfo(
         {
           input: info!.name!,
+          background: info?.description,
         },
         memeInfoSign.signal
       )

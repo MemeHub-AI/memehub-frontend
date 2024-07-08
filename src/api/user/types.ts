@@ -105,6 +105,7 @@ interface User {
 export interface Chain {
   id: string
   name: string
+  displayName: string
   logo: string
   native: {
     decimals: number

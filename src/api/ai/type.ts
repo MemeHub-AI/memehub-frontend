@@ -9,6 +9,7 @@ export interface AIMemeInfo {
 export interface AIMemeInfoQuery {
   input: string
   type?: 1 | 0
+  background?: string
 }
 
 export interface AIMemeImageQuery extends AIMemeInfo {}

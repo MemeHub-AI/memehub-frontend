@@ -50,7 +50,7 @@ const IdeaPage = () => {
   const memeInfo = {
     name: basicInfo?.title,
     image: basicInfo?.logo,
-    description: basicInfo?.content,
+    description: basicInfo?.description,
   }
 
   const onConfirm = () => {
