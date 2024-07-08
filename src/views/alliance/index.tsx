@@ -30,7 +30,7 @@ export const AlliancePage = () => {
   return (
     <PrimaryLayout container="div" className="py-5">
       <Tabs value={defaultValue} onValueChange={handleTabChange}>
-        <TabsList className="border-none gap-2 h-10">
+        <TabsList className="border-none space-x-2 h-10">
           <TabsTrigger
             value={Tab.Kol}
             className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black"

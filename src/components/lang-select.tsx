@@ -49,7 +49,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
         </HoverCard>
       </div>
       <div className={cn('lg:hidden', className)}>
-        <Accordion type="single" collapsible >
+        <Accordion defaultValue={["item-1"]} type="multiple">
           <AccordionItem value="item-1">
             <AccordionTrigger>{t('Languages')}</AccordionTrigger>
             <AccordionContent onClick={() => setLang('zh')}>

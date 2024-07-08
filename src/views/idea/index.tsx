@@ -89,11 +89,6 @@ const IdeaPage = () => {
               defalutTab={defualtTab}
               className="max-md:!hidden max-sm:!px-0 "
             >
-              <div className="md:hidden ml-4">
-                <Button className="bg-white text-2xl" size={'icon'}>
-                  💡
-                </Button>
-              </div>
             </MobileQpportunityMoonshot>
           </div>
         </div>
