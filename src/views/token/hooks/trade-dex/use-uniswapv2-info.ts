@@ -8,6 +8,7 @@ import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 import { uniswapV2LPAbi } from '@/contract/uniswapv2/abi/lp'
 import { BI_ZERO } from '@/constants/number'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { Tuple } from '@/utils/types'
 
 export const useUniswapV2Info = (poolAddr?: Address | undefined | null) => {
   const { chainId } = useChainInfo()
@@ -19,28 +20,32 @@ export const useUniswapV2Info = (poolAddr?: Address | undefined | null) => {
     functionName: 'getReserves',
     query: { enabled: !!poolAddr },
   })
-  const [reserveIn, reserveOut] = reserves
+  const reservePair = reserves.slice(0, 2) as Tuple<bigint>
 
-  const getReserveAmount = (amountOut: string) => {
+  const getAmountOut = (amountIn: string, reverse = false) => {
+    const reversed = [...reservePair].reverse() as Tuple<bigint>
+
     return readContract(wagmiConfig, {
       abi: uniswapV2RouterAbi,
       address: router,
       chainId,
-      functionName: 'getAmountIn',
-      args: [parseEther(amountOut), reserveIn, reserveOut],
+      functionName: 'getAmountOut',
+      args: [parseEther(amountIn), ...(reverse ? reversed : reservePair)],
     }).catch((e: Error) => {
       console.error(e.message)
       return BI_ZERO
     })
   }
 
-  const getTokenAmount = (amountIn: string) => {
+  const getAmountIn = (amountOut: string, reverse = false) => {
+    const reversed = [...reservePair].reverse() as Tuple<bigint>
+
     return readContract(wagmiConfig, {
       abi: uniswapV2RouterAbi,
       address: router,
       chainId,
-      functionName: 'getAmountOut',
-      args: [parseEther(amountIn), reserveIn, reserveOut],
+      functionName: 'getAmountIn',
+      args: [parseEther(amountOut), ...(reverse ? reversed : reservePair)],
     }).catch((e: Error) => {
       console.error(e.message)
       return BI_ZERO
@@ -48,7 +53,7 @@ export const useUniswapV2Info = (poolAddr?: Address | undefined | null) => {
   }
 
   return {
-    getReserveAmount,
-    getTokenAmount,
+    getAmountOut,
+    getAmountIn,
   }
 }

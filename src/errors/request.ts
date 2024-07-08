@@ -8,16 +8,16 @@ export const REQUEST_ERR = {
     try {
       const { message } = (await response.json()) as ApiResponse
       loggerError(message)
-      toast.error(message)
+      // toast.error(message)
     } catch {
-      if (response.status >= 500) {
-        toast.error('Server error, please try again.')
-        return
-      }
-      if (response.status >= 400 && response.status <= 499) {
-        toast.error('Request error, please try again.')
-        return
-      }
+      // if (response.status >= 500) {
+      //   toast.error('Server error, please try again.')
+      //   return
+      // }
+      // if (response.status >= 400 && response.status <= 499) {
+      //   toast.error('Request error, please try again.')
+      //   return
+      // }
       loggerError(response.status)
     }
   },

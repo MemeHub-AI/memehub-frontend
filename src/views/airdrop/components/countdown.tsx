@@ -49,5 +49,5 @@ export const Countdown = ({
     return <p className="text-zinc-500">{t('expired')}</p>
   }
 
-  return <p className="text-red-600 font-bold">{countdown}</p>
+  return <p className="text-red-600 font-bold whitespace-nowrap">{countdown}</p>
 }
