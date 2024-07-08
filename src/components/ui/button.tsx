@@ -67,7 +67,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         className={cn(
           buttonVariants({ variant, size, className }),
-          shadowVariants({ shadow })
+          shadowVariants({ shadow }),
+          'min-w-5'
         )}
         {...restProps}
       />
