@@ -66,7 +66,7 @@ export const TokenCard = (props: Props) => {
               alt="logo"
               size={20}
               className="mt-1"
-              title={card.chain.name}
+              title={card.chain.displayName}
             />
           </CardTitle>
           <p

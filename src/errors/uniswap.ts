@@ -25,5 +25,5 @@ export const UNISWAP_ERR = {
   reserveNotFound: () => toast.error(t('uniswapv2.err.reserve-not-found')),
   poolAddrNotFound: () => toast.error(t('uniswapv2.err.pool-addr')),
 
-  reserveAmonutInvalid: () => toast.error(t('uniswapv2.err.reserve-amount')),
+  amonutInvalid: () => toast.error(t('uniswapv2.err.amount')),
 }

@@ -13,7 +13,7 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion"
+} from '@/components/ui/accordion'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -25,14 +25,17 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
   const currentLang = getLang()
   return (
     <div>
-      <div className='max-lg:hidden'>
+      <div className="max-lg:hidden">
         <HoverCard openDelay={100}>
           <HoverCardTrigger className="p-0">
             <Button size="icon" className={cn(className)}>
               <Languages size={20} />
             </Button>
           </HoverCardTrigger>
-          <HoverCardContent className="w-min py-[6px] px-1 mt-1">
+          <HoverCardContent
+            className="w-min py-[6px] px-1 mt-1 relative !left-1"
+            sideOffset={8}
+          >
             {langs.map(([code, { name }], i) => (
               <Button
                 key={i}
@@ -49,14 +52,18 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
         </HoverCard>
       </div>
       <div className={cn('lg:hidden', className)}>
-        <Accordion defaultValue={["item-1"]} type="multiple">
+        <Accordion defaultValue={['item-1']} type="multiple">
           <AccordionItem value="item-1">
             <AccordionTrigger>{t('Languages')}</AccordionTrigger>
             <AccordionContent onClick={() => setLang('zh')}>
-              <span className={currentLang === 'zh' ? 'text-blue-500': ""}>{t('中文')}</span>
+              <span className={currentLang === 'zh' ? 'text-blue-500' : ''}>
+                {t('中文')}
+              </span>
             </AccordionContent>
             <AccordionContent onClick={() => setLang('en')}>
-              <span className={currentLang === 'en' ? 'text-blue-500': ""}>{t('English')}</span>
+              <span className={currentLang === 'en' ? 'text-blue-500' : ''}>
+                {t('English')}
+              </span>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
@@ -64,7 +71,5 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
     </div>
   )
 }
-
-
 
 export default LangSelect

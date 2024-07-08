@@ -44,12 +44,12 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
 
   return (
     <Card
-      className={cn('p-3 max-sm:w-[96vw]', className)}
+      className={cn('p-3 max-sm:w-[96vw] max-w-[450px]', className)}
       shadow="none"
       onClick={onPushToken}
     >
       <div className="flex justify-between">
-        <span className=" font-bold">
+        <span className="font-bold truncate">
           {airdrop?.name}
           {airdrop?.ticker ? `(${airdrop.ticker})` : ''}
         </span>
@@ -59,7 +59,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
         />
       </div>
       <div className="mt-3 flex justify-between gap-4">
-        <div className="">
+        <div>
           <div className="flex items-center justify-between rounded bg-lime-green">
             <div className="flex items-center w-[150px]">
               <Img
@@ -79,7 +79,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           </div>
           <div className="mt-3 flex items-center">
             <img src="/images/gift.png" alt="gift" className="w-6 h-6" />
-            <span className="ml-2 text-gray-500">
+            <span className="ml-2 text-gray-500 break-all">
               {BigNumber(airdrop?.amount ?? 0).toFormat()} {airdrop?.ticker}
             </span>
           </div>

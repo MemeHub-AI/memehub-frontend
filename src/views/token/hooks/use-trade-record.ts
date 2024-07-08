@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
-import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 
 import {
@@ -15,33 +14,39 @@ import {
   WSMessageType,
   WSTradeRecordMessage,
 } from '@/api/websocket/types'
+import { useTradeSearchParams } from './use-search-params'
+import { useTokenContext } from '@/contexts/token'
 
 export const useTradeRecord = () => {
-  const { query } = useRouter()
   const [tradeRecords, setTradeRecords] = useState<WSTradeRecordMessage[]>([])
+  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { isNotFound } = useTokenContext()
 
   const { lastJsonMessage, sendJsonMessage, getWebSocket } = useWebSocket<
     WSMessageBase<WSTradeRecordMessage[] | null>
-  >(wsApiURL.tradeRecord, {
-    heartbeat,
-    onOpen: () => {
-      const token_address = query.address || ''
-      const chain = query.chain || ''
+  >(
+    isNotFound ? '' : wsApiURL.tradeRecord,
+    {
+      heartbeat,
+      onOpen: () => {
+        if (isEmpty(chainName) || isEmpty(tokenAddr)) return
 
-      if (isEmpty(token_address)) return
-      if (isEmpty(chain)) return
-
-      sendJsonMessage({
-        type: 'message',
-        data: { token_address, chain },
-      })
+        sendJsonMessage({
+          type: 'message',
+          data: {
+            chain: chainName,
+            token_address: tokenAddr,
+          },
+        })
+      },
+      filter: ({ data }) =>
+        isSuccessMessage(data) ||
+        isUpdateMessage(data) ||
+        isDisconnectMessage(data),
+      shouldReconnect: () => true,
     },
-    filter: ({ data }) =>
-      isSuccessMessage(data) ||
-      isUpdateMessage(data) ||
-      isDisconnectMessage(data),
-    shouldReconnect: () => true,
-  })
+    !isNotFound
+  )
 
   useEffect(() => {
     if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {

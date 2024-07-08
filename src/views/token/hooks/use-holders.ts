@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
-import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
+import { BigNumber } from 'bignumber.js'
 
 import {
   WSMessageType,
@@ -16,32 +16,38 @@ import {
   isUpdateMessage,
 } from '@/api/websocket'
 import { useHoldersStore } from '@/stores/use-holders-store'
+import { useTradeSearchParams } from './use-search-params'
+import { useTokenContext } from '@/contexts/token'
 
 export const useHolders = () => {
-  const { query } = useRouter()
   const { marketCap, holders, setHolders, setMarketCap } = useHoldersStore()
+  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { isNotFound } = useTokenContext()
 
   const { lastJsonMessage, sendJsonMessage, getWebSocket } =
-    useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(wsApiURL.tokenInfo, {
-      heartbeat,
-      onOpen: () => {
-        const token_address = query.address || ''
-        const chain = query.chain || ''
+    useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(
+      isNotFound ? '' : wsApiURL.tokenInfo,
+      {
+        heartbeat,
+        onOpen: () => {
+          if (isEmpty(chainName) || isEmpty(tokenAddr)) return
 
-        if (isEmpty(token_address)) return
-        if (isEmpty(chain)) return
-
-        sendJsonMessage({
-          type: 'message',
-          data: { token_address, chain },
-        })
+          sendJsonMessage({
+            type: 'message',
+            data: {
+              chain: chainName,
+              token_address: tokenAddr,
+            },
+          })
+        },
+        filter: ({ data }) =>
+          isSuccessMessage(data) ||
+          isUpdateMessage(data) ||
+          isDisconnectMessage(data),
+        shouldReconnect: () => true,
       },
-      filter: ({ data }) =>
-        isSuccessMessage(data) ||
-        isUpdateMessage(data) ||
-        isDisconnectMessage(data),
-      shouldReconnect: () => true,
-    })
+      !isNotFound
+    )
 
   useEffect(() => {
     if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {
@@ -51,7 +57,7 @@ export const useHolders = () => {
 
     // Make sure that data will not be reset to zero/empty
     // once it is available.
-    if (marketCap !== 0) setMarketCap(market_cap)
+    if (!BigNumber(market_cap).isZero()) setMarketCap(market_cap)
     if (!isEmpty(holders)) setHolders(holders)
   }, [lastJsonMessage])
 

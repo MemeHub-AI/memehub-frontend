@@ -65,9 +65,9 @@ export const TokenMobile = () => {
         <HoldersRank />
       </TabsContent>
       <div className="h-[36px] mb-2">
-        <div className="fixed left-0 bottom-[2vh] px-3 w-full">
-          <TabsList className="h-11 grid w-full grid-cols-3 bg-white">
-            <TabsTrigger value={TabName.trade}>{t('trade')}</TabsTrigger>
+        <div className="fixed left-0 bottom-0 w-full">
+          <TabsList className="h-11 grid w-full rounded-none grid-cols-3 bg-white">
+            <TabsTrigger value={TabName.trade}>{t('trade.tab')}</TabsTrigger>
             <TabsTrigger
               className="border-x-2 border-black relative"
               value={TabName.chart}

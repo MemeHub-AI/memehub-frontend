@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 import dayjs from 'dayjs'
+import { BigNumber } from 'bignumber.js'
 
 import { useApprove } from '@/hooks/use-approve'
 import { commonAddr } from '@/contract/address'
@@ -21,7 +22,7 @@ export const useUniswapV2 = () => {
   const { chainId } = useChainInfo()
   const { isApproving, approvalForAll } = useApprove()
   const { tokenInfo } = useTokenContext()
-  const { getReserveAmount } = useUniswapV2Info(tokenInfo?.pool_address)
+  const { getAmountOut } = useUniswapV2Info(tokenInfo?.pool_address)
 
   const { reserveToken, router } =
     commonAddr[chainId as keyof typeof commonAddr] || {}
@@ -58,9 +59,19 @@ export const useUniswapV2 = () => {
     return true
   }
 
-  const uniswapV2Buy = (amount: string, token: Address, slippage: string) => {
+  const uniswapV2Buy = async (
+    amount: string,
+    token: Address,
+    slippage: string
+  ) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
+
+    const tokenAmount = formatEther(await getAmountOut(amount))
+    if (BigNumber(tokenAmount).isZero()) {
+      UNISWAP_ERR.amonutInvalid()
+      return
+    }
 
     logger('uniswap buy', {
       amount,
@@ -69,7 +80,7 @@ export const useUniswapV2 = () => {
       chainId,
       router,
       reserveToken,
-      slippaged: formatEther(subSlippage(amount, slippage)),
+      slippaged: formatEther(subSlippage(tokenAmount, slippage)),
     })
     writeContract({
       abi: uniswapV2RouterAbi,
@@ -77,7 +88,7 @@ export const useUniswapV2 = () => {
       chainId,
       functionName: 'swapExactETHForTokens',
       args: [
-        subSlippage(amount, slippage),
+        subSlippage(tokenAmount, slippage),
         [reserveToken, token],
         address!,
         BigInt(dayjs().unix() + 60),
@@ -97,7 +108,11 @@ export const useUniswapV2 = () => {
     const isApproved = await approvalForAll(token, router, amount)
     if (!isApproved) return
 
-    const reserveAmount = formatEther(await getReserveAmount(amount))
+    const reserveAmount = formatEther(await getAmountOut(amount, true))
+    if (BigNumber(reserveAmount).isZero()) {
+      UNISWAP_ERR.amonutInvalid()
+      return
+    }
 
     logger('uniswap sell', {
       amount,

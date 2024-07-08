@@ -93,7 +93,9 @@ export const Chart = memo(() => {
         )}
       </div>
 
-      <ChartSkeleton className={!isCreating && 'scale-0 absolute'} />
+      <ChartSkeleton
+        className={(!isCreating || isGrauated) && 'scale-0 absolute'}
+      />
     </>
   )
 })

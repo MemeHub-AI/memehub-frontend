@@ -27,30 +27,30 @@ export const CoinTypeField = () => {
       desc: t('deploy.coin-type.normal.desc'),
       value: CoinType.Normal,
     },
-    {
-      title: t('deploy.coin-type.erc404'),
-      desc: t('deploy.coin-type.erc404.desc'),
-      value: CoinType.Erc404,
-      disabled: true,
-    },
-    {
-      title: t('deploy.coin-type.reward-lp'),
-      desc: t('deploy.coin-type.reward-lp.desc').replace('{}', '3%'),
-      value: CoinType.RewardLp,
-      disabled: true,
-    },
-    {
-      title: t('deploy.coin-type.reward-holder'),
-      desc: t('deploy.coin-type.reward-holder.desc').replace('{}', '3%'),
-      value: CoinType.RewardHolder,
-      disabled: true,
-    },
-    {
-      title: t('deploy.coin-type.burning'),
-      desc: t('deploy.coin-type.burning.desc'),
-      value: CoinType.Burning,
-      disabled: true,
-    },
+    // {
+    //   title: t('deploy.coin-type.erc404'),
+    //   desc: t('deploy.coin-type.erc404.desc'),
+    //   value: CoinType.Erc404,
+    //   disabled: true,
+    // },
+    // {
+    //   title: t('deploy.coin-type.reward-lp'),
+    //   desc: t('deploy.coin-type.reward-lp.desc').replace('{}', '3%'),
+    //   value: CoinType.RewardLp,
+    //   disabled: true,
+    // },
+    // {
+    //   title: t('deploy.coin-type.reward-holder'),
+    //   desc: t('deploy.coin-type.reward-holder.desc').replace('{}', '3%'),
+    //   value: CoinType.RewardHolder,
+    //   disabled: true,
+    // },
+    // {
+    //   title: t('deploy.coin-type.burning'),
+    //   desc: t('deploy.coin-type.burning.desc'),
+    //   value: CoinType.Burning,
+    //   disabled: true,
+    // },
   ]
 
   return (
@@ -74,7 +74,7 @@ export const CoinTypeField = () => {
                     key={t.value}
                     value={t.value.toString()}
                     className="border-b-2 border-black rounded-none m-0 last:border-none  p-3"
-                    disabled={t.disabled}
+                    // disabled={t.disabled}
                   >
                     <h3 className="font-bold text-base text-start">
                       {t.title}
