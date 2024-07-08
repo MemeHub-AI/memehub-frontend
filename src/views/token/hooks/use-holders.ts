@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { isEmpty } from 'lodash'
+import { BigNumber } from 'bignumber.js'
 
 import {
   WSMessageType,
@@ -56,7 +57,7 @@ export const useHolders = () => {
 
     // Make sure that data will not be reset to zero/empty
     // once it is available.
-    if (marketCap !== 0) setMarketCap(market_cap)
+    if (!BigNumber(market_cap).isZero()) setMarketCap(market_cap)
     if (!isEmpty(holders)) setHolders(holders)
   }, [lastJsonMessage])
 
