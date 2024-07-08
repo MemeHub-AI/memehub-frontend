@@ -68,28 +68,30 @@ export const Chart = memo(() => {
         {isGrauated ? (
           <DexToolsChart className="w-full h-full" />
         ) : (
-          <>
-            {datafeedConfig.readyConfig.supported_resolutions?.map((r) => (
-              <Button
-                key={r}
-                size="sm"
-                shadow="none"
-                variant="ghost"
-                className={cn(
-                  activeChart?.resolution() === r && 'text-blue-600'
-                )}
-                onClick={() => {
-                  activeChart?.setResolution(r)
-                  // Refresh component, because `setResolution` does not refresh
-                  update((v) => !v)
-                }}
-              >
-                {formatInterval(r, false)}
-              </Button>
-            ))}
+          <div className="flex flex-col h-full">
+            <div className="flex items-center">
+              {datafeedConfig.readyConfig.supported_resolutions?.map((r) => (
+                <Button
+                  key={r}
+                  size="sm"
+                  shadow="none"
+                  variant="ghost"
+                  className={cn(
+                    activeChart?.resolution() === r && 'text-blue-600'
+                  )}
+                  onClick={() => {
+                    activeChart?.setResolution(r)
+                    // Refresh component, because `setResolution` does not refresh
+                    update((v) => !v)
+                  }}
+                >
+                  {formatInterval(r, false)}
+                </Button>
+              ))}
+            </div>
             <hr />
-            <div ref={chartRef} className="w-full h-full"></div>
-          </>
+            <div ref={chartRef} className="w-full h-full flex-1"></div>
+          </div>
         )}
       </div>
 
