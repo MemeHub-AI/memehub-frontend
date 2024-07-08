@@ -1,10 +1,10 @@
 import Chart from '@/components/chart'
-import { CommentTradeTab } from './components/comment-trade-tab'
-import HoldersRank from './components/holders-rank'
-import TokenInfo from './components/token-info'
-import TokenInfoHeader from './components/token-info-header'
-import TradeAirdrop from './components/trade-airdrop'
-import TradeTab from './components/trade-tab'
+import { CommentTradeTab } from './comment-trade-tab'
+import HoldersRank from './holders-rank'
+import TokenInfo from './token-info'
+import TokenInfoHeader from './token-info-header'
+import TradeAirdrop from './trade-airdrop'
+import TradeTab from './trade-tab'
 
 export const TokenDesktop = () => {
   return (

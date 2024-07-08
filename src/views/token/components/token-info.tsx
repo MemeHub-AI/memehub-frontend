@@ -28,7 +28,7 @@ import { usePools } from '../hooks/use-pools'
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [details, setDetails] = useState<ReactNode>(null)
-  const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo, isNotFound } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
   const { isGrauated } = usePools(tokenInfo?.address)
@@ -107,7 +107,9 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </div>
         {/* Name/symbol */}
         <div className="font-bold leading-none text-center pt-16 max-sm:pt-14">
-          {tokenInfo?.name}({tokenInfo?.ticker})
+          {isNotFound
+            ? t('token.not-found')
+            : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
         </div>
         {/* Links */}
         <div className="flex justify-center items-center my-1 max-sm:m-0">
@@ -161,7 +163,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           {tokenInfo?.desc}
         </div>
         {/* Contract address */}
-        {!isMobile && (
+        {!isMobile && !isNotFound && (
           <div
             className="text-sm flex items-center cursor-pointer my-3"
             onClick={() => copy(tokenInfo?.address || '')}
@@ -174,13 +176,19 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           </div>
         )}
         {/* Bonding curve description */}
-        <p className="text-xs text-zinc-500 max-sm:mt-2">
-          {isGrauated
-            ? t('token.graduated-desc')
-            : utilLang.replace(t('bonding-curve.desc'), [
-                '$' + BigNumber(LISTED_MARKET_CAP).toFormat(),
-              ])}
-        </p>
+        {isNotFound ? (
+          <p className="text-xs text-zinc-500 max-sm:mt-2">
+            {t('token.not-found-desc')}
+          </p>
+        ) : (
+          <p className="text-xs text-zinc-500 max-sm:mt-2">
+            {isGrauated
+              ? t('token.graduated-desc')
+              : utilLang.replace(t('bonding-curve.desc'), [
+                  '$' + BigNumber(LISTED_MARKET_CAP).toFormat(),
+                ])}
+          </p>
+        )}
       </Card>
     </>
   )
