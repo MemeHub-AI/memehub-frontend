@@ -20,6 +20,7 @@ import { useResponsive } from '@/hooks/use-responsive'
 import { Badge } from '@/components/ui/badge'
 import { usePools } from '../hooks/use-pools'
 import { useChainsStore } from '@/stores/use-chains-store'
+import { PosterImages } from '@/components/poster-images'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -145,6 +146,13 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             </Button>
           )}
         </div>
+
+        {/* Poster */}
+        <PosterImages
+          poster={tokenInfo?.poster ?? []}
+          className="max-sm:mt-2"
+        />
+
         {/* Description */}
         <div
           className={cn(
@@ -160,6 +168,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         >
           {tokenInfo?.desc}
         </div>
+
         {/* Contract address */}
         {!isMobile && !isNotFound && (
           <div
@@ -173,6 +182,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             {isCopied ? <Check size={16} /> : <Copy size={16} />}
           </div>
         )}
+
         {/* Bonding curve description */}
         {isNotFound ? (
           <p className="text-xs text-zinc-500 max-sm:mt-2">
