@@ -16,6 +16,7 @@ export const useUniswapV2Info = (poolAddr?: Address | undefined | null) => {
 
   const { data: reserves = [BI_ZERO, BI_ZERO, 0] as const } = useReadContract({
     abi: uniswapV2LPAbi,
+    chainId,
     address: poolAddr!,
     functionName: 'getReserves',
     query: { enabled: !!poolAddr },
