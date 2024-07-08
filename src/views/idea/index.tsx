@@ -51,6 +51,7 @@ const IdeaPage = () => {
     name: basicInfo?.title,
     image: basicInfo?.logo,
     description: basicInfo?.content,
+    background: basicInfo?.description,
   }
 
   const onConfirm = () => {
