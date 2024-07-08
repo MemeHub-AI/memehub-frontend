@@ -12,7 +12,7 @@ import { CustomSuspense } from '../custom-suspense'
 import { Skeleton } from '../ui/skeleton'
 import { useComment } from './hooks/use-comment'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
-import { useTokenContext } from '@/contexts/token'
+import { useTokenInfo } from '@/views/token/hooks/use-token-info'
 
 interface Props extends ComponentProps<'div'> {
   cards: UserListRes[UserListType.Replies][]
@@ -57,7 +57,7 @@ export const CommentCards = (props: Props) => {
     onFetchNext,
     hasMore: cards.length < total,
   })
-  const { isNotFound } = useTokenContext()
+  const { isNotFound } = useTokenInfo()
 
   const onComment = (content: string, mentions: string[], img?: string) => {
     const related_comments = [...mentions]
