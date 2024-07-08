@@ -14,7 +14,7 @@ import { useResponsive } from '@/hooks/use-responsive'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo, isNotFound } = useTokenContext()
   const { marketCap } = useHoldersStore()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
@@ -43,8 +43,11 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
               size={26}
               className="border-2 border-black"
             />
+
             <span className="ml-1 font-bold text-blue-600">
-              {tokenInfo?.name}({tokenInfo?.ticker})
+              {isNotFound
+                ? t('token.not-found')
+                : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
             </span>
           </div>
           <div className="sm:hidden flex items-center">

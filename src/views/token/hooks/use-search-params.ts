@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { Address } from 'viem'
 
 export const useTradeSearchParams = () => {
-  const { query } = useRouter()
+  const { query, isReady } = useRouter()
 
   const chainName = (query.chain ?? '') as string
   const tokenAddr = (query.address ?? '') as Address
@@ -12,5 +12,6 @@ export const useTradeSearchParams = () => {
     chainName,
     tokenAddr,
     referralCode,
+    isReady,
   }
 }

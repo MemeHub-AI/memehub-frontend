@@ -98,18 +98,16 @@ export const TokenCards = (props: Props) => {
           filteredCards.map((t, i) => (
             <TokenCard key={i} card={t} className={'max-sm:mb-2'} />
           ))}
-        <div>
-          {isPending && (
-            <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
-              {t('loading')}
-            </div>
-          )}
-          {noMore && (
-            <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
-              {t('nomore')}
-            </div>
-          )}
-        </div>
+        {isPending && (
+          <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
+            {t('loading')}
+          </div>
+        )}
+        {noMore && (
+          <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
+            {t('nomore')}
+          </div>
+        )}
       </CustomSuspense>
     </div>
   )
@@ -117,7 +115,7 @@ export const TokenCards = (props: Props) => {
 
 const CardSkeleton = () => {
   return Array.from({ length: 4 }).map((_, i) => (
-    <div className="border-2 rounded flex relativew" key={i}>
+    <div className="border-2 rounded flex relative mb-2" key={i}>
       <Skeleton className="w-40 h-40 flex-shrink-0 rounded-none" />
       <div className="w-full my-2 flex flex-col justify-between ml-2 mr-2">
         <div className="flex flex-col">
