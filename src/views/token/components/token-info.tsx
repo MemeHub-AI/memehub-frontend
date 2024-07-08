@@ -1,9 +1,4 @@
-import React, {
-  createElement,
-  useState,
-  type ComponentProps,
-  type ReactNode,
-} from 'react'
+import React, { useState, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Copy, Twitter, Check } from 'lucide-react'
 import { FaTelegramPlane } from 'react-icons/fa'
@@ -24,6 +19,7 @@ import { LISTED_MARKET_CAP } from '@/constants/trade'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Badge } from '@/components/ui/badge'
 import { usePools } from '../hooks/use-pools'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -32,6 +28,8 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
   const { isGrauated } = usePools(tokenInfo?.address)
+  const { findChain } = useChainsStore()
+  const chain = findChain(tokenInfo?.chain?.name)
 
   if (isLoadingTokenInfo) {
     return (
@@ -76,8 +74,8 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </Dialog>
         {/* Chain logo */}
         <div className="absolute left-2 top-2 flex items-center gap-1">
-          <Avatar src={tokenInfo?.chain.logo} size={20} />
-          <p className="text-sm max-w-20 break-all">{tokenInfo?.chain.name}</p>
+          <Avatar src={chain?.logo} size={20} />
+          <p className="text-sm max-w-20 break-all">{chain?.displayName}</p>
         </div>
         {/* Logo */}
         <div className="relative">
