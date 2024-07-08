@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import React, { ComponentProps, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Languages } from 'lucide-react'
 import { FaCheck } from 'react-icons/fa6'
@@ -22,7 +22,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
   const { i18n } = useTranslation()
   const { getLang, setLang } = useLang()
   const { t } = useTranslation()
-  const currentLang = getLang()
+
   return (
     <div>
       <div className="max-lg:hidden">
@@ -55,16 +55,13 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
         <Accordion defaultValue={['item-1']} type="multiple">
           <AccordionItem value="item-1">
             <AccordionTrigger>{t('Languages')}</AccordionTrigger>
-            <AccordionContent onClick={() => setLang('zh')}>
-              <span className={currentLang === 'zh' ? 'text-blue-500' : ''}>
-                {t('中文')}
-              </span>
-            </AccordionContent>
-            <AccordionContent onClick={() => setLang('en')}>
-              <span className={currentLang === 'en' ? 'text-blue-500' : ''}>
-                {t('English')}
-              </span>
-            </AccordionContent>
+            {
+              langs.map(([code, { name }], i) => (
+                <AccordionContent key={i} onClick={() => setLang(code)}>
+                  <span className={i18n.language === code ? 'text-blue-500' : ''}>{name}</span>
+                </AccordionContent>
+              ))
+            }
           </AccordionItem>
         </Accordion>
       </div>

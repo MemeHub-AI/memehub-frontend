@@ -58,7 +58,7 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
           duration={durationSeconds}
         />
       </div>
-      <div className="mt-3 flex justify-between gap-4">
+      <div className="mt-3 flex justify-between space-x-4">
         <div>
           <div className="flex items-center justify-between rounded bg-lime-green">
             <div className="flex items-center w-[150px]">

@@ -55,7 +55,7 @@ export const TradeTable = () => {
         <TableHeader>
           <TableRow className="!border-b-2 border-b-black">
             {ths.map((t, i) => (
-              <TableHead key={i} className={cn(i === 0 && 'w-[100px]', 'px-3')}>
+              <TableHead key={i} className={cn(i === 0 && 'w-[100px]', 'px-2 text-nowrap')}>
                 {/* Date field */}
                 {i === ths.length - 2 ? (
                   <div

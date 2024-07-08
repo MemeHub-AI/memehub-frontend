@@ -98,6 +98,8 @@ export const TokenCards = (props: Props) => {
           filteredCards.map((t, i) => (
             <TokenCard key={i} card={t} className={'max-sm:mb-2'} />
           ))}
+      </CustomSuspense>
+      <div className='mt-2'>
         {isPending && (
           <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
             {t('loading')}
@@ -108,7 +110,7 @@ export const TokenCards = (props: Props) => {
             {t('nomore')}
           </div>
         )}
-      </CustomSuspense>
+      </div>
     </div>
   )
 }
