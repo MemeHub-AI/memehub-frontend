@@ -22,5 +22,6 @@
     "**/*.tsx",
     "src/components/token-cards/token-search-input.tss"
   ],
+
   "exclude": ["node_modules"]
 }

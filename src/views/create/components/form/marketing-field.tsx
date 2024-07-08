@@ -13,8 +13,9 @@ import { MarketType, Marketing } from '@/api/token/types'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Tooltip } from '@/components/ui/tooltip'
 import { fmt } from '@/utils/fmt'
-import { Dialog } from '@/components/ui/dialog'
+import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { DialogContent, DialogTitle } from '@radix-ui/react-dialog'
+import { Button } from '@/components/ui/button'
 
 const KolPercent = 0.02
 
@@ -218,6 +219,9 @@ export const DialogMarketing = ({ type }: DialogProps) => {
             </>
           )}
         </DialogContent>
+        <DialogFooter className="!justify-center">
+          <Button onClick={() => setOpen(false)}>OK</Button>
+        </DialogFooter>
       </Dialog>
     </>
   )

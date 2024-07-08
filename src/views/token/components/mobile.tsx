@@ -9,6 +9,9 @@ import Chart from '@/components/chart'
 import TradeAirdrop from './trade-airdrop'
 import HoldersRank from './holders-rank'
 import { useTokenContext } from '@/contexts/token'
+import { BsArrowDownUp } from 'react-icons/bs'
+import { BsGraphUpArrow } from 'react-icons/bs'
+import { LuUsers } from 'react-icons/lu'
 
 const enum TabName {
   trade = '0',
@@ -67,11 +70,15 @@ export const TokenMobile = () => {
       <div className="h-[36px] mb-2">
         <div className="fixed left-0 bottom-0 w-full">
           <TabsList className="h-11 grid w-full rounded-none grid-cols-3 bg-white">
-            <TabsTrigger value={TabName.trade}>{t('trade.tab')}</TabsTrigger>
+            <TabsTrigger value={TabName.trade}>
+              <BsArrowDownUp className="mr-1" size={16}></BsArrowDownUp>
+              {t('trade.tab')}
+            </TabsTrigger>
             <TabsTrigger
               className="border-x-2 border-black relative"
               value={TabName.chart}
             >
+              <BsGraphUpArrow className="mr-1" size={16}></BsGraphUpArrow>
               {t('chart')}
               {tipsCount && tab !== TabName.chart ? (
                 <div
@@ -84,7 +91,10 @@ export const TokenMobile = () => {
                 </div>
               ) : null}
             </TabsTrigger>
-            <TabsTrigger value={TabName.holder}>{t('holder')}</TabsTrigger>
+            <TabsTrigger value={TabName.holder}>
+              <LuUsers className="mr-1" size={20}></LuUsers>
+              {t('holder')}
+            </TabsTrigger>
           </TabsList>
         </div>
       </div>

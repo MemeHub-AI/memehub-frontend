@@ -100,7 +100,7 @@ const AirdropSkeleton = () => {
       {data?.map((airdrop, i) => (
         <AirdropCard
           key={i}
-          className="blur-md pointer-events-none select-none"
+          className="pointer-events-none select-none"
           airdrop={airdrop}
         />
       ))}

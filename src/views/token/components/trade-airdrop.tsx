@@ -127,6 +127,7 @@ const Burn = (props: BurmProps) => {
 
   const {
     durationSeconds,
+    totalAirdrop,
     remain: remainKol,
     refetch,
     refetchIsClaimed,
@@ -137,7 +138,7 @@ const Burn = (props: BurmProps) => {
     airdrop.distribution_id
   )
 
-  const remain = Math.min(remainKol, remainCommunity)
+  const remain = Math.abs(totalAirdrop - remainKol - remainCommunity)
   const burnText = `${BigNumber(remain).toFormat()} ${tokenInfo?.ticker}`
 
   const { isBurning, isBurn, burn } = useAirdrop(
