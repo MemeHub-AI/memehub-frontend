@@ -51,7 +51,7 @@ export const Chart = memo(() => {
           'rounded-md overflow-hidden max-sm:mt-3 flex justify-center items-center'
         )}
       >
-        <p className='font-bold'>{t('token.not-found-desc')}</p>
+        <p className="font-bold">{t('token.not-found-desc')}</p>
       </div>
     )
   }
@@ -62,7 +62,7 @@ export const Chart = memo(() => {
         className={cn(
           'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
           'rounded-md overflow-hidden max-sm:mt-3',
-          isCreating && 'scale-0 absolute'
+          isCreating && !isGrauated && 'scale-0 absolute'
         )}
       >
         {isGrauated ? (
