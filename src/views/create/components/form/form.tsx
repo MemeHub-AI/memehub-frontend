@@ -113,7 +113,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             {/* Chain / coinType */}
             <div className="h-[150px] flex flex-col justify-between max-sm:flex-row max-sm:h-min max-sm:justify-start max-sm:space-x-4 max-sm:flex-wrap">
               <FormChain formData={formData} />
-              <CoinTypeField />
+              {/* <CoinTypeField /> */}
             </div>
           </div>
 
