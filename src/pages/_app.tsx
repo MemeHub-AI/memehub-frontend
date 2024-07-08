@@ -7,7 +7,6 @@ import '@/styles/globals.css'
 import { AppLayout } from '@/components/layouts/app'
 import { AppProviders } from '@/components/app-providers'
 import Script from 'next/script'
-import { useRewardCode } from '@/hooks/use-reward-code'
 import { useStorage } from '@/hooks/use-storage'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
@@ -48,7 +47,11 @@ export default function App({ Component, pageProps }: AppProps) {
         <title>{t('meme-hub')}</title>
         <meta
           name="keywords"
-          content="meme, meme hub, meme launchpad, meme coin, crypto, web3, blockchain"
+          content="meme, memehub, memecoin, crypto, web3, blockchain"
+        />
+        <meta
+          name="description"
+          content="Memehub is a unique memecoin launch platform driven by AI."
         />
         <meta
           name="viewport"

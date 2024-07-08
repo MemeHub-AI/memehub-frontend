@@ -7,6 +7,7 @@ export interface ApiResponse<T = null> {
 export enum ApiCode {
   Success = 200,
   AuthError = 401,
+  NotFound = 404,
 }
 
 export interface PaginationReq {

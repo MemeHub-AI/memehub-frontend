@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { isAddress } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
-import { useAccount, useSwitchChain } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { isEmpty } from 'lodash'
 import { useDebounce } from 'react-use'
 
@@ -29,7 +29,6 @@ import { InviteTipsDialog } from './invite-tips-dialog'
 import { TradeCommentDialog } from './trade-comment-dialog'
 import { useCheckChain } from '@/hooks/use-check-chain'
 import { useTradeSearchParams } from '../hooks/use-search-params'
-import { useRouter } from 'next/router'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -47,7 +46,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
-  const { tokenInfo } = useTokenContext()
+  const { tokenInfo, isNotFound } = useTokenContext()
   const { copy } = useClipboard()
   const { userInfo } = useUserStore()
   const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
@@ -56,7 +55,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { checkForChain } = useCheckChain()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
-  const disabled = isSubmitting || isClaimingAirdrop
+  const disabled = isSubmitting || isClaimingAirdrop || isNotFound
   const disableTrade =
     disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
 
