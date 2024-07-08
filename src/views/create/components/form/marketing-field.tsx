@@ -1,4 +1,4 @@
-import React, { use, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 
@@ -11,16 +11,15 @@ import {
 } from '@/components/ui/form'
 import { MarketType, Marketing } from '@/api/token/types'
 import { Checkbox } from '@/components/ui/checkbox'
-import { Tooltip } from '@/components/ui/tooltip'
 import { fmt } from '@/utils/fmt'
 import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { DialogContent, DialogTitle } from '@radix-ui/react-dialog'
 import { Button } from '@/components/ui/button'
 
-const KolPercent = 0.02
+const kolPercent = 0.02
 
-const CommunityName = 'BNB'
-const CommunityPercent = 0.05
+const communityName = 'BNB'
+const communityPercent = 0.05
 
 const memehubName = 'Memehub'
 const memehubPercent = 0.05
@@ -41,21 +40,21 @@ export const MarketingField = () => {
 
   const markets = [
     {
-      title: t('marketing.kol').replace('{}', fmt.percent(KolPercent)),
-      desc: t('marketing.kol.desc').replace('{}', fmt.percent(KolPercent)),
+      title: t('marketing.kol').replace('{}', fmt.percent(kolPercent)),
+      desc: t('marketing.kol.desc').replace('{}', fmt.percent(kolPercent)),
       value: MarketType.Kol,
-      percent: KolPercent,
+      percent: kolPercent,
     },
     {
       title: t('marketing.community')
-        .replace('{}', fmt.percent(CommunityPercent))
+        .replace('{}', fmt.percent(communityPercent))
         .replace('{}', ''),
       desc: t('marketing.community.desc').replace(
         '{}',
-        fmt.percent(CommunityPercent)
+        fmt.percent(communityPercent)
       ),
       value: MarketType.Community,
-      percent: CommunityPercent,
+      percent: communityPercent,
     },
     // {
     //   title: t('marketing.memehub')
@@ -70,6 +69,20 @@ export const MarketingField = () => {
     // },
   ]
 
+  // Default checked.
+  useEffect(() => {
+    form.setValue(formFields.marketing, [
+      {
+        type: MarketType.Kol,
+        percent: kolPercent,
+      },
+      {
+        type: MarketType.Community,
+        percent: communityPercent,
+      },
+    ])
+  }, [])
+
   return (
     <div className="!mt-5">
       <p className="font-bold text-sm">{t('marketing')}</p>
@@ -83,6 +96,7 @@ export const MarketingField = () => {
               <FormControl>
                 <Checkbox
                   // disabled={m.disabled}
+                  checked={field.value?.some((v) => v.type === m.value)}
                   onCheckedChange={(checked) => {
                     const value = field.value as Marketing[]
                     const { added, removed } = marketingActions(value, m)
