@@ -36,6 +36,8 @@ export const useAirdrop = (
   const { checkForChain } = useCheckChain()
   const { checkForLogin } = useLogin()
 
+  const toastConfig = window.innerWidth > 600 ? buttonLeft : undefined
+
   // Query airdrop details.
   const { data: { data } = {}, refetch } = useQuery({
     enabled: !!chainName && !!type_list && !!tokenAddr,
@@ -68,7 +70,7 @@ export const useAirdrop = (
   } = useWriteContract({
     mutation: {
       onMutate: () =>
-        toast.loading(isClaim ? t('claiming') : t('burning'), buttonLeft),
+        toast.loading(isClaim ? t('claiming') : t('burning'), toastConfig),
       onSettled: (_, __, ___, id) => {
         toast.dismiss(id)
         setBurning(false)
@@ -86,17 +88,17 @@ export const useAirdrop = (
   const { isFetching: isWaitingClaim } = useWaitForTx({
     hash,
     onLoading: () => {
-      toast.loading(t('tx.waiting'), buttonLeft)
+      toast.loading(t('tx.waiting'), toastConfig)
     },
     onError: () =>
       toast.error(
         isClaim ? t('airdrop.claim.failed') : t('airdrop.burn.failed'),
-        buttonLeft
+        toastConfig
       ),
     onSuccess: () =>
       toast.success(
         isClaim ? t('airdrop.claim.success') : t('airdrop.burn.success'),
-        buttonLeft
+        toastConfig
       ),
     onFillay: () => {
       setBurning(false)

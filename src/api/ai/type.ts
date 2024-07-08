@@ -4,6 +4,7 @@ export interface AIMemeInfo {
   symbol?: string
   image?: string
   chainName?: string
+  background?: string
 }
 
 export interface AIMemeInfoQuery {

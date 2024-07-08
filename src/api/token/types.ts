@@ -30,6 +30,7 @@ export interface TokenNewReq {
   website?: string
   coin_type?: CoinType
   marketing?: Marketing[]
+  poster?: string[]
 }
 
 export enum CoinType {

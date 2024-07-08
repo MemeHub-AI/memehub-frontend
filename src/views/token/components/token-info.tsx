@@ -183,7 +183,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             {isGrauated
               ? t('token.graduated-desc')
               : utilLang.replace(t('bonding-curve.desc'), [
-                  '$' + BigNumber(LISTED_MARKET_CAP).toFormat(),
+                  BigNumber(LISTED_MARKET_CAP).toFormat(),
                 ])}
           </p>
         )}

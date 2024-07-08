@@ -29,7 +29,10 @@ export const CONTRACT_ERR = {
     }
 
     if (msg.includes(ERR.transactionExecutionError)) {
-      toast.message(createElement(SlippageError), buttonLeft)
+      toast.message(
+        createElement(SlippageError),
+        window.innerWidth > 600 ? buttonLeft : undefined
+      )
       return
     }
 
