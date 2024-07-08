@@ -3,6 +3,7 @@ import type { Config } from 'tailwindcss'
 const baseWidth = {
   main: '1280px',
   aside: '340px',
+  18: '4.5rem',
   100: '28rem',
   128: '32rem',
   42: '10.5rem',
@@ -14,6 +15,7 @@ const baseHeight = {
   body: 'calc(100vh - 64px)', // Exclude footer height.
   main: 'calc(100vh - 64px - 64px)', // Include footer height.
   footer: '64px',
+  18: '4.5rem',
   42: '10.5rem',
 }
 

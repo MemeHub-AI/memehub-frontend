@@ -124,6 +124,7 @@ export const useCreateTokenForm = (
       website: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
       coin_type: values.coinType as number,
       marketing: values.marketing as Marketing[],
+      poster: values.poster,
       version: deployVersion,
     })
   }
