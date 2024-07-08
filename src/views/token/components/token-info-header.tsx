@@ -54,7 +54,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
             <img
               src={tokenInfo?.chain.logo}
               alt={tokenInfo?.chain.name}
-              className="w-[25px] h-[25px]"
+              className="w-[25px] h-[25px] rounded"
             />
             <span className="ml-1">
               {fmt.firstUpperCase(tokenInfo?.chain.name)}
