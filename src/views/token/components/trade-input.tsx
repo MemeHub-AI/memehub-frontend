@@ -143,7 +143,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
             <Skeleton className="w-24 h-4" />
           </>
         }
-        className="text-zinc-500 text-xs flex flex-col pt-1 "
+        className="text-zinc-500 text-xs flex flex-col space-y-1 mt-1"
       >
         <span>
           {inputAmount} {isBuy ? nativeSymbol : tokenSymbol} ≈ {targetAmount}{' '}
