@@ -447,7 +447,6 @@
   "contract.err.exec": "出现了一个小问题，请重试",
   "uniswapv2.err.insufficient-amount": "剩余数量不足",
   "uniswapv2.err.reserve-not-found": "找不到储备代币",
-  "uniswapv2.err.reserve-amount": "储备代币金额无效",
   "tx": "区块链记录",
   "tx.submit": "交易提交中...",
   "slippage.low.tips": "请提高滑点重试",
@@ -469,5 +468,6 @@
   "token.invalid.token": "很抱歉，您访问的路径\"{}\"有误",
   "token.not-found": "无效代币",
   "token.not-found-desc": "抱歉，这是一个错误的代币，我们无法找到他的信息",
-  "Languages": "语言"
+  "Languages": "语言",
+  "uniswapv2.err.amount": "金额无效"
 }

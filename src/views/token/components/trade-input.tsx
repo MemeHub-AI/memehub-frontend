@@ -35,8 +35,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
   const { isGrauated } = usePools(tokenInfo?.address)
-  const { getReserveAmount, getTokenAmount: getTokenAmount2 } =
-    useUniswapV2Info(tokenInfo?.pool_address as Address)
+  const { getAmountOut } = useUniswapV2Info(tokenInfo?.pool_address as Address)
 
   const inputAmount = fmt.decimals(String(value || 0), { fixed: 3 })
   const [targetAmount, setTargetAmount] = useState('0')
@@ -54,6 +53,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     onChange?.(target.value)
   }
 
+  // Calculate buy pair amount.
   const calcAmountForBuy = async () => {
     const total = formatEther(await getTotalSupply())
     if (BigNumber(value as string).gt(total)) {
@@ -63,12 +63,13 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     }
 
     const tokenAmount = await (isGrauated
-      ? getTokenAmount2(value as string)
+      ? getAmountOut(value as string)
       : getTokenAmount(value as string))
     const amount = fmt.decimals(BigNumber(formatEther(tokenAmount)))
     setTargetAmount(amount)
   }
 
+  // Calculate sell pair amount.
   const calcAmountForSell = async () => {
     const current = formatEther(await getTotalSupply())
     if (BigNumber(value as string).gt(current)) {
@@ -80,7 +81,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     }
 
     const nativeAmount = await (isGrauated
-      ? getReserveAmount(value as string)
+      ? getAmountOut(value as string, true)
       : getNativeAmount(value as string))
     const amount = fmt.decimals(BigNumber(formatEther(nativeAmount)))
     setTargetAmount(amount)
