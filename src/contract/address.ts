@@ -76,7 +76,7 @@ export const commonAddr = {
   },
   [blast.id]: {
     reserveToken: '0x4300000000000000000000000000000000000004',
-    router: '0xBB66Eb1c5e875933D44DAe661dbD80e5D9B03035',
+    router: '0x44889b52b71E60De6ed7dE82E2939fcc52fB2B4E',
   },
   // [fantom.id]: {
   //   reserveToken: '0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83',

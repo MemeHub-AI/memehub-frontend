@@ -8,7 +8,6 @@ import {
   type WSMessageBase,
   type WSTradeInfoMessage,
 } from '@/api/websocket/types'
-
 import {
   heartbeat,
   isSuccessMessage,
@@ -20,7 +19,7 @@ import { useHoldersStore } from '@/stores/use-holders-store'
 
 export const useHolders = () => {
   const { query } = useRouter()
-  const { setHolders, setMarketCap } = useHoldersStore()
+  const { marketCap, holders, setHolders, setMarketCap } = useHoldersStore()
 
   const { lastJsonMessage, sendJsonMessage, getWebSocket } =
     useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(wsApiURL.tokenInfo, {
@@ -44,15 +43,16 @@ export const useHolders = () => {
       shouldReconnect: () => true,
     })
 
-  const marketCap = lastJsonMessage?.data?.market_cap || 0
-  const holders = lastJsonMessage?.data?.holders.slice(0, 15) || []
-
   useEffect(() => {
     if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {
       return getWebSocket()?.close()
     }
-    setMarketCap(marketCap)
-    setHolders(holders)
+    const { market_cap = 0, holders = [] } = lastJsonMessage?.data ?? {}
+
+    // Make sure that data will not be reset to zero/empty
+    // once it is available.
+    if (marketCap !== 0) setMarketCap(market_cap)
+    if (!isEmpty(holders)) setHolders(holders)
   }, [lastJsonMessage])
 
   return {

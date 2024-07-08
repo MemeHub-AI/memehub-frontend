@@ -41,9 +41,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
   )
-  const { query, ...router } = useRouter()
-  const { switchChainAsync } = useSwitchChain()
-  const { isConnected, chainId, address } = useAccount()
+  const { isConnected } = useAccount()
   const { isClaimingAirdrop } = useAirdropStore()
   const { tokenAddr } = useTradeSearchParams()
 

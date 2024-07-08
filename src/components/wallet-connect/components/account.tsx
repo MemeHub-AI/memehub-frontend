@@ -36,12 +36,12 @@ export const WalletAccount = () => {
     const username = userInfo?.name
     if (username) {
       if (username.length > 4) {
-        return userInfo?.name.substring(0, 4) + '...';
+        return userInfo?.name.substring(0, 4) + '...'
       } else {
-        return username;
+        return username
       }
     } else {
-      return t('login');
+      return t('login')
     }
   }
 
@@ -50,7 +50,7 @@ export const WalletAccount = () => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className='text-wrap h-9 w-12 p-2 text-xs'>
+            <Button className="text-wrap h-9 w-12 p-2 text-xs">
               {getUsername()}
             </Button>
           </DropdownMenuTrigger>

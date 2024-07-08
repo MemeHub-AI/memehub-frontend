@@ -31,10 +31,7 @@ export const HeaderMobile = (props: Props) => {
       <Sheet>
         <SheetTrigger asChild ref={closeRef}>
           <div className="flex justify-start items-center gap-2">
-            <Logo src='/images/logo.png'
-              alt='logo'
-              className='mt-1 w-10'
-            />
+            <Logo src="/images/logo.png" alt="logo" className="mt-1 w-10" />
             <Button size="icon-sm">
               <HamburgerMenuIcon />
             </Button>
@@ -81,11 +78,11 @@ export const HeaderMobile = (props: Props) => {
       {/* <SearchInput /> */}
       <div className="flex justify-between items-center gap-2 ml-1">
         <Button
-          className='bg-lime-green'
+          className="bg-lime-green"
           size={'sm'}
           onClick={() => router.push(Routes.Airdrop)}
         >
-          <img src='/images/gift.png' className='w-5' />
+          <img src="/images/gift.png" className="w-5" />
         </Button>
         <RewardButton className="max-sm:px-2" showReferral={false} />
         <Button

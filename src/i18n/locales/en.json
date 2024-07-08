@@ -397,7 +397,7 @@
   "alliance.communities": " COMMUNITIES",
   "referral.copy": "Copy Referral Link",
   "referral.desc": "Share this token with your friends using your special referral link and earn $ of their trading fees",
-  "bonding-curve.desc": "When the market cap reaches {} all the liquidity from the pool will be deposited into dex and burned. Progression increases as the price goes up.",
+  "bonding-curve.desc": "When the market cap reaches ≈{} all the liquidity from the pool will be deposited into dex and burned. Progression increases as the price goes up.",
   "inviter1": "First-level inviter",
   "inviter2": "Second-level inviter",
   "url.error": "Please enter a valid URL.",
@@ -470,5 +470,6 @@
   "login": "login",
   "chart": "Chart",
   "Languages": "Languages",
-  "English": "English"
+  "English": "English",
+  "token.graduated-desc": "Congratulations, this token has successfully graduated"
 }
