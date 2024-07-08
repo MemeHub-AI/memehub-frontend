@@ -1,4 +1,4 @@
-import React, { ComponentProps, useRef } from 'react'
+import React, { ComponentProps, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 
@@ -14,6 +14,8 @@ import { SearchInput } from '../search-input'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import RewardButton from '../reward-button'
+import { useWallet } from '../wallet-connect/hooks/use-wallet'
+import { cn } from '@/lib/utils'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -25,16 +27,20 @@ export const HeaderMobile = (props: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
+  const { isConnected } = useWallet()
 
   return (
     <>
       <Sheet>
         <SheetTrigger asChild ref={closeRef}>
           <div className="flex justify-start items-center gap-2">
-            <Logo src="/images/logo.png" alt="logo" className="mt-1 w-10" />
-            <Button size="icon-sm">
+            <Logo src='/images/logo.png'
+              alt='logo'
+              className='mt-1 w-10 max-[375px]:hidden'
+            />
+            <div className='font-extrabold'>
               <HamburgerMenuIcon />
-            </Button>
+            </div>
           </div>
         </SheetTrigger>
 
@@ -42,12 +48,8 @@ export const HeaderMobile = (props: Props) => {
           onOpenAutoFocus={(e) => e.preventDefault()}
           showClose={false}
           side="bottom"
-          className="pt-4 px-3 rounded-t-lg"
+          className="pt-4 px-3 rounded-t-lg gap-3"
         >
-          <div className="flex items-center gap-2">
-            {/* <Logo showMeme />
-            <LangSelect className="ml-3 h-7" /> */}
-          </div>
           <ul className="flex flex-col gap-3 mt-3 mb-1">
             {navs.map((n, i) => (
               <li key={i}>
@@ -63,28 +65,29 @@ export const HeaderMobile = (props: Props) => {
               </li>
             ))}
           </ul>
-          <LangSelect className="h-7 mb-9 size-fit w-full justify-start" />
-          <WalletDisconnector
+          <LangSelect className={cn(isConnected && "mb-9" ,
+             "h-7 size-fit w-full justify-start")} />
+          {isConnected && <WalletDisconnector
             size="sm"
             variant="destructive"
             className="absolute bottom-4 left-3 right-3 inline-flex items-center gap-2"
             onConfirm={() => closeRef.current?.click()}
           >
             <span>{t('disconnect')}</span>
-          </WalletDisconnector>
+          </WalletDisconnector>}
         </SheetContent>
       </Sheet>
 
       {/* <SearchInput /> */}
       <div className="flex justify-between items-center gap-2 ml-1">
         <Button
-          className="bg-lime-green"
+          className='bg-lime-green w-8 p-0'
           size={'sm'}
           onClick={() => router.push(Routes.Airdrop)}
         >
           <img src="/images/gift.png" className="w-5" />
         </Button>
-        <RewardButton className="max-sm:px-2" showReferral={false} />
+        {isConnected && <RewardButton className="max-sm:px-2" showReferral={false} />}
         <Button
           variant="outline"
           className="mx-3 max-sm:mx-0"
