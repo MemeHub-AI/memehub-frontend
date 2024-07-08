@@ -20,7 +20,7 @@ const langs = Object.entries(resources as Record<string, { name: string }>)
 export const LangSelect = (props: ComponentProps<'div'>) => {
   const { className } = props
   const { i18n } = useTranslation()
-  const { getLang, setLang } = useLang()
+  const { setLang } = useLang()
   const { t } = useTranslation()
 
   return (

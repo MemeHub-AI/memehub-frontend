@@ -480,5 +480,6 @@
   "airdrop.community.desc1": "Memehub将向许多知名社区的$2名成员进行空投，空投数量为代币总量的$1%，每人将获得$3%的空投。",
   "airdrop.community.desc2": "如果在$1小时内未领取，所有空投代币将被销毁。",
   "airdrop.community.desc3": "这将为您的Memecoin带来广泛的影响力。",
-  "airdrop.community.desc4": "不必担心成员出售空投代币，因为通过购买带来的资金远远超过空投代币的销售。"
+  "airdrop.community.desc4": "不必担心成员出售空投代币，因为通过购买带来的资金远远超过空投代币的销售。",
+  "connect": "连接钱包"
 }

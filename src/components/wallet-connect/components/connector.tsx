@@ -23,7 +23,7 @@ export const WalletConnector = () => {
         size={isMobile ? 'sm' : 'default'}
         onClick={() => setConnectOpen(true)}
       >
-        {disabled ? t('wallet.connecting') : t('wallet.connect')}
+        {disabled ? t('wallet.connecting') : !isMobile ? t('wallet.connect') : t('connect')}
       </Button>
       <Dialog
         open={connectOpen}

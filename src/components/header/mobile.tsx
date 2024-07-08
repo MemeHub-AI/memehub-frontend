@@ -17,6 +17,8 @@ import RewardButton from '../reward-button'
 import { useWallet } from '../wallet-connect/hooks/use-wallet'
 import { cn } from '@/lib/utils'
 import { IoMdArrowRoundDown } from 'react-icons/io';
+import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+import { SOCIAL_LINKS } from '@/config/link'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -29,6 +31,19 @@ export const HeaderMobile = (props: Props) => {
   const router = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
   const { isConnected } = useWallet()
+
+  const links = [
+    {
+      name: t('telegram'),
+      icon: <FaTelegramPlane />,
+      link: SOCIAL_LINKS.tg,
+    },
+    {
+      name: t('twitter-x'),
+      icon: <FaTwitter />,
+      link: SOCIAL_LINKS.x,
+    },
+  ]
 
   return (
     <>
@@ -67,16 +82,21 @@ export const HeaderMobile = (props: Props) => {
               </li>
             ))}
           </ul>
-          <LangSelect className={cn(isConnected && "mb-9" ,
-             "size-fit w-full justify-start")} />
-          {isConnected && <WalletDisconnector
-            size="sm"
-            variant="destructive"
-            className="absolute bottom-4 left-3 right-3 inline-flex items-center space-y-2"
-            onConfirm={() => closeRef.current?.click()}
-          >
-            <span>{t('disconnect')}</span>
-          </WalletDisconnector>}
+          <LangSelect className={cn(isConnected && "mb-9",
+            "size-fit w-full justify-start")} />
+          <div className='flex space-x-6 text-2xl mt-20'>
+            {links.map((l, i) => (
+              <div
+                key={i}
+                className="gap-2 px-2 justify-start items-start max-sm:!px-0 max-sm:py-2"
+                onClick={() => {
+                  if (l.link) open(l.link)
+                }}
+              >
+                {l.icon}
+              </div>
+            ))}
+          </div>
         </SheetContent>
       </Sheet>
 
