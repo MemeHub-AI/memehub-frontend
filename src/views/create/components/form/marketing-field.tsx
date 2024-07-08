@@ -76,7 +76,7 @@ export const MarketingField = () => {
           control={form.control}
           name={formFields.marketing}
           render={({ field }) => (
-            <FormItem className="flex items-center gap-2 mt-2">
+            <FormItem className="flex items-center space-x-2 mt-2">
               <FormControl>
                 <Checkbox
                   disabled={m.disabled}

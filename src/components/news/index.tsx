@@ -18,7 +18,7 @@ export const NewsCard = ({ news, onClick }: Props) => {
   return (
     <div
       className={cn(
-        'flex gap-2 transition-all p-2 cursor-pointer',
+        'flex space-x-3 transition-all p-2 cursor-pointer',
         'rounded-md hover:bg-zinc-100'
       )}
       onClick={onClick}

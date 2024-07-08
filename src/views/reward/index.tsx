@@ -45,7 +45,7 @@ export const RewardPage = () => {
       <div className="flex items-stretch gap-4 xl:gap-8 mt-2 flex-wrap">
         <div className="flex flex-col justify-between">
           <h3 className="font-bold text-lg">{t('reward.diamond-reward')}</h3>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center space-x-2">
             <DiamondIcon size={36} />
             <p className="text-blue-600 text-2xl font-bold">
               {BigNumber(userInfo?.reward_amount || 0).toFormat()}
@@ -56,7 +56,7 @@ export const RewardPage = () => {
           <h3 className="font-bold text-lg">
             {t('reward.direct-invite-count')}
           </h3>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center space-x-2">
             <UserIcon size={36} />
             <p className="text-blue-600 text-2xl font-bold">
               {BigNumber(userInfo?.inviter_count.one ?? 0).toFormat()}
@@ -67,7 +67,7 @@ export const RewardPage = () => {
           <h3 className="font-bold text-lg">
             {t('reward.indirect-invite-count')}
           </h3>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center space-x-2">
             <UserIcon type="user2" size={38} />
             <p className="text-blue-600 text-2xl font-bold">
               {BigNumber(userInfo?.inviter_count.two ?? 0).toFormat()}

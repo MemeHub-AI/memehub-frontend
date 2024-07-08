@@ -1,7 +1,7 @@
 import React, { ComponentProps, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-
+import { SlMenu } from "react-icons/sl";
+import { MdArrowDropDown } from "react-icons/md";
 import type { Nav } from '.'
 
 import { Button } from '../ui/button'
@@ -16,6 +16,7 @@ import { Routes } from '@/routes'
 import RewardButton from '../reward-button'
 import { useWallet } from '../wallet-connect/hooks/use-wallet'
 import { cn } from '@/lib/utils'
+import { IoMdArrowRoundDown } from 'react-icons/io';
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -33,13 +34,14 @@ export const HeaderMobile = (props: Props) => {
     <>
       <Sheet>
         <SheetTrigger asChild ref={closeRef}>
-          <div className="flex justify-start items-center gap-2">
+          <div className="flex justify-start items-center space-x-2">
             <Logo src='/images/logo.png'
               alt='logo'
               className='mt-1 w-10 max-[375px]:hidden'
             />
-            <div className='font-extrabold'>
-              <HamburgerMenuIcon />
+            <div className='flex font-extraboldc text-xl mt-1'>
+              <SlMenu />
+              <MdArrowDropDown />
             </div>
           </div>
         </SheetTrigger>
@@ -48,9 +50,9 @@ export const HeaderMobile = (props: Props) => {
           onOpenAutoFocus={(e) => e.preventDefault()}
           showClose={false}
           side="bottom"
-          className="pt-4 px-3 rounded-t-lg gap-3"
+          className="pt-4 px-3 rounded-t-lg font-bold"
         >
-          <ul className="flex flex-col gap-3 mt-3 mb-1">
+          <ul className="flex flex-col space-y-3 mt-3 mb-1">
             {navs.map((n, i) => (
               <li key={i}>
                 <div
@@ -66,11 +68,11 @@ export const HeaderMobile = (props: Props) => {
             ))}
           </ul>
           <LangSelect className={cn(isConnected && "mb-9" ,
-             "h-7 size-fit w-full justify-start")} />
+             "size-fit w-full justify-start")} />
           {isConnected && <WalletDisconnector
             size="sm"
             variant="destructive"
-            className="absolute bottom-4 left-3 right-3 inline-flex items-center gap-2"
+            className="absolute bottom-4 left-3 right-3 inline-flex items-center space-y-2"
             onConfirm={() => closeRef.current?.click()}
           >
             <span>{t('disconnect')}</span>
@@ -79,7 +81,7 @@ export const HeaderMobile = (props: Props) => {
       </Sheet>
 
       {/* <SearchInput /> */}
-      <div className="flex justify-between items-center gap-2 ml-1">
+      <div className="flex justify-between items-center space-x-2 ml-1">
         <Button
           className='bg-lime-green w-8 p-0'
           size={'sm'}

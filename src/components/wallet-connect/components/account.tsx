@@ -50,7 +50,7 @@ export const WalletAccount = () => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button className="text-wrap h-9 w-12 p-2 text-xs">
+            <Button className="text-wrap h-8 w-12 p-2 text-xs">
               {getUsername()}
             </Button>
           </DropdownMenuTrigger>

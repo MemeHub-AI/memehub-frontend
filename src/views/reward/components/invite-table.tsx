@@ -36,7 +36,7 @@ export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
       cell: ({ row }) => {
         const { chain, earned, category } = row.original
         return (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center space-x-1">
             <span>{fmt.decimals(earned)}</span>
             {category === RewardType.Diamond ? (
               <DiamondIcon size={20} />

@@ -62,7 +62,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           className="flex flex-col space-y-3 max-sm:w-full max-sm:space-y-2"
         >
           {/* Loog/name/chain/symbol */}
-          <div className="flex gap-5 max-sm:flex-col max-sm:gap-1">
+          <div className="flex gap-5 max-sm:flex-col max-sm:gap-2">
             <div className="flex">
               {/* Logo */}
               <FormLogo formData={formData}></FormLogo>
@@ -111,7 +111,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             </div>
 
             {/* Chain / coinType */}
-            <div className="h-[150px] flex flex-col justify-between max-sm:flex-row max-sm:h-min max-sm:justify-start max-sm:gap-4 max-sm:flex-wrap">
+            <div className="h-[150px] flex flex-col justify-between max-sm:flex-row max-sm:h-min max-sm:justify-start max-sm:space-x-4 max-sm:flex-wrap">
               <FormChain formData={formData} />
               <CoinTypeField />
             </div>
@@ -178,7 +178,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           </div>
 
           {/* Submit button */}
-          <div className="flex flex-col items-start gap-3 max-w-[500px]">
+          <div className="flex flex-col items-start space-y-3 max-w-[500px]">
             <Button
               variant="default"
               className="px-10 mt-3"
