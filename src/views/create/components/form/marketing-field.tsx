@@ -54,17 +54,17 @@ export const MarketingField = () => {
       value: MarketType.Community,
       percent: CommunityPercent,
     },
-    {
-      title: t('marketing.memehub')
-        .replace('{}', fmt.percent(memehubPercent))
-        .replace('{}', memehubName),
-      desc: t('marketing.memehub.desc')
-        .replace('{}', fmt.percent(memehubPercent))
-        .replace('{}', memehubName),
-      value: MarketType.Memehub,
-      percent: memehubPercent,
-      disabled: true,
-    },
+    // {
+    //   title: t('marketing.memehub')
+    //     .replace('{}', fmt.percent(memehubPercent))
+    //     .replace('{}', memehubName),
+    //   desc: t('marketing.memehub.desc')
+    //     .replace('{}', fmt.percent(memehubPercent))
+    //     .replace('{}', memehubName),
+    //   value: MarketType.Memehub,
+    //   percent: memehubPercent,
+    //   disabled: true,
+    // },
   ]
 
   return (
@@ -79,7 +79,7 @@ export const MarketingField = () => {
             <FormItem className="flex items-center space-x-2 mt-2">
               <FormControl>
                 <Checkbox
-                  disabled={m.disabled}
+                  // disabled={m.disabled}
                   onCheckedChange={(checked) => {
                     const value = field.value as Marketing[]
                     const { added, removed } = marketingActions(value, m)
