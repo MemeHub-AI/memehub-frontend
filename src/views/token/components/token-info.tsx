@@ -28,7 +28,7 @@ import { usePools } from '../hooks/use-pools'
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [details, setDetails] = useState<ReactNode>(null)
-  const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo, isNotFound } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
   const { isGrauated } = usePools(tokenInfo?.address)
@@ -74,20 +74,18 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         >
           {details}
         </Dialog>
-
         {/* Chain logo */}
         <div className="absolute left-2 top-2 flex items-center gap-1">
           <Avatar src={tokenInfo?.chain.logo} size={20} />
           <p className="text-sm max-w-20 break-all">{tokenInfo?.chain.name}</p>
         </div>
-
         {/* Logo */}
         <div className="relative">
           <Avatar
             src={tokenInfo?.image}
             variant="border"
             alt="logo"
-            className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2"
+            className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white"
             onClick={() => {
               setDetails(
                 <img
@@ -107,12 +105,12 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             </Badge>
           )}
         </div>
-
         {/* Name/symbol */}
         <div className="font-bold leading-none text-center pt-16 max-sm:pt-14">
-          {tokenInfo?.name}({tokenInfo?.ticker})
+          {isNotFound
+            ? t('token.not-found')
+            : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
         </div>
-
         {/* Links */}
         <div className="flex justify-center items-center my-1 max-sm:m-0">
           {tokenInfo?.twitter_url && (
@@ -149,7 +147,6 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             </Button>
           )}
         </div>
-
         {/* Description */}
         <div
           className={cn(
@@ -165,26 +162,33 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         >
           {tokenInfo?.desc}
         </div>
-
         {/* Contract address */}
-        {!isMobile && (
+        {!isMobile && !isNotFound && (
           <div
-            className="text-sm flex items-center gap-2 cursor-pointer my-3"
+            className="text-sm flex items-center cursor-pointer my-3"
             onClick={() => copy(tokenInfo?.address || '')}
           >
             <span>{t('ca')}:</span>
-            <span className="truncate">
+            <span className="truncate mx-2">
               {fmt.addr(tokenInfo?.address || '', { len: 12 })}
             </span>
             {isCopied ? <Check size={16} /> : <Copy size={16} />}
           </div>
         )}
         {/* Bonding curve description */}
-        <p className="text-xs text-zinc-500 max-sm:mt-2">
-          {utilLang.replace(t('bonding-curve.desc'), [
-            '$' + BigNumber(LISTED_MARKET_CAP).toFormat(),
-          ])}
-        </p>
+        {isNotFound ? (
+          <p className="text-xs text-zinc-500 max-sm:mt-2">
+            {t('token.not-found-desc')}
+          </p>
+        ) : (
+          <p className="text-xs text-zinc-500 max-sm:mt-2">
+            {isGrauated
+              ? t('token.graduated-desc')
+              : utilLang.replace(t('bonding-curve.desc'), [
+                  '$' + BigNumber(LISTED_MARKET_CAP).toFormat(),
+                ])}
+          </p>
+        )}
       </Card>
     </>
   )

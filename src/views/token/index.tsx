@@ -1,34 +1,31 @@
 import React from 'react'
-import { useTranslation } from 'react-i18next'
+import { isAddress } from 'viem'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { TokenProvider } from '@/contexts/token'
 import { useTokenInfo } from './hooks/use-token-info'
 import { cn } from '@/lib/utils'
-import { TokenDesktop } from './desktop'
-import { TokenMobile } from './mobile'
+import { TokenDesktop } from './components/desktop'
+import { TokenMobile } from './components/mobile'
+import { TokenQueryInvalid } from './components/query-invalid'
+import { useTradeSearchParams } from './hooks/use-search-params'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenPage = () => {
+  const { chainName, tokenAddr, isReady } = useTradeSearchParams()
+  const { findChain } = useChainsStore()
+  const chain = findChain(chainName)
   const { isMobile } = useResponsive()
-  const { t } = useTranslation()
-  const {
-    tokenInfo,
-    isLoadingTokenInfo,
-    isFetchingTokenInfo,
-    refetchInfo,
-    airdrop,
-  } = useTokenInfo()
+  const tokenInfo = useTokenInfo()
+  const { isLoadingTokenInfo } = tokenInfo
+
+  const invalidPath = !chain || !isAddress(tokenAddr)
+  if (invalidPath && !isLoadingTokenInfo && isReady) {
+    return <TokenQueryInvalid reason={`/${chainName}/${tokenAddr}`} />
+  }
 
   return (
-    <TokenProvider
-      value={{
-        tokenInfo,
-        isLoadingTokenInfo,
-        isFetchingTokenInfo,
-        refetchInfo,
-        airdrop,
-      }}
-    >
+    <TokenProvider value={tokenInfo}>
       <main
         className={cn(
           'px-4 max-sm:px-3 pt-6 max-w-main mx-auto min-h-main',

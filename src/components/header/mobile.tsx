@@ -85,7 +85,7 @@ export const HeaderMobile = (props: Props) => {
           size={'sm'}
           onClick={() => router.push(Routes.Airdrop)}
         >
-          <img src='/images/gift.png' className='w-5' />
+          <img src="/images/gift.png" className="w-5" />
         </Button>
         {isConnected && <RewardButton className="max-sm:px-2" showReferral={false} />}
         <Button

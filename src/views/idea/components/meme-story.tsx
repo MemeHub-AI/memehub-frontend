@@ -15,13 +15,13 @@ export const MemeStory = memo(({ data }: MemeStoryData) => {
     data?.content
       // .replaceAll(/ src=/g, ' data-src1=')
       // .replaceAll(/ data-src=/g, ' src=')
-      .replaceAll(
+      .replace(
         /(<img[^>]+)src="([^"]+)"([^>]+)data-src="([^"]+)"/g,
         '$1src="$4"$3data-src="$2"'
       )
-      .replaceAll(/(\&nbsp\;)/g, '')
-      .replaceAll(/<br\s?\/?><br\s?\/?>/g, '')
-      .replaceAll(/<br\/>/g, '') || ''
+      .replace(/(\&nbsp\;)/g, '')
+      .replace(/<br\s?\/?><br\s?\/?>/g, '')
+      .replace(/<br\/>/g, '') || ''
 
   // console.log(content)
 

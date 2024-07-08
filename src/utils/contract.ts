@@ -70,9 +70,9 @@ export const subSlippage = (value: string, slippage: string) => {
   const biValue = parseEther(value)
   if (BigNumber(slippage).lte(0)) return biValue
 
-  const slippagePercent = BigNumber(slippage).dividedBy(100).plus(1)
+  const slippagePercent = BigNumber(1).minus(BigNumber(slippage).div(100))
   const total = BigNumber(biValue.toString())
-    .dividedBy(slippagePercent)
+    .multipliedBy(slippagePercent)
     .toFixed(0)
 
   return BigInt(total)

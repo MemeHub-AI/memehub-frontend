@@ -17,6 +17,8 @@ import { getV3Config } from '@/contract/v3/config'
 import { useAirdropStore } from '@/stores/use-airdrop'
 import { useCheckChain } from '@/hooks/use-check-chain'
 import { buttonLeft } from '@/config/toast'
+import { useWallet } from '@/components/wallet-connect/hooks/use-wallet'
+import { useLogin } from '@/hooks/use-login'
 
 export const useAirdrop = (
   id: number = 0,
@@ -32,6 +34,7 @@ export const useAirdrop = (
   const [isClaim, setIsCalim] = useState(false)
   const [isBurning, setBurning] = useState(false)
   const { checkForChain } = useCheckChain()
+  const { checkForLogin } = useLogin()
 
   // Query airdrop details.
   const { data: { data } = {}, refetch } = useQuery({
@@ -107,6 +110,8 @@ export const useAirdrop = (
   const isClaiming = isSubmittingClaim || isWaitingClaim || isBurning
 
   const claim = async () => {
+    if (!checkForLogin()) return
+
     const isValidChain = await checkForChain(chainId)
     if (!isValidChain) return
     if (!distributorConfig) {
@@ -137,6 +142,8 @@ export const useAirdrop = (
   }
 
   const burn = async () => {
+    if (!checkForLogin()) return
+
     const isValidChain = await checkForChain(chainId)
     if (!isValidChain) return
 

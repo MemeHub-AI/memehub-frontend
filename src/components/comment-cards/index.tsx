@@ -12,6 +12,7 @@ import { CustomSuspense } from '../custom-suspense'
 import { Skeleton } from '../ui/skeleton'
 import { useComment } from './hooks/use-comment'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
+import { useTokenContext } from '@/contexts/token'
 
 interface Props extends ComponentProps<'div'> {
   cards: UserListRes[UserListType.Replies][]
@@ -56,6 +57,7 @@ export const CommentCards = (props: Props) => {
     onFetchNext,
     hasMore: cards.length < total,
   })
+  const { isNotFound } = useTokenContext()
 
   const onComment = (content: string, mentions: string[], img?: string) => {
     const related_comments = [...mentions]
@@ -83,36 +85,44 @@ export const CommentCards = (props: Props) => {
       </Dialog>
 
       {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
-      <CustomSuspense
-        className="flex flex-col w-[30rem] max-sm:w-full"
-        isPending={isLoading}
-        fallback={<CardSkeleton />}
-        nullback={<p className="text-zinc-500">{t('comment.list.empty')}</p>}
-      >
-        {cards.map((c, i) => (
-          <React.Fragment key={c.id}>
-            <CommentCard
-              key={c.id}
-              c={c}
-              readonly={readonly}
-              isActive={c.id === lastAnchor}
-              isLiking={isLiking}
-              isUnliking={isUnliking}
-              onLike={likeComment}
-              onUnlike={unlikeComment}
-              onReply={(id) => setReplyId(id)}
-              onAnchorClick={setLastAnchor}
-            />
-            {i !== cards.length - 1 && (
-              <hr className="border-t-2 border-black" />
+      {!isNotFound && (
+        <>
+          <CustomSuspense
+            className="flex flex-col w-[30rem] max-sm:w-full"
+            isPending={isLoading}
+            fallback={<CardSkeleton />}
+            nullback={
+              <p className="text-zinc-500">{t('comment.list.empty')}</p>
+            }
+          >
+            {cards.map((c, i) => (
+              <React.Fragment key={c.id}>
+                <CommentCard
+                  key={c.id}
+                  c={c}
+                  readonly={readonly}
+                  isActive={c.id === lastAnchor}
+                  isLiking={isLiking}
+                  isUnliking={isUnliking}
+                  onLike={likeComment}
+                  onUnlike={unlikeComment}
+                  onReply={(id) => setReplyId(id)}
+                  onAnchorClick={setLastAnchor}
+                />
+                {i !== cards.length - 1 && (
+                  <hr className="border-t-2 border-black" />
+                )}
+              </React.Fragment>
+            ))}
+            {isPending && (
+              <p className="text-zinc-500 text-center">{t('loading')}</p>
             )}
-          </React.Fragment>
-        ))}
-        {isPending && (
-          <p className="text-zinc-500 text-center">{t('loading')}</p>
-        )}
-        {noMore && <p className="text-zinc-500 text-center">{t('nomore')}</p>}
-      </CustomSuspense>
+            {noMore && (
+              <p className="text-zinc-500 text-center">{t('nomore')}</p>
+            )}
+          </CustomSuspense>
+        </>
+      )}
     </>
   )
 }
@@ -120,17 +130,17 @@ export const CommentCards = (props: Props) => {
 const CardSkeleton = () => {
   return Array.from({ length: 3 }).map((_, i) => (
     <div className="border-b-2 flex flex-col p-4 relative" key={i}>
-      <div className="flex gap-2 items-stretch">
+      <div className="flex items-stretch">
         <Skeleton className="rounded-full w-8 h-8" />
-        <div className="flex flex-col justify-between">
+        <div className="flex flex-col justify-between ml-2">
           <Skeleton className="w-16 h-4" />
           <Skeleton className="w-20 h-3" />
         </div>
       </div>
       <Skeleton className="h-4 w-1/2 mt-3" />
-      <div className="flex gap-2 mt-2 absolute right-0 top-0">
+      <div className="flex mt-2 absolute right-0 top-0">
         <Skeleton className="h-5 w-8" />
-        <Skeleton className="h-5 w-8" />
+        <Skeleton className="h-5 w-8 ml-2" />
       </div>
     </div>
   ))

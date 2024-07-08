@@ -54,21 +54,22 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
 
   if (isLoadingTokenInfo) {
     return (
-      <div className="flex gap-2 mt-3">
+      <div className="flex mt-3">
         <Skeleton className="w-16 h-6" />
-        <Skeleton className="w-16 h-6" />
-        <Skeleton className="w-16 h-6" />
-        <Skeleton className="w-16 h-6" />
+        <Skeleton className="w-16 h-6 ml-2" />
+        <Skeleton className="w-16 h-6 ml-2" />
+        <Skeleton className="w-16 h-6 ml-2" />
       </div>
     )
   }
 
   return (
-    <div className="flex gap-2 mt-3 flex-wrap">
+    <div className="flex mt-3 flex-wrap">
       {(isBuy ? buyItems : sellItems).map((v, i) => (
         <Button
           size="xs"
           shadow="none"
+          className={i === 0 ? '' : 'ml-2'}
           key={i}
           onClick={() => {
             isBuy ? onBuyClick(v) : onSellClick(v)

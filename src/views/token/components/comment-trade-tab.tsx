@@ -7,6 +7,7 @@ import { CommentCards } from '@/components/comment-cards'
 import { TradeTable } from './trade-table'
 import { useComments } from '@/components/comment-cards/hooks/use-comments'
 import { useStorage } from '@/hooks/use-storage'
+import { useTokenContext } from '@/contexts/token'
 
 enum Tab {
   Comments = 'comments',
@@ -16,6 +17,7 @@ enum Tab {
 export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { getCommentTradeTab, setCommentTradeTab } = useStorage()
+
   const {
     comments,
     total,

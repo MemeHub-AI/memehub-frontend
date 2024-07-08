@@ -7,6 +7,7 @@ import { tokenApi } from '@/api/token'
 import { TokenCommentListRes } from '@/api/token/types'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { useCommentsStore } from '@/stores/use-comments'
+import { useTokenContext } from '@/contexts/token'
 
 export const useComments = (enableFetchComments = true) => {
   const { chainName, tokenAddr } = useTradeSearchParams()

@@ -26,7 +26,12 @@ import { Label } from '@/components/ui/label'
 import { ProfileForm } from './profile-form'
 import { useAccountContext } from '@/contexts/account'
 import { useUser } from '@/hooks/use-user'
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
 import { RewardButton } from '@/components/reward-button'
@@ -73,13 +78,13 @@ export const Profile = (props: ComponentProps<'div'>) => {
         />
       </Dialog>
 
-      <CardHeader className="flex-row gap-4 relative p-4">
+      <CardHeader className="flex-row relative p-4">
         <Label
           htmlFor="avatar-edit"
           className={cn(
             "relative group after:content-[''] after:absolute after:inset-0 cursor-pointer",
             !isOtherUser &&
-            'after:rounded-full hover:after:bg-black/50 after:transition-all'
+              'after:rounded-full hover:after:bg-black/50 after:transition-all'
           )}
           onClick={() => {
             if (isOtherUser && !isEmpty(userInfo?.logo)) {
@@ -110,7 +115,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
             </>
           )}
         </Label>
-        <div>
+        <div className="ml-4">
           <CardTitle>{userInfo?.name}</CardTitle>
           <Tooltip tip={t('click-to-copy')}>
             <CardDescription
@@ -129,7 +134,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
             size="icon"
             variant="outline"
             shadow="none"
-            className="absolute right-4 top-2 hover:bg-zinc-200"
+            className="absolute right-4 top-2 hover:bg-zinc-200 ml-4"
             disabled={isFollowing || isUnfollowing}
             onClick={() =>
               userInfo?.is_follower ? unfollow(tokenAddr) : follow(tokenAddr)
@@ -143,7 +148,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
               size="icon"
               variant="outline"
               shadow="none"
-              className="absolute right-4 top-2 hover:bg-zinc-200"
+              className="absolute right-4 top-2 hover:bg-zinc-200 ml-4"
             >
               <AiOutlineEdit size={20} />
             </Button>
@@ -152,10 +157,10 @@ export const Profile = (props: ComponentProps<'div'>) => {
       </CardHeader>
 
       <CardContent className="px-4 flex flex-col items-start gap-2 pb-3">
-        <div className="flex items-center flex-wrap gap-2">
+        <div className="flex items-center flex-wrap">
           <RewardButton shadow="none" className="border-none text-lg px-3" />
           <p
-            className="text-sm text-blue-600 cursor-pointer hover:underline"
+            className="text-sm text-blue-600 cursor-pointer hover:underline ml-2"
             onClick={() => router.push(Routes.Reward)}
           >
             {t('reward.rule')}
@@ -164,20 +169,21 @@ export const Profile = (props: ComponentProps<'div'>) => {
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex justify-between">
-        <div className="flex items-center gap-1 text-zinc-500 text-sm">
+        <div className="flex items-center text-zinc-500 text-sm">
           <span className="cursor-default">{t('account.total-likes')}:</span>
-          <span className="inline-flex items-center gap-1 text-red-500">
-            {userInfo?.like_count || 0} <HeartFilledIcon />
+          <span className="inline-flex items-center ml-1 text-red-500">
+            {userInfo?.like_count || 0} <HeartFilledIcon className="ml-1" />
           </span>
         </div>
-        <div className="flex items-center gap-1 text-sm text-zinc-500">
+        <div className="flex items-center text-sm text-zinc-500">
           <span>{t('account.total-mentions')}:</span>
-          <span className="inline-flex items-center gap-1 text-black">
-            {userInfo?.mention_count || 0} <EnvelopeClosedIcon />
+          <span className="inline-flex items-center ml-1 text-black">
+            {userInfo?.mention_count || 0}{' '}
+            <EnvelopeClosedIcon className="ml-1" />
           </span>
         </div>
       </CardFooter>
-      <div className='md:hidden'>
+      <div className="md:hidden">
         <FollowTab />
       </div>
     </Card>

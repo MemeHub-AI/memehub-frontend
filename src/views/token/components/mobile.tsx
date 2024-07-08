@@ -1,13 +1,13 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
-import TokenInfoHeader from './components/token-info-header'
-import TradeTab from './components/trade-tab'
-import TokenInfo from './components/token-info'
-import { CommentTradeTab } from './components/comment-trade-tab'
+import TokenInfoHeader from './token-info-header'
+import TradeTab from './trade-tab'
+import TokenInfo from './token-info'
+import { CommentTradeTab } from './comment-trade-tab'
 import Chart from '@/components/chart'
-import TradeAirdrop from './components/trade-airdrop'
-import HoldersRank from './components/holders-rank'
+import TradeAirdrop from './trade-airdrop'
+import HoldersRank from './holders-rank'
 import { useTokenContext } from '@/contexts/token'
 
 const enum TabName {
@@ -26,11 +26,14 @@ export const TokenMobile = () => {
   const { t } = useTranslation()
 
   const getCount = () => {
-    return airdrop.kol && airdrop.communities
-      ? 2
-      : airdrop.kol || airdrop.communities
-      ? 1
-      : 0
+    let count = 0
+    if (airdrop.kol && !airdrop.kolAirdropInfo.isClaimed) {
+      count++
+    }
+    if (airdrop.communities && !airdrop.communitiesAirdropInfo.isClaimed) {
+      count++
+    }
+    return count
   }
 
   const tipsCount = getCount()
@@ -62,7 +65,7 @@ export const TokenMobile = () => {
         <HoldersRank />
       </TabsContent>
       <div className="h-[36px] mb-2">
-        <div className="fixed left-0 bottom-2 px-3 w-full ">
+        <div className="fixed left-0 bottom-[2vh] px-3 w-full">
           <TabsList className="h-11 grid w-full grid-cols-3 bg-white">
             <TabsTrigger value={TabName.trade}>{t('trade')}</TabsTrigger>
             <TabsTrigger
