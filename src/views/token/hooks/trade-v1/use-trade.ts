@@ -72,6 +72,7 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
     )
     setIsInternalTrade(isInternal)
 
+    if (!isInternal) return dexBuy(amount, token)
     // Internal buy but overflow current max value.
     if (isInternal && isOverflow) {
       setValue?.(currentMax)
@@ -80,7 +81,6 @@ export const useTradeV1 = (dexProps: DexTradeProps) => {
       )
       return
     }
-    if (!isInternal) return dexBuy(amount, token)
 
     console.log('v1 internal buy', amount, token)
     writeContract({

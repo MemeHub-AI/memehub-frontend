@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { formatEther, type Address } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useDebounce } from 'react-use'
-import { toast } from 'sonner'
 
 import { Input } from '@/components/ui/input'
 import { useTradeContext } from '@/contexts/trade'
@@ -13,7 +12,6 @@ import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { useTradeInfoV3 } from '../hooks/trade-v3/use-trade-info'
-import { utilLang } from '@/utils/lang'
 import { Img } from '@/components/img'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { usePools } from '../hooks/use-pools'
@@ -28,11 +26,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
-  const {
-    getMaxSupply: getTotalSupply,
-    getTokenAmount,
-    getNativeAmount,
-  } = useTradeInfoV3()
+  const { getTokenAmount, getNativeAmount } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
   const { isGrauated } = usePools(tokenInfo?.address)
   const { getAmountOut } = useUniswapV2Info(tokenInfo?.pool_address as Address)
@@ -53,37 +47,23 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     onChange?.(target.value)
   }
 
-  // Calculate buy pair amount.
   const calcAmountForBuy = async () => {
-    const total = formatEther(await getTotalSupply())
-    if (BigNumber(value as string).gt(total)) {
-      value = total
-      onChange?.(value)
-      toast.warning(utilLang.replace(t('trade.limit'), [value, t('trade.buy')]))
-    }
-
+    value = value as string
     const tokenAmount = await (isGrauated
-      ? getAmountOut(value as string)
-      : getTokenAmount(value as string))
+      ? getAmountOut(value)
+      : getTokenAmount(value))
     const amount = fmt.decimals(BigNumber(formatEther(tokenAmount)))
+
     setTargetAmount(amount)
   }
 
-  // Calculate sell pair amount.
   const calcAmountForSell = async () => {
-    const current = formatEther(await getTotalSupply())
-    if (BigNumber(value as string).gt(current)) {
-      value = current
-      onChange?.(value)
-      toast.warning(
-        utilLang.replace(t('trade.limit'), [value, t('trade.sell')])
-      )
-    }
-
+    value = String(value)
     const nativeAmount = await (isGrauated
-      ? getAmountOut(value as string, true)
-      : getNativeAmount(value as string))
+      ? getAmountOut(value, true)
+      : getNativeAmount(value))
     const amount = fmt.decimals(BigNumber(formatEther(nativeAmount)))
+
     setTargetAmount(amount)
   }
 
