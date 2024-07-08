@@ -36,6 +36,10 @@ export const useTradeToast = () => {
       operation: type,
     })
 
+    const rewardAmount = data?.reward_amount
+    const diamondQuantity =
+      rewardAmount < 100 ? +rewardAmount.toFixed(4) : +rewardAmount.toFixed(2)
+
     setLoading(false)
 
     const id = toast(
@@ -45,7 +49,7 @@ export const useTradeToast = () => {
         tokenAmount,
         hash: hash,
         nativeTokenAmount: nativeAmount,
-        diamondQuantity: data?.reward_amount,
+        diamondQuantity,
         getToastId: () => id,
       }),
       {
