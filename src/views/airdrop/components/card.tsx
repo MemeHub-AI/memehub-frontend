@@ -97,7 +97,10 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
             {isClaimed ? t('airdrop.claimed') : t('claim.airdrop')}
           </Button>
         </div>
-        <Img src={airdrop?.logo} className="w-40 h-40" />
+        <Img
+          src={airdrop?.logo}
+          className="w-40 h-40 max-sm:w-[38%] max-sm:h-full"
+        />
       </div>
     </Card>
   )

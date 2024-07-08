@@ -93,7 +93,7 @@ export const CommentForm = (props: Props) => {
 
       <div className="flex items-center">
         <Button
-          className={cn('px-10', buttonClass)}
+          className={cn('px-10 max-sm:px-5', buttonClass)}
           disabled={disabled}
           onClick={onCommentClick}
         >
@@ -102,7 +102,7 @@ export const CommentForm = (props: Props) => {
         {showCancel && (
           <Button
             type="button"
-            className="px-10 ml-2"
+            className="px-10 ml-2 max-sm:px-5"
             disabled={disabled}
             onClick={onCancel}
           >
