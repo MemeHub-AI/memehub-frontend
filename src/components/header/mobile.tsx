@@ -1,7 +1,7 @@
 import React, { ComponentProps, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { SlMenu } from "react-icons/sl";
-import { MdArrowDropDown } from "react-icons/md";
+import { SlMenu } from 'react-icons/sl'
+import { MdArrowDropDown } from 'react-icons/md'
 import type { Nav } from '.'
 
 import { Button } from '../ui/button'
@@ -16,7 +16,7 @@ import { Routes } from '@/routes'
 import RewardButton from '../reward-button'
 import { useWallet } from '../wallet-connect/hooks/use-wallet'
 import { cn } from '@/lib/utils'
-import { IoMdArrowRoundDown } from 'react-icons/io';
+import { IoMdArrowRoundDown } from 'react-icons/io'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -35,11 +35,12 @@ export const HeaderMobile = (props: Props) => {
       <Sheet>
         <SheetTrigger asChild ref={closeRef}>
           <div className="flex justify-start items-center space-x-2">
-            <Logo src='/images/logo.png'
-              alt='logo'
-              className='mt-1 w-10 max-[375px]:hidden'
+            <Logo
+              src="/images/logo.png"
+              alt="logo"
+              className="mt-1 w-10 max-[375px]:hidden"
             />
-            <div className='flex font-extraboldc text-xl mt-1'>
+            <div className="flex font-extraboldc text-xl mt-1">
               <SlMenu />
               <MdArrowDropDown />
             </div>
@@ -67,29 +68,37 @@ export const HeaderMobile = (props: Props) => {
               </li>
             ))}
           </ul>
-          <LangSelect className={cn(isConnected && "mb-9" ,
-             "size-fit w-full justify-start")} />
-          {isConnected && <WalletDisconnector
-            size="sm"
-            variant="destructive"
-            className="absolute bottom-4 left-3 right-3 inline-flex items-center space-y-2"
-            onConfirm={() => closeRef.current?.click()}
-          >
-            <span>{t('disconnect')}</span>
-          </WalletDisconnector>}
+          <LangSelect
+            className={cn(
+              isConnected && 'mb-9',
+              'size-fit w-full justify-start'
+            )}
+          />
+          {isConnected && (
+            <WalletDisconnector
+              size="sm"
+              variant="destructive"
+              className="absolute bottom-4 left-3 right-3 inline-flex items-center space-y-2"
+              onConfirm={() => closeRef.current?.click()}
+            >
+              <span>{t('disconnect')}</span>
+            </WalletDisconnector>
+          )}
         </SheetContent>
       </Sheet>
 
       {/* <SearchInput /> */}
       <div className="flex justify-between items-center space-x-2 ml-1">
         <Button
-          className='bg-lime-green w-8 p-0'
+          className="bg-lime-green w-8 p-0"
           size={'sm'}
           onClick={() => router.push(Routes.Airdrop)}
         >
           <img src="/images/gift.png" className="w-5" />
         </Button>
-        {isConnected && <RewardButton className="max-sm:px-2" showReferral={false} />}
+        {isConnected && (
+          <RewardButton className="max-sm:px-2" showReferral={false} />
+        )}
         <Button
           variant="outline"
           className="mx-3 max-sm:mx-0"
