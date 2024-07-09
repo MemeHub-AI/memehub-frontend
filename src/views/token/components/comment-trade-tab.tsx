@@ -17,6 +17,7 @@ enum Tab {
 export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { getCommentTradeTab, setCommentTradeTab } = useStorage()
+  const { isNotFound } = useTokenContext()
 
   const {
     comments,
@@ -35,8 +36,12 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
       onValueChange={(value) => setCommentTradeTab(value)}
     >
       <TabsList className="rounded-md">
-        <TabsTrigger value={Tab.Comments}>{t('comments')}</TabsTrigger>
-        <TabsTrigger value={Tab.Trades}>{t('trades')}</TabsTrigger>
+        <TabsTrigger value={Tab.Comments} disabled={isNotFound}>
+          {t('comments')}
+        </TabsTrigger>
+        <TabsTrigger value={Tab.Trades} disabled={isNotFound}>
+          {t('trades')}
+        </TabsTrigger>
       </TabsList>
       <TabsContent value={Tab.Comments} className="mt-2 max-sm:mt-1">
         <CommentCards
