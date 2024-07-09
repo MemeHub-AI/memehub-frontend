@@ -10,7 +10,6 @@ import {
   Table,
   TableBody,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -35,12 +34,13 @@ export const TradeTable = () => {
   const ths = [
     t('account'),
     t('type'),
+    t('price'),
     t('amount'),
     t('volume'),
     showAge ? t('age') : t('date'),
     t('tx.hash'),
   ]
-  const { tradeRecords } = useTradeRecord()
+  const { tradeRecords, hasMore, fetchNextPage } = useTradeRecord()
 
   const formatFromTz = (ts: number) => {
     const date = dayjs.unix(ts)
@@ -55,7 +55,10 @@ export const TradeTable = () => {
         <TableHeader>
           <TableRow className="!border-b-2 border-b-black">
             {ths.map((t, i) => (
-              <TableHead key={i} className={cn(i === 0 && 'w-[100px]', 'px-2 text-nowrap')}>
+              <TableHead
+                key={i}
+                className={cn(i === 0 && 'w-[100px]', 'px-2 text-nowrap')}
+              >
                 {/* Date field */}
                 {i === ths.length - 2 ? (
                   <div
@@ -104,6 +107,9 @@ export const TradeTable = () => {
                   {isBuy ? t('trade.buy') : t('trade.sell')}
                 </TableCell>
                 <TableCell className="max-sm:text-xs">
+                  ${fmt.decimals(r.usd_price, { round: true })}
+                </TableCell>
+                <TableCell className="max-sm:text-xs">
                   {fmt.decimals(r.base_amount, { round: true })} {r.base_symbol}
                 </TableCell>
                 <TableCell className="max-sm:text-xs">
@@ -138,18 +144,16 @@ export const TradeTable = () => {
             </tr>
           )}
         </TableBody>
-
-        {/* <TableRow className="hover:bg-transparent">
-          <TableCell colSpan={ths.length} className="p-0">
-            <Pagination total={tradeRecords.length} onPageChange={setPage} />
-          </TableCell>
-        </TableRow> */}
       </Table>
-      {/* <div className="underline text-center mt-1 cursor-pointer" onClick={() => {
-
-      }}>
-        {t('loading.more')}
-      </div> */}
+      <div
+        className={cn(
+          'text-center mt-1 cursor-pointer',
+          hasMore ? 'text-blue-500 underline' : 'text-zinc-500'
+        )}
+        onClick={fetchNextPage}
+      >
+        {hasMore ? t('loading.more') : t('nomore')}
+      </div>
     </>
   )
 }
