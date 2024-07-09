@@ -49,6 +49,11 @@ export const useHolders = () => {
       !isNotFound
     )
 
+  const clearHolders = () => {
+    setMarketCap(0)
+    setHolders([])
+  }
+
   useEffect(() => {
     if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {
       return getWebSocket()?.close()
@@ -64,5 +69,6 @@ export const useHolders = () => {
   return {
     marketCap,
     holders,
+    clearHolders,
   }
 }
