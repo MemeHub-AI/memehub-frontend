@@ -30,10 +30,19 @@ export const TokenMobile = () => {
 
   const getCount = () => {
     let count = 0
-    if (airdrop.kol && !airdrop.kolAirdropInfo.isClaimed) {
+
+    if (
+      airdrop.kol &&
+      !airdrop.kolAirdropInfo.isClaimed &&
+      !airdrop.kolAirdrop.isBurn
+    ) {
       count++
     }
-    if (airdrop.communities && !airdrop.communitiesAirdropInfo.isClaimed) {
+    if (
+      airdrop.communities &&
+      !airdrop.communitiesAirdropInfo.isClaimed &&
+      !airdrop.kolAirdrop.isBurn
+    ) {
       count++
     }
     return count
