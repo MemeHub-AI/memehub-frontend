@@ -9,7 +9,7 @@ import { useStorage } from '@/hooks/use-storage'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
-import { DexToolsChart } from '../dextools-chart'
+import { ChartDexScreener } from '../chart-dexscrenner'
 import { usePools } from '@/views/token/hooks/use-pools'
 import { datafeedConfig } from '@/config/datafeed'
 import { Button } from '../ui/button'
@@ -65,7 +65,7 @@ export const Chart = memo(() => {
         )}
       >
         {isGrauated ? (
-          <DexToolsChart className="w-full h-full" />
+          <ChartDexScreener className="w-full h-full" />
         ) : (
           <div className="flex flex-col h-full">
             <div className="flex items-center">
