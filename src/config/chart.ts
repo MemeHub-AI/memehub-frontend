@@ -13,9 +13,7 @@ type TVChartOptions = Omit<
 const options: TVChartOptions = {
   library_path: 'js/charting_library/',
   disabled_features: [
-    // Header
     'header_widget',
-    // 'header_resolutions',
     'header_symbol_search',
     'header_compare',
     'header_chart_type',
@@ -31,19 +29,14 @@ const options: TVChartOptions = {
     'property_pages',
     'symbol_search_hot_key',
 
-    // 'chart_zoom',
     'left_toolbar',
-    'timeframes_toolbar', // bottom time tools.
-    'main_series_scale_menu', // bottom right setting button.
+    'timeframes_toolbar',
+    'main_series_scale_menu',
     'items_favoriting',
     'show_object_tree',
-    // 'create_volume_indicator_by_default',
   ],
   enabled_features: [
     'pre_post_market_sessions',
-    // currency logo, need to config in useDatafeed symbolInfo
-    // 'show_symbol_logos',
-    // 'show_symbol_logo_in_legend',
     'show_spread_operators',
     'move_logo_to_main_pane',
   ],
@@ -51,22 +44,20 @@ const options: TVChartOptions = {
   custom_formatters: {
     priceFormatterFactory: (symbolInfo, minTick) => {
       if (symbolInfo?.format === 'price') {
-        return {
-          format: (price) => fmt.decimals(price, { fixed: 4 }),
-        }
+        return { format }
       }
       return null
     },
-    studyFormatterFactory: (format) => {
-      if (format.type === 'volume') {
-        return {
-          format: (value) => fmt.decimals(value, { fixed: 4 }),
-        }
+    studyFormatterFactory: ({ type }) => {
+      if (type === 'volume') {
+        return { format }
       }
       return null
     },
   },
 }
+
+const format = (price?: number) => fmt.decimals(price, { fixed: 5 })
 
 const overrides: Partial<ChartPropertiesOverrides> = {
   'paneProperties.vertGridProperties.color': 'rgba(255,255,255,0)',

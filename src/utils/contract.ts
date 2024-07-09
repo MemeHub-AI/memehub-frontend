@@ -98,11 +98,10 @@ export const getDeadline = async () => {
 }
 
 export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
-  const hashAddr = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_TOPIC)
-    ?.topics?.[1]
-  const addr = hashAddr?.replace(/0x0+/, '') ?? ''
+  const log = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_TOPIC)
+  const hashAddr = log?.topics?.[1]
 
-  return '0x' + addr
+  return hashAddr?.replace(/0x0+/, '0x') ?? ''
 }
 
 /**

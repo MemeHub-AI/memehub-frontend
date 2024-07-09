@@ -8,8 +8,8 @@ import {
 } from '../../../../public/js/charting_library/charting_library'
 import { useDatafeed } from './use-datafeed'
 import { useChartStore } from '@/stores/use-chart-store'
-import { useChartUtils } from './use-chart-utils'
 import { chartConfig } from '@/config/chart'
+import { parseInterval } from '@/utils/chart'
 
 interface ChartOptions {
   symbol: string
@@ -22,7 +22,6 @@ export const useChart = () => {
   const [isCreating, setIsCreating] = useState(true)
   const { chart, setChart, setChartEl } = useChartStore()
   const { createDatafeed, removeDatafeed } = useDatafeed()
-  const { parseInterval } = useChartUtils()
 
   const createChart = (container: HTMLDivElement, options: ChartOptions) => {
     const { symbol, interval } = options || {}

@@ -1,11 +1,10 @@
 import React, { ComponentProps, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { dexChartBaseUrl } from '@/config/dex-chart'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { qs } from '@/hooks/use-fetch'
 
-export const DexToolsChart = ({
+export const ChartDexScreener = ({
   className,
   ...props
 }: ComponentProps<'iframe'>) => {
@@ -21,10 +20,10 @@ export const DexToolsChart = ({
       info: 0,
     })
 
-    return `${dexChartBaseUrl}/${chainName}/${tokenAddr}${query}`
+    return `https://dexscreener.com/${chainName}/${tokenAddr}${query}`
   }, [i18n, chainName, tokenAddr])
 
   return <iframe src={src} className={className} {...props}></iframe>
 }
 
-export default DexToolsChart
+export default ChartDexScreener
