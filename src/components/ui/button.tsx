@@ -4,6 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 import { shadowVariants, ShadowVariantsProps } from '@/styles/variants'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 const buttonVariants = cva(
   cn(
@@ -62,6 +63,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     } = props
     const Comp = asChild ? Slot : 'button'
 
+    const {playAudio, stopAudio, isPlaying} = useAudioPlayer()
+
+    const PlayAudio = () => {
+      if (isPlaying) {
+        stopAudio()
+      } 
+      playAudio('/audio/gua.mp3')
+    }
     return (
       <Comp
         ref={ref}
@@ -70,6 +79,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           shadowVariants({ shadow }),
           'min-w-5'
         )}
+        onClick={() => PlayAudio()}
         {...restProps}
       />
     )

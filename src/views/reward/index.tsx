@@ -193,7 +193,7 @@ export const RewardPage = () => {
                   {isCopied ? (
                     <CheckIcon className="mx-2.5" />
                   ) : (
-                    t('copy').toUpperCase()
+                    <span className='text-nowrap'>{t('copy').toUpperCase()}</span>
                   )}
                 </div>
               </div>
