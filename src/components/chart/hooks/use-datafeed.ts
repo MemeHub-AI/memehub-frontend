@@ -7,10 +7,10 @@ import type {
 
 import { useDatafeedCache } from './use-datafeed-cache'
 import { useDatafeedWebsocket } from './use-datafeed-websocket'
-import { useChartUtils } from './use-chart-utils'
 import { useStorage } from '@/hooks/use-storage'
 import { datafeedConfig } from '@/config/datafeed'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { parseBars, formatInterval, parsePricescale } from '@/utils/chart'
 
 export const useDatafeed = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -26,12 +26,6 @@ export const useDatafeed = () => {
           chain: chainName,
         }),
     })
-  const {
-    formatInterval,
-    formatBars,
-    formatPricescale,
-    formatVolumePrecision,
-  } = useChartUtils()
 
   const createDatafeed = () => {
     return {
@@ -46,14 +40,14 @@ export const useDatafeed = () => {
           token_address: tokenAddr,
           chain: chainName,
         })
-        const bars = formatBars(data)
+        const bars = parseBars(data)
         const lastBar = last(bars)
         const symbolInfo: LibrarySymbolInfo = {
           ...datafeedConfig.symbolInfo,
           name: symbolName,
           full_name: symbolName,
           description: symbolName,
-          pricescale: formatPricescale(lastBar?.open),
+          pricescale: parsePricescale(lastBar?.open),
         }
 
         cache.setBars(bars)
@@ -77,7 +71,7 @@ export const useDatafeed = () => {
             token_address: tokenAddr,
             chain: chainName,
           })
-          const bars = formatBars(data)
+          const bars = parseBars(data)
           !isEmpty(bars) && cache.setLastBar(last(bars))
           setInterval(chainName, tokenAddr, interval)
           onResult(bars, { noData: isEmpty(data) })
@@ -91,7 +85,7 @@ export const useDatafeed = () => {
           limit: period.countBack,
           chain: chainName,
         })
-        const bars = formatBars(data)
+        const bars = parseBars(data)
 
         !isEmpty(bars) && cache.setLastBar(last(bars))
         onResult(bars, { noData: isEmpty(bars) })
@@ -99,7 +93,7 @@ export const useDatafeed = () => {
       subscribeBars(_, resolution, onTick, uid, onRest) {
         console.log('subscribe', uid)
         onUpdate(({ data }) => {
-          const bars = formatBars(data)
+          const bars = parseBars(data)
 
           bars.forEach((bar) => {
             const lastTime = cache.getLastBar()?.time || 0

@@ -13,8 +13,8 @@ import { DexToolsChart } from '../dextools-chart'
 import { usePools } from '@/views/token/hooks/use-pools'
 import { datafeedConfig } from '@/config/datafeed'
 import { Button } from '../ui/button'
-import { useChartUtils } from './hooks/use-chart-utils'
 import { useChartStore } from '@/stores/use-chart-store'
+import { formatInterval } from '@/utils/chart'
 
 export const Chart = memo(() => {
   const { t } = useTranslation()
@@ -24,7 +24,6 @@ export const Chart = memo(() => {
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
   const { isGrauated } = usePools(tokenInfo?.address)
-  const { formatInterval } = useChartUtils()
   const { chart } = useChartStore()
   const [, update] = useState(false)
   const activeChart = chart?.activeChart()
