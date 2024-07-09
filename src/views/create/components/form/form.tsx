@@ -1,6 +1,5 @@
 import React, { forwardRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { formatEther } from 'viem'
 import { toast } from 'sonner'
 import { useAccount } from 'wagmi'
 
@@ -188,7 +187,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             </Button>
             {symbol && (
               <p className="text-zinc-400 text-xs">
-                {t('deploy.fee')}: ~{fmt.decimals(deployFee)} {symbol}
+                {t('deploy.fee')} ≈ {fmt.decimals(deployFee)} {symbol}
               </p>
             )}
           </div>
