@@ -2,21 +2,19 @@ import React, { ComponentProps, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SlMenu } from 'react-icons/sl'
 import { MdArrowDropDown } from 'react-icons/md'
-import type { Nav } from '.'
+import { useRouter } from 'next/router'
+import { useAccount } from 'wagmi'
 
+import type { Nav } from '.'
 import { Button } from '../ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
 import { WalletConnect } from '../wallet-connect'
 import { WalletDisconnector } from '../wallet-connect/components/disconnector'
-import { SearchInput } from '../search-input'
-import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import RewardButton from '../reward-button'
-import { useWallet } from '../wallet-connect/hooks/use-wallet'
 import { cn } from '@/lib/utils'
-import { IoMdArrowRoundDown } from 'react-icons/io'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -28,7 +26,7 @@ export const HeaderMobile = (props: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
-  const { isConnected } = useWallet()
+  const { isConnected } = useAccount()
 
   return (
     <>
