@@ -15,6 +15,7 @@ export interface TokenListItem extends UserCoinsCreated {
   explorer_tx: string
   version: string
   pool_address: null | Address
+  poster: string[]
 }
 
 export interface TokenNewReq {
