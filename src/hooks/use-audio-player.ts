@@ -1,15 +1,12 @@
 import { useState } from 'react';
 
+let audio: HTMLAudioElement;
 const useAudioPlayer = () => {
-  const [audio] = useState(new Audio());
   const [isPlaying, setIsPlaying] = useState(false);
-
+  if(audio == null) audio = new Audio();
   const playAudio = (src: string) => {
-    // Pause any currently playing audio
-    if (isPlaying) {
-      audio.pause();
-    }
-
+    if(isPlaying) stopAudio();
+    
     // Set new audio source and play
     audio.src = src;
     audio.play();

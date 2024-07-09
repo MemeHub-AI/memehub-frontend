@@ -19,6 +19,7 @@ import { toast } from 'sonner'
 import { Router } from 'next/router'
 import { useUserStore } from '@/stores/use-user-store'
 import { useWalletStore } from '@/stores/use-wallet-store'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -34,6 +35,7 @@ export const PosterForm = ({ formData }: Props) => {
 
   const { t } = useTranslation()
   const { loadingPoster, setLoadingPoster } = useAimemeInfoStore()
+  const { playAudio } = useAudioPlayer()
   const createPoster = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
@@ -108,6 +110,7 @@ export const PosterForm = ({ formData }: Props) => {
 
   useEffect(() => {
     if (loadingPoster) {
+      playAudio('/audio/guagua.mp3')
       fetchMemePoster()
     }
   }, [loadingPoster])

@@ -28,30 +28,35 @@ export const AlliancePage = () => {
   }
 
   return (
-    <PrimaryLayout container="div" className="py-5">
-      <Tabs value={defaultValue} onValueChange={handleTabChange}>
-        <TabsList className="border-none space-x-2 h-10">
-          <TabsTrigger
-            value={Tab.Kol}
-            className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black"
-          >
-            {tabMap[Tab.Kol]}
-          </TabsTrigger>
-          <TabsTrigger
-            value={Tab.Communities}
-            className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black"
-          >
-            {tabMap[Tab.Communities]}
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value={Tab.Kol}>
-          <Kol />
-        </TabsContent>
-        <TabsContent value={Tab.Communities}>
-          <Communities />
-        </TabsContent>
-      </Tabs>
-    </PrimaryLayout>
+    <div>
+      <audio autoPlay>
+        <source src="/audio/alliance.mp3" type="audio/mpeg"/>
+      </audio>
+      <PrimaryLayout container="div" className="py-5">
+        <Tabs value={defaultValue} onValueChange={handleTabChange}>
+          <TabsList className="border-none space-x-2 h-10">
+            <TabsTrigger
+              value={Tab.Kol}
+              className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black"
+            >
+              {tabMap[Tab.Kol]}
+            </TabsTrigger>
+            <TabsTrigger
+              value={Tab.Communities}
+              className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black"
+            >
+              {tabMap[Tab.Communities]}
+            </TabsTrigger>
+          </TabsList>
+          <TabsContent value={Tab.Kol}>
+            <Kol />
+          </TabsContent>
+          <TabsContent value={Tab.Communities}>
+            <Communities />
+          </TabsContent>
+        </Tabs>
+      </PrimaryLayout>
+    </div>
   )
 }
 

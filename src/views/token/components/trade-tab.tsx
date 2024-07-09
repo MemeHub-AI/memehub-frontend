@@ -29,6 +29,7 @@ import { InviteTipsDialog } from './invite-tips-dialog'
 import { TradeCommentDialog } from './trade-comment-dialog'
 import { useCheckChain } from '@/hooks/use-check-chain'
 import { useTradeSearchParams } from '../hooks/use-search-params'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -59,25 +60,28 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const disableTrade =
     disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
 
+  const {playAudio} = useAudioPlayer()
   const onBuy = async () => {
     // Check native token balance.
     if (BigNumber(value).gt(nativeBalance)) {
       toast.error(t('balance.illegality'))
       setValue(nativeBalance)
+      playAudio('/audio/e.mp3')
       return
     }
-
     buying(value, slippage, setValue)
+    playAudio('/audio/success.mp3')
   }
 
   const onSell = async () => {
     // Check token balance.
     if (BigNumber(value).gt(tokenBalance)) {
       toast.error(t('balance.illegality'))
+      playAudio('/audio/e.mp3')
       return
     }
-
     selling(value, slippage)
+    playAudio('/audio/success.mp3')
   }
 
   const onTrade = async () => {
@@ -90,6 +94,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     // Check token addr.
     if (isEmpty(tokenAddr) || !isAddress(tokenAddr)) {
       toast.error(t('contract.err.token-addr'))
+      playAudio('/audio/e.mp3')
       return
     }
 

@@ -17,6 +17,7 @@ import { toast } from 'sonner'
 import { Router } from 'next/router'
 import { useUserStore } from '@/stores/use-user-store'
 import { useWalletStore } from '@/stores/use-wallet-store'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -28,6 +29,7 @@ export const FormLogo = ({ formData }: Props) => {
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
   const userStore = useUserStore()
   const { setConnectOpen } = useWalletStore()
+  const { playAudio } = useAudioPlayer()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
@@ -67,6 +69,7 @@ export const FormLogo = ({ formData }: Props) => {
 
   useEffect(() => {
     if (loadingLogo) {
+      playAudio('/audio/guagua.mp3')
       fetchMemeLogo()
     }
   }, [loadingLogo])

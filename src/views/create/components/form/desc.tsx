@@ -16,6 +16,7 @@ import { toast } from 'sonner'
 import { aiApi } from '@/api/ai'
 import { useEffect } from 'react'
 import { cn } from '@/lib/utils'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -28,6 +29,7 @@ export const Description = ({ formData }: Props) => {
   const { loadingDesc, setLoadingDesc } = useAimemeInfoStore()
   const userStore = useUserStore()
   const { setConnectOpen } = useWalletStore()
+  const { playAudio } = useAudioPlayer()
 
   const createDesc = (e: any) => {
     e.stopPropagation()
@@ -67,6 +69,7 @@ export const Description = ({ formData }: Props) => {
 
   useEffect(() => {
     if (loadingDesc) {
+      playAudio('/audio/guagua.mp3')
       fetchMemeLogo()
     }
   }, [loadingDesc])

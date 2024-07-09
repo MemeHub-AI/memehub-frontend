@@ -33,7 +33,7 @@ export const TokenCards = (props: Props) => {
   const { t } = useTranslation()
   const [chianTag, setChainTag] = useState('all')
   const [filteredCards, setFilteredCards] = useState(cards)
-  const { playAudio, stopAudio, isPlaying } = useAudioPlayer();
+  const { playAudio } = useAudioPlayer();
 
   const { noMore } = useScrollLoad({
     onFetchNext,

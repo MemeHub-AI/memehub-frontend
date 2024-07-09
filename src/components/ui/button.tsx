@@ -59,17 +59,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       size,
       asChild = false,
       shadow,
+      onClick,
       ...restProps
     } = props
     const Comp = asChild ? Slot : 'button'
 
-    const {playAudio, stopAudio, isPlaying} = useAudioPlayer()
+    const {playAudio} = useAudioPlayer()
 
-    const PlayAudio = () => {
-      if (isPlaying) {
-        stopAudio()
-      } 
+    const PlayAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
       playAudio('/audio/gua.mp3')
+      if(onClick) onClick(event)
     }
     return (
       <Comp
@@ -79,7 +78,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           shadowVariants({ shadow }),
           'min-w-5'
         )}
-        onClick={() => PlayAudio()}
+        onClick={(event) => PlayAudio(event)}
         {...restProps}
       />
     )

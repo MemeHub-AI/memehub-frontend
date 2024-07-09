@@ -19,6 +19,7 @@ import { useCheckChain } from '@/hooks/use-check-chain'
 import { buttonLeft } from '@/config/toast'
 import { useWallet } from '@/components/wallet-connect/hooks/use-wallet'
 import { useLogin } from '@/hooks/use-login'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 export const useAirdrop = (
   id: number = 0,
@@ -35,6 +36,7 @@ export const useAirdrop = (
   const [isBurning, setBurning] = useState(false)
   const { checkForChain } = useCheckChain()
   const { checkForLogin } = useLogin()
+  const { playAudio } = useAudioPlayer()
 
   const toastConfig = window.innerWidth > 600 ? buttonLeft : undefined
 
@@ -148,6 +150,8 @@ export const useAirdrop = (
 
     const isValidChain = await checkForChain(chainId)
     if (!isValidChain) return
+    
+    playAudio('/audio/fire.mp3')
 
     setBurning(true)
     writeContract({

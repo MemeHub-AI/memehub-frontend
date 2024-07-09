@@ -86,6 +86,9 @@ export const Ids = () => {
 
   return (
     <>
+      <audio autoPlay>
+        <source src="/audio/rap-dos-memes.mp3" type="audio/mpeg"/>
+      </audio>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
       {userInfo?.role?.kol ? null : (
