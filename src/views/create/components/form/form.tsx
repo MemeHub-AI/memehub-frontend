@@ -62,7 +62,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           className="flex flex-col space-y-3 max-sm:w-full max-sm:space-y-2"
         >
           {/* Loog/name/chain/symbol */}
-          <div className="flex gap-5 max-sm:flex-col max-sm:gap-2">
+          <div className="flex md:gap-5 max-sm:flex-col max-sm:space-y-2">
             <div className="flex">
               {/* Logo */}
               <FormLogo formData={formData}></FormLogo>

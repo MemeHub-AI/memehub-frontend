@@ -57,7 +57,7 @@ export const WalletAccount = () => {
           <DropdownMenuContent>
             <DropdownMenuItem className="pb-0">
               <Button
-                className="w-full gap-2 justify-start px-0"
+                className="w-full space-x-2 justify-start px-0"
                 variant="ghost"
                 shadow="none"
                 onClick={() => {
@@ -68,11 +68,11 @@ export const WalletAccount = () => {
                 }}
               >
                 <User size={20} className="shrink-0" />
-                {t('view.profile')}
+                <span>{t('view.profile')}</span>
               </Button>
             </DropdownMenuItem>
             <DropdownMenuItem className="py-0">
-              <SocialLinks className="flex-col !px-0" size="default" />
+              <SocialLinks className="flex-col !px-0 w-full" size="default" />
             </DropdownMenuItem>
             <DropdownMenuItem
               className="py-1"
@@ -81,7 +81,7 @@ export const WalletAccount = () => {
                 e.preventDefault()
               }}
             >
-              <WalletDisconnector />
+              <WalletDisconnector/>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
