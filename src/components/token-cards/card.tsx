@@ -13,6 +13,7 @@ import { Img } from '@/components/img'
 import { useTokenProgressV3 } from '@/views/token/hooks/trade-v3/use-token-progress'
 import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -23,6 +24,9 @@ export const TokenCard = (props: Props) => {
   const { card, className, descClass, onClick, ...restProps } = props
   const router = useRouter()
   const { t } = useTranslation()
+  const { findChain } = useChainsStore()
+
+  const chain = findChain(card.chain.id)
 
   const { progress, isGrauated } = useTokenProgressV3(
     card.address as Address,
@@ -66,7 +70,7 @@ export const TokenCard = (props: Props) => {
               alt="logo"
               size={20}
               className="mt-1"
-              title={card.chain.displayName}
+              title={chain?.displayName}
             />
           </CardTitle>
           <p

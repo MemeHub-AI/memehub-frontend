@@ -1,6 +1,5 @@
 import React, { forwardRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { formatEther } from 'viem'
 import { toast } from 'sonner'
 import { useAccount } from 'wagmi'
 
@@ -113,7 +112,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             {/* Chain / coinType */}
             <div className="h-[150px] flex flex-col justify-between max-sm:flex-row max-sm:h-min max-sm:justify-start max-sm:space-x-4 max-sm:flex-wrap">
               <FormChain formData={formData} />
-              <CoinTypeField />
+              {/* <CoinTypeField /> */}
             </div>
           </div>
 
@@ -188,7 +187,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             </Button>
             {symbol && (
               <p className="text-zinc-400 text-xs">
-                {t('deploy.fee')}: ~{fmt.decimals(deployFee)} {symbol}
+                {t('deploy.fee')} ≈ {fmt.decimals(deployFee)} {symbol}
               </p>
             )}
           </div>

@@ -78,8 +78,6 @@ export const TradeAirdrop = () => {
         </div>
         {(isOnlyOne || (kol && communities)) && !isMobile ? (
           <Burn
-            kol={kol}
-            communities={communities}
             airdrop={kol! || communities!}
             suffix={t('ambassador')}
             className={cn(
@@ -89,18 +87,14 @@ export const TradeAirdrop = () => {
               !isOnlyOne && 'px-1',
               isOnlyOne ? 'flex-1' : 'mt-2'
             )}
-            onburn={() => {}}
           />
         ) : null}
       </div>
       {(!kol && !communities) || isMobile ? (
         <Burn
-          kol={kol}
-          communities={communities}
           airdrop={kol! || communities!}
           suffix={t('ambassador')}
-          className="flex-1 p-1 max-sm:pb-3 max-sm:mt-2.5"
-          onburn={() => {}}
+          className="flex-1 p-1 pt-2 max-sm:pb-3 max-sm:mt-2.5"
         />
       ) : null}
     </div>
@@ -109,18 +103,12 @@ export const TradeAirdrop = () => {
 
 interface BurmProps {
   className?: string
-  burnNumber?: BigNumber
   airdrop: AirdropItem
   suffix: string
-  isKol?: boolean
-  isCommunity?: boolean
-  kol: AirdropItem | undefined
-  communities: AirdropItem | undefined
-  onburn: () => void
 }
 
 const Burn = (props: BurmProps) => {
-  const { className, airdrop, kol, communities } = props
+  const { className, airdrop } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
   const [isExpired, setIsExpired] = useState(false)

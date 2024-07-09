@@ -1,4 +1,4 @@
-import React, { Fragment, type ComponentProps } from 'react'
+import React, { useEffect, type ComponentProps } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { zeroAddress } from 'viem'
@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { holders } = useHolders()
+  const { holders, clearHolders } = useHolders()
 
   const getLabel = (holder: (typeof holders)[number]) => {
     const { contract_flag, address } = holder
@@ -42,6 +42,8 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
       return `(${t('airdrop')})`
     }
   }
+
+  useEffect(() => clearHolders, [])
 
   return (
     <>

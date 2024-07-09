@@ -2,19 +2,20 @@ import React, { ComponentProps, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SlMenu } from 'react-icons/sl'
 import { MdArrowDropDown } from 'react-icons/md'
-import type { Nav } from '.'
+import { useRouter } from 'next/router'
+import { useAccount } from 'wagmi'
 
+import type { Nav } from '.'
 import { Button } from '../ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
 import { WalletConnect } from '../wallet-connect'
-import { useRouter } from 'next/router'
+import { WalletDisconnector } from '../wallet-connect/components/disconnector'
 import { Routes } from '@/routes'
 import RewardButton from '../reward-button'
-import { useWallet } from '../wallet-connect/hooks/use-wallet'
 import { cn } from '@/lib/utils'
-import { FaTelegramPlane, FaTwitter } from 'react-icons/fa';
+import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 import { SOCIAL_LINKS } from '@/config/link'
 
 interface Props extends ComponentProps<'div'> {
@@ -27,7 +28,7 @@ export const HeaderMobile = (props: Props) => {
   const { t } = useTranslation()
   const router = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
-  const { isConnected } = useWallet()
+  const { isConnected } = useAccount()
 
   const links = [
     {
@@ -80,9 +81,13 @@ export const HeaderMobile = (props: Props) => {
               </li>
             ))}
           </ul>
-          <LangSelect className={cn(isConnected && "mb-9",
-            "size-fit w-full justify-start")} />
-          <div className='flex space-x-6 text-2xl mt-20'>
+          <LangSelect
+            className={cn(
+              isConnected && 'mb-9',
+              'size-fit w-full justify-start'
+            )}
+          />
+          <div className="flex space-x-6 text-2xl mt-20">
             {links.map((l, i) => (
               <div
                 key={i}

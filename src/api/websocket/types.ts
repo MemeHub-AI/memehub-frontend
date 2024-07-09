@@ -5,7 +5,9 @@ export interface WSMessageBase<T = null> {
   type: string
   message: string
   data: T
-  channel_name: string
+  extra: {
+    hasmore: boolean
+  }
 }
 
 export enum WSMessageType {
@@ -57,6 +59,7 @@ export interface WSTradeRecordMessage {
   create_time: string
   hash: string
   hash_url: string
+  usd_price: string
 }
 
 export interface WSTradeInfoMessage {

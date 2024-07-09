@@ -94,28 +94,9 @@
   }
 }
 
-.story h2 {
-  font-size: 24px;
-}
-
-.story a {
-  color: firebrick;
-}
-
-.story hr {
-  margin: 15px 0;
-}
-
-.story p {
-  margin-bottom: 15px;
-}
-
-.story center {
-  margin: 15px 0;
-}
-
-.story img {
-  margin: 15px 0;
+object,embed {
+  width: 100% !important;
+  max-width: 600px;
   border-radius: 4px;
 }
 

@@ -389,7 +389,7 @@
   "alliance.communities": "社区",
   "referral.copy": "复制推荐链接",
   "referral.desc": "使用您的特殊推荐链接与朋友分享此代币，并获得其交易费用的 $ 提成。",
-  "bonding-curve.desc": "随着内盘代币价格上涨，进度也会增加。当市值≈${} 美元时，自动在DEX加池子开盘。",
+  "bonding-curve.desc": "随着内盘代币价格上涨，进度也会增加。当市值 ≈${} 美元时，将自动在 DEX 加池子开盘并将流动性销毁。",
   "inviter1": "一级邀请人",
   "inviter2": "二级邀请人",
   "url.error": "请输入正确的网址",
@@ -481,5 +481,6 @@
   "airdrop.community.desc2": "如果在$1小时内未领取，所有空投代币将被销毁。",
   "airdrop.community.desc3": "这将为您的Memecoin带来广泛的影响力。",
   "airdrop.community.desc4": "不必担心成员出售空投代币，因为通过购买带来的资金远远超过空投代币的销售。",
-  "connect": "连接钱包"
+  "connect": "连接钱包",
+  "price": "价格"
 }

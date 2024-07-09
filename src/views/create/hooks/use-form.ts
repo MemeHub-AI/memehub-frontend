@@ -10,7 +10,7 @@ import { toast } from 'sonner'
 import { useDeploy } from './use-deploy'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { CoinType, Marketing } from '@/api/token/types'
+import { CoinType, MarketType, Marketing } from '@/api/token/types'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
 import { deployVersion } from '@/config/contract'
 

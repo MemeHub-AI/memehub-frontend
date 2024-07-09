@@ -1,16 +1,21 @@
 export interface DatafeedEventBase<T extends string, D = null> {
   type: T
   message?: string
-  data: D
+  data: DatafeedBaseData<D>
+}
+
+export interface DatafeedBaseData<T = null> {
+  master: T
+  usd: T
 }
 
 export interface DatafeedBar {
-  timestamp: number
+  time: number
   open: number
   close: number
   high: number
   low: number
-  volume: number
+  volume?: number
 }
 
 export interface DatafeedOnEvents {

@@ -397,7 +397,7 @@
   "alliance.communities": " COMMUNITIES",
   "referral.copy": "Copy Referral Link",
   "referral.desc": "Share this token with your friends using your special referral link and earn $ of their trading fees",
-  "bonding-curve.desc": "When the market cap reaches ≈${} all the liquidity from the pool will be deposited into dex and burned. Progression increases as the price goes up.",
+  "bonding-curve.desc": "As the price of the internal token rises, the progress will also increase. When the market value reaches approximately $X, it will automatically open for trading in the DEX pool and the liquidity will be burned.",
   "inviter1": "First-level inviter",
   "inviter2": "Second-level inviter",
   "url.error": "Please enter a valid URL.",
@@ -491,5 +491,6 @@
   "airdrop.community.desc2": "If not claimed within $1 hours, all airdropped tokens will be destroyed.",
   "airdrop.community.desc3": "This will bring extensive influence to your Memecoin.",
   "airdrop.community.desc4": "Don't worry about memebers selling, because the funds brought in by purchases far exceed the sales from the airdropped tokens.",
-  "connect": "Connect"
+  "connect": "Connect",
+  "price": "Price"
 }

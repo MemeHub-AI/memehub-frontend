@@ -159,7 +159,7 @@ export const PosterForm = ({ formData }: Props) => {
                   <img src="/images/poster-loading.png" alt="loading" />
                 ) : !!field.value?.length ? (
                   <>
-                    <div className="flex gap-3 w-max max-md:w-[99%] max-md:overflow-x-auto">
+                    <div className="flex space-x-3 w-max max-md:w-[99%] max-md:overflow-x-auto">
                       {(field.value as string[])?.map((item, i) => {
                         return (
                           <div
