@@ -1,11 +1,15 @@
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import {
+  Connector,
+  CreateConnectorFn,
+  useAccount,
+  useConnect,
+  useDisconnect,
+} from 'wagmi'
 import { first } from 'lodash'
-import { injected } from 'wagmi/connectors'
 
 import { useLogin } from '@/hooks/use-login'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUserStore } from '@/stores/use-user-store'
-import { useResponsive } from '@/hooks/use-responsive'
 
 export const useWallet = () => {
   const {
@@ -21,16 +25,13 @@ export const useWallet = () => {
   const { signLogin, logout } = useLogin()
   const { setConnectOpen } = useWalletStore()
   const { setUserInfo } = useUserStore()
-  const { isMobile } = useResponsive()
 
-  const connectWallet = async (connector: (typeof connectors)[number]) => {
+  const connectWallet = async (connector: CreateConnectorFn | Connector) => {
     try {
       if (isConnected) {
         return await signLogin()
       }
-      const { accounts, chainId } = await connectAsync({
-        connector: isMobile ? injected() : connector,
-      })
+      const { accounts, chainId } = await connectAsync({ connector })
       const curAddress = first(accounts)
       if (!curAddress?.trim()) throw 'No address'
       setConnectOpen(false)

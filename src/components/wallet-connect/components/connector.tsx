@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { injected } from 'wagmi/connectors'
 
 import { useWallet } from '../hooks/use-wallet'
 import { useResponsive } from '@/hooks/use-responsive'
@@ -21,16 +22,15 @@ export const WalletConnector = () => {
       <Button
         disabled={disabled}
         size={isMobile ? 'sm' : 'default'}
-        onClick={() => setConnectOpen(true)}
+        onClick={() =>
+          isMobile ? connectWallet(injected()) : setConnectOpen(true)
+        }
       >
         {disabled ? t('wallet.connecting') : t('wallet.connect')}
       </Button>
       <Dialog
         open={connectOpen}
-        onOpenChange={(value) => {
-          console.log('value', value)
-          setConnectOpen(value)
-        }}
+        onOpenChange={(value) => setConnectOpen(value)}
       >
         <DialogTitle>{t('walle.select')}</DialogTitle>
         {/* Exclude `injected` connect */}
