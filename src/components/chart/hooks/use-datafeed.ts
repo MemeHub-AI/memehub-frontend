@@ -10,7 +10,7 @@ import { useDatafeedWebsocket } from './use-datafeed-websocket'
 import { useStorage } from '@/hooks/use-storage'
 import { datafeedConfig } from '@/config/datafeed'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
-import { parseBars, formatInterval, parsePricescale } from '@/utils/chart'
+import { formatInterval, parsePricescale } from '@/utils/chart'
 
 export const useDatafeed = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -40,7 +40,7 @@ export const useDatafeed = () => {
           token_address: tokenAddr,
           chain: chainName,
         })
-        const bars = parseBars(data)
+        const bars = data.master
         const lastBar = last(bars)
         const symbolInfo: LibrarySymbolInfo = {
           ...datafeedConfig.symbolInfo,
@@ -71,7 +71,7 @@ export const useDatafeed = () => {
             token_address: tokenAddr,
             chain: chainName,
           })
-          const bars = parseBars(data)
+          const bars = data.master
           !isEmpty(bars) && cache.setLastBar(last(bars))
           setInterval(chainName, tokenAddr, interval)
           onResult(bars, { noData: isEmpty(data) })
@@ -85,7 +85,7 @@ export const useDatafeed = () => {
           limit: period.countBack,
           chain: chainName,
         })
-        const bars = parseBars(data)
+        const bars = data.master
 
         !isEmpty(bars) && cache.setLastBar(last(bars))
         onResult(bars, { noData: isEmpty(bars) })
@@ -93,9 +93,7 @@ export const useDatafeed = () => {
       subscribeBars(_, resolution, onTick, uid, onRest) {
         console.log('subscribe', uid)
         onUpdate(({ data }) => {
-          const bars = parseBars(data)
-
-          bars.forEach((bar) => {
+          data.master.forEach((bar) => {
             const lastTime = cache.getLastBar()?.time || 0
             if (bar.time < lastTime) return
 
