@@ -57,12 +57,11 @@ const options: TVChartOptions = {
   },
 }
 
-const format = (price?: number) => fmt.decimals(price, { fixed: 5 })
+const format = (price?: number) => fmt.decimals(price, { fixed: 4 })
 
 const overrides: Partial<ChartPropertiesOverrides> = {
   'paneProperties.vertGridProperties.color': 'rgba(255,255,255,0)',
   'paneProperties.horzGridProperties.color': 'rgba(255,255,255,0)',
-  'mainSeriesProperties.minTick': '1000000000,1,false',
 }
 
 export const chartConfig = {

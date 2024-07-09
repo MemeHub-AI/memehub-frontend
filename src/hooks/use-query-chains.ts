@@ -1,13 +1,10 @@
 import { useEffect } from 'react'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
 
 import { chainApi } from '@/api/chain'
 import { useChainsStore } from '@/stores/use-chains-store'
 
 export const useQueryChains = () => {
-  const { t } = useTranslation()
   const { setChains } = useChainsStore()
 
   const { data, isLoading, isFetching, isError, refetch } = useQuery({
@@ -19,10 +16,6 @@ export const useQueryChains = () => {
   useEffect(() => {
     if (data?.data) {
       setChains(data.data)
-    }
-
-    if (isError) {
-      toast.error(t('get.chain.error'))
     }
   }, [data, isError])
 
