@@ -82,6 +82,7 @@ export const useAirdrop = (
         setBurning(false)
       },
       onSuccess: () => {
+        playAudio('/audio/fire.mp3')
         setBurning(false)
       },
     },
@@ -150,8 +151,6 @@ export const useAirdrop = (
 
     const isValidChain = await checkForChain(chainId)
     if (!isValidChain) return
-    
-    playAudio('/audio/fire.mp3')
 
     setBurning(true)
     writeContract({
