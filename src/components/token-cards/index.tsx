@@ -12,6 +12,7 @@ import { UserCoinsCreated } from '@/api/user/types'
 import { TokenChainSelect } from './chain-select'
 import { TokenSearchInput } from './token-search-input'
 import useAudioPlayer from '@/hooks/use-audio-player'
+import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -33,8 +34,7 @@ export const TokenCards = (props: Props) => {
   const { t } = useTranslation()
   const [chianTag, setChainTag] = useState('all')
   const [filteredCards, setFilteredCards] = useState(cards)
-  const { playAudio } = useAudioPlayer();
-
+  const { isPlayHomeAudio, setIsPlayHomeAudio } = useIsPlayAudio()
   const { noMore } = useScrollLoad({
     onFetchNext,
     hasMore: cards.length < total,
@@ -55,22 +55,15 @@ export const TokenCards = (props: Props) => {
     setFilteredCards(cards)
   }, [cards])
 
-  // useEffect(() => {
-  //   if (isPlaying) {
-  //     stopAudio();
-  //   }
-  //   playAudio('audio/_home.mp3');
-  // }, [isPlaying])
-
   useEffect(() => {
     setFilteredCards(cards)
   }, [cards])
 
   return (
     <div className={cn(className)}>
-      <audio autoPlay>
+      <audio autoPlay={isPlayHomeAudio} onPlay={() => setIsPlayHomeAudio(false)}>
         <source src="/audio/home.mp3" type="audio/mpeg"/>
-      </audio>
+      </audio> 
       <CustomSuspense
         className="flex justify-between items-start gap-4 max-sm:justify-between mb-4 max-sm:gap-0"
         isPending={isLoading}

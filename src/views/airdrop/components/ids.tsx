@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import Link from 'next/link'
@@ -11,6 +11,8 @@ import { CommunityCategory } from '@/api/airdrop/types'
 import { useIds } from '@/hooks/use-ids'
 import { cn } from '@/lib/utils'
 import { useUserStore } from '@/stores/use-user-store'
+import useAudioPlayer from '@/hooks/use-audio-player'
+import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 
 const kolHref = ''
 const communityHref = ''
@@ -21,6 +23,7 @@ export const Ids = () => {
   const { userInfo } = useUserStore()
   const { setConnectOpen } = useWalletStore()
   const { ids } = useIds()
+  const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
 
   const communityMap = {
     [CommunityCategory.Chat]: t('member'),
@@ -86,7 +89,7 @@ export const Ids = () => {
 
   return (
     <>
-      <audio autoPlay>
+      <audio autoPlay={isPlayAirdropAudio} onPlay={() => setIsPlayAirdropAudio(false)}>
         <source src="/audio/rap-dos-memes.mp3" type="audio/mpeg"/>
       </audio>
       <h1 className="text-2xl">{t('my.identity')}</h1>
