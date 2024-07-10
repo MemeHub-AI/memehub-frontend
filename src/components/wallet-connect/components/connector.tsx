@@ -28,31 +28,33 @@ export const WalletConnector = () => {
       >
         {disabled ? t('wallet.connecting') : !isMobile ? t('wallet.connect') : t('connect')}
       </Button>
-      <Dialog
-        open={connectOpen}
-        onOpenChange={(value) => setConnectOpen(value)}
-      >
-        <DialogTitle>{t('walle.select')}</DialogTitle>
-        {/* Exclude `injected` connect */}
-        {connectors.slice(1).map((c, i) => (
-          <Button
-            key={i}
-            size="lg"
-            variant="outline"
-            shadow="none"
-            className="flex w-full hover:bg-zinc-100"
-            onClick={() => connectWallet(c)}
-          >
-            <Avatar
-              src={c.icon ?? ''}
-              fallback={c.name.charAt(0)}
-              size={isMobile ? 22 : 24}
-              className="mr-2 rounded-none"
-            />
-            <span>{c.name}</span>
-          </Button>
-        ))}
-      </Dialog>
+      <div className='fixed z-[100000000000000]'>
+        <Dialog
+          open={connectOpen}
+          onOpenChange={(value) => setConnectOpen(value)}
+        >
+          <DialogTitle>{t('walle.select')}</DialogTitle>
+            {/* Exclude `injected` connect */}
+            {connectors.slice(1).map((c, i) => (
+              <Button
+                key={i}
+                size="lg"
+                variant="outline"
+                shadow="none"
+                className="flex w-full hover:bg-zinc-100"
+                onClick={() => connectWallet(c)}
+              >
+                <Avatar
+                  src={c.icon ?? ''}
+                  fallback={c.name.charAt(0)}
+                  size={isMobile ? 22 : 24}
+                  className="mr-2 rounded-none"
+                />
+                <span>{c.name}</span>
+              </Button>
+            ))}
+        </Dialog>
+      </div>
     </>
   )
 }
