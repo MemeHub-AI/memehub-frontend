@@ -319,7 +319,7 @@
   "kol.ambassador": "KOL Ambassador",
   "kol.desc": "Currently, there are $1 KOL ambassadors collaborating with Memehub, and they will receive a significant amount of token airdrops",
   "communitie.ambassador": "COMMUNITIES",
-  "community.desc": "Currently, there is 1 community collaborating with Memehub, and community members will receive a significant amount of token airdrops",
+  "community.desc": "Currently, there is $1 community collaborating with Memehub, and community members will receive a significant amount of token airdrops",
   "community": "COMMUNITIES",
   "ideas": "💡Ideas",
   "meme.story": "👏Meme story",
@@ -490,5 +490,8 @@
   "airdrop.community.desc1": "Memehub will airdop $1% of the tokens to $2 to members of many well-known communities, with each person receiving $3%.",
   "airdrop.community.desc2": "If not claimed within $1 hours, all airdropped tokens will be destroyed.",
   "airdrop.community.desc3": "This will bring extensive influence to your Memecoin.",
-  "airdrop.community.desc4": "Don't worry about memebers selling, because the funds brought in by purchases far exceed the sales from the airdropped tokens."
+  "airdrop.community.desc4": "Don't worry about memebers selling, because the funds brought in by purchases far exceed the sales from the airdropped tokens.",
+  "coming soon": "Coming soon",
+  "search.kol": "Search for KOL",
+  "search.community": "Searching for communities"
 }

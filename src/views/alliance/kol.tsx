@@ -8,14 +8,23 @@ import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
+import Input from '@/components/input'
+import { cn } from '@/lib/utils'
+import { useState } from 'react'
+import { debounce } from 'lodash'
+import { IoSearch } from 'react-icons/io5'
 
 export const Kol = () => {
   const { t } = useTranslation()
   const { userInfo } = useUserStore()
+  const [value, setValue] = useState('')
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryKey: [allianceApi.getKols.name],
+    queryKey: [allianceApi.getKols.name, value],
     queryFn: async ({ pageParam }) => {
-      const { data } = await allianceApi.getKols({ page: pageParam })
+      const { data } = await allianceApi.getKols({
+        page: pageParam,
+        search: value,
+      })
       return data
     },
     initialPageParam: 1,
@@ -50,6 +59,8 @@ export const Kol = () => {
   }
 
   const kols = data?.kol
+  const onChange = debounce((value) => setValue(value), 300)
+
   return (
     <>
       <div className="pb-5 pr-4 max-sm:pr-0">
@@ -65,9 +76,31 @@ export const Kol = () => {
           {t('kol.desc').replace('$1', `${data?.total}` || '-')}
         </div>
 
-        {userInfo?.role?.kol ? null : <Button>{t('apply.kol')}</Button>}
+        <div>
+          <Input
+            className={cn('max-w-[300px] max-sm:max-w-full border-1')}
+            onChange={({ target }) => onChange(target.value)}
+            placeholder={t('search.kol')}
+          />
+        </div>
+
+        {/* {userInfo?.role?.kol ? null : <Button>{t('apply.kol')}</Button>} */}
+        {/* <Input
+          className={cn('shadow-offset h-9 select-none', className)}
+          value={value}
+          onChange={({ target }) => setValue(target.value)}
+          placeholder={t('search.placeholder')}
+          startIcon={
+            <MagnifyingGlassIcon
+              width={18}
+              height={18}
+              className="cursor-pointer ml-2"
+              onClick={onSearch}
+            />
+          }
+        /> */}
         <CustomSuspense
-          className="mt-5 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 w-full"
+          className="mt-4 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 w-full"
           isPending={isLoading}
           fallback={<CardSkeleton></CardSkeleton>}
           nullback={<div className="mt-4">{t('no.kol')}</div>}

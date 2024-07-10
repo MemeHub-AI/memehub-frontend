@@ -28,7 +28,7 @@ export const HeaderDesktop = (props: Props) => {
         <nav className="ml-8 flex items-center">
           <ul className="flex items-center gap-2">
             {navs.map((n, i) => {
-              if(n.path === Routes.Moonshot || n.path === Routes.ClassicMeme)
+              if (n.path === Routes.Moonshot || n.path === Routes.ClassicMeme)
                 return
               return (
                 <li key={i}>
@@ -37,7 +37,7 @@ export const HeaderDesktop = (props: Props) => {
                       'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
                       'hover:border-black text-nowrap font-bold xl:px-4',
                       router.pathname === n.path &&
-                      'bg-black text-white border-black'
+                        'bg-black text-white border-black'
                     )}
                     onClick={() => onNavClick?.(n)}
                   >
@@ -53,9 +53,9 @@ export const HeaderDesktop = (props: Props) => {
         {/* <SearchInput /> */}
         <RewardButton />
         <LangSelect className="flex-shrink-0" />
-        <Button onClick={() => router.push(Routes.Create)}>
+        {/* <Button onClick={() => router.push(Routes.Create)}>
           {t('create.token')}
-        </Button>
+        </Button> */}
         <WalletConnect />
       </div>
     </>

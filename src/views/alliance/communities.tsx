@@ -8,15 +8,22 @@ import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
+import { useState } from 'react'
+import Input from '@/components/input'
+import { cn } from '@/lib/utils'
+import { debounce } from 'lodash'
 
 export const Communities = () => {
   const { t } = useTranslation()
-
+  const [value, setValue] = useState('')
   const { userInfo } = useUserStore()
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryKey: [allianceApi.getCommunity.name],
+    queryKey: [allianceApi.getCommunity.name, value],
     queryFn: async ({ pageParam }) => {
-      const { data } = await allianceApi.getCommunity({ page: pageParam })
+      const { data } = await allianceApi.getCommunity({
+        page: pageParam,
+        search: value,
+      })
       return data
     },
     initialPageParam: 1,
@@ -51,6 +58,8 @@ export const Communities = () => {
     }
   }
 
+  const onChange = debounce((value) => setValue(value), 300)
+
   return (
     <>
       <div className="pb-5 pr-4 max-sm:pr-0">
@@ -65,9 +74,16 @@ export const Communities = () => {
         <div className="my-3">
           {t('community.desc').replace('$1', `${data?.total}` || '-')}
         </div>
-        {userInfo?.role?.community ? null : (
+        {/* {userInfo?.role?.community ? null : (
           <Button>{t('apply.community')}</Button>
-        )}
+        )} */}
+        <div>
+          <Input
+            className={cn('max-w-[300px] max-sm:max-w-full border-1')}
+            onChange={({ target }) => onChange(target.value)}
+            placeholder={t('search.community')}
+          />
+        </div>
         <CustomSuspense
           className="mt-5 gap-4 w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"
           isPending={isLoading}

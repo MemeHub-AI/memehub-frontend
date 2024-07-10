@@ -99,14 +99,14 @@ export const HeaderMobile = (props: Props) => {
         {isConnected && (
           <RewardButton className="max-sm:px-2" showReferral={false} />
         )}
-        <Button
+        {/* <Button
           variant="outline"
           className="mx-3 max-sm:mx-0"
           size={'sm'}
           onClick={() => router.push(Routes.Create)}
         >
           {t('create.token')}
-        </Button>
+        </Button> */}
         <WalletConnect />
       </div>
     </>

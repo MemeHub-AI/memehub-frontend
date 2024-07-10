@@ -88,7 +88,7 @@ export const Ids = () => {
     <>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
-      {userInfo?.role?.kol ? null : (
+      {/* {userInfo?.role?.kol ? null : (
         <div className="mt-4">
           <Link
             href={kolHref}
@@ -111,7 +111,7 @@ export const Ids = () => {
           </Link>
           <span className="ml-2">{t('community.airdrops')}</span>
         </div>
-      )}
+      )} */}
     </>
   )
 }

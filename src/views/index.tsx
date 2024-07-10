@@ -6,8 +6,10 @@ import { AIIdeaBar } from '@/components/ai-idea-bar'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
 import { PrimaryLayout } from '@/components/layouts/primary'
+import { useTranslation } from 'react-i18next'
 
 export const MainPage = () => {
+  const { t } = useTranslation()
   const { tokens, totalToken, isLoading, isFetching, fetchNextPage } =
     useTokens()
 
@@ -23,6 +25,8 @@ export const MainPage = () => {
 
   return (
     <PrimaryLayout>
+      <div className="mt-5 text-2xl">{t('coming soon')}</div>
+      {/*       
       <div className="flex-1 max-sm:mt-2">
         <AIIdeaBar
           className="max-sm:mb-3"
@@ -44,7 +48,7 @@ export const MainPage = () => {
           onCancel={onCancel}
           onConfirm={onConfirm}
         />
-      </div>
+      </div> */}
     </PrimaryLayout>
   )
 }
