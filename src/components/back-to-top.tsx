@@ -15,7 +15,7 @@ export const BackToTop = () => {
     <Button
       size="icon"
       className={cn(
-        'fixed right-14 bottom-14 max-sm:right-4 transition-all bg-white max-sm:bottom-[8vh] max-sm:w-[10vw] max-sm:h-[10vw]',
+        'fixed right-14 bottom-14 max-sm:right-4 transition-all bg-white max-sm:bottom-[10vh] max-sm:w-[10vw] max-sm:h-[10vw]',
         isShow ? 'scale-100' : 'scale-0'
       )}
       onClick={() => window.scrollTo({ top: 0 })}

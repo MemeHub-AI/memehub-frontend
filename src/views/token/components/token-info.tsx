@@ -111,12 +111,13 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
         </div>
         {/* Links */}
-        <div className="flex justify-center items-center my-1 max-sm:m-0">
+        <div className="space-x-2 flex justify-center items-center my-1 max-sm:m-0">
           {tokenInfo?.twitter_url && (
             <Button
               variant="ghost"
               size="icon"
               shadow="none"
+              className='bg-lime-green-deep'
               onClick={() => open(tokenInfo.twitter_url)}
               title="twitter"
             >
@@ -128,6 +129,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
               variant="ghost"
               size="icon"
               shadow="none"
+              className='bg-lime-green-deep'
               onClick={() => open(tokenInfo?.telegram_url)}
               title="telegram"
             >
@@ -139,6 +141,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
               variant="ghost"
               size="icon"
               shadow="none"
+              className='bg-lime-green-deep'
               onClick={() => open(tokenInfo?.website)}
               title="website"
             >
