@@ -19,3 +19,8 @@ export interface PaginationRes<T> {
   count: number
   results?: T[]
 }
+
+export interface Locale {
+  zh?: string
+  en?: string
+}
