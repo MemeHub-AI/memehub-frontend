@@ -492,5 +492,7 @@
   "airdrop.community.desc3": "This will bring extensive influence to your Memecoin.",
   "airdrop.community.desc4": "Don't worry about memebers selling, because the funds brought in by purchases far exceed the sales from the airdropped tokens.",
   "connect": "Connect",
-  "price": "Price"
+  "price": "Price",
+  "community.count": "Community population",
+  "founder": "Founder"
 }

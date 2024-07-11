@@ -17,6 +17,7 @@ import { AirdropItem } from '@/api/airdrop/types'
 import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
 import { MarketType } from '@/api/token/types'
 import { useResponsive } from '@/hooks/use-responsive'
+import { utilLang } from '@/utils/lang'
 
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
@@ -237,7 +238,8 @@ const AirdropCard = (props: AirdropCardProps) => {
             className="w-10 h-10 rounded-r-none"
           />
           <span className="ml-2">
-            {baseInfo.kol_name || baseInfo.community_name} {suffix}
+            {utilLang.locale(baseInfo.kol_name || baseInfo.community_name)}
+            {suffix}
           </span>
           <img src="/images/check.png" alt="check" className="w-6 h-6 ml-2" />
         </div>

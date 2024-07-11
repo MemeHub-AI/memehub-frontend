@@ -20,5 +20,5 @@ export interface CommunityListItem {
   description: string
   id: string
   logo: string
-  name: string
+  name: Locale
 }

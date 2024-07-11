@@ -13,6 +13,8 @@ import { useAirdropInfo } from '../hooks/use-airdrop-info'
 import { fmt } from '@/utils/fmt'
 import { MarketType } from '@/api/token/types'
 import { useAirdropContext } from '@/contexts/airdrop'
+import { utilLang } from '@/utils/lang'
+import { IdTag } from '@/components/id-tag'
 
 interface Props {
   airdrop: AirdropItem | undefined
@@ -60,26 +62,16 @@ export const AirdropCard = ({ airdrop, className }: Props) => {
       </div>
       <div className="mt-3 flex justify-between space-x-4">
         <div>
-          <div className="flex items-center justify-between rounded bg-lime-green">
-            <div className="flex items-center w-[150px]">
-              <Img
-                src={airdrop?.kol_logo || airdrop?.community_logo}
-                alt="avatar"
-                className="w-10 h-10 shrink-0 rounded-r-none"
-              />
-              <span className="mx-2 truncate w-[80%]">
-                {airdrop?.kol_name || airdrop?.community_name}
-              </span>
-            </div>
-            <img
-              src="/images/check.png"
-              alt="Avatar"
-              className="w-10 h-10 p-2"
-            />
-          </div>
+          <IdTag
+            src={airdrop?.kol_logo || airdrop?.community_logo}
+            title={utilLang.locale(
+              airdrop?.kol_name || airdrop?.community_name
+            )}
+            containerClass="w-[150px]"
+          />
           <div className="mt-3 flex items-center">
             <img src="/images/gift.png" alt="gift" className="w-6 h-6" />
-            <span className="ml-2 text-gray-500 break-all">
+            <span className="ml-2 text-gray-500 break-all line-clamp-1">
               {BigNumber(airdrop?.amount ?? 0).toFormat()} {airdrop?.ticker}
             </span>
           </div>
