@@ -10,7 +10,7 @@ interface Props extends AlertDialogPrimitive.AlertDialogProps {
   title?: React.ReactNode
   description?: React.ReactNode
   content?: React.ReactNode
-  triggerProps?: AlertDialogPrimitive.DialogTriggerProps
+  triggerProps?: AlertDialogPrimitive.AlertDialogTriggerProps
   footerClass?: string
   showFooter?: boolean
   showCancel?: boolean
@@ -65,7 +65,7 @@ const AlertDialog = React.forwardRef<
         {showFooter && (
           <AlertDialogFooter
             className={cn(
-              'sm:justify-start max-sm:flex max-sm:flex-row max-sm:gap-4',
+              'sm:justify-start max-sm:flex max-sm:flex-row max-sm:space-x-4',
               footerClass,
               // Add `mr-3` offset, because button have shadow.
               align === 'center' && '!justify-center mr-3'
@@ -97,14 +97,15 @@ const AlertDialogOverlay = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Overlay
-    className={cn(
-      'fixed inset-0 z-[1000000000] bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-      className
-    )}
-    {...props}
-    ref={ref}
-  />
+  <div className='fixed left-0 top-0 w-full h-full z-[10000] bg-black/80'>
+    <AlertDialogPrimitive.Overlay
+      className={cn(
+        'fixed inset-0 z-[10000] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+        className
+      )}
+      {...props}
+      ref={ref}
+    /></div>
 ))
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
 

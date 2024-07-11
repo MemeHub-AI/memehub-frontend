@@ -33,14 +33,16 @@ const DialogOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <DialogPrimitive.Overlay
+   <div className={cn('fixed left-0 top-0 w-full h-full z-50 bg-black/80', className)}>
+    <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-[1000000000] bg-black/80  data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+      'fixed inset-0 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
       className
     )}
     {...props}
   />
+  // </div>
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
 
@@ -60,7 +62,7 @@ const DialogContent = React.forwardRef<
       onOpenAutoFocus={(e) => e.preventDefault()}
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[50%] z-[1000000001] grid w-full max-w-lg',
+        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg',
         'translate-x-[-50%] translate-y-[-50%] gap-4 border',
         'bg-background p-6 shadow-lg duration-200',
         'data-[state=open]:animate-in data-[state=closed]:animate-out',

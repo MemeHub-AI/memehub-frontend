@@ -57,7 +57,7 @@ export const TradeTable = () => {
             {ths.map((t, i) => (
               <TableHead
                 key={i}
-                className={cn(i === 0 && 'w-[100px]', 'px-2 text-nowrap')}
+                className={cn('px-2 text-nowrap whitespace-nowrap')}
               >
                 {/* Date field */}
                 {i === ths.length - 2 ? (
@@ -68,7 +68,7 @@ export const TradeTable = () => {
                       setTableShowAge(String(!showAge))
                     }}
                   >
-                    <span className="ml-1">{t}</span>
+                    <span>{t}</span>
                     <ArrowLeftRight size={12} />
                   </div>
                 ) : (

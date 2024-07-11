@@ -12,6 +12,9 @@ import { useTokenContext } from '@/contexts/token'
 import { BsArrowDownUp } from 'react-icons/bs'
 import { BsGraphUpArrow } from 'react-icons/bs'
 import { LuUsers } from 'react-icons/lu'
+import { useMemo, useState } from 'react'
+import dayjs from 'dayjs'
+import { taraxa } from 'viem/chains'
 
 const enum TabName {
   trade = '0',
@@ -27,13 +30,44 @@ export const TokenMobile = () => {
 
   const tab = location.search.match(tabReg)?.[1] || TabName.trade
   const { t } = useTranslation()
+  const [isExpired, setIsExpired] = useState(false)
 
+  /** Gets the airdrop creation time */
+  const getCreateTime = (createdAt: number, duration: number) => {
+    const createTime = dayjs.unix(createdAt).add(duration, 'second')
+    return createTime
+  }
+
+  /** Determine if the airdrop has expired */
+  const isExpiredAPI = (createdAt: number, duration: number) => {
+    const currentTime = dayjs()
+    const diff = getCreateTime(createdAt, duration).diff(currentTime, 'second')
+    if (diff < 0) return true
+    return false
+  }
+
+  /**
+   * Determine how many airdrops are available
+   * @returns count - How many airdrops can be picked up
+   */
   const getCount = () => {
     let count = 0
-    if (airdrop.kol && !airdrop.kolAirdropInfo.isClaimed) {
+    console.log(isExpiredAPI(airdrop.communities?.create ?? 0, airdrop.communitiesAirdropInfo.durationSeconds));
+    
+    if (
+      airdrop.kol &&
+      !airdrop.kolAirdropInfo.isClaimed &&
+      !airdrop.kolAirdrop.isBurn &&
+      !isExpiredAPI(airdrop.kol.create ?? 0, airdrop.kolAirdropInfo.durationSeconds)
+    ) {
       count++
     }
-    if (airdrop.communities && !airdrop.communitiesAirdropInfo.isClaimed) {
+    if (
+      airdrop.communities &&
+      !airdrop.communitiesAirdropInfo.isClaimed &&
+      !airdrop.communitiesAirdrop.isBurn &&
+      !isExpiredAPI(airdrop.communities.create ?? 0, airdrop.communitiesAirdropInfo.durationSeconds)
+    ) {
       count++
     }
     return count
@@ -70,12 +104,12 @@ export const TokenMobile = () => {
       <div className="h-[36px] mb-2">
         <div className="fixed left-0 bottom-0 w-full">
           <TabsList className="h-11 grid w-full rounded-none grid-cols-3 bg-white">
-            <TabsTrigger value={TabName.trade}>
+            <TabsTrigger value={TabName.trade} className='bg-white'>
               <BsArrowDownUp className="mr-1" size={16}></BsArrowDownUp>
               {t('trade.tab')}
             </TabsTrigger>
             <TabsTrigger
-              className="border-x-2 border-black relative"
+              className="border-x-2 border-black relative bg-white"
               value={TabName.chart}
             >
               <BsGraphUpArrow className="mr-1" size={16}></BsGraphUpArrow>
@@ -91,7 +125,7 @@ export const TokenMobile = () => {
                 </div>
               ) : null}
             </TabsTrigger>
-            <TabsTrigger value={TabName.holder}>
+            <TabsTrigger value={TabName.holder} className='bg-white'>
               <LuUsers className="mr-1" size={20}></LuUsers>
               {t('holder')}
             </TabsTrigger>

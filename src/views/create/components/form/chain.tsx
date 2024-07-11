@@ -75,7 +75,7 @@ export const FormChain = ({ formData }: Props) => {
             {chains ? (
               <RadioGroup
                 defaultValue={field.value}
-                className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap max-w-[300px]  max-sm:w-max"
+                className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap max-w-[300px] max-sm:w-max"
               >
                 {chains.slice(0, 7)?.map((c, i) => (
                   <FormItem

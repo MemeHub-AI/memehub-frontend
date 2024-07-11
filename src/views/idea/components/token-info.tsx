@@ -114,7 +114,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
         <span className="font-bold break-all">{ideaData?.name}</span>
         {Object.keys(chains).length === 0 ? (
           <span
-            className="ml-2 cursor-pointer text-nowrap text-base leading-5 text-blue-500"
+            className="ml-2 cursor-pointer text-nowrap text-base leading-5 text-blue-500 whitespace-nowrap"
             onClick={() => onCreateNow(ideaData!)}
           >
             {t('create.now')}

@@ -64,12 +64,11 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
   }
 
   return (
-    <div className="flex mt-3 flex-wrap">
+    <div className="flex mt-3 flex-nowrap space-x-2 overflow-x-auto">
       {(isBuy ? buyItems : sellItems).map((v, i) => (
         <Button
           size="xs"
           shadow="none"
-          className={i === 0 ? '' : 'ml-2'}
           key={i}
           onClick={() => {
             isBuy ? onBuyClick(v) : onSellClick(v)

@@ -16,7 +16,7 @@ interface AmbassadorCardProps {
 export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
   return (
     <Card
-      className="flex p-4 hover:scale-102 gap-2"
+      className="flex p-4 hover:scale-102"
       shadow={'none'}
       onClick={() => {
         if (!data?.twitter_url && !data?.telegram_url) return
@@ -29,9 +29,9 @@ export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
       <Img
         src={data?.logo || defaultImg}
         alt="Avatar"
-        className="w-24 h-24 xl:w-32 xl:h-32 rounded-full border-2 border-black"
+        className="w-24 h-24 flex-shrink-0 xl:w-32 xl:h-32 rounded-full border-2 border-black"
       />
-      <div className="ml-2">
+      <div className="ml-4">
         <h2
           className="text-2xl max-sm:text-xl break-all line-clamp-2"
           title={data?.name}

@@ -35,13 +35,13 @@ export const SocialLinks = ({
           size={size}
           variant="ghost"
           shadow="none"
-          className="w-full gap-2 px-2 justify-start items-start max-sm:!px-0 max-sm:py-2"
+          className="w-full space-x-2 px-2 justify-start items-start max-sm:!px-0 max-sm:py-2"
           onClick={() => {
             if (l.link) open(l.link)
           }}
         >
-          {l.icon}
-          {l.name}
+          <span>{l.icon}</span>
+          <span>{l.name}</span>
         </Button>
       ))}
     </div>

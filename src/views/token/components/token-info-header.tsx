@@ -68,14 +68,14 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
 
         {isMobile && (
           <div
-            className="text-sm flex items-center gap-2 cursor-pointer"
+            className="text-sm flex items-center space-x-2 cursor-pointer"
             onClick={() => copy(tokenInfo?.address || '')}
           >
             <span>{t('ca')}:</span>
             <span className="truncate">
               {fmt.addr(tokenInfo?.address || '', { len: 14 })}
             </span>
-            {isCopied ? <Check size={16} /> : <Copy size={16} />}
+            <span>{isCopied ? <Check size={16} /> : <Copy size={16} />}</span>
           </div>
         )}
 

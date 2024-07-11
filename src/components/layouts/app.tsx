@@ -45,7 +45,7 @@ export const AppLayout = ({ children }: ComponentProps<'div'>) => {
   }, [i18n.language])
 
   if (isNotMounted) return <></>
-
+  
   return (
     <>
       <Header />
