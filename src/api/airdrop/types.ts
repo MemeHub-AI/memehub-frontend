@@ -1,4 +1,5 @@
 import { Hash } from 'viem'
+import { Locale } from '../types'
 
 export interface AirdropMerkleRootReq {
   chain: string
@@ -30,7 +31,7 @@ export interface IdentityList {
 
 export interface Kol {
   id: number
-  name: string
+  name: Locale
   logo: string
   description: string
 }
@@ -54,9 +55,9 @@ export interface AirdropItem {
   address: string
   chain: string
   distribution_id: number
-  community_name?: string
+  community_name?: Locale
   community_logo?: string
-  kol_name?: string
+  kol_name?: Locale
   kol_logo?: string
   airdrop_type: number
 }

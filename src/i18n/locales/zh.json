@@ -482,5 +482,7 @@
   "airdrop.community.desc3": "这将为您的Memecoin带来广泛的影响力。",
   "airdrop.community.desc4": "不必担心成员出售空投代币，因为通过购买带来的资金远远超过空投代币的销售。",
   "connect": "连接钱包",
-  "price": "价格"
+  "price": "价格",
+  "community.count": "社区人数",
+  "founder": "创始人"
 }

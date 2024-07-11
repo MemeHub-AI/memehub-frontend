@@ -2,12 +2,12 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { allianceApi } from '@/api/alliance'
-import { AmbassadorCard } from '@/components/ambassador-card'
 import CustomSuspense from '@/components/custom-suspense'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
+import { KolCard } from '@/components/kol-card'
 
 export const Kol = () => {
   const { t } = useTranslation()
@@ -67,13 +67,13 @@ export const Kol = () => {
 
         {userInfo?.role?.kol ? null : <Button>{t('apply.kol')}</Button>}
         <CustomSuspense
-          className="mt-5 grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4 w-full"
+          className="mt-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-full"
           isPending={isLoading}
           fallback={<CardSkeleton></CardSkeleton>}
           nullback={<div className="mt-4">{t('no.kol')}</div>}
         >
           {kols?.map((kol) => {
-            return <AmbassadorCard key={kol!.id} data={kol}></AmbassadorCard>
+            return <KolCard key={kol!.id} data={kol} />
           })}
         </CustomSuspense>
         {handleLoadStatus()}

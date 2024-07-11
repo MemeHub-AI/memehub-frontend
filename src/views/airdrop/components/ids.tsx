@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils'
 import { useUserStore } from '@/stores/use-user-store'
 import useAudioPlayer from '@/hooks/use-audio-player'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
+import { utilLang } from '@/utils/lang'
 
 const kolHref = ''
 const communityHref = ''
@@ -62,7 +63,7 @@ export const Ids = () => {
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {ids?.kol?.name} {t('ambassador')}
+              {utilLang.locale(ids?.kol?.name)} {t('ambassador')}
             </span>
             <CheckIcon />
           </div>
@@ -78,7 +79,7 @@ export const Ids = () => {
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {c.name} {communityMap[c.category]}
+              {utilLang.locale(c.name)} {communityMap[c.category]}
             </span>
             <CheckIcon />
           </div>
@@ -89,8 +90,11 @@ export const Ids = () => {
 
   return (
     <>
-      <audio autoPlay={isPlayAirdropAudio} onPlay={() => setIsPlayAirdropAudio(false)}>
-        <source src="/audio/rap-dos-memes.mp3" type="audio/mpeg"/>
+      <audio
+        autoPlay={isPlayAirdropAudio}
+        onPlay={() => setIsPlayAirdropAudio(false)}
+      >
+        <source src="/audio/rap-dos-memes.mp3" type="audio/mpeg" />
       </audio>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}

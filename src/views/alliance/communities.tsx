@@ -2,12 +2,12 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { allianceApi } from '@/api/alliance'
-import { AmbassadorCard } from '@/components/ambassador-card'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
+import { CommunityCard } from '@/components/community-card'
 
 export const Communities = () => {
   const { t } = useTranslation()
@@ -74,13 +74,8 @@ export const Communities = () => {
           fallback={<CardSkeleton></CardSkeleton>}
           nullback={<div className="mt-4">{t('no.communities')}</div>}
         >
-          {communities?.map((communitie) => {
-            return (
-              <AmbassadorCard
-                key={communitie!.id}
-                data={communitie!}
-              ></AmbassadorCard>
-            )
+          {communities?.map((c) => {
+            return <CommunityCard key={c!.id} data={c} />
           })}
         </CustomSuspense>
         {handleLoadStatus()}
