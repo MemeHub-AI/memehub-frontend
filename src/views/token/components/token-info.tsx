@@ -1,15 +1,12 @@
 import React, { useState, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Copy, Twitter, Check } from 'lucide-react'
-import { FaTelegramPlane } from 'react-icons/fa'
-import { RiGlobalLine } from 'react-icons/ri'
+import { Copy, Check } from 'lucide-react'
 import { BigNumber } from 'bignumber.js'
 
 import { cn } from '@/lib/utils'
 import { Dialog } from '@/components/ui/dialog'
 import { useTokenContext } from '@/contexts/token'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
@@ -21,6 +18,7 @@ import { Badge } from '@/components/ui/badge'
 import { usePools } from '../hooks/use-pools'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { PosterImages } from '@/components/poster-images'
+import { TokenLinks } from './token-links'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -73,11 +71,13 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         >
           {details}
         </Dialog>
+
         {/* Chain logo */}
         <div className="absolute left-2 top-2 flex items-center gap-1">
           <Avatar src={chain?.logo} size={20} />
           <p className="text-sm max-w-20 break-all">{chain?.displayName}</p>
         </div>
+
         {/* Logo */}
         <div className="relative">
           <Avatar
@@ -104,51 +104,16 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
             </Badge>
           )}
         </div>
+
         {/* Name/symbol */}
         <div className="font-bold leading-none text-center pt-16 max-sm:pt-14">
           {isNotFound
             ? t('token.not-found')
             : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
         </div>
+
         {/* Links */}
-        <div className="space-x-2 flex justify-center items-center my-1 max-sm:m-0">
-          {tokenInfo?.twitter_url && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              className='bg-lime-green-deep'
-              onClick={() => open(tokenInfo.twitter_url)}
-              title="twitter"
-            >
-              <Twitter size={20} />
-            </Button>
-          )}
-          {tokenInfo?.telegram_url && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              className='bg-lime-green-deep'
-              onClick={() => open(tokenInfo?.telegram_url)}
-              title="telegram"
-            >
-              <FaTelegramPlane size={20} />
-            </Button>
-          )}
-          {tokenInfo?.website && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              className='bg-lime-green-deep'
-              onClick={() => open(tokenInfo?.website)}
-              title="website"
-            >
-              <RiGlobalLine size={20} />
-            </Button>
-          )}
-        </div>
+        <TokenLinks />
 
         {/* Poster */}
         <PosterImages

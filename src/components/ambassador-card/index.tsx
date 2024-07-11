@@ -2,15 +2,11 @@ import { defaultImg } from '@/config/link'
 import { Card } from '../ui/card'
 import { Img } from '../img'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
+import { KolListItem } from '@/api/alliance/type'
+import { utilLang } from '@/utils/lang'
 
 interface AmbassadorCardProps {
-  data?: {
-    logo: string
-    name: string
-    description: string
-    twitter_url?: string
-    telegram_url?: string
-  }
+  data?: KolListItem
 }
 
 export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
@@ -34,9 +30,9 @@ export const AmbassadorCard = ({ data }: AmbassadorCardProps) => {
       <div className="ml-4">
         <h2
           className="text-2xl max-sm:text-xl break-all line-clamp-2"
-          title={data?.name}
+          title={utilLang.locale(data?.name)}
         >
-          {data?.name}
+          {utilLang.locale(data?.name)}
         </h2>
         <div className="mt-2 break-all line-clamp-2" title={data?.description}>
           {data?.description}
