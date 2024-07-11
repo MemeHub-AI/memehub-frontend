@@ -28,7 +28,14 @@ export const KolCard = ({ data }: Props) => {
       }}
     >
       <div className="flex space-x-4 relative">
-        <img src="/images/x.png" alt="x" className="absolute top-0 right-0" />
+        <img
+          src="/images/x.png"
+          alt="x"
+          className="absolute top-0 right-0"
+          onClick={() =>
+            open(utilsUrl.mediaUrl(data?.twitter_url, URL_TYPE.TWITTER))
+          }
+        />
         <Img
           src={data?.logo || defaultImg}
           alt="Avatar"
