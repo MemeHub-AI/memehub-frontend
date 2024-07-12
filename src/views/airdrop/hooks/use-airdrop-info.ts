@@ -1,11 +1,13 @@
-import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { getV3Config } from '@/contract/v3/config'
 import { MarketType } from '@/api/token/types'
 import { BI_ZERO } from '@/constants/number'
+import { v3Addr } from '@/contract/v3/address'
+import { v3DistributorAbi } from '@/contract/v3/abi/distributor'
+import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
+import { v3TokenAbi } from '@/contract/v3/abi/token'
 
 export const useAirdropInfo = (
   type: MarketType,
@@ -17,21 +19,16 @@ export const useAirdropInfo = (
   const { address } = useAccount()
   const { chainId } = useChainInfo(chainName)
 
-  const { isKol, distributorConfig, bondingCurveConfig, tokenConfig } =
-    useMemo(() => {
-      return {
-        isKol: type === MarketType.Kol,
-        isCommunity: type === MarketType.Community,
-        ...getV3Config(chainId),
-      }
-    }, [type, chainId])
+  const { distributor, bondingCurve } = v3Addr[chainId] ?? {}
+  const isKol = type === MarketType.Kol
 
   const { data: airdropInfo = [], refetch } = useReadContract({
-    ...distributorConfig!,
+    abi: v3DistributorAbi,
+    address: distributor,
     functionName: 'distributions',
-    args: [BigInt(id)],
     chainId,
-    query: { enabled: !!distributorConfig },
+    args: [BigInt(id)],
+    query: { enabled: !!distributor },
   })
   const [
     tokenAddr,
@@ -50,27 +47,29 @@ export const useAirdropInfo = (
   const perAmount = formatEther(isKol ? kolAmount : communityAmount)
 
   const { data: ratio = BI_ZERO } = useReadContract({
-    ...bondingCurveConfig!,
-    chainId,
+    abi: v3BondingCurveAbi,
+    address: bondingCurve,
     functionName: 'airdropRate_',
-    query: { enabled: !!bondingCurveConfig },
+    chainId,
+    query: { enabled: !!bondingCurve },
   })
   const { data: totalSupply = BI_ZERO } = useReadContract({
-    ...tokenConfig!,
+    abi: v3TokenAbi,
     address: tokenAddr,
     chainId,
     functionName: 'totalSupply',
-    query: { enabled: !!tokenConfig },
+    query: { enabled: !!tokenAddr },
   })
   const airdropRatio = Number(ratio) / 100 / 100
   const totalAirdrop = +formatEther(totalSupply) * airdropRatio
   const remain = totalAirdrop - claimed * +perAmount
 
   const { data: duration = BI_ZERO } = useReadContract({
-    ...distributorConfig!,
+    abi: v3DistributorAbi,
+    address: distributor,
     functionName: 'duration',
     chainId,
-    query: { enabled: !!distributorConfig },
+    query: { enabled: !!distributor },
   })
   const durationSeconds = Number(duration)
 
@@ -80,7 +79,8 @@ export const useAirdropInfo = (
     isFetching: isFetchingKol,
     refetch: refetchKol,
   } = useReadContract({
-    ...distributorConfig!,
+    abi: v3DistributorAbi,
+    address: distributor,
     functionName: 'isClaimedKOL',
     args: [BigInt(id), address!],
     chainId,
@@ -93,20 +93,13 @@ export const useAirdropInfo = (
     isFetching: isFetchingCommunity,
     refetch: refetchCommunity,
   } = useReadContract({
-    ...distributorConfig!,
+    abi: v3DistributorAbi,
     functionName: 'isClaimedCommunity',
     args: [BigInt(id), address!],
     chainId,
     query: { enabled: !!address && type === MarketType.Community },
   })
   const isClaimed = isKol ? isKolClaimed : isCommunityClaimed
-
-  const { data: isBurned } = useReadContract({
-    ...distributorConfig!,
-    chainId,
-    functionName: 'isBurn',
-    args: [BigInt(id)],
-  })
 
   const refetchIsClaimed = () => {
     refetchKol()

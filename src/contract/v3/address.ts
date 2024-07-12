@@ -1,10 +1,13 @@
+import { Address } from 'viem'
 import { bscTestnet, opBNBTestnet, bsc, blast, base } from 'wagmi/chains'
 
 import { dotenv } from '@/utils/env'
 
-const prod = {}
+type Keys = 'bondingCurve' | 'distributor' | 'recommend'
 
-const dev = {
+const prod: Record<number, Record<Keys, Address> | undefined> = {}
+
+const dev: Record<number, Record<Keys, Address> | undefined> = {
   [bscTestnet.id]: {
     bondingCurve: '0xfc056f46f12c73eCEA186106f2E830864E739cf8',
     distributor: '0x659e859F60ea89F568530504E0A14A1e383a1081',
