@@ -8,7 +8,7 @@ import {
 } from '../../../../public/js/charting_library/charting_library'
 import { useDatafeed } from './use-datafeed'
 import { useChartStore } from '@/stores/use-chart-store'
-import { chartConfig } from '@/config/chart'
+import { chartOptions, chartOverrides } from '@/config/chart'
 import { parseInterval } from '@/utils/chart'
 
 interface ChartOptions {
@@ -29,7 +29,7 @@ export const useChart = () => {
     setChartEl(container)
     try {
       const chart = new (widget || window.TradingView.widget)({
-        ...chartConfig.options,
+        ...chartOptions,
         container,
         symbol,
         interval: parseInterval(interval) as ResolutionString,
@@ -41,7 +41,7 @@ export const useChart = () => {
 
       chart.onChartReady(() => {
         setChart(chart)
-        chart.applyOverrides(chartConfig.overrides)
+        chart.applyOverrides(chartOverrides)
       })
       return chart
     } catch (error) {

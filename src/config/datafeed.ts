@@ -4,7 +4,7 @@ import {
   ResolutionString,
 } from '../../public/js/charting_library/charting_library'
 
-const readyConfig: DatafeedConfiguration = {
+export const datafeedConfig: DatafeedConfiguration = {
   supported_resolutions: [
     '1',
     '5',
@@ -18,7 +18,7 @@ const readyConfig: DatafeedConfiguration = {
   supports_timescale_marks: true,
 }
 
-const symbolInfo: LibrarySymbolInfo = {
+export const symbolInfoConfig: LibrarySymbolInfo = {
   pricescale: 100,
   minmov: 1,
   visible_plots_set: 'ohlcv',
@@ -32,16 +32,11 @@ const symbolInfo: LibrarySymbolInfo = {
   listed_exchange: 'Memehub',
   format: 'price',
   timezone: 'Etc/UTC',
-  supported_resolutions: readyConfig.supported_resolutions!,
+  supported_resolutions: datafeedConfig.supported_resolutions!,
   has_weekly_and_monthly: true,
   has_seconds: true,
   has_ticks: true,
   has_intraday: true,
   volume_precision: 18,
   currency_code: 'Memehub',
-}
-
-export const datafeedConfig = {
-  readyConfig,
-  symbolInfo,
 }

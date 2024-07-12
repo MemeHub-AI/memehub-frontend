@@ -8,7 +8,7 @@ import { DatafeedBaseData } from './use-datafeed-websocket/types'
 import { useDatafeedCache } from './use-datafeed-cache'
 import { useDatafeedWebsocket } from './use-datafeed-websocket'
 import { useStorage } from '@/hooks/use-storage'
-import { datafeedConfig } from '@/config/datafeed'
+import { datafeedConfig, symbolInfoConfig } from '@/config/datafeed'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { formatInterval, parsePricescale } from '@/utils/chart'
 
@@ -32,7 +32,7 @@ export const useDatafeed = () => {
   const createDatafeed = () => {
     return {
       onReady: (callback) => {
-        setTimeout(() => callback(datafeedConfig.readyConfig))
+        setTimeout(() => callback(datafeedConfig))
         emitter.on('connect_invalid', disconenct)
       },
       searchSymbols(_, __, ___, ____) {},
@@ -45,7 +45,7 @@ export const useDatafeed = () => {
         const bars = data[unit]
         const lastBar = last(bars)
         const symbolInfo: LibrarySymbolInfo = {
-          ...datafeedConfig.symbolInfo,
+          ...symbolInfoConfig,
           name: symbolName,
           full_name: `${symbolName}/USD`,
           description: `${symbolName}/USD`,
