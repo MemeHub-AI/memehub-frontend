@@ -94,6 +94,7 @@ export const useAirdropInfo = (
     refetch: refetchCommunity,
   } = useReadContract({
     abi: v3DistributorAbi,
+    address: distributor,
     functionName: 'isClaimedCommunity',
     args: [BigInt(id), address!],
     chainId,
