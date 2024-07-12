@@ -12,8 +12,6 @@ import { Marketing, TokenNewReq } from '@/api/token/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { useDeployV1 } from './use-deploy-v1'
-import { useDeployV2 } from './use-deploy-v2'
 import { useDeployV3 } from './use-deploy-v3'
 import { getDeployLogAddr, versionOf } from '@/utils/contract'
 import { ContractVersion } from '@/constants/contract'
@@ -68,8 +66,6 @@ export const useDeploy = () => {
     [data]
   )
 
-  const { deployV1 } = useDeployV1(writeContract)
-  const { deployV2 } = useDeployV2(writeContract)
   const { deployV3 } = useDeployV3(writeContract, creationFee)
 
   const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
@@ -88,8 +84,6 @@ export const useDeploy = () => {
     const vIs = versionOf(params.version)
 
     logger('deploy', deployParams, balance, creationFee)
-    if (vIs(ContractVersion.V1)) return deployV1(deployParams)
-    if (vIs(ContractVersion.V2)) return deployV2(deployParams)
     if (vIs(ContractVersion.V3)) return deployV3(deployParams)
   }
 
