@@ -1,4 +1,4 @@
-import { Config } from 'wagmi'
+import { Config, useReadContract } from 'wagmi'
 import { WriteContractMutate } from 'wagmi/query'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash'
@@ -7,18 +7,27 @@ import type { DeployParams } from './use-deploy'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { getV3Config } from '@/contract/v3/config'
 import { AirdropMerkleRootRes } from '@/api/airdrop/types'
 import { MarketType, Marketing } from '@/api/token/types'
 import { v3DistributorParams } from '@/config/v3'
+import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
+import { v3Addr } from '@/contract/v3/address'
+import { BI_ZERO } from '@/constants/number'
 
 export const useDeployV3 = (
-  writeContract: WriteContractMutate<Config, unknown>,
-  fee: bigint
+  writeContract: WriteContractMutate<Config, unknown>
 ) => {
   const { chainId, chainName, walletChainId } = useChainInfo()
   const { getMerkleRoot } = useCreateToken()
-  const { bondingCurveConfig } = getV3Config(walletChainId)
+  const { bondingCurve } = v3Addr[walletChainId ?? 0] ?? {}
+
+  const { data: creationFee = BI_ZERO } = useReadContract({
+    abi: v3BondingCurveAbi,
+    address: bondingCurve,
+    chainId: walletChainId,
+    functionName: 'creationFee_',
+    query: { enabled: !!bondingCurve },
+  })
 
   const parsePercent = (p: number) => {
     return BigNumber(p).multipliedBy(100).multipliedBy(100).toNumber()
@@ -83,7 +92,7 @@ export const useDeployV3 = (
     marketing,
     onSuccess,
   }: DeployParams) => {
-    if (!bondingCurveConfig || !chainId || !chainName) {
+    if (!bondingCurve || !chainId || !chainName) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -97,17 +106,19 @@ export const useDeployV3 = (
     console.log('v3 deploy', airdropParams)
     writeContract(
       {
-        ...bondingCurveConfig,
-        chainId: walletChainId,
+        abi: v3BondingCurveAbi,
+        address: bondingCurve,
         functionName: 'createToken',
+        chainId: walletChainId,
         args: [name, ticker, airdropParams],
-        value: fee,
+        value: creationFee,
       },
       { onSuccess }
     )
   }
 
   return {
+    creationFee,
     deployV3,
   }
 }

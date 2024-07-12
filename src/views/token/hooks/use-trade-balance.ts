@@ -2,15 +2,14 @@ import { formatEther } from 'viem'
 import { useAccount, useBalance, useReadContract } from 'wagmi'
 
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { getV3Config } from '@/contract/v3/config'
 import { useTradeSearchParams } from './use-search-params'
 import { BI_ZERO } from '@/constants/number'
+import { v3TokenAbi } from '@/contract/v3/abi/token'
 
 export const useTradeBalance = () => {
   const { address } = useAccount()
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
-  const { tokenConfig } = getV3Config(chainId)
 
   // Native token balance.
   const {
@@ -29,13 +28,13 @@ export const useTradeBalance = () => {
     isFetching: isFetchingTokenBalance,
     refetch: refetchTokenBalance,
   } = useReadContract({
-    ...tokenConfig!,
+    abi: v3TokenAbi,
     address: tokenAddr,
     functionName: 'balanceOf',
     chainId,
     args: [address!],
     query: {
-      enabled: !!address && !!tokenConfig,
+      enabled: !!address,
       refetchInterval: 5_000,
     },
   })

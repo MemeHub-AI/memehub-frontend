@@ -3,11 +3,12 @@ import { useReadContract } from 'wagmi'
 import { BigNumber } from 'bignumber.js'
 import { Address, formatEther } from 'viem'
 
-import { getV3Config } from '@/contract/v3/config'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { BI_ZERO } from '@/constants/number'
 import { usePools } from '../use-pools'
+import { v3Addr } from '@/contract/v3/address'
+import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
 
 export const useTokenProgressV3 = (
   overrideToken?: Address,
@@ -18,7 +19,7 @@ export const useTokenProgressV3 = (
 
   const token = overrideToken ?? tokenAddr
   const chainId = overrideChainId ?? cId
-  const { bondingCurveConfig } = getV3Config(chainId)
+  const { bondingCurve } = v3Addr[chainId] ?? {}
 
   const {
     data: totalSupply,
@@ -26,10 +27,11 @@ export const useTokenProgressV3 = (
     isFetching: isFetchingProgress,
     refetch: refetchTotal,
   } = useReadContract({
-    ...bondingCurveConfig!,
-    chainId,
+    abi: v3BondingCurveAbi,
+    address: bondingCurve,
     functionName: 'maxSupply_',
-    query: { enabled: !!bondingCurveConfig },
+    chainId,
+    query: { enabled: !!bondingCurve },
   })
   const { tokenReserve, isGrauated, refetchPools } = usePools(token, chainId)
 
