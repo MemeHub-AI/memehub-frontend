@@ -3,6 +3,7 @@ import {
   LibrarySymbolInfo,
   ResolutionString,
 } from '../../public/js/charting_library/charting_library'
+import { DatafeedBaseData } from '@/components/chart/hooks/use-datafeed-websocket/types'
 
 export const datafeedConfig: DatafeedConfiguration = {
   supported_resolutions: [
@@ -40,3 +41,5 @@ export const symbolInfoConfig: LibrarySymbolInfo = {
   volume_precision: 18,
   currency_code: 'Memehub',
 }
+
+export const datafeedUnit: keyof DatafeedBaseData = 'master'
