@@ -1,3 +1,5 @@
+import { useMemo } from 'react'
+import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 import { defaultImg } from '@/config/link'
@@ -7,6 +9,7 @@ import { URL_TYPE, utilsUrl } from '@/utils/url'
 import { KolListItem } from '@/api/alliance/type'
 import { utilLang } from '@/utils/lang'
 import { IdTag } from './id-tag'
+import { randomBy } from '@/utils/math'
 
 interface Props {
   data?: KolListItem
@@ -14,6 +17,7 @@ interface Props {
 
 export const KolCard = ({ data }: Props) => {
   const { t } = useTranslation()
+  const community = useMemo(() => randomBy(data?.communities), [])
 
   return (
     <Card
@@ -48,7 +52,14 @@ export const KolCard = ({ data }: Props) => {
           >
             {utilLang.locale(data?.name)}
           </h2>
-          <IdTag src={data?.logo} title={data?.name.en} imgClass="w-8 h-8" />
+          {!isEmpty(data?.communities) && (
+            <IdTag
+              src={community.logo}
+              title={utilLang.locale(community.name)}
+              imgClass="w-8 h-8"
+              iconClass="w-8 h-8 p-1"
+            />
+          )}
         </div>
       </div>
       <div className="my-2">

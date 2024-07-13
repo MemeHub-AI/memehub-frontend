@@ -28,11 +28,15 @@ export const CommunityCard = ({ data }: Props) => {
           >
             {utilLang.locale(data?.name)}
           </h2>
-          <div className="flex items-center space-x-2">
-            {t('founder')}:
-            <span className="text-violet-600 font-bold ml-2">Mr Kai</span>
-            <img src="/images/check.png" alt="check" className="w-5" />
-          </div>
+          {data?.kol && (
+            <div className="flex items-center space-x-2">
+              {t('founder')}:
+              <span className="text-violet-600 font-bold ml-2">
+                {utilLang.locale(data?.kol?.name)}
+              </span>
+              <img src="/images/check.png" alt="check" className="w-5" />
+            </div>
+          )}
         </div>
       </div>
       <div className="my-2">
