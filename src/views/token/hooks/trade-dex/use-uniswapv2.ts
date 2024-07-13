@@ -7,7 +7,6 @@ import dayjs from 'dayjs'
 import { BigNumber } from 'bignumber.js'
 
 import { useApprove } from '@/hooks/use-approve'
-import { commonAddr } from '@/contract/address'
 import { logger } from '@/utils/log'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { UNISWAP_ERR } from '@/errors/uniswap'
@@ -15,6 +14,8 @@ import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 import { subSlippage } from '@/utils/contract'
 import { useUniswapV2Info } from './use-uniswapv2-info'
 import { useTokenContext } from '@/contexts/token'
+import { reserveAddr } from '@/contract/address'
+import { uniswapV2Addr } from '@/contract/uniswapv2/address'
 
 export const useUniswapV2 = () => {
   const { t } = useTranslation()
@@ -23,9 +24,8 @@ export const useUniswapV2 = () => {
   const { isApproving, approvalForAll } = useApprove()
   const { tokenInfo } = useTokenContext()
   const { getAmountOut } = useUniswapV2Info(tokenInfo?.pool_address)
-
-  const { reserveToken, router } =
-    commonAddr[chainId as keyof typeof commonAddr] || {}
+  const reserveToken = reserveAddr[chainId]
+  const uniswapV2Address = uniswapV2Addr[chainId]
 
   const {
     data: hash,
@@ -78,13 +78,11 @@ export const useUniswapV2 = () => {
       token,
       address,
       chainId,
-      router,
-      reserveToken,
       slippaged: formatEther(subSlippage(tokenAmount, slippage)),
     })
     writeContract({
       abi: uniswapV2RouterAbi,
-      address: router,
+      address: uniswapV2Address,
       chainId,
       functionName: 'swapExactETHForTokens',
       args: [
@@ -105,7 +103,7 @@ export const useUniswapV2 = () => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
-    const isApproved = await approvalForAll(token, router, amount)
+    const isApproved = await approvalForAll(token, uniswapV2Address, amount)
     if (!isApproved) return
 
     const reserveAmount = formatEther(await getAmountOut(amount, true))
@@ -119,14 +117,12 @@ export const useUniswapV2 = () => {
       token,
       address,
       chainId,
-      router,
-      reserveToken,
       reserveAmount,
       slippaged: formatEther(subSlippage(reserveAmount, slippage)),
     })
     writeContract({
       abi: uniswapV2RouterAbi,
-      address: router,
+      address: uniswapV2Address,
       chainId,
       functionName: 'swapExactTokensForETH',
       args: [

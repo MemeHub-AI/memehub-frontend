@@ -124,7 +124,7 @@ export const useDatafeedWebsocket = ({
   }
 
   return {
-    emitter,
+    ws: emitter,
     connect,
     disconenct,
     listenAsync,

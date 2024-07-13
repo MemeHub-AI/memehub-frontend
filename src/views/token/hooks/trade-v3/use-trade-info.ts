@@ -6,29 +6,33 @@ import { last } from 'lodash'
 
 import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { getV3Config } from '@/contract/v3/config'
 import { BI_ZERO } from '@/constants/number'
 import { useTradeSearchParams } from '../use-search-params'
+import { v3Addr } from '@/contract/v3/address'
+import { v3TokenAbi } from '@/contract/v3/abi/token'
+import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
 
 export const useTradeInfoV3 = (overrideToken?: Address) => {
   const { chainId } = useChainInfo()
   const { tokenAddr: queryToken } = useTradeSearchParams()
-  const { bondingCurveConfig, tokenConfig } = getV3Config(chainId)
   const tokenAddr = overrideToken ?? queryToken
+  const { bondingCurve } = v3Addr[chainId] ?? {}
 
   const { data = BI_ZERO } = useReadContract({
-    ...tokenConfig!,
+    abi: v3TokenAbi,
     address: tokenAddr,
     chainId,
     functionName: 'totalSupply',
-    query: { enabled: !!tokenConfig && !!tokenAddr },
+    query: { enabled: !!tokenAddr },
   })
   const totalSupply = BigNumber(formatEther(data)).toFixed()
 
   const getMaxSupply = async () => {
-    if (!bondingCurveConfig) return BI_ZERO
+    if (!bondingCurve) return BI_ZERO
+
     return readContract(wagmiConfig, {
-      ...bondingCurveConfig,
+      abi: v3BondingCurveAbi,
+      address: bondingCurve,
       functionName: 'maxSupply_',
       chainId,
     }).catch((e) => {
@@ -38,12 +42,14 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
   }
 
   const getDetails = async (token = tokenAddr) => {
-    if (!bondingCurveConfig) return [] as const
+    if (!bondingCurve) return [] as const
+
     return readContract(wagmiConfig, {
-      ...bondingCurveConfig,
+      abi: v3BondingCurveAbi,
+      address: bondingCurve,
       functionName: 'pools_',
-      args: [token],
       chainId,
+      args: [token],
     }).catch((e) => {
       console.error(e.message)
       return [] as const
@@ -51,9 +57,11 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
   }
 
   const getNativeAmount = async (amount: string) => {
-    if (!bondingCurveConfig) return BI_ZERO
+    if (!bondingCurve) return BI_ZERO
+
     const value = await readContract(wagmiConfig, {
-      ...bondingCurveConfig,
+      abi: v3BondingCurveAbi,
+      address: bondingCurve,
       functionName: 'calcAmountOutFromToken',
       args: [tokenAddr, parseEther(amount)],
       chainId,
@@ -65,10 +73,11 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
   }
 
   const getTokenAmount = async (amount: string) => {
-    if (!bondingCurveConfig) return BI_ZERO
+    if (!bondingCurve) return BI_ZERO
 
     const value = await readContract(wagmiConfig, {
-      ...bondingCurveConfig,
+      abi: v3BondingCurveAbi,
+      address: bondingCurve,
       functionName: 'calcAmountOutFromEth',
       chainId,
       args: [tokenAddr, parseEther(amount)],
@@ -81,10 +90,11 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
   }
 
   const getPrice = () => {
-    if (!bondingCurveConfig) return BI_ZERO
+    if (!bondingCurve) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      ...bondingCurveConfig,
+      abi: v3BondingCurveAbi,
+      address: bondingCurve,
       functionName: 'calcPrice',
       args: [tokenAddr],
       chainId,
@@ -114,8 +124,11 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
   }
 
   const getLastOrderAmount = async (currentLeft: string, token = tokenAddr) => {
+    if (!bondingCurve) return '0'
+
     const amount = await readContract(wagmiConfig, {
-      ...bondingCurveConfig!,
+      abi: v3BondingCurveAbi,
+      address: bondingCurve,
       functionName: 'calcAmountOutFromTokenCutOff',
       args: [token, parseEther(currentLeft)],
     }).catch(() => BI_ZERO)

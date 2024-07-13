@@ -4,22 +4,24 @@ import type {
   IBasicDataFeed,
   LibrarySymbolInfo,
 } from '../../../../public/js/charting_library/charting_library'
-import { DatafeedBaseData } from './use-datafeed-websocket/types'
 import { useDatafeedCache } from './use-datafeed-cache'
 import { useDatafeedWebsocket } from './use-datafeed-websocket'
 import { useStorage } from '@/hooks/use-storage'
-import { datafeedConfig } from '@/config/datafeed'
+import {
+  datafeedConfig,
+  datafeedUnit,
+  symbolInfoConfig,
+} from '@/config/datafeed'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { formatInterval, parsePricescale } from '@/utils/chart'
-
-const unit: keyof DatafeedBaseData = 'usd'
+import { withPair } from '@/utils/datafeed'
 
 export const useDatafeed = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { getInterval, setInterval } = useStorage()
   const interval = getInterval(chainName, tokenAddr) || '1m'
   const cache = useDatafeedCache()
-  const { emitter, listenAsync, historyAsync, onUpdate, disconenct } =
+  const { ws, listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket({
       onReconnect: () =>
         listenAsync({
@@ -32,8 +34,8 @@ export const useDatafeed = () => {
   const createDatafeed = () => {
     return {
       onReady: (callback) => {
-        setTimeout(() => callback(datafeedConfig.readyConfig))
-        emitter.on('connect_invalid', disconenct)
+        setTimeout(() => callback(datafeedConfig))
+        ws.on('connect_invalid', disconenct)
       },
       searchSymbols(_, __, ___, ____) {},
       async resolveSymbol(symbolName, onResolve, onError, extension) {
@@ -42,13 +44,13 @@ export const useDatafeed = () => {
           token_address: tokenAddr,
           chain: chainName,
         })
-        const bars = data[unit]
+        const bars = data[datafeedUnit]
         const lastBar = last(bars)
         const symbolInfo: LibrarySymbolInfo = {
-          ...datafeedConfig.symbolInfo,
+          ...symbolInfoConfig,
           name: symbolName,
-          full_name: `${symbolName}/USD`,
-          description: `${symbolName}/USD`,
+          full_name: withPair(symbolName),
+          description: withPair(symbolName),
           pricescale: parsePricescale(lastBar?.open),
         }
 
@@ -73,7 +75,7 @@ export const useDatafeed = () => {
             token_address: tokenAddr,
             chain: chainName,
           })
-          const bars = data[unit]
+          const bars = data[datafeedUnit]
           !isEmpty(bars) && cache.setLastBar(last(bars))
           setInterval(chainName, tokenAddr, interval)
           onResult(bars, { noData: isEmpty(data) })
@@ -87,7 +89,7 @@ export const useDatafeed = () => {
           limit: period.countBack,
           chain: chainName,
         })
-        const bars = data[unit]
+        const bars = data[datafeedUnit]
 
         !isEmpty(bars) && cache.setLastBar(last(bars))
         onResult(bars, { noData: isEmpty(bars) })
@@ -95,7 +97,7 @@ export const useDatafeed = () => {
       subscribeBars(_, resolution, onTick, uid, onRest) {
         console.log('subscribe', uid)
         onUpdate(({ data }) => {
-          data[unit].forEach((bar) => {
+          data[datafeedUnit].forEach((bar) => {
             const lastTime = cache.getLastBar()?.time || 0
             if (bar.time < lastTime) return
 

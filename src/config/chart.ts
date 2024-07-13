@@ -10,7 +10,9 @@ type TVChartOptions = Omit<
   'container' | 'datafeed' | 'interval' | 'localets' | 'locale'
 >
 
-const options: TVChartOptions = {
+const format = (price?: number) => fmt.decimals(price, { fixed: 4 })
+
+export const chartOptions: TVChartOptions = {
   library_path: 'js/charting_library/',
   disabled_features: [
     'header_widget',
@@ -57,14 +59,7 @@ const options: TVChartOptions = {
   },
 }
 
-const format = (price?: number) => fmt.decimals(price, { fixed: 4 })
-
-const overrides: Partial<ChartPropertiesOverrides> = {
+export const chartOverrides: Partial<ChartPropertiesOverrides> = {
   'paneProperties.vertGridProperties.color': 'rgba(255,255,255,0)',
   'paneProperties.horzGridProperties.color': 'rgba(255,255,255,0)',
-}
-
-export const chartConfig = {
-  options,
-  overrides,
 }

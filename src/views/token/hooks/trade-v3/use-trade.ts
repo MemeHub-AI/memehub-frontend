@@ -5,7 +5,6 @@ import { BigNumber } from 'bignumber.js'
 
 import { DexTradeProps } from '../trade-dex/use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { getV3Config } from '@/contract/v3/config'
 import { getDeadline, subSlippage } from '@/utils/contract'
 import { useTradeInfoV3 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
@@ -15,16 +14,18 @@ import { usePools } from '../use-pools'
 import { utilLang } from '@/utils/lang'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
+import { v3Addr } from '@/contract/v3/address'
+import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
 
 export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
   const { address } = useAccount()
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
-  const { bondingCurveConfig } = getV3Config(chainId)
   const { getReferrals } = useInvite()
   const { isGrauated } = usePools(tokenAddr, chainId)
   const { t } = useTranslation()
+  const { bondingCurve } = v3Addr[chainId] ?? {}
 
   const {
     getNativeAmount,
@@ -52,7 +53,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       CONTRACT_ERR.tokenInvalid()
       return false
     }
-    if (!address || !bondingCurveConfig) return false
+    if (!address || !bondingCurve) return false
 
     return true
   }
@@ -85,11 +86,11 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     }
 
     console.log('v3 buy', getReferrals(), current)
-
     writeContract({
-      ...bondingCurveConfig!,
-      chainId,
+      abi: v3BondingCurveAbi,
+      address: bondingCurve!,
       functionName: 'mint',
+      chainId,
       args: [
         tokenAddr,
         nativeAmount,
@@ -114,9 +115,10 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
     console.log('v3 sell', await getReferrals())
     writeContract({
-      ...bondingCurveConfig!,
-      chainId,
+      abi: v3BondingCurveAbi,
+      address: bondingCurve!,
       functionName: 'burn',
+      chainId,
       args: [
         tokenAddr,
         parseEther(amount),

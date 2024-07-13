@@ -11,12 +11,7 @@ export const v3RecommendAbi = [
   },
   {
     inputs: [],
-    name: 'MEMEHUB_InvalidAmount',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_InvalidTokenOrUser',
+    name: 'MEMEHUB_IllegalValue',
     type: 'error',
   },
   {
@@ -27,11 +22,6 @@ export const v3RecommendAbi = [
   {
     inputs: [],
     name: 'MEMEHUB_NotSufficientFund',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MemeHub_IllegalValue',
     type: 'error',
   },
   {
@@ -55,6 +45,19 @@ export const v3RecommendAbi = [
     ],
     name: 'OwnableUnauthorizedAccount',
     type: 'error',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'flag',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubContractDeploy',
+    type: 'event',
   },
   {
     anonymous: false,
@@ -214,6 +217,24 @@ export const v3RecommendAbi = [
     inputs: [
       {
         internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: 'rescueETHMemeHub',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
         name: 'referrer',
         type: 'address',
       },
@@ -252,6 +273,19 @@ export const v3RecommendAbi = [
     name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'version',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'pure',
     type: 'function',
   },
   {

@@ -24,7 +24,7 @@ export const IdTag = ({
         className
       )}
     >
-      <div className={cn('flex items-center ', containerClass)}>
+      <div className={cn('flex items-center', containerClass)}>
         <Img
           src={src}
           alt="avatar"
@@ -35,7 +35,7 @@ export const IdTag = ({
       <img
         src="/images/check.png"
         alt="Avatar"
-        className={cn('w-10 h-10 p-2', imgClass)}
+        className={cn('w-10 h-10 p-2', iconClass)}
       />
     </div>
   )

@@ -69,7 +69,7 @@ export const Chart = memo(() => {
         ) : (
           <div className="flex flex-col h-full">
             <div className="flex items-center">
-              {datafeedConfig.readyConfig.supported_resolutions?.map((r) => (
+              {datafeedConfig.supported_resolutions?.map((r) => (
                 <Button
                   key={r}
                   size="sm"

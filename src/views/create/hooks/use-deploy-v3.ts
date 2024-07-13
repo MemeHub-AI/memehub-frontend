@@ -1,4 +1,4 @@
-import { Config } from 'wagmi'
+import { Config, useReadContract } from 'wagmi'
 import { WriteContractMutate } from 'wagmi/query'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash'
@@ -7,17 +7,27 @@ import type { DeployParams } from './use-deploy'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { getV3Config } from '@/contract/v3/config'
 import { AirdropMerkleRootRes } from '@/api/airdrop/types'
 import { MarketType, Marketing } from '@/api/token/types'
+import { v3DistributorParams } from '@/config/v3'
+import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
+import { v3Addr } from '@/contract/v3/address'
+import { BI_ZERO } from '@/constants/number'
 
 export const useDeployV3 = (
-  writeContract: WriteContractMutate<Config, unknown>,
-  fee: bigint
+  writeContract: WriteContractMutate<Config, unknown>
 ) => {
   const { chainId, chainName, walletChainId } = useChainInfo()
   const { getMerkleRoot } = useCreateToken()
-  const { bondingCurveConfig, distributorParams } = getV3Config(walletChainId)
+  const { bondingCurve } = v3Addr[walletChainId ?? 0] ?? {}
+
+  const { data: creationFee = BI_ZERO } = useReadContract({
+    abi: v3BondingCurveAbi,
+    address: bondingCurve,
+    chainId: walletChainId,
+    functionName: 'creationFee_',
+    query: { enabled: !!bondingCurve },
+  })
 
   const parsePercent = (p: number) => {
     return BigNumber(p).multipliedBy(100).multipliedBy(100).toNumber()
@@ -25,13 +35,13 @@ export const useDeployV3 = (
 
   const updateAirdropParams = (
     data: AirdropMerkleRootRes,
-    params: NonNullable<typeof distributorParams>,
+    params: NonNullable<typeof v3DistributorParams>,
     marketing: Marketing[]
   ) => {
     const { kol_count, kol_root_hash, community_count, community_root_hash } =
       data
     // A new object must be used.
-    const p = { ...params } as NonNullable<typeof distributorParams>
+    const p = { ...params } as NonNullable<typeof v3DistributorParams>
 
     const kol = marketing.find((m) => m.type === MarketType.Kol)
     const cmnt = marketing.find((m) => m.type === MarketType.Community)
@@ -59,18 +69,18 @@ export const useDeployV3 = (
     chain: string,
     marketing: Marketing[] | undefined
   ) => {
-    if (!distributorParams) return
+    if (!v3DistributorParams) return
 
     const type_list = marketing?.map((m) => m.type).join(',') ?? ''
-    if (!marketing || isEmpty(type_list)) return distributorParams
+    if (!marketing || isEmpty(type_list)) return v3DistributorParams
 
     try {
       const { data } = await getMerkleRoot({ chain, type_list })
       if (data) {
-        return updateAirdropParams(data, distributorParams, marketing)
+        return updateAirdropParams(data, v3DistributorParams, marketing)
       }
 
-      return distributorParams
+      return v3DistributorParams
     } catch (error) {
       return
     }
@@ -82,7 +92,7 @@ export const useDeployV3 = (
     marketing,
     onSuccess,
   }: DeployParams) => {
-    if (!bondingCurveConfig || !chainId || !chainName) {
+    if (!bondingCurve || !chainId || !chainName) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -96,17 +106,19 @@ export const useDeployV3 = (
     console.log('v3 deploy', airdropParams)
     writeContract(
       {
-        ...bondingCurveConfig,
-        chainId: walletChainId,
+        abi: v3BondingCurveAbi,
+        address: bondingCurve,
         functionName: 'createToken',
+        chainId: walletChainId,
         args: [name, ticker, airdropParams],
-        value: fee,
+        value: creationFee,
       },
       { onSuccess }
     )
   }
 
   return {
+    creationFee,
     deployV3,
   }
 }

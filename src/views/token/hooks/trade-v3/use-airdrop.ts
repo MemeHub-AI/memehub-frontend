@@ -13,13 +13,13 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { MarketType } from '@/api/token/types'
 import { addPrefix0x } from '@/utils/contract'
 import { useTradeSearchParams } from '../use-search-params'
-import { getV3Config } from '@/contract/v3/config'
 import { useAirdropStore } from '@/stores/use-airdrop'
 import { useCheckChain } from '@/hooks/use-check-chain'
 import { buttonLeft } from '@/config/toast'
-import { useWallet } from '@/components/wallet-connect/hooks/use-wallet'
 import { useLogin } from '@/hooks/use-login'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { v3Addr } from '@/contract/v3/address'
+import { v3DistributorAbi } from '@/contract/v3/abi/distributor'
 
 export const useAirdrop = (
   id: number = 0,
@@ -29,7 +29,6 @@ export const useAirdrop = (
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { chainId } = useChainInfo()
-  const { distributorConfig } = getV3Config(chainId)
   const uniqueKey = useMemo(nanoid, [])
   const { setIsCalimingAirdrop } = useAirdropStore()
   const [isClaim, setIsCalim] = useState(false)
@@ -38,6 +37,7 @@ export const useAirdrop = (
   const { checkForLogin } = useLogin()
   const { playAudio } = useAudioPlayer()
 
+  const { distributor } = v3Addr[chainId] ?? {}
   const toastConfig = window.innerWidth > 600 ? buttonLeft : undefined
 
   // Query airdrop details.
@@ -55,7 +55,8 @@ export const useAirdrop = (
   })
 
   const { data: isBurn, refetch: refetchIsBurn } = useReadContract({
-    ...distributorConfig!,
+    abi: v3DistributorAbi,
+    address: distributor,
     functionName: 'isBurn',
     args: [BigInt(id)],
     chainId,
@@ -119,7 +120,7 @@ export const useAirdrop = (
 
     const isValidChain = await checkForChain(chainId)
     if (!isValidChain) return
-    if (!distributorConfig) {
+    if (!distributor) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -139,10 +140,11 @@ export const useAirdrop = (
 
     setIsCalim(true)
     writeContract({
-      ...distributorConfig,
+      abi: v3DistributorAbi,
+      address: distributor,
       functionName: 'claim',
-      args: [BigInt(id), addPrefix0x(kol_proof), addPrefix0x(community_proof)],
       chainId,
+      args: [BigInt(id), addPrefix0x(kol_proof), addPrefix0x(community_proof)],
     })
   }
 
@@ -150,14 +152,15 @@ export const useAirdrop = (
     if (!checkForLogin()) return
 
     const isValidChain = await checkForChain(chainId)
-    if (!isValidChain) return
+    if (!isValidChain || !distributor) return
 
     setBurning(true)
     writeContract({
-      ...distributorConfig!,
+      abi: v3DistributorAbi,
+      address: distributor,
       functionName: 'burnToken',
-      args: [BigInt(id)],
       chainId,
+      args: [BigInt(id)],
     })
   }
 

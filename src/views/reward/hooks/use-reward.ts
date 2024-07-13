@@ -9,30 +9,33 @@ import { BigNumber } from 'bignumber.js'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
-import { getV3Config } from '@/contract/v3/config'
 import { BI_ZERO } from '@/constants/number'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { v3Addr } from '@/contract/v3/address'
+import { v3RecommendAbi } from '@/contract/v3/abi/recommend'
 
 export const useReward = (chainId: number) => {
   const { t } = useTranslation()
   const { address, chainId: accountChainId } = useAccount()
-  const { recommendConfig } = getV3Config(chainId)
   const { switchChainAsync } = useSwitchChain()
+  const { recommend } = v3Addr[chainId] ?? {}
 
   const { data: total = BI_ZERO, refetch: refetchAmount } = useReadContract({
-    ...recommendConfig!,
-    chainId,
+    abi: v3RecommendAbi,
+    address: recommend,
     functionName: 'obtainedAmount',
+    chainId,
     args: [address!],
-    query: { enabled: !!recommendConfig && !!address },
+    query: { enabled: !!recommend && !!address },
   })
   const { data: claimed = BI_ZERO, refetch: refetchClaimed } = useReadContract({
-    ...recommendConfig!,
+    abi: v3RecommendAbi,
+    address: recommend,
     chainId,
     functionName: 'alreadyClaimed',
     args: [address!],
-    query: { enabled: !!recommendConfig && !!address },
+    query: { enabled: !!recommend && !!address },
   })
   const totalAmount = formatEther(total)
   const claimedAmount = formatEther(claimed)
@@ -63,7 +66,7 @@ export const useReward = (chainId: number) => {
   const isClaiming = isPending || isFetching
 
   const claimReward = async () => {
-    if (!recommendConfig) {
+    if (!recommend) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -73,7 +76,8 @@ export const useReward = (chainId: number) => {
     }
 
     writeContract({
-      ...recommendConfig!,
+      abi: v3RecommendAbi,
+      address: recommend,
       functionName: 'claimTokens',
       chainId,
     })
