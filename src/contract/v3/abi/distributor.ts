@@ -75,6 +75,26 @@ export const v3DistributorAbi = [
   },
   {
     inputs: [],
+    name: 'MEMEHUB_NFTAddrNotExist',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NFTOfExIsZeroAddress',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NFTOfKolIsZeroAddress',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NFTOfOwnerIsZeroAddress',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'MEMEHUB_NotStarted',
     type: 'error',
   },
@@ -86,6 +106,11 @@ export const v3DistributorAbi = [
   {
     inputs: [],
     name: 'MEMEHUB_PermissionDenied',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_TokenAddrNotExist',
     type: 'error',
   },
   {
@@ -187,6 +212,19 @@ export const v3DistributorAbi = [
       {
         indexed: true,
         internalType: 'uint256',
+        name: 'flag',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubContractDeploy',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
         name: 'distributionId',
         type: 'uint256',
       },
@@ -226,6 +264,134 @@ export const v3DistributorAbi = [
     type: 'event',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'NFTAddrs',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'NFTOfExchangeCommunity',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'NFTOfKol',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'NFTOfOwner',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_NFTOfExchangeCommunity',
+        type: 'address',
+      },
+    ],
+    name: 'addNFTAddressOfExchange',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_NFTOfKol',
+        type: 'address',
+      },
+    ],
+    name: 'addNFTAddressOfKol',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: 'addrs',
+        type: 'address[]',
+      },
+    ],
+    name: 'addNFTAddrs',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_NFTOfOwner',
+        type: 'address',
+      },
+    ],
+    name: 'addOwnerNFT',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: 'addrs',
+        type: 'address[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'amounts',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'addTokenAddrs',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'bond',
     outputs: [
@@ -259,17 +425,46 @@ export const v3DistributorAbi = [
         type: 'uint256',
       },
       {
-        internalType: 'bytes32[]',
-        name: 'merkleProofKOL',
-        type: 'bytes32[]',
+        internalType: 'uint256',
+        name: 'specifiedExId',
+        type: 'uint256',
       },
       {
-        internalType: 'bytes32[]',
-        name: 'merkleProofCommunity',
-        type: 'bytes32[]',
+        internalType: 'address',
+        name: 'specifiedNFT',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'specifiedToken',
+        type: 'address',
       },
     ],
-    name: 'claim',
+    name: 'claimCommunity',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'distributionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'specifiedKolId',
+        type: 'uint256',
+      },
+    ],
+    name: 'claimKol',
     outputs: [
       {
         internalType: 'uint256',
@@ -310,14 +505,14 @@ export const v3DistributorAbi = [
             type: 'uint40',
           },
           {
-            internalType: 'bytes32',
-            name: 'merkleRootKol',
-            type: 'bytes32',
+            internalType: 'uint16',
+            name: 'kolFlag',
+            type: 'uint16',
           },
           {
-            internalType: 'bytes32',
-            name: 'merkleRootCommunity',
-            type: 'bytes32',
+            internalType: 'uint16',
+            name: 'CommunityFlag',
+            type: 'uint16',
           },
         ],
         internalType: 'struct IMEMEHUB_Distributor.DistributionParams',
@@ -340,16 +535,6 @@ export const v3DistributorAbi = [
             internalType: 'uint64',
             name: 'startTime',
             type: 'uint64',
-          },
-          {
-            internalType: 'bool',
-            name: 'isKol',
-            type: 'bool',
-          },
-          {
-            internalType: 'bool',
-            name: 'isCommunity',
-            type: 'bool',
           },
         ],
         internalType: 'struct IMEMEHUB_Distributor.TokenParam',
@@ -403,14 +588,14 @@ export const v3DistributorAbi = [
         type: 'uint64',
       },
       {
-        internalType: 'bool',
-        name: 'isKOL',
-        type: 'bool',
+        internalType: 'uint16',
+        name: 'kolFlag',
+        type: 'uint16',
       },
       {
-        internalType: 'bool',
-        name: 'isCommunity',
-        type: 'bool',
+        internalType: 'uint16',
+        name: 'CommunityFlag',
+        type: 'uint16',
       },
       {
         internalType: 'uint176',
@@ -421,16 +606,6 @@ export const v3DistributorAbi = [
         internalType: 'uint176',
         name: 'amountPerClaimCommunity',
         type: 'uint176',
-      },
-      {
-        internalType: 'bytes32',
-        name: 'merkleRootKOL',
-        type: 'bytes32',
-      },
-      {
-        internalType: 'bytes32',
-        name: 'merkleRootCommunity',
-        type: 'bytes32',
       },
     ],
     stateMutability: 'view',
@@ -458,6 +633,63 @@ export const v3DistributorAbi = [
       },
     ],
     name: 'getAmountClaimed',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'hasNFTAddr',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'hasTokenAddr',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'holderAmounts',
     outputs: [
       {
         internalType: 'uint256',
@@ -514,6 +746,30 @@ export const v3DistributorAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256[]',
+        name: 'specifiedExCommunity',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedEx',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'uint256',
         name: 'distributionId',
         type: 'uint256',
@@ -530,6 +786,116 @@ export const v3DistributorAbi = [
         internalType: 'bool',
         name: '',
         type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: 'specifiedKolId',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedKol',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: '_nftAddrs',
+        type: 'address[]',
+      },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedNFT',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'NFTAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedNFTAll',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'NFTAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: '_tokenAddrs',
+        type: 'address[]',
+      },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedToken',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'tokenAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedTokenAll',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'tokenAddress',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -558,6 +924,25 @@ export const v3DistributorAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'tokenAddrs',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: 'newOwner',
         type: 'address',
@@ -579,6 +964,19 @@ export const v3DistributorAbi = [
     name: 'updateEndTime',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'version',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'pure',
     type: 'function',
   },
   {

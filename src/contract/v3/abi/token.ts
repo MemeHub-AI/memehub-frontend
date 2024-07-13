@@ -31,6 +31,92 @@ export const v3TokenAbi = [
     type: 'constructor',
   },
   {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'spender',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'allowance',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'needed',
+        type: 'uint256',
+      },
+    ],
+    name: 'ERC20InsufficientAllowance',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'balance',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'needed',
+        type: 'uint256',
+      },
+    ],
+    name: 'ERC20InsufficientBalance',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'approver',
+        type: 'address',
+      },
+    ],
+    name: 'ERC20InvalidApprover',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'receiver',
+        type: 'address',
+      },
+    ],
+    name: 'ERC20InvalidReceiver',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'ERC20InvalidSender',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'spender',
+        type: 'address',
+      },
+    ],
+    name: 'ERC20InvalidSpender',
+    type: 'error',
+  },
+  {
     inputs: [],
     name: 'MEMEHUB_NotApprovable',
     type: 'error',
@@ -58,11 +144,24 @@ export const v3TokenAbi = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'amount',
+        name: 'value',
         type: 'uint256',
       },
     ],
     name: 'Approval',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'deployer',
+        type: 'address',
+      },
+    ],
+    name: 'MemeHubContractDeploy',
     type: 'event',
   },
   {
@@ -83,7 +182,7 @@ export const v3TokenAbi = [
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'amount',
+        name: 'value',
         type: 'uint256',
       },
     ],
@@ -91,13 +190,24 @@ export const v3TokenAbi = [
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'DOMAIN_SEPARATOR',
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: 'spender',
+        type: 'address',
+      },
+    ],
+    name: '_allowances',
     outputs: [
       {
-        internalType: 'bytes32',
+        internalType: 'uint256',
         name: '',
-        type: 'bytes32',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -107,12 +217,12 @@ export const v3TokenAbi = [
     inputs: [
       {
         internalType: 'address',
-        name: '',
+        name: 'owner',
         type: 'address',
       },
       {
         internalType: 'address',
-        name: '',
+        name: 'spender',
         type: 'address',
       },
     ],
@@ -155,7 +265,7 @@ export const v3TokenAbi = [
     inputs: [
       {
         internalType: 'address',
-        name: '',
+        name: 'account',
         type: 'address',
       },
     ],
@@ -283,68 +393,6 @@ export const v3TokenAbi = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'nonces',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
-      {
-        internalType: 'address',
-        name: 'spender',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'value',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'deadline',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint8',
-        name: 'v',
-        type: 'uint8',
-      },
-      {
-        internalType: 'bytes32',
-        name: 'r',
-        type: 'bytes32',
-      },
-      {
-        internalType: 'bytes32',
-        name: 's',
-        type: 'bytes32',
-      },
-    ],
-    name: 'permit',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'bool',
         name: '_isApprovable',
         type: 'bool',
@@ -390,7 +438,7 @@ export const v3TokenAbi = [
       },
       {
         internalType: 'uint256',
-        name: 'amount',
+        name: 'value',
         type: 'uint256',
       },
     ],
