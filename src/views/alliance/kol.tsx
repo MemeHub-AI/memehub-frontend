@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { debounce } from 'lodash'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
@@ -8,16 +10,19 @@ import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
-import Input from '@/components/input'
+import { Input } from '@/components/input'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
-import { debounce } from 'lodash'
-import { IoSearch } from 'react-icons/io5'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import { useAccount } from 'wagmi'
+import { kolFormLink } from '@/config/link'
 
 export const Kol = () => {
   const { t } = useTranslation()
   const { userInfo } = useUserStore()
   const [value, setValue] = useState('')
+  const { isConnected } = useAccount()
+  const { setConnectOpen } = useWalletStore()
+
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: [allianceApi.getKols.name, value],
     queryFn: async ({ pageParam }) => {
@@ -75,6 +80,21 @@ export const Kol = () => {
         <div className="my-3">
           {t('kol.desc').replace('$1', `${data?.total}` || '-')}
         </div>
+
+        {userInfo?.role?.kol ? null : (
+          <Button
+            className="mb-4"
+            onClick={() => {
+              if (!isConnected) {
+                setConnectOpen(true)
+                return
+              }
+              open(kolFormLink)
+            }}
+          >
+            {t('apply.kol')}
+          </Button>
+        )}
 
         <div>
           <Input
