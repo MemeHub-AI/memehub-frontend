@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useAccount } from 'wagmi'
 import { kolFormLink } from '@/config/link'
+import { KolCard } from '@/components/kol-card'
 
 export const Kol = () => {
   const { t } = useTranslation()
@@ -126,7 +127,8 @@ export const Kol = () => {
           nullback={<div className="mt-4">{t('no.kol')}</div>}
         >
           {kols?.map((kol) => {
-            return <AmbassadorCard key={kol!.id} data={kol}></AmbassadorCard>
+            // return <AmbassadorCard key={kol!.id} data={kol}></AmbassadorCard>
+            return <KolCard data={kol} key={kol?.id} />
           })}
         </CustomSuspense>
         {handleLoadStatus()}

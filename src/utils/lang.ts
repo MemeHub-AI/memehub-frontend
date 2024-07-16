@@ -27,4 +27,8 @@ export const utilLang = {
     let i = 0
     return value.replace(new RegExp(symbol, 'g'), () => String(args[i++]))
   },
+  locale: (localeObj: Record<string, any> | undefined) => {
+    if (!localeObj) return ''
+    return localeObj[i18next.language] ?? localeObj.en
+  },
 }

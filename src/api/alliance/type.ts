@@ -1,7 +1,6 @@
 export interface Query {
   page: number
   page_size?: number
-  [property: string]: any
 }
 
 export interface KolListItem {
@@ -12,7 +11,7 @@ export interface KolListItem {
   telegram_group_url: string
   telegram_url: string
   twitter_url: string
-  [property: string]: any
+  communities: CommunityListItem[]
 }
 
 export interface CommunityListItem {

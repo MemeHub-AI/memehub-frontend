@@ -12,6 +12,7 @@ import { useState } from 'react'
 import Input from '@/components/input'
 import { cn } from '@/lib/utils'
 import { debounce } from 'lodash'
+import CommunityCard from '@/components/community-card'
 
 export const Communities = () => {
   const { t } = useTranslation()
@@ -90,13 +91,14 @@ export const Communities = () => {
           fallback={<CardSkeleton></CardSkeleton>}
           nullback={<div className="mt-4">{t('no.communities')}</div>}
         >
-          {communities?.map((communitie) => {
-            return (
-              <AmbassadorCard
-                key={communitie!.id}
-                data={communitie!}
-              ></AmbassadorCard>
-            )
+          {communities?.map((community) => {
+            // return (
+            //   <AmbassadorCard
+            //     key={communitie!.id}
+            //     data={communitie!}
+            //   ></AmbassadorCard>
+            // )
+            return <CommunityCard data={community} />
           })}
         </CustomSuspense>
         {handleLoadStatus()}

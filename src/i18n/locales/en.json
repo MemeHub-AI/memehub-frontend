@@ -493,5 +493,7 @@
   "airdrop.community.desc4": "Don't worry about memebers selling, because the funds brought in by purchases far exceed the sales from the airdropped tokens.",
   "coming soon": "Coming soon",
   "search.kol": "Search for KOL",
-  "search.community": "Searching for communities"
+  "search.community": "Searching for communities",
+  "community.count": "Community population",
+  "founder": "Founder"
 }
