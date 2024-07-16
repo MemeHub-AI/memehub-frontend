@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 import { defaultImg } from '@/config/link'
@@ -52,7 +51,7 @@ export const KolCard = ({ data }: Props) => {
           >
             {utilLang.locale(data?.name)}
           </h2>
-          {!isEmpty(data?.communities) && (
+          {community && (
             <IdTag
               src={community.logo}
               title={utilLang.locale(community.name)}
