@@ -29,6 +29,6 @@ export const utilLang = {
   },
   locale: (localeObj: Record<string, any> | undefined) => {
     if (!localeObj) return ''
-    return localeObj[i18next.language] ?? localeObj.en
+    return localeObj[i18next.language] || localeObj.en
   },
 }
