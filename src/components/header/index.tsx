@@ -13,7 +13,21 @@ export interface Nav {
 export const Header = () => {
   const { isMobile } = useResponsive()
 
+<<<<<<< Updated upstream
   const navs: Nav[] = []
+=======
+  const navs: Nav[] = [
+    { title: t('home'), path: Routes.Main },
+    { title: t('next.moonshot'), path: Routes.Moonshot },
+    { title: t('classic.meme'), path: Routes.ClassicMeme },
+    // { title: t('create'), path: Routes.Create },
+    { title: t('airdrop'), path: Routes.Airdrop },
+    { title: t('alliance'), path: Routes.Alliance },
+    { title: t('posts'), path: Routes.Posts },
+    // { title: t('KOL'), path: Routes.KOL },
+    // { title: t('community'), path: Routes.Community },
+  ]
+>>>>>>> Stashed changes
 
   const onNavClick = () => {}
 
