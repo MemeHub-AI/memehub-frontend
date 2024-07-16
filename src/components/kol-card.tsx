@@ -20,7 +20,7 @@ export const KolCard = ({ data }: Props) => {
   const { t } = useTranslation()
   const community = useMemo(() => randomBy(data?.communities), [])
 
-  const { members } = useCommunityMembers(community?.id)
+  // const { members } = useCommunityMembers(community?.id)
 
   return (
     <Card
@@ -65,11 +65,11 @@ export const KolCard = ({ data }: Props) => {
           )}
         </div>
       </div>
-      {community && (
+      {/* {community && (
         <div className="mt-2">
           {t('community.count')}: <span className="font-bold">{members}</span>
         </div>
-      )}
+      )} */}
       <div className="mt-2 break-all line-clamp-2" title={data?.description}>
         {data?.description}
       </div>
