@@ -6,14 +6,10 @@ import { AIIdeaBar } from '@/components/ai-idea-bar'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { useTranslation } from 'react-i18next'
-import { IdoCards } from './components/ido-cards'
 
 export const MainPage = () => {
   const { tokens, totalToken, isLoading, isFetching, fetchNextPage } =
     useTokens()
-  const { t } = useTranslation()
 
   const {
     isRandom,
@@ -33,25 +29,14 @@ export const MainPage = () => {
           onInputGen={onInputGen}
           onRandomGen={onRandomGen}
         />
-        <Tabs defaultValue="ido">
-          <TabsList>
-            <TabsTrigger value="ido">{t('ido')}</TabsTrigger>
-            <TabsTrigger value="token">{t('token')}</TabsTrigger>
-          </TabsList>
-          <TabsContent value={'ido'}>
-            <IdoCards></IdoCards>
-          </TabsContent>
-          <TabsContent value={'token'}>
-            <TokenCards
-              className="flex-1 max-sm:mt-2 flex flex-col pb-4"
-              cards={tokens}
-              total={totalToken}
-              isLoading={isLoading}
-              isPending={isFetching}
-              onFetchNext={fetchNextPage}
-            />
-          </TabsContent>
-        </Tabs>
+        <TokenCards
+          className="flex-1 max-sm:mt-2 flex flex-col pb-4"
+          cards={tokens}
+          total={totalToken}
+          isLoading={isLoading}
+          isPending={isFetching}
+          onFetchNext={fetchNextPage}
+        />
         <AICreateMemecoinDialog
           show={show}
           isRandom={isRandom}

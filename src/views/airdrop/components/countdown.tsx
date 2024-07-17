@@ -1,14 +1,16 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect, useMemo, ComponentProps } from 'react'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/utils'
 
-interface CountdownProps {
+interface CountdownProps extends ComponentProps<'p'> {
   createdAt: number
   duration: number
   onExpired?: () => void
 }
 
 export const Countdown = ({
+  className,
   createdAt,
   duration,
   onExpired,
@@ -49,5 +51,9 @@ export const Countdown = ({
     return <p className="text-zinc-500">{t('expired')}</p>
   }
 
-  return <p className="text-red-600 font-bold whitespace-nowrap">{countdown}</p>
+  return (
+    <p className={cn('text-red-600 font-bold whitespace-nowrap', className)}>
+      {countdown}
+    </p>
+  )
 }

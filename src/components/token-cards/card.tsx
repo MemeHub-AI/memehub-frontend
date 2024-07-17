@@ -18,10 +18,18 @@ import { useChainsStore } from '@/stores/use-chains-store'
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
   descClass?: string
+  isIdo?: boolean
 }
 
 export const TokenCard = (props: Props) => {
-  const { card, className, descClass, onClick, ...restProps } = props
+  const {
+    card,
+    className,
+    descClass,
+    onClick,
+    isIdo = false,
+    ...restProps
+  } = props
   const router = useRouter()
   const { t } = useTranslation()
   const { findChain } = useChainsStore()
@@ -62,7 +70,9 @@ export const TokenCard = (props: Props) => {
       <div className="py-1.5 xl:py-2 pr-2 w-full flex flex-col justify-between">
         <div className="h-full">
           <CardTitle className="pt-0 text-lg flex items-start justify-between gap-2 ">
-            <span className="break-all line-clamp-2">
+            <span
+              className={cn('break-all line-clamp-2', isIdo && 'line-clamp-1')}
+            >
               {card?.name} {card?.ticker && `(${card?.ticker})`}
             </span>
             <Avatar
@@ -73,10 +83,12 @@ export const TokenCard = (props: Props) => {
               title={chain?.displayName}
             />
           </CardTitle>
+          {isIdo && <Badge variant="yellow">{t('ido.tag')}</Badge>}
           <p
             className={cn(
               'text-zinc-500 text-sm break-all line-clamp-2 xl:line-clamp-3',
               isGrauated && 'line-clamp-4 xl:line-clamp-5',
+              isIdo && 'line-clamp-2 xl:line-clamp-3',
               descClass
             )}
           >
@@ -85,7 +97,7 @@ export const TokenCard = (props: Props) => {
         </div>
         <Progress
           className="h-5 self-end w-full"
-          indicatorClass="bg-green-500"
+          indicatorClass={isIdo ? 'bg-orange-500' : 'bg-green-500'}
           value={isGrauated ? 100 : progress}
         />
       </div>
