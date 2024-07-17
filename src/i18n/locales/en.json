@@ -494,5 +494,10 @@
   "connect": "Connect",
   "price": "Price",
   "community.count": "Community population",
-  "founder": "Founder"
+  "founder": "Founder",
+  "token": "Token",
+  "ido": "IDO",
+  "ido.kol.tips": "It has been detected that you are the distinguished KOL Ambassador $1. Therefore, you have an allowance of $2.",
+  "ido.buy": "Buy",
+  "ido.community.tips": "It has been detected that you are a member of the $1 community. Therefore, you have an allowance of $2."
 }
