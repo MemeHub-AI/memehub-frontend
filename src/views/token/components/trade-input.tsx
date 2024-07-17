@@ -7,11 +7,15 @@ import { useDebounce } from 'react-use'
 import { Input } from '@/components/ui/input'
 import { useTradeContext } from '@/contexts/trade'
 import { useTokenContext } from '@/contexts/token'
-import { useTradeInfo } from '../hooks/use-trade-info'
 import { cn } from '@/lib/utils'
 import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
+import { useTradeInfoV3 } from '../hooks/trade-v3/use-trade-info'
+import { Img } from '@/components/img'
+import { useChainInfo } from '@/hooks/use-chain-info'
+import { usePools } from '../hooks/use-pools'
+import { useUniswapV2Info } from '../hooks/trade-dex/use-uniswapv2-info'
 
 interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
   onChange?: (value: string) => void
@@ -19,45 +23,58 @@ interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
 
 export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
-  const [quoteTokenAmount, setQuoteTokenAmount] = useState('0')
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
   const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
-  const { getBuyTokenAmount, getSellTokenAmount } = useTradeInfo()
+  const { getTokenAmount, getNativeAmount } = useTradeInfoV3()
+  const { chainInfo } = useChainInfo()
+  const { isGrauated } = usePools(tokenInfo?.address)
+  const { getAmountOut } = useUniswapV2Info(tokenInfo?.pool_address as Address)
 
+  const inputAmount = fmt.decimals(String(value || 0), { fixed: 3 })
+  const [targetAmount, setTargetAmount] = useState('0')
   const tokenSymbol = tokenInfo?.ticker || ''
-  const baseTokenAmount = fmt.decimals(String(value || 0))
   const tokenAddr = tokenInfo?.address as Address
   const balance = fmt.decimals(isBuy ? nativeBalance : tokenBalance)
 
-  const calcBuyTokenAmount = () => {
-    getBuyTokenAmount(tokenAddr, value as string).then((weiAmount) => {
-      const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
-      setQuoteTokenAmount(amount)
-    })
+  const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    if (BigNumber(target.value).lt(0)) return
+    // if (BigNumber(balance).lte(0)) return
+    // if (BigNumber(target.value).gt(balance)) {
+    //   return onChange?.(balance)
+    // }
+
+    onChange?.(target.value)
   }
 
-  const calcSellTokenAmount = () => {
-    getSellTokenAmount(tokenAddr, value as string).then((weiAmount) => {
-      const amount = fmt.decimals(BigNumber(formatEther(weiAmount)))
-      setQuoteTokenAmount(amount)
-    })
+  const calcAmountForBuy = async () => {
+    value = value as string
+    const tokenAmount = await (isGrauated
+      ? getAmountOut(value)
+      : getTokenAmount(value))
+    const amount = fmt.decimals(BigNumber(formatEther(tokenAmount)))
+
+    setTargetAmount(amount)
+  }
+
+  const calcAmountForSell = async () => {
+    value = String(value)
+    const nativeAmount = await (isGrauated
+      ? getAmountOut(value, true)
+      : getNativeAmount(value))
+    const amount = fmt.decimals(BigNumber(formatEther(nativeAmount)))
+
+    setTargetAmount(amount)
   }
 
   const calcAmount = () => {
-    if (!tokenAddr) return
-    if (isBuy) return calcBuyTokenAmount()
-    if (isSell) return calcSellTokenAmount()
-  }
-
-  const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    if (BigNumber(target.value).lt(0)) return
-    if (BigNumber(balance).lte(0)) return
-    if (BigNumber(target.value).gt(balance)) {
-      return onChange?.(balance)
+    if (!tokenAddr || !value) {
+      setTargetAmount('0')
+      return
     }
-
-    onChange?.(target.value)
+    if (BigNumber(value.toString()).lte(0)) return
+    if (isBuy) return calcAmountForBuy()
+    if (isSell) return calcAmountForSell()
   }
 
   useDebounce(calcAmount, 500, [value, isBuy, isSell, isTraded])
@@ -74,9 +91,9 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         disabled={disabled}
         endIcon={
           isLoadingTokenInfo ? (
-            <div className="flex items-center gap-1 mr-2">
+            <div className="flex items-center mr-2">
               <Skeleton className="w-12 h-4" />
-              <Skeleton className="w-6 h-6" />
+              <Skeleton className="w-6 h-6 ml-1" />
             </div>
           ) : (
             <div
@@ -88,12 +105,11 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
               <span className="mr-2 text-zinc-600">
                 {isBuy ? nativeSymbol : tokenSymbol}
               </span>
-              <img
-                loading="lazy"
+              <Img
+                src={isBuy ? chainInfo?.logo : tokenInfo?.image}
                 width={20}
                 height={20}
                 className="object-contain rounded"
-                src={isBuy ? tokenInfo?.chain.logo : tokenInfo?.image}
               />
             </div>
           )
@@ -107,14 +123,13 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
             <Skeleton className="w-24 h-4" />
           </>
         }
-        className="text-zinc-500 text-xs flex flex-col pt-1 gap-1"
+        className="text-zinc-500 text-xs flex flex-col space-y-1 mt-1"
       >
         <span>
-          {isBuy
-            ? `${baseTokenAmount} ${nativeSymbol} ≈ ${quoteTokenAmount} ${tokenSymbol}`
-            : `${baseTokenAmount} ${tokenSymbol} ≈ ${quoteTokenAmount} ${nativeSymbol}`}
+          {inputAmount} {isBuy ? nativeSymbol : tokenSymbol} ≈ {targetAmount}{' '}
+          {isBuy ? tokenSymbol : nativeSymbol}
         </span>
-        <span>
+        <span className="mt-1">
           {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
         </span>
       </CustomSuspense>

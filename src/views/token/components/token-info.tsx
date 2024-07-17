@@ -1,24 +1,34 @@
 import React, { useState, type ComponentProps, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Copy, Twitter, Check } from 'lucide-react'
-import { FaTelegramPlane } from 'react-icons/fa'
-import { RiGlobalLine } from 'react-icons/ri'
+import { Copy, Check } from 'lucide-react'
+import { BigNumber } from 'bignumber.js'
 
 import { cn } from '@/lib/utils'
 import { Dialog } from '@/components/ui/dialog'
 import { useTokenContext } from '@/contexts/token'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { Button } from '@/components/ui/button'
-import { BondingCurveProgress } from './bonding-curve-progress'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Card } from '@/components/ui/card'
+import { Avatar } from '@/components/ui/avatar'
+import { fmt } from '@/utils/fmt'
+import { utilLang } from '@/utils/lang'
+import { LISTED_MARKET_CAP } from '@/constants/trade'
+import { useResponsive } from '@/hooks/use-responsive'
+import { Badge } from '@/components/ui/badge'
+import { usePools } from '../hooks/use-pools'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { PosterImages } from '@/components/poster-images'
+import { TokenLinks } from './token-links'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [details, setDetails] = useState<ReactNode>(null)
-  const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo, isNotFound } = useTokenContext()
   const { isCopied, copy } = useClipboard()
-  const hasLink =
-    tokenInfo?.twitter_url || tokenInfo?.telegram_url || tokenInfo?.website
+  const { isMobile } = useResponsive()
+  const { isGrauated } = usePools(tokenInfo?.address)
+  const { findChain } = useChainsStore()
+  const chain = findChain(tokenInfo?.chain?.name)
 
   if (isLoadingTokenInfo) {
     return (
@@ -46,7 +56,14 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
 
   return (
     <>
-      <div className={cn('flex gap-3 items-start mt-4', className)}>
+      <Card
+        shadow="none"
+        padding="md"
+        className={cn(
+          'mt-20 bg-lime-green-deep cursor-default max-sm:mt-14 relative',
+          className
+        )}
+      >
         <Dialog
           open={!!details}
           onOpenChange={() => setDetails(null)}
@@ -55,87 +72,100 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           {details}
         </Dialog>
 
-        <img
-          src={tokenInfo?.image}
-          alt="logo"
-          className="w-36 h-36 object-cover rounded cursor-pointer"
-          onClick={() => {
-            setDetails(
-              <img
-                src={tokenInfo?.image}
-                alt="logo"
-                className="w-full object-contain"
-              />
-            )
-          }}
-        />
-        <div className="break-all line-clamp-[9]">
-          <div className="font-bold leading-none">
-            {tokenInfo?.name}({tokenInfo?.ticker})
-          </div>
-          <div
-            className="text-xs text-gray-400 mt-1 break-all cursor-pointer"
+        {/* Chain logo */}
+        <div className="absolute left-2 top-2 flex items-center gap-1">
+          <Avatar src={chain?.logo} size={20} />
+          <p className="text-sm max-w-20 break-all">{chain?.displayName}</p>
+        </div>
+
+        {/* Logo */}
+        <div className="relative">
+          <Avatar
+            src={tokenInfo?.image}
+            variant="border"
+            alt="logo"
+            className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white"
             onClick={() => {
-              setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)
+              setDetails(
+                <img
+                  src={tokenInfo?.image}
+                  alt="logo"
+                  className="w-full object-contain"
+                />
+              )
             }}
-          >
-            {tokenInfo?.desc}
-          </div>
+          />
+          {isGrauated && (
+            <Badge
+              variant="success"
+              className="absolute -bottom-14 left-1/2 -translate-x-1/2 border-black"
+            >
+              {t('token.graduated')}
+            </Badge>
+          )}
         </div>
-      </div>
 
-      <BondingCurveProgress />
+        {/* Name/symbol */}
+        <div className="font-bold leading-none text-center pt-16 max-sm:pt-14">
+          {isNotFound
+            ? t('token.not-found')
+            : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
+        </div>
 
-      {/* Contract address */}
-      <div className="text-sm text-zinc-500 flex flex-col items-start mt-2">
-        <h3 className="font-bold text-base text-black">{t('ca')}:</h3>
+        {/* Links */}
+        <TokenLinks />
+
+        {/* Poster */}
+        <PosterImages
+          poster={tokenInfo?.poster ?? []}
+          className="max-sm:mt-2"
+        />
+
+        {/* Description */}
         <div
-          className="w-full flex items-center cursor-pointer"
-          onClick={() => copy(tokenInfo?.address || '')}
+          className={cn(
+            'text-sm mt-1 break-all cursor-pointer',
+            (tokenInfo?.twitter_url ||
+              tokenInfo?.telegram_url ||
+              tokenInfo?.website) &&
+              'max-sm:mt-0'
+          )}
+          onClick={() => {
+            setDetails(<p className="p-8"> {tokenInfo?.desc}</p>)
+          }}
         >
-          <span className="truncate">{tokenInfo?.address || ''}</span>
-          {isCopied ? <Check size={16} /> : <Copy size={16} />}
+          {tokenInfo?.desc}
         </div>
-      </div>
 
-      {/* Twitter/telegram/website */}
-      {hasLink && (
-        <div className="flex justify-between items-center mt-3">
-          {tokenInfo?.twitter_url && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              onClick={() => open(tokenInfo.twitter_url)}
-              title="twitter"
-            >
-              <Twitter />
-            </Button>
-          )}
-          {tokenInfo?.telegram_url && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              onClick={() => open(tokenInfo?.telegram_url)}
-              title="telegram"
-            >
-              <FaTelegramPlane size={24} />
-            </Button>
-          )}
-          {tokenInfo?.website && (
-            <Button
-              variant="ghost"
-              size="icon"
-              shadow="none"
-              onClick={() => open(tokenInfo?.website)}
-              title="website"
-            >
-              <RiGlobalLine size={24} />
-            </Button>
-          )}
-        </div>
-      )}
+        {/* Contract address */}
+        {!isMobile && !isNotFound && (
+          <div
+            className="text-sm flex items-center cursor-pointer my-3"
+            onClick={() => copy(tokenInfo?.address || '')}
+          >
+            <span>{t('ca')}:</span>
+            <span className="truncate mx-2">
+              {fmt.addr(tokenInfo?.address || '', { len: 12 })}
+            </span>
+            {isCopied ? <Check size={16} /> : <Copy size={16} />}
+          </div>
+        )}
+
+        {/* Bonding curve description */}
+        {isNotFound ? (
+          <p className="text-xs text-zinc-500 max-sm:mt-2">
+            {t('token.not-found-desc')}
+          </p>
+        ) : (
+          <p className="text-xs text-zinc-500 max-sm:mt-2">
+            {isGrauated
+              ? t('token.graduated-desc')
+              : utilLang.replace(t('bonding-curve.desc'), [
+                  BigNumber(LISTED_MARKET_CAP).toFormat(),
+                ])}
+          </p>
+        )}
+      </Card>
     </>
   )
 }

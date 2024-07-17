@@ -1,20 +1,20 @@
+import { TradeType } from '@/constants/trade'
 import { TokenListItem } from '../token/types'
 
 export interface WSMessageBase<T = null> {
   type: string
   message: string
   data: T
+  extra: {
+    hasmore: boolean
+  }
 }
 
 export enum WSMessageType {
   Message = 'message',
   Error = 'error',
   Heartbeat = 'heartbeat',
-}
-
-export enum TradeType {
-  Buy = 'buy',
-  Sell = 'sell',
+  ConnectInvalid = 'connect_invalid',
 }
 
 export interface WSTradeLogMessage {
@@ -59,6 +59,7 @@ export interface WSTradeRecordMessage {
   create_time: string
   hash: string
   hash_url: string
+  usd_price: string
 }
 
 export interface WSTradeInfoMessage {
@@ -66,6 +67,7 @@ export interface WSTradeInfoMessage {
   holders: {
     address: string
     percentage: string
+    contract_flag: string | null
     scan_url: string
   }[]
 }

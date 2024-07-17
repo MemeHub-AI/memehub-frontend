@@ -4,18 +4,27 @@ import { first, isEmpty } from 'lodash'
 interface FmtAddrOptions {
   len?: number
   separator?: string
+  preLen?: number
+  sufLen?: number
 }
 
 interface FmtProgressOptions {
   toFixed?: number
 }
 
+interface DecimalsOptions {
+  fixed?: number
+  round?: boolean
+}
+
 export const fmt = {
   addr: (address?: string, options?: FmtAddrOptions) => {
     if (!address || !address.trim()) return ''
-    const { len = 4, separator = '...' } = options || {}
+    const { len = 4, separator = '...', preLen, sufLen } = options || {}
+    const prefix = address.slice(0, preLen ?? len)
+    const suffix = address.slice(-(sufLen ?? len))
 
-    return `${address.slice(0, len)}${separator}${address.slice(-len)}`
+    return `${prefix}${separator}${suffix}`
   },
   progress: (value?: number, options?: FmtProgressOptions) => {
     const { toFixed } = options || {}
@@ -53,14 +62,19 @@ export const fmt = {
 
     return args.join('/')
   },
-  decimals(value?: number | string | BigNumber, fixed = 2) {
+  decimals(value?: number | string | BigNumber, options?: DecimalsOptions) {
+    const { fixed = 2, round = false } = options ?? {}
     if (!value) return '0'
 
+    const roundMode = round ? BigNumber.ROUND_HALF_UP : BigNumber.ROUND_DOWN
     value = value instanceof BigNumber ? value : BigNumber(value)
-    if (value.gte(1)) return value.toFixed(fixed)
+
+    if (value.gte(1)) {
+      return value.toFixed(fixed, roundMode)
+    }
     if (value.lte(0)) return '0'
 
-    const decimalIndex = value.toFixed().indexOf('.')
+    const decimalIndex = value.toFixed(roundMode).indexOf('.')
     if (decimalIndex !== -1) {
       const decimalPart = value.toFixed().slice(decimalIndex + 1)
       const zeroLen = decimalPart.match(/^0*/)?.[0].length ?? 0
@@ -68,12 +82,27 @@ export const fmt = {
       const slicedLastNum = lastNumbers.slice(0, fixed)
       const result = `0.0{${zeroLen}}${slicedLastNum}`
 
-      if (zeroLen < 2) return value.toFixed(fixed)
-      if (zeroLen === 2) return value.toFixed(++fixed)
+      if (zeroLen < 2) return value.toFixed(fixed, roundMode)
+      if (zeroLen === 2) return value.toFixed(fixed + 1, roundMode)
 
       return result
     } else {
-      return BigNumber(value).toFixed()
+      return BigNumber(value).toFixed(roundMode)
     }
+  },
+  replaceHTMLCode(content: string) {
+    const reg = /&lt;|&gt;|&amp;|&quot;|&#39;|&nbsp;/g
+    const map = {
+      '&lt;': '<',
+      '&gt;': '>',
+      '&amp;': '&',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&nbsp;': ' ',
+    } as Record<string, string>
+
+    return content.replace(reg, (match) => {
+      return map[match] as string
+    })
   },
 }

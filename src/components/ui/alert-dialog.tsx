@@ -7,11 +7,15 @@ import { buttonVariants } from '@/components/ui/button'
 import { shadowVariants } from '@/styles/variants'
 
 interface Props extends AlertDialogPrimitive.AlertDialogProps {
-  title: React.ReactNode
+  title?: React.ReactNode
   description?: React.ReactNode
   content?: React.ReactNode
-  triggerProps?: AlertDialogPrimitive.DialogTriggerProps
+  triggerProps?: AlertDialogPrimitive.AlertDialogTriggerProps
   footerClass?: string
+  showFooter?: boolean
+  showCancel?: boolean
+  confirmText?: string
+  align?: 'left' | 'center' | 'right'
   onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   onConfirm?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
@@ -29,6 +33,10 @@ const AlertDialog = React.forwardRef<
     onConfirm,
     triggerProps,
     footerClass,
+    showFooter = true,
+    showCancel = true,
+    align = 'left',
+    confirmText,
     ...restProps
   } = props
   const { t } = useTranslation()
@@ -41,27 +49,41 @@ const AlertDialog = React.forwardRef<
         </AlertDialogTrigger>
       )}
       <AlertDialogContent className="max-sm:w-[90%]" ref={ref}>
-        <AlertDialogHeader>
-          <AlertDialogTitle>{title}</AlertDialogTitle>
-          <AlertDialogDescription>{description}</AlertDialogDescription>
-        </AlertDialogHeader>
+        {title && (
+          <AlertDialogHeader>
+            <AlertDialogTitle
+              className={cn(align === 'center' && '!text-center')}
+            >
+              {title}
+            </AlertDialogTitle>
+            {description && (
+              <AlertDialogDescription>{description}</AlertDialogDescription>
+            )}
+          </AlertDialogHeader>
+        )}
         {content}
-        <AlertDialogFooter
-          className={cn(
-            'sm:justify-start max-sm:flex max-sm:flex-row max-sm:gap-4',
-            footerClass
-          )}
-        >
-          <AlertDialogAction onClick={onConfirm} className="max-sm:flex-1">
-            {t('confirm')}
-          </AlertDialogAction>
-          <AlertDialogCancel
-            onClick={onCancel}
-            className="max-sm:mt-0 max-sm:flex-1"
+        {showFooter && (
+          <AlertDialogFooter
+            className={cn(
+              'sm:justify-start max-sm:flex max-sm:flex-row max-sm:space-x-4',
+              footerClass,
+              // Add `mr-3` offset, because button have shadow.
+              align === 'center' && '!justify-center mr-3'
+            )}
           >
-            {t('cancel')}
-          </AlertDialogCancel>
-        </AlertDialogFooter>
+            <AlertDialogAction onClick={onConfirm} className="max-sm:flex-1">
+              {confirmText ?? t('confirm')}
+            </AlertDialogAction>
+            {showCancel && (
+              <AlertDialogCancel
+                onClick={onCancel}
+                className="max-sm:mt-0 max-sm:flex-1"
+              >
+                {t('cancel')}
+              </AlertDialogCancel>
+            )}
+          </AlertDialogFooter>
+        )}
       </AlertDialogContent>
     </AlertDialogPrimitive.Root>
   )
@@ -75,14 +97,15 @@ const AlertDialogOverlay = React.forwardRef<
   React.ElementRef<typeof AlertDialogPrimitive.Overlay>,
   React.ComponentPropsWithoutRef<typeof AlertDialogPrimitive.Overlay>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Overlay
-    className={cn(
-      'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-      className
-    )}
-    {...props}
-    ref={ref}
-  />
+  <div className='fixed left-0 top-0 w-full h-full z-[10000] bg-black/80'>
+    <AlertDialogPrimitive.Overlay
+      className={cn(
+        'fixed inset-0 z-[10000] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+        className
+      )}
+      {...props}
+      ref={ref}
+    /></div>
 ))
 AlertDialogOverlay.displayName = AlertDialogPrimitive.Overlay.displayName
 
@@ -95,7 +118,7 @@ const AlertDialogContent = React.forwardRef<
     <AlertDialogPrimitive.Content
       ref={ref}
       className={cn(
-        'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] rounded-lg',
+        'fixed left-[50%] top-[50%] z-[1000000001] grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] rounded-lg',
         className
       )}
       {...props}

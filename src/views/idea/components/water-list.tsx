@@ -61,13 +61,13 @@ export const WaterList = ({ newsId, type }: Props) => {
       })
       return {
         list: waterfallList,
+        current: list.length,
         total: result.pages[0]?.data.count,
       }
     },
   })
 
   useEffect(() => {
-    // 检查是否滚动到底部
     if (
       window.innerHeight +
         document.documentElement.scrollTop -
@@ -75,9 +75,9 @@ export const WaterList = ({ newsId, type }: Props) => {
         -(window.innerHeight / 2) &&
       hasNextPage &&
       !isFetching &&
-      !isFetchNextPageError
+      !isFetchNextPageError &&
+      Number(waterfallList?.total) > Number(waterfallList?.current)
     ) {
-      // 加载下一页的数据
       fetchNextPage()
     }
   }, [y])

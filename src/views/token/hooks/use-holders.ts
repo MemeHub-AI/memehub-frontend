@@ -1,47 +1,74 @@
 import { useEffect } from 'react'
 import useWebSocket from 'react-use-websocket'
-import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
+import { BigNumber } from 'bignumber.js'
 
-import type { WSMessageBase, WSTradeInfoMessage } from '@/api/websocket/types'
-
+import {
+  WSMessageType,
+  type WSMessageBase,
+  type WSTradeInfoMessage,
+} from '@/api/websocket/types'
 import {
   heartbeat,
   isSuccessMessage,
-  isUpdateMessage,
+  isDisconnectMessage,
   wsApiURL,
+  isUpdateMessage,
 } from '@/api/websocket'
 import { useHoldersStore } from '@/stores/use-holders-store'
+import { useTradeSearchParams } from './use-search-params'
+import { useTokenContext } from '@/contexts/token'
 
 export const useHolders = () => {
-  const { query } = useRouter()
-  const { setHolders, setMarketCap } = useHoldersStore()
+  const { marketCap, holders, setHolders, setMarketCap } = useHoldersStore()
+  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { isNotFound } = useTokenContext()
 
-  const { lastJsonMessage, sendJsonMessage } =
-    useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(wsApiURL.tokenInfo, {
-      heartbeat,
-      onOpen: () => {
-        const token_address = query.address || ''
-        if (isEmpty(token_address)) return
-        sendJsonMessage({
-          type: 'message',
-          data: { token_address },
-        })
+  const { lastJsonMessage, sendJsonMessage, getWebSocket } =
+    useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(
+      isNotFound ? '' : wsApiURL.tokenInfo,
+      {
+        heartbeat,
+        onOpen: () => {
+          if (isEmpty(chainName) || isEmpty(tokenAddr)) return
+
+          sendJsonMessage({
+            type: 'message',
+            data: {
+              chain: chainName,
+              token_address: tokenAddr,
+            },
+          })
+        },
+        filter: ({ data }) =>
+          isSuccessMessage(data) ||
+          isUpdateMessage(data) ||
+          isDisconnectMessage(data),
+        shouldReconnect: () => true,
       },
-      filter: ({ data }) => isSuccessMessage(data) || isUpdateMessage(data),
-      shouldReconnect: () => true,
-    })
+      !isNotFound
+    )
 
-  const marketCap = lastJsonMessage?.data?.market_cap || 0
-  const holders = lastJsonMessage?.data?.holders.slice(0, 10) || []
+  const clearHolders = () => {
+    setMarketCap(0)
+    setHolders([])
+  }
 
   useEffect(() => {
-    setMarketCap(marketCap)
-    setHolders(holders)
+    if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {
+      return getWebSocket()?.close()
+    }
+    const { market_cap = 0, holders = [] } = lastJsonMessage?.data ?? {}
+
+    // Make sure that data will not be reset to zero/empty
+    // once it is available.
+    if (!BigNumber(market_cap).isZero()) setMarketCap(market_cap)
+    if (!isEmpty(holders)) setHolders(holders)
   }, [lastJsonMessage])
 
   return {
     marketCap,
     holders,
+    clearHolders,
   }
 }

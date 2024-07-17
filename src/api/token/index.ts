@@ -3,18 +3,17 @@ import { qs } from '@/hooks/use-fetch'
 
 import type {
   TokenNewReq,
-  TokenNewRes,
   TokenUpdateReq,
   TokenListItem,
   TokenCommentListRes,
   TokenAddCommentReq,
   OnchainTokensRes,
 } from './types'
-import { ApiResponse, Pagination, PaginationParams } from '../types'
+import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 
 export const tokenApi = {
-  list(req: PaginationParams & { token?: string }) {
-    return api.GET<ApiResponse<Pagination<TokenListItem>>>(
+  list(req: PaginationReq & { token?: string }) {
+    return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
       '/api/v1/coin/coinslist/' + qs.stringify(req)
     )
   },
@@ -28,20 +27,20 @@ export const tokenApi = {
       body: req,
     })
   },
-  details(addr: string) {
-    return api.GET<ApiResponse<TokenListItem>>(`/api/v1/coin/coins/${addr}/`)
+  details(chain: string, addr: string) {
+    return api.GET<ApiResponse<TokenListItem>>(
+      `/api/v1/coin/coins/${chain}/${addr}`
+    )
   },
-  commentList(addr: string, req: PaginationParams) {
-    return api.GET<ApiResponse<Pagination<TokenCommentListRes>>>(
-      `/api/v1/coin/comments/${addr}/` + qs.stringify(req)
+  commentList(chain: string, addr: string, req: PaginationReq) {
+    return api.GET<ApiResponse<PaginationRes<TokenCommentListRes>>>(
+      `/api/v1/coin/comments/${chain}/${addr}/` + qs.stringify(req)
     )
   },
   addComment(req: TokenAddCommentReq) {
     return api.POST<ApiResponse<TokenCommentListRes>>(
       '/api/v1/coin/comments/',
-      {
-        body: req,
-      }
+      { body: req }
     )
   },
   like(addr: string) {

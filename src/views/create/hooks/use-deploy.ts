@@ -1,87 +1,79 @@
-import { useAccount, useWriteContract } from 'wagmi'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
+import { useMemo } from 'react'
+import { useAccount, useBalance, useWriteContract } from 'wagmi'
+import { Hash, formatEther } from 'viem'
+import { BigNumber } from 'bignumber.js'
 
-import type { TokenNewReq } from '@/api/token/types'
-
-import { factoryAbi } from '../../../contract/abi/factory'
-import { useCreateToken } from './use-create-token'
+import { Marketing, TokenNewReq } from '@/api/token/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { useDeployConfig } from './use-deploy-config'
-import { ca } from '@/contract/address'
+import { useCreateToken } from './use-create-token'
+import { CONTRACT_ERR } from '@/errors/contract'
+import { useDeployV3 } from './use-deploy-v3'
+import { getDeployLogAddr, versionOf } from '@/utils/contract'
+import { ContractVersion } from '@/constants/contract'
+import { logger } from '@/utils/log'
 
+export interface DeployParams {
+  name: string
+  ticker: string
+  marketing?: Marketing[] | undefined
+  onSuccess?: (hash: Hash) => void
+}
+
+// Used for retry create.
 let cacheParams: Omit<TokenNewReq, 'hash'>
 
 export const useDeploy = () => {
-  const { t } = useTranslation()
-  const { chainId } = useAccount()
   const { createTokenData, createTokenError, isCreatingToken, create } =
     useCreateToken()
-  const { deployFee, deploySymbol, reserveRatio } = useDeployConfig()
+  const { address } = useAccount()
+  const { data: balanceData } = useBalance({ address })
+  const balance = String(balanceData?.value ?? 0)
 
   const {
     data: hash,
-    isPending,
+    isPending: isSubmitting,
     error: submitError,
     writeContract,
-    reset,
-  } = useWriteContract()
+    reset: resetDeploy,
+  } = useWriteContract({
+    mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
+  })
   const {
     data,
     error: confirmError,
+    isLoading: isConfirming,
     isSuccess,
-    isLoading,
     isError,
   } = useWaitForTx({ hash })
+  const deployLogAddr = useMemo(
+    () => getDeployLogAddr(data?.logs ?? []),
+    [data]
+  )
 
-  const deploy = (params: Omit<TokenNewReq, 'hash'>) => {
+  const { creationFee, deployV3 } = useDeployV3(writeContract)
+
+  const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
     cacheParams = params
-    // const contractAddr = chains.find((c) => c.name === params.chain)
-    //   ?.contract_address as `0x${string}`
 
-    // if (!contractAddr) {
-    //   toast.error(t('not.supported.chain'))
-    //   return
-    // }
+    const deployParams = {
+      ...params,
+      onSuccess: (hash: string) => create({ ...params, hash }),
+    }
 
-    const id = chainId as keyof typeof ca.reserveToken
-    const nativeTokenAddr = ca.reserveToken[id]
-    const routerAddr = ca.routerAddress[id]
-    if (!nativeTokenAddr || !routerAddr) {
-      toast.error(t('chain.empty'))
+    if (BigNumber(balance).lt(creationFee.toString())) {
+      CONTRACT_ERR.balanceInsufficient()
       return
     }
 
-    const address = ca.factory[chainId as keyof typeof ca.factory]
-    if (!address) {
-      toast.error(t('addr.empty'))
-      return
-    }
+    const vIs = versionOf(params.version)
 
-    return writeContract(
-      {
-        abi: factoryAbi,
-        address,
-        functionName: 'deploy',
-        args: [
-          reserveRatio,
-          nativeTokenAddr,
-          params.name,
-          params.ticker,
-          routerAddr,
-        ],
-        value: BigInt(deployFee),
-      },
-      {
-        // Submit hash to backend when contract submit success.
-        onSuccess: (hash) => create({ ...params, hash }),
-      }
-    )
+    logger('deploy', deployParams, balance, creationFee)
+    if (vIs(ContractVersion.V3)) return deployV3(deployParams)
   }
 
   const retryCreate = () => {
     if (!cacheParams || !hash) {
-      toast.error(t('cannot-retry'))
+      CONTRACT_ERR.retryCreateFailed()
       return
     }
 
@@ -90,21 +82,21 @@ export const useDeploy = () => {
 
   return {
     data,
-    deployFee,
-    deploySymbol,
+    deployFee: formatEther(creationFee),
     deployHash: hash,
-    isDeploying: isPending || isLoading || isCreatingToken,
-    isSubmitting: isPending,
-    isConfirming: isLoading,
+    deployLogAddr,
+    isDeploying: isSubmitting || isConfirming,
+    isSubmitting,
+    isConfirming,
     isCreatingToken,
     isDeploySuccess: isSuccess,
     isDeployError: isError,
     submitError,
     confirmError,
-    createTokenError,
     createTokenData,
+    createTokenError,
     deploy,
-    resetDeploy: reset,
+    resetDeploy,
     retryCreate,
   }
 }

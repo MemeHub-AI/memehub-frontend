@@ -27,7 +27,6 @@ export const useStorage = (useSession = false) => {
 
     getToken: () => get('token'),
     setToken: (v: string) => set('token', v),
-    removeToken: () => remove('token'),
 
     getArea: () => get('area') || '24',
     setArea: (v: string) => set('area', v),
@@ -44,5 +43,11 @@ export const useStorage = (useSession = false) => {
     // c === chain, a === address
     getInterval: (c: string, a: string) => get(`${c}.${a}`),
     setInterval: (c: string, a: string, i: string) => set(`${c}.${a}`, i),
+
+    getSlippage: () => get('slippage'),
+    setSlippage: (v: string) => set('slippage', v),
+
+    getInviteCode: () => get('invite_code'),
+    setInviteCode: (v: string) => set('invite_code', v),
   }
 }

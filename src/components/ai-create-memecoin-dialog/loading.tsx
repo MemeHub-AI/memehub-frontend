@@ -7,6 +7,8 @@ import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { AIMemeInfo } from '@/api/ai/type'
 import { toast } from 'sonner'
 import { Router } from 'next/router'
+import { useUserInfo } from '@/hooks/use-user-info'
+import { useWalletStore } from '@/stores/use-wallet-store'
 
 interface Props {
   formHook: ReturnType<typeof useCreateTokenForm>
@@ -25,6 +27,8 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     setLoadingPoster,
     setLoadingInfoDialog,
   } = useAimemeInfoStore()
+  const userStore = useUserInfo()
+  const { setConnectOpen } = useWalletStore()
 
   const fetchMemeInfo = async () => {
     if (!loadingInfo) {
@@ -38,11 +42,10 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
       formHook.form.setValue(formHook.formFields.symbol, '')
       formHook.form.setValue(formHook.formFields.description, '')
 
-      toast.loading(t('create.info.loading'))
-
       const { data } = await aiApi.getMemeInfo(
         {
           input: info!.name!,
+          background: info?.background,
         },
         memeInfoSign.signal
       )
@@ -50,7 +53,6 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
         fetchMemeImage(data)
       }
     } catch (e) {
-      toast.error(t('create.info.error'))
     } finally {
       toast.dismiss()
       setLoadingInfoDialog(false)
@@ -63,7 +65,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
     if (info?.name) {
       formHook.form.setValue(formHook.formFields.fullname, info?.name)
-      formHook.form.setValue(formHook.formFields.symbol, info?.symbol)
+      formHook.form.setValue(formHook.formFields.symbol, info?.symbol!)
     }
 
     if (info?.description) {
@@ -79,33 +81,38 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
 
   useEffect(() => {
     if (loadingInfoDialog && info?.name !== undefined && !loadingInfo) {
+      if (userStore.userInfo?.id == null) {
+        setLoadingInfoDialog(false)
+        setConnectOpen(true)
+        return
+      }
       fetchMemeInfo()
     }
   }, [loadingInfoDialog])
 
   useEffect(() => {
-    const cb = () => {
-      memeInfoSign.abort()
+    return () => {
+      toast.dismiss()
+      memeInfoSign?.abort('')
       setLoadingInfoDialog(false)
       setLoadingInfo(false)
       setLoadingPoster(false)
       setLoadingLogo(false)
     }
-    Router.events.on('routeChangeStart', cb)
-
-    return () => {
-      toast.dismiss()
-      Router.events.off('routeChangeStart', cb)
-    }
   }, [])
+
   return (
     <Dialog
       open={loadingInfoDialog}
       onOpenChange={() => setLoadingInfoDialog(false)}
     >
       <div className="mt-4 text-center">
-        <h1 className="text-xl text-center">{t('ai.creating')}</h1>
-        <h1 className="text-xl text-center">{t('wait')}</h1>
+        <h2 className="text-xl text-center">
+          {t('ai.creating').split('$')[0]}
+        </h2>
+        <h2 className="text-xl text-center">
+          {t('ai.creating').split('$')[1]}
+        </h2>
       </div>
       <div>
         <img

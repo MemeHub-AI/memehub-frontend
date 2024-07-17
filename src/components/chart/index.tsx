@@ -1,49 +1,102 @@
-import React, { useEffect, useRef, memo } from 'react'
-import { useRouter } from 'next/router'
+import React, { useEffect, useRef, memo, useState } from 'react'
 import { isEmpty } from 'lodash'
+import { useTranslation } from 'react-i18next'
 
 import type { ClassValue } from 'class-variance-authority/types'
-
 import { useChart } from './hooks/use-chart'
 import { useTokenContext } from '@/contexts/token'
-import { useChartStore } from '@/stores/use-chart-store'
 import { useStorage } from '@/hooks/use-storage'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
+import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { ChartDexScreener } from '../chart-dexscrenner'
+import { usePools } from '@/views/token/hooks/use-pools'
+import { datafeedConfig } from '@/config/datafeed'
+import { Button } from '../ui/button'
+import { useChartStore } from '@/stores/use-chart-store'
+import { formatInterval } from '@/utils/chart'
 
 export const Chart = memo(() => {
+  const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
-  const { query } = useRouter()
-  const chain = (query.chain || '') as string
-  const addr = (query.address || '') as string
-  const { tokenInfo } = useTokenContext()
+  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { tokenInfo, isNotFound } = useTokenContext()
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
+  const { isGrauated } = usePools(tokenInfo?.address)
   const { chart } = useChartStore()
+  const [, update] = useState(false)
+  const activeChart = chart?.activeChart()
 
   useEffect(() => {
-    if (!chartRef.current || isEmpty(addr) || !tokenInfo) return
+    if (!chartRef.current || isEmpty(tokenAddr) || !tokenInfo || isNotFound) {
+      return
+    }
 
     createChart(chartRef.current, {
       symbol: tokenInfo.ticker,
-      interval: getInterval(chain, addr) || '1m',
-      tokenAddr: addr,
+      interval: getInterval(chainName, tokenAddr) || '1m',
+      tokenAddr,
     })
 
     return removeChart
   }, [tokenInfo])
 
+  if (isNotFound) {
+    return (
+      <div
+        className={cn(
+          'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
+          'rounded-md overflow-hidden max-sm:mt-3 flex justify-center items-center'
+        )}
+      >
+        <p className="font-bold">{t('token.not-found-desc')}</p>
+      </div>
+    )
+  }
+
   return (
     <>
       <div
-        ref={chartRef}
         className={cn(
           'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
           'rounded-md overflow-hidden max-sm:mt-3',
-          isCreating && 'scale-0 absolute'
+          isCreating && !isGrauated && 'scale-0 absolute'
         )}
-      ></div>
-      <ChartSkeleton className={!isCreating && 'scale-0 absolute'} />
+      >
+        {isGrauated ? (
+          <ChartDexScreener className="w-full h-full" />
+        ) : (
+          <div className="flex flex-col h-full">
+            <div className="flex items-center">
+              {datafeedConfig.supported_resolutions?.map((r) => (
+                <Button
+                  key={r}
+                  size="sm"
+                  shadow="none"
+                  variant="ghost"
+                  className={cn(
+                    activeChart?.resolution() === r && 'text-blue-600'
+                  )}
+                  onClick={() => {
+                    activeChart?.setResolution(r)
+                    // Refresh component, because `setResolution` does not refresh
+                    update((v) => !v)
+                  }}
+                >
+                  {formatInterval(r, false)}
+                </Button>
+              ))}
+            </div>
+            <hr />
+            <div ref={chartRef} className="w-full h-full flex-1"></div>
+          </div>
+        )}
+      </div>
+
+      <ChartSkeleton
+        className={(!isCreating || isGrauated) && 'scale-0 absolute'}
+      />
     </>
   )
 })

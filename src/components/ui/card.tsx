@@ -26,7 +26,7 @@ const cardVariants = cva(
         scale: 'hover:scale-105 cursor-pointer',
       },
       border: {
-        none: '',
+        none: 'border-none',
         default: 'border-2 border-black',
       },
     },

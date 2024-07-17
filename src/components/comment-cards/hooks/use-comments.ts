@@ -1,13 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
+import { nanoid } from 'nanoid'
 
 import { tokenApi } from '@/api/token'
 import { TokenCommentListRes } from '@/api/token/types'
+import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useCommentsStore } from '@/stores/use-comments'
+import { useTokenContext } from '@/contexts/token'
 
 export const useComments = (enableFetchComments = true) => {
-  const { query } = useRouter()
+  const { chainName, tokenAddr } = useTradeSearchParams()
+  const uniqueId = useMemo(nanoid, [])
+  const { setRefetchComments } = useCommentsStore()
 
   const {
     data: commentData,
@@ -17,21 +22,19 @@ export const useComments = (enableFetchComments = true) => {
     fetchNextPage,
   } = useInfiniteQuery({
     enabled: enableFetchComments,
-    queryKey: [tokenApi.commentList.name, query.address],
+    queryKey: [tokenApi.commentList.name + uniqueId, chainName, tokenAddr],
     refetchOnWindowFocus: false,
+    initialPageParam: 1,
     queryFn: ({ pageParam }) => {
-      const tokenAddr = (query.address || '') as string
-
       if (isEmpty(tokenAddr)) return Promise.reject()
 
       // Claer when query.
       setComments([])
-      return tokenApi.commentList(tokenAddr, {
+      return tokenApi.commentList(chainName, tokenAddr, {
         page: pageParam,
         page_size: 25,
       })
     },
-    initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
   })
   // Update a single comment, not the refresh list. so we need this state.
@@ -44,6 +47,10 @@ export const useComments = (enableFetchComments = true) => {
   const updateComment = (data: (typeof comments)[number]) => {
     setComments((old) => old.map((c) => (c.id === data.id ? data : c)))
   }
+
+  useEffect(() => {
+    setRefetchComments(refetchComments)
+  }, [refetchComments])
 
   // Listen comment list.
   useEffect(() => {

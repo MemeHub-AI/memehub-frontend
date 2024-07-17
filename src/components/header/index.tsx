@@ -1,21 +1,23 @@
 import React from 'react'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { useResponsive } from '@/hooks/use-responsive'
 import { HeaderMobile } from './mobile'
 import { HeaderDesktop } from './desktop'
+import { Routes } from '@/routes'
 
 export interface Nav {
-  id: string
   title: string
+  path: string
 }
 
 export const Header = () => {
-  const { isMobile } = useResponsive()
+  const { isPad } = useResponsive()
+  const { t } = useTranslation()
+  const { push } = useRouter()
 
-<<<<<<< Updated upstream
-  const navs: Nav[] = []
-=======
   const navs: Nav[] = [
     { title: t('home'), path: Routes.Main },
     { title: t('next.moonshot'), path: Routes.Moonshot },
@@ -27,9 +29,10 @@ export const Header = () => {
     // { title: t('KOL'), path: Routes.KOL },
     // { title: t('community'), path: Routes.Community },
   ]
->>>>>>> Stashed changes
 
-  const onNavClick = () => {}
+  const onNavClick = (n: Nav) => {
+    push({ pathname: n.path })
+  }
 
   return (
     <header
@@ -39,7 +42,7 @@ export const Header = () => {
         'border-b-2 border-black'
       )}
     >
-      {isMobile ? (
+      {isPad ? (
         <HeaderMobile navs={navs} onNavClick={onNavClick} />
       ) : (
         <HeaderDesktop navs={navs} onNavClick={onNavClick} />

@@ -1,3 +1,6 @@
+import { Address } from 'viem'
+
+import { ContractVersion } from '@/constants/contract'
 import type { UserCoinsCreated, UserInfoRes } from '../user/types'
 
 export interface TokenListItem extends UserCoinsCreated {
@@ -10,6 +13,9 @@ export interface TokenListItem extends UserCoinsCreated {
   create_time: null
   hash: string
   explorer_tx: string
+  version: string
+  pool_address: null | Address
+  poster: string[]
 }
 
 export interface TokenNewReq {
@@ -19,9 +25,32 @@ export interface TokenNewReq {
   image: string
   hash: string
   chain: string
+  version: ContractVersion
   twitter_url?: string
   telegram_url?: string
   website?: string
+  coin_type?: CoinType
+  marketing?: Marketing[]
+  poster?: string[]
+}
+
+export enum CoinType {
+  Normal,
+  Erc404,
+  RewardLp,
+  RewardHolder,
+  Burning,
+}
+
+export interface Marketing {
+  type: MarketType
+  percent: number
+}
+
+export enum MarketType {
+  Kol = 1,
+  Community,
+  Memehub,
 }
 
 export interface TokenNewRes {
@@ -56,6 +85,7 @@ export interface TokenAddCommentReq {
   content: string
   img?: string
   related_comments: string[]
+  chain: string
 }
 
 export interface CreateTokenResult {

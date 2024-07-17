@@ -1,6 +1,7 @@
-import React, { type ComponentProps } from 'react'
+import React, { useEffect, type ComponentProps } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
+import { zeroAddress } from 'viem'
 
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
@@ -10,11 +11,45 @@ import { Skeleton } from '@/components/ui/skeleton'
 
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { holders } = useHolders()
+  const { holders, clearHolders } = useHolders()
+
+  const getLabel = (holder: (typeof holders)[number]) => {
+    const { contract_flag, address } = holder
+    const flag = (contract_flag || '').toLowerCase()
+
+    // Zero addr.
+    if (address === zeroAddress) {
+      return `🔥${t('holder.burning')}`
+    }
+
+    // Bonding curve.
+    if (flag.includes('bonding')) {
+      return `(💰${t('pool')})`
+    }
+
+    // Creator or dev.
+    if (flag.includes('dev') || flag.includes('creator')) {
+      return `(🧑‍💻${t('creator')})`
+    }
+
+    // Dex.
+    if (flag.includes('dex')) {
+      return `(👑${t('dex')})`
+    }
+
+    // Airdrop.
+    if (flag.includes('air')) {
+      return `(${t('airdrop')})`
+    }
+  }
+
+  useEffect(() => clearHolders, [])
 
   return (
     <>
-      <h3 className={cn('font-bold my-2', className)}>{t('holders')}</h3>
+      <h3 className={cn('font-bold my-2 max-sm:text-lg', className)}>
+        {t('holders')}
+      </h3>
       <div className="text-sm text-zinc-500">
         <CustomSuspense
           container="ul"
@@ -23,23 +58,26 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
           fallback={<HolderRankSkeleton />}
           nullback={<p>{t('no.holders')}</p>}
         >
-          {holders?.map((r, i) => (
-            <li key={i} className="flex items-center justify-between">
-              <p>
-                {i + 1}.{' '}
-                <Link
-                  href={r.scan_url}
-                  target="_blank"
-                  className="hover:text-black hover:underline transition-all cursor-pointer"
-                >
-                  {fmt.addr(r.address)}
-                </Link>
-                {/* {r.isBondingCurve && ` 💰 (${t('bonding-curve')})`} */}
-                {/* {r.isDev && ` 🧑‍💻 (${t('dev')})`} */}
-              </p>
-              <span>{fmt.percent(r.percentage)}</span>
-            </li>
-          ))}
+          {holders?.map((r, i) => {
+            // Exclude airdrop.
+            if (r.contract_flag?.includes('Air')) return null
+            return (
+              <li key={i} className="flex items-center justify-between">
+                <p>
+                  {i + 1}.{' '}
+                  <Link
+                    href={r.scan_url}
+                    target="_blank"
+                    className="hover:text-black hover:underline transition-all cursor-pointer"
+                  >
+                    {fmt.addr(r.address)}
+                  </Link>
+                  {getLabel(r)}
+                </p>
+                <span>{fmt.percent(r.percentage)}</span>
+              </li>
+            )
+          })}
         </CustomSuspense>
       </div>
     </>

@@ -18,6 +18,8 @@ import clsx from 'clsx'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Img } from '@/components/img'
+import { useUserStore } from '@/stores/use-user-store'
+import { useWalletStore } from '@/stores/use-wallet-store'
 
 interface Props {
   ideaData: IdeaDataList | undefined
@@ -37,8 +39,13 @@ export const TokenInfo = ({ ideaData }: Props) => {
   const uniqueKey = useMemo(nanoid, [])
   const { onIdeaConfirm } = useGenAIIdea()
   const { setFormInfo, setLoadingLogo, setLoadingPoster } = useAimemeInfoStore()
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
 
   const onCreateNow = (item: IdeaDataList) => {
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
     router.push(`${Routes.Create}`)
     setFormInfo({
       name: item?.name,
@@ -104,10 +111,10 @@ export const TokenInfo = ({ ideaData }: Props) => {
   return (
     <>
       <div className="flex justify-between items-start px-2 max-sm:px-3 text-lg gap-2 leading-5 mb-2">
-        <span className="font-bold">{ideaData?.name}</span>
+        <span className="font-bold break-all">{ideaData?.name}</span>
         {Object.keys(chains).length === 0 ? (
           <span
-            className="ml-2 cursor-pointer text-nowrap text-base leading-5 text-blue-500"
+            className="ml-2 cursor-pointer text-nowrap text-base leading-5 text-blue-500 whitespace-nowrap"
             onClick={() => onCreateNow(ideaData!)}
           >
             {t('create.now')}
@@ -125,7 +132,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
         )}
         <Desc description={ideaData?.description ?? ''}></Desc>
       </div>
-      <div className="px-2  max-sm:px-3">
+      <div className="px-2 max-sm:px-3">
         {chainList(Object.entries(chains).slice(0, 4))}
         {Object.entries(chains).length > 4 ? (
           <div

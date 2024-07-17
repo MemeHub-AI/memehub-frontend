@@ -17,6 +17,9 @@ import { Dialog } from '@/components/ui/dialog'
 import { aiApi } from '@/api/ai'
 import { toast } from 'sonner'
 import { Router } from 'next/router'
+import { useUserStore } from '@/stores/use-user-store'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -27,17 +30,29 @@ export const PosterForm = ({ formData }: Props) => {
   const { form, formFields } = formData
   const [showPoster, setShowPoster] = useState(false)
   const [index, setIndex] = useState(0)
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
 
   const { t } = useTranslation()
   const { loadingPoster, setLoadingPoster } = useAimemeInfoStore()
+  const { playAudio } = useAudioPlayer()
   const createPoster = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
+
+    if (loadingPoster) {
+      return
+    }
+
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
     if (
       form.getValues(formFields?.fullname) === '' ||
       form.getValues(formFields?.description) === ''
     ) {
-      toast.warning(t('need.base.info.warning'))
+      toast.warning(t('need.name.desc.warning'))
       return
     }
 
@@ -66,7 +81,11 @@ export const PosterForm = ({ formData }: Props) => {
   }
 
   const fetchMemePoster = () => {
-    memePosterSign.abort()
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
+    memePosterSign.abort('')
     memePosterSign = new AbortController()
     aiApi
       .getMemePoster(
@@ -91,18 +110,19 @@ export const PosterForm = ({ formData }: Props) => {
 
   useEffect(() => {
     if (loadingPoster) {
+      playAudio('/audio/guagua.mp3')
       fetchMemePoster()
     }
   }, [loadingPoster])
 
   useEffect(() => {
     const cb = () => {
-      memePosterSign.abort()
+      memePosterSign.abort('')
     }
     Router.events.on('routeChangeStart', cb)
 
     return () => {
-      Router.events.off('routeChangeStart', cb)
+      memePosterSign.abort('')
     }
   }, [])
   return (
@@ -113,27 +133,33 @@ export const PosterForm = ({ formData }: Props) => {
         render={({ field }) => {
           return (
             <FormItem>
-              <FormLabel className="mr-2">
-                {loadingPoster ? (
-                  t('ai.poster.tip')
-                ) : field.value?.length ? (
-                  <>
-                    {t('ai.poster')}{' '}
-                    <Button onClick={createPoster} className="ml-3">
-                      <LuRefreshCcw className="mr-1"></LuRefreshCcw>{' '}
-                      {t('switch.ai.poster')}
-                    </Button>
-                  </>
-                ) : (
-                  t('ai.poster')
-                )}
+              <FormLabel className="font-bold">
+                <div className="flex items-center">
+                  {loadingPoster ? (
+                    t('ai.poster.tip')
+                  ) : (
+                    <>
+                      {t('ai.poster')}
+                      <LuRefreshCcw
+                        className={cn(
+                          'ml-2',
+                          loadingPoster ? 'animate-spin' : 'cursor-pointer'
+                        )}
+                        title="Regenerate"
+                        onClick={createPoster}
+                      >
+                        {t('create.ai.poster')}
+                      </LuRefreshCcw>
+                    </>
+                  )}
+                </div>
               </FormLabel>
               <FormControl>
                 {loadingPoster ? (
                   <img src="/images/poster-loading.png" alt="loading" />
                 ) : !!field.value?.length ? (
                   <>
-                    <div className="flex gap-3 w-max max-md:w-[99%] max-md:overflow-x-auto">
+                    <div className="flex space-x-3 w-max max-md:w-[99%] max-md:overflow-x-auto">
                       {(field.value as string[])?.map((item, i) => {
                         return (
                           <div
@@ -155,13 +181,7 @@ export const PosterForm = ({ formData }: Props) => {
                       })}
                     </div>
                   </>
-                ) : (
-                  <div>
-                    <Button onClick={createPoster}>
-                      {t('create.ai.poster')}
-                    </Button>
-                  </div>
-                )}
+                ) : null}
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -169,11 +189,11 @@ export const PosterForm = ({ formData }: Props) => {
         }}
       />
       <Dialog open={showPoster} onOpenChange={() => setShowPoster(false)}>
-        <div className="flex flex-col px-5 mt-5">
-          <div className="absolute top-[50%] translate-y-[-50%] left-2 cursor-pointer">
+        <div className="flex flex-col px-5 mt-5 max-sm:px-2 max-sm:mt-4">
+          <div className="absolute top-[50%] translate-y-[-50%] left-2 max-sm:left-1 cursor-pointer">
             <FaChevronLeft size={26} onClick={onLeft}></FaChevronLeft>
           </div>
-          <div className="absolute top-[50%] translate-y-[-50%] right-2 cursor-pointer">
+          <div className="absolute top-[50%] translate-y-[-50%] right-2 max-sm:right-1 cursor-pointer">
             <FaChevronRight size={26} onClick={onRight}></FaChevronRight>
           </div>
           <img
@@ -183,7 +203,12 @@ export const PosterForm = ({ formData }: Props) => {
                 ?.[index]?.replace('mini', 'origin') as string
             }
             alt="Poster"
-            className="w-full rounded-md mb-4 select-none"
+            className={cn(
+              index < 2
+                ? 'w-[422px] h-[645px] max-h-[70vh] max-sm:h-[85%]'
+                : 'w-[422px] h-[295px] max-h-[70vh] max-sm:h-[85%]',
+              'rounded-md mb-4 select-none object-cover'
+            )}
           />
           <div className="flex justify-center">
             {(form?.getValues(formFields?.poster!) as string[])?.map(

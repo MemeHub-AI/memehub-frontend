@@ -1,1 +1,1 @@
-export { default } from '@/views/main'
+export { default } from '@/views'

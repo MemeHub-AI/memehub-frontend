@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IoIosMore } from 'react-icons/io'
 import { clsx } from 'clsx'
 import { useTranslation } from 'react-i18next'
-import { useSwitchChain } from 'wagmi'
+import { useAccount, useSwitchChain } from 'wagmi'
+import { isEmpty } from 'lodash'
 
 import {
   FormControl,
@@ -28,14 +29,34 @@ interface Props {
 }
 export const FormChain = ({ formData }: Props) => {
   const { form, formFields, chains } = formData
-  const { switchChain } = useSwitchChain()
+  const { switchChainAsync } = useSwitchChain()
   const { t } = useTranslation()
   const [show, setShow] = useState(false)
   const { findChain } = useChainsStore()
+  const { chainId } = useAccount()
 
   const isSelect = (v: string) => {
     return chains.findIndex((c) => c.name === v) > 6
   }
+
+  const switchChain = (id: string, name: string) => {
+    switchChainAsync({ chainId: Number(id) })
+      .then(() => {
+        // Only success can change the chain.
+        form?.setValue(formFields?.chainName, name)
+      })
+      .catch(() => {})
+  }
+
+  // Default select.
+  useEffect(() => {
+    if (!chainId || isEmpty(chains)) return
+
+    const chain = findChain(chainId)
+    if (!chain) return
+
+    form.setValue(formFields.chainName, chain.name)
+  }, [chainId, chains])
 
   return (
     <FormField
@@ -43,7 +64,7 @@ export const FormChain = ({ formData }: Props) => {
       name={formFields?.chainName!}
       render={({ field }) => (
         <FormItem className="mt-0">
-          <FormLabel className="mt-0">
+          <FormLabel className="mt-0 font-bold">
             *
             {fmt.firstUpperCase(
               chains?.find((c) => c.name === field.value)?.name
@@ -54,7 +75,7 @@ export const FormChain = ({ formData }: Props) => {
             {chains ? (
               <RadioGroup
                 defaultValue={field.value}
-                className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap max-w-[300px]  max-sm:w-max"
+                className="flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap max-w-[300px] max-sm:w-max"
               >
                 {chains.slice(0, 7)?.map((c, i) => (
                   <FormItem
@@ -70,10 +91,7 @@ export const FormChain = ({ formData }: Props) => {
                       <RadioGroupItem
                         value={c.name}
                         disabled={!c.is_supported}
-                        onClick={() => {
-                          form?.setValue(formFields?.chainName!, c.name)
-                          switchChain({ chainId: Number(c.id) })
-                        }}
+                        onClick={() => switchChain(c.id, c.name)}
                       >
                         <img
                           src={c.logo}
@@ -81,9 +99,8 @@ export const FormChain = ({ formData }: Props) => {
                           about={c.name}
                           className={cn(
                             'w-[27px] h-[27px] block rounded-full overflow-hidden',
-                            !c.is_supported
-                              ? 'opacity-50 cursor-not-allowed'
-                              : ''
+                            'max-sm:w-[24px] max-sm:h-[24px]',
+                            !c.is_supported && 'opacity-50 cursor-not-allowed'
                           )}
                         />
                       </RadioGroupItem>
@@ -109,8 +126,7 @@ export const FormChain = ({ formData }: Props) => {
                         setShow(false)
                         const chain = findChain(v)
                         if (!chain) return
-                        form?.setValue(formFields?.chainName!, chain.name)
-                        switchChain({ chainId: Number(chain.id) })
+                        switchChain(chain.id, chain.name)
                       }}
                     >
                       <SelectTrigger

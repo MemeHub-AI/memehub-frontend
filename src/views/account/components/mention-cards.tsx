@@ -28,13 +28,15 @@ export const MentionCards = (props: Props) => {
 
   return (
     <CustomSuspense
-      className="flex flex-col gap-3 max-sm:gap-2"
+      className="flex flex-col gap-3 max-sm:gap-0"
       isPending={isLoading}
       fallback={<CardSkeleton />}
       nullback={<p className="text-zinc-500">{t('mentions.empty')}</p>}
     >
       {cards.map((c, i) => (
-        <MentionCard key={i} c={c} />
+        <div className={i === 0 ? '' : 'max-sm:mt-2'}>
+          <MentionCard key={i} c={c} />
+        </div>
       ))}
       {isPending && <p className="text-zinc-500 text-center">{t('loading')}</p>}
       {noMore && <p className="text-zinc-500 text-center">{t('nomore')}</p>}
@@ -46,25 +48,20 @@ const MentionCard = ({ c }: { c: UserListRes[UserListType.Notifications] }) => {
   const { t } = useTranslation()
 
   return (
-    <Card
-      padding="md"
-      className="flex items-center gap-3"
-      hover="bg"
-      shadow="none"
-    >
+    <Card padding="md" className="flex items-center" hover="bg" shadow="none">
       <ChatBubbleIcon width={20} height={20} />
-      <div className="flex flex-col">
-        <div className="flex items-center gap-1 flex-wrap">
+      <div className="flex flex-col ml-3">
+        <div className="flex items-center flex-wrap">
           <Link
             href={`${Routes.Account}/${c.user.wallet_address}`}
             className="font-bold text-black hover:underline"
           >
             {c.user?.name}
           </Link>
-          <span className="text-zinc-500 max-sm:text-xs">
+          <span className="text-zinc-500 max-sm:text-xs ml-1">
             {t('comment.mention-you')}:
           </span>
-          <span className="max-sm:text-sm">#{c.id}</span>
+          <span className="max-sm:text-sm ml-1">#{c.id}</span>
         </div>
         <p>{c.content}</p>
       </div>
@@ -74,11 +71,11 @@ const MentionCard = ({ c }: { c: UserListRes[UserListType.Notifications] }) => {
 
 const CardSkeleton = () => {
   return Array.from({ length: 3 }).map((_, i) => (
-    <Card key={i} padding="md" className="flex gap-2 items-center">
+    <Card key={i} padding="md" className="flex items-center mb-2">
       <Skeleton className="w-8 h-6" />
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col ml-2">
         <Skeleton className="w-48 h-4" />
-        <Skeleton className="w-32 h-4" />
+        <Skeleton className="w-32 h-4 mt-2" />
       </div>
     </Card>
   ))

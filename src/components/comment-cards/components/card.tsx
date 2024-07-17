@@ -15,7 +15,7 @@ import { Dialog } from '@/components/ui/dialog'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { UserListRes, UserListType } from '@/api/user/types'
-import Img from '@/components/img'
+import { Img } from '@/components/img'
 
 interface Props extends ComponentProps<'div'> {
   c: UserListRes[UserListType.Replies]
@@ -62,7 +62,7 @@ export const CommentCard = (props: Props) => {
       >
         {/* User profile */}
         <div
-          className="flex items-center gap-2 group transition-all w-fit"
+          className="flex items-center group transition-all w-fit"
           onClick={() => {
             router.push(fmt.toHref(Routes.Account, c.user.wallet_address))
           }}
@@ -72,7 +72,7 @@ export const CommentCard = (props: Props) => {
             size={32}
             className="border border-zinc-400 cursor-pointer"
           />
-          <div className="flex flex-col">
+          <div className="flex flex-col ml-2">
             <span className="text-sm hover:underline cursor-pointer">
               {c.user.name}
             </span>
@@ -88,7 +88,7 @@ export const CommentCard = (props: Props) => {
         </div>
 
         {/* Like, comment */}
-        <div className="flex items-center gap-3 absolute right-3 top-2">
+        <div className="flex items-center absolute right-3 top-2">
           {!readonly && (
             <Tooltip tip={t('replay')}>
               <MessageSquareReply
@@ -101,25 +101,25 @@ export const CommentCard = (props: Props) => {
 
           {c.is_liked ? (
             <div
-              className="flex items-center gap-1 cursor-pointer group"
+              className="ml-2 flex items-center cursor-pointer group"
               onClick={() => {
                 if (isUnliking) return
                 onUnlike?.(c.id.toString())
               }}
             >
               <HeartFilledIcon className="text-red-600 group-hover:stroke-black" />
-              <span className="text-sm mb-[0.5px]">{c.likes_count}</span>
+              <span className="ml-1 text-sm mb-[0.5px]">{c.likes_count}</span>
             </div>
           ) : (
             <div
-              className="flex items-center gap-1 cursor-pointer group"
+              className="ml-2 flex items-center cursor-pointer group"
               onClick={() => {
                 if (isLiking) return
                 onLike?.(c.id.toString())
               }}
             >
               <HeartIcon className="text-zinc-400 group-hover:stroke-black" />
-              <span className="text-sm mb-[0.5px]">{c.likes_count}</span>
+              <span className="ml-1 text-sm mb-[0.5px]">{c.likes_count}</span>
             </div>
           )}
         </div>
@@ -150,7 +150,10 @@ export const CommentCard = (props: Props) => {
             <Dialog
               open={open}
               onOpenChange={setOpen}
-              contentProps={{ className: 'p-0 w-[50vw] border-none' }}
+              contentProps={{
+                className:
+                  'p-0 w-[50vw] border-none max-sm:w-[85vw] max-h-[96vh] overflow-auto',
+              }}
             >
               <Img
                 src={c.img}
@@ -163,7 +166,7 @@ export const CommentCard = (props: Props) => {
             <Img
               src={c.img}
               alt="img"
-              className="rounded max-w-64 cursor-pointer"
+              className="rounded mt-1 max-w-64 max-h-96 cursor-pointer"
               onClick={() => setOpen(true)}
             />
           </>

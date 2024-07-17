@@ -31,16 +31,18 @@ export const AccountPage = () => {
         refetchUserInfo: isOtherUser ? refetchOtherUserInfo : refetchUserInfo,
       }}
     >
-      <main className="min-h-main px-6 max-sm:px-3 flex gap-4 max-sm:flex-col max-sm:gap-2">
+      <main className="min-h-main px-6 max-sm:px-3 flex gap-4 max-sm:flex-col max-sm:gap-0">
         {/* Left aside */}
         <aside
           className={cn(
-            'h-fit flex flex-col gap-4 sticky top-20 mt-4',
+            'h-fit flex flex-col gap-4 max-sm:gap-0 sticky top-20 mt-4 max-sm:mb-2',
             'max-sm:static max-sm:gap-2'
           )}
         >
           <Profile />
-          <FollowTab />
+          <div className="max-sm:hidden max-sm:mt-4">
+            <FollowTab />
+          </div>
         </aside>
 
         {/* Right tabs */}

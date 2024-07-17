@@ -1,33 +1,35 @@
 import React, { ReactNode } from 'react'
-import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { CircleAlert } from 'lucide-react'
+import { useRouter } from 'next/router'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
-import { useDeploy } from '../hooks/use-deploy'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { isUserReject } from '@/utils/contract'
 import { fmt } from '@/utils/fmt'
+import { useCreateTokenContext } from '@/contexts/create-token'
 
-interface Props extends ReturnType<typeof useDeploy> {}
-
-export const CreateTokenStatusDialog = (props: Props) => {
-  const {
-    createTokenData,
-    createTokenError,
-    deployHash = '',
-    isSubmitting,
-    isConfirming,
-    isDeploySuccess,
-    isCreatingToken,
-    submitError,
-    confirmError,
-    resetDeploy,
-    retryCreate,
-  } = props
+export const CreateTokenStatusDialog = () => {
   const { t } = useTranslation()
+  const {
+    deployResult: {
+      deployLogAddr,
+      createTokenData,
+      createTokenError,
+      isSubmitting,
+      isConfirming,
+      isDeploySuccess,
+      isCreatingToken,
+      submitError,
+      confirmError,
+      resetDeploy,
+      retryCreate,
+    },
+  } = useCreateTokenContext()
+  const router = useRouter()
+
   const chainName = createTokenData?.chain?.name || ''
   const deployedAddr = createTokenData?.address || ''
   const explorerUrl = createTokenData?.chain?.explorer_tx || ''
@@ -64,7 +66,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!submitError}
         title={withIcon(t('deploy.submit.error') + ':')}
         description={
-          <p className="break-all line-clamp-3">{submitError?.message}</p>
+          <span className="break-all line-clamp-3">{submitError?.message}</span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -83,7 +85,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
       >
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
-          <p>{t('deploy.submit.success.desc')}</p>
+          <span>{t('deploy.submit.success.desc')}</span>
         </DialogDescription>
       </Dialog>
     )
@@ -96,7 +98,9 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!confirmError}
         title={withIcon(t('deploy.confirm.error') + ':')}
         description={
-          <p className="break-all line-clamp-3">{confirmError?.message}</p>
+          <span className="break-all line-clamp-3">
+            {confirmError?.message}
+          </span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -104,6 +108,7 @@ export const CreateTokenStatusDialog = (props: Props) => {
     )
   }
 
+  // Submit token info
   if (isCreatingToken) {
     return (
       <AlertDialog
@@ -123,8 +128,8 @@ export const CreateTokenStatusDialog = (props: Props) => {
         open={!!createTokenError}
         title={withIcon(t('deploy.backend.error') + ':')}
         description={
-          <div>
-            <p className="break-all line-clamp-3">
+          <span>
+            <span className="break-all line-clamp-3">
               {t('deploy.backend.error.desc')}
               <span
                 className="text-blue-600 cursor-pointer hover:underline"
@@ -132,8 +137,8 @@ export const CreateTokenStatusDialog = (props: Props) => {
               >
                 {t('retry')}
               </span>
-            </p>
-          </div>
+            </span>
+          </span>
         }
         onCancel={resetDeploy}
         onConfirm={resetDeploy}
@@ -146,35 +151,33 @@ export const CreateTokenStatusDialog = (props: Props) => {
     return (
       <AlertDialog
         open={isDeploySuccess}
-        title={t('deploy.success')}
         onCancel={resetDeploy}
-        onConfirm={resetDeploy}
-        description={
-          <div className="flex flex-col gap-2 w-fit">
-            <Link
-              className="text-blue-600 hover:underline"
-              href={Routes.Main}
-              onClick={resetDeploy}
-            >
-              {t('deploy.success.view-list')}
-            </Link>
-            {chainName && deployedAddr && (
-              <Link
-                className="text-blue-600 hover:underline"
-                href={fmt.toHref(Routes.Main, chainName, deployedAddr)}
-                onClick={resetDeploy}
-              >
-                {t('deploy.success.view-details')}
-              </Link>
-            )}
-            <Link
-              className="text-blue-600 hover:underline"
-              href={explorerUrl}
-              target="_blank"
-              onClick={resetDeploy}
-            >
-              {t('deploy.success.view-hash')}
-            </Link>
+        onConfirm={() => {
+          resetDeploy()
+          router.push(
+            fmt.toHref(
+              Routes.Main,
+              chainName,
+              deployedAddr || deployLogAddr || ''
+            )
+          )
+        }}
+        showCancel={false}
+        confirmText={t('go-to.buy')}
+        align="center"
+        title={
+          <>
+            <p>{t('deploy.success').split('$')[0]}</p>
+            <p>{t('deploy.success').split('$')[1]}</p>
+          </>
+        }
+        content={
+          <div className="flex items-center justify-center my-8">
+            <img
+              src="/images/create-success.png"
+              alt="poster"
+              className="w-32"
+            />
           </div>
         }
       />

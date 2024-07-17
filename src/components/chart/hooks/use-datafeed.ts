@@ -1,51 +1,57 @@
 import { isEmpty, last } from 'lodash'
-import { useRouter } from 'next/router'
 
 import type {
   IBasicDataFeed,
   LibrarySymbolInfo,
 } from '../../../../public/js/charting_library/charting_library'
-
-import { useDatafeedConfig } from './use-datafeed-config'
 import { useDatafeedCache } from './use-datafeed-cache'
 import { useDatafeedWebsocket } from './use-datafeed-websocket'
-import { useChartUtils } from './use-chart-utils'
 import { useStorage } from '@/hooks/use-storage'
+import {
+  datafeedConfig,
+  datafeedUnit,
+  symbolInfoConfig,
+} from '@/config/datafeed'
+import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { formatInterval, parsePricescale } from '@/utils/chart'
+import { withPair } from '@/utils/datafeed'
 
 export const useDatafeed = () => {
-  const { query } = useRouter()
-  const chain = (query.chain || '') as string
-  const addr = (query.address || '') as string
-
+  const { chainName, tokenAddr } = useTradeSearchParams()
   const { getInterval, setInterval } = useStorage()
-  const interval = getInterval(chain, addr) || '1m'
-  const { readyConfig, symbolInfoConfig } = useDatafeedConfig()
+  const interval = getInterval(chainName, tokenAddr) || '1m'
   const cache = useDatafeedCache()
-  const { listenAsync, historyAsync, onUpdate, disconenct } =
+  const { ws, listenAsync, historyAsync, onUpdate, disconenct } =
     useDatafeedWebsocket({
-      onReconnect: () => listenAsync({ interval, token_address: addr }),
+      onReconnect: () =>
+        listenAsync({
+          interval,
+          token_address: tokenAddr,
+          chain: chainName,
+        }),
     })
-  const { formatInterval, formatBars, formatPricescale } = useChartUtils()
 
   const createDatafeed = () => {
     return {
-      onReady: (callback) => setTimeout(() => callback(readyConfig)),
+      onReady: (callback) => {
+        setTimeout(() => callback(datafeedConfig))
+        ws.on('connect_invalid', disconenct)
+      },
       searchSymbols(_, __, ___, ____) {},
       async resolveSymbol(symbolName, onResolve, onError, extension) {
         const { data } = await listenAsync({
           interval,
-          token_address: addr,
+          token_address: tokenAddr,
+          chain: chainName,
         })
-        const bars = formatBars(data)
+        const bars = data[datafeedUnit]
         const lastBar = last(bars)
         const symbolInfo: LibrarySymbolInfo = {
           ...symbolInfoConfig,
           name: symbolName,
-          full_name: symbolName,
-          description: symbolName,
-          pricescale: formatPricescale(lastBar?.open),
-          // pricescale: 100,
-          // minmov: 1,
+          full_name: withPair(symbolName),
+          description: withPair(symbolName),
+          pricescale: parsePricescale(lastBar?.open),
         }
 
         cache.setBars(bars)
@@ -57,7 +63,7 @@ export const useDatafeed = () => {
 
         if (period.firstDataRequest) {
           const cachedBars = cache.getBars() || []
-          const cachedInterval = getInterval(chain, addr)
+          const cachedInterval = getInterval(chainName, tokenAddr)
           // Have cached bars & interval no change, use cache.
           if (!isEmpty(cachedBars) && cachedInterval === interval) {
             onResult(cachedBars, { noData: false })
@@ -66,22 +72,24 @@ export const useDatafeed = () => {
 
           const { data } = await listenAsync({
             interval,
-            token_address: addr,
+            token_address: tokenAddr,
+            chain: chainName,
           })
-          const bars = formatBars(data)
+          const bars = data[datafeedUnit]
           !isEmpty(bars) && cache.setLastBar(last(bars))
-          setInterval(chain, addr, interval)
+          setInterval(chainName, tokenAddr, interval)
           onResult(bars, { noData: isEmpty(data) })
           return
         }
 
         const { data } = await historyAsync({
           interval,
-          token_address: addr,
+          token_address: tokenAddr,
           start: period.from,
           limit: period.countBack,
+          chain: chainName,
         })
-        const bars = formatBars(data)
+        const bars = data[datafeedUnit]
 
         !isEmpty(bars) && cache.setLastBar(last(bars))
         onResult(bars, { noData: isEmpty(bars) })
@@ -89,9 +97,7 @@ export const useDatafeed = () => {
       subscribeBars(_, resolution, onTick, uid, onRest) {
         console.log('subscribe', uid)
         onUpdate(({ data }) => {
-          const bars = formatBars(data)
-
-          bars.forEach((bar) => {
+          data[datafeedUnit].forEach((bar) => {
             const lastTime = cache.getLastBar()?.time || 0
             if (bar.time < lastTime) return
 

@@ -1,14 +1,14 @@
-import React, { useContext, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 import { Title } from './title'
-import { AIIdeaBar } from '@/components/ai-idea'
+import { AIIdeaBar } from '@/components/ai-idea-bar'
 import { CreateTokenForm } from './form/form'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
-import { CreateTokenContext } from '../context'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
+import { useCreateTokenContext } from '@/contexts/create-token'
 
 interface Props {
   className?: string
@@ -16,11 +16,9 @@ interface Props {
   setTab: (tab: number) => void
 }
 
-export const Main = (props: Props) => {
-  const { className, tab, setTab } = props
+export const CreateTokenMain = (props: Props) => {
+  const { className } = props
   const { t } = useTranslation()
-
-  const { formData, deployResult } = useContext(CreateTokenContext)
 
   const {
     show,
@@ -34,7 +32,7 @@ export const Main = (props: Props) => {
   return (
     <div
       className={cn(
-        'w-96 pr-6 max-md:w-[480px] max-sm:w-full max-sm:px-4  max-sm:mb-5',
+        'w-96 pr-6 max-md:w-[480px] max-sm:w-full max-sm:px-0  max-sm:mb-5',
         className
       )}
     >

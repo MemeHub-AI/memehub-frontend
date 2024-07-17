@@ -1,19 +1,22 @@
 import React, { ComponentProps, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { SlMenu } from 'react-icons/sl'
+import { MdArrowDropDown } from 'react-icons/md'
 import { useRouter } from 'next/router'
-import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { useAccount } from 'wagmi'
 
 import type { Nav } from '.'
-
 import { Button } from '../ui/button'
-import { Routes } from '@/routes'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
 import { WalletConnect } from '../wallet-connect'
 import { WalletDisconnector } from '../wallet-connect/components/disconnector'
-import { SearchInput } from '../search-input'
+import { Routes } from '@/routes'
+import RewardButton from '../reward-button'
+import { cn } from '@/lib/utils'
+import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
+import { SOCIAL_LINKS } from '@/config/link'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -27,62 +30,99 @@ export const HeaderMobile = (props: Props) => {
   const closeRef = useRef<HTMLButtonElement>(null)
   const { isConnected } = useAccount()
 
+  const links = [
+    {
+      name: t('telegram'),
+      icon: <FaTelegramPlane />,
+      link: SOCIAL_LINKS.tg,
+    },
+    {
+      name: t('twitter-x'),
+      icon: <FaTwitter />,
+      link: SOCIAL_LINKS.x,
+    },
+  ]
+
   return (
     <>
       <Sheet>
         <SheetTrigger asChild ref={closeRef}>
-          <div className="flex justify-start items-center gap-2">
-            <Button size="icon-sm">
-              <HamburgerMenuIcon />
-            </Button>
-            {/* <Logo showMeme /> */}
+          <div className="flex justify-start items-center space-x-2">
+            <Logo
+              src="/images/logo.png"
+              alt="logo"
+              className="mt-1 w-10 max-[375px]:hidden"
+            />
+            <div className="flex font-extraboldc text-xl mt-1">
+              <SlMenu />
+              <MdArrowDropDown />
+            </div>
           </div>
         </SheetTrigger>
-        <SearchInput className="h-8 ml-3 mr-1" />
+
         <SheetContent
           onOpenAutoFocus={(e) => e.preventDefault()}
           showClose={false}
-          side="left"
-          className="pt-4 px-3"
+          side="bottom"
+          className="pt-4 px-3 rounded-t-lg font-bold"
         >
-          <div className="flex items-center gap-2">
-            <Logo showMeme />
-            <LangSelect className="ml-3 h-7" />
-          </div>
-          <ul className="flex flex-col gap-3 mt-3">
+          <ul className="flex flex-col space-y-3 mt-3 mb-1">
             {navs.map((n, i) => (
               <li key={i}>
-                <Button
+                <div
                   className="w-full justify-start"
-                  variant="outline"
-                  onClick={() => onNavClick?.(n)}
+                  onClick={() => {
+                    onNavClick?.(n)
+                    closeRef.current?.click()
+                  }}
                 >
                   {n.title}
-                </Button>
+                </div>
               </li>
             ))}
           </ul>
-          <WalletDisconnector
-            size="sm"
-            variant="destructive"
-            className="absolute bottom-4 left-4 right-4 inline-flex items-center gap-2"
-            onConfirm={() => closeRef.current?.click()}
-          >
-            <span>{t('disconnect')}</span>
-          </WalletDisconnector>
+          <LangSelect
+            className={cn(
+              isConnected && 'mb-9',
+              'size-fit w-full justify-start'
+            )}
+          />
+          <div className="flex space-x-6 text-2xl mt-20">
+            {links.map((l, i) => (
+              <div
+                key={i}
+                className="gap-2 px-2 justify-start items-start max-sm:!px-0 max-sm:py-2"
+                onClick={() => {
+                  if (l.link) open(l.link)
+                }}
+              >
+                {l.icon}
+              </div>
+            ))}
+          </div>
         </SheetContent>
       </Sheet>
 
-      <div className="flex items-center">
-        {isConnected && router.pathname !== Routes.Create && (
-          <Button
-            className="mx-3 max-sm:mx-1.5"
-            onClick={() => router.push(Routes.Create)}
-            size="sm"
-          >
-            {t('token.create')}
-          </Button>
+      {/* <SearchInput /> */}
+      <div className="flex justify-between items-center space-x-2 ml-1">
+        <Button
+          className="bg-lime-green w-8 p-0"
+          size={'sm'}
+          onClick={() => router.push(Routes.Airdrop)}
+        >
+          <img src="/images/gift.png" className="w-5" />
+        </Button>
+        {isConnected && (
+          <RewardButton className="max-sm:px-2" showReferral={false} />
         )}
+        <Button
+          variant="outline"
+          className="mx-3 max-sm:mx-0"
+          size={'sm'}
+          onClick={() => router.push(Routes.Create)}
+        >
+          {t('create.token')}
+        </Button>
         <WalletConnect />
       </div>
     </>

@@ -1,4 +1,4 @@
-export interface ApiResponse<T> {
+export interface ApiResponse<T = null> {
   code: number
   message: string
   data: T
@@ -6,14 +6,21 @@ export interface ApiResponse<T> {
 
 export enum ApiCode {
   Success = 200,
+  AuthError = 401,
+  NotFound = 404,
 }
 
-export interface PaginationParams {
-  page: number
-  page_size: number
+export interface PaginationReq {
+  page?: number
+  page_size?: number
 }
 
-export interface Pagination<T> {
+export interface PaginationRes<T> {
   count: number
   results?: T[]
+}
+
+export interface Locale {
+  zh?: string
+  en?: string
 }

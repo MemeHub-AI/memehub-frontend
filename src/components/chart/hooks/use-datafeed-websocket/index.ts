@@ -9,7 +9,6 @@ import type {
   DatafeedEventBase,
   DatafeedOnEvents,
 } from './types'
-
 import { wsApiURL } from '@/api/websocket'
 import { useEmitter } from '@/hooks/use-emitter'
 import { useChartStore } from '@/stores/use-chart-store'
@@ -20,24 +19,27 @@ const heartbetaMessage = {
   data: null,
 }
 
-const heartbeatFreq = 10 // unit is seconds
-
 interface Options {
   onReconnect?: (e: Event) => void
+  reconnectDelay?: number
 }
 
-export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
+export const useDatafeedWebsocket = ({
+  onReconnect,
+  reconnectDelay = 500,
+}: Options = {}) => {
   const emitter = useEmitter<DatafeedOnEvents, DatafeedEmitEvents>()
   const wsRef = useRef<WebSocket>()
   const timerRef = useRef<number>()
-  const { chart } = useChartStore()
+  // Do not speculate or interpret further here,
+  // as it cannot obtain the latest status!!!
+  // const { chart } = useChartStore()
 
   // Keep heartbeat.
   const onOpen = () => {
-    sendMessage(heartbetaMessage)
     timerRef.current = window.setInterval(() => {
       sendMessage(heartbetaMessage)
-    }, heartbeatFreq * 1000)
+    }, 10_000) // Each 10s.
   }
 
   // Emit listened events.
@@ -65,7 +67,8 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
         resolve(e)
       })
       wsRef.current.addEventListener('close', (e) => {
-        chart && onReconnect?.(e) // Reconnect if chart exist.
+        if (!useChartStore.getState().chart) return
+        setTimeout(() => onReconnect?.(e), reconnectDelay)
       })
       wsRef.current.addEventListener('error', reject)
       wsRef.current.addEventListener('message', onMessage)
@@ -95,7 +98,7 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
     return withPromise<DatafeedEventBase<'listen', DatafeedBar[]>>(
       async (resolve, reject) => {
         emitter.on('listen', (v) => v.data && resolve(v))
-        sendMessage({ type: 'listen', data })
+        sendMessage({ type: 'listen', data: data })
       }
     )
   }
@@ -121,6 +124,7 @@ export const useDatafeedWebsocket = ({ onReconnect }: Options = {}) => {
   }
 
   return {
+    ws: emitter,
     connect,
     disconenct,
     listenAsync,

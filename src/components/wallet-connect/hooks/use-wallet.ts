@@ -1,4 +1,10 @@
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import {
+  Connector,
+  CreateConnectorFn,
+  useAccount,
+  useConnect,
+  useDisconnect,
+} from 'wagmi'
 import { first } from 'lodash'
 
 import { useLogin } from '@/hooks/use-login'
@@ -20,7 +26,7 @@ export const useWallet = () => {
   const { setConnectOpen } = useWalletStore()
   const { setUserInfo } = useUserStore()
 
-  const connectWallet = async (connector: (typeof connectors)[number]) => {
+  const connectWallet = async (connector: CreateConnectorFn | Connector) => {
     try {
       if (isConnected) {
         return await signLogin()

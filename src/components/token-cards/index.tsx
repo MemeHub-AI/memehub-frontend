@@ -10,6 +10,9 @@ import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { Routes } from '@/routes'
 import { UserCoinsCreated } from '@/api/user/types'
 import { TokenChainSelect } from './chain-select'
+import { TokenSearchInput } from './token-search-input'
+import useAudioPlayer from '@/hooks/use-audio-player'
+import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -29,15 +32,17 @@ export const TokenCards = (props: Props) => {
     onFetchNext,
   } = props
   const { t } = useTranslation()
+  const [chianTag, setChainTag] = useState('all')
   const [filteredCards, setFilteredCards] = useState(cards)
-
-  // TODO: Encapsulate a component to handling scroll load.
+  const { isPlayHomeAudio, setIsPlayHomeAudio } = useIsPlayAudio()
   const { noMore } = useScrollLoad({
     onFetchNext,
     hasMore: cards.length < total,
   })
 
   const onChange = (chainId: string) => {
+    setChainTag(chainId)
+
     if (chainId === 'all') {
       setFilteredCards(cards)
       return
@@ -50,26 +55,41 @@ export const TokenCards = (props: Props) => {
     setFilteredCards(cards)
   }, [cards])
 
+  useEffect(() => {
+    setFilteredCards(cards)
+  }, [cards])
+
   return (
     <div className={cn(className)}>
-      {isLoading ? (
-        <Skeleton className="h-9 w-24 mb-4" />
-      ) : (
-        <div
-          className={cn(
-            'flex items-center gap-4 max-sm:justify-between mb-4',
-            total <= 1 && 'hidden'
-          )}
-        >
-          <TokenChainSelect onValueChange={onChange} />
-          {/* <TokenSortSelect /> */}
-        </div>
-      )}
+      <audio autoPlay={isPlayHomeAudio} onPlay={() => setIsPlayHomeAudio(false)}>
+        <source src="/audio/home.mp3" type="audio/mpeg"/>
+      </audio> 
+      <CustomSuspense
+        className="flex justify-between items-start gap-4 max-sm:justify-between mb-4 max-sm:gap-0"
+        isPending={isLoading}
+        fallback={
+          <>
+            <Skeleton className="h-9 w-24" />
+            <Skeleton className="h-9 w-40" />
+          </>
+        }
+      >
+        <TokenChainSelect onValueChange={onChange} />
+        {/* <TokenSortSelect /> */}
+        <TokenSearchInput
+          chianTag={chianTag}
+          onSearched={(tokens) => setFilteredCards(tokens)}
+          onCleared={() =>
+            setFilteredCards(cards.filter((c) => c.chain.id === chianTag))
+          }
+          className="ml-4"
+        />
+      </CustomSuspense>
 
       <CustomSuspense
         className={cn(
           'grid grid-cols-2 gap-4 2xl:grid-cols-3 max-lg:grid-cols-1',
-          'max-sm:gap-2'
+          'max-sm:gap-0'
         )}
         isPending={isLoading}
         fallback={<CardSkeleton />}
@@ -84,34 +104,38 @@ export const TokenCards = (props: Props) => {
         }
       >
         {!!cards.length &&
-          filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
+          filteredCards.map((t, i) => (
+            <TokenCard key={i} card={t} className={'max-sm:mb-2'} />
+          ))}
+      </CustomSuspense>
+      <div className='mt-2'>
         {isPending && (
-          <p className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
+          <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
             {t('loading')}
-          </p>
+          </div>
         )}
         {noMore && (
-          <p className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
+          <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
             {t('nomore')}
-          </p>
+          </div>
         )}
-      </CustomSuspense>
+      </div>
     </div>
   )
 }
 
 const CardSkeleton = () => {
   return Array.from({ length: 4 }).map((_, i) => (
-    <div className="border-2 rounded flex gap-2 relative" key={i}>
+    <div className="border-2 rounded flex relative mb-2" key={i}>
       <Skeleton className="w-40 h-40 flex-shrink-0 rounded-none" />
-      <div className="w-full my-2 flex flex-col justify-between gap-2 mr-2">
-        <div className="flex flex-col gap-2">
+      <div className="w-full my-2 flex flex-col justify-between ml-2 mr-2">
+        <div className="flex flex-col">
           <Skeleton className="w-1/2 h-6 mt-1" />
-          <Skeleton className="w-full h-4" />
-          <Skeleton className="w-full h-4" />
-          <Skeleton className="w-1/2 h-4" />
+          <Skeleton className="w-full h-4 mt-2" />
+          <Skeleton className="w-full h-4 mt-2" />
+          <Skeleton className="w-1/2 h-4 mt-2" />
         </div>
-        <Skeleton className="w-full h-5 rounded-full" />
+        <Skeleton className="w-full h-5 rounded-full ml-2" />
       </div>
       <Skeleton className="w-6 h-6 rounded-full absolute right-2 top-2" />
     </div>

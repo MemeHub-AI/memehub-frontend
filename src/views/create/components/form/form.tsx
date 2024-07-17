@@ -1,9 +1,8 @@
-import React, { forwardRef, useContext, useEffect } from 'react'
+import React, { forwardRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { formatEther } from 'viem'
 import { toast } from 'sonner'
+import { useAccount } from 'wagmi'
 
-import { CreateTokenContext } from '../../context'
 import {
   Form,
   FormControl,
@@ -13,23 +12,32 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/input'
-import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
 import { FormLogo } from './logo'
 import { FormChain } from './chain'
 import { PosterForm } from './poster'
+import { fmt } from '@/utils/fmt'
+import { useCreateTokenContext } from '@/contexts/create-token'
+import { CoinTypeField } from './coin-type-field'
+import { MarketingField } from './marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { Description } from './desc'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
-  const { deployResult, formData } = useContext(CreateTokenContext)
+  const { deployResult, formData } = useCreateTokenContext()
+  const { chain } = useAccount()
+
+  const { url, form, formFields, onSubmit, chains } = formData
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
-  const { url, form, formFields, onSubmit } = formData
 
-  const { deployFee, deploySymbol, isDeploying } = deployResult || {}
+  const { isDeploying, deployFee } = deployResult || {}
 
-  const fee = Number(formatEther(BigInt(deployFee!))).toFixed(3)
-  const symbol = deploySymbol
+  const chainSymbol = chains.find(
+    (c) => c.name === form.getValues(formFields.chainName)
+  )?.native.symbol
+  const symbol =
+    (chainSymbol ? chainSymbol : chain?.nativeCurrency.symbol) || ''
 
   const beforeSubmit = (values: any) => {
     if (loadingInfo || loadingLogo) {
@@ -53,7 +61,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           className="flex flex-col space-y-3 max-sm:w-full max-sm:space-y-2"
         >
           {/* Loog/name/chain/symbol */}
-          <div className="flex gap-5 max-sm:flex-col max-sm:gap-1">
+          <div className="flex md:gap-5 max-sm:flex-col max-sm:space-y-2">
             <div className="flex">
               {/* Logo */}
               <FormLogo formData={formData}></FormLogo>
@@ -65,13 +73,14 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                   name={formFields?.fullname!}
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel className="mt-0">*{t('fullname')}</FormLabel>
+                      <FormLabel className="mt-0 font-bold">
+                        *{t('fullname')}
+                      </FormLabel>
                       <FormControl className="w-full">
                         <Input
                           placeholder={t('name.placeholder')}
                           {...field}
                           className="w-full"
-                          inputClassName="w-full"
                         />
                       </FormControl>
                       <FormMessage />
@@ -83,13 +92,14 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                   name={formFields?.symbol!}
                   render={({ field }) => (
                     <FormItem className="w-full">
-                      <FormLabel>*{t('symbol')}</FormLabel>
+                      <FormLabel className="font-bold">
+                        *{t('symbol')}
+                      </FormLabel>
                       <FormControl className="w-full">
                         <Input
                           placeholder={t('symbol.placeholder')}
                           {...field}
                           className="w-full"
-                          inputClassName="w-full"
                         />
                       </FormControl>
                       <FormMessage />
@@ -99,28 +109,18 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
               </div>
             </div>
 
-            {/* chain */}
-            <FormChain formData={formData}></FormChain>
+            {/* Chain / coinType */}
+            <div className="h-[150px] flex flex-col justify-between max-sm:flex-row max-sm:h-min max-sm:justify-start max-sm:space-x-4 max-sm:flex-wrap">
+              <FormChain formData={formData} />
+              {/* <CoinTypeField /> */}
+            </div>
           </div>
 
+          {/* Marketing */}
+          <MarketingField />
+
           {/* Description */}
-          <FormField
-            control={form?.control}
-            name={formFields?.description!}
-            render={({ field }) => (
-              <FormItem className="max-w-[500px]">
-                <FormLabel>*{t('description.placeholder')}</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder={t('description.placeholder')}
-                    rows={5}
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <Description formData={formData} />
 
           {/* Poster */}
           <PosterForm formData={formData}></PosterForm>
@@ -132,7 +132,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
               name={formFields?.twitter!}
               render={({ field }) => (
                 <FormItem className="flex-1 mr-4">
-                  <FormLabel>{t('twitter-x')}</FormLabel>
+                  <FormLabel className="font-bold">{t('twitter-x')}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -148,7 +148,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
               name={formFields?.telegram!}
               render={({ field }) => (
                 <FormItem className="flex-1">
-                  <FormLabel>{t('telegram')}</FormLabel>
+                  <FormLabel className="font-bold">{t('telegram')}</FormLabel>
                   <FormControl>
                     <Input placeholder={t('telegram.placeholder')} {...field} />
                   </FormControl>
@@ -165,39 +165,19 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
               name={formFields?.website!}
               render={({ field }) => (
                 <FormItem className="flex-1 mr-4">
-                  <FormLabel>{t('website')}</FormLabel>
+                  <FormLabel className="font-bold">{t('website')}</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder={t('website.placeholder')}
-                      type="url"
-                      {...field}
-                    />
+                    <Input placeholder={t('website.placeholder')} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <FormField
-              control={form?.control}
-              name={formFields?.website!}
-              render={({ field }) => (
-                <FormItem className="flex-1 opacity-0">
-                  <FormLabel>{t('website')}</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder={t('website.placeholder')}
-                      type="url"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="flex-1"></div>
           </div>
 
           {/* Submit button */}
-          <div className="flex flex-col items-start gap-3 max-w-[500px]">
+          <div className="flex flex-col items-start space-y-3 max-w-[500px]">
             <Button
               variant="default"
               className="px-10 mt-3"
@@ -207,7 +187,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
             </Button>
             {symbol && (
               <p className="text-zinc-400 text-xs">
-                {t('deploy.fee')}: {fee} {symbol}
+                {t('deploy.fee')} ≈ {fmt.decimals(deployFee)} {symbol}
               </p>
             )}
           </div>

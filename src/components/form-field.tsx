@@ -12,10 +12,10 @@ export type Props = {
 } & (ComponentProps<'textarea'> | ComponentProps<'input'>)
 
 export const FormField = (props: Props) => {
-  const { render, label, isRequired, error, ...restProps } = props
+  const { render, label, isRequired, error, className, ...restProps } = props
 
   return (
-    <div className="space-y-1 relative">
+    <div className={cn('space-y-1 relative', className)}>
       {label && (
         <Label htmlFor={restProps.id} className={cn(!!error && 'text-red-600')}>
           {isRequired && '*'}
@@ -28,10 +28,14 @@ export const FormField = (props: Props) => {
   )
 }
 
+interface TextareaProps extends Omit<Props, 'render'> {
+  disableFocusBorder?: boolean
+}
+
 export const FormTextareaField = (
-  props: Omit<Props, 'render'> & ComponentProps<'textarea'>
+  props: TextareaProps & ComponentProps<'textarea'>
 ) => {
-  const { label, isRequired, error, ...restProps } = props
+  const { label, isRequired, error, disableFocusBorder, ...restProps } = props
 
   return (
     <FormField
@@ -42,7 +46,7 @@ export const FormTextareaField = (
       render={
         <Textarea
           className={cn(error && 'border-red-600')}
-          disableFocusBorder={!!error}
+          disableFocusBorder={disableFocusBorder || !!error}
           {...restProps}
         />
       }

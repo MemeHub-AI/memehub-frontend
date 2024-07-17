@@ -2,6 +2,7 @@ import React, { useEffect, type ComponentProps } from 'react'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import timezone from 'dayjs/plugin/timezone'
+import duration from 'dayjs/plugin/duration'
 import dayjsZh from 'dayjs/locale/zh-cn'
 import dayjsEn from 'dayjs/locale/en'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -20,6 +21,7 @@ import { useQueryChains } from '@/hooks/use-query-chains'
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
+dayjs.extend(duration)
 dayjs.locale(dayjsZh)
 dayjs.locale(dayjsEn)
 
@@ -43,7 +45,7 @@ export const AppLayout = ({ children }: ComponentProps<'div'>) => {
   }, [i18n.language])
 
   if (isNotMounted) return <></>
-
+  
   return (
     <>
       <Header />

@@ -1,6 +1,7 @@
 export interface ChainData {
   id: string
   name: string
+  displayName: string
   logo: string
   is_supported: boolean
   contract_address: string

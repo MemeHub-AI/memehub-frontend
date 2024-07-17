@@ -32,6 +32,17 @@ export interface IdeaRes {
 export interface IdeaBasicInfo {
   id: number
   title: string
+  description: string
   content: string
   logo: string
+  meme: any
+  category: string
+}
+
+export interface MemeStoryData {
+  id: number
+  title: string
+  content: string
+  logo: string
+  types: any
 }

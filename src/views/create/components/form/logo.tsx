@@ -15,6 +15,9 @@ import { Button } from '@/components/ui/button'
 import { LuRefreshCcw } from 'react-icons/lu'
 import { toast } from 'sonner'
 import { Router } from 'next/router'
+import { useUserStore } from '@/stores/use-user-store'
+import { useWalletStore } from '@/stores/use-wallet-store'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -24,14 +27,19 @@ let memeLogoSign = new AbortController()
 export const FormLogo = ({ formData }: Props) => {
   const { form, formFields } = formData
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
+  const userStore = useUserStore()
+  const { setConnectOpen } = useWalletStore()
+  const { playAudio } = useAudioPlayer()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
-    if (
-      form.getValues(formFields?.fullname) === '' ||
-      form.getValues(formFields?.description) === ''
-    ) {
+
+    if (userStore.userInfo?.id == null) {
+      return setConnectOpen(true)
+    }
+
+    if (form.getValues(formFields?.fullname) === '') {
       toast.warning(t('need.base.info.warning'))
       return
     }
@@ -51,7 +59,7 @@ export const FormLogo = ({ formData }: Props) => {
       )
       .then(({ data }) => {
         if (data) {
-          form.setValue(formFields.logo, data[0])
+          form.setValue(formFields.logo, data?.images?.[0])
         }
       })
       .finally(() => {
@@ -61,17 +69,14 @@ export const FormLogo = ({ formData }: Props) => {
 
   useEffect(() => {
     if (loadingLogo) {
+      playAudio('/audio/guagua.mp3')
       fetchMemeLogo()
     }
   }, [loadingLogo])
 
   useEffect(() => {
-    const cb = () => {
-      memeLogoSign.abort()
-    }
-    Router.events.on('routeChangeStart', cb)
     return () => {
-      Router.events.off('routeChangeStart', cb)
+      memeLogoSign.abort('')
     }
   }, [])
 

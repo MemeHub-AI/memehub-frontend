@@ -1,4 +1,4 @@
-import React, { ComponentProps, useState } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
@@ -6,42 +6,66 @@ import { BigNumber } from 'bignumber.js'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { useTradeContext } from '@/contexts/trade'
+import { cn } from '@/lib/utils'
 
-export const SlippageButton = ({ disabled }: ComponentProps<'button'>) => {
+const slippages = ['0', '1', '5', '49']
+
+const MAX_SLIPPAGE = '100'
+
+interface Props {
+  value: string
+  disabled?: boolean
+  onChange?: (value: string) => void
+}
+
+export const SlippageButton = (props: Props) => {
+  const { disabled, value, onChange } = props
   const { t } = useTranslation()
-  const [slippage, setSlippage] = useState('5')
-
-  const onConfirm = () => {
-    if (isEmpty(slippage) || BigNumber(slippage).lt(0)) {
-      setSlippage('5')
-    }
-  }
 
   return (
     <div className="flex justify-between w-full gap-2">
       <AlertDialog
+        triggerProps={{ asChild: true }}
         title={<p>{t('slippage.title')}</p>}
         description={t('slippage.description')}
         content={
           <div className="flex items-center gap-2">
+            {slippages.map((s) => (
+              <Button
+                key={s}
+                shadow="none"
+                onClick={() => onChange?.(s)}
+                className={cn(
+                  value === s && 'bg-black text-white hover:bg-black'
+                )}
+              >
+                {s}%
+              </Button>
+            ))}
             <Input
-              value={slippage}
-              type="number"
-              className="text-black"
-              onChange={({ target }) => {
-                if (target.value.length > 3) return
-                setSlippage(target.value)
+              autoFocus
+              value={value}
+              onChange={({ target: { value } }) => {
+                if (isEmpty(value)) return onChange?.(value)
+                if (BigNumber(value).gt(100)) return onChange?.(MAX_SLIPPAGE)
+                if (BigNumber(value).isNaN()) return
+                onChange?.(value)
               }}
+              endIcon={
+                <p
+                  className="mx-2 text-sm cursor-pointer select-none"
+                  onClick={() => onChange?.(MAX_SLIPPAGE)}
+                >
+                  {t('max')}
+                </p>
+              }
             />
             <span>%</span>
           </div>
         }
-        onConfirm={onConfirm}
-        triggerProps={{ asChild: true }}
       >
-        <Button size="xs" disabled={disabled}>
-          {t('set-max-slippage')}({slippage}%)
+        <Button size="xs" shadow="none" disabled={disabled}>
+          {t('set-max-slippage')}({value}%)
         </Button>
       </AlertDialog>
     </div>

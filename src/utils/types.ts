@@ -12,3 +12,5 @@ export type PartialPick<T, K extends keyof T> = Partial<Pick<T, K>> & Omit<T, K>
 
 export type RequirePick<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>
+
+export type Tuple<T = unknown> = [T, T]

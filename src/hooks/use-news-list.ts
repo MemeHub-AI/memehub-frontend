@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react'
 import { useStorage } from './use-storage'
 import { defaultImg } from '@/config/link'
 import { useScroll } from 'react-use'
-import { queryClient } from '@/components/app-providers'
 import { utilTime } from '@/utils/time'
 
 interface Options {
@@ -30,7 +29,9 @@ export const useNewsList = (options?: Options) => {
   } = useInfiniteQuery({
     queryKey: newsListKeys,
     initialPageParam: 1,
-    refetchInterval: 10_000,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchInterval: false,
     queryFn: async ({ pageParam }) => {
       if (isFetchNextPageError) throw new Error('fetching next page')
       let result: any
@@ -38,7 +39,7 @@ export const useNewsList = (options?: Options) => {
       if (isOpportunity) {
         const getData: any = async () => {
           try {
-            const { data } = await newsApi.getOpportunity({
+            const { data } = await newsApi.getNewsMeme({
               page: pageParam,
               page_size: 10,
             })
@@ -48,9 +49,8 @@ export const useNewsList = (options?: Options) => {
                 results: data.results?.map((item) => ({
                   id: item.id,
                   title: item?.title,
-                  link: '',
-                  content: item?.content,
-                  image: item?.image,
+                  content: item?.description,
+                  image: item?.logo,
                 })),
               }
           } catch (error) {
@@ -73,10 +73,9 @@ export const useNewsList = (options?: Options) => {
               count: data?.count,
               results: data?.results?.map((item) => ({
                 id: item?.id,
-                title: item?.title?.query,
-                link: item?.title?.exploreLink,
-                content: item?.articles?.[0]?.snippet,
-                image: item?.articles?.[0]?.image?.imageUrl || defaultImg,
+                title: item?.title,
+                content: item?.description,
+                image: item?.logo || defaultImg,
               })),
             }
         } catch (error) {

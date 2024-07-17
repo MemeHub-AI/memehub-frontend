@@ -1,16 +1,15 @@
 import React, { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
+import { clsx } from 'clsx'
 
 import type { Nav } from './'
-
-import { Button } from '../ui/button'
 import { Logo } from '../logo'
 import { WalletConnect } from '../wallet-connect'
 import { LangSelect } from '../lang-select'
-import { SocialLinks } from '../social-links'
+import { RewardButton } from '../reward-button'
+import { Button } from '../ui/button'
+import { useTranslation } from 'react-i18next'
 import { Routes } from '@/routes'
-import { SearchInput } from '../search-input'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -19,36 +18,44 @@ interface Props extends ComponentProps<'div'> {
 
 export const HeaderDesktop = (props: Props) => {
   const { navs, onNavClick } = props
-  const { t } = useTranslation()
   const router = useRouter()
+  const { t } = useTranslation()
 
   return (
     <>
-      <div className="flex items-center gap-4">
-        <Logo showMeme />
-      </div>
-      {/* <div className="flex items-center gap-3">
-        <nav className="flex items-center gap-3">
-          <ul className="flex items-center gap-3">
-            {navs.map((n, i) => (
-              <li key={i}>
-                <Button variant="ghost" onClick={() => onNavClick?.(n)}>
-                  {n.title}
-                </Button>
-              </li>
-            ))}
+      <div className="flex items-center gap-3 mr-3 select-none">
+        <Logo showMeme className="shrink-0" />
+        <nav className="ml-8 flex items-center">
+          <ul className="flex items-center gap-2">
+            {navs.map((n, i) => {
+              if(n.path === Routes.Moonshot || n.path === Routes.ClassicMeme)
+                return
+              return (
+                <li key={i}>
+                  <div
+                    className={clsx(
+                      'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
+                      'hover:border-black text-nowrap font-bold xl:px-4',
+                      router.pathname === n.path &&
+                      'bg-black text-white border-black'
+                    )}
+                    onClick={() => onNavClick?.(n)}
+                  >
+                    {n.title}
+                  </div>
+                </li>
+              )
+            })}
           </ul>
         </nav>
-        <SearchInput />
-        {router.pathname !== Routes.Create ? (
-          <Button
-            className="max-sm:mx-1.5"
-            onClick={() => router.push(Routes.Create)}
-          >
-            {t('token.create')}
-          </Button>
-        ) : null}
+      </div>
+      <div className="flex items-center gap-3">
+        {/* <SearchInput /> */}
+        <RewardButton />
         <LangSelect className="flex-shrink-0" />
+        <Button onClick={() => router.push(Routes.Create)}>
+          {t('create.token')}
+        </Button>
         <WalletConnect />
       </div> */}
     </>

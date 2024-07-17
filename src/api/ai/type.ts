@@ -4,10 +4,13 @@ export interface AIMemeInfo {
   symbol?: string
   image?: string
   chainName?: string
+  background?: string
 }
 
 export interface AIMemeInfoQuery {
   input: string
+  type?: 1 | 0
+  background?: string
 }
 
 export interface AIMemeImageQuery extends AIMemeInfo {}

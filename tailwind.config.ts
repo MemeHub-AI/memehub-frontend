@@ -3,6 +3,11 @@ import type { Config } from 'tailwindcss'
 const baseWidth = {
   main: '1280px',
   aside: '340px',
+  18: '4.5rem',
+  100: '28rem',
+  128: '32rem',
+  42: '10.5rem',
+  256: '64rem',
 }
 
 const baseHeight = {
@@ -10,6 +15,8 @@ const baseHeight = {
   body: 'calc(100vh - 64px)', // Exclude footer height.
   main: 'calc(100vh - 64px - 64px)', // Include footer height.
   footer: '64px',
+  18: '4.5rem',
+  42: '10.5rem',
 }
 
 const config = {
@@ -26,6 +33,7 @@ const config = {
       center: true,
       padding: '2rem',
       screens: {
+        laptop: '1140px',
         '2xl': '1400px',
       },
     },
@@ -51,7 +59,13 @@ const config = {
       scrollMargin: {
         ...baseHeight,
       },
+      scale: {
+        102: '1.02',
+      },
       colors: {
+        'lime-green': '#CBFF08',
+        'lime-green-deep': '#e6fd77',
+        'blue-deep': '#2c30ee',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -92,6 +106,7 @@ const config = {
           'var(--offset-width, 3px) var(--offset-width, 3px) 0 0 var(--offset-color, black)',
         'offset-border': `var(--offset-width, 3px) var(--offset-width, 3px) 0 0 var(--offset-color, white), 
           var(--offset-width, 3px) var(--offset-width, 3px) 0 2px var(--offset-border-color, black)`,
+        input2: '0 0 5px 3px #A4C9EC',
       },
       translate: {
         offset: '4px',

@@ -1,44 +1,95 @@
 import { useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
-import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 
 import {
   heartbeat,
   isSuccessMessage,
-  isUpdateMessage,
+  isDisconnectMessage,
   wsApiURL,
+  isUpdateMessage,
 } from '@/api/websocket'
-import { WSMessageBase, WSTradeRecordMessage } from '@/api/websocket/types'
+import {
+  WSMessageBase,
+  WSMessageType,
+  WSTradeRecordMessage,
+} from '@/api/websocket/types'
+import { useTradeSearchParams } from './use-search-params'
+import { useTokenContext } from '@/contexts/token'
+
+const pageSize = 10
 
 export const useTradeRecord = () => {
-  const { query } = useRouter()
   const [tradeRecords, setTradeRecords] = useState<WSTradeRecordMessage[]>([])
+  const [page, setPage] = useState(2)
+  const [hasMore, setHasMore] = useState(true)
+  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { isNotFound } = useTokenContext()
 
-  const { lastJsonMessage, sendJsonMessage } = useWebSocket<
+  const { lastJsonMessage, sendJsonMessage, getWebSocket } = useWebSocket<
     WSMessageBase<WSTradeRecordMessage[] | null>
-  >(wsApiURL.tradeRecord, {
-    heartbeat,
-    onOpen: () => {
-      const token_address = query.address || ''
-      if (isEmpty(token_address)) return
+  >(
+    isNotFound ? '' : wsApiURL.tradeRecord,
+    {
+      heartbeat,
+      onOpen: () => {
+        if (isEmpty(chainName) || isEmpty(tokenAddr)) return
 
-      sendJsonMessage({
-        type: 'message',
-        data: { token_address },
-      })
+        sendJsonMessage({
+          type: 'message',
+          data: {
+            chain: chainName,
+            token_address: tokenAddr,
+          },
+        })
+      },
+      filter: ({ data }) =>
+        isSuccessMessage(data) ||
+        isUpdateMessage(data) ||
+        isDisconnectMessage(data),
+      shouldReconnect: () => true,
     },
-    filter: ({ data }) => isSuccessMessage(data) || isUpdateMessage(data),
-    shouldReconnect: () => true,
-  })
+    !isNotFound
+  )
+
+  const fetchNextPage = () => {
+    setPage((page) => ++page)
+
+    sendJsonMessage({
+      type: 'message',
+      data: {
+        chain: chainName,
+        token_address: tokenAddr,
+        offset: (page - 1) * pageSize,
+        limit: pageSize,
+      },
+    })
+  }
+
+  const unique = (records: WSTradeRecordMessage[]) => {
+    return records.reduce((acc, cur) => {
+      const isExisted = acc.find((r) => r.hash === cur.hash)
+      if (!isExisted) acc.push(cur)
+      return acc
+    }, [] as WSTradeRecordMessage[])
+  }
 
   useEffect(() => {
+    if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {
+      return getWebSocket()?.close()
+    }
     if (!lastJsonMessage || !lastJsonMessage.data) return
 
-    setTradeRecords((records) => [...lastJsonMessage.data!, ...records])
+    setHasMore(lastJsonMessage.extra.hasmore)
+    setTradeRecords((old) => {
+      const records = [...old, ...(lastJsonMessage.data ?? [])]
+      return unique(records)
+    })
   }, [lastJsonMessage])
 
   return {
+    hasMore: hasMore && !isEmpty(tradeRecords),
     tradeRecords,
+    fetchNextPage,
   }
 }

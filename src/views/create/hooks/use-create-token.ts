@@ -1,8 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
 
 import type { TokenUpdateReq } from '@/api/token/types'
-
 import { tokenApi } from '@/api/token'
+import { airdropApi } from '@/api/airdrop'
 
 export const useCreateToken = () => {
   // Submit created token to backend.
@@ -32,14 +32,28 @@ export const useCreateToken = () => {
   })
   const updateTokenData = updateData?.data
 
+  const {
+    data: merkleRootData,
+    error: merkleRootError,
+    isPending: isGettingMerkleRoot,
+    mutateAsync: getMerkleRoot,
+  } = useMutation({
+    mutationKey: [airdropApi.getMerkleRoot.name],
+    mutationFn: airdropApi.getMerkleRoot,
+  })
+
   return {
     createTokenData,
     updateTokenData,
+    merkleRootData,
     createTokenError,
     updateTokenError,
+    merkleRootError,
     isCreatingToken,
     isUpdatingToken,
+    isGettingMerkleRoot,
     create,
     update,
+    getMerkleRoot,
   }
 }

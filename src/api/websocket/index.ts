@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash'
 
-import { WSMessageBase } from './types'
+import { WSMessageBase, WSMessageType } from './types'
 
 const baseURL = process.env.NEXT_PUBLIC_WS_URL
 
@@ -46,4 +46,14 @@ export const isUpdateMessage = <T = null>(
     message.message === 'success' &&
     message.data !== null
   )
+}
+
+export const isDisconnectMessage = <T = null>(
+  value?: string | WSMessageBase<T>
+) => {
+  if (!value || isEmpty(value)) return false
+
+  const message =
+    typeof value === 'string' ? (JSON.parse(value) as WSMessageBase<T>) : value
+  return message.type === WSMessageType.ConnectInvalid
 }

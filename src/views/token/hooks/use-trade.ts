@@ -1,105 +1,143 @@
-import { useState } from 'react'
-import { useRouter } from 'next/router'
-import { BigNumber } from 'bignumber.js'
-import { toast } from 'sonner'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { formatEther } from 'viem'
 
-import type { Address } from 'viem'
-
-import { useInternalTrade } from './use-internal-trade'
-import { useUniswapV2 } from './use-uniswap-v2'
-import { useTradeInfo } from './use-trade-info'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
+import { CONTRACT_ERR } from '@/errors/contract'
+import { useTradeV3 } from './trade-v3/use-trade'
+import { useTokenContext } from '@/contexts/token'
+import { useDexTrade } from './trade-dex/use-dex-trade'
+import { Options, useTradeToast } from '@/hooks/use-trade-toast'
+import { useUserInfo } from '@/hooks/use-user-info'
+import { useTradeSearchParams } from './use-search-params'
+import { useTradeInfoV3 } from './trade-v3/use-trade-info'
+import { ContractVersion } from '@/constants/contract'
+import { logger } from '@/utils/log'
+import { versionOf } from '@/utils/contract'
+import { TradeType } from '@/constants/trade'
+import { useInvite } from './use-invite'
+import { fmt } from '@/utils/fmt'
+
+// Used for trade success tips.
+const lastTrade: Options = {
+  tokenAmount: '',
+  nativeAmount: '',
+  type: '',
+  txUrl: '',
+}
 
 export const useTrade = () => {
-  const { t } = useTranslation()
-  const [isInternalTrade, setIsInternalTrade] = useState(true)
-  const { query } = useRouter()
-  const token = (query.address || '') as Address
+  const { tokenInfo } = useTokenContext()
+  const { showToast } = useTradeToast()
+  const { userInfo } = useUserInfo()
+  const { referralCode } = useTradeSearchParams()
+  const [inviteOpen, setInviteOpen] = useState(false)
+  const { getInviterInfo, getCanBind } = useInvite()
+  const [loading, setLoading] = useState(false)
 
-  const { checkForOverflow } = useTradeInfo()
-  const {
-    internalHash,
-    isInternalTrading,
-    internalBuy,
-    internalSell,
-    resetInternalTrade,
-  } = useInternalTrade()
-  const {
-    uniswapHash,
-    isUniswapTrading,
-    uniswapBuy,
-    uniswapSell,
-    resetUniswapTrade,
-  } = useUniswapV2()
-  const hash = isInternalTrade ? internalHash : uniswapHash
-  const isSubmitting = isInternalTrading || isUniswapTrading
+  const dexTrade = useDexTrade()
+  const tradeV3 = useTradeV3(dexTrade)
+  const { getNativeAmount, getTokenAmount } = useTradeInfoV3()
 
-  // Waiting results for contract interaction.
-  const { isLoading, isFetched: isTraded } = useWaitForTx({
-    hash,
-    onLoading: () => toast.loading(t('tx.waiting')),
-    onSuccess: () => toast.success(t('trade.success')),
-    onError: () => toast.error(t('trade.failed')),
-    onFillay: () => {
-      resetTrade()
-      toast.dismiss()
-    },
-  })
-  const isTrading = isInternalTrading || isUniswapTrading || isLoading
+  const trade = useMemo(() => {
+    if (!tokenInfo) return
 
-  // Check trade type. internal trade or dex trade.
+    const vIs = versionOf(tokenInfo.version)
+
+    if (vIs(ContractVersion.V3)) return tradeV3
+
+    CONTRACT_ERR.versionNotFound()
+  }, [tokenInfo?.version, tradeV3])
+
+  const tradeHash = trade?.tradeHash
+  const isSubmitting = trade?.isSubmitting
+  const isTrading = isSubmitting || loading
+
   const checkForTrade = async (amount: string) => {
-    const { currentMax, isOverflow } = await checkForOverflow(amount)
-    const isInternal = !BigNumber(currentMax).eq(0)
-
-    return {
-      isInternal,
-      isOverflow,
-      currentMax,
+    // Cannot use self code to trade.
+    if (userInfo?.code === referralCode) {
+      setInviteOpen(true)
+      return false
     }
+
+    // Backend check must be `true`.
+    const canBind = await getCanBind(referralCode)
+    if (!canBind) {
+      setInviteOpen(true)
+      return false
+    }
+
+    return true
   }
 
-  const buy = async (amount: string) => {
-    const { currentMax, isInternal, isOverflow } = await checkForTrade(amount)
+  const buying = async (
+    reserveAmount: string,
+    slippage: string,
+    setValue?: (value: string) => void
+  ) => {
+    setLoading(true)
+    const isValid = await checkForTrade(reserveAmount)
+    if (!isValid) {
+      setLoading(false)
+      return
+    }
 
-    setIsInternalTrade(isInternal)
+    const amount = await getTokenAmount(reserveAmount)
+    lastTrade.tokenAmount = `${fmt.decimals(formatEther(amount))} ${
+      tokenInfo?.ticker
+    }`
+    lastTrade.nativeAmount = `${fmt.decimals(reserveAmount, { fixed: 3 })} ${
+      tokenInfo?.chain.native.symbol
+    }`
+    lastTrade.type = TradeType.Buy
 
-    // Internal buy but overflow current max value.
-    if (isInternal && isOverflow) return currentMax
-
-    // Internal buy.
-    if (isInternal) return internalBuy(amount, token)
-
-    // DEX buy.
-    uniswapBuy(amount, token)
+    logger('buy', reserveAmount, slippage)
+    trade?.buy(reserveAmount, slippage, setValue)
   }
 
-  const sell = async (amount: string) => {
-    const { isInternal } = await checkForTrade(amount)
+  const selling = async (tokenAmount: string, slippage: string) => {
+    setLoading(true)
+    const isValid = await checkForTrade(tokenAmount)
+    if (!isValid) {
+      setLoading(false)
+      return
+    }
 
-    setIsInternalTrade(isInternal)
+    const amount = await getNativeAmount(tokenAmount)
+    lastTrade.nativeAmount = `${fmt.decimals(formatEther(amount), {
+      fixed: 3,
+    })} ${tokenInfo?.chain.native.symbol}`
+    lastTrade.tokenAmount = `${fmt.decimals(tokenAmount)} ${tokenInfo?.ticker}`
+    lastTrade.type = TradeType.Sell
 
-    // Internal sell.
-    if (isInternal) return internalSell(amount, token)
-
-    // DEX sell.
-    uniswapSell(amount, token)
+    logger('sell', tokenAmount, slippage)
+    trade?.sell(tokenAmount, slippage)
   }
 
-  const resetTrade = () => {
-    resetInternalTrade()
-    resetUniswapTrade()
+  const resetting = () => {
+    trade?.resetTrade()
   }
+
+  useEffect(() => {
+    if (!trade?.tradeHash) return
+    resetting()
+    showToast({
+      ...lastTrade,
+      txUrl: `${tokenInfo?.chain.explorer}/tx/${trade.tradeHash}`,
+      hash: trade.tradeHash,
+      setLoading: () => setLoading(false),
+    })
+  }, [trade])
 
   return {
-    tradeHash: hash,
+    tradeHash,
     isSubmitting,
     isTrading,
-    isTraded,
-    checkForTrade,
-    buy,
-    sell,
-    resetTrade,
+    isTraded: false,
+    buying,
+    selling,
+    resetting,
+    inviteOpen,
+    setInviteOpen,
   }
 }

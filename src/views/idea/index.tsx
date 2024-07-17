@@ -5,16 +5,16 @@ import { useQuery } from '@tanstack/react-query'
 import { ideaApi } from '@/api/idea'
 import { useRouter } from 'next/router'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
-import { memo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { defaultImg } from '@/config/link'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useTranslation } from 'react-i18next'
 import { WaterList } from './components/water-list'
-import {
-  MobileQpportunityMoonshot,
-  OpportunityMoonshot,
-} from '@/components/opportunity-moonshot'
+import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
+import { MemeStory } from './components/meme-story'
+import { PrimaryLayout } from '@/components/layouts/primary'
+import { fmt } from '@/utils/fmt'
 
 const IdeaPage = () => {
   const { t } = useTranslation()
@@ -24,13 +24,17 @@ const IdeaPage = () => {
   const [show, setShow] = useState(false)
   const { push } = useRouter()
   const { setLoadingInfoDialog, setInfo } = useAimemeInfoStore()
-  const defualtTab = +type - 1
+  const defualtTab = Math.min(+type - 1, 1)
 
   const { data: basicInfoData } = useQuery({
     queryKey: [ideaApi.getIdeaInfo.name, newsId, type],
     queryFn: () => {
-      if (newsId == undefined || type === undefined) {
-        throw new Error('newsId is undefined')
+      if (newsId == undefined || type == undefined) {
+        return Promise.reject()
+      }
+
+      if (+type === 3) {
+        return ideaApi.getMemeStory(newsId as string)
       }
 
       return ideaApi.getIdeaInfo(newsId, { type })
@@ -47,6 +51,7 @@ const IdeaPage = () => {
     name: basicInfo?.title,
     image: basicInfo?.logo,
     description: basicInfo?.content,
+    background: basicInfo?.description,
   }
 
   const onConfirm = () => {
@@ -61,12 +66,8 @@ const IdeaPage = () => {
   }
 
   return (
-    <main className="min-h-main flex max-sm:px-3 max-sm:pt-0 max-sm:flex-col gap-6">
-      <OpportunityMoonshot
-        defalutTab={defualtTab}
-        className="max-sm:!hidden max-sm:!px-0"
-      />
-      <div className="max-w-[1185px] max-sm:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
+    <PrimaryLayout>
+      <div className="max-w-[1185px] max-md:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <div className="flex flex-1">
             <img
@@ -76,28 +77,47 @@ const IdeaPage = () => {
             />
             <div className="ml-3 w-full">
               <div className="text-xl text">{basicInfo?.title}</div>
-              <Content content={basicInfo?.content}></Content>
+              <Content content={basicInfo?.description}></Content>
             </div>
           </div>
 
           <div className="flex max-md:mt-4">
             <Button onClick={onRandomCreate}>
               <BsStars className="mr-1"></BsStars>
-              {t('random.meme')}
+              {type !== '3' ? t('random.meme') : t('meme.it')}
             </Button>
             <MobileQpportunityMoonshot
               defalutTab={defualtTab}
-              className="max-sm:!hidden max-sm:!px-0 "
-            >
-              <div className="sm:hidden ml-4">
-                <Button className="bg-white text-2xl" size={'icon'}>
-                  💡
-                </Button>
-              </div>
-            </MobileQpportunityMoonshot>
+              className="max-md:!hidden max-sm:!px-0 "
+            ></MobileQpportunityMoonshot>
           </div>
         </div>
-        <WaterList newsId={newsId} type={type}></WaterList>
+        {/* {+type === 2 ? (
+          <div className="flex items-start">
+            {tabs.map((tab, i) => {
+              return (
+                <div
+                  key={i}
+                  className={cn(
+                    'px-2.5 py-1.5 text-nowrap rounded-xl mt-5 cursor-pointer border-2 border-transparent',
+                    'hover:border-black',
+                    i === 1 && 'ml-3',
+                    tabIdx == i && 'bg-black text-[#ffe770]'
+                  )}
+                  onClick={() => setTab(i)}
+                >
+                  {tab}
+                </div>
+              )
+            })}
+          </div>
+        ) : null} */}
+        {/* tabIdx === 0 ||  */}
+        {type !== '3' ? (
+          <WaterList newsId={newsId} type={type}></WaterList>
+        ) : (
+          <MemeStory data={basicInfo!}></MemeStory>
+        )}
       </div>
       <AICreateMemecoinDialog
         show={show}
@@ -105,7 +125,7 @@ const IdeaPage = () => {
         onConfirm={onConfirm}
         onCancel={onCancel}
       ></AICreateMemecoinDialog>
-    </main>
+    </PrimaryLayout>
   )
 }
 
@@ -114,12 +134,12 @@ const Content = memo(({ content }: { content?: string }) => {
   return (
     <div
       className={clsx(
-        'mt-2 text-gray-500 max-w-[90%] max-sm:max-w-full cursor-pointer leading-[23px]',
-        show ? '' : 'line-clamp-3'
+        'mt-2 max-sm:mt-1 text-gray-500 max-w-[90%] max-sm:max-w-full cursor-pointer leading-[23px]',
+        show ? '' : 'line-clamp-3 max-sm:line-clamp-2'
       )}
       onClick={() => setShow(!show)}
     >
-      {content}
+      {fmt.replaceHTMLCode(content || '')}
     </div>
   )
 })

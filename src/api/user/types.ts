@@ -1,4 +1,4 @@
-import type { PaginationParams } from '../types'
+import type { PaginationReq } from '../types'
 
 export interface UserLoginReq {
   name?: string
@@ -31,6 +31,20 @@ export interface UserInfoRes {
   like_count: number
   mention_count: number
   is_follower: boolean
+  reward_amount: number
+  code: string
+  inviter: {
+    one: string
+    two: string
+  }
+  inviter_count: {
+    one: number
+    two: number
+  }
+  role?: {
+    kol: boolean
+    community: boolean
+  }
 }
 
 export interface UserMyInfoFollow {
@@ -65,7 +79,7 @@ export enum UserListType {
   CoinsHeld,
 }
 
-export interface UserListReq extends PaginationParams {
+export interface UserListReq extends PaginationReq {
   type: UserListType
 }
 
@@ -91,6 +105,7 @@ interface User {
 export interface Chain {
   id: string
   name: string
+  displayName: string
   logo: string
   native: {
     decimals: number
@@ -112,6 +127,7 @@ export interface UserCoinsCreated {
   market_cap: number
   total_replies: number
   chain: Chain
+  status: number
 }
 
 export interface UserReplies {
@@ -144,6 +160,7 @@ export interface UserFollow {
   logo: string
   follower_count: number
   user: User
+  is_follower: boolean
 }
 
 export interface UserCoinsHeld {

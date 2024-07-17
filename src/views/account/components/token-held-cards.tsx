@@ -33,17 +33,23 @@ export const TokenHeldCards = (props: Props) => {
       isPending={isLoading}
       fallback={<CardSkeleton />}
       nullback={<p className="text-zinc-500">{t('token.no-token')}</p>}
-      className="grid grid-cols-3 gap-3 2xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-2"
+      className="grid grid-cols-3 gap-3 2xl:grid-cols-4 max-sm:grid-cols-1 max-sm:gap-0"
     >
       {cards?.map((c, i) => (
         <HeldCard c={c} key={i} />
       ))}
-      {isPending && (
-        <p className="text-zinc-500 text-center col-span-3">{t('loading')}</p>
-      )}
-      {noMore && (
-        <p className="text-zinc-500 text-center col-span-3">{t('nomore')}</p>
-      )}
+      <div className="max-sm:mt-2">
+        {isPending && (
+          <div className="text-zinc-500 text-center col-span-3">
+            {t('loading')}
+          </div>
+        )}
+        {noMore && (
+          <div className="text-zinc-500 text-center col-span-3">
+            {t('nomore')}
+          </div>
+        )}
+      </div>
     </CustomSuspense>
   )
 }
@@ -59,11 +65,12 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
         const href = fmt.toHref(Routes.Main, c.chain.name, c.coin.address)
         router.push(href)
       }}
+      className="max-sm:mb-2"
     >
-      <div className="flex items-center gap-2">
+      <div className="flex items-center">
         <Avatar src={c.coin.image} fallback={c.coin.ticker.charAt(0)} />
-        <div className="flex flex-col justify-between">
-          <p className="font-bold truncate">
+        <div className="flex flex-col justify-between ml-2">
+          <p className="font-bold break-all line-clamp-1">
             {c.coin.name}({c.coin.ticker})
           </p>
           <p className="text-zinc-500 text-sm">
@@ -77,9 +84,9 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
 
 const CardSkeleton = () => {
   return Array.from({ length: 3 }).map((_, i) => (
-    <Card className="flex gap-2" padding="md" key={i}>
+    <Card className="flex mb-2" padding="md" key={i}>
       <Skeleton className="w-10 h-10 rounded-full" />
-      <div className="flex flex-col justify-between">
+      <div className="flex flex-col justify-between ml-2">
         <Skeleton className="w-20 h-4" />
         <Skeleton className="w-14 h-3 rounded-full" />
       </div>

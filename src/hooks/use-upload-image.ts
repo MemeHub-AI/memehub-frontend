@@ -6,24 +6,27 @@ import { useTranslation } from 'react-i18next'
 
 import { otherApi } from '@/api/other'
 import { useStorage } from './use-storage'
+import { MAX_IMAGE_MB } from '@/constants/upload'
 
 interface Options {
+  inputEl?: HTMLInputElement | null
   onSuccess?: (url: string) => void
   onError?: (reason: string) => void
   onFinally?: () => void
 }
 
-const MAX_KB = 300
-
 export const useUploadImage = (options?: Options) => {
-  const { onSuccess, onError, onFinally } = options || {}
+  const { inputEl, onSuccess, onError, onFinally } = options || {}
   const { t } = useTranslation()
   const [file, setFile] = useState<File | null>(null)
   const { getToken } = useStorage()
 
-  const clearFile = () => setFile(null)
-
-  const { data, mutateAsync } = useMutation({
+  const {
+    data,
+    isPending: isUploading,
+    mutateAsync,
+    reset,
+  } = useMutation({
     mutationKey: [otherApi.uploadImage.name],
     mutationFn: otherApi.uploadImage,
     onMutate: () => toast.loading(t('uploading')),
@@ -51,11 +54,16 @@ export const useUploadImage = (options?: Options) => {
     }
 
     const file = first(e.target.files)!
-    const formData = new FormData()
-    const kbSize = file.size / 1024
 
-    if (kbSize > MAX_KB) {
-      toast.error(`${t('upload.large')}: ${MAX_KB}kb`)
+    if (!file.size) {
+      return
+    }
+
+    const formData = new FormData()
+    const mb = file.size / 1024 / 1024
+
+    if (mb > MAX_IMAGE_MB) {
+      toast.error(`${t('upload.large')}: ${MAX_IMAGE_MB} mb`)
       return
     }
 
@@ -64,9 +72,16 @@ export const useUploadImage = (options?: Options) => {
     mutateAsync(formData)
   }
 
+  const clearFile = () => {
+    setFile(null)
+    reset()
+    if (inputEl) inputEl.value = ''
+  }
+
   return {
     url: data?.data?.image_url ?? '',
     file,
+    isUploading,
     onChangeUpload,
     clearFile,
   }

@@ -1,51 +1,39 @@
 import React from 'react'
+import { isAddress } from 'viem'
 
-import { TradeTab } from './components/trade-tab'
-import { TokenInfo } from './components/token-info'
-import { CommentTradeTab } from './components/comment-trade-tab'
 import { useResponsive } from '@/hooks/use-responsive'
-import { HoldersRank } from './components/holders-rank'
 import { TokenProvider } from '@/contexts/token'
 import { useTokenInfo } from './hooks/use-token-info'
-import { Chart } from '@/components/chart'
-import { TokenInfoHeader } from './components/token-info-header'
 import { cn } from '@/lib/utils'
+import { TokenDesktop } from './components/desktop'
+import { TokenMobile } from './components/mobile'
+import { TokenQueryInvalid } from './components/query-invalid'
+import { useTradeSearchParams } from './hooks/use-search-params'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenPage = () => {
+  const { chainName, tokenAddr, isReady } = useTradeSearchParams()
+  const { findChain } = useChainsStore()
+  const chain = findChain(chainName)
   const { isMobile } = useResponsive()
-  const { tokenInfo, isLoadingTokenInfo, isFetchingTokenInfo, refetchInfo } =
-    useTokenInfo()
+  const tokenInfo = useTokenInfo()
+  const { isLoadingTokenInfo } = tokenInfo
+
+  const invalidPath = !chain || !isAddress(tokenAddr)
+  if (invalidPath && !isLoadingTokenInfo && isReady) {
+    return <TokenQueryInvalid reason={`/${chainName}/${tokenAddr}`} />
+  }
+
   return (
-    <TokenProvider
-      value={{
-        tokenInfo,
-        isLoadingTokenInfo,
-        isFetchingTokenInfo,
-        refetchInfo,
-      }}
-    >
+    <TokenProvider value={tokenInfo}>
       <main
         className={cn(
           'px-4 max-sm:px-3 pt-6 max-w-main mx-auto min-h-main',
-          'flex space-x-4 max-sm:flex-col max-sm:space-x-0 pb-4'
+          'flex space-x-4 max-sm:flex-col max-sm:space-x-0 max-sm:pt-2 pb-4 max-sm:min-h-max'
         )}
       >
         {/* Left */}
-        <div className="flex flex-col flex-1">
-          {isMobile && <TradeTab />}
-          <TokenInfoHeader />
-          <Chart />
-          <CommentTradeTab />
-        </div>
-
-        {/* Right */}
-        {!isMobile && (
-          <div className="w-aside">
-            <TradeTab />
-            <TokenInfo />
-            <HoldersRank />
-          </div>
-        )}
+        {isMobile ? <TokenMobile /> : <TokenDesktop />}
       </main>
     </TokenProvider>
   )

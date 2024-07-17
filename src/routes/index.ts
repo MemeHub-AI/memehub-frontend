@@ -3,12 +3,6 @@ export enum Routes {
 
   Create = '/create',
 
-<<<<<<< Updated upstream
-=======
-  Posts = '/posts',
-
-  createPost = '/create-post',
-
   Airdrop = '/airdrop',
 
   Alliance = '/alliance',
@@ -17,10 +11,22 @@ export enum Routes {
 
   // Community = '/communities',
 
->>>>>>> Stashed changes
+  Posts = '/posts',
+
+  createPost = '/create-post',
+
+  // KOL = '/kol',
+
+  // Community = '/communities',
+
   Account = '/account',
 
-  Launchpad = '/launchpad',
-
   Idea = '/idea',
+
+  Reward = '/reward',
+
+  Moonshot = '/moonshot/1',
+
+  ClassicMeme = '/moonshot/2',
+
 }

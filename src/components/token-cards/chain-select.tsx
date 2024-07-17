@@ -1,5 +1,4 @@
 import React, { type ComponentProps } from 'react'
-import { upperFirst } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 import {
@@ -18,14 +17,14 @@ export const TokenChainSelect = (props: ComponentProps<typeof Select>) => {
 
   return (
     <Select onValueChange={onValueChange} {...restProps}>
-      <SelectTrigger className="w-26 max-sm:mb-2">
+      <SelectTrigger className="w-26">
         <SelectValue placeholder={t('chains')} />
       </SelectTrigger>
       <SelectContent>
         <SelectItem value="all">{t('all')}</SelectItem>
         {chains.map((c, i) => (
           <SelectItem key={i} value={c.id}>
-            {upperFirst(c.name)}
+            {c.displayName}
           </SelectItem>
         ))}
       </SelectContent>

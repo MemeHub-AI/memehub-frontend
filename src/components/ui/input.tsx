@@ -13,7 +13,7 @@ const inputVariants = cva(
   {
     variants: {
       border: {
-        default: 'border border-input focus-visible:outline-none',
+        default: 'border-2 border-black focus-visible:outline-none',
         none: 'focus-visible:outline-none focus-visible:ring-none',
       },
     },
@@ -48,7 +48,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
       <div
         className={cn(
           'flex items-center border-2 border-black rounded-md',
-          'focus-within:shadow-[0_0_5px_3px_#A4C9EC] duration-150',
+          'focus-within:shadow-input2 duration-150',
           className
         )}
       >
@@ -67,7 +67,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     <input
       className={cn(
         inputVariants({ className, border }),
-        !disableFocusBorder && 'focus-visible:ring-1 focus-visible:ring-ring'
+        'focus:shadow-input2'
       )}
       ref={ref}
       {...restProps}
