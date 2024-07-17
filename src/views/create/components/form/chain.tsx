@@ -27,6 +27,7 @@ import { useChainsStore } from '@/stores/use-chains-store'
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
 }
+
 export const FormChain = ({ formData }: Props) => {
   const { form, formFields, chains } = formData
   const { switchChainAsync } = useSwitchChain()

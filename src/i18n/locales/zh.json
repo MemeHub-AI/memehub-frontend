@@ -484,5 +484,10 @@
   "connect": "连接钱包",
   "price": "价格",
   "community.count": "社区人数",
-  "founder": "创始人"
+  "founder": "创始人",
+  "token": "代币",
+  "ido": "众筹开盘",
+  "ido.kol.tips": "检测到您是尊贵的KOL大使$1，因此您拥有额度$2的额度",
+  "ido.buy": "购买",
+  "ido.community.tips": "检测到您是$1社区的成员，因此您拥有额度$2的额度"
 }
