@@ -57,7 +57,7 @@ export const HeaderDesktop = (props: Props) => {
           {t('create.token')}
         </Button>
         <WalletConnect />
-      </div> */}
+      </div>
     </>
   )
 }

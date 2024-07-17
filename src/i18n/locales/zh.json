@@ -295,9 +295,6 @@
   "create.ai.logo": "重新生成",
   "no.data.news": "暂时没有热点新闻",
   "meme.loading.tip": "AI正在生成Meme信息请稍等",
-<<<<<<< Updated upstream
-  "create.info.loading": "AI正在生成MEME信息中..."
-=======
   "create.info.loading": "AI正在生成MEME信息中...",
   "my.identity": "我的身份",
   "apply.kol": "申请成为KOL大使",
@@ -488,6 +485,26 @@
   "price": "价格",
   "latest": "最新",
   "hot": "热门",
-  "idea": "我的idea"
->>>>>>> Stashed changes
+  "idea": "我的idea",
+  "edit": "编辑",
+  "add.details": "请尽快补充代币详情，强化共识",
+  "hundred.like": "已收集到100个赞",
+  "add.launch": "请立刻补充代币详情以发射内盘",
+  "idea.fail": "否则创意将失败",
+  "started": "已启动",
+  "succeed": "已成功",
+  "consensus.successful": "点赞后如果共识成功，你将获得0.1%代币",
+  "consensus.fails": "如果48h后共识失败，你将获得退款",
+  "sure.like": "是否确定给这条Idea点赞?",
+  "Claim": "领取",
+  "choose": "请选择要发行的区块链",
+  "least.string": "请填写至少10个字符",
+  "least.img": "请上传至少一张图片或视频",
+  "build.consensus": "只需集齐50个赞凝聚共识，内盘交易将被创建，",
+  "get.token": "你作为项目发起人将获得0.3%代币",
+  "like.consensus": "点赞的共识者，每人可获得0.1%代币",
+  "start.vacation": "开启传奇之旅，登上月球吧！",
+  "create.post":"发布meme创意",
+  "post":"发布",
+  "mind":"你有什么好的想法"
 }
