@@ -8,13 +8,17 @@ import { Avatar } from './ui/avatar'
 interface Props extends ComponentProps<typeof Card> {
   src?: string
   avatarChildren?: ReactNode
+  avatarClass?: string
+  avatarVaiant?: ComponentProps<typeof Avatar>['variant']
 }
 
 export const AvatarCard = ({
   className,
   children,
   src,
+  avatarClass,
   avatarChildren,
+  avatarVaiant = 'border',
   ...props
 }: Props) => {
   const [open, setOpen] = useState(false)
@@ -35,12 +39,15 @@ export const AvatarCard = ({
       >
         <img src={src} alt="logo" />
       </Dialog>
-      <div className="relative">
+      <div className="relative pt-14">
         <Avatar
           src={src}
-          variant="border"
+          variant={avatarVaiant}
           alt="logo"
-          className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white"
+          className={cn(
+            'w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white',
+            avatarClass
+          )}
         />
         {avatarChildren}
       </div>

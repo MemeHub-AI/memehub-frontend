@@ -13,6 +13,7 @@ import { TokenChainSelect } from './chain-select'
 import { TokenSearchInput } from './token-search-input'
 import useAudioPlayer from '@/hooks/use-audio-player'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
+import dayjs from 'dayjs'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -104,7 +105,13 @@ export const TokenCards = (props: Props) => {
         }
       >
         {/* <IdoCard /> */}
-        {filteredCards?.[0] && <TokenCard card={filteredCards?.[0]} isIdo />}
+        {filteredCards?.[0] && (
+          <TokenCard
+            card={filteredCards?.[0]}
+            idoCreateAt={dayjs().unix()}
+            idoDuration={3 * 24 * 60 * 60}
+          />
+        )}
         {!!cards.length &&
           filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
       </CustomSuspense>

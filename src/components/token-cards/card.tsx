@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from 'react'
+import React, { useState, type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { Address } from 'viem'
 import { useTranslation } from 'react-i18next'
@@ -15,11 +15,13 @@ import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { IdoTag } from '../ido-tag'
+import { Countdown } from '@/components/countdown'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
   descClass?: string
-  isIdo?: boolean
+  idoCreateAt?: number
+  idoDuration?: number
 }
 
 export const TokenCard = (props: Props) => {
@@ -28,14 +30,17 @@ export const TokenCard = (props: Props) => {
     className,
     descClass,
     onClick,
-    isIdo = false,
+    idoCreateAt,
+    idoDuration,
     ...restProps
   } = props
   const router = useRouter()
   const { t } = useTranslation()
-  const { findChain } = useChainsStore()
+  const { chainsMap } = useChainsStore()
+  const chain = chainsMap[card.chain.id]
 
-  const chain = findChain(card.chain.id)
+  const [isExpired, setIsExpired] = useState(false)
+  const isIdo = !!idoCreateAt && !!idoDuration
 
   const { progress, isGrauated } = useTokenProgressV3(
     card.address as Address,
@@ -49,6 +54,9 @@ export const TokenCard = (props: Props) => {
         className
       )}
       onClick={(e) => {
+        if (isIdo) {
+          return router.push(Routes.Ido)
+        }
         router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
         onClick?.(e)
       }}
@@ -74,7 +82,7 @@ export const TokenCard = (props: Props) => {
             <span
               className={cn('break-all line-clamp-2', isIdo && 'line-clamp-1')}
             >
-              {card?.name} {card?.ticker && `(${card?.ticker})`}
+              {card?.ticker}({card?.name})
             </span>
             <Avatar
               src={card.chain.logo}
@@ -96,11 +104,23 @@ export const TokenCard = (props: Props) => {
             {card?.desc}
           </p>
         </div>
-        <Progress
-          className="h-5 self-end w-full"
-          indicatorClass={isIdo ? 'bg-orange-500' : 'bg-green-500'}
-          value={isGrauated ? 100 : progress}
-        />
+        {isIdo && !isExpired ? (
+          <div className="font-bold flex items-center space-x-1 leading-none">
+            <span>{t('ido.start-in')}</span>
+            <Countdown
+              className="text-blue-600"
+              createdAt={idoCreateAt}
+              duration={idoDuration}
+              onExpired={setIsExpired}
+            />
+          </div>
+        ) : (
+          <Progress
+            className="h-5 self-end w-full"
+            indicatorClass={isIdo ? 'bg-orange-500' : 'bg-green-500'}
+            value={isGrauated ? 100 : progress}
+          />
+        )}
       </div>
     </Card>
   )

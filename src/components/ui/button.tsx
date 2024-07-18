@@ -12,7 +12,7 @@ const buttonVariants = cva(
     'rounded-md text-sm font-medium transition-colors',
     'focus-visible:outline-none focus-visible:ring-1',
     'focus-visible:ring-ring disabled:pointer-events-none',
-    'disabled:opacity-50 transition-all duration-100 bg-white',
+    'disabled:opacity-50 transition-all duration-100 bg-white'
   ),
   {
     variants: {
@@ -26,6 +26,7 @@ const buttonVariants = cva(
           'bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80]',
         ghost: 'border-transparent hover:bg-zinc-100',
         link: 'text-primary underline-offset-4 hover:underline text-white bg-black',
+        warning: 'bg-orange-500 text-primary-foreground hover:bg-orange-500/90',
       },
       size: {
         default: 'h-9 px-4 py-2',
@@ -64,11 +65,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     } = props
     const Comp = asChild ? Slot : 'button'
 
-    const {playAudio} = useAudioPlayer()
+    const { playAudio } = useAudioPlayer()
 
     const PlayAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
       playAudio('/audio/gua.mp3')
-      if(onClick) onClick(event)
+      if (onClick) onClick(event)
     }
     return (
       <Comp

@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 import { useRouter } from 'next/router'
 
 import { Card } from '@/components/ui/card'
-import { Countdown } from './countdown'
+import { Countdown } from '@/components/countdown'
 import { AirdropItem } from '@/api/airdrop/types'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'

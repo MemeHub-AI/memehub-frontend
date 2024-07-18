@@ -3,15 +3,18 @@ import { Twitter } from 'lucide-react'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { RiGlobalLine } from 'react-icons/ri'
 
-import { useTokenContext } from '@/contexts/token'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
 const classes = 'border-transparent !bg-transparent hover:border-black'
 
-export const TokenLinks = ({ className }: ComponentProps<'div'>) => {
-  const { tokenInfo } = useTokenContext()
+interface Props extends ComponentProps<'div'> {
+  x?: string
+  tg?: string
+  website?: string
+}
 
+export const TokenSocialLinks = ({ className, x, tg, website }: Props) => {
   return (
     <div
       className={cn(
@@ -19,34 +22,34 @@ export const TokenLinks = ({ className }: ComponentProps<'div'>) => {
         className
       )}
     >
-      {tokenInfo?.twitter_url && (
+      {x && (
         <Button
           shadow="none"
           size="icon"
           title="twitter"
-          onClick={() => open(tokenInfo.twitter_url)}
+          onClick={() => open(x)}
           className={classes}
         >
           <Twitter size={20} />
         </Button>
       )}
-      {tokenInfo?.telegram_url && (
+      {tg && (
         <Button
           shadow="none"
           size="icon"
           title="telegram"
-          onClick={() => open(tokenInfo?.telegram_url)}
+          onClick={() => open(tg)}
           className={classes}
         >
           <FaTelegramPlane size={20} />
         </Button>
       )}
-      {tokenInfo?.website && (
+      {website && (
         <Button
           shadow="none"
           size="icon"
           title="website"
-          onClick={() => open(tokenInfo?.website)}
+          onClick={() => open(website)}
           className={classes}
         >
           <RiGlobalLine size={20} />
@@ -56,4 +59,4 @@ export const TokenLinks = ({ className }: ComponentProps<'div'>) => {
   )
 }
 
-export default TokenLinks
+export default TokenSocialLinks

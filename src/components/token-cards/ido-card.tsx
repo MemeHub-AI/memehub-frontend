@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
 import { Card } from '@/components/ui/card'
-import { Countdown } from '@/views/airdrop/components/countdown'
+import { Countdown } from '@/components/countdown'
 import { Progress } from '../ui/progress'
 import { Button } from '../ui/button'
 import { cn } from '@/lib/utils'
 
 interface Props extends ComponentProps<typeof Card> {}
 
+/** @deprecated We don't need it */
 export const IdoCard = ({ className, children, ...props }: Props) => {
   const { t } = useTranslation()
   const card = {
@@ -43,8 +44,7 @@ export const IdoCard = ({ className, children, ...props }: Props) => {
             </div>
           </div>
         </div>
-        {/* <span className="text-yellow-700">72h24m23s</span> */}
-        <Countdown createdAt={Date.now()} duration={Date.now() + 6} />
+        <Countdown createdAt={Date.now()} duration={60} />
       </div>
       <div className="my-1 line-clamp-2">{card.descrition}</div>
       <Progress

@@ -11,6 +11,7 @@ interface ChainsStore {
 
   setChains: (chains: ChainData[]) => void
   setChainsMap: (chains: ChainData[]) => void
+  /*** @deprecated use `chainsMap` to instead. **/
   findChain: (nameOrId: string | number | undefined) => ChainData | undefined
   findChains: (namOrIds: (string | number | undefined)[]) => ChainData[]
 }

@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge'
 import { usePools } from '../hooks/use-pools'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { PosterImages } from '@/components/poster-images'
-import { TokenLinks } from './token-links'
+import { TokenSocialLinks } from '../../../components/token-links'
 import { AvatarCard } from '@/components/avatar-card'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
@@ -74,14 +74,14 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       </div>
 
       {/* Name/symbol */}
-      <div className="font-bold leading-none text-center pt-16">
+      <div className="font-bold leading-none text-center">
         {isNotFound
           ? t('token.not-found')
           : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
       </div>
 
       {/* Links */}
-      <TokenLinks />
+      <TokenSocialLinks />
 
       {/* Poster */}
       <PosterImages poster={tokenInfo?.poster} className="mt-2" />
