@@ -1,21 +1,34 @@
+import { useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { debounce } from 'lodash'
 
 import { allianceApi } from '@/api/alliance'
-import CustomSuspense from '@/components/custom-suspense'
+import { CustomSuspense } from '@/components/custom-suspense'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
 import { KolCard } from '@/components/kol-card'
+import { Input } from '@/components/ui/input'
 
 export const Kol = () => {
   const { t } = useTranslation()
+  const [search, setSearch] = useState('')
   const { userInfo } = useUserStore()
-  const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryKey: [allianceApi.getKols.name],
+
+  const {
+    data: { kols = [], total = 0 } = {},
+    isLoading,
+    fetchNextPage,
+    isFetching,
+  } = useInfiniteQuery({
+    queryKey: [allianceApi.getKols.name, search],
     queryFn: async ({ pageParam }) => {
-      const { data } = await allianceApi.getKols({ page: pageParam })
+      const { data } = await allianceApi.getKols({
+        page: pageParam,
+        search,
+      })
       return data
     },
     initialPageParam: 1,
@@ -23,13 +36,13 @@ export const Kol = () => {
     select: (data) => {
       return {
         total: data.pages[0].count,
-        kol: data.pages.flatMap((p) => p?.results).filter(Boolean),
+        kols: data.pages.flatMap((p) => p?.results).filter(Boolean),
       }
     },
   })
 
   const handleLoadStatus = () => {
-    if (isFetching && data?.total) {
+    if (isFetching && total) {
       return (
         <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
           {t('loading')}
@@ -37,7 +50,7 @@ export const Kol = () => {
       )
     }
 
-    if (Number(data?.total) > Number(kols?.length)) {
+    if (Number(total) > Number(kols?.length)) {
       return (
         <div
           className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
@@ -49,7 +62,8 @@ export const Kol = () => {
     }
   }
 
-  const kols = data?.kol
+  const onChagne = debounce((value) => setSearch(value), 500)
+
   return (
     <>
       <div className="pb-5 pr-4 max-sm:pr-0">
@@ -62,10 +76,16 @@ export const Kol = () => {
           </Button>
         </MobileQpportunityMoonshot>
         <div className="my-3">
-          {t('kol.desc').replace('$1', `${data?.total}` || '-')}
+          {t('kol.desc').replace('$1', `${total}` || '-')}
         </div>
 
         {userInfo?.role?.kol ? null : <Button>{t('apply.kol')}</Button>}
+
+        <Input
+          onChange={({ target }) => onChagne(target.value)}
+          placeholder={t('kol.search')}
+          className="max-w-[280px] mt-4"
+        />
         <CustomSuspense
           className="mt-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-full"
           isPending={isLoading}

@@ -515,5 +515,7 @@
   "ido.refund": "Refund",
   "ido.no-win": "I'm sorry, you didn't win the prize. It is recommended to purchase\n            after the market opens. The price after the market opens is\n            consistent with the donation price.",
   "ido.4052": "",
-  "ido.405": "The world's first token issued based on the ERC-405 protocol, integrating the 404 and burning mechanisms, disruptively ensures a continuous surge in token value"
+  "ido.405": "The world's first token issued based on the ERC-405 protocol, integrating the 404 and burning mechanisms, disruptively ensures a continuous surge in token value",
+  "kol.search": "Search for KOL",
+  "community.search": "Search for communities"
 }
