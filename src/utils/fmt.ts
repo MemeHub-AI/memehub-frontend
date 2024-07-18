@@ -1,4 +1,5 @@
 import { BigNumber } from 'bignumber.js'
+import { t } from 'i18next'
 import { first, isEmpty } from 'lodash'
 
 interface FmtAddrOptions {
@@ -44,10 +45,6 @@ export const fmt = {
 
     const percent = BigNumber(value).multipliedBy(100).toFixed(fixed)
     return percent + label
-  },
-  firstUpperCase(s?: string) {
-    if (!s) return ''
-    return s.replace(s[0], s[0].toUpperCase())
   },
   toHref(...args: string[]) {
     // Adapt ends with '/' for the first arg.
@@ -100,5 +97,13 @@ export const fmt = {
     return content.replace(reg, (match) => {
       return map[match] as string
     })
+  },
+  withChain(value: string | undefined) {
+    if (!value) return ''
+
+    const chain = t('chain')
+    if (value.endsWith(chain)) return value
+
+    return `${value} ${chain}`
   },
 }

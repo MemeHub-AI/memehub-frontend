@@ -29,11 +29,11 @@ interface Props {
 }
 
 export const FormChain = ({ formData }: Props) => {
-  const { form, formFields, chains } = formData
+  const { form, formFields } = formData
   const { switchChainAsync } = useSwitchChain()
   const { t } = useTranslation()
   const [show, setShow] = useState(false)
-  const { findChain } = useChainsStore()
+  const { chains, findChain } = useChainsStore()
   const { chainId } = useAccount()
 
   const isSelect = (v: string) => {
@@ -66,11 +66,7 @@ export const FormChain = ({ formData }: Props) => {
       render={({ field }) => (
         <FormItem className="mt-0">
           <FormLabel className="mt-0 font-bold">
-            *
-            {fmt.firstUpperCase(
-              chains?.find((c) => c.name === field.value)?.name
-            )}{' '}
-            {t('chain')}
+            *{fmt.withChain(findChain(field.value)?.displayName)}
           </FormLabel>
           <FormControl>
             {chains ? (
