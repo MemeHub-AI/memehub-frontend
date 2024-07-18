@@ -16,10 +16,10 @@ import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { DialogContent, DialogTitle } from '@radix-ui/react-dialog'
 import { Button } from '@/components/ui/button'
 
-const kolPercent = 0.02
+const kolPercent = 2 // 2%
 
 const communityName = 'BNB'
-const communityPercent = 0.05
+const communityPercent = 5 // 5%
 
 const memehubName = 'Memehub'
 const memehubPercent = 0.05
@@ -40,28 +40,34 @@ export const MarketingField = () => {
 
   const markets = [
     {
-      title: t('marketing.kol').replace('{}', fmt.percent(kolPercent)),
-      desc: t('marketing.kol.desc').replace('{}', fmt.percent(kolPercent)),
+      title: t('marketing.kol').replace(
+        '{}',
+        fmt.percent(kolPercent, { fixed: 0 })
+      ),
+      desc: t('marketing.kol.desc').replace(
+        '{}',
+        fmt.percent(kolPercent, { fixed: 0 })
+      ),
       value: MarketType.Kol,
       percent: kolPercent,
     },
     {
       title: t('marketing.community')
-        .replace('{}', fmt.percent(communityPercent))
+        .replace('{}', fmt.percent(communityPercent, { fixed: 0 }))
         .replace('{}', ''),
       desc: t('marketing.community.desc').replace(
         '{}',
-        fmt.percent(communityPercent)
+        fmt.percent(communityPercent, { fixed: 0 })
       ),
       value: MarketType.Community,
       percent: communityPercent,
     },
     // {
     //   title: t('marketing.memehub')
-    //     .replace('{}', fmt.percent(memehubPercent))
+    //     .replace('{}', fmt.percent(memehubPercent,{fixed:0}))
     //     .replace('{}', memehubName),
     //   desc: t('marketing.memehub.desc')
-    //     .replace('{}', fmt.percent(memehubPercent))
+    //     .replace('{}', fmt.percent(memehubPercent,{fixed:0}))
     //     .replace('{}', memehubName),
     //   value: MarketType.Memehub,
     //   percent: memehubPercent,

@@ -8,13 +8,14 @@ interface FmtAddrOptions {
   sufLen?: number
 }
 
-interface FmtProgressOptions {
-  toFixed?: number
-}
-
 interface DecimalsOptions {
   fixed?: number
   round?: boolean
+}
+
+interface PercentOptions {
+  fixed?: number
+  label?: string
 }
 
 export const fmt = {
@@ -26,28 +27,23 @@ export const fmt = {
 
     return `${prefix}${separator}${suffix}`
   },
-  progress: (value?: number, options?: FmtProgressOptions) => {
-    const { toFixed } = options || {}
-    let percent = value
-
-    if (typeof value === 'undefined') {
-      percent = 0
-    }
-
-    const result = toFixed ? percent?.toFixed(toFixed) : percent
-    return `${result}%`
-  },
   toAnchor(value?: string | number) {
     const val = (value?.toString() || '').trim()
 
     if (isEmpty(val)) return '#'
     return `#${val}`
   },
-  percent: (value: string | number | undefined, fixed = 2) => {
-    if (!value) return '0%'
+  percent: (
+    value: string | number | undefined,
+    { fixed = 2, label = '%' }: PercentOptions = {}
+  ) => {
+    if (!value) return 0 + label
+
+    const isFractional = value.toString().includes('.')
+    if (!isFractional) return BigNumber(value).toFixed(fixed) + label
 
     const percent = BigNumber(value).multipliedBy(100).toFixed(fixed)
-    return fmt.progress(Number(percent))
+    return percent + label
   },
   firstUpperCase(s?: string) {
     if (!s) return ''
