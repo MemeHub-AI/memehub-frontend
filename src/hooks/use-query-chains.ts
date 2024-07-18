@@ -5,25 +5,31 @@ import { chainApi } from '@/api/chain'
 import { useChainsStore } from '@/stores/use-chains-store'
 
 export const useQueryChains = () => {
-  const { setChains } = useChainsStore()
+  const { setChains, setChainsMap } = useChainsStore()
 
-  const { data, isLoading, isFetching, isError, refetch } = useQuery({
+  const {
+    data: chains,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: [chainApi.getChain.name],
     queryFn: chainApi.getChain,
-    refetchInterval: 60_000, // 1 minutes
+    refetchInterval: 30_000,
+    select: ({ data }) => data,
   })
 
   useEffect(() => {
-    if (data?.data) {
-      setChains(data.data)
+    if (chains) {
+      setChains(chains)
+      setChainsMap(chains)
     }
-  }, [data, isError])
+  }, [chains])
 
   return {
-    chains: data?.data || [],
+    chains: chains ?? [],
     isLoading,
     isFetching,
-    isError,
     refetch,
   }
 }
