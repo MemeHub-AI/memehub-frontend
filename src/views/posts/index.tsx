@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 import {MyPosts} from './components/my-posts'
 import { OrtherPosts } from './components/orther-posts';
 import Header from './components/header'
+import { Posts } from './type'
 // enum Tab {
 //   Latest = 'latest',
 //   Hot = 'hot',
@@ -13,27 +14,37 @@ import Header from './components/header'
 //   MyParticipate = 'my participate'
 // }
 const PostPage = () => {
-  const [posts , setPosts] = useState<any[]>([])
+  const [posts , setPosts] = useState<Posts | undefined>(
+    { 
+     type:1,
+     data:[{
+     isLaunched: true,
+     isAirdrop: true,
+   }, {
+     isLaunched: true,
+     isAirdrop: false,
+   },
+   {
+     isLaunched: false,
+     isAirdrop: false,
+   }]}
+   )
   console.log(posts);
   
-  useEffect(()=>{
-    // setPosts([])
-  })
-  // const router = useRouter()
-  // const {tab} = router.query
-  // const tabs = {
-  //   latest :t('latest'), 
-  //   hot :t('hot'), 
-  //   myIdea :t('idea') , 
-  //   myParyicipate :t('participate')
-  // }
+  const renderCom =()=>{
+    switch(posts?.type){
+      case 0:
+        return <MyPosts postObj={posts} />
+      case 1:
+        return <OrtherPosts postObj={posts} />
+    }
+  }
   return (
     <div>
        <PrimaryLayout container="div" className={cn('w-full')}>
           <Header setPosts = {setPosts}/>
           {/* <OfflinePost/> */}
-          <OrtherPosts posts={posts}/>
-          <MyPosts posts={posts}/>
+          {renderCom()}
           {/* <MyUnlaunchedPost />
           <MyLaunchedPost /> */}
        </PrimaryLayout>

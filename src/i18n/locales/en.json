@@ -33,7 +33,7 @@
   "token.create": "Create token",
   "creator": "Creator",
   "market-cap": "Market cap",
-  "comments": "Comments",
+  "comments": "Comment",
   "market.sort.desc": "Market cap DESC",
   "market.sort.asc": "Market cap ASC",
   "comments.sort.asc": "Comments ASC",
@@ -496,17 +496,17 @@
   "latest": "Latest",
   "hot": "Hot",
   "idea": "My Idea",
-  "edit" : "Edit",
-  "add.details" :"Please add the token details as soon as possible to strengthen the consensus",
-  "hundred.like":"It has collected 100 likes",
-  "add.launch":"Please immediately supplement the token details to launch the internal exchange.",
-  "idea.fail":"Otherwise, the idea will fail.",
-  "started" : "started",
-  "succeed":"succeed",
-  "consensus.successful":"If the consensus is successful after liking, you will receive 0.1% of the tokens.",
-  "consensus.fails":"If the consensus fails after 48 hours, you will receive a refund.",
-  "sure.like":"Are you sure you want to like this idea?",
-  "Claim":"Claim",
+  "edit": "Edit",
+  "add.details": "Please add the token details as soon as possible to strengthen the consensus",
+  "hundred.like": "It has collected 100 likes",
+  "add.launch": "Please immediately supplement the token details to launch the internal exchange.",
+  "idea.fail": "Otherwise, the idea will fail.",
+  "started": "started",
+  "succeed": "succeed",
+  "consensus.successful": "If the consensus is successful after liking, you will receive 0.1% of the tokens.",
+  "consensus.fails": "If the consensus fails after 48 hours, you will receive a refund.",
+  "sure.like": "Are you sure you want to like this idea?",
+  "Claim": "Claim",
   "choose": "Please select the blockchain to be launched",
   "least.string": "Please fill in at least 10 characters",
   "least.img": "Please upload at least one photo or video",
@@ -514,13 +514,12 @@
   "get.token": "You will receive 0.3% tokens as a project sponsor",
   "like.consensus": "The consensus of the likes will receive 0.1% tokens each",
   "start.vacation": "Start your legendary journey and to the moon!",
-  "create.post":"Create Post",
-  "post":"Post",
-  "mind":"What's on your mind"
+  "create.post": "Create Post",
+  "post": "Post",
+  "mind": "What's on your mind",
+  "codeName": "Code name",
+  "fullName": "Full name",
+  "my.participate": "My Participate",
+  "go.trade": "Go To Trade",
+  "picture": "Add picture"
 }
-
-
-
-
-
-
