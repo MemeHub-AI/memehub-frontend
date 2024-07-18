@@ -3,6 +3,7 @@ import { create } from 'zustand'
 import type { ChainData } from '@/api/chain/type'
 
 interface ChainsStore {
+  // TODO: Derived a map, improve find chain complexity to `O(1)`
   chains: ChainData[]
   loadingChains: boolean
 

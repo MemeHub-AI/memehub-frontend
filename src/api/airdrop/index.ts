@@ -17,16 +17,19 @@ export const airdropApi = {
       '/api/v1/airdrop/airdrop_list' + qs.stringify(query)
     )
   },
+  /** @depreacted */
   getMerkleRoot: (req: AirdropMerkleRootReq) => {
     return api.GET<ApiResponse<AirdropMerkleRootRes>>(
       '/api/v1/airdrop/generate_root/' + qs.stringify(req)
     )
   },
+  /** @depreacted */
   getProof: (req: AirdropProofReq) => {
     return api.GET<ApiResponse<AirdropProofRes>>(
       '/api/v1/airdrop/get_proof/' + qs.stringify(req)
     )
   },
+  /** @depreacted */
   getIdentityList: () => {
     return api.GET<ApiResponse<IdentityList>>('/api/v1/airdrop/identity')
   },

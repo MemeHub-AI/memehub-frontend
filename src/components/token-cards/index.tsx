@@ -104,7 +104,7 @@ export const TokenCards = (props: Props) => {
         }
       >
         {/* <IdoCard /> */}
-        <TokenCard card={filteredCards?.[0]} isIdo />
+        {filteredCards?.[0] && <TokenCard card={filteredCards?.[0]} isIdo />}
         {!!cards.length &&
           filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
       </CustomSuspense>
