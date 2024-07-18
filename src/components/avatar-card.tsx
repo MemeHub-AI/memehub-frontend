@@ -1,8 +1,8 @@
-import React, { ComponentProps, ReactNode } from 'react'
+import React, { ComponentProps, ReactNode, useState } from 'react'
 
 import { Card } from './ui/card'
 import { cn } from '@/lib/utils'
-import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
+import { Dialog } from './ui/dialog'
 import { Avatar } from './ui/avatar'
 
 interface Props extends ComponentProps<typeof Card> {
@@ -17,6 +17,7 @@ export const AvatarCard = ({
   avatarChildren,
   ...props
 }: Props) => {
+  const [open, setOpen] = useState(false)
   return (
     <Card
       shadow="none"
@@ -27,20 +28,20 @@ export const AvatarCard = ({
       )}
       {...props}
     >
+      <Dialog
+        open={open}
+        onOpenChange={setOpen}
+        contentProps={{ className: 'p-0 break-all' }}
+      >
+        <img src={src} alt="logo" />
+      </Dialog>
       <div className="relative">
-        <Dialog>
-          <DialogTrigger>
-            <Avatar
-              src={src}
-              variant="border"
-              alt="logo"
-              className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white"
-            />
-          </DialogTrigger>
-          <DialogContent className="p-0 break-all">
-            <img src={src} alt="logo" />
-          </DialogContent>
-        </Dialog>
+        <Avatar
+          src={src}
+          variant="border"
+          alt="logo"
+          className="w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white"
+        />
         {avatarChildren}
       </div>
       {children}

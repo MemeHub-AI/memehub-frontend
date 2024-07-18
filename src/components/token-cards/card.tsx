@@ -14,7 +14,7 @@ import { useTokenProgressV3 } from '@/views/token/hooks/trade-v3/use-token-progr
 import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
 import { useChainsStore } from '@/stores/use-chains-store'
-import IdoTag from '../ido-tag'
+import { IdoTag } from '../ido-tag'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
