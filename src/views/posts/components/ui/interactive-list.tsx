@@ -15,7 +15,8 @@ import {
 } from "@/components/ui/dialog"
 import React, {  ComponentProps, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FaLessThanEqual } from 'react-icons/fa6';
+import { Button } from '@/components/ui/button';
+import { CiHeart } from "react-icons/ci";
 
 interface props extends ComponentProps<'div'>{
   // setConfirm : React.Dispatch<React.SetStateAction<boolean>>
@@ -36,7 +37,7 @@ export const InteractiveList = ({className}:props) => {
         <Dialog>
           <DialogTrigger>
             <div className='flex items-center gap-2'>
-              {confirm ?<FcLike /> : <FcLikePlaceholder className='cursor-pointer ' />}
+              {confirm ?<FcLike /> : <CiHeart className='cursor-pointer' />}
               <span className='cursor-pointer'>10</span>
             </div>
           </DialogTrigger>
@@ -50,10 +51,12 @@ export const InteractiveList = ({className}:props) => {
                   <span>{t('consensus.successful')}</span>
                   <div>{t('consensus.fails')}</div>
                 </div>
-                <div className='mt-2 gap-4 flex '>
-                  <DialogClose className=' bg-yellow-200 w-20 h-8 rounded-md border border-black border-soli text-black' onClick={onConfirm}>{t('confirm')}</DialogClose>
+                <div className='mt-2 gap-8 flex '>
+                  <DialogClose className='  w-20 h-8 rounded-md border border-black border-soli text-black' onClick={onConfirm}>
+                  <Button className='bg-yellow-200'>{t('confirm')}</Button>
+                  </DialogClose>
                   <DialogClose className='border border-black border-solid w-20 h-8 rounded-md text-black'>
-                    {t('cancel')}
+                    <Button>{t('cancel')}</Button>
                   </DialogClose>
                 </div>
               </DialogDescription>
@@ -75,12 +78,14 @@ export const InteractiveList = ({className}:props) => {
                   rows={4}
                   className='border transition ease-in-out w-52 sm:text-sm sm:leading-5 resize-none focus:outline-none focus:border-blue-500'
                 />
-                <DialogFooter className='mt-2 gap-4 '>
-                  <button className=' bg-yellow-200 w-20 h-8 rounded-md border border-black border-soli text-black'>{t('confirm')}</button>
-                  <DialogClose className='border border-black border-solid w-20 h-8 rounded-md text-black'>
-                    {t('cancel')}
+                <div className='mt-2 gap-8 flex '>
+                  <DialogClose className='  w-20 h-8 rounded-md border border-black border-soli text-black' onClick={onConfirm}>
+                  <Button className='bg-yellow-200'>{t('confirm')}</Button>
                   </DialogClose>
-                </DialogFooter>
+                  <DialogClose className='border border-black border-solid w-20 h-8 rounded-md text-black'>
+                    <Button>{t('cancel')}</Button>
+                  </DialogClose>
+                </div>
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
@@ -88,7 +93,7 @@ export const InteractiveList = ({className}:props) => {
       </div>
     </div>
     <div>
-      <div className="cursor-pointer flex items-center gap-1 text-lg text-gray-600 transition duration-350 ease-in-out">
+      <div className=" flex items-center gap-1 text-lg text-gray-600 transition duration-350 ease-in-out">
         <img src="/images/bsc.svg" alt="" className='w-4 h-4'/>
         <span className='  text-sm text-black'>BNB Chain</span>
       </div>

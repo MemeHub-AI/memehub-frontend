@@ -28,6 +28,6 @@ export const TokenBlock = ({type}: props)=>{
         </div>
         {type === 1 &&<Button className='border border-solid border-gray-500 p-1 rounded-md lg:ml-9 sm:mr-2 mr-1'>{t('go.trade')}</Button>}
     </div>
-    <Progress value={60} className='text-black h-4 w-[96%] ml-2 rounded-sm my-2' indicatorClass="bg-[#97f6fb]">60%</Progress>
+    <Progress value={60} className='text-black h-4 w-[96%] ml-2 rounded-sm my-2 border border-black border-solid' indicatorClass="bg-[#97f6fb]">60%</Progress>
 </div>
 }

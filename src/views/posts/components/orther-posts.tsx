@@ -23,7 +23,7 @@ export const OrtherPosts = ({ postObj }: postsPro) => {
         <div className='shrink-0'>
           <img className="inline-block h-10 w-10 rounƒded-full ml-1" src="/favicon.ico" alt="" />
         </div>
-        <div className="ml-3 flex max-lg:justify-between w-full items-center">
+        <div className="ml-3 flex justify-between w-full items-center lg:w-[500px]">
           <div>
             <p className="text-base leading-6 font-medium text-black ">
               Sonali Hiraveee
@@ -33,7 +33,7 @@ export const OrtherPosts = ({ postObj }: postsPro) => {
             </p>
           </div>
           {p.isLaunched ?
-            <div className='bg-purple-500 rounded-md p-1 text-white lg:ml-[155px]'>
+            <div className='bg-purple-500 rounded-md p-1 text-white '>
               🚀  {t('succeed')}
             </div> :
             <span className="text-sm font-medium text-green-500 lg:ml-[155px]">
@@ -42,7 +42,7 @@ export const OrtherPosts = ({ postObj }: postsPro) => {
           }
         </div>
       </div>
-      {p.isLaunched && <Button className=' bg-yellow-200 rounded-md h-8 gap-1 ml-14 mb-2'><PiPencilSimpleLineThin />{p.isAirdrop ? t('token.detail') : t('Claim') + ` 0.1% $PEPE`}</Button>}
+      {p.isLaunched && <Button className=' bg-yellow-200 rounded-md h-8 ml-14 mb-2'>{p.isAirdrop ? <div className='flex'><PiPencilSimpleLineThin />{t('token.detail')}</div> : t('Claim') + ` 0.1% $PEPE`}</Button>}
       <div className="pl-14 ">
         <p className="text-base width-auto font-medium text-black flex-shrink lg:w-[500px]" >
           Day 07 of the challenge
@@ -54,7 +54,7 @@ export const OrtherPosts = ({ postObj }: postsPro) => {
         {p.isLaunched && <TokenBlock type={postObj.type} />}
         <Imgs imgs={imgs} className='mt-3 mr-1' />
         <InteractiveList className='py-1'/>
-        <Progress value={60} className='text-black h-4 lg:w-[500px] rounded-sm mb-4' indicatorClass="bg-red-500">60%</Progress>
+        <Progress value={60} className='text-black h-4 lg:w-[500px] rounded-sm mb-4 border border-solid border-black' indicatorClass="bg-red-500">60%</Progress>
       </div>
       {i !== posts.length - 1 &&<div className={cn('mt-3 bg-gray-400 h-[0.7px] mr-[-0.7rem] lg:w-[600px] pl-[-5px]  ml-[-1.5rem] sm:mr-[-1.4rem]')}></div>}
 
