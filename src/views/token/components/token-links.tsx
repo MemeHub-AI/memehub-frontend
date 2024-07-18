@@ -1,18 +1,24 @@
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { Twitter } from 'lucide-react'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { RiGlobalLine } from 'react-icons/ri'
 
 import { useTokenContext } from '@/contexts/token'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
-const classes = 'border-transparent hover:border-black hover:bg-transparent'
+const classes = 'border-transparent !bg-transparent hover:border-black'
 
-export const TokenLinks = () => {
+export const TokenLinks = ({ className }: ComponentProps<'div'>) => {
   const { tokenInfo } = useTokenContext()
 
   return (
-    <div className="flex justify-center items-center my-1 max-sm:m-0 space-x-1">
+    <div
+      className={cn(
+        'flex justify-center items-center mt-1 space-x-1',
+        className
+      )}
+    >
       {tokenInfo?.twitter_url && (
         <Button
           shadow="none"
