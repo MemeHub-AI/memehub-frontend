@@ -15,11 +15,12 @@ import { addPrefix0x } from '@/utils/contract'
 import { useTradeSearchParams } from '../use-search-params'
 import { useAirdropStore } from '@/stores/use-airdrop'
 import { useCheckChain } from '@/hooks/use-check-chain'
-import { buttonLeft } from '@/config/toast'
+import { bottomLeft } from '@/config/toast'
 import { useLogin } from '@/hooks/use-login'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { v3Addr } from '@/contract/v3/address'
 import { v3DistributorAbi } from '@/contract/v3/abi/distributor'
+import { DeviceWidth } from '@/hooks/use-responsive'
 
 export const useAirdrop = (
   id: number = 0,
@@ -38,7 +39,8 @@ export const useAirdrop = (
   const { playAudio } = useAudioPlayer()
 
   const { distributor } = v3Addr[chainId] ?? {}
-  const toastConfig = window.innerWidth > 600 ? buttonLeft : undefined
+  const toastConfig =
+    window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined
 
   // Query airdrop details.
   const { data: { data } = {}, refetch } = useQuery({
