@@ -9,6 +9,7 @@ import { TokenSocialLinks } from '@/components/token-links'
 import { Countdown } from '@/components/countdown'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
+import { cn } from '@/lib/utils'
 
 const usdtAmount = '20000U'
 
@@ -39,6 +40,14 @@ export const IdoPage = () => {
         avatarClass="!border-orange-500"
         className="flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32"
       >
+        <img
+          src="/images/ido/work.jpeg"
+          alt="poster"
+          className={cn(
+            'w-48 absolute -right-28 -bottom-28 z-0 border-2 border-white rounded -rotate-[65deg]',
+            'sm:w-36 sm:-right-16 sm:-bottom-12',
+          )}
+        />
         <h2 className="font-bold text-xl text-center">PP405</h2>
         <TokenSocialLinks
           x="https://x.com"
@@ -47,11 +56,13 @@ export const IdoPage = () => {
           className="mt-0 text-zinc-600"
         />
         <p className="text-sm">{t('ido.405')}</p>
+
         {isStarted && !isEnded && (
           <div className="absolute right-2 top-1 text-yellow-600">
             71h: 23m: 23s
           </div>
         )}
+
         {isStarted ? (
           <div className="w-full">
             <Progress
@@ -83,13 +94,13 @@ export const IdoPage = () => {
         )}
 
         {kol && (
-          <p className="text-zinc-500 text-sm mt-3 ">
+          <p className="text-zinc-500 text-sm mt-3 z-10">
             {t('ido.detect').replace('{}', kol).replace('{}', kolAmount)}
           </p>
         )}
 
         {isEnded && !hasClaim && (
-          <div className=" font-bold">
+          <div className="font-bold z-10">
             <p className="flex items-center space-x-1.5">
               <span>{t('ido.ended1')}</span>
               <InfoIcon className="w-4 cursor-pointer" />
@@ -97,6 +108,7 @@ export const IdoPage = () => {
             <p>{t('ido.ended2')}</p>
           </div>
         )}
+
         {isEnded && hasClaim && !isRefund && (
           <div className="">
             <p>{t('ido.ended-desc1')}</p>
@@ -104,7 +116,8 @@ export const IdoPage = () => {
             {hasWaiting && <p>{t('ido.ended-desc3')}</p>}
           </div>
         )}
-        {isRefund && <p className=" text-sm mt-1">{t('ido.no-win')}</p>}
+
+        {isRefund && <p className="text-sm mt-1 z-10">{t('ido.no-win')}</p>}
 
         {isStarted && hasDonated ? (
           <>
@@ -113,7 +126,7 @@ export const IdoPage = () => {
                 <Button
                   shadow="none"
                   size="sm"
-                  className="text-base self-start mt-3 bg-yellow-200"
+                  className="text-base self-start mt-3 bg-yellow-200 select-none"
                   disabled={isRefunded}
                 >
                   {t('ido.refund')} {kolAmount}
@@ -122,7 +135,7 @@ export const IdoPage = () => {
                 <Button
                   shadow="none"
                   size="sm"
-                  className="text-base self-start mt-3 bg-yellow-200"
+                  className="text-base self-start mt-3 bg-yellow-200 select-none"
                   disabled={hasWaiting || claimed}
                 >
                   {t('ido.claim')} {BigNumber(12312312312).toFormat()} PP405
@@ -132,7 +145,7 @@ export const IdoPage = () => {
               <Button
                 shadow="none"
                 size="sm"
-                className="text-base self-start mt-3 bg-yellow-200"
+                className="text-base self-start mt-3 bg-yellow-200 select-none"
                 disabled
               >
                 {t('ido.donate')} 10 USDT
@@ -144,7 +157,7 @@ export const IdoPage = () => {
             shadow="none"
             variant="warning"
             size="sm"
-            className="text-base self-start mt-3"
+            className="text-base self-start mt-3 select-none"
           >
             100x {t('coin')}
           </Button>
