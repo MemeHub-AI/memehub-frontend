@@ -8,11 +8,11 @@ import Imgs from './ui/imgs'
 import { useTranslation } from 'react-i18next'
 import { TokenBlock } from './ui/token-block'
 import { Posts } from '../type'
-interface postsPro {
+interface PostsPro {
   postObj: Posts
 }
 
-export const OrtherPosts = ({ postObj }: postsPro) => {
+export const OrtherPosts = ({ postObj }: PostsPro) => {
   const posts = postObj.data
   const { t } = useTranslation()
   const imgs = [
@@ -21,6 +21,7 @@ export const OrtherPosts = ({ postObj }: postsPro) => {
     '/favicon.ico',
     '/images/cat.jpg',
   ]
+
   return (
     <div>
       {posts.map((p, i) => (

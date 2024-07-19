@@ -12,6 +12,7 @@ interface props {
 
 export const TokenBlock = ({ type }: props) => {
   const { t } = useTranslation()
+  
   return (
     <div className=" border border-solid border-gray-400 rounded-md mt-2 lg:w-[500px]">
       <div className="relative">

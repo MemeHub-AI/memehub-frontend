@@ -13,32 +13,45 @@ import {
   DialogClose,
   DialogFooter,
 } from '@/components/ui/dialog'
-import React, { ComponentProps, useState } from 'react'
+import React, { ComponentProps, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { CiHeart } from 'react-icons/ci'
+import { Textarea } from '@/components/ui/textarea'
 
-interface props extends ComponentProps<'div'> {
+interface Props extends ComponentProps<'div'> {
   // setConfirm : React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const InteractiveList = ({ className }: props) => {
+export const InteractiveList = ({ className }: Props) => {
+  const closeLikeRef = useRef<HTMLButtonElement>(null)
+  const closeCommentRef = useRef<HTMLButtonElement>(null)
   const [confirm, setConfirm] = useState(false)
+  const { t, i18n } = useTranslation()
+
   const onConfirm = () => {
     setConfirm(true)
     // setIsopen(false)
   }
-  const { t, i18n } = useTranslation()
+  const onLikeClose = () => {
+    closeLikeRef.current?.click()
+  }
+  const onCommentClose = () => {
+    closeCommentRef.current?.click()
+  }
+  const onCommentConfirm = () => {}
+
   return (
     <div
       className={cn(
-        'flex items-center  justify-between lg:w-[500px]',
+        'flex items-center justify-between lg:w-[500px]',
         className
       )}
     >
-      <div className="flex gap-7">
+      <div className="flex gap-3">
         <div className=" flex items-center gap-2 text-lg text-gray-500 transition duration-350 ease-in-out">
           <Dialog>
+            <DialogClose ref={closeLikeRef}></DialogClose>
             <DialogTrigger>
               <div className="flex items-center gap-2">
                 {confirm ? <FcLike /> : <CiHeart className="cursor-pointer" />}
@@ -72,15 +85,15 @@ export const InteractiveList = ({ className }: props) => {
                     <div>{t('consensus.fails')}</div>
                   </div>
                   <div className="mt-2 gap-8 flex ">
-                    <DialogClose
-                      className="  w-20 h-8 rounded-md border border-black border-soli text-black"
-                      onClick={onConfirm}
+                    <Button className="bg-yellow-200 w-20 h-8 rounded-md border border-black border-soli text-black">
+                      {t('confirm')}
+                    </Button>
+                    <Button
+                      className="border border-black border-solid w-20 h-8 rounded-md text-black"
+                      onClick={onLikeClose}
                     >
-                      <Button className="bg-yellow-200">{t('confirm')}</Button>
-                    </DialogClose>
-                    <DialogClose className="border border-black border-solid w-20 h-8 rounded-md text-black">
-                      <Button>{t('cancel')}</Button>
-                    </DialogClose>
+                      {t('cancel')}
+                    </Button>
                   </div>
                 </DialogDescription>
               </DialogHeader>
@@ -89,6 +102,7 @@ export const InteractiveList = ({ className }: props) => {
         </div>
         <div className=" flex items-center gap-2 text-lg text-gray-500  transition duration-350 ease-in-out">
           <Dialog>
+            <DialogClose ref={closeCommentRef}></DialogClose>
             <DialogTrigger className="flex items-center gap-2">
               <BiComment className=" cursor-pointer" />
               <span className=" cursor-pointer">14</span>
@@ -97,20 +111,20 @@ export const InteractiveList = ({ className }: props) => {
               <DialogHeader>
                 <DialogTitle className="m-auto">{t('comments')}</DialogTitle>
                 <DialogDescription className="flex items-center flex-col">
-                  <textarea
-                    rows={4}
-                    className="border transition ease-in-out w-52 sm:text-sm sm:leading-5 resize-none focus:outline-none focus:border-blue-500"
-                  />
+                  <Textarea rows={4} className=" " />
                   <div className="mt-2 gap-8 flex ">
-                    <DialogClose
-                      className="  w-20 h-8 rounded-md border border-black border-soli text-black"
-                      onClick={onConfirm}
+                    <Button
+                      className="bg-yellow-200 w-20 h-8 rounded-md border border-black border-soli text-black"
+                      onClick={onCommentConfirm}
                     >
-                      <Button className="bg-yellow-200">{t('confirm')}</Button>
-                    </DialogClose>
-                    <DialogClose className="border border-black border-solid w-20 h-8 rounded-md text-black">
-                      <Button>{t('cancel')}</Button>
-                    </DialogClose>
+                      {t('confirm')}
+                    </Button>
+                    <Button
+                      className="border border-black border-solid w-20 h-8 rounded-md text-black"
+                      onClick={onCommentClose}
+                    >
+                      {t('cancel')}
+                    </Button>
                   </div>
                 </DialogDescription>
               </DialogHeader>

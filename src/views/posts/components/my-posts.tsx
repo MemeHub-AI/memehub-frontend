@@ -11,12 +11,13 @@ import { useTranslation } from 'react-i18next'
 import { IoAlertCircleOutline } from 'react-icons/io5'
 import { Posts } from '../type'
 import { TokenBlock } from './ui/token-block'
+import { DialogClose } from '@radix-ui/react-dialog'
 
-interface postsPro {
+interface PostsPro {
   postObj: Posts
 }
 
-export const MyPosts = ({ postObj }: postsPro) => {
+export const MyPosts = ({ postObj }: PostsPro) => {
   const posts = postObj.data
   const { t } = useTranslation()
   const imgs = [
@@ -25,6 +26,7 @@ export const MyPosts = ({ postObj }: postsPro) => {
     '/images/ai.jpg',
     '/images/ai.jpg',
   ]
+
   return (
     <div>
       {posts.map((p, i) => (

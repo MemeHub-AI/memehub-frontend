@@ -1,22 +1,24 @@
-import { ComponentProps, ReactNode } from 'react'
+import { ComponentProps, ReactNode, useRef } from 'react'
 import { cn } from '@/lib/utils'
 import React from 'react'
 import { LetterCaseUppercaseIcon } from '@radix-ui/react-icons'
 import { useState, useEffect } from 'react'
 import { Dialog } from '@/components/ui/dialog'
+import {
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+} from '@radix-ui/react-dialog'
 
 interface ImgsProps extends ComponentProps<'div'> {
   imgs: string[]
 }
 
 const Imgs = ({ className, imgs }: ImgsProps) => {
-  // const [detial , setDetail] = useState<ReactNode>(null)
-  // <Dialog open={!!detial}>
-
-  // </Dialog>
   const [detail, setDetail] = useState<ReactNode>(null)
+
   const showImg = (i: number) => {
-    setDetail(<img src={imgs[i]} className="w-full object-contain z-10s"></img>)
+    setDetail(<img src={imgs[i]} className="w-full object-contiin z-10s"></img>)
   }
 
   return (
@@ -32,12 +34,11 @@ const Imgs = ({ className, imgs }: ImgsProps) => {
         onOpenChange={() => {
           setDetail(null)
         }}
-        contentProps={{ className: 'p-0 breake-all' }}
+        contentProps={{ className: 'p-0 breake-all', showClose: false }}
       >
         {detail}
       </Dialog>
       {imgs.map((image, index) => (
-        // <div className='shrink-0'>
         <img
           src={image}
           alt={`Image ${index + 1}`}
@@ -46,7 +47,6 @@ const Imgs = ({ className, imgs }: ImgsProps) => {
             showImg(index)
           }}
         />
-        // </div>
       ))}
     </div>
   )

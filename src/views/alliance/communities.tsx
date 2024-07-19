@@ -11,7 +11,6 @@ import { CommunityCard } from '@/components/community-card'
 
 export const Communities = () => {
   const { t } = useTranslation()
-
   const { userInfo } = useUserStore()
   const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
     queryKey: [allianceApi.getCommunity.name],

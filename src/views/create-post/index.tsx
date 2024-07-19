@@ -29,6 +29,7 @@ const CreatePost = () => {
   const [selected, setSelected] = useState(0)
   const [filename, setFilename] = useState<String>()
   const imgs = ['/favicon.ico', '/favicon.ico', '/favicon.ico']
+
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (target.files && target.files[0]) {
       var name = target.files[0].name
@@ -38,6 +39,7 @@ const CreatePost = () => {
       setFilename(name)
     }
   }
+  
   return (
     //     <CreateTokenProvider
     //   value={{

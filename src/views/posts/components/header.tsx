@@ -52,6 +52,7 @@ const Header = ({ setPosts }: HeaderProps) => {
   }
   const [selected, setSelected] = useState(0)
   const tabs = [t('latest'), t('hot'), t('idea'), t('my.participate')]
+
   function onChangeTab(i: number, e: React.MouseEvent) {
     const target = e.target as HTMLElement
     setSelected(i)
@@ -62,6 +63,7 @@ const Header = ({ setPosts }: HeaderProps) => {
       setPosts(myPosts)
     }
   }
+
   return (
     <div
       className={cn(
