@@ -76,7 +76,7 @@ const Airdrop = () => {
           <>
             <CustomSuspense
               isPending={isLoading}
-              fallback={<div>loading...</div>}
+              fallback={<div>{t('loading')}</div>}
               nullback={<div className="mt-3">{t('no.airdrop')}</div>}
               className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max"
             >

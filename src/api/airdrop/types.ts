@@ -1,3 +1,4 @@
+import { Locale } from '../types'
 import { Hash } from 'viem'
 
 export interface AirdropMerkleRootReq {
@@ -30,7 +31,7 @@ export interface IdentityList {
 
 export interface Kol {
   id: number
-  name: string
+  name: Locale
   logo: string
   description: string
 }

@@ -1,15 +1,16 @@
+import { SearchReq } from './../types'
 import { api, morkaApi } from '@/api'
 import { CommunityListItem, KolListItem, Query } from './type'
 import { qs } from '@/hooks/use-fetch'
 import { ApiResponse, PaginationRes } from '../types'
 
 export const allianceApi = {
-  async getKols(query: Query) {
+  async getKols(query: Query & SearchReq) {
     return api.GET<ApiResponse<PaginationRes<KolListItem>>>(
       '/api/v1/kol/list/' + qs.stringify(query)
     )
   },
-  getCommunity(query: Query) {
+  getCommunity(query: Query & SearchReq) {
     return api.GET<ApiResponse<PaginationRes<CommunityListItem>>>(
       '/api/v1/community/list/' + qs.stringify(query)
     )
