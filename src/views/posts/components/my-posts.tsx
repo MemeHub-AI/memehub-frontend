@@ -120,7 +120,7 @@ export const MyPosts = ({ postObj }: PostsPro) => {
           {i !== posts.length - 1 && (
             <div
               className={cn(
-                '  bg-gray-400 h-[0.7px] mr-[-0.7rem] lg:w-[600px] pl-[-5px]  ml-[-1.5rem] sm:mr-[-1.4rem]'
+                '  bg-gray-400 h-[0.7px] mr-[-0.7rem] lg:w-[600px] pl-[-5px]  ml-[-1.5rem] sm:mr-[-1.4rem]',
               )}
             ></div>
           )}

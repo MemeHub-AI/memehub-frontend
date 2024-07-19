@@ -1,7 +1,7 @@
 import { ComponentProps, useMemo, useState } from 'react'
 import { IoIosMore } from 'react-icons/io'
 import { useTranslation } from 'react-i18next'
-import { useSwitchChain } from 'wagmi'
+import { useChainId, useSwitchChain } from 'wagmi'
 
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { cn } from '@/lib/utils'
@@ -29,17 +29,18 @@ export const ChainSelect = ({
   const [open, setOpen] = useState(false)
   const { switchChainAsync } = useSwitchChain()
   const { loadingChains, chains, chainsMap } = useChainsStore()
+  const chainId = useChainId()
 
   const isSelected = useMemo(() => {
     const idx = chains.findIndex((c) => {
-      const v = value || defaultValue
+      const v = value || defaultValue || chainId.toString()
       return v === c.id || v === c.name
     })
     return idx > 6
   }, [chains, value, defaultValue])
 
   const isChainSelected = (c: ChainData) => {
-    const v = value || defaultValue
+    const v = value || defaultValue || chainId.toString()
     return v === c.id || v === c.name
   }
 

@@ -1,21 +1,17 @@
 import React, { useState } from 'react'
-import PrimaryLayout from '@/components/layouts/primary'
-import { cn } from '@/lib/utils'
 import Image from 'next/image'
-import { Routes } from '@/routes'
 import { useRouter } from 'next/router'
 import { AiOutlinePicture } from 'react-icons/ai'
-import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import { IoIosArrowBack } from 'react-icons/io'
 import { IoNewspaperOutline } from 'react-icons/io5'
-import { FormChain } from '../create/components/form/chain'
-import { useCreateTokenContext } from '@/contexts/create-token'
-import { useDeploy } from '../create/hooks/use-deploy'
-import { Form } from './components/Form'
-import { useCreateTokenForm } from '../create/hooks/use-form'
-import { useNewsList } from '@/hooks/use-news-list'
-import { CreateTokenProvider } from '@/contexts/create-token'
+
+import PrimaryLayout from '@/components/layouts/primary'
+import { cn } from '@/lib/utils'
+import { Routes } from '@/routes'
+import { Button } from '@/components/ui/button'
+import { ChainSelect } from '@/components/chain-select'
+
 const CreatePost = () => {
   const { t } = useTranslation()
   // const deployResult = useDeploy()
@@ -39,7 +35,7 @@ const CreatePost = () => {
       setFilename(name)
     }
   }
-  
+
   return (
     //     <CreateTokenProvider
     //   value={{
@@ -80,7 +76,8 @@ const CreatePost = () => {
           ></textarea>
         </div>
         <div>{t('chain')}</div>
-        <div className="flex py-1">
+        <ChainSelect className="mb-2" />
+        {/* <div className="flex py-1">
           {imgs.map((img, i) => {
             return (
               <div
@@ -91,14 +88,14 @@ const CreatePost = () => {
                   i === 0 && 'rounded-l-lg',
                   'border border-solid border-black cursor-pointer my-1',
                   i === 2 && 'rounded-r-lg',
-                  i === selected && 'bg-red-600'
+                  i === selected && 'bg-red-600',
                 )}
               >
                 <Image src={imgs[i]} alt="" width={30} height={30}></Image>
               </div>
             )
           })}
-        </div>
+        </div> */}
         {/* <FormChain formData={FormData}/> */}
         {/* <Form/> */}
         <div className="flex gap-3 mb-4">
@@ -141,7 +138,7 @@ const CreatePost = () => {
         <div className=" text-green-400 text-[#7aa93a]">{t('least.img')}</div>
         <div
           className={cn(
-            ' mt-4 w-2/3  rounded-md max-sm:w-full p-2 text-black lg:w-[500px] bg-[#e3e9fd]'
+            ' mt-4 w-2/3  rounded-md max-sm:w-full p-2 text-black lg:w-[500px] bg-[#e3e9fd]',
           )}
         >
           <div>{t('build.consensus')}</div>
