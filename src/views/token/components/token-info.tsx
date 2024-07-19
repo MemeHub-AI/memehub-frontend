@@ -60,7 +60,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         isGrauated && (
           <Badge
             variant="success"
-            className="absolute -bottom-14 left-1/2 -translate-x-1/2 border-black"
+            className="absolute -bottom-0 left-1/2 -translate-x-1/2 border-black"
           >
             {t('token.graduated')}
           </Badge>
@@ -74,7 +74,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       </div>
 
       {/* Name/symbol */}
-      <div className="font-bold leading-none text-center">
+      <div className="font-bold leading-none text-center mt-2">
         {isNotFound
           ? t('token.not-found')
           : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
