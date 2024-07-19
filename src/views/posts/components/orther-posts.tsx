@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { InteractiveList } from './ui/interactive-list';
-import { PiPencilSimpleLineThin } from "react-icons/pi";
+import { RiEdit2Fill } from "react-icons/ri";
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import Imgs from './ui/imgs';
@@ -15,7 +15,7 @@ interface postsPro {
 export const OrtherPosts = ({ postObj }: postsPro) => {
   const posts = postObj.data
   const { t } = useTranslation()
-  const imgs = ['/images/ai.jpg', '/images/ai.jpg', '/favicon.ico', '/images/ai.jpg']
+  const imgs = ['/images/404.png', '/images/burn.png', '/favicon.ico', '/images/cat.jpg']
   return <div>
       {posts.map((p,i)=>(
     <div className={cn('py-1')}>
@@ -42,7 +42,9 @@ export const OrtherPosts = ({ postObj }: postsPro) => {
           }
         </div>
       </div>
-      {p.isLaunched && <Button className=' bg-yellow-200 rounded-md h-8 ml-14 mb-2'>{p.isAirdrop ? <div className='flex'><PiPencilSimpleLineThin />{t('token.detail')}</div> : t('Claim') + ` 0.1% $PEPE`}</Button>}
+      {p.isLaunched && <Button className=' bg-yellow-200 rounded-md h-8 ml-14 mb-2 gap-1'>
+        {p.isAirdrop ? <div className='flex gap-1 items-center'><RiEdit2Fill />{t('token.detail')}</div> : 
+        t('Claim') + ` 0.1% $PEPE`}</Button>}
       <div className="pl-14 ">
         <p className="text-base width-auto font-medium text-black flex-shrink lg:w-[500px]" >
           Day 07 of the challenge

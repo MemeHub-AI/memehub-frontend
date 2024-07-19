@@ -35,10 +35,10 @@ const Imgs = ({ className , imgs}: ImgsProps) => {
 //       }
 //     });
     
-    return <div className={cn(imgs.length > 1 && 'grid grid-cols-2', ' rounded-2xl overflow-hidden lg:w-[500px] gap-1 ' , className)}>
+    return <div className={cn(imgs.length > 1 && 'grid grid-cols-2', ' rounded-2xl overflow-hidden lg:w-[500px] gap-1 h-[300px]' , className)}>
         {imgs.map((image, index) => (
             // <div className='shrink-0'>
-                <img src={image} alt={`Image ${index + 1}`} className={cn("w-full object-cover h-full" , )}/>
+                <img src={image} alt={`Image ${index + 1}`} className={cn("w-full object-cover h-[150px]" , )}/>
             // </div>
         ))}
     </div>

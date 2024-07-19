@@ -2,16 +2,13 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { InteractiveList } from './ui/interactive-list';
-import { PiPencilSimpleLineThin } from "react-icons/pi";
+import { RiEdit2Fill } from "react-icons/ri";
 import { FaBoltLightning } from "react-icons/fa6";
 import Imgs from './ui/imgs';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from 'react-i18next';
 import { IoAlertCircleOutline } from "react-icons/io5";
-import { FaTwitter } from "react-icons/fa";
-import { FaTelegramPlane } from "react-icons/fa";
-import { TbWorld } from "react-icons/tb";
 import { Posts } from '../type';
 import { TokenBlock } from './ui/token-block';
 
@@ -55,7 +52,7 @@ export const MyPosts = ({postObj}: postsPro) => {
                         {/* 只有未补充代币详情才会有编辑代币详情按钮，如果发射可以查看代币详情但是无法编辑 */}
                         {(!p.isLaunched || !p.isDetailed) &&<button className='border border-solid border-black px-2 rounded-md'>{t('edit')}</button>}
                         {(p.isLaunched || !p.isDetailed) && <Button className=' bg-yellow-200 rounded-md h-8 gap-1'>
-                            {!p.isDetailed && <PiPencilSimpleLineThin />}{t('token.detail')}</Button>}
+                            {!p.isDetailed && <RiEdit2Fill />}{t('token.detail')}</Button>}
                     </div>
                     {/* 先判断是否为未补充代币详情状态，在判断代币是否已经筹集结束，如果是的话显示已完成筹集尽快补充，如果不是显示尽快补充*/}
                     {!p.isDetailed && (p.isLaunched ?
