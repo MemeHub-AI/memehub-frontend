@@ -8,15 +8,14 @@ const ERR = {
 }
 
 export const UNISWAP_ERR = {
-  exec: (msg: string) => {
-    msg = msg.toLowerCase()
+  message: (msg: string) => {
+    const lower = msg.toLowerCase()
 
-    if (msg.includes(ERR.insufficientAmount)) {
+    if (lower.includes(ERR.insufficientAmount)) {
       toast.error(t('uniswapv2.err.insufficient-amount'))
       return
     }
-
-    if (isUserReject(msg)) return
+    if (isUserReject(lower)) return
 
     toast.error(msg)
     console.error(msg)

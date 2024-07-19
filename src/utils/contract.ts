@@ -1,41 +1,15 @@
 import { BigNumber } from 'bignumber.js'
-import { Hash, parseEther, Address, Log } from 'viem'
+import { Hash, parseEther, Log } from 'viem'
 import dayjs from 'dayjs'
 import { getBlock } from 'wagmi/actions'
 
 import { DEPLOY_LOG_TOPIC } from '@/constants/deploy'
-import { TRADE_SERVICE_FEE } from '@/constants/trade'
 import { wagmiConfig } from '@/config/wagmi'
-import { DEADLINE_SECONDS } from '@/constants/trade'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
   const e = String(err).toLowerCase()
   return e.includes('user rejected') || e.includes('user denied')
-}
-
-// Make a config for contract.
-export const makeConfig = <T = unknown>(abi: T, address: Address) => {
-  return {
-    abi,
-    address,
-  } as const
-}
-
-/**
- * @example
- * ```
- * addServiceFee('1') // amount
- * // 1010000000000000000n = 1.01
- * ```
- */
-export const addServiceFee = (amount: string) => {
-  const biAmount = parseEther(amount)
-  const total = BigNumber(biAmount.toString())
-    .multipliedBy(TRADE_SERVICE_FEE)
-    .toFixed(0)
-
-  return BigInt(total)
 }
 
 /**
@@ -78,21 +52,25 @@ export const subSlippage = (value: string, slippage: string) => {
   return BigInt(total)
 }
 
-// Add `0x` prefix.
+/** Add `0x` prefix. */
 export const addPrefix0x = (input: string | string[]) => {
   const arr = Array.isArray(input) ? input : [input]
-  return arr.map((s) => '0x' + s) as Hash[]
+  return arr.map((s) => (s.startsWith('0x') ? s : '0x' + s)) as Hash[]
 }
 
-// Get timestamp & plus offset seconds.
-export const getDeadline = async () => {
+/**
+ * Get timestamp of block chain & plus offset seconds,
+ * use local timestamp as fallback.
+ * @default seconds `300`(5m)
+ */
+export const getDeadline = async (seconds = 300) => {
   const addOffset = (value: bigint | number) => {
-    return BigNumber(value.toString()).plus(DEADLINE_SECONDS).toFixed(0)
+    return BigNumber(value.toString()).plus(seconds).toFixed(0)
   }
 
   const ts = await getBlock(wagmiConfig)
     .then(({ timestamp }) => addOffset(timestamp))
-    .catch(() => addOffset(dayjs().unix())) // Use local timestamp as fallback.
+    .catch(() => addOffset(dayjs().unix())) // fallback.
 
   return BigInt(ts)
 }
