@@ -31,7 +31,7 @@ export const InteractiveList = ({ className }: Props) => {
 
   const onConfirm = () => {
     setConfirm(true)
-    // setIsopen(false)
+    closeLikeRef.current?.click()
   }
   const onLikeClose = () => {
     closeLikeRef.current?.click()
@@ -85,7 +85,10 @@ export const InteractiveList = ({ className }: Props) => {
                     <div>{t('consensus.fails')}</div>
                   </div>
                   <div className="mt-2 gap-8 flex ">
-                    <Button className="bg-yellow-200 w-20 h-8 rounded-md border border-black border-soli text-black">
+                    <Button
+                      className="bg-yellow-200 w-20 h-8 rounded-md border border-black border-soli text-black"
+                      onClick={onConfirm}
+                    >
                       {t('confirm')}
                     </Button>
                     <Button
