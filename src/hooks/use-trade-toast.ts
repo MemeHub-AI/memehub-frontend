@@ -40,7 +40,7 @@ export const useTradeToast = () => {
     const diamondQuantity =
       rewardAmount < 100 ? +rewardAmount.toFixed(4) : +rewardAmount.toFixed(2)
 
-    setLoading(false)
+    setLoading?.(false)
 
     const id = toast(
       createElement(TxStatus, {
@@ -60,7 +60,7 @@ export const useTradeToast = () => {
           transition:
             'transformY 0s,transformX .4s,opacity .4s,height .4s,box-shadow .2s',
         },
-      }
+      },
     )
     setToastId(id)
 

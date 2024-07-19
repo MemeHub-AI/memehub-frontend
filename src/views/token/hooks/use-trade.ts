@@ -1,8 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { formatEther } from 'viem'
 
-import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useTradeV3 } from './trade-v3/use-trade'
 import { useTokenContext } from '@/contexts/token'
@@ -31,7 +29,7 @@ export const useTrade = () => {
   const { userInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
   const [inviteOpen, setInviteOpen] = useState(false)
-  const { getInviterInfo, getCanBind } = useInvite()
+  const { getCanBind } = useInvite()
   const [loading, setLoading] = useState(false)
 
   const dexTrade = useDexTrade()
@@ -69,48 +67,51 @@ export const useTrade = () => {
     return true
   }
 
+  const updateLastTrade = async (type: TradeType, amount: string) => {
+    const tokenSymbol = tokenInfo?.ticker
+    const reserveSymbol = tokenInfo?.chain.native.symbol
+    lastTrade.type = type
+
+    if (type === TradeType.Buy) {
+      const value = await getTokenAmount(amount)
+      lastTrade.tokenAmount = fmt.decimals(formatEther(value)) + tokenSymbol
+      lastTrade.nativeAmount =
+        fmt.decimals(amount, { fixed: 3 }) + reserveSymbol
+    } else {
+      const value = await getNativeAmount(amount)
+      lastTrade.tokenAmount = fmt.decimals(amount, { fixed: 3 }) + tokenSymbol
+      lastTrade.nativeAmount = fmt.decimals(formatEther(value)) + reserveSymbol
+    }
+  }
+
   const buying = async (
-    reserveAmount: string,
+    amount: string,
     slippage: string,
     setValue?: (value: string) => void,
   ) => {
     setLoading(true)
-    const isValid = await checkForTrade(reserveAmount)
+    const isValid = await checkForTrade(amount)
     if (!isValid) {
       setLoading(false)
       return
     }
 
-    const amount = await getTokenAmount(reserveAmount)
-    lastTrade.tokenAmount = `${fmt.decimals(formatEther(amount))} ${
-      tokenInfo?.ticker
-    }`
-    lastTrade.nativeAmount = `${fmt.decimals(reserveAmount, { fixed: 3 })} ${
-      tokenInfo?.chain.native.symbol
-    }`
-    lastTrade.type = TradeType.Buy
-
-    console.log('buy', reserveAmount, slippage)
-    trade?.buy(reserveAmount, slippage, setValue)
+    await updateLastTrade(TradeType.Buy, amount)
+    console.log('buy', amount, slippage)
+    trade?.buy(amount, slippage, setValue)
   }
 
-  const selling = async (tokenAmount: string, slippage: string) => {
+  const selling = async (amount: string, slippage: string) => {
     setLoading(true)
-    const isValid = await checkForTrade(tokenAmount)
+    const isValid = await checkForTrade(amount)
     if (!isValid) {
       setLoading(false)
       return
     }
 
-    const amount = await getNativeAmount(tokenAmount)
-    lastTrade.nativeAmount = `${fmt.decimals(formatEther(amount), {
-      fixed: 3,
-    })} ${tokenInfo?.chain.native.symbol}`
-    lastTrade.tokenAmount = `${fmt.decimals(tokenAmount)} ${tokenInfo?.ticker}`
-    lastTrade.type = TradeType.Sell
-
-    console.log('sell', tokenAmount, slippage)
-    trade?.sell(tokenAmount, slippage)
+    await updateLastTrade(TradeType.Sell, amount)
+    console.log('sell', amount, slippage)
+    trade?.sell(amount, slippage)
   }
 
   const resetting = () => {
