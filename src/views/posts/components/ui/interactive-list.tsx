@@ -16,7 +16,7 @@ import {
 import React, { ComponentProps, useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
-import { CiHeart } from 'react-icons/ci'
+import { IoMdHeartEmpty } from 'react-icons/io'
 import { Textarea } from '@/components/ui/textarea'
 
 interface Props extends ComponentProps<'div'> {
@@ -54,7 +54,11 @@ export const InteractiveList = ({ className }: Props) => {
             <DialogClose ref={closeLikeRef}></DialogClose>
             <DialogTrigger>
               <div className="flex items-center gap-2">
-                {confirm ? <FcLike /> : <CiHeart className="cursor-pointer" />}
+                {confirm ? (
+                  <FcLike />
+                ) : (
+                  <IoMdHeartEmpty className="cursor-pointer " />
+                )}
                 <span className="cursor-pointer">10</span>
               </div>
             </DialogTrigger>

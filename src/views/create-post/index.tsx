@@ -37,27 +37,21 @@ const CreatePost = () => {
   }
 
   return (
-    //     <CreateTokenProvider
-    //   value={{
-    //     formData,
-    //     deployResult,
-    //     newsListData,
-    //   }}
-    // >
     <PrimaryLayout container="div" className={cn('w-full')}>
       <div className="pb-3">
-        <div className=" flex justify-between mt-1 mb-3 text-center items-center">
+        <div className=" flex justify-between mt-1 mb-3 text-center lg:w-[500px] pr-1 items-center sm:w-2/3 sm:pr-6 md:w-[325px]">
           {/* <span className='mr-1 text-3xl font-light mb-1'>&lt;</span> */}
           <div
             onClick={() => {
               router.push(Routes.Posts)
             }}
-            className="flex items-center cursor-pointer text-lg"
+            className="flex items-center cursor-pointer h-[35px] gap-2"
           >
-            <IoIosArrowBack className="h-10" />
-            {t('create.post')}
+            {/* <IoIosArrowBack className="text-lg" /> */}
+            <span className="text-3xl leading-[35x] font-thin">&lt;</span>
+            <span className="leading-[35px] mt-[4px]">{t('create.post')}</span>
           </div>
-          <Button className={cn()}>{t('post')}</Button>
+          <Button className={cn('')}>{t('post')}</Button>
         </div>
         <div className="">
           <Image
@@ -71,7 +65,7 @@ const CreatePost = () => {
             id="postContent"
             name="postContent"
             rows={5}
-            className=" ml-[-1.6em] sm:w-[calc(100%+45px)] max-sm:w-[calc(100%+34px)] border-b-2 py-2 pl-20 transition ease-in-out sm:text-sm sm:leading-5 resize-none focus:outline-none focus:border-blue-500"
+            className=" ml-[-1.6em] sm:w-2/3 lg:w-[500px] max-sm:w-[calc(100%+34px)] border-b-2 py-2 pl-20 transition ease-in-out sm:text-sm sm:leading-5 md:w-[325px] resize-none focus:outline-none focus:border-blue-500"
             placeholder={t('mind')}
           ></textarea>
         </div>
@@ -99,7 +93,7 @@ const CreatePost = () => {
         {/* <FormChain formData={FormData}/> */}
         {/* <Form/> */}
         <div className="flex gap-3 mb-4">
-          <div className="relative border-2 border-black rounded-md px-1 py-1 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out max-w-sm:w-[37%] x-[33%] xl:w-[310px]">
+          <div className="relative border-2 border-black rounded-md px-1 py-1 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out max-w-sm:w-[37%]">
             <input
               type="file"
               id="fileAttachment"
@@ -115,7 +109,7 @@ const CreatePost = () => {
               </span>
             </div>
           </div>
-          <div className="relative border-2 border-black rounded-md px-1 py-1 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out max-w-sm:w-[37%] xl:w-[310px]">
+          <div className="relative border-2 border-black rounded-md px-1 py-1 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out max-w-sm:w-[37%]">
             <input
               type="file"
               id="fileAttachment"
@@ -131,14 +125,12 @@ const CreatePost = () => {
             </div>
           </div>
         </div>
-        <div className=" text-green-400 text-[#7aa93a]">{t('choose')}</div>
-        <div className=" text-green-400 text-[#7aa93a]">
-          {t('least.string')}
-        </div>
-        <div className=" text-green-400 text-[#7aa93a]">{t('least.img')}</div>
+        <div className="  text-[#7aa93a]">{t('choose')}</div>
+        <div className="  text-[#7aa93a]">{t('least.string')}</div>
+        <div className=" text-[#7aa93a]">{t('least.img')}</div>
         <div
           className={cn(
-            ' mt-4 w-2/3  rounded-md max-sm:w-full p-2 text-black lg:w-[500px] bg-[#e3e9fd]',
+            ' mt-4 w-2/3  rounded-md max-sm:w-full p-2 text-black lg:w-[500px] bg-[#e3e9fd] md:w-[325px]'
           )}
         >
           <div>{t('build.consensus')}</div>

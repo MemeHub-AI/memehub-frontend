@@ -18,7 +18,7 @@ const Imgs = ({ className, imgs }: ImgsProps) => {
   const [detail, setDetail] = useState<ReactNode>(null)
 
   const showImg = (i: number) => {
-    setDetail(<img src={imgs[i]} className="w-full object-contiin z-10s"></img>)
+    setDetail(<img src={imgs[i]} className="w-full object-cover z-10s"></img>)
   }
 
   return (
