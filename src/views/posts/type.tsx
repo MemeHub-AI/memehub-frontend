@@ -1,4 +1,4 @@
 export interface Posts {
-    type:number,
-    data:any[]
-  }
+  type: number
+  data: any[]
+}
