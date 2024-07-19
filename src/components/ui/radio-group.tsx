@@ -1,17 +1,12 @@
 import * as React from 'react'
-import { CheckIcon } from '@radix-ui/react-icons'
 import * as RadioGroupPrimitive from '@radix-ui/react-radio-group'
+import { VariantProps, cva } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
-import { VariantProps, cva } from 'class-variance-authority'
 
 export interface RadioProps
   extends React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Root> {
   disableFocusBorder?: boolean
-  value?: any
-  defaultValue?: any
-  [key: string]: any
-  classsName?: string
 }
 
 const RadioGroup = React.forwardRef<
@@ -55,18 +50,25 @@ const RadioGroupItem = React.forwardRef<
   React.ElementRef<typeof RadioGroupPrimitive.Item>,
   React.ComponentPropsWithoutRef<typeof RadioGroupPrimitive.Item> &
     VariantProps<typeof radioItemVariants>
->(
-  (
-    { className, variant = 'default', size = 'default', children, ...props },
-    ref
-  ) => {
-    return (
-      <RadioGroupPrimitive.Item ref={ref} className={cn('block')} {...props}>
-        {children}
-      </RadioGroupPrimitive.Item>
-    )
-  }
-)
+>((p, ref) => {
+  const {
+    className,
+    variant = 'default',
+    size = 'default',
+    children,
+    ...props
+  } = p
+
+  return (
+    <RadioGroupPrimitive.Item
+      ref={ref}
+      className={cn('block', props.disabled && 'opacity-50', className)}
+      {...props}
+    >
+      {children}
+    </RadioGroupPrimitive.Item>
+  )
+})
 RadioGroupItem.displayName = RadioGroupPrimitive.Item.displayName
 
 export { RadioGroup, RadioGroupItem }
