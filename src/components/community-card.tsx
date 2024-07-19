@@ -5,6 +5,7 @@ import { Card } from './ui/card'
 import { Img } from './img'
 import { CommunityListItem } from '@/api/alliance/type'
 import { utilLang } from '@/utils/lang'
+import { useCommunityMembers } from '@/hooks/use-community-members'
 
 interface Props {
   data?: CommunityListItem
@@ -12,6 +13,7 @@ interface Props {
 
 export const CommunityCard = ({ data }: Props) => {
   const { t } = useTranslation()
+  const { members } = useCommunityMembers(data?.id)
 
   return (
     <Card className="p-4 hover:scale-102" shadow="none" onClick={() => {}}>
@@ -40,7 +42,7 @@ export const CommunityCard = ({ data }: Props) => {
         </div>
       </div>
       <div className="my-2">
-        {t('community.count')}: <span className="font-bold">{123}</span>
+        {t('community.count')}: <span className="font-bold">{members}</span>
       </div>
       <div className="break-all line-clamp-2" title={data?.description}>
         {data?.description}

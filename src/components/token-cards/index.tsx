@@ -13,6 +13,7 @@ import { TokenChainSelect } from './chain-select'
 import { TokenSearchInput } from './token-search-input'
 import useAudioPlayer from '@/hooks/use-audio-player'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
+import dayjs from 'dayjs'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -61,9 +62,12 @@ export const TokenCards = (props: Props) => {
 
   return (
     <div className={cn(className)}>
-      <audio autoPlay={isPlayHomeAudio} onPlay={() => setIsPlayHomeAudio(false)}>
-        <source src="/audio/home.mp3" type="audio/mpeg"/>
-      </audio> 
+      <audio
+        autoPlay={isPlayHomeAudio}
+        onPlay={() => setIsPlayHomeAudio(false)}
+      >
+        <source src="/audio/home.mp3" type="audio/mpeg" />
+      </audio>
       <CustomSuspense
         className="flex justify-between items-start gap-4 max-sm:justify-between mb-4 max-sm:gap-0"
         isPending={isLoading}
@@ -87,10 +91,7 @@ export const TokenCards = (props: Props) => {
       </CustomSuspense>
 
       <CustomSuspense
-        className={cn(
-          'grid grid-cols-2 gap-4 2xl:grid-cols-3 max-lg:grid-cols-1',
-          'max-sm:gap-0'
-        )}
+        className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3 max-sm:gap-3"
         isPending={isLoading}
         fallback={<CardSkeleton />}
         nullback={
@@ -103,12 +104,18 @@ export const TokenCards = (props: Props) => {
           </div>
         }
       >
+        {/* <IdoCard /> */}
+        {filteredCards?.[0] && (
+          <TokenCard
+            card={filteredCards?.[0]}
+            idoCreateAt={dayjs().unix()}
+            idoDuration={3 * 24 * 60 * 60}
+          />
+        )}
         {!!cards.length &&
-          filteredCards.map((t, i) => (
-            <TokenCard key={i} card={t} className={'max-sm:mb-2'} />
-          ))}
+          filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
       </CustomSuspense>
-      <div className='mt-2'>
+      <div className="mt-2">
         {isPending && (
           <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
             {t('loading')}

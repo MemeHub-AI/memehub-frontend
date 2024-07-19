@@ -32,26 +32,15 @@ export const WalletAccount = () => {
   const { isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
 
-  const getUsername = () => {
-    const username = userInfo?.name
-    if (username) {
-      if (username.length > 4) {
-        return userInfo?.name.substring(0, 4) + '...'
-      } else {
-        return username
-      }
-    } else {
-      return t('login')
-    }
-  }
-
   const getComp = () => {
     if (isMobile) {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="text-wrap h-8 w-12 p-2 text-xs">
-              {getUsername()}
+              <span className="line-clamp-1">
+                {userInfo?.name ? userInfo.name : t('login')}
+              </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -81,7 +70,7 @@ export const WalletAccount = () => {
                 e.preventDefault()
               }}
             >
-              <WalletDisconnector/>
+              <WalletDisconnector />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

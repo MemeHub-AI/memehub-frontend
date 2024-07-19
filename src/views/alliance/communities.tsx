@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
+import { debounce } from 'lodash'
 
 import { allianceApi } from '@/api/alliance'
 import { CustomSuspense } from '@/components/custom-suspense'
@@ -8,14 +10,25 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
 import { CommunityCard } from '@/components/community-card'
+import { Input } from '@/components/ui/input'
 
 export const Communities = () => {
   const { t } = useTranslation()
+  const [search, setSearch] = useState('')
   const { userInfo } = useUserStore()
-  const { data, isLoading, fetchNextPage, isFetching } = useInfiniteQuery({
-    queryKey: [allianceApi.getCommunity.name],
+
+  const {
+    data: { communities = [], total = 0 } = {},
+    isLoading,
+    fetchNextPage,
+    isFetching,
+  } = useInfiniteQuery({
+    queryKey: [allianceApi.getCommunity.name, search],
     queryFn: async ({ pageParam }) => {
-      const { data } = await allianceApi.getCommunity({ page: pageParam })
+      const { data } = await allianceApi.getCommunity({
+        page: pageParam,
+        search,
+      })
       return data
     },
     initialPageParam: 1,
@@ -27,10 +40,9 @@ export const Communities = () => {
       }
     },
   })
-  const communities = data?.communities
 
   const handleLoadStatus = () => {
-    if (isFetching && data?.total) {
+    if (isFetching && total) {
       return (
         <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
           {t('loading')}
@@ -38,7 +50,7 @@ export const Communities = () => {
       )
     }
 
-    if (Number(data?.total) > Number(communities?.length)) {
+    if (Number(total) > Number(communities?.length)) {
       return (
         <div
           className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
@@ -49,6 +61,8 @@ export const Communities = () => {
       )
     }
   }
+
+  const onChagne = debounce((value) => setSearch(value), 500)
 
   return (
     <>
@@ -62,11 +76,16 @@ export const Communities = () => {
           </Button>
         </MobileQpportunityMoonshot>
         <div className="my-3">
-          {t('community.desc').replace('$1', `${data?.total}` || '-')}
+          {t('community.desc').replace('$1', `${total}` || '-')}
         </div>
         {userInfo?.role?.community ? null : (
           <Button>{t('apply.community')}</Button>
         )}
+        <Input
+          placeholder={t('community.search')}
+          onChange={({ target }) => onChagne(target.value)}
+          className="max-w-[270px] mt-4"
+        />
         <CustomSuspense
           className="mt-5 gap-4 w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"
           isPending={isLoading}

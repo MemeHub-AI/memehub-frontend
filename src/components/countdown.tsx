@@ -1,18 +1,33 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  ComponentProps,
+  ReactNode,
+} from 'react'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 
-interface CountdownProps {
+import { cn } from '@/lib/utils'
+
+interface Props extends Omit<ComponentProps<'p'>, 'prefix'> {
   createdAt: number
   duration: number
-  onExpired?: () => void
+  onExpired?: (value: boolean) => void
+  expiredText?: string
+  keepZero?: boolean
+  prefix?: ReactNode
 }
 
 export const Countdown = ({
+  className,
   createdAt,
   duration,
+  expiredText,
+  keepZero,
+  prefix,
   onExpired,
-}: CountdownProps) => {
+}: Props) => {
   const { t } = useTranslation()
   const [countdown, setCountdown] = useState('')
   const [isExpired, setIsExpired] = useState(false)
@@ -30,12 +45,12 @@ export const Countdown = ({
     const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0')
     const s = String(diff % 60).padStart(2, '0')
 
-    const formattedCountdown = `${h}: ${m}: ${s}`
+    const formattedCountdown = `${h}h: ${m}m: ${s}s`
     setCountdown(formattedCountdown)
 
     if (diff <= 0) {
       setIsExpired(true)
-      onExpired?.()
+      onExpired?.(true)
       return
     }
     setTimeout(updateCountdown, 1000)
@@ -45,9 +60,17 @@ export const Countdown = ({
     updateCountdown()
   }, [createdAt, duration])
 
-  if (isExpired) {
-    return <p className="text-zinc-500">{t('expired')}</p>
+  if (isExpired && !keepZero) {
+    return (
+      <p className={cn('text-zinc-500', className)}>
+        {prefix} {expiredText ?? t('expired')}
+      </p>
+    )
   }
 
-  return <p className="text-red-600 font-bold whitespace-nowrap">{countdown}</p>
+  return (
+    <p className={cn('text-red-600 font-bold whitespace-nowrap', className)}>
+      {prefix} {keepZero ? '0h: 0m: 0s' : countdown}
+    </p>
+  )
 }

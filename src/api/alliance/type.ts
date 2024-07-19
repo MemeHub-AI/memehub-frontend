@@ -3,7 +3,6 @@ import { Locale } from '../types'
 export interface Query {
   page: number
   page_size?: number
-  [property: string]: any
 }
 
 export interface KolListItem {
@@ -22,12 +21,11 @@ export interface KolListItem {
 }
 
 export interface CommunityListItem {
-  id: number
+  id: string
   name: Locale
   logo: string
   description: string
   category: number
-  identity: string
   chain: string
   contract_address: null | string
   contract_token_id: null | number

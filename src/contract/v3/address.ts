@@ -3,25 +3,49 @@ import { bscTestnet, opBNBTestnet, bsc, blast, base } from 'wagmi/chains'
 
 import { dotenv } from '@/utils/env'
 
-type Keys = 'bondingCurve' | 'distributor' | 'recommend'
+type Keys =
+  | 'bondingCurve'
+  | 'distributor'
+  | 'recommend'
+  | 'exchangeNft'
+  | 'kolNft'
 
-const prod: Record<number, Record<Keys, Address> | undefined> = {}
+const prod: Record<number, Record<Keys, Address> | undefined> = {
+  [bsc.id]: {
+    exchangeNft: '0xeB22DaC6525b0763AC0fEa2834Ca2C396859b3BF',
+    kolNft: '0x4e1571c2460034A5Fe120aE312678cB3180BFC74',
+  },
+  [base.id]: {
+    exchangeNft: '0xeB22DaC6525b0763AC0fEa2834Ca2C396859b3BF',
+    kolNft: '0x4e1571c2460034A5Fe120aE312678cB3180BFC74',
+  },
+  [blast.id]: {
+    exchangeNft: '0xeB22DaC6525b0763AC0fEa2834Ca2C396859b3BF',
+    kolNft: '0x4e1571c2460034A5Fe120aE312678cB3180BFC74',
+  },
+}
 
 const dev: Record<number, Record<Keys, Address> | undefined> = {
   [bsc.id]: {
     bondingCurve: '0x2d3b2Ff5930c1710204aE2c16E3C464De4a653EF',
     distributor: '0x16d489F983e62d6A7319A0a33256D6395457da81',
     recommend: '0x80Ba6203Ac72bb8F4D807E3A58412Bc6B2A9f3da',
-  },
-  [blast.id]: {
-    bondingCurve: '0x3558F554C56067cEa77457F7329FfB55189A29e3',
-    distributor: '0x52b765cDC8f1a4b871BfCe21B19A30B7C14A2a08',
-    recommend: '0x3e5E1904d24427441Fef1FdCFB2f7B9288b8BbeD',
+    exchangeNft: '0x5f5EAC903c8CCf445671580C178a7B6815519a12',
+    kolNft: '0x5859AdD7DA6107D1FA4FC3aB98D242aAF310d61e',
   },
   [base.id]: {
     bondingCurve: '0x15374e7000d9633a3E7782998407Eb98293E478f',
     distributor: '0x7a4CC06c68F4c4AfA5B0BFC11511370a2852d877',
     recommend: '0x9552e34D141725f812acE96014a6Bb5946cC3931',
+    exchangeNft: '0xBe6544fb6041Fc0638D1E03A8ff41Fc718596758',
+    kolNft: '0x416F8eAA8c46A02A7d967A7a3cf0464322c6EC71',
+  },
+  [blast.id]: {
+    bondingCurve: '0x3558F554C56067cEa77457F7329FfB55189A29e3',
+    distributor: '0x52b765cDC8f1a4b871BfCe21B19A30B7C14A2a08',
+    recommend: '0x3e5E1904d24427441Fef1FdCFB2f7B9288b8BbeD',
+    exchangeNft: '0xdBcf1F26CA92F61ba0C466a68F06460158339b05',
+    kolNft: '0x0d23ffeeb39A15aC87695749540b6536cD1Dc1EE',
   },
 
   // testnet

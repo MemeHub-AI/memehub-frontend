@@ -5,7 +5,8 @@ import { lowerCase } from 'lodash'
 
 import { isUserReject } from '@/utils/contract'
 import { SlippageError } from '@/components/toast/slippage-error'
-import { buttonLeft } from '@/config/toast'
+import { bottomLeft } from '@/config/toast'
+import { DeviceWidth } from '@/hooks/use-responsive'
 
 const ERR = {
   estimateGas: 'gap tip',
@@ -31,7 +32,7 @@ export const CONTRACT_ERR = {
     if (msg.includes(ERR.transactionExecutionError)) {
       toast.message(
         createElement(SlippageError),
-        window.innerWidth > 600 ? buttonLeft : undefined
+        window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined
       )
       return
     }

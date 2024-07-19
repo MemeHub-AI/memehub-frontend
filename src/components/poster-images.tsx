@@ -9,10 +9,10 @@ import { Dialog } from './ui/dialog'
 import { Button } from './ui/button'
 
 interface Props extends ComponentProps<'div'> {
-  poster: string[]
+  poster?: string[]
 }
 
-export const PosterImages = ({ poster, className }: Props) => {
+export const PosterImages = ({ poster = [], className }: Props) => {
   const { t } = useTranslation()
   const [active, setActive] = useState<number>()
 
