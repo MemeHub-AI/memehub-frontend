@@ -506,5 +506,14 @@
   "ido.4052": "",
   "ido.405": "全球第一个基于ERC-405协议发行的代币，融合了404和燃烧机制，颠覆性地确保了代币不断上涨",
   "kol.search": "搜索 KOL",
-  "community.search": "搜索社区"
+  "community.search": "搜索社区",
+  "trump.reward-pool": "奖励池",
+  "trump.collection": "集齐一套 Trump NFT 获取 {} 奖金池",
+  "trump.detect": "检测到您持有一套 Trump NFT",
+  "trump.redeem": "兑换",
+  "trump.redeemed1": "兑换后您将获得 {}",
+  "trump.redeemed2": "并获得价值{}的{}奖励",
+  "trump.burn-pool": "燃烧池",
+  "trump.burn.placehoder": "输入要燃烧的代币数量",
+  "trump.my-amount": "我的额度"
 }

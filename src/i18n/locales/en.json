@@ -517,5 +517,14 @@
   "ido.4052": "",
   "ido.405": "The world's first token issued based on the ERC-405 protocol, integrating the 404 and burning mechanisms, disruptively ensures a continuous surge in token value",
   "kol.search": "Search for KOL",
-  "community.search": "Search for communities"
+  "community.search": "Search for communities",
+  "trump.reward-pool": "Reward pool",
+  "trump.collection": "Collecting a complete set of Trump NFT will grant you access to a prize pool of {}",
+  "trump.detect": "It has been detected that you hold a set of Trump NFTs",
+  "trump.redeem": "Redeem",
+  "trump.redeemed1": "Upon redemption, you will receive {}",
+  "trump.redeemed2": "And receive a {} reward worth {}",
+  "trump.burn-pool": "Burn pool",
+  "trump.burn.placehoder": "Please input the quantity of tokens to be burned",
+  "trump.my-amount": "My credit limit"
 }
