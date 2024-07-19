@@ -98,7 +98,7 @@ export const AIIdeaBar = (props: Props) => {
             //   </TooltipProvider>
             // }
           />
-          <Button className="ml-2">{t('ai.craete')}</Button>
+          <Button className="ml-2 bg-transparent">{t('ai.craete')}</Button>
         </form>
       </div>
       <div className="w-full h-[1px] bg-[#e2e2e2] my-4 max-sm:hidden"></div>

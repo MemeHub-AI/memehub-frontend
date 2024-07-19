@@ -1,4 +1,8 @@
-import { Hash, zeroHash } from 'viem'
+export enum AirdropType {
+  None,
+  Assign,
+  All,
+}
 
 export const v3DistributorParams = {
   isDistribution: false,
@@ -6,6 +10,6 @@ export const v3DistributorParams = {
   distributionRatioCommunity: 0,
   walletCountKol: 0,
   walletCountCommunity: 0,
-  merkleRootKol: zeroHash as Hash,
-  merkleRootCommunity: zeroHash as Hash,
+  kolFlag: AirdropType.None,
+  CommunityFlag: AirdropType.None,
 }

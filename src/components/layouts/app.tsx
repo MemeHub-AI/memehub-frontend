@@ -30,22 +30,19 @@ BigNumber.config({ ROUNDING_MODE: BigNumber.ROUND_DOWN })
 export const AppLayout = ({ children }: ComponentProps<'div'>) => {
   const { i18n } = useTranslation()
   const { isNotMounted } = useMounted()
-  const { initLang } = useLang()
 
-  useQueryChains()
+  useLang() // init lang
 
-  useUserInfo() // Login if `token` already exists.
+  useQueryChains() // init chains
 
-  useEffect(() => {
-    initLang()
-  }, [])
+  useUserInfo() // init login
 
   useEffect(() => {
     dayjs.locale(i18n.language === 'zh' ? dayjsZh : dayjsEn)
   }, [i18n.language])
 
   if (isNotMounted) return <></>
-  
+
   return (
     <>
       <Header />

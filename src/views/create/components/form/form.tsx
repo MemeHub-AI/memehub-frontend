@@ -14,29 +14,28 @@ import {
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { FormLogo } from './logo'
-import { FormChain } from './chain'
 import { PosterForm } from './poster'
 import { fmt } from '@/utils/fmt'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { MarketingField } from './marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Description } from './desc'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { ChainField } from './chain-field'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
   const { deployResult, formData } = useCreateTokenContext()
   const { chain } = useAccount()
 
-  const { url, form, formFields, onSubmit, chains } = formData
+  const { url, form, formFields, onSubmit } = formData
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
+  const { chainsMap } = useChainsStore()
 
   const { isDeploying, deployFee } = deployResult || {}
 
-  const chainSymbol = chains.find(
-    (c) => c.name === form.getValues(formFields.chainName)
-  )?.native.symbol
-  const symbol =
-    (chainSymbol ? chainSymbol : chain?.nativeCurrency.symbol) || ''
+  const { native } = chainsMap[form.getValues(formFields.chainName)] || {}
+  const symbol = native?.symbol || chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
     if (loadingInfo || loadingLogo) {
@@ -110,7 +109,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
 
             {/* Chain / coinType */}
             <div className="h-[150px] flex flex-col justify-between max-sm:flex-row max-sm:h-min max-sm:justify-start max-sm:space-x-4 max-sm:flex-wrap">
-              <FormChain formData={formData} />
+              <ChainField />
               {/* <CoinTypeField /> */}
             </div>
           </div>

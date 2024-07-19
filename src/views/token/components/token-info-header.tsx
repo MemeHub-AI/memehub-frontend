@@ -11,6 +11,7 @@ import { BondingCurveProgress } from './bonding-curve-progress'
 import { Avatar } from '@/components/ui/avatar'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useResponsive } from '@/hooks/use-responsive'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -18,6 +19,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { marketCap } = useHoldersStore()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
+  const { findChain } = useChainsStore()
 
   if (isLoadingTokenInfo) {
     return (
@@ -54,10 +56,10 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
             <img
               src={tokenInfo?.chain.logo}
               alt={tokenInfo?.chain.name}
-              className="w-[25px] h-[25px] rounded"
+              className="w-5 h-5 rounded"
             />
             <span className="ml-1">
-              {fmt.firstUpperCase(tokenInfo?.chain.name)}
+              {fmt.withChain(findChain(tokenInfo?.chain.id)?.displayName)}
             </span>
           </div>
         </div>

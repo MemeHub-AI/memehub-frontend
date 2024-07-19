@@ -24,3 +24,7 @@ export interface Locale {
   zh?: string
   en?: string
 }
+
+export interface SearchReq {
+  search?: string
+}

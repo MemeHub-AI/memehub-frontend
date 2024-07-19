@@ -1,9 +1,8 @@
 import { Fragment, memo } from 'react'
-import clsx from 'clsx'
+import { upperFirst } from 'lodash'
 
 import { IdeaBasicInfo } from '@/api/idea/type'
 import { Skeleton } from '@/components/ui/skeleton'
-import { fmt } from '@/utils/fmt'
 import { MemeMarkdown } from './meme-markdown'
 
 interface MemeStoryData {
@@ -66,18 +65,14 @@ export const MemeStory = memo(({ data }: MemeStoryData) => {
               return (
                 <div
                   key={key}
-                  className={clsx(
-                    'max-sm:bg-slate-100 mt-2 max-sm:mt-0 max-sm:p-2 rounded-sm'
-                  )}
+                  className="max-sm:bg-slate-100 mt-2 max-sm:mt-0 max-sm:p-2 rounded-sm"
                 >
                   {key.toLocaleLowerCase() === 'tags' ? (
                     <div className="h-[1px] bg-slate-200 my-1 max-sm:hidden"></div>
                   ) : (
                     ''
                   )}
-                  <div className="font-bold">
-                    {fmt.firstUpperCase(key || '')}
-                  </div>
+                  <div className="font-bold">{upperFirst(key)}</div>
                   <div className="break-all">
                     {Array.isArray(memeInfo[key])
                       ? memeInfo[key].join(', ')
