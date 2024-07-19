@@ -7,7 +7,6 @@ import dayjs from 'dayjs'
 import { BigNumber } from 'bignumber.js'
 
 import { useApprove } from '@/hooks/use-approve'
-import { logger } from '@/utils/log'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { UNISWAP_ERR } from '@/errors/uniswap'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
@@ -62,7 +61,7 @@ export const useUniswapV2 = () => {
   const uniswapV2Buy = async (
     amount: string,
     token: Address,
-    slippage: string
+    slippage: string,
   ) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
@@ -73,7 +72,7 @@ export const useUniswapV2 = () => {
       return
     }
 
-    logger('uniswap buy', {
+    console.log('uniswap buy', {
       amount,
       token,
       address,
@@ -98,7 +97,7 @@ export const useUniswapV2 = () => {
   const uniswapV2Sell = async (
     amount: string,
     token: Address,
-    slippage: string
+    slippage: string,
   ) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
@@ -112,7 +111,7 @@ export const useUniswapV2 = () => {
       return
     }
 
-    logger('uniswap sell', {
+    console.log('uniswap sell', {
       amount,
       token,
       address,

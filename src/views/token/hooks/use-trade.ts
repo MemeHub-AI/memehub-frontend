@@ -12,7 +12,6 @@ import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
 import { useTradeInfoV3 } from './trade-v3/use-trade-info'
 import { ContractVersion } from '@/constants/contract'
-import { logger } from '@/utils/log'
 import { versionOf } from '@/utils/contract'
 import { TradeType } from '@/constants/trade'
 import { useInvite } from './use-invite'
@@ -73,7 +72,7 @@ export const useTrade = () => {
   const buying = async (
     reserveAmount: string,
     slippage: string,
-    setValue?: (value: string) => void
+    setValue?: (value: string) => void,
   ) => {
     setLoading(true)
     const isValid = await checkForTrade(reserveAmount)
@@ -91,7 +90,7 @@ export const useTrade = () => {
     }`
     lastTrade.type = TradeType.Buy
 
-    logger('buy', reserveAmount, slippage)
+    console.log('buy', reserveAmount, slippage)
     trade?.buy(reserveAmount, slippage, setValue)
   }
 
@@ -110,7 +109,7 @@ export const useTrade = () => {
     lastTrade.tokenAmount = `${fmt.decimals(tokenAmount)} ${tokenInfo?.ticker}`
     lastTrade.type = TradeType.Sell
 
-    logger('sell', tokenAmount, slippage)
+    console.log('sell', tokenAmount, slippage)
     trade?.sell(tokenAmount, slippage)
   }
 

@@ -1,13 +1,12 @@
 import { toast } from 'sonner'
 
 import { ApiResponse } from '@/api/types'
-import { loggerError } from '@/utils/log'
 
 export const REQUEST_ERR = {
   responseErr: async (response: Response) => {
     try {
       const { message } = (await response.json()) as ApiResponse
-      loggerError(message)
+      console.error(message)
       // toast.error(message)
     } catch {
       // if (response.status >= 500) {
@@ -18,7 +17,7 @@ export const REQUEST_ERR = {
       //   toast.error('Request error, please try again.')
       //   return
       // }
-      loggerError(response.status)
+      console.error(response.status)
     }
   },
   error: (e: Error) => {
@@ -32,6 +31,6 @@ export const REQUEST_ERR = {
       return
     }
 
-    loggerError(m)
+    console.error(m)
   },
 }
