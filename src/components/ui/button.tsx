@@ -12,7 +12,7 @@ const buttonVariants = cva(
     'rounded-md text-sm font-medium transition-colors',
     'focus-visible:outline-none focus-visible:ring-1',
     'focus-visible:ring-ring disabled:pointer-events-none',
-    'disabled:opacity-50 transition-all duration-100 bg-white'
+    'disabled:opacity-50 transition-all duration-100 bg-white',
   ),
   {
     variants: {
@@ -32,7 +32,7 @@ const buttonVariants = cva(
         default: 'h-9 px-4 py-2',
         xs: 'h-6 rounded px-2 text-xs',
         sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-10 rounded-md px-8',
+        lg: 'h-10 rounded-md px-8 text-lg',
         icon: 'h-9 w-9',
         'icon-sm': 'h-8 w-8',
         'icon-xs': 'h-6 w-6 text-xs',
@@ -42,7 +42,7 @@ const buttonVariants = cva(
       variant: 'outline',
       size: 'default',
     },
-  }
+  },
 )
 
 export interface ButtonProps
@@ -77,13 +77,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(
           buttonVariants({ variant, size, className }),
           shadowVariants({ shadow }),
-          'min-w-5'
+          'min-w-5',
         )}
         onClick={(event) => PlayAudio(event)}
         {...restProps}
       />
     )
-  }
+  },
 )
 Button.displayName = 'Button'
 

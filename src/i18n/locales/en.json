@@ -504,7 +504,7 @@
   "coin": "Coin",
   "ido.start-in": "Start in",
   "ido.total-amount": "Total amount",
-  "ido.detect": "As a distinguished KOL ambassador {}, you are entitled to a credit limit of {}",
+  "ido.detect": "As a distinguished KOL ambassador {},$ you are entitled to a credit limit of {}",
   "ido.donate": "Donate",
   "ido.ended1": "Donation has ended.",
   "ido.ended2": "Waiting for the drawing of lots.",
@@ -526,5 +526,14 @@
   "trump.redeemed2": "And receive a {} reward worth {}",
   "trump.burn-pool": "Burn pool",
   "trump.burn.placehoder": "Please input the quantity of tokens to be burned",
-  "trump.my-amount": "My credit limit"
+  "trump.my-amount": "My credit limit",
+  "ido.eligibility": "Eligibility",
+  "ido.holder-nft": "Hold Memehub NFT",
+  "ido.input-amount": "Input amount",
+  "ido.join": "Join",
+  "ido.policy1": "Receive allocation according to the proportion of your funds to the total funds of all participants",
+  "ido.policy2": "Only Memehub NFT holders are eligible to participate.",
+  "ido.participated": "Participated in",
+  "ido.obtained": "obtained",
+  "ido.quota": "quota"
 }

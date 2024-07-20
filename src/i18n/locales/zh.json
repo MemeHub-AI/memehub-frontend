@@ -494,7 +494,7 @@
   "coin": "币",
   "ido.start-in": "开始于",
   "ido.total-amount": "总额度",
-  "ido.detect": "检测到您是尊贵的KOL大使{}，因此您拥有{}的额度",
+  "ido.detect": "检测到您是尊贵的KOL大使{}，$因此您拥有{}的额度",
   "ido.donate": "捐赠",
   "ido.ended1": "捐赠已结束。",
   "ido.ended2": "等待公布抽奖结果。",
@@ -515,5 +515,14 @@
   "trump.redeemed2": "并获得价值{}的{}奖励",
   "trump.burn-pool": "燃烧池",
   "trump.burn.placehoder": "输入要燃烧的代币数量",
-  "trump.my-amount": "我的额度"
+  "trump.my-amount": "我的额度",
+  "ido.eligibility": "参与资格",
+  "ido.holder-nft": "持有 Memehub NFT",
+  "ido.input-amount": "输入金额",
+  "ido.join": "加入",
+  "ido.policy1": "按照你的资金与全部参与者的比例获得额度",
+  "ido.policy2": "仅限 Memehub NFT 持有人参与",
+  "ido.participated": "参与了",
+  "ido.obtained": "获得了",
+  "ido.quota": "额度"
 }
