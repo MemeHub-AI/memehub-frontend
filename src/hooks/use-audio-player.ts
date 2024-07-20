@@ -27,6 +27,10 @@ export const useAudioPlayer = () => {
 
   const playGuaGua = () => playAudio('/audio/guagua.mp3')
 
+  const playGua = () => playAudio('/audio/gua.mp3')
+
+  const playFire = () => playAudio('/audio/fire.mp3')
+
   return {
     isPlaying,
     playAudio,
@@ -34,6 +38,8 @@ export const useAudioPlayer = () => {
     playError,
     playSuccess,
     playGuaGua,
+    playGua,
+    playFire,
   }
 }
 

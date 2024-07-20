@@ -36,7 +36,7 @@ export const useAirdrop = (
   const [isBurning, setBurning] = useState(false)
   const { checkForChain } = useCheckAccount()
   const { checkForLogin } = useLogin()
-  const { playAudio } = useAudioPlayer()
+  const { playFire } = useAudioPlayer()
 
   const { distributor } = v3Addr[chainId] ?? {}
   const toastConfig =
@@ -85,7 +85,7 @@ export const useAirdrop = (
         setBurning(false)
       },
       onSuccess: () => {
-        playAudio('/audio/fire.mp3')
+        playFire()
         setBurning(false)
       },
     },

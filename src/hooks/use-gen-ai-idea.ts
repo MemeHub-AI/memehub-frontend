@@ -1,10 +1,11 @@
-import { Routes } from '@/routes'
-import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import useAudioPlayer from './use-audio-player'
+
+import { Routes } from '@/routes'
+import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
+import { useAudioPlayer } from './use-audio-player'
 
 export const useGenAIIdea = () => {
   const [show, setShow] = useState(false)
@@ -12,7 +13,7 @@ export const useGenAIIdea = () => {
   const [value, setValue] = useState('')
   const { pathname, push } = useRouter()
   const { t } = useTranslation()
-  const { playAudio } = useAudioPlayer()
+  const { playGuaGua } = useAudioPlayer()
 
   const {
     loadingInfo,
@@ -55,7 +56,7 @@ export const useGenAIIdea = () => {
 
     setInfo({ name: isRandom ? '' : value })
     setLoadingInfoDialog(true)
-    playAudio('/audio/guagua.mp3')
+    playGuaGua()
   }
 
   const onIdeaConfirm = (data: typeof formInfo) => {
@@ -68,7 +69,7 @@ export const useGenAIIdea = () => {
     setFormInfo(data)
     setLoadingLogo(true)
     setLoadingPoster(true)
-    playAudio('/audio/guagua.mp3')
+    playGuaGua()
   }
 
   const onCancel = () => {

@@ -1,3 +1,8 @@
+import { LuRefreshCcw } from 'react-icons/lu'
+import { toast } from 'sonner'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+
 import {
   FormControl,
   FormField,
@@ -6,30 +11,27 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { useCreateTokenForm } from '../../hooks/use-form'
-import { LuRefreshCcw } from 'react-icons/lu'
 import { Textarea } from '@/components/ui/textarea'
-import { useTranslation } from 'react-i18next'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useUserStore } from '@/stores/use-user-store'
 import { useWalletStore } from '@/stores/use-wallet-store'
-import { toast } from 'sonner'
 import { aiApi } from '@/api/ai'
-import { useEffect } from 'react'
 import { cn } from '@/lib/utils'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
 }
 
 let memeDescAbort = new AbortController()
+
 export const Description = ({ formData }: Props) => {
   const { form, formFields } = formData
   const { t } = useTranslation()
   const { loadingDesc, setLoadingDesc } = useAimemeInfoStore()
   const userStore = useUserStore()
   const { setConnectOpen } = useWalletStore()
-  const { playAudio } = useAudioPlayer()
+  const { playGuaGua } = useAudioPlayer()
 
   const createDesc = (e: any) => {
     e.stopPropagation()
@@ -55,7 +57,7 @@ export const Description = ({ formData }: Props) => {
           input: form.getValues(formFields.fullname)! as string,
           type: 1,
         },
-        memeDescAbort.signal
+        memeDescAbort.signal,
       )
       .then(({ data }) => {
         if (data) {
@@ -69,7 +71,7 @@ export const Description = ({ formData }: Props) => {
 
   useEffect(() => {
     if (loadingDesc) {
-      playAudio('/audio/guagua.mp3')
+      playGuaGua()
       fetchMemeLogo()
     }
   }, [loadingDesc])
@@ -91,7 +93,7 @@ export const Description = ({ formData }: Props) => {
             <LuRefreshCcw
               className={cn(
                 'ml-2',
-                loadingDesc ? 'animate-spin' : 'cursor-pointer'
+                loadingDesc ? 'animate-spin' : 'cursor-pointer',
               )}
               title="Regenerate"
               onClick={createDesc}

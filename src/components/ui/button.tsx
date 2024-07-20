@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 import { shadowVariants, ShadowVariantsProps } from '@/styles/variants'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 const buttonVariants = cva(
   cn(
@@ -12,7 +12,7 @@ const buttonVariants = cva(
     'rounded-md text-sm font-medium transition-colors',
     'focus-visible:outline-none focus-visible:ring-1',
     'focus-visible:ring-ring disabled:pointer-events-none',
-    'disabled:opacity-50 transition-all duration-100 bg-white'
+    'disabled:opacity-50 transition-all duration-100 bg-white',
   ),
   {
     variants: {
@@ -42,7 +42,7 @@ const buttonVariants = cva(
       variant: 'outline',
       size: 'default',
     },
-  }
+  },
 )
 
 export interface ButtonProps
@@ -64,26 +64,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...restProps
     } = props
     const Comp = asChild ? Slot : 'button'
+    const { playGua } = useAudioPlayer()
 
-    const { playAudio } = useAudioPlayer()
-
-    const PlayAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
-      playAudio('/audio/gua.mp3')
-      if (onClick) onClick(event)
-    }
     return (
       <Comp
         ref={ref}
         className={cn(
           buttonVariants({ variant, size, className }),
           shadowVariants({ shadow }),
-          'min-w-5'
+          'min-w-5',
         )}
-        onClick={(event) => PlayAudio(event)}
+        onClick={(e) => {
+          playGua()
+          onClick?.(e)
+        }}
         {...restProps}
       />
     )
-  }
+  },
 )
 Button.displayName = 'Button'
 
