@@ -6,22 +6,21 @@ import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 
 import { useApprove } from '@/hooks/use-approve'
-import { useChainInfo } from '@/hooks/use-chain-info'
 import { UNISWAP_ERR } from '@/errors/uniswap'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 import { getDeadline, subSlippage } from '@/utils/contract'
 import { useUniswapV2Info } from './use-uniswapv2-info'
-import { useTokenContext } from '@/contexts/token'
 import { reserveAddr } from '@/contract/address'
 import { uniswapV2Addr } from '@/contract/uniswapv2/address'
 
-export const useUniswapV2 = () => {
+export const useUniswapV2 = (
+  chainId: number,
+  poolAddr: Address | undefined | null,
+) => {
   const { t } = useTranslation()
   const { address } = useAccount()
-  const { chainId } = useChainInfo()
   const { isApproving, approvalForAll } = useApprove()
-  const { tokenInfo } = useTokenContext()
-  const { getAmountOut } = useUniswapV2Info(tokenInfo?.pool_address)
+  const { getAmountOut } = useUniswapV2Info(poolAddr)
   const reserveToken = reserveAddr[chainId]
   const uniswapV2Address = uniswapV2Addr[chainId]
 
@@ -58,8 +57,8 @@ export const useUniswapV2 = () => {
   }
 
   const uniswapV2Buy = async (
-    amount: string,
     token: Address,
+    amount: string,
     slippage: string,
   ) => {
     const isValid = checkForTrade(amount, token)
@@ -94,8 +93,8 @@ export const useUniswapV2 = () => {
   }
 
   const uniswapV2Sell = async (
-    amount: string,
     token: Address,
+    amount: string,
     slippage: string,
   ) => {
     const isValid = checkForTrade(amount, token)

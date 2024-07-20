@@ -54,7 +54,7 @@ const dev = createConfig({
     [sepolia.id]: fallback([http(), unstable_connector(injected)]),
     [bscTestnet.id]: fallback([
       http(
-        'https://greatest-broken-tab.bsc-testnet.quiknode.pro/0ce6bb713784c756397169ec4fc2fa6f7eaa9608'
+        'https://greatest-broken-tab.bsc-testnet.quiknode.pro/0ce6bb713784c756397169ec4fc2fa6f7eaa9608',
       ),
       unstable_connector(injected),
     ]),

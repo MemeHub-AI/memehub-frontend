@@ -21,10 +21,19 @@ export const useAudioPlayer = () => {
     setIsPlaying(false)
   }
 
+  const playError = () => playAudio('/audio/e.mp3')
+
+  const playSuccess = () => playAudio('/audio/success.mp3')
+
+  const playGuaGua = () => playAudio('/audio/guagua.mp3')
+
   return {
+    isPlaying,
     playAudio,
     stopAudio,
-    isPlaying,
+    playError,
+    playSuccess,
+    playGuaGua,
   }
 }
 

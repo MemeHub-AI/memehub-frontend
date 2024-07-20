@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { formatEther } from 'viem'
 
-import { CONTRACT_ERR } from '@/errors/contract'
 import { useTradeV3 } from './trade-v3/use-trade'
 import { useTokenContext } from '@/contexts/token'
 import { useDexTrade } from './trade-dex/use-dex-trade'
@@ -14,6 +13,8 @@ import { versionOf } from '@/utils/contract'
 import { TradeType } from '@/constants/trade'
 import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
+import { useChainInfo } from '@/hooks/use-chain-info'
+import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 
 // Used for trade success tips.
 const lastTrade: Options = {
@@ -31,24 +32,18 @@ export const useTrade = () => {
   const [inviteOpen, setInviteOpen] = useState(false)
   const { getCanBind } = useInvite()
   const [loading, setLoading] = useState(false)
+  const { chainId } = useChainInfo()
 
-  const dexTrade = useDexTrade()
+  const dexTrade = useDexTrade(chainId, tokenInfo?.pool_address)
   const tradeV3 = useTradeV3(dexTrade)
   const { getNativeAmount, getTokenAmount } = useTradeInfoV3()
 
-  const trade = useMemo(() => {
-    if (!tokenInfo) return
-
-    const vIs = versionOf(tokenInfo.version)
-
-    if (vIs(ContractVersion.V3)) return tradeV3
-
-    CONTRACT_ERR.versionNotFound()
-  }, [tokenInfo?.version, tradeV3])
-
+  const trade = tradeV3
   const tradeHash = trade?.tradeHash
   const isSubmitting = trade?.isSubmitting
   const isTrading = isSubmitting || loading
+  // This `useWaitForTx` only track status
+  const { isFetched: isTraded } = useWaitForTx({ hash: tradeHash })
 
   const checkForTrade = async (amount: string) => {
     // Cannot use self code to trade.
@@ -84,11 +79,7 @@ export const useTrade = () => {
     }
   }
 
-  const buying = async (
-    amount: string,
-    slippage: string,
-    setValue?: (value: string) => void,
-  ) => {
+  const buying = async (amount: string, slippage: string) => {
     setLoading(true)
     const isValid = await checkForTrade(amount)
     if (!isValid) {
@@ -96,9 +87,9 @@ export const useTrade = () => {
       return
     }
 
-    await updateLastTrade(TradeType.Buy, amount)
     console.log('buy', amount, slippage)
-    trade?.buy(amount, slippage, setValue)
+    await updateLastTrade(TradeType.Buy, amount)
+    return trade?.buy(amount, slippage)
   }
 
   const selling = async (amount: string, slippage: string) => {
@@ -109,15 +100,16 @@ export const useTrade = () => {
       return
     }
 
-    await updateLastTrade(TradeType.Sell, amount)
     console.log('sell', amount, slippage)
-    trade?.sell(amount, slippage)
+    await updateLastTrade(TradeType.Sell, amount)
+    return trade?.sell(amount, slippage)
   }
 
   const resetting = () => {
     trade?.resetTrade()
   }
 
+  // Handle waiting tx with showToast.
   useEffect(() => {
     if (!trade?.tradeHash) return
     resetting()
@@ -133,7 +125,7 @@ export const useTrade = () => {
     tradeHash,
     isSubmitting,
     isTrading,
-    isTraded: false,
+    isTraded,
     buying,
     selling,
     resetting,

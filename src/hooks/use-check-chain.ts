@@ -1,14 +1,25 @@
-import { useChainId, useSwitchChain } from 'wagmi'
+import { useAccount, useSwitchChain } from 'wagmi'
 
-export const useCheckChain = () => {
+import { useWalletStore } from '@/stores/use-wallet-store'
+
+export const useCheckAccount = () => {
+  const { address, isConnected, chainId: walletChainId } = useAccount()
+  const { setConnectOpen } = useWalletStore()
   const { switchChainAsync } = useSwitchChain()
-  const accountChainId = useChainId()
+
+  const checkForConnect = () => {
+    if (!isConnected || !address) {
+      setConnectOpen(true)
+      return false
+    }
+    return true
+  }
 
   const checkForChain = async (chainId: number | string | undefined) => {
     if (!chainId) return false
 
     chainId = +chainId
-    if (accountChainId === chainId) return true
+    if (walletChainId === chainId) return true
 
     try {
       await switchChainAsync({ chainId })
@@ -19,6 +30,10 @@ export const useCheckChain = () => {
   }
 
   return {
+    address,
+    isConnected,
+    walletChainId,
+    checkForConnect,
     checkForChain,
   }
 }
