@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { useAccount, useReadContract } from 'wagmi'
 
@@ -7,32 +6,42 @@ import { kolNftAbi } from '@/contract/v3/abi/kol-nft'
 import { v3Addr } from '@/contract/v3/address'
 import { useQuery } from '@tanstack/react-query'
 import { allianceApi } from '@/api/alliance'
-import { randomBy } from '@/utils/math'
+import { useIdoContext } from '@/contexts/ido'
+import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
+import { addPrefix0x } from '@/utils/contract'
 
 export const useIdoCheck = () => {
-  const { chainId = 0, address } = useAccount()
+  const { address } = useAccount()
+  const { chainId } = useIdoContext()
   const { kolNft, exchangeNft } = v3Addr[chainId] ?? {}
 
   const { data: kolTokenId = BI_ZERO } = useReadContract({
     abi: kolNftAbi,
     address: kolNft,
+    chainId,
     functionName: 'userOfId',
     args: [address!],
     query: { enabled: !!address },
   })
   const isKol = !BigNumber(kolTokenId.toString()).isZero()
 
-  const { data: { communities } = {} } = useQuery({
-    queryKey: [allianceApi.getKolCommunities.name],
-    queryFn: () => allianceApi.getKolCommunities(),
-    select: ({ data }) => ({
-      total: data.count,
-      communities: data.results,
-    }),
+  const { data: communityId = BI_ZERO } = useReadContract({
+    abi: exchangeNftAbi,
+    address: exchangeNft,
+    chainId,
+    functionName: 'isClaimedOfId',
+    args: [address!, BigInt(1)], // TODO: use 0 instead 1
   })
-  const community = useMemo(() => randomBy(communities), [communities])
-
-  console.log('community', community)
+  const { data: community } = useQuery({
+    queryKey: [allianceApi.getCommunityDetail.name],
+    queryFn: () => {
+      return allianceApi.getCommunityDetail({
+        identity: addPrefix0x([communityId.toString(16)])[0],
+      })
+    },
+    select: ({ data }) => data,
+    enabled: !BigNumber(communityId.toString()).isZero(),
+  })
 
   return {
     kolTokenId,

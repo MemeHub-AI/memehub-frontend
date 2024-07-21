@@ -5,13 +5,15 @@ import { BigNumber } from 'bignumber.js'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useIdo } from '../hooks/use-ido'
+import { useIdoContext } from '@/contexts/ido'
 
 const MAX_VALUE = '10'
 
 export const JoinInput = () => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
-  const { buy } = useIdo()
+  const { isLoading, buy } = useIdo()
+  const { reserveSymbol } = useIdoContext()
 
   const onChange = (value: string) => {
     const v = BigNumber(value)
@@ -53,13 +55,19 @@ export const JoinInput = () => {
           }
           value={value}
           onChange={({ target }) => onChange(target.value)}
+          disabled={isLoading}
         />
         <div className="flex items-center space-x-1">
-          <img src="/images/bsc.svg" alt="bnb" className="w-5" />
-          <span>BNB</span>
+          <img src="/images/bsc.svg" alt="logo" className="w-5" />
+          <span>{reserveSymbol}</span>
         </div>
       </div>
-      <Button className="mt-3 w-min bg-yellow-200" size="lg" shadow="none">
+      <Button
+        className="mt-3 w-min bg-yellow-200"
+        size="lg"
+        shadow="none"
+        disabled={isLoading}
+      >
         {t('ido.join')}
       </Button>
     </form>

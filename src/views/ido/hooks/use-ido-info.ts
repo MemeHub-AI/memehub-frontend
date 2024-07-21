@@ -14,8 +14,8 @@ export enum IdoStatus {
 
 const poolId = BigInt(0) // TODO: temp
 
-export const useIdoInfo = () => {
-  const { address, chainId = 0 } = useAccount()
+export const useIdoInfo = (chainId = 0) => {
+  const { address } = useAccount()
   const { ido } = v3Addr[chainId] ?? {}
 
   const {
@@ -25,6 +25,7 @@ export const useIdoInfo = () => {
   } = useReadContract({
     abi: idoAbi,
     address: ido,
+    chainId,
     functionName: 'getUserInfo',
     args: [poolId, address!],
     query: { enabled: !!ido && !!address },
@@ -40,6 +41,7 @@ export const useIdoInfo = () => {
   } = useReadContract({
     abi: idoAbi,
     address: ido,
+    chainId,
     functionName: 'pools',
     args: [poolId],
   })

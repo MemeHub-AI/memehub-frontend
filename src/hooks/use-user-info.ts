@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { isEmpty } from 'lodash'
 
 import { userApi } from '@/api/user'
 import { useStorage } from './use-storage'
@@ -18,10 +17,8 @@ export const useUserInfo = (addr?: string) => {
     refetch: refetchOtherUserInfo,
   } = useQuery({
     queryKey: [userApi.getInfo.name, addr],
-    queryFn: () => {
-      if (!addr || isEmpty(addr)) return Promise.reject()
-      return userApi.getInfo(addr)
-    },
+    queryFn: () => userApi.getInfo(addr!),
+    enabled: !!addr,
   })
 
   // Query my info.
@@ -31,10 +28,8 @@ export const useUserInfo = (addr?: string) => {
     refetch: refetchUserInfo,
   } = useQuery({
     queryKey: [userApi.getInfoFromToken.name, token],
-    queryFn: () => {
-      if (isEmpty(token)) return Promise.reject()
-      return userApi.getInfoFromToken()
-    },
+    queryFn: () => userApi.getInfoFromToken(),
+    enabled: !!token,
   })
 
   // Update latest user info if it's not null.

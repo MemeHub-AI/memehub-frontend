@@ -1,6 +1,7 @@
 import { useAccount, useSwitchChain } from 'wagmi'
 
 import { useWalletStore } from '@/stores/use-wallet-store'
+import { useUserInfo } from './use-user-info'
 
 export const useCheckAccount = () => {
   const { address, isConnected, chainId: walletChainId } = useAccount()

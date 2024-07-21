@@ -1,5 +1,5 @@
 import { api } from '@/api'
-import { CommunityListItem, KolListItem, Query } from './type'
+import { CommunityListItem, CommunityReq, KolListItem, Query } from './type'
 import { qs } from '@/hooks/use-fetch'
 import { ApiResponse, PaginationReq, PaginationRes, SearchReq } from '../types'
 
@@ -12,6 +12,11 @@ export const allianceApi = {
   getCommunity(query: Query & SearchReq) {
     return api.GET<ApiResponse<PaginationRes<CommunityListItem>>>(
       '/api/v1/community/list/' + qs.stringify(query),
+    )
+  },
+  getCommunityDetail(query: CommunityReq) {
+    return api.GET<ApiResponse<CommunityListItem>>(
+      '/api/v1/community/query' + qs.stringify(query),
     )
   },
   getKolCommunities(query?: PaginationReq) {

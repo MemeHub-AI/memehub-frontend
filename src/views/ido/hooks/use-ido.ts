@@ -7,12 +7,14 @@ import { v3Addr } from '@/contract/v3/address'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { IDO_ERR } from '@/errors/ido'
 import { useTranslation } from 'react-i18next'
+import { useIdoContext } from '@/contexts/ido'
 
 const poolId = 0 // TODO: temp
 
 export const useIdo = () => {
   const { t } = useTranslation()
-  const { chainId = 0, address } = useAccount()
+  const { chainId } = useIdoContext()
+  const { address } = useAccount()
   const { ido } = v3Addr[chainId] ?? {}
 
   const {
@@ -45,6 +47,7 @@ export const useIdo = () => {
     writeContract({
       abi: idoAbi,
       address: ido!,
+      chainId,
       functionName: 'buy',
       args: [BigInt(poolId), [], BigInt(0)],
       value: parseEther(amount),
@@ -55,6 +58,7 @@ export const useIdo = () => {
     writeContract({
       abi: idoAbi,
       address: ido!,
+      chainId,
       functionName: 'claimToken',
       args: [BigInt(poolId), address!],
     })
@@ -64,6 +68,7 @@ export const useIdo = () => {
     writeContract({
       abi: idoAbi,
       address: ido!,
+      chainId,
       functionName: 'claimEth',
       args: [BigInt(poolId), address!],
     })

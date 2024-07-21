@@ -11,8 +11,6 @@ import { JoinInput } from './join-input'
 import { EndedButtons } from './ended-buttons'
 import { utilLang } from '@/utils/lang'
 
-const withSymbol = (value: string | number) => value + ' BNB'
-
 export const IdoStarted = () => {
   const { t } = useTranslation()
   const {
@@ -23,7 +21,9 @@ export const IdoStarted = () => {
     userQuota,
     isActive,
     isEnded,
+    isCanceled,
     isExpired,
+    reserveSymbol,
   } = useIdoContext()
   const progress = BigNumber(currentReserveAmount)
     .div(totalReserveAmount)
@@ -32,35 +32,41 @@ export const IdoStarted = () => {
   const { isKol, community } = useIdoCheck()
   const { userInfo } = useUserStore()
 
+  console.log('status', isEnded, isCanceled)
+
   return (
     <>
       <div className="w-full">
         <Progress
           className="h-5 mt-3 rounded"
           indicatorClass="bg-green-500"
-          value={progress}
+          value={BigNumber(progress).isNaN() ? 0 : progress}
         />
         <div className="flex items-center justify-between">
-          <span>{withSymbol(fmt.decimals(currentReserveAmount))}</span>
-          <span>{withSymbol(totalReserveAmount)}</span>
+          <span>
+            {fmt.decimals(currentReserveAmount)} {reserveSymbol}
+          </span>
+          <span>
+            {totalReserveAmount} {reserveSymbol}
+          </span>
         </div>
       </div>
 
       {isActive && !isExpired && <JoinInput />}
 
-      {isExpired && (
+      {isActive && isExpired && (
         <div className="font-bold mt-4">
           <p>{t('ido.ended1')}</p>
           <p>{t('ido.ended2')}</p>
         </div>
       )}
 
-      {isEnded && <EndedButtons />}
+      {(isEnded || isCanceled) && <EndedButtons />}
 
       {!BigNumber(userAmount).isZero() && (
         <div className="mt-3 text-purple-500 font-bold">
           <p>
-            {t('ido.participated')} {withSymbol(fmt.decimals(userAmount))} x{' '}
+            {t('ido.participated')} {fmt.decimals(userAmount)} {reserveSymbol} x{' '}
             {userWeight}%
           </p>
           <p>

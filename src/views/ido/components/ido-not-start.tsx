@@ -8,13 +8,13 @@ import { dateTiemFormat } from '@/config/dayjs'
 
 export const IdoNotStart = () => {
   const { t } = useTranslation()
-  const { startAt, totalReserveAmount } = useIdoContext()
+  const { startAt, totalReserveAmount, reserveSymbol } = useIdoContext()
 
   return (
     <div className="mt-3 space-y-1">
       <div className="flex items-center space-x-1 mt-3">
         <span className="font-bold mr-1">{t('ido.total-amount')}:</span>
-        {totalReserveAmount} BNB
+        {totalReserveAmount} {reserveSymbol}
         <InfoIcon className="w-4" />
       </div>
       <div>

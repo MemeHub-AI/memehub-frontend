@@ -11,12 +11,17 @@ import { IdoProvider } from '@/contexts/ido'
 import { IdoNotStart } from './components/ido-not-start'
 import { IdoStarted } from './components/ido-started'
 import { Countdown } from '@/components/countdown'
+import { useCheckAccount } from '@/hooks/use-check-chain'
+
+const chainId = 56
+const reserveSymbol = 'BNB'
 
 export const IdoPage = () => {
   const { t } = useTranslation()
-  const idoInfo = useIdoInfo()
-  const { startAt, endAt, isActive } = idoInfo
+  const idoInfo = useIdoInfo(chainId)
+  const { startAt, endAt } = idoInfo
   const [isExpired, setIsExpired] = useState(false)
+  const { isConnected, checkForConnect } = useCheckAccount()
 
   const [isStarted, duration] = useMemo(
     () => [dayjs(startAt * 1000).diff(dayjs()) <= 0, endAt - startAt],
@@ -24,10 +29,17 @@ export const IdoPage = () => {
   )
 
   return (
-    <IdoProvider value={{ ...idoInfo, isExpired }}>
+    <IdoProvider
+      value={{
+        ...idoInfo,
+        isExpired,
+        chainId,
+        reserveSymbol,
+      }}
+    >
       <main className="bg-orange-500 min-h-body px-3 pt-3 overflow-hidden">
         <AvatarCard
-          src="/images/trump.jpeg"
+          src="/images/ido/trump.jpeg"
           border="none"
           avatarClass="!border-orange-500"
           className="flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32"
@@ -50,7 +62,7 @@ export const IdoPage = () => {
           />
           <p>{t('ido.405')}</p>
 
-          {isActive && (
+          {isStarted && (
             <Countdown
               className="absolute right-2 top-1 text-yellow-600"
               createdAt={startAt}
@@ -61,6 +73,18 @@ export const IdoPage = () => {
           )}
 
           {isStarted ? <IdoStarted /> : <IdoNotStart />}
+
+          {!isConnected && (
+            <Button
+              className="mt-3 w-min bg-yellow-200"
+              size="lg"
+              shadow="none"
+              type="button"
+              onClick={() => checkForConnect()}
+            >
+              {t('connect')}
+            </Button>
+          )}
 
           <Button
             shadow="none"

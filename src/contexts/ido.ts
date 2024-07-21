@@ -5,6 +5,8 @@ import { useIdoInfo } from '@/views/ido/hooks/use-ido-info'
 
 interface Value extends ReturnType<typeof useIdoInfo> {
   isExpired: boolean
+  chainId: number
+  reserveSymbol: string
 }
 
 const Context = createContext<Value | null>(null)
