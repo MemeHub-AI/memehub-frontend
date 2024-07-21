@@ -35,7 +35,7 @@ export const useTokenInfo = () => {
     // Be careful, chart will be recreate when refetch.
     refetch: refetchInfo,
   } = useQuery({
-    enabled: !!tokenAddr,
+    enabled: !!chainName && !!tokenAddr,
     queryKey: [tokenApi.details.name, chainName, tokenAddr],
     queryFn: () => tokenApi.details(chainName, tokenAddr),
     refetchOnWindowFocus: false,
@@ -52,18 +52,18 @@ export const useTokenInfo = () => {
       data?.find((a) => a.community_name),
       data?.length === 1,
     ],
-    [data]
+    [data],
   )
 
   const kolAirdropInfo = useAirdropInfo(
     MarketType.Kol,
     kol?.chain,
-    kol?.distribution_id
+    kol?.distribution_id,
   )
   const communitiesAirdropInfo = useAirdropInfo(
     MarketType.Community,
     communities?.chain,
-    communities?.distribution_id
+    communities?.distribution_id,
   )
 
   const kolAirdrop = useAirdrop(
@@ -72,7 +72,7 @@ export const useTokenInfo = () => {
     () => {
       kolAirdropInfo?.refetch()
       kolAirdropInfo?.refetchIsClaimed()
-    }
+    },
   )
 
   const communitiesAirdrop = useAirdrop(
@@ -81,7 +81,7 @@ export const useTokenInfo = () => {
     () => {
       communitiesAirdropInfo?.refetch()
       communitiesAirdropInfo?.refetchIsClaimed()
-    }
+    },
   )
 
   return {

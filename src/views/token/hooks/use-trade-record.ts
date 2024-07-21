@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
-import { isEmpty } from 'lodash'
+import { first, isEmpty } from 'lodash'
 
 import {
   heartbeat,
@@ -49,7 +49,7 @@ export const useTradeRecord = () => {
         isDisconnectMessage(data),
       shouldReconnect: () => true,
     },
-    !isNotFound
+    !isNotFound,
   )
 
   const fetchNextPage = () => {
@@ -66,7 +66,7 @@ export const useTradeRecord = () => {
     })
   }
 
-  const unique = (records: WSTradeRecordMessage[]) => {
+  const uniqueRecords = (records: WSTradeRecordMessage[]) => {
     return records.reduce((acc, cur) => {
       const isExisted = acc.find((r) => r.hash === cur.hash)
       if (!isExisted) acc.push(cur)
@@ -74,17 +74,34 @@ export const useTradeRecord = () => {
     }, [] as WSTradeRecordMessage[])
   }
 
+  const pushRecords = (records: WSTradeRecordMessage[]) => {
+    setTradeRecords((old) => {
+      return uniqueRecords([...old, ...records])
+    })
+  }
+
+  const unshiftRecords = (records: WSTradeRecordMessage[]) => {
+    setTradeRecords((old) => {
+      return uniqueRecords([...records, ...old])
+    })
+  }
+
   useEffect(() => {
     if (lastJsonMessage?.type === WSMessageType.ConnectInvalid) {
       return getWebSocket()?.close()
     }
     if (!lastJsonMessage || !lastJsonMessage.data) return
+    const { data } = lastJsonMessage
 
     setHasMore(lastJsonMessage.extra.hasmore)
-    setTradeRecords((old) => {
-      const records = [...old, ...(lastJsonMessage.data ?? [])]
-      return unique(records)
-    })
+    if (isEmpty(data)) return pushRecords(data)
+
+    const newTime = first(data)?.create_time ?? 0
+    const oldTime = first(tradeRecords)?.create_time ?? 0
+
+    // Is latest data.
+    if (newTime > oldTime) return unshiftRecords(data)
+    pushRecords(data)
   }, [lastJsonMessage])
 
   return {

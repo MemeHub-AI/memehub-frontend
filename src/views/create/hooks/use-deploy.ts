@@ -10,7 +10,6 @@ import { CONTRACT_ERR } from '@/errors/contract'
 import { useDeployV3 } from './use-deploy-v3'
 import { getDeployLogAddr, versionOf } from '@/utils/contract'
 import { ContractVersion } from '@/constants/contract'
-import { logger } from '@/utils/log'
 
 export interface DeployParams {
   name: string
@@ -47,7 +46,7 @@ export const useDeploy = () => {
   } = useWaitForTx({ hash })
   const deployLogAddr = useMemo(
     () => getDeployLogAddr(data?.logs ?? []),
-    [data]
+    [data],
   )
 
   const { creationFee, deployV3 } = useDeployV3(writeContract)
@@ -67,7 +66,7 @@ export const useDeploy = () => {
 
     const vIs = versionOf(params.version)
 
-    logger('deploy', deployParams, balance, creationFee)
+    console.log('deploy', deployParams, balance, creationFee)
     if (vIs(ContractVersion.V3)) return deployV3(deployParams)
   }
 

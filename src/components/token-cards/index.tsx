@@ -109,7 +109,7 @@ export const TokenCards = (props: Props) => {
           <TokenCard
             card={filteredCards?.[0]}
             idoCreateAt={dayjs().unix()}
-            idoDuration={3 * 24 * 60 * 60}
+            idoDuration={3}
           />
         )}
         {!!cards.length &&

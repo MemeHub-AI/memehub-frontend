@@ -23,6 +23,7 @@ export const utilLang = {
     return ''
   },
   isEn: (i18n = i18next) => i18n.language === 'en',
+  isZh: (i18n = i18next) => i18n.language === 'zh',
   replace: (value: string, args: (string | number)[], symbol = '{}') => {
     let i = 0
     return value.replace(new RegExp(symbol, 'g'), () => String(args[i++]))

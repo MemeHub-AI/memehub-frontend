@@ -3,15 +3,13 @@ import { formatEther, isAddress, parseEther, type Address } from 'viem'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
-import dayjs from 'dayjs'
 import { BigNumber } from 'bignumber.js'
 
 import { useApprove } from '@/hooks/use-approve'
-import { logger } from '@/utils/log'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { UNISWAP_ERR } from '@/errors/uniswap'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
-import { subSlippage } from '@/utils/contract'
+import { getDeadline, subSlippage } from '@/utils/contract'
 import { useUniswapV2Info } from './use-uniswapv2-info'
 import { useTokenContext } from '@/contexts/token'
 import { reserveAddr } from '@/contract/address'
@@ -36,7 +34,7 @@ export const useUniswapV2 = () => {
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: (e) => UNISWAP_ERR.exec(e.message),
+      onError: ({ message }) => UNISWAP_ERR.message(message),
     },
   })
 
@@ -62,7 +60,7 @@ export const useUniswapV2 = () => {
   const uniswapV2Buy = async (
     amount: string,
     token: Address,
-    slippage: string
+    slippage: string,
   ) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
@@ -73,7 +71,7 @@ export const useUniswapV2 = () => {
       return
     }
 
-    logger('uniswap buy', {
+    console.log('uniswap buy', {
       amount,
       token,
       address,
@@ -89,7 +87,7 @@ export const useUniswapV2 = () => {
         subSlippage(tokenAmount, slippage),
         [reserveToken, token],
         address!,
-        BigInt(dayjs().unix() + 60),
+        await getDeadline(),
       ],
       value: parseEther(amount),
     })
@@ -98,7 +96,7 @@ export const useUniswapV2 = () => {
   const uniswapV2Sell = async (
     amount: string,
     token: Address,
-    slippage: string
+    slippage: string,
   ) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
@@ -112,7 +110,7 @@ export const useUniswapV2 = () => {
       return
     }
 
-    logger('uniswap sell', {
+    console.log('uniswap sell', {
       amount,
       token,
       address,
@@ -130,7 +128,7 @@ export const useUniswapV2 = () => {
         subSlippage(reserveAmount, slippage),
         [token, reserveToken],
         address!,
-        BigInt(dayjs().unix() + 60),
+        await getDeadline(),
       ],
     })
   }
