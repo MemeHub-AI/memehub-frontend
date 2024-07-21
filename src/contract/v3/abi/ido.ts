@@ -6,6 +6,16 @@ export const idoAbi = [
   },
   {
     inputs: [],
+    name: 'AlreadyClaimedEth',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'AlreadyClaimedToken',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'AlreadyDeposit',
     type: 'error',
   },
@@ -46,17 +56,17 @@ export const idoAbi = [
   },
   {
     inputs: [],
-    name: 'NoRandom',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'NoSetTokenAmount',
     type: 'error',
   },
   {
     inputs: [],
     name: 'NoStartClaim',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'NoStartRaise',
     type: 'error',
   },
   {
@@ -87,6 +97,11 @@ export const idoAbi = [
   {
     inputs: [],
     name: 'NotPeriod',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'OverPerUserLimit',
     type: 'error',
   },
   {
@@ -220,6 +235,25 @@ export const idoAbi = [
       },
     ],
     name: 'IdoPoolInit',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'poolId',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'uint8',
+        name: 'status',
+        type: 'uint8',
+      },
+    ],
+    name: 'IdoSetPoolStatus',
     type: 'event',
   },
   {
@@ -365,6 +399,134 @@ export const idoAbi = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'communityCheckMax',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_userAddress',
+        type: 'address',
+      },
+    ],
+    name: 'getClaimEthAmount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'refunds',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_userAddress',
+        type: 'address',
+      },
+    ],
+    name: 'getClaimTokenAmount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'claimAmount',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_userAddress',
+        type: 'address',
+      },
+    ],
+    name: 'getIsClaimedEth',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_userAddress',
+        type: 'address',
+      },
+    ],
+    name: 'getIsClaimedToken',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+    ],
+    name: 'getPoolUserAddresses',
+    outputs: [
+      {
+        internalType: 'address[]',
+        name: '',
+        type: 'address[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -397,8 +559,18 @@ export const idoAbi = [
     inputs: [
       {
         internalType: 'address',
-        name: 'user',
+        name: '_user',
         type: 'address',
+      },
+      {
+        internalType: 'bytes32[]',
+        name: '_merkleproof',
+        type: 'bytes32[]',
+      },
+      {
+        internalType: 'uint256',
+        name: '_type',
+        type: 'uint256',
       },
     ],
     name: 'getUserWeight',
@@ -415,31 +587,24 @@ export const idoAbi = [
   {
     inputs: [
       {
-        components: [
-          {
-            internalType: 'uint40',
-            name: 'startTime',
-            type: 'uint40',
-          },
-          {
-            internalType: 'uint40',
-            name: 'endTime',
-            type: 'uint40',
-          },
-          {
-            internalType: 'uint168',
-            name: 'perUserLimit',
-            type: 'uint168',
-          },
-          {
-            internalType: 'uint256',
-            name: 'totalETHAmount',
-            type: 'uint256',
-          },
-        ],
-        internalType: 'struct IDO.PoolInitConfig',
-        name: '_config',
-        type: 'tuple',
+        internalType: 'uint40',
+        name: 'startTime',
+        type: 'uint40',
+      },
+      {
+        internalType: 'uint40',
+        name: 'endTime',
+        type: 'uint40',
+      },
+      {
+        internalType: 'uint168',
+        name: 'perUserLimit',
+        type: 'uint168',
+      },
+      {
+        internalType: 'uint256',
+        name: 'totalETHAmount',
+        type: 'uint256',
       },
     ],
     name: 'initializePool',
@@ -500,7 +665,20 @@ export const idoAbi = [
   },
   {
     inputs: [],
-    name: 'merkleRoot',
+    name: 'merkleRootCommunity',
+    outputs: [
+      {
+        internalType: 'bytes32',
+        name: '',
+        type: 'bytes32',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'merkleRootKol',
     outputs: [
       {
         internalType: 'bytes32',
@@ -600,6 +778,19 @@ export const idoAbi = [
     inputs: [
       {
         internalType: 'uint256',
+        name: '_communityCheckMax',
+        type: 'uint256',
+      },
+    ],
+    name: 'setCommunityCheckMax',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
         name: '_kolWeight',
         type: 'uint256',
       },
@@ -613,11 +804,24 @@ export const idoAbi = [
     inputs: [
       {
         internalType: 'bytes32',
-        name: '_merkleRoot',
+        name: '_merkleRootCommunity',
         type: 'bytes32',
       },
     ],
-    name: 'setMerkleRoot',
+    name: 'setMerkleRootCommunity',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bytes32',
+        name: '_merkleRootKol',
+        type: 'bytes32',
+      },
+    ],
+    name: 'setMerkleRootKol',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -656,12 +860,53 @@ export const idoAbi = [
         type: 'uint256',
       },
       {
+        internalType: 'uint40',
+        name: '_endTime',
+        type: 'uint40',
+      },
+    ],
+    name: 'setPoolEndTime',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+      {
         internalType: 'uint8',
         name: 'status',
         type: 'uint8',
       },
     ],
     name: 'setPoolStatus',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_tokenAddress',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_tokenAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'setTokenData',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -701,35 +946,6 @@ export const idoAbi = [
     inputs: [
       {
         internalType: 'address',
-        name: 'user',
-        type: 'address',
-      },
-      {
-        internalType: 'bytes32[]',
-        name: '_merkleproof',
-        type: 'bytes32[]',
-      },
-      {
-        internalType: 'uint256',
-        name: '_type',
-        type: 'uint256',
-      },
-    ],
-    name: 'typeCheck',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'userType',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
         name: 'adr',
         type: 'address',
       },
@@ -756,6 +972,13 @@ export const idoAbi = [
       },
     ],
     stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'withdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {

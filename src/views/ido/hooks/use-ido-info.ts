@@ -12,9 +12,7 @@ export enum IdoStatus {
   Canceled,
 }
 
-const poolId = BigInt(0) // TODO: temp
-
-export const useIdoInfo = (chainId = 0) => {
+export const useIdoInfo = (chainId = 0, poolId = 0) => {
   const { address } = useAccount()
   const { ido } = v3Addr[chainId] ?? {}
 
@@ -27,12 +25,22 @@ export const useIdoInfo = (chainId = 0) => {
     address: ido,
     chainId,
     functionName: 'getUserInfo',
-    args: [poolId, address!],
+    args: [BigInt(poolId), address!],
     query: { enabled: !!ido && !!address },
   })
   const [deposit = BI_ZERO, weight = BI_ZERO] = userInfo
   const userAmount = formatEther(deposit)
-  const userWeight = weight.toString()
+
+  const { data: getUserWeight } = useReadContract({
+    abi: idoAbi,
+    address: v3Addr[chainId]?.ido,
+    functionName: 'getUserWeight',
+    args: [address!, [], BigInt(0)],
+    query: { enabled: !!address },
+  })
+  const userWeight = BigNumber(deposit.toString()).isZero()
+    ? getUserWeight
+    : weight.toString()
 
   const {
     data: pools = [],
@@ -43,7 +51,7 @@ export const useIdoInfo = (chainId = 0) => {
     address: ido,
     chainId,
     functionName: 'pools',
-    args: [poolId],
+    args: [BigInt(poolId)],
   })
   const [
     tokenAddress,
@@ -72,6 +80,9 @@ export const useIdoInfo = (chainId = 0) => {
     .multipliedBy(100)
     .toFixed()
   const progress = BigNumber(idoProgress).isNaN() ? 0 : idoProgress
+  const userMax = formatEther(perUserLimit)
+
+  const userRemain = BigNumber(userMax).minus(formatEther(deposit)).toFixed()
 
   const refetchIdoInfo = () => {
     refetchUserInfo()
@@ -96,5 +107,7 @@ export const useIdoInfo = (chainId = 0) => {
     currentReserveAmount,
     totalReserveAmount,
     progress,
+    userMax,
+    userRemain,
   }
 }

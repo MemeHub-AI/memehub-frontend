@@ -25,11 +25,10 @@ export const IdoStarted = () => {
     isExpired,
     reserveSymbol,
     progress,
+    status,
   } = useIdoContext()
   const { isKol, community } = useIdoCheck()
   const { userInfo } = useUserStore()
-
-  console.log('status', isEnded, isCanceled)
 
   return (
     <>

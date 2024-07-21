@@ -15,6 +15,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 
 const chainId = 56
 const reserveSymbol = 'BNB'
+const poolId = 0
 
 export const IdoPage = () => {
   const { t } = useTranslation()
@@ -24,7 +25,7 @@ export const IdoPage = () => {
   const { isConnected, checkForConnect } = useCheckAccount()
 
   const [isStarted, duration] = useMemo(
-    () => [dayjs(startAt * 1000).diff(dayjs()) <= 0, endAt - startAt],
+    () => [dayjs(startAt * 1000).diff() <= 0, endAt - startAt],
     [startAt],
   )
 
@@ -35,6 +36,7 @@ export const IdoPage = () => {
         isExpired,
         chainId,
         reserveSymbol,
+        poolId,
       }}
     >
       <main className="bg-orange-500 min-h-body px-3 pt-3 overflow-hidden">

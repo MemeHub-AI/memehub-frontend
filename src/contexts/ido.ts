@@ -7,6 +7,7 @@ interface Value extends ReturnType<typeof useIdoInfo> {
   isExpired: boolean
   chainId: number
   reserveSymbol: string
+  poolId: number
 }
 
 const Context = createContext<Value | null>(null)

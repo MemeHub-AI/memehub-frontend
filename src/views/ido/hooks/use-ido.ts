@@ -9,11 +9,9 @@ import { IDO_ERR } from '@/errors/ido'
 import { useTranslation } from 'react-i18next'
 import { useIdoContext } from '@/contexts/ido'
 
-const poolId = 0 // TODO: temp
-
-export const useIdo = () => {
+export const useIdo = (onFinally?: () => void) => {
   const { t } = useTranslation()
-  const { chainId } = useIdoContext()
+  const { chainId, poolId } = useIdoContext()
   const { address } = useAccount()
   const { ido } = v3Addr[chainId] ?? {}
 
@@ -39,6 +37,7 @@ export const useIdo = () => {
     onSuccess: () => toast.success(t('ido.tx.success')),
     onFillay: () => {
       reset()
+      onFinally?.()
       toast.dismiss()
     },
   })

@@ -33,7 +33,7 @@ const dev: Record<number, Record<Keys, Address> | undefined> = {
     recommend: '0x80Ba6203Ac72bb8F4D807E3A58412Bc6B2A9f3da',
     exchangeNft: '0x5f5EAC903c8CCf445671580C178a7B6815519a12',
     kolNft: '0x5859AdD7DA6107D1FA4FC3aB98D242aAF310d61e',
-    ido: '0xc6DE78Def65aC7BD48998af96131F72f88Fb2514',
+    ido: '0x7E66631AEFc93c0186e1E8789C2915f996127d5E',
   },
   [base.id]: {
     bondingCurve: '0x15374e7000d9633a3E7782998407Eb98293E478f',
