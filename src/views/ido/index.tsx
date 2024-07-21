@@ -17,7 +17,7 @@ export const IdoPage = () => {
   const [isStarted, setIsStarted] = useState(false)
 
   return (
-    <main className="bg-orange-500 min-h-body px-3 pt-3">
+    <main className="bg-orange-500 min-h-body px-3 pt-3 overflow-hidden">
       <AvatarCard
         src="/images/trump.jpeg"
         border="none"
