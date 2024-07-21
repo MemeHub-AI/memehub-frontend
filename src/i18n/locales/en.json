@@ -504,7 +504,6 @@
   "coin": "Coin",
   "ido.start-in": "Start in",
   "ido.total-amount": "Total amount",
-  "ido.detect": "As a distinguished KOL ambassador {},$ you are entitled to a credit limit of {}",
   "ido.donate": "Donate",
   "ido.ended1": "Donation has ended.",
   "ido.ended2": "Waiting for the drawing of lots.",
@@ -535,5 +534,11 @@
   "ido.policy2": "Only Memehub NFT holders are eligible to participate.",
   "ido.participated": "Participated in",
   "ido.obtained": "obtained",
-  "ido.quota": "quota"
+  "ido.quota": "quota",
+  "ido.ended": "Already ended",
+  "ido.detect-kol": "As a distinguished KOL ambassador {},$ you are entitled to a credit limit of {}",
+  "ido.detect-cmnt": "It has been detected that you are a member of {} $ Therefore, you have a {} equity bonus",
+  "pure.community": "Community",
+  "tx.submitting": "Tx submitting...",
+  "ido.tx.success": "Participation successful!"
 }

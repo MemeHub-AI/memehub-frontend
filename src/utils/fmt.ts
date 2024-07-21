@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { t } from 'i18next'
 import { first, isEmpty } from 'lodash'
+import { utilLang } from './lang'
 
 interface FmtAddrOptions {
   len?: number
@@ -36,7 +37,7 @@ export const fmt = {
   },
   percent: (
     value: string | number | undefined,
-    { fixed = 2, label = '%' }: PercentOptions = {}
+    { fixed = 2, label = '%' }: PercentOptions = {},
   ) => {
     if (!value) return 0 + label
 
@@ -105,5 +106,14 @@ export const fmt = {
     if (value.endsWith(chain)) return value
 
     return `${value} ${chain}`
+  },
+  withCommunity(str: string | undefined) {
+    if (!str) return ''
+
+    const lower = str.toLowerCase()
+    const cmnt = t('pure.community')
+    if (lower.endsWith(cmnt.toLowerCase())) return str
+
+    return utilLang.isEn() ? `${str} ${cmnt}` : str + cmnt
   },
 }

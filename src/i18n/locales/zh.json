@@ -494,7 +494,6 @@
   "coin": "币",
   "ido.start-in": "开始于",
   "ido.total-amount": "总额度",
-  "ido.detect": "检测到您是尊贵的KOL大使{}，$因此您拥有{}的额度",
   "ido.donate": "捐赠",
   "ido.ended1": "捐赠已结束。",
   "ido.ended2": "等待公布抽奖结果。",
@@ -525,5 +524,11 @@
   "ido.policy2": "仅限 Memehub NFT 持有人参与",
   "ido.participated": "参与了",
   "ido.obtained": "获得了",
-  "ido.quota": "额度"
+  "ido.quota": "额度",
+  "ido.ended": "已结束",
+  "ido.detect-kol": "检测到您是尊贵的KOL大使{}，$因此您拥有{}的额度",
+  "ido.detect-cmnt": "检测到您是{}成员 $ 因此您拥有{}权益加成",
+  "pure.community": "社区",
+  "tx.submitting": "交易提交中...",
+  "ido.tx.success": "参与成功！"
 }

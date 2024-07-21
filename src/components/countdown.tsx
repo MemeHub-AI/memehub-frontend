@@ -11,7 +11,9 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 
 interface Props extends Omit<ComponentProps<'p'>, 'prefix'> {
+  /** unit is seconds */
   createdAt: number
+  /** unit is seconds */
   duration: number
   onExpired?: (value: boolean) => void
   expiredText?: string
