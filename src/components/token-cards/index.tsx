@@ -1,6 +1,7 @@
 import React, { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
+import dayjs from 'dayjs'
 
 import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
@@ -11,9 +12,8 @@ import { Routes } from '@/routes'
 import { UserCoinsCreated } from '@/api/user/types'
 import { TokenChainSelect } from './chain-select'
 import { TokenSearchInput } from './token-search-input'
-import useAudioPlayer from '@/hooks/use-audio-player'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
-import dayjs from 'dayjs'
+import { IdoCard } from '../ido-card'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -104,14 +104,7 @@ export const TokenCards = (props: Props) => {
           </div>
         }
       >
-        {/* <IdoCard /> */}
-        {filteredCards?.[0] && (
-          <TokenCard
-            card={filteredCards?.[0]}
-            idoCreateAt={dayjs().unix()}
-            idoDuration={3}
-          />
-        )}
+        <IdoCard />
         {!!cards.length &&
           filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
       </CustomSuspense>

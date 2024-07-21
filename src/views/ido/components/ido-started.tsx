@@ -24,11 +24,8 @@ export const IdoStarted = () => {
     isCanceled,
     isExpired,
     reserveSymbol,
+    progress,
   } = useIdoContext()
-  const progress = BigNumber(currentReserveAmount)
-    .div(totalReserveAmount)
-    .multipliedBy(100)
-    .toFixed()
   const { isKol, community } = useIdoCheck()
   const { userInfo } = useUserStore()
 
@@ -40,7 +37,7 @@ export const IdoStarted = () => {
         <Progress
           className="h-5 mt-3 rounded"
           indicatorClass="bg-green-500"
-          value={BigNumber(progress).isNaN() ? 0 : progress}
+          value={progress}
         />
         <div className="flex items-center justify-between">
           <span>

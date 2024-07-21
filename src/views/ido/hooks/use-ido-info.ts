@@ -67,6 +67,11 @@ export const useIdoInfo = (chainId = 0) => {
     .toFixed()
   const currentReserveAmount = formatEther(ethBalance)
   const totalReserveAmount = formatEther(totalEthAmount)
+  const idoProgress = BigNumber(currentReserveAmount)
+    .div(totalReserveAmount)
+    .multipliedBy(100)
+    .toFixed()
+  const progress = BigNumber(idoProgress).isNaN() ? 0 : idoProgress
 
   const refetchIdoInfo = () => {
     refetchUserInfo()
@@ -90,5 +95,6 @@ export const useIdoInfo = (chainId = 0) => {
     userQuota,
     currentReserveAmount,
     totalReserveAmount,
+    progress,
   }
 }
