@@ -22,4 +22,6 @@ export enum Routes {
   ClassicMeme = '/moonshot/2',
 
   Ido = '/ido',
+
+  Trump = '/trump',
 }
