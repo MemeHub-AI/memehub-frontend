@@ -7,10 +7,9 @@ import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
+import { MAX_SLIPPAGE } from '@/constants/trade'
 
-const slippages = ['0', '1', '5', '49']
-
-const MAX_SLIPPAGE = '100'
+const slippages = ['0', '1', '3', '5', '49']
 
 interface Props {
   value: string
@@ -36,18 +35,19 @@ export const SlippageButton = (props: Props) => {
                 shadow="none"
                 onClick={() => onChange?.(s)}
                 className={cn(
-                  value === s && 'bg-black text-white hover:bg-black'
+                  value === s && 'bg-black text-white hover:bg-black',
                 )}
               >
                 {s}%
               </Button>
             ))}
             <Input
-              autoFocus
               value={value}
               onChange={({ target: { value } }) => {
                 if (isEmpty(value)) return onChange?.(value)
-                if (BigNumber(value).gt(100)) return onChange?.(MAX_SLIPPAGE)
+                if (BigNumber(value).gt(MAX_SLIPPAGE)) {
+                  return onChange?.(MAX_SLIPPAGE)
+                }
                 if (BigNumber(value).isNaN()) return
                 onChange?.(value)
               }}
@@ -59,6 +59,8 @@ export const SlippageButton = (props: Props) => {
                   {t('max')}
                 </p>
               }
+              autoFocus
+              className="h-9"
             />
             <span>%</span>
           </div>
