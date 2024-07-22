@@ -39,7 +39,7 @@ export const useIdoInfo = (chainId = 0, poolId = 0) => {
     query: { enabled: !!address },
   })
   const userWeight = BigNumber(deposit.toString()).isZero()
-    ? initUserWeight
+    ? initUserWeight.toString()
     : weight.toString()
 
   const {
@@ -68,11 +68,11 @@ export const useIdoInfo = (chainId = 0, poolId = 0) => {
   const isActive = status === IdoStatus.Active
   const isEnded = status === IdoStatus.Ended
   const isCanceled = status === IdoStatus.Canceled
-  // userQuota = deposit / weightSum * 100
+  const totalWeight = formatEther(weightSum)
+  // userQuota = deposit * weight / weightSum
   const userQuota = BigNumber(userAmount)
-    .multipliedBy(weight.toString())
-    .div(weightSum.toString())
-    .multipliedBy(100)
+    .multipliedBy(userWeight)
+    .div(totalWeight)
     .toFixed()
   const currentReserveAmount = formatEther(ethBalance)
   const totalReserveAmount = formatEther(totalEthAmount)
