@@ -104,6 +104,7 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     isLoadingUserInfo,
     isLoadingPools,
     refetchIdoInfo,
+    pools,
     tokenAddress,
     tokenAmount,
     status,

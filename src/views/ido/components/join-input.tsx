@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
+import { isEmpty } from 'lodash'
 
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
@@ -9,7 +10,7 @@ import { useIdoContext } from '@/contexts/ido'
 import { cn } from '@/lib/utils'
 import { useAccount, useBalance } from 'wagmi'
 import { BI_ZERO } from '@/constants/number'
-import { formatEther } from 'viem'
+import { formatEther, zeroAddress } from 'viem'
 import { fmt } from '@/utils/fmt'
 import { CONTRACT_ERR } from '@/errors/contract'
 
@@ -18,10 +19,17 @@ export const JoinInput = () => {
   const [value, setValue] = useState('')
   const { refetchIdoInfo } = useIdoContext()
   const { isLoading, buy } = useIdo(refetchIdoInfo)
-  const { reserveSymbol, chainId, userRemain } = useIdoContext()
+  const { reserveSymbol, chainId, userRemain, pools, poolId } = useIdoContext()
   const { address } = useAccount()
   const { data: reserveBalance } = useBalance({ address, chainId })
   const balance = formatEther(reserveBalance?.value ?? BI_ZERO)
+
+  const isEmptyPools = useMemo(() => {
+    const p = pools.filter((p) => p && p !== zeroAddress)
+    return isEmpty(p)
+  }, [pools])
+
+  const disabeld = isLoading || isEmptyPools
 
   const onChange = (value: string) => {
     const v = BigNumber(value)
@@ -75,7 +83,7 @@ export const JoinInput = () => {
           }
           value={value}
           onChange={({ target }) => onChange(target.value)}
-          disabled={isLoading}
+          disabled={disabeld}
         />
         <div className="flex items-center space-x-1">
           <img src="/images/bsc.svg" alt="logo" className="w-5" />
@@ -89,10 +97,15 @@ export const JoinInput = () => {
         className="mt-3 w-min bg-yellow-200"
         size="lg"
         shadow="none"
-        disabled={isLoading}
+        disabled={disabeld}
       >
         {t('ido.join')}
       </Button>
+      {isEmptyPools && (
+        <p className="mt-2 text-zinc-500 font-bold">
+          The pool with id "{poolId}" is empty
+        </p>
+      )}
     </form>
   )
 }
