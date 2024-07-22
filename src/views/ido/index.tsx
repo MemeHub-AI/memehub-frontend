@@ -13,6 +13,8 @@ import { IdoStarted } from './components/ido-started'
 import { Countdown } from '@/components/countdown'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useRouter } from 'next/router'
+import { Badge } from '@/components/ui/badge'
+import { IdoTag } from '@/components/ido-tag'
 
 export const idoChainId = 56
 export const idoPoolId = 0
@@ -99,14 +101,7 @@ export const IdoPage = () => {
             </Button>
           )}
 
-          <Button
-            shadow="none"
-            variant="warning"
-            size="sm"
-            className="text-base self-start mt-auto select-none"
-          >
-            🚀 100x {t('coin')}
-          </Button>
+          <IdoTag className="text-base self-start mt-auto select-none px-2" />
         </AvatarCard>
       </main>
     </IdoProvider>
