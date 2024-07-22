@@ -23,10 +23,11 @@ export const IdoPage = () => {
   const { startAt, endAt } = idoInfo
   const [isExpired, setIsExpired] = useState(false)
   const { isConnected, checkForConnect } = useCheckAccount()
+  const [isStart, setIsStart] = useState(false)
 
   const [isStarted, duration] = useMemo(
     () => [dayjs(startAt * 1000).diff() <= 0, endAt - startAt],
-    [startAt],
+    [startAt, isStart],
   )
 
   return (
@@ -74,7 +75,7 @@ export const IdoPage = () => {
             />
           )}
 
-          {isStarted ? <IdoStarted /> : <IdoNotStart />}
+          {isStarted ? <IdoStarted /> : <IdoNotStart onExpired={setIsStart} />}
 
           {!isConnected && (
             <Button
