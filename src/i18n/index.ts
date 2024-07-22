@@ -19,7 +19,7 @@ export const resources: Resource = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: 'zh', // TODO: temp
+  lng: 'en',
   interpolation: {
     escapeValue: false,
   },
