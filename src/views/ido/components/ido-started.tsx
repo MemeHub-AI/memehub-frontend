@@ -72,10 +72,11 @@ export const IdoStarted = () => {
         </div>
       )}
 
-      <p className="text-sm text-zinc-500 mt-3">{t('ido.policy1')}</p>
-      <p className="text-sm text-zinc-500 my-1">{t('ido.policy2')}</p>
+      <p className="text-sm text-zinc-500 mt-3 w-5/6">{t('ido.policy1')}</p>
+      <p className="text-sm text-zinc-500 my-1 w-5/6">{t('ido.policy2')}</p>
+
       {isKol && (
-        <div className="text-zinc-500 text-sm space-y-1">
+        <div className="text-zinc-500 text-sm space-y-1 w-5/6">
           <p>
             {t('ido.detect-kol')
               .split('$')[0]
@@ -87,7 +88,7 @@ export const IdoStarted = () => {
         </div>
       )}
       {!isKol && community && (
-        <div className="text-zinc-500 text-sm space-y-1">
+        <div className="text-zinc-500 text-sm space-y-1 w-5/6">
           <p>
             {t('ido.detect-cmnt')
               .split('$')[0]

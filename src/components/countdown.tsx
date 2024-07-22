@@ -4,6 +4,7 @@ import React, {
   useMemo,
   ComponentProps,
   ReactNode,
+  useRef,
 } from 'react'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
@@ -39,10 +40,12 @@ export const Countdown = ({
     const createTime = dayjs.unix(createdAt).add(duration, 'second')
     return createTime
   }, [createdAt, duration])
+  const timerRef = useRef<NodeJS.Timeout>()
 
   const updateCountdown = () => {
     if (createdAt <= 0 || duration <= 0) {
       onInitExpired?.(true)
+      clearInterval(timerRef.current)
       return
     }
 
@@ -58,13 +61,17 @@ export const Countdown = ({
     if (diff <= 0) {
       setIsExpired(true)
       onExpired?.(true)
-      return
+      clearInterval(timerRef.current)
     }
-    setTimeout(updateCountdown, 1000)
   }
 
   useEffect(() => {
     updateCountdown()
+    timerRef.current = setInterval(updateCountdown, 1_000)
+
+    return () => {
+      clearInterval(timerRef.current)
+    }
   }, [createdAt, duration])
 
   if (isExpired && !keepZero) {
