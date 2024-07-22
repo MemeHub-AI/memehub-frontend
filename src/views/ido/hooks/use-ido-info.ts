@@ -1,6 +1,7 @@
 import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
+import { useInterval } from 'react-use'
 
 import { BI_ZERO } from '@/constants/number'
 import { idoAbi } from '@/contract/v3/abi/ido'
@@ -99,6 +100,8 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     refetchPools()
     refetchClaimedReserve()
   }
+
+  useInterval(refetchIdoInfo, 10_000)
 
   return {
     isLoadingUserInfo,
