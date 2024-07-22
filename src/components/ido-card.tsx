@@ -1,6 +1,5 @@
 import React from 'react'
 import dayjs from 'dayjs'
-import { useInterval } from 'react-use'
 
 import { useIdoInfo } from '@/views/ido/hooks/use-ido-info'
 import { TokenCard } from './token-cards/card'
@@ -31,12 +30,7 @@ const card = {
 } as UserCoinsCreated
 
 export const IdoCard = () => {
-  const { startAt, progress, refetchIdoInfo } = useIdoInfo(
-    idoChainId,
-    idoPoolId,
-  )
-
-  useInterval(refetchIdoInfo, 10_000)
+  const { startAt, progress } = useIdoInfo(idoChainId, idoPoolId)
 
   return (
     <TokenCard

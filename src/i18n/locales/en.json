@@ -539,7 +539,7 @@
   "ido.detect-kol": "As a distinguished KOL ambassador {},$ you are entitled to a credit limit of {}",
   "ido.detect-cmnt": "It has been detected that you are a member of {} $ Therefore, you have a {} equity bonus",
   "pure.community": "Community",
-  "tx.submitting": "Tx submitting...",
+  "tx.submitting": "Transaction submitting...",
   "ido.tx.success": "Participation successful!",
   "already-refunded": "Already refunded",
   "already-claimed": "Already claimed"
