@@ -44,7 +44,9 @@ export const JoinInput = () => {
 
   const onSubmit = () => {
     const v = BigNumber(value)
-    if (v.isNaN()) return
+    if (v.isNaN() || v.isZero()) {
+      return CONTRACT_ERR.amountInvlid()
+    }
     if (BigNumber(balance).lt(value)) {
       return CONTRACT_ERR.balanceInsufficient()
     }
@@ -94,7 +96,8 @@ export const JoinInput = () => {
         {t('balance')}: {fmt.decimals(balance)} {reserveSymbol}
       </p>
       <Button
-        className="mt-3 w-min bg-yellow-200"
+        variant="yellow"
+        className="mt-3 w-min"
         size="lg"
         shadow="none"
         disabled={disabeld}
