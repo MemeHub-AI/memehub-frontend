@@ -49,19 +49,21 @@ export const TokenCard = (props: Props) => {
     Number(card.chain.id),
   )
 
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (isIdo) {
+      return router.push(Routes.Ido)
+    }
+    router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
+    onClick?.(e)
+  }
+
   return (
     <Card
       className={cn(
         'flex items-stretch overflow-hidden gap-2 relative max-sm:gap-0',
         className,
       )}
-      onClick={(e) => {
-        if (isIdo) {
-          return router.push(Routes.Ido)
-        }
-        router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
-        onClick?.(e)
-      }}
+      onClick={handleClick}
       {...restProps}
     >
       {isGrauated && (
