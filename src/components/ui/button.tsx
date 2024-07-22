@@ -27,6 +27,7 @@ const buttonVariants = cva(
         ghost: 'border-transparent hover:bg-zinc-100',
         link: 'text-primary underline-offset-4 hover:underline text-white bg-black',
         warning: 'bg-orange-500 text-primary-foreground hover:bg-orange-500/90',
+        yellow: 'bg-yellow-200 border-2 border-black hover:bg-yellow-200/90',
       },
       size: {
         default: 'h-9 px-4 py-2',
