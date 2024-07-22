@@ -12,18 +12,23 @@ import { IdoNotStart } from './components/ido-not-start'
 import { IdoStarted } from './components/ido-started'
 import { Countdown } from '@/components/countdown'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { useRouter } from 'next/router'
 
 export const idoChainId = 56
-export const idoPoolId = 2
+export const idoPoolId = 0
 const reserveSymbol = 'BNB'
 
 export const IdoPage = () => {
   const { t } = useTranslation()
-  const idoInfo = useIdoInfo(idoChainId, idoPoolId)
-  const { startAt, endAt, status } = idoInfo
   const [isExpired, setIsExpired] = useState(false)
-  const { isConnected, checkForConnect } = useCheckAccount()
   const [isStart, setIsStart] = useState(false)
+  const { isConnected, checkForConnect } = useCheckAccount()
+  const { query } = useRouter()
+  const poolId = Number(query.id || idoPoolId)
+
+  const idoInfo = useIdoInfo(idoChainId, poolId)
+  const { startAt, endAt, status } = idoInfo
+
   const [isStarted, duration] = useMemo(
     () => [dayjs(startAt * 1000).diff() <= 0, endAt - startAt],
     [startAt, isStart],
@@ -38,7 +43,7 @@ export const IdoPage = () => {
         isExpired,
         chainId: idoChainId,
         reserveSymbol,
-        poolId: idoPoolId,
+        poolId,
       }}
     >
       <main className="bg-orange-500 min-h-body px-3 pt-3 overflow-hidden">
@@ -84,7 +89,7 @@ export const IdoPage = () => {
           {!isConnected && (
             <Button
               variant="yellow"
-              className="mt-3 w-min"
+              className="my-3 w-min"
               size="lg"
               shadow="none"
               type="button"
