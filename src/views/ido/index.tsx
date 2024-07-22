@@ -15,11 +15,11 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 
 const chainId = 56
 const reserveSymbol = 'BNB'
-const poolId = 0
+const poolId = 1
 
 export const IdoPage = () => {
   const { t } = useTranslation()
-  const idoInfo = useIdoInfo(chainId)
+  const idoInfo = useIdoInfo(chainId, poolId)
   const { startAt, endAt } = idoInfo
   const [isExpired, setIsExpired] = useState(false)
   const { isConnected, checkForConnect } = useCheckAccount()
@@ -44,7 +44,7 @@ export const IdoPage = () => {
           src="/images/ido/trump.jpeg"
           border="none"
           avatarClass="!border-orange-500"
-          className="flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32"
+          className="flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32 min-h-100"
         >
           <img
             src="/images/ido/fight.jpeg"
@@ -66,7 +66,7 @@ export const IdoPage = () => {
 
           {isStarted && (
             <Countdown
-              className="absolute right-2 top-1 text-yellow-600"
+              className="absolute right-2 top-1 text-yellow-600 text-sm"
               createdAt={startAt}
               duration={duration}
               expiredText={t('ido.ended')}
@@ -78,7 +78,8 @@ export const IdoPage = () => {
 
           {!isConnected && (
             <Button
-              className="mt-3 w-min bg-yellow-200"
+              variant="yellow"
+              className="mt-3 w-min"
               size="lg"
               shadow="none"
               type="button"
@@ -92,7 +93,7 @@ export const IdoPage = () => {
             shadow="none"
             variant="warning"
             size="sm"
-            className="text-base self-start mt-5 select-none"
+            className="text-base self-start mt-auto select-none"
           >
             🚀 100x {t('coin')}
           </Button>

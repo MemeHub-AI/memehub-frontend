@@ -540,5 +540,7 @@
   "ido.detect-cmnt": "It has been detected that you are a member of {} $ Therefore, you have a {} equity bonus",
   "pure.community": "Community",
   "tx.submitting": "Tx submitting...",
-  "ido.tx.success": "Participation successful!"
+  "ido.tx.success": "Participation successful!",
+  "already-refunded": "Already refunded",
+  "already-claimed": "Already claimed"
 }

@@ -530,5 +530,7 @@
   "ido.detect-cmnt": "检测到您是{}成员 $ 因此您拥有{}权益加成",
   "pure.community": "社区",
   "tx.submitting": "交易提交中...",
-  "ido.tx.success": "参与成功！"
+  "ido.tx.success": "参与成功！",
+  "already-refunded": "已退款",
+  "already-claimed": "已领取"
 }

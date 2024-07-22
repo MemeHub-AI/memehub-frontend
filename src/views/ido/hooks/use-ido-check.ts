@@ -10,6 +10,8 @@ import { useIdoContext } from '@/contexts/ido'
 import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
 import { addPrefix0x } from '@/utils/contract'
 
+let communityIdx = 0
+
 export const useIdoCheck = () => {
   const { address } = useAccount()
   const { chainId } = useIdoContext()
@@ -30,18 +32,22 @@ export const useIdoCheck = () => {
     address: exchangeNft,
     chainId,
     functionName: 'isClaimedOfId',
-    args: [address!, BigInt(1)], // TODO: use 0 instead 1
+    args: [address!, BigInt(communityIdx)],
+    query: { enabled: !isKol },
   })
+  const cId = BigNumber(communityId.toString())
+
   const { data: community } = useQuery({
-    queryKey: [allianceApi.getCommunityDetail.name],
+    queryKey: [allianceApi.getCommunityDetail.name, cId.toString(), address],
     queryFn: () => {
       return allianceApi.getCommunityDetail({
         identity: addPrefix0x([communityId.toString(16)])[0],
       })
     },
     select: ({ data }) => data,
-    enabled: !BigNumber(communityId.toString()).isZero(),
+    enabled: !cId.isZero() && !isKol,
   })
+  console.log('community', communityIdx, communityId, community?.name)
 
   return {
     kolTokenId,

@@ -34,7 +34,7 @@ export const useIdo = (onFinally?: () => void) => {
     hash,
     onLoading: () => toast.loading(t('tx.waiting')),
     onError: ({ message }) => IDO_ERR.message(message),
-    onSuccess: () => toast.success(t('ido.tx.success')),
+    onSuccess: () => toast.success(t('tx.success')),
     onFillay: () => {
       reset()
       onFinally?.()

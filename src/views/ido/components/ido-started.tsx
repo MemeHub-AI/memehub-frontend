@@ -25,13 +25,12 @@ export const IdoStarted = () => {
     isExpired,
     reserveSymbol,
     progress,
-    status,
   } = useIdoContext()
   const { isKol, community } = useIdoCheck()
   const { userInfo } = useUserStore()
 
   return (
-    <>
+    <div className="mb-3 z-10">
       <div className="w-full">
         <Progress
           className="h-5 mt-3 rounded"
@@ -40,15 +39,15 @@ export const IdoStarted = () => {
         />
         <div className="flex items-center justify-between">
           <span>
-            {fmt.decimals(currentReserveAmount)} {reserveSymbol}
+            {fmt.decimals(currentReserveAmount, { fixed: 3 })} {reserveSymbol}
           </span>
           <span>
-            {totalReserveAmount} {reserveSymbol}
+            {fmt.decimals(totalReserveAmount)} {reserveSymbol}
           </span>
         </div>
       </div>
 
-      {isActive && !isExpired && <JoinInput />}
+      {isActive && !isExpired && (isKol || community) && <JoinInput />}
 
       {isActive && isExpired && (
         <div className="font-bold mt-4">
@@ -76,7 +75,7 @@ export const IdoStarted = () => {
       <p className="text-sm text-zinc-500 mt-3">{t('ido.policy1')}</p>
       <p className="text-sm text-zinc-500 my-1">{t('ido.policy2')}</p>
       {isKol && (
-        <div className="text-zinc-500 text-sm z-10 space-y-1">
+        <div className="text-zinc-500 text-sm space-y-1">
           <p>
             {t('ido.detect-kol')
               .split('$')[0]
@@ -88,7 +87,7 @@ export const IdoStarted = () => {
         </div>
       )}
       {!isKol && community && (
-        <div className="text-zinc-500 text-sm z-10 space-y-1">
+        <div className="text-zinc-500 text-sm space-y-1">
           <p>
             {t('ido.detect-cmnt')
               .split('$')[0]
@@ -102,7 +101,7 @@ export const IdoStarted = () => {
           </p>
         </div>
       )}
-    </>
+    </div>
   )
 }
 
