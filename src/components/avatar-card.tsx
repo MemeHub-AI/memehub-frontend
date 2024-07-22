@@ -45,7 +45,7 @@ export const AvatarCard = ({
           variant={avatarVaiant}
           alt="logo"
           className={cn(
-            'w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white',
+            'w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white select-none',
             avatarClass,
           )}
           onClick={() => setOpen(true)}

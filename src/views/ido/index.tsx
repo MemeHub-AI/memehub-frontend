@@ -62,7 +62,7 @@ export const IdoPage = () => {
             alt="poster"
             className={cn(
               'w-52 absolute -right-24 -bottom-10 z-0 border-4 border-white rounded -rotate-[65deg]',
-              'sm:w-52 sm:-right-16 sm:-bottom-12',
+              'sm:w-52 sm:-right-16 sm:-bottom-12 select-none',
             )}
           />
 
