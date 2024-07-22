@@ -47,7 +47,7 @@ export const IdoPage = () => {
         poolId,
       }}
     >
-      <main className="bg-orange-500 min-h-body px-3 pt-3 overflow-hidden">
+      <main className="bg-orange-500 min-h-body p-3 overflow-hidden">
         <AvatarCard
           src="/images/ido/trump.jpeg"
           border="none"

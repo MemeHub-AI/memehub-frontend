@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
@@ -89,11 +90,12 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     ? BigNumber(userAmount).div(totalReserveAmount).multipliedBy(100).toFixed(2)
     : BigNumber(userAmount).multipliedBy(userWeight).div(totalWeight).toFixed(2)
 
-  const idoProgress = BigNumber(raisedReserveAmount)
-    .div(totalReserveAmount)
-    .multipliedBy(100)
-    .toFixed(2)
-  const progress = BigNumber(idoProgress).isNaN() ? 0 : idoProgress
+  const progress = useMemo(() => {
+    const p = BigNumber(raisedReserveAmount)
+      .div(totalReserveAmount)
+      .multipliedBy(100)
+    return p.isNaN() ? 0 : p.toFixed(2)
+  }, [pools])
 
   const refetchIdoInfo = () => {
     refetchUserInfo()
