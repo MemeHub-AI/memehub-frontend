@@ -4,6 +4,7 @@ import dayjs from 'dayjs'
 import { useIdoInfo } from '@/views/ido/hooks/use-ido-info'
 import { TokenCard } from './token-cards/card'
 import { UserCoinsCreated } from '@/api/user/types'
+import { idoChainId, idoPoolId } from '@/views/ido'
 
 const card = {
   id: 12380192830921,
@@ -29,7 +30,7 @@ const card = {
 } as UserCoinsCreated
 
 export const IdoCard = () => {
-  const { progress } = useIdoInfo()
+  const { progress } = useIdoInfo(idoChainId, idoPoolId)
 
   return (
     <TokenCard

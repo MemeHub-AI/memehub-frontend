@@ -10,11 +10,17 @@ import { useIdoClaimed } from '../hooks/use-ido-claimed'
 
 export const EndedButtons = () => {
   const { t } = useTranslation()
-  const { userAmount, reserveSymbol, isCanceled, refetchIdoInfo } =
-    useIdoContext()
+  const {
+    userAmount,
+    reserveSymbol,
+    isCanceled,
+    chainId,
+    poolId,
+    refetchIdoInfo,
+  } = useIdoContext()
   const { isLoading, claim, refund } = useIdo(refetchIdoInfo)
   const { tokenAmount, reserveAmount, isClaimedToken, isClaimedReserve } =
-    useIdoClaimed()
+    useIdoClaimed(chainId, poolId)
   const disableClaim =
     isLoading || isClaimedToken || BigNumber(tokenAmount).lte(0)
   const disableRefund =

@@ -5,6 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import { BI_ZERO } from '@/constants/number'
 import { idoAbi } from '@/contract/v3/abi/ido'
 import { v3Addr } from '@/contract/v3/address'
+import { useIdoClaimed } from './use-ido-claimed'
 
 export enum IdoStatus {
   Active,
@@ -12,9 +13,14 @@ export enum IdoStatus {
   Canceled,
 }
 
-export const useIdoInfo = (chainId = 0, poolId = 0) => {
+export const useIdoInfo = (chainId: number, poolId: number) => {
   const { address } = useAccount()
   const { ido } = v3Addr[chainId] ?? {}
+
+  const { isClaimedReserve, refetchClaimedReserve } = useIdoClaimed(
+    chainId,
+    poolId,
+  )
 
   const {
     data: userInfo = [],
@@ -38,7 +44,7 @@ export const useIdoInfo = (chainId = 0, poolId = 0) => {
     args: [address!, [], BigInt(0)],
     query: { enabled: !!address },
   })
-  const userWeight = BigNumber(deposit.toString()).isZero()
+  const userWeight = BigNumber(userAmount).isZero()
     ? initUserWeight.toString()
     : weight.toString()
 
@@ -64,29 +70,34 @@ export const useIdoInfo = (chainId = 0, poolId = 0) => {
     ethBalance = BI_ZERO,
     totalEthAmount = BI_ZERO,
     weightSum = BI_ZERO,
+    raisedEthAmount = BI_ZERO,
   ] = pools
   const isActive = status === IdoStatus.Active
   const isEnded = status === IdoStatus.Ended
   const isCanceled = status === IdoStatus.Canceled
   const totalWeight = formatEther(weightSum)
-  // userQuota = deposit * weight / weightSum
-  const userQuota = BigNumber(userAmount)
-    .multipliedBy(userWeight)
-    .div(totalWeight)
-    .toFixed()
   const currentReserveAmount = formatEther(ethBalance)
   const totalReserveAmount = formatEther(totalEthAmount)
-  const idoProgress = BigNumber(currentReserveAmount)
+  const userMax = formatEther(perUserLimit)
+  const raisedReserveAmount = formatEther(raisedEthAmount)
+
+  // claimed: deposit / totalEthAmount * 100
+  // unclaimed: deposit * weight / weightSum
+  const userQuota = isClaimedReserve
+    ? BigNumber(userAmount).div(totalReserveAmount).multipliedBy(100).toFixed(2)
+    : BigNumber(userAmount).multipliedBy(userWeight).div(totalWeight).toFixed(2)
+
+  const idoProgress = BigNumber(raisedReserveAmount)
     .div(totalReserveAmount)
     .multipliedBy(100)
     .toFixed(2)
   const progress = BigNumber(idoProgress).isNaN() ? 0 : idoProgress
-  const userMax = formatEther(perUserLimit)
-  const userRemain = BigNumber(userMax).minus(formatEther(deposit)).toFixed()
+  const userRemain = BigNumber(userMax).minus(userAmount).toFixed()
 
   const refetchIdoInfo = () => {
     refetchUserInfo()
     refetchPools()
+    refetchClaimedReserve()
   }
 
   return {
@@ -106,6 +117,7 @@ export const useIdoInfo = (chainId = 0, poolId = 0) => {
     userQuota,
     currentReserveAmount,
     totalReserveAmount,
+    raisedReserveAmount,
     progress,
     userMax,
     userRemain,

@@ -14,7 +14,7 @@ import { utilLang } from '@/utils/lang'
 export const IdoStarted = () => {
   const { t } = useTranslation()
   const {
-    currentReserveAmount,
+    raisedReserveAmount,
     totalReserveAmount,
     userAmount,
     userWeight,
@@ -39,7 +39,7 @@ export const IdoStarted = () => {
         />
         <div className="flex items-center justify-between">
           <span>
-            {fmt.decimals(currentReserveAmount, { fixed: 3 })} {reserveSymbol}
+            {fmt.decimals(raisedReserveAmount, { fixed: 3 })} {reserveSymbol}
           </span>
           <span>
             {fmt.decimals(totalReserveAmount)} {reserveSymbol}

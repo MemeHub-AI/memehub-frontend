@@ -13,13 +13,13 @@ import { IdoStarted } from './components/ido-started'
 import { Countdown } from '@/components/countdown'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 
-const chainId = 56
+export const idoChainId = 56
 const reserveSymbol = 'BNB'
-const poolId = 1
+export const idoPoolId = 1
 
 export const IdoPage = () => {
   const { t } = useTranslation()
-  const idoInfo = useIdoInfo(chainId, poolId)
+  const idoInfo = useIdoInfo(idoChainId, idoPoolId)
   const { startAt, endAt } = idoInfo
   const [isExpired, setIsExpired] = useState(false)
   const { isConnected, checkForConnect } = useCheckAccount()
@@ -34,9 +34,9 @@ export const IdoPage = () => {
       value={{
         ...idoInfo,
         isExpired,
-        chainId,
+        chainId: idoChainId,
         reserveSymbol,
-        poolId,
+        poolId: idoPoolId,
       }}
     >
       <main className="bg-orange-500 min-h-body px-3 pt-3 overflow-hidden">
