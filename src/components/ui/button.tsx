@@ -4,7 +4,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 import { shadowVariants, ShadowVariantsProps } from '@/styles/variants'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 const buttonVariants = cva(
   cn(
@@ -12,7 +12,7 @@ const buttonVariants = cva(
     'rounded-md text-sm font-medium transition-colors',
     'focus-visible:outline-none focus-visible:ring-1',
     'focus-visible:ring-ring disabled:pointer-events-none',
-    'disabled:opacity-50 transition-all duration-100 bg-white'
+    'disabled:opacity-50 transition-all duration-100 bg-white',
   ),
   {
     variants: {
@@ -27,12 +27,13 @@ const buttonVariants = cva(
         ghost: 'border-transparent hover:bg-zinc-100',
         link: 'text-primary underline-offset-4 hover:underline text-white bg-black',
         warning: 'bg-orange-500 text-primary-foreground hover:bg-orange-500/90',
+        yellow: 'bg-yellow-200 border-2 border-black hover:bg-yellow-200/90',
       },
       size: {
         default: 'h-9 px-4 py-2',
         xs: 'h-6 rounded px-2 text-xs',
         sm: 'h-8 rounded-md px-3 text-xs',
-        lg: 'h-10 rounded-md px-8',
+        lg: 'h-10 rounded-md px-8 text-lg',
         icon: 'h-9 w-9',
         'icon-sm': 'h-8 w-8',
         'icon-xs': 'h-6 w-6 text-xs',
@@ -42,7 +43,7 @@ const buttonVariants = cva(
       variant: 'outline',
       size: 'default',
     },
-  }
+  },
 )
 
 export interface ButtonProps
@@ -64,26 +65,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       ...restProps
     } = props
     const Comp = asChild ? Slot : 'button'
+    const { playGua } = useAudioPlayer()
 
-    const { playAudio } = useAudioPlayer()
-
-    const PlayAudio = (event: React.MouseEvent<HTMLButtonElement>) => {
-      playAudio('/audio/gua.mp3')
-      if (onClick) onClick(event)
-    }
     return (
       <Comp
         ref={ref}
         className={cn(
           buttonVariants({ variant, size, className }),
           shadowVariants({ shadow }),
-          'min-w-5'
+          'min-w-5',
         )}
-        onClick={(event) => PlayAudio(event)}
+        onClick={(e) => {
+          playGua()
+          onClick?.(e)
+        }}
         {...restProps}
       />
     )
-  }
+  },
 )
 Button.displayName = 'Button'
 

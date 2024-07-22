@@ -17,6 +17,7 @@ const baseHeight = {
   footer: '64px',
   18: '4.5rem',
   42: '10.5rem',
+  100: '26rem',
 }
 
 const config = {

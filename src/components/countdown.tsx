@@ -11,12 +11,15 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 
 interface Props extends Omit<ComponentProps<'p'>, 'prefix'> {
+  /** unit is seconds */
   createdAt: number
+  /** unit is seconds */
   duration: number
   onExpired?: (value: boolean) => void
   expiredText?: string
   keepZero?: boolean
   prefix?: ReactNode
+  onInitExpired?: (value: boolean) => void
 }
 
 export const Countdown = ({
@@ -27,6 +30,7 @@ export const Countdown = ({
   keepZero,
   prefix,
   onExpired,
+  onInitExpired,
 }: Props) => {
   const { t } = useTranslation()
   const [countdown, setCountdown] = useState('')
@@ -37,7 +41,10 @@ export const Countdown = ({
   }, [createdAt, duration])
 
   const updateCountdown = () => {
-    if (createdAt <= 0 || duration <= 0) return
+    if (createdAt <= 0 || duration <= 0) {
+      onInitExpired?.(true)
+      return
+    }
 
     const currentTime = dayjs()
     const diff = targetTime.diff(currentTime, 'second')

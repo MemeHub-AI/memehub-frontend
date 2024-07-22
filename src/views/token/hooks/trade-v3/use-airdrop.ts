@@ -14,7 +14,7 @@ import { MarketType } from '@/api/token/types'
 import { addPrefix0x } from '@/utils/contract'
 import { useTradeSearchParams } from '../use-search-params'
 import { useAirdropStore } from '@/stores/use-airdrop'
-import { useCheckChain } from '@/hooks/use-check-chain'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 import { bottomLeft } from '@/config/toast'
 import { useLogin } from '@/hooks/use-login'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
@@ -25,7 +25,7 @@ import { DeviceWidth } from '@/hooks/use-responsive'
 export const useAirdrop = (
   id: number = 0,
   type_list: string,
-  onFinlly?: () => void
+  onFinlly?: () => void,
 ) => {
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -34,9 +34,9 @@ export const useAirdrop = (
   const { setIsCalimingAirdrop } = useAirdropStore()
   const [isClaim, setIsCalim] = useState(false)
   const [isBurning, setBurning] = useState(false)
-  const { checkForChain } = useCheckChain()
+  const { checkForChain } = useCheckAccount()
   const { checkForLogin } = useLogin()
-  const { playAudio } = useAudioPlayer()
+  const { playFire } = useAudioPlayer()
 
   const { distributor } = v3Addr[chainId] ?? {}
   const toastConfig =
@@ -85,7 +85,7 @@ export const useAirdrop = (
         setBurning(false)
       },
       onSuccess: () => {
-        playAudio('/audio/fire.mp3')
+        playFire()
         setBurning(false)
       },
     },
@@ -99,12 +99,12 @@ export const useAirdrop = (
     onError: () =>
       toast.error(
         isClaim ? t('airdrop.claim.failed') : t('airdrop.burn.failed'),
-        toastConfig
+        toastConfig,
       ),
     onSuccess: () =>
       toast.success(
         isClaim ? t('airdrop.claim.success') : t('airdrop.burn.success'),
-        toastConfig
+        toastConfig,
       ),
     onFillay: () => {
       setBurning(false)

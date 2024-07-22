@@ -8,9 +8,9 @@ interface Options {
   onLoading?: () => void
   onFetching?: () => void
   onSuccess?: (
-    data: ReturnType<typeof useWaitForTransactionReceipt>['data']
+    data: ReturnType<typeof useWaitForTransactionReceipt>['data'],
   ) => void
-  onError?: (error: WaitForTransactionReceiptErrorType | null) => void
+  onError?: (error: WaitForTransactionReceiptErrorType) => void
   onFillay?: () => void
 }
 

@@ -22,6 +22,7 @@ interface Props extends ComponentProps<typeof Card> {
   descClass?: string
   idoCreateAt?: number
   idoDuration?: number
+  idoProgress?: number | string
 }
 
 export const TokenCard = (props: Props) => {
@@ -32,6 +33,7 @@ export const TokenCard = (props: Props) => {
     onClick,
     idoCreateAt,
     idoDuration,
+    idoProgress,
     ...restProps
   } = props
   const router = useRouter()
@@ -44,14 +46,14 @@ export const TokenCard = (props: Props) => {
 
   const { progress, isGrauated } = useTokenProgressV3(
     card.address as Address,
-    Number(card.chain.id)
+    Number(card.chain.id),
   )
 
   return (
     <Card
       className={cn(
         'flex items-stretch overflow-hidden gap-2 relative max-sm:gap-0',
-        className
+        className,
       )}
       onClick={(e) => {
         if (isIdo) {
@@ -98,7 +100,7 @@ export const TokenCard = (props: Props) => {
               'text-zinc-500 text-sm break-all line-clamp-2 xl:line-clamp-3',
               isGrauated && 'line-clamp-4 xl:line-clamp-5',
               isIdo && 'line-clamp-2 xl:line-clamp-3',
-              descClass
+              descClass,
             )}
           >
             {card?.desc}
@@ -112,13 +114,14 @@ export const TokenCard = (props: Props) => {
               createdAt={idoCreateAt}
               duration={idoDuration}
               onExpired={setIsExpired}
+              onInitExpired={setIsExpired}
             />
           </div>
         ) : (
           <Progress
             className="h-5 self-end w-full"
             indicatorClass={isIdo ? 'bg-orange-500' : 'bg-green-500'}
-            value={isGrauated ? 100 : progress}
+            value={idoProgress || (isGrauated ? 100 : progress)}
           />
         )}
       </div>

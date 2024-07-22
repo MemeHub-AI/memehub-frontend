@@ -33,3 +33,9 @@ export interface CommunityListItem {
   related_link: null | number
   kol: KolListItem | null
 }
+
+export interface CommunityReq {
+  id?: string
+  identity?: string
+  token_id?: number
+}

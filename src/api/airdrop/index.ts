@@ -14,28 +14,28 @@ import { qs } from '@/hooks/use-fetch'
 export const airdropApi = {
   getList: (query: PaginationReq) => {
     return api.GET<ApiResponse<PaginationRes<AirdropItem>>>(
-      '/api/v1/airdrop/airdrop_list' + qs.stringify(query)
+      '/api/v1/airdrop/airdrop_list' + qs.stringify(query),
     )
   },
-  /** @depreacted */
+  /** @deprecated */
   getMerkleRoot: (req: AirdropMerkleRootReq) => {
     return api.GET<ApiResponse<AirdropMerkleRootRes>>(
-      '/api/v1/airdrop/generate_root/' + qs.stringify(req)
+      '/api/v1/airdrop/generate_root/' + qs.stringify(req),
     )
   },
-  /** @depreacted */
+  /** @deprecated */
   getProof: (req: AirdropProofReq) => {
     return api.GET<ApiResponse<AirdropProofRes>>(
-      '/api/v1/airdrop/get_proof/' + qs.stringify(req)
+      '/api/v1/airdrop/get_proof/' + qs.stringify(req),
     )
   },
-  /** @depreacted */
+  /** @deprecated */
   getIdentityList: () => {
     return api.GET<ApiResponse<IdentityList>>('/api/v1/airdrop/identity')
   },
   getDetails: (req: Omit<AirdropProofReq, 'type_list'>) => {
     return api.GET<ApiResponse<AirdropItem[]>>(
-      '/api/v1/airdrop/get_airdrop_detail/' + qs.stringify(req)
+      '/api/v1/airdrop/get_airdrop_detail/' + qs.stringify(req),
     )
   },
 }

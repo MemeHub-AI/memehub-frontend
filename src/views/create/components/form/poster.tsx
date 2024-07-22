@@ -1,3 +1,10 @@
+import { LuRefreshCcw } from 'react-icons/lu'
+import { useTranslation } from 'react-i18next'
+import { useEffect, useState } from 'react'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
+import { toast } from 'sonner'
+import { Router } from 'next/router'
+
 import { Button } from '@/components/ui/button'
 import {
   FormItem,
@@ -7,19 +14,13 @@ import {
   FormField,
 } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
-import { LuRefreshCcw } from 'react-icons/lu'
 import { useCreateTokenForm } from '../../hooks/use-form'
-import { useTranslation } from 'react-i18next'
-import { useEffect, useState } from 'react'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6'
 import { Dialog } from '@/components/ui/dialog'
 import { aiApi } from '@/api/ai'
-import { toast } from 'sonner'
-import { Router } from 'next/router'
 import { useUserStore } from '@/stores/use-user-store'
 import { useWalletStore } from '@/stores/use-wallet-store'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -35,7 +36,7 @@ export const PosterForm = ({ formData }: Props) => {
 
   const { t } = useTranslation()
   const { loadingPoster, setLoadingPoster } = useAimemeInfoStore()
-  const { playAudio } = useAudioPlayer()
+  const { playGuaGua } = useAudioPlayer()
   const createPoster = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
@@ -93,7 +94,7 @@ export const PosterForm = ({ formData }: Props) => {
           name: form.getValues(formFields?.fullname) as string,
           description: form.getValues(formFields?.description) as string,
         },
-        memePosterSign.signal
+        memePosterSign.signal,
       )
       .then(({ data }) => {
         if (data) {
@@ -110,7 +111,7 @@ export const PosterForm = ({ formData }: Props) => {
 
   useEffect(() => {
     if (loadingPoster) {
-      playAudio('/audio/guagua.mp3')
+      playGuaGua()
       fetchMemePoster()
     }
   }, [loadingPoster])
@@ -143,7 +144,7 @@ export const PosterForm = ({ formData }: Props) => {
                       <LuRefreshCcw
                         className={cn(
                           'ml-2',
-                          loadingPoster ? 'animate-spin' : 'cursor-pointer'
+                          loadingPoster ? 'animate-spin' : 'cursor-pointer',
                         )}
                         title="Regenerate"
                         onClick={createPoster}
@@ -168,7 +169,7 @@ export const PosterForm = ({ formData }: Props) => {
                               'flex-shrink-0 rounded-md overflow-hidden cursor-pointer',
                               i < 2
                                 ? 'w-[133px] h-[153px]'
-                                : 'w-[233px] h-[153px]'
+                                : 'w-[233px] h-[153px]',
                             )}
                             onClick={() => {
                               setShowPoster(true)
@@ -207,7 +208,7 @@ export const PosterForm = ({ formData }: Props) => {
               index < 2
                 ? 'w-[422px] h-[645px] max-h-[70vh] max-sm:h-[85%]'
                 : 'w-[422px] h-[295px] max-h-[70vh] max-sm:h-[85%]',
-              'rounded-md mb-4 select-none object-cover'
+              'rounded-md mb-4 select-none object-cover',
             )}
           />
           <div className="flex justify-center">
@@ -218,12 +219,12 @@ export const PosterForm = ({ formData }: Props) => {
                     key={item}
                     className={cn(
                       'w-[10px] h-[10px] mx-2 rounded-full cursor-pointer',
-                      i === index ? 'bg-black' : 'bg-gray-300'
+                      i === index ? 'bg-black' : 'bg-gray-300',
                     )}
                     onClick={() => setIndex(i)}
                   ></div>
                 )
-              }
+              },
             )}
           </div>
           <div
@@ -232,7 +233,7 @@ export const PosterForm = ({ formData }: Props) => {
               open(
                 (form?.getValues(formFields?.poster!) as string[])[
                   index
-                ].replace('mini', 'origin')
+                ].replace('mini', 'origin'),
               )
             }
           >

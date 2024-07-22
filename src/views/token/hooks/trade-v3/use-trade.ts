@@ -2,6 +2,8 @@ import { useAccount, useWriteContract } from 'wagmi'
 import { formatEther, isAddress, parseEther } from 'viem'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
 import { DexTradeProps } from '../trade-dex/use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -12,8 +14,6 @@ import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
 import { usePools } from '../use-pools'
 import { utilLang } from '@/utils/lang'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 import { v3Addr } from '@/contract/v3/address'
 import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
 
@@ -58,13 +58,9 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     return true
   }
 
-  const buy = async (
-    amount: string,
-    slippage: string,
-    setValue?: (v: string) => void
-  ) => {
+  const buy = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGrauated) return dexBuy(amount, tokenAddr, slippage)
+    if (isGrauated) return dexBuy(tokenAddr, amount, slippage)
 
     const nativeAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
@@ -74,16 +70,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     }
 
     const { isOverflow, current } = await checkForOverflow(amount)
-
-    if (isOverflow) {
-      getLastOrderAmount(current).then((value) => {
-        setValue?.(value)
-        toast.warning(
-          utilLang.replace(t('trade.limit'), [value, t('trade.buy')])
-        )
-      })
-      return
-    }
+    if (isOverflow) return getLastOrderAmount(current)
 
     console.log('v3 buy', getReferrals(), current)
     writeContract({
@@ -105,7 +92,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGrauated) return dexSell(amount, tokenAddr, slippage)
+    if (isGrauated) return dexSell(tokenAddr, amount, slippage)
 
     const nativeAmount = formatEther(await getNativeAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {
