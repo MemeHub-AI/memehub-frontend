@@ -14,21 +14,22 @@ import { Countdown } from '@/components/countdown'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 
 export const idoChainId = 56
+export const idoPoolId = 2
 const reserveSymbol = 'BNB'
-export const idoPoolId = 1
 
 export const IdoPage = () => {
   const { t } = useTranslation()
   const idoInfo = useIdoInfo(idoChainId, idoPoolId)
-  const { startAt, endAt } = idoInfo
+  const { startAt, endAt, status } = idoInfo
   const [isExpired, setIsExpired] = useState(false)
   const { isConnected, checkForConnect } = useCheckAccount()
   const [isStart, setIsStart] = useState(false)
-
   const [isStarted, duration] = useMemo(
     () => [dayjs(startAt * 1000).diff() <= 0, endAt - startAt],
     [startAt, isStart],
   )
+
+  console.log('ido status', status)
 
   return (
     <IdoProvider
@@ -45,7 +46,10 @@ export const IdoPage = () => {
           src="/images/ido/trump.jpeg"
           border="none"
           avatarClass="!border-orange-500"
-          className="flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32 min-h-100"
+          className={cn(
+            'flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32',
+            isStart ? 'min-h-100' : 'min-h-96',
+          )}
         >
           <img
             src="/images/ido/fight.jpeg"

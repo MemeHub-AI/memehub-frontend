@@ -47,7 +47,6 @@ export const useIdoCheck = () => {
     select: ({ data }) => data,
     enabled: !cId.isZero() && !isKol,
   })
-  console.log('community', communityIdx, communityId, community?.name)
 
   return {
     kolTokenId,

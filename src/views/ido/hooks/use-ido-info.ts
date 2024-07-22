@@ -63,7 +63,7 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
   const [
     tokenAddress,
     tokenAmount,
-    status,
+    status = 0,
     startAt = 0,
     endAt = 0,
     perUserLimit = BI_ZERO,
@@ -78,8 +78,9 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
   const totalWeight = formatEther(weightSum)
   const currentReserveAmount = formatEther(ethBalance)
   const totalReserveAmount = formatEther(totalEthAmount)
-  const userMax = formatEther(perUserLimit)
   const raisedReserveAmount = formatEther(raisedEthAmount)
+  const userMax = formatEther(perUserLimit)
+  const userRemain = BigNumber(userMax).minus(userAmount).toFixed()
 
   // claimed: deposit / totalEthAmount * 100
   // unclaimed: deposit * weight / weightSum
@@ -92,7 +93,6 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     .multipliedBy(100)
     .toFixed(2)
   const progress = BigNumber(idoProgress).isNaN() ? 0 : idoProgress
-  const userRemain = BigNumber(userMax).minus(userAmount).toFixed()
 
   const refetchIdoInfo = () => {
     refetchUserInfo()

@@ -19,6 +19,7 @@ interface Props extends Omit<ComponentProps<'p'>, 'prefix'> {
   expiredText?: string
   keepZero?: boolean
   prefix?: ReactNode
+  onInitExpired?: (value: boolean) => void
 }
 
 export const Countdown = ({
@@ -29,6 +30,7 @@ export const Countdown = ({
   keepZero,
   prefix,
   onExpired,
+  onInitExpired,
 }: Props) => {
   const { t } = useTranslation()
   const [countdown, setCountdown] = useState('')
@@ -39,7 +41,10 @@ export const Countdown = ({
   }, [createdAt, duration])
 
   const updateCountdown = () => {
-    if (createdAt <= 0 || duration <= 0) return
+    if (createdAt <= 0 || duration <= 0) {
+      onInitExpired?.(true)
+      return
+    }
 
     const currentTime = dayjs()
     const diff = targetTime.diff(currentTime, 'second')

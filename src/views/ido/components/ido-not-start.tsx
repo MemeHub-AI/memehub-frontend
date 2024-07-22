@@ -27,6 +27,7 @@ export const IdoNotStart = ({ onExpired }: Props) => {
           createdAt={startAt}
           duration={startAt - dayjs().unix()}
           onExpired={onExpired}
+          className="text-black font-normal"
         />
       </div>
       <div>

@@ -770,6 +770,11 @@ export const idoAbi = [
         name: 'weightedSum',
         type: 'uint256',
       },
+      {
+        internalType: 'uint256',
+        name: 'raisedEthAmount',
+        type: 'uint256',
+      },
     ],
     stateMutability: 'view',
     type: 'function',

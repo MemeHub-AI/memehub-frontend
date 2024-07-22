@@ -114,13 +114,14 @@ export const TokenCard = (props: Props) => {
               createdAt={idoCreateAt}
               duration={idoDuration}
               onExpired={setIsExpired}
+              onInitExpired={setIsExpired}
             />
           </div>
         ) : (
           <Progress
             className="h-5 self-end w-full"
             indicatorClass={isIdo ? 'bg-orange-500' : 'bg-green-500'}
-            value={idoProgress || isGrauated ? 100 : progress}
+            value={idoProgress || (isGrauated ? 100 : progress)}
           />
         )}
       </div>
