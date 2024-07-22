@@ -82,7 +82,7 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
   const totalReserveAmount = formatEther(totalEthAmount)
   const raisedReserveAmount = formatEther(raisedEthAmount)
   const userMax = formatEther(perUserLimit)
-  const userRemain = BigNumber(userMax).minus(userAmount).toFixed()
+  const userRemaining = BigNumber(userMax).minus(userAmount).toFixed()
 
   // claimed: deposit / totalEthAmount * 100
   // unclaimed: deposit * weight / weightSum
@@ -126,6 +126,6 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     raisedReserveAmount,
     progress,
     userMax,
-    userRemain,
+    userRemaining,
   }
 }

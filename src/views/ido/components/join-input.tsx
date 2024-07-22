@@ -13,16 +13,19 @@ import { BI_ZERO } from '@/constants/number'
 import { formatEther, zeroAddress } from 'viem'
 import { fmt } from '@/utils/fmt'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 export const JoinInput = () => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
   const { refetchIdoInfo } = useIdoContext()
   const { isLoading, buy } = useIdo(refetchIdoInfo)
-  const { reserveSymbol, chainId, userRemain, pools, poolId } = useIdoContext()
+  const { reserveSymbol, chainId, userRemaining, pools, poolId } =
+    useIdoContext()
   const { address } = useAccount()
   const { data: reserveBalance } = useBalance({ address, chainId })
   const balance = formatEther(reserveBalance?.value ?? BI_ZERO)
+  const { checkForChain } = useCheckAccount()
 
   const isEmptyPools = useMemo(() => {
     const p = pools.filter((p) => p && p !== zeroAddress)
@@ -34,15 +37,15 @@ export const JoinInput = () => {
   const onChange = (value: string) => {
     const v = BigNumber(value)
     if (v.lt(0)) return
-    if (v.gt(userRemain)) {
-      setValue(userRemain)
+    if (v.gt(userRemaining)) {
+      setValue(userRemaining)
       return
     }
 
     setValue(value)
   }
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     const v = BigNumber(value)
     if (v.isNaN() || v.isZero()) {
       return CONTRACT_ERR.amountInvlid()
@@ -50,6 +53,7 @@ export const JoinInput = () => {
     if (BigNumber(balance).lt(value)) {
       return CONTRACT_ERR.balanceInsufficient()
     }
+    if (!(await checkForChain(chainId))) return
 
     buy(value)
   }
@@ -63,8 +67,8 @@ export const JoinInput = () => {
     >
       <div className="mt-3 flex items-center space-x-1">
         <Input
-          className="max-w-44 h-9"
-          inputClass="pl-2 pr-0"
+          className="max-w-48 h-9"
+          inputClass="pl-2 pr-2"
           placeholder={t('ido.input-amount')}
           endIcon={
             <span
@@ -74,13 +78,13 @@ export const JoinInput = () => {
               )}
               onClick={() => {
                 if (isLoading) return
-                if (BigNumber(balance).lt(userRemain)) {
+                if (BigNumber(balance).lt(userRemaining)) {
                   return setValue(balance)
                 }
-                setValue(userRemain)
+                setValue(userRemaining)
               }}
             >
-              {t('max')}({BigNumber(userRemain).toFixed(2)})
+              {t('max')}({fmt.decimals(userRemaining)})
             </span>
           }
           value={value}
