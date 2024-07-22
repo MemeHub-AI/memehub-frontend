@@ -1,8 +1,8 @@
 import * as React from 'react'
 import * as ProgressPrimitive from '@radix-ui/react-progress'
+import { BigNumber } from 'bignumber.js'
 
 import { cn } from '@/lib/utils'
-import BigNumber from 'bignumber.js'
 
 interface Props
   extends Omit<
@@ -21,38 +21,38 @@ const Progress = React.forwardRef<
 >((props, ref) => {
   const {
     className,
-    value,
+    value = 0,
     indicatorClass,
     withLabel = true,
     labelClass,
     ...restProps
   } = props
+  const translateX = BigNumber(100).minus(value).toFixed()
+  const progress = BigNumber(value).gt(100) ? 0 : translateX
 
   return (
     <ProgressPrimitive.Root
       ref={ref}
       className={cn(
         'relative h-2 w-full overflow-hidden rounded-full bg-primary/20',
-        className
+        className,
       )}
       {...restProps}
     >
       <ProgressPrimitive.Indicator
         className={cn(
           'h-full w-full flex-1 bg-primary transition-all',
-          indicatorClass
+          indicatorClass,
         )}
         style={{
-          transform: `translateX(-${BigNumber(100)
-            .minus(value || 0)
-            .toFixed()}%)`,
+          transform: `translateX(-${progress}%)`,
         }}
       />
       {withLabel && (
         <div
           className={cn(
             'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-sm',
-            labelClass
+            labelClass,
           )}
         >
           {value}%
