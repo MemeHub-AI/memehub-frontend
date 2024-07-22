@@ -28,7 +28,7 @@ export const AvatarCard = ({
       padding="md"
       className={cn(
         'mt-12 bg-lime-green-deep cursor-default max-sm:mt-14 relative',
-        className
+        className,
       )}
       {...props}
     >
@@ -46,8 +46,9 @@ export const AvatarCard = ({
           alt="logo"
           className={cn(
             'w-28 h-28 cursor-pointer absolute -top-16 left-1/2 -translate-x-1/2 bg-white',
-            avatarClass
+            avatarClass,
           )}
+          onClick={() => setOpen(true)}
         />
         {avatarChildren}
       </div>
