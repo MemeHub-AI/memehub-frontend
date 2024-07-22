@@ -25,7 +25,7 @@ export const JoinInput = () => {
   const { address } = useAccount()
   const { data: reserveBalance } = useBalance({ address, chainId })
   const balance = formatEther(reserveBalance?.value ?? BI_ZERO)
-  const { checkForChain } = useCheckAccount()
+  const { checkForConnect, checkForChain } = useCheckAccount()
 
   const isEmptyPools = useMemo(() => {
     const p = pools.filter((p) => p && p !== zeroAddress)
@@ -53,6 +53,7 @@ export const JoinInput = () => {
     if (BigNumber(balance).lt(value)) {
       return CONTRACT_ERR.balanceInsufficient()
     }
+    if (!checkForConnect()) return
     if (!(await checkForChain(chainId))) return
 
     buy(value)
