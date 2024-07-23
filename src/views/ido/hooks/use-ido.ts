@@ -1,4 +1,4 @@
-import { useAccount, useWriteContract } from 'wagmi'
+import { useWriteContract } from 'wagmi'
 import { parseEther } from 'viem'
 import { toast } from 'sonner'
 
@@ -12,7 +12,6 @@ import { useIdoContext } from '@/contexts/ido'
 export const useIdo = (onFinally?: () => void) => {
   const { t } = useTranslation()
   const { chainId, poolId } = useIdoContext()
-  const { address } = useAccount()
   const { ido } = v3Addr[chainId] ?? {}
 
   const {
@@ -59,7 +58,7 @@ export const useIdo = (onFinally?: () => void) => {
       address: ido!,
       chainId,
       functionName: 'claimToken',
-      args: [BigInt(poolId), address!],
+      args: [BigInt(poolId)],
     })
   }
 
@@ -69,7 +68,7 @@ export const useIdo = (onFinally?: () => void) => {
       address: ido!,
       chainId,
       functionName: 'claimEth',
-      args: [BigInt(poolId), address!],
+      args: [BigInt(poolId)],
     })
   }
 
