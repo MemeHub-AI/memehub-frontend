@@ -18,12 +18,6 @@ import { useChainsStore } from '@/stores/use-chains-store'
 import { idoTrumpLink } from '@/config/link'
 import { IdoIntro } from './components/ido-intro'
 
-const DEFAULT_POOL_ID = 0
-
-const DEFAULT_CHAIN_ID = 56
-
-const DEFAULT_SYMBOL = 'BNB'
-
 export const IdoPage = () => {
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
@@ -32,9 +26,9 @@ export const IdoPage = () => {
   const { chainsMap } = useChainsStore()
   const { query } = useRouter()
   const chain = (query.chain || '') as string
-  const poolId = Number(query.id || DEFAULT_POOL_ID)
-  const chainId = Number(chainsMap[chain]?.id || DEFAULT_CHAIN_ID)
-  const reserveSymbol = chainsMap[chain]?.native.symbol || DEFAULT_SYMBOL
+  const poolId = Number(query.id || 0)
+  const chainId = Number(chainsMap[chain]?.id || 56)
+  const reserveSymbol = chainsMap[chain]?.native.symbol || 'BNB'
 
   const idoInfo = useIdoInfo(chainId, poolId)
   const { startAt, endAt, status } = idoInfo
@@ -63,7 +57,7 @@ export const IdoPage = () => {
           avatarClass="!border-orange-500"
           className={cn(
             'flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32',
-            'min-h-100 mx-3'
+            'min-h-100 sm:max-w-md max-sm:mx-3'
           )}
         >
           <img

@@ -21,7 +21,7 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
 
   const { isClaimedReserve, refetchClaimedReserve } = useIdoClaimed(
     chainId,
-    poolId,
+    poolId
   )
 
   const {
