@@ -10,7 +10,7 @@ import { BI_ZERO } from '@/constants/number'
 import { useAirdropParams } from './use-airdrop-params'
 
 export const useDeployV3 = (
-  writeContract: WriteContractMutate<Config, unknown>,
+  writeContract: WriteContractMutate<Config, unknown>
 ) => {
   const { chainName, walletChainId = 0 } = useChainInfo()
   const { bondingCurve } = v3Addr[walletChainId] ?? {}
@@ -41,7 +41,6 @@ export const useDeployV3 = (
       return
     }
 
-    console.log('v3 deploy', airdropParams)
     writeContract(
       {
         abi: v3BondingCurveAbi,
@@ -51,7 +50,7 @@ export const useDeployV3 = (
         args: [name, ticker, airdropParams],
         value: creationFee,
       },
-      { onSuccess },
+      { onSuccess }
     )
   }
 

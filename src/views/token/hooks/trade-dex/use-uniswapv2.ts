@@ -15,7 +15,7 @@ import { uniswapV2Addr } from '@/contract/uniswapv2/address'
 
 export const useUniswapV2 = (
   chainId: number,
-  poolAddr: Address | undefined | null,
+  poolAddr: Address | undefined | null
 ) => {
   const { t } = useTranslation()
   const { address } = useAccount()
@@ -59,7 +59,7 @@ export const useUniswapV2 = (
   const uniswapV2Buy = async (
     token: Address,
     amount: string,
-    slippage: string,
+    slippage: string
   ) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
@@ -70,13 +70,6 @@ export const useUniswapV2 = (
       return
     }
 
-    console.log('uniswap buy', {
-      amount,
-      token,
-      address,
-      chainId,
-      slippaged: formatEther(subSlippage(tokenAmount, slippage)),
-    })
     writeContract({
       abi: uniswapV2RouterAbi,
       address: uniswapV2Address,
@@ -95,7 +88,7 @@ export const useUniswapV2 = (
   const uniswapV2Sell = async (
     token: Address,
     amount: string,
-    slippage: string,
+    slippage: string
   ) => {
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
@@ -109,14 +102,6 @@ export const useUniswapV2 = (
       return
     }
 
-    console.log('uniswap sell', {
-      amount,
-      token,
-      address,
-      chainId,
-      reserveAmount,
-      slippaged: formatEther(subSlippage(reserveAmount, slippage)),
-    })
     writeContract({
       abi: uniswapV2RouterAbi,
       address: uniswapV2Address,

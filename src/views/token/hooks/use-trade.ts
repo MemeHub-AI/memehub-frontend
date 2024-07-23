@@ -87,7 +87,6 @@ export const useTrade = () => {
       return
     }
 
-    console.log('buy', amount, slippage)
     await updateLastTrade(TradeType.Buy, amount)
     return trade?.buy(amount, slippage)
   }
@@ -100,7 +99,6 @@ export const useTrade = () => {
       return
     }
 
-    console.log('sell', amount, slippage)
     await updateLastTrade(TradeType.Sell, amount)
     return trade?.sell(amount, slippage)
   }

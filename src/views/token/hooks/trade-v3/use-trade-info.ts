@@ -11,6 +11,7 @@ import { useTradeSearchParams } from '../use-search-params'
 import { v3Addr } from '@/contract/v3/address'
 import { v3TokenAbi } from '@/contract/v3/abi/token'
 import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
+import { reportException } from '@/errors'
 
 export const useTradeInfoV3 = (overrideToken?: Address) => {
   const { chainId } = useChainInfo()
@@ -36,7 +37,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
       functionName: 'maxSupply_',
       chainId,
     }).catch((e) => {
-      console.error(e.message)
+      reportException(e)
       return BI_ZERO
     })
   }
@@ -51,7 +52,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
       chainId,
       args: [token],
     }).catch((e) => {
-      console.error(e.message)
+      reportException(e)
       return [] as const
     })
   }
@@ -66,7 +67,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
       args: [tokenAddr, parseEther(amount)],
       chainId,
     }).catch((e) => {
-      console.error(e.message)
+      reportException(e)
       return BI_ZERO
     })
     return BigInt(value)
@@ -82,7 +83,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
       chainId,
       args: [tokenAddr, parseEther(amount)],
     }).catch((e) => {
-      console.error(e.message)
+      reportException(e)
       return BI_ZERO
     })
 

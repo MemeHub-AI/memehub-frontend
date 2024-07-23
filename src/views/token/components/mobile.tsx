@@ -52,13 +52,15 @@ export const TokenMobile = () => {
    */
   const getCount = () => {
     let count = 0
-    console.log(isExpiredAPI(airdrop.communities?.create ?? 0, airdrop.communitiesAirdropInfo.durationSeconds));
-    
+
     if (
       airdrop.kol &&
       !airdrop.kolAirdropInfo.isClaimed &&
       !airdrop.kolAirdrop.isBurn &&
-      !isExpiredAPI(airdrop.kol.create ?? 0, airdrop.kolAirdropInfo.durationSeconds)
+      !isExpiredAPI(
+        airdrop.kol.create ?? 0,
+        airdrop.kolAirdropInfo.durationSeconds
+      )
     ) {
       count++
     }
@@ -66,7 +68,10 @@ export const TokenMobile = () => {
       airdrop.communities &&
       !airdrop.communitiesAirdropInfo.isClaimed &&
       !airdrop.communitiesAirdrop.isBurn &&
-      !isExpiredAPI(airdrop.communities.create ?? 0, airdrop.communitiesAirdropInfo.durationSeconds)
+      !isExpiredAPI(
+        airdrop.communities.create ?? 0,
+        airdrop.communitiesAirdropInfo.durationSeconds
+      )
     ) {
       count++
     }
@@ -104,7 +109,7 @@ export const TokenMobile = () => {
       <div className="h-[36px] mb-2">
         <div className="fixed left-0 bottom-0 w-full">
           <TabsList className="h-11 grid w-full rounded-none grid-cols-3 bg-white">
-            <TabsTrigger value={TabName.trade} className='bg-white'>
+            <TabsTrigger value={TabName.trade} className="bg-white">
               <BsArrowDownUp className="mr-1" size={16}></BsArrowDownUp>
               {t('trade.tab')}
             </TabsTrigger>
@@ -125,7 +130,7 @@ export const TokenMobile = () => {
                 </div>
               ) : null}
             </TabsTrigger>
-            <TabsTrigger value={TabName.holder} className='bg-white'>
+            <TabsTrigger value={TabName.holder} className="bg-white">
               <LuUsers className="mr-1" size={20}></LuUsers>
               {t('holder')}
             </TabsTrigger>

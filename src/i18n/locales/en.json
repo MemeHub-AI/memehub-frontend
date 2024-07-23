@@ -542,5 +542,6 @@
   "tx.submitting": "Transaction submitting...",
   "ido.tx.success": "Participation successful!",
   "already-refunded": "Already refunded",
-  "already-claimed": "Already claimed"
+  "already-claimed": "Already claimed",
+  "occurred-error": "A small error occurred, please try again later"
 }

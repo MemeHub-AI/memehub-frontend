@@ -10,6 +10,7 @@ import { useDatafeed } from './use-datafeed'
 import { useChartStore } from '@/stores/use-chart-store'
 import { chartOptions, chartOverrides } from '@/config/chart'
 import { parseInterval } from '@/utils/chart'
+import { reportException } from '@/errors'
 
 interface ChartOptions {
   symbol: string
@@ -44,8 +45,8 @@ export const useChart = () => {
         chart.applyOverrides(chartOverrides)
       })
       return chart
-    } catch (error) {
-      console.error('[createChart Erorr]:', error)
+    } catch (e) {
+      reportException(e)
     } finally {
       setIsCreating(false)
     }

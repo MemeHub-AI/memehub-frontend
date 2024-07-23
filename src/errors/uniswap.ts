@@ -2,6 +2,7 @@ import { t } from 'i18next'
 import { toast } from 'sonner'
 
 import { isUserReject } from '@/utils/contract'
+import { reportException } from '.'
 
 const ERR = {
   insufficientAmount: 'INSUFFICIENT_OUTPUT_AMOUNT'.toLowerCase(),
@@ -9,16 +10,16 @@ const ERR = {
 
 export const UNISWAP_ERR = {
   message: (msg: string) => {
-    const lower = msg.toLowerCase()
+    const m = msg.toLowerCase()
 
-    if (lower.includes(ERR.insufficientAmount)) {
+    reportException(msg)
+    if (isUserReject(m)) return
+    if (m.includes(ERR.insufficientAmount)) {
       toast.error(t('uniswapv2.err.insufficient-amount'))
       return
     }
-    if (isUserReject(lower)) return
 
-    toast.error(msg)
-    console.error(msg)
+    toast.error(t('occurred-error'))
   },
 
   reserveNotFound: () => toast.error(t('uniswapv2.err.reserve-not-found')),

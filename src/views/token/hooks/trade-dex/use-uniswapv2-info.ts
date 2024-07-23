@@ -9,6 +9,7 @@ import { BI_ZERO } from '@/constants/number'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { Tuple } from '@/utils/types'
 import { uniswapV2Addr } from '@/contract/uniswapv2/address'
+import { reportException } from '@/errors'
 
 export const useUniswapV2Info = (poolAddr?: Address | undefined | null) => {
   const { chainId } = useChainInfo()
@@ -32,7 +33,7 @@ export const useUniswapV2Info = (poolAddr?: Address | undefined | null) => {
       functionName: 'getAmountOut',
       args: [parseEther(amountIn), ...(reverse ? reversed : reservePair)],
     }).catch((e: Error) => {
-      console.error(e.message)
+      reportException(e)
       return BI_ZERO
     })
   }
@@ -47,7 +48,7 @@ export const useUniswapV2Info = (poolAddr?: Address | undefined | null) => {
       functionName: 'getAmountIn',
       args: [parseEther(amountOut), ...(reverse ? reversed : reservePair)],
     }).catch((e: Error) => {
-      console.error(e.message)
+      reportException(e)
       return BI_ZERO
     })
   }

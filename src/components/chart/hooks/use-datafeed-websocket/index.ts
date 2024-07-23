@@ -12,6 +12,7 @@ import type {
 import { wsApiURL } from '@/api/websocket'
 import { useEmitter } from '@/hooks/use-emitter'
 import { useChartStore } from '@/stores/use-chart-store'
+import { reportException } from '@/errors'
 
 const heartbetaMessage = {
   type: 'heartbeat',
@@ -48,7 +49,7 @@ export const useDatafeedWebsocket = ({
       const message = JSON.parse(e.data)
       emitter.emit(message.type, message)
     } catch (error) {
-      console.log('[onMessage JSON.parse error]:', error)
+      reportException(error)
     }
   }
 
