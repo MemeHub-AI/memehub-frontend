@@ -14,25 +14,33 @@ import { Countdown } from '@/components/countdown'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useRouter } from 'next/router'
 import { IdoTag } from '@/components/ido-tag'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { idoTrumpLink } from '@/config/link'
 
-export const idoChainId = 56
-export const idoPoolId = 0
-const reserveSymbol = 'BNB'
+const DEFAULT_POOL_ID = 0
+
+const DEFAULT_CHAIN_ID = 56
+
+const DEFAULT_SYMBOL = 'BNB'
 
 export const IdoPage = () => {
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
   const [isStart, setIsStart] = useState(false)
   const { isConnected, checkForConnect } = useCheckAccount()
+  const { chainsMap } = useChainsStore()
   const { query } = useRouter()
-  const poolId = Number(query.id || idoPoolId)
+  const chain = (query.chain || '') as string
+  const poolId = Number(query.id || DEFAULT_POOL_ID)
+  const chainId = Number(chainsMap[chain]?.id || DEFAULT_CHAIN_ID)
+  const reserveSymbol = chainsMap[chain]?.native.symbol || DEFAULT_SYMBOL
 
-  const idoInfo = useIdoInfo(idoChainId, poolId)
+  const idoInfo = useIdoInfo(chainId, poolId)
   const { startAt, endAt, status } = idoInfo
 
   const [isStarted, duration] = useMemo(
     () => [dayjs(startAt * 1000).diff() <= 0, endAt - startAt],
-    [startAt, isStart],
+    [startAt, isStart]
   )
 
   console.log('ido status', status)
@@ -42,7 +50,7 @@ export const IdoPage = () => {
       value={{
         ...idoInfo,
         isExpired,
-        chainId: idoChainId,
+        chainId,
         reserveSymbol,
         poolId,
       }}
@@ -54,7 +62,7 @@ export const IdoPage = () => {
           avatarClass="!border-orange-500"
           className={cn(
             'flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32',
-            isStart ? 'min-h-100' : 'min-h-96',
+            isStart ? 'min-h-100' : 'min-h-96'
           )}
         >
           <img
@@ -62,15 +70,15 @@ export const IdoPage = () => {
             alt="poster"
             className={cn(
               'w-52 absolute -right-24 -bottom-10 z-0 border-4 border-white rounded -rotate-[65deg]',
-              'sm:w-52 sm:-right-16 sm:-bottom-12 select-none',
+              'sm:w-52 sm:-right-16 sm:-bottom-12 select-none'
             )}
           />
 
           <h2 className="font-bold text-xl text-center">Trump407</h2>
           <TokenSocialLinks
-            x="https://x.com"
-            tg="https://t.me"
-            website="https://mememhub.ai"
+            x={idoTrumpLink.x}
+            tg={idoTrumpLink.tg}
+            website={idoTrumpLink.website}
             className="my-1 text-zinc-600"
           />
           <p>{t('ido.405')}</p>

@@ -46,12 +46,12 @@ export const TokenCard = (props: Props) => {
 
   const { progress, isGrauated } = useTokenProgressV3(
     card.address as Address,
-    Number(card.chain.id),
+    Number(card.chain.id)
   )
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isIdo) {
-      return router.push(Routes.Ido)
+      return router.push(fmt.toHref(Routes.Ido, card.chain.name, card.id))
     }
     router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
     onClick?.(e)
@@ -61,7 +61,7 @@ export const TokenCard = (props: Props) => {
     <Card
       className={cn(
         'flex items-stretch overflow-hidden gap-2 relative max-sm:gap-0',
-        className,
+        className
       )}
       onClick={handleClick}
       {...restProps}
@@ -102,7 +102,7 @@ export const TokenCard = (props: Props) => {
               'text-zinc-500 text-sm break-all line-clamp-2 xl:line-clamp-3',
               isGrauated && 'line-clamp-4 xl:line-clamp-5',
               isIdo && 'line-clamp-2 xl:line-clamp-3',
-              descClass,
+              descClass
             )}
           >
             {card?.desc}

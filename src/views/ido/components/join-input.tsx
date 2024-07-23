@@ -25,7 +25,7 @@ export const JoinInput = () => {
   const { address } = useAccount()
   const { data: reserveBalance } = useBalance({ address, chainId })
   const balance = formatEther(reserveBalance?.value ?? BI_ZERO)
-  const { checkForChain } = useCheckAccount()
+  const { checkForConnect, checkForChain } = useCheckAccount()
 
   const isEmptyPools = useMemo(() => {
     const p = pools.filter((p) => p && p !== zeroAddress)
@@ -53,6 +53,7 @@ export const JoinInput = () => {
     if (BigNumber(balance).lt(value)) {
       return CONTRACT_ERR.balanceInsufficient()
     }
+    if (!checkForConnect()) return
     if (!(await checkForChain(chainId))) return
 
     buy(value)
@@ -74,10 +75,10 @@ export const JoinInput = () => {
             <span
               className={cn(
                 'text-blue-600 text-sm mr-1 whitespace-nowrap',
-                isLoading && 'opacity-50',
+                disabeld && 'opacity-50'
               )}
               onClick={() => {
-                if (isLoading) return
+                if (disabeld) return
                 if (BigNumber(balance).lt(userRemaining)) {
                   return setValue(balance)
                 }
@@ -101,7 +102,7 @@ export const JoinInput = () => {
       </p>
       <Button
         variant="yellow"
-        className="mt-3 w-min"
+        className="mt-3 w-min select-none"
         size="lg"
         shadow="none"
         disabled={disabeld}

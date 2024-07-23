@@ -6,13 +6,19 @@ type ChainsMap = Record<string | number, ChainData | undefined>
 
 interface ChainsStore {
   chains: ChainData[]
+  /**
+   * @example example for find a chain.
+   * ```ts
+   * const chain1 = chainsMap[56]
+   * const chain2 = chainsMap['bsc']
+   * ```
+   */
   chainsMap: ChainsMap
   loadingChains: boolean
 
   setChains: (chains: ChainData[]) => void
   setChainsMap: (chains: ChainData[]) => void
-  /*** @deprecated use `chainsMap` to instead. **/
-  findChain: (nameOrId: string | number | undefined) => ChainData | undefined
+  /** If you want to find a single chain, please use `chainsMap` */
   findChains: (namOrIds: (string | number | undefined)[]) => ChainData[]
 }
 
@@ -29,6 +35,7 @@ export const useChainsStore = create<ChainsStore>((set, get) => ({
   },
   setChainsMap: (allChains) => {
     const chains = allChains.filter((c) => c.is_supported)
+    // Trade space for time.
     const chainsMap = chains.reduce((acc, cur) => {
       acc[cur.id] = cur
       acc[cur.name] = cur
@@ -37,21 +44,15 @@ export const useChainsStore = create<ChainsStore>((set, get) => ({
 
     set({ chainsMap, loadingChains: false })
   },
-  findChain: (nameOrId) => {
-    if (!nameOrId) return
-    const { chains } = get()
-    const ni = String(nameOrId)
-
-    return chains.find((chain) => chain.name === ni || chain.id === ni)
-  },
   findChains: (nameOrIds) => {
-    const { chains } = get()
+    const { chainsMap } = get()
+    const chains: ChainData[] = []
 
-    return chains.filter((chain) => {
-      return nameOrIds.some((n) => {
-        const ni = String(n)
-        return chain.id === ni || chain.name === ni
-      })
-    })
+    for (let i = 0; i < nameOrIds.length; i++) {
+      const key = nameOrIds[i]
+      if (key && chainsMap[key]) chains.push(chainsMap[key])
+    }
+
+    return chains
   },
 }))

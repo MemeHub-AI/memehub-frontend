@@ -4,10 +4,9 @@ import dayjs from 'dayjs'
 import { useIdoInfo } from '@/views/ido/hooks/use-ido-info'
 import { TokenCard } from './token-cards/card'
 import { UserCoinsCreated } from '@/api/user/types'
-import { idoChainId, idoPoolId } from '@/views/ido'
 
 const card = {
-  id: 12380192830921,
+  id: 5,
   image: '/images/ido/trump.jpeg',
   address: '',
   name: 'Trump407',
@@ -22,6 +21,7 @@ const card = {
   market_cap: 0,
   total_replies: 0,
   chain: {
+    id: '56',
     name: 'bsc',
     displayName: 'BNB',
     logo: '/images/bsc.svg',
@@ -30,7 +30,7 @@ const card = {
 } as UserCoinsCreated
 
 export const IdoCard = () => {
-  const { startAt, progress } = useIdoInfo(idoChainId, idoPoolId)
+  const { startAt, progress } = useIdoInfo(Number(card.chain.id), card.id)
 
   return (
     <TokenCard

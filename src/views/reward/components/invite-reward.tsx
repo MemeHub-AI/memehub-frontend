@@ -42,9 +42,9 @@ const InviteCard = ({ c }: { c: ChainData }) => {
   const { t } = useTranslation()
   const { totalAmount, unclaimedAmount, isClaiming, isClaimed, claimReward } =
     useReward(Number(c.id))
-  const { findChain } = useChainsStore()
-  const chain = useMemo(() => findChain(c.id), [c])
+  const { chainsMap } = useChainsStore()
 
+  const { native } = chainsMap[c.id] ?? {}
   const disabeld = isClaiming || isClaimed
 
   return (
@@ -57,7 +57,7 @@ const InviteCard = ({ c }: { c: ChainData }) => {
       <div className="mt-3">
         <p>{t('reward.invite.total-earned')}</p>
         <span className="text-2xl font-bold">{fmt.decimals(totalAmount)}</span>
-        <span className="ml-2">{chain?.native.symbol}</span>
+        <span className="ml-2">{native?.symbol}</span>
       </div>
 
       <div className="mt-3">
@@ -65,7 +65,7 @@ const InviteCard = ({ c }: { c: ChainData }) => {
         <span className="text-2xl font-bold">
           {fmt.decimals(unclaimedAmount)}
         </span>
-        <span className="ml-2">{chain?.native.symbol}</span>
+        <span className="ml-2">{native?.symbol}</span>
       </div>
 
       <Button

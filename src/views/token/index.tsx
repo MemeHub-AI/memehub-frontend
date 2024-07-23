@@ -13,13 +13,12 @@ import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenPage = () => {
   const { chainName, tokenAddr, isReady } = useTradeSearchParams()
-  const { findChain } = useChainsStore()
-  const chain = findChain(chainName)
+  const { chainsMap } = useChainsStore()
   const { isMobile } = useResponsive()
   const tokenInfo = useTokenInfo()
   const { isLoadingTokenInfo } = tokenInfo
 
-  const invalidPath = !chain || !isAddress(tokenAddr)
+  const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
     return <TokenQueryInvalid reason={`/${chainName}/${tokenAddr}`} />
   }
