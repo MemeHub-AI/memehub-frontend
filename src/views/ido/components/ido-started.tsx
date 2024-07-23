@@ -19,7 +19,6 @@ export const IdoStarted = () => {
     totalReserveAmount,
     userAmount,
     userWeight,
-    userQuota,
     isActive,
     isEnded,
     isCanceled,
@@ -63,7 +62,12 @@ export const IdoStarted = () => {
 
       {!BigNumber(userAmount).isZero() && <ParticipatedTips />}
 
-      <p className="text-sm text-zinc-500 mt-3 w-5/6">{t('ido.policy1')}</p>
+      <p className="text-sm text-zinc-500 mt-3 w-5/6">
+        {utilLang.replace(t('ido.policy1'), [
+          totalReserveAmount,
+          reserveSymbol,
+        ])}
+      </p>
       <p className="text-sm text-zinc-500 my-1 w-5/6">{t('ido.policy2')}</p>
 
       {isKol && (

@@ -520,7 +520,7 @@
   "ido.holder-nft": "持有 Memehub NFT",
   "ido.input-amount": "输入金额",
   "ido.join": "加入",
-  "ido.policy1": "按照你的资金与全部参与者的比例获得额度",
+  "ido.policy1": "最多收{}，按照你的资金与全部参与者的比例获得额度，剩下的在结束后可退回",
   "ido.policy2": "仅限 Memehub NFT 持有人参与",
   "ido.participated": "参与了",
   "ido.obtained": "获得了",

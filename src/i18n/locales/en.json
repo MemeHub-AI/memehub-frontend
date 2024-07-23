@@ -530,7 +530,7 @@
   "ido.holder-nft": "Hold Memehub NFT",
   "ido.input-amount": "Input amount",
   "ido.join": "Join",
-  "ido.policy1": "Receive allocation according to the proportion of your funds to the total funds of all participants",
+  "ido.policy1": "A maximum of {} can be collected. Your allocation will be based on the proportion of your funds relative to all participants. Any remaining amount will be refunded after the event ends.",
   "ido.policy2": "Only Memehub NFT holders are eligible to participate.",
   "ido.participated": "Participated in",
   "ido.obtained": "obtained",
