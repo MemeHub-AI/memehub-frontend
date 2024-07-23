@@ -1,7 +1,6 @@
 import React, { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
-import dayjs from 'dayjs'
 
 import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
