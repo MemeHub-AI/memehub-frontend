@@ -56,14 +56,14 @@ export const IdoPage = () => {
         poolId,
       }}
     >
-      <main className="bg-orange-500 min-h-body pt-3 overflow-hidden">
+      <main className="bg-orange-500 min-h-body pt-3 overflow-hidden ">
         <AvatarCard
           src="/images/ido/trump.jpeg"
           border="none"
           avatarClass="!border-orange-500"
           className={cn(
             'flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32',
-            'min-h-100 mx-3'
+            'min-h-100 sm:max-w-md'
           )}
         >
           <img
