@@ -62,7 +62,7 @@ export const IdoPage = () => {
           avatarClass="!border-orange-500"
           className={cn(
             'flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32',
-            isStart ? 'min-h-100' : 'min-h-96'
+            'min-h-100'
           )}
         >
           <img

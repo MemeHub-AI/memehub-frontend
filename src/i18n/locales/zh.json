@@ -533,5 +533,6 @@
   "ido.tx.success": "参与成功！",
   "already-refunded": "已退款",
   "already-claimed": "已领取",
-  "occurred-error": "发生了一点儿小意外，请稍后重试"
+  "occurred-error": "发生了一点儿小意外，请稍后重试",
+  "ido.get-quota": "获得了{}额度"
 }

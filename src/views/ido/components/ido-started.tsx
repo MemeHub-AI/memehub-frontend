@@ -10,6 +10,7 @@ import { useUserStore } from '@/stores/use-user-store'
 import { JoinInput } from './join-input'
 import { EndedButtons } from './ended-buttons'
 import { utilLang } from '@/utils/lang'
+import { ParticipatedTips } from './participated-tips'
 
 export const IdoStarted = () => {
   const { t } = useTranslation()
@@ -49,6 +50,8 @@ export const IdoStarted = () => {
 
       {isActive && !isExpired && (isKol || community) && <JoinInput />}
 
+      {isExpired && !isEnded && <EndedButtons onlyRefund />}
+
       {isActive && isExpired && (
         <div className="font-bold mt-4">
           <p>{t('ido.ended1')}</p>
@@ -58,19 +61,7 @@ export const IdoStarted = () => {
 
       {(isEnded || isCanceled) && <EndedButtons />}
 
-      {!BigNumber(userAmount).isZero() && (
-        <div className="mt-3 text-purple-500 font-bold">
-          <p>
-            {t('ido.participated')} {fmt.decimals(userAmount)} {reserveSymbol} x{' '}
-            {userWeight}%
-          </p>
-          <p>
-            <span>{t('ido.obtained')}</span>
-            <span className="text-xl mx-1">{fmt.decimals(userQuota)}%</span>
-            <span>{t('ido.quota')}</span>
-          </p>
-        </div>
-      )}
+      {!BigNumber(userAmount).isZero() && <ParticipatedTips />}
 
       <p className="text-sm text-zinc-500 mt-3 w-5/6">{t('ido.policy1')}</p>
       <p className="text-sm text-zinc-500 my-1 w-5/6">{t('ido.policy2')}</p>
@@ -94,7 +85,7 @@ export const IdoStarted = () => {
               .split('$')[0]
               .replace(
                 '{}',
-                fmt.withCommunity(utilLang.locale(community.name)),
+                fmt.withCommunity(utilLang.locale(community.name))
               )}
           </p>
           <p>

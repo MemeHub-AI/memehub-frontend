@@ -8,7 +8,9 @@ import { useIdo } from '../hooks/use-ido'
 import { fmt } from '@/utils/fmt'
 import { useIdoClaimed } from '../hooks/use-ido-claimed'
 
-export const EndedButtons = () => {
+export const EndedButtons = ({
+  onlyRefund,
+}: Partial<{ onlyRefund: boolean }>) => {
   const { t } = useTranslation()
   const {
     userAmount,
@@ -31,7 +33,7 @@ export const EndedButtons = () => {
   return (
     <>
       <div className="flex items-center space-x-2 mt-3">
-        {!isCanceled && (
+        {!isCanceled && !onlyRefund && (
           <Button
             variant="yellow"
             shadow="none"
@@ -40,13 +42,17 @@ export const EndedButtons = () => {
           >
             {isClaimedToken
               ? t('already-claimed')
-              : `${t('ido.claim')} ${BigNumber(BigNumber(tokenAmount).toFixed(2)).toFormat()} LP`}
+              : `${t('ido.claim')} ${BigNumber(
+                  BigNumber(tokenAmount).toFixed(2)
+                ).toFormat()} LP`}
           </Button>
         )}
         <Button shadow="none" disabled={disableRefund} onClick={() => refund()}>
           {isClaimedReserve
             ? t('already-refunded')
-            : `${t('ido.refund')} ${fmt.decimals(reserveAmount)} ${reserveSymbol}`}
+            : `${t('ido.refund')} ${fmt.decimals(
+                reserveAmount
+              )} ${reserveSymbol}`}
         </Button>
       </div>
     </>

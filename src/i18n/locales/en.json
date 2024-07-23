@@ -543,5 +543,6 @@
   "ido.tx.success": "Participation successful!",
   "already-refunded": "Already refunded",
   "already-claimed": "Already claimed",
-  "occurred-error": "A small error occurred, please try again later"
+  "occurred-error": "A small error occurred, please try again later",
+  "ido.get-quota": "Acquired {} quota"
 }
