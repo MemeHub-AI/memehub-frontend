@@ -32,7 +32,7 @@ export const IdoNotStart = ({ onExpired }: Props) => {
       <div className="flex items-center space-x-1">
         <span className="font-bold mr-1"> {t('ido.start-in')}:</span>
         <Countdown
-          createdAt={startAt}
+          createdAt={dayjs().unix()}
           duration={startAt - dayjs().unix()}
           onExpired={onExpired}
           className="text-black font-normal"
