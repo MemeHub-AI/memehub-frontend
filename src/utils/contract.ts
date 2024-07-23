@@ -3,7 +3,7 @@ import { Hash, parseEther, Log } from 'viem'
 import dayjs from 'dayjs'
 import { getBlock } from 'wagmi/actions'
 
-import { DEPLOY_LOG_TOPIC } from '@/constants/deploy'
+import { DEPLOY_LOG_ADDR } from '@/constants/deploy'
 import { wagmiConfig } from '@/config/wagmi'
 
 // Whether user rejected error.
@@ -76,7 +76,7 @@ export const getDeadline = async (seconds = 300) => {
 }
 
 export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
-  const log = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_TOPIC)
+  const log = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_ADDR)
   const hashAddr = log?.topics?.[1]
 
   return hashAddr?.replace(/0x0+/, '0x') ?? ''
