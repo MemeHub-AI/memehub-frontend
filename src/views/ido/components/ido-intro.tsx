@@ -52,7 +52,7 @@ export const IdoIntro = ({ className }: ComponentProps<'div'>) => {
           {utilLang.replace(t('ido.intro6'), ['70%', '30%'])}
         </p>
         <p className="mt-2">{utilLang.replace(t('ido.intro7'), ['1.5%'])}</p>
-        <p className="self-start mt-2">{t('ido.intro8')}</p>
+        {/* <p className="self-start mt-2">{t('ido.intro8')}</p>
         <p className="self-start mt-2">
           1 + 2 + 3 = {utilLang.replace(t('ido.redeem'), ['5%'])}
         </p>
@@ -66,7 +66,7 @@ export const IdoIntro = ({ className }: ComponentProps<'div'>) => {
         <p className="self-start">
           1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 ={' '}
           {utilLang.replace(t('ido.redeem'), ['90%'])}
-        </p>
+        </p> */}
         <img
           src="/images/ido/nft.gif"
           alt="nft"

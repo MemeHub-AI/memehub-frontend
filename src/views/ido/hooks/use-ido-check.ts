@@ -9,8 +9,7 @@ import { allianceApi } from '@/api/alliance'
 import { useIdoContext } from '@/contexts/ido'
 import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
 import { addPrefix0x } from '@/utils/contract'
-
-let communityIdx = 0
+import { COMMUNITY_IDX } from '@/config/ido'
 
 export const useIdoCheck = () => {
   const { address } = useAccount()
@@ -32,7 +31,7 @@ export const useIdoCheck = () => {
     address: exchangeNft,
     chainId,
     functionName: 'isClaimedOfId',
-    args: [address!, BigInt(communityIdx)],
+    args: [address!, BigInt(COMMUNITY_IDX)],
     query: { enabled: !isKol },
   })
   const cId = BigNumber(communityId.toString())

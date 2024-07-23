@@ -64,8 +64,7 @@ export const IdoStarted = () => {
 
       <p className="text-sm text-zinc-500 mt-3 w-5/6">
         {utilLang.replace(t('ido.policy1'), [
-          totalReserveAmount,
-          reserveSymbol,
+          `${totalReserveAmount} ${reserveSymbol}`,
         ])}
       </p>
       <p className="text-sm text-zinc-500 my-1 w-5/6">{t('ido.policy2')}</p>
