@@ -1,20 +1,20 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
-import TokenInfoHeader from './token-info-header'
-import TradeTab from './trade-tab'
-import TokenInfo from './token-info'
-import { CommentTradeTab } from './comment-trade-tab'
-import Chart from '@/components/chart'
-import TradeAirdrop from './trade-airdrop'
-import HoldersRank from './holders-rank'
-import { useTokenContext } from '@/contexts/token'
 import { BsArrowDownUp } from 'react-icons/bs'
 import { BsGraphUpArrow } from 'react-icons/bs'
 import { LuUsers } from 'react-icons/lu'
-import { useMemo, useState } from 'react'
 import dayjs from 'dayjs'
-import { taraxa } from 'viem/chains'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
+
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
+import { TokenInfoHeader } from './token-info-header'
+import { TradeTab } from './trade-tab'
+import { TokenInfo } from './token-info'
+import { CommentTradeTab } from './comment-trade-tab'
+import { Chart } from '@/components/chart'
+import { TradeAirdrop } from './trade-airdrop'
+import { HoldersRank } from './holders-rank'
+import { useTokenContext } from '@/contexts/token'
+import { cn } from '@/lib/utils'
 
 const enum TabName {
   trade = '0',
@@ -22,15 +22,19 @@ const enum TabName {
   holder = '2',
 }
 
-const tabReg = /tab=([^&#?]+)/
-
 export const TokenMobile = () => {
+  const { t } = useTranslation()
   const { query, replace } = useRouter()
   const { airdrop } = useTokenContext()
-
-  const tab = location.search.match(tabReg)?.[1] || TabName.trade
-  const { t } = useTranslation()
-  const [isExpired, setIsExpired] = useState(false)
+  const {
+    kol,
+    kolAirdrop,
+    kolAirdropInfo,
+    communities,
+    communitiesAirdrop,
+    communitiesAirdropInfo,
+  } = airdrop
+  const tab = (query.tab || TabName.trade) as string
 
   /** Gets the airdrop creation time */
   const getCreateTime = (createdAt: number, duration: number) => {
@@ -39,9 +43,8 @@ export const TokenMobile = () => {
   }
 
   /** Determine if the airdrop has expired */
-  const isExpiredAPI = (createdAt: number, duration: number) => {
-    const currentTime = dayjs()
-    const diff = getCreateTime(createdAt, duration).diff(currentTime, 'second')
+  const isExpired = (createdAt: number, duration: number) => {
+    const diff = getCreateTime(createdAt, duration).diff(dayjs(), 'second')
     if (diff < 0) return true
     return false
   }
@@ -53,24 +56,20 @@ export const TokenMobile = () => {
   const getCount = () => {
     let count = 0
 
-    if (
-      airdrop.kol &&
-      !airdrop.kolAirdropInfo.isClaimed &&
-      !airdrop.kolAirdrop.isBurn &&
-      !isExpiredAPI(
-        airdrop.kol.create ?? 0,
-        airdrop.kolAirdropInfo.durationSeconds
-      )
-    ) {
+    const hasKol = kol && !kolAirdropInfo.isClaimed && !kolAirdrop.isBurn
+    if (hasKol && !isExpired(kol.create ?? 0, kolAirdropInfo.durationSeconds)) {
       count++
     }
+
+    const hasCommunity =
+      communities &&
+      !communitiesAirdropInfo.isClaimed &&
+      !communitiesAirdrop.isBurn
     if (
-      airdrop.communities &&
-      !airdrop.communitiesAirdropInfo.isClaimed &&
-      !airdrop.communitiesAirdrop.isBurn &&
-      !isExpiredAPI(
-        airdrop.communities.create ?? 0,
-        airdrop.communitiesAirdropInfo.durationSeconds
+      hasCommunity &&
+      !isExpired(
+        communities.create ?? 0,
+        communitiesAirdropInfo.durationSeconds
       )
     ) {
       count++
@@ -87,7 +86,7 @@ export const TokenMobile = () => {
       onValueChange={(tab) => {
         replace({
           pathname: `/${query.chain}/${query.address}`,
-          query: { tab: tab },
+          query: { tab },
         })
       }}
     >
@@ -121,11 +120,12 @@ export const TokenMobile = () => {
               {t('chart')}
               {tipsCount && tab !== TabName.chart ? (
                 <div
-                  className="absolute top-2 right-4 bg-red-500 rounded-full
-                    w-[16px] h-[16px] flex items-center justify-center !text-[10px] text-white
-                  "
+                  className={cn(
+                    'absolute top-2 right-4 bg-red-500 rounded-full',
+                    'w-4 h-4 flex items-center justify-center !text-[10px] text-white'
+                  )}
                 >
-                  <div className="animate-ping bg-red-500 w-[16px] h-[16px] rounded-full absolute"></div>
+                  <div className="animate-ping bg-red-500 w-4 h-4 rounded-full absolute"></div>
                   {tipsCount}
                 </div>
               ) : null}
