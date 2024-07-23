@@ -6,7 +6,7 @@ import { TokenCard } from './token-cards/card'
 import { UserCoinsCreated } from '@/api/user/types'
 
 const card = {
-  id: 5,
+  id: 0,
   image: '/images/ido/trump.jpeg',
   address: '',
   name: 'Trump407',
