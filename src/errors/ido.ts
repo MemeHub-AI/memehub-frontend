@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/nextjs'
+import { reportException } from './index'
 
 import { isUserReject } from '@/utils/contract'
 import { dotenv } from '@/utils/env'
@@ -8,7 +8,7 @@ export const IDO_ERR = {
     const lower = msg.toLowerCase()
 
     console.error(msg)
-    if (dotenv.isProd) captureException(msg)
+    reportException
     if (isUserReject(lower)) return
   },
 }

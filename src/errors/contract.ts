@@ -2,13 +2,12 @@ import { createElement } from 'react'
 import { toast } from 'sonner'
 import { t } from 'i18next'
 import { lowerCase } from 'lodash'
-import { captureException } from '@sentry/nextjs'
 
 import { isUserReject } from '@/utils/contract'
 import { SlippageError } from '@/components/toast/slippage-error'
 import { bottomLeft } from '@/config/toast'
 import { DeviceWidth } from '@/hooks/use-responsive'
-import { dotenv } from '@/utils/env'
+import { reportException } from '.'
 
 const ERR = {
   estimateGas: 'gap tip',
@@ -25,8 +24,7 @@ export const CONTRACT_ERR = {
 
     const msg = (e.message ?? '').toLowerCase()
 
-    if (dotenv.isProd) captureException(e.message)
-
+    reportException(e)
     // Cannot estimate gas.
     if (msg.includes(ERR.estimateGas)) {
       toast.error(t('contract.err.gas-estimate'))
@@ -36,7 +34,7 @@ export const CONTRACT_ERR = {
     if (msg.includes(ERR.transactionExecutionError)) {
       toast.message(
         createElement(SlippageError),
-        window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined,
+        window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined
       )
       return
     }
