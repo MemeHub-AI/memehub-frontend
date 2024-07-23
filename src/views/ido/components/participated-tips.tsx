@@ -7,14 +7,8 @@ import { utilLang } from '@/utils/lang'
 
 export const ParticipatedTips = () => {
   const { t } = useTranslation()
-  const {
-    isExpired,
-    userAmount,
-    reserveSymbol,
-    userWeight,
-    userQuota,
-    progress,
-  } = useIdoContext()
+  const { isExpired, userAmount, reserveSymbol, userWeight, userQuota } =
+    useIdoContext()
 
   return (
     <div className="mt-3 text-purple-500 font-bold">
@@ -22,11 +16,11 @@ export const ParticipatedTips = () => {
         <>
           <p>
             {utilLang.replace(t('ido.get-quota'), [
-              `${userAmount} ${reserveSymbol}`,
+              `${fmt.decimals(userAmount)} ${reserveSymbol}`,
             ])}
           </p>
           <p>
-            = <span className="text-2xl">{progress}%</span> {t('ido.quota')}
+            = <span className="text-2xl">{userQuota}%</span> {t('ido.quota')}
           </p>
         </>
       ) : (

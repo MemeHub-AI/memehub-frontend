@@ -506,7 +506,7 @@
   "ido.total-amount": "Total amount",
   "ido.donate": "Donate",
   "ido.ended1": "Donation has ended.",
-  "ido.ended2": "Waiting for the drawing of lots.",
+  "ido.ended2": "Wait for the results to be announced",
   "ido.claim": "Claim",
   "ido.ended-desc1": "Congradulations,",
   "ido.ended-desc2": "You've won a prize of {}!",
@@ -557,5 +557,6 @@
   "ido.intro6": "When players trade tokens, they automatically receive NFTs through the 407 protocol, with {} being Trump NFTs and {} being other NFTs.",
   "ido.intro7": "A {} transaction tax will flow into the prize pool. Additionally, as the project develops to a certain stage, the Trump407 Foundation will inject tokens into the prize pool.",
   "ido.intro8": "Collect the following number of tokens to redeem the prize pool rewards",
-  "ido.redeem": "Redeem {} of the total prize pool"
+  "ido.redeem": "Redeem {} of the total prize pool",
+  "ido.limit": "Your purchase has reached the limit"
 }

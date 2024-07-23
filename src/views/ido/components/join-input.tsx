@@ -32,7 +32,8 @@ export const JoinInput = () => {
     return isEmpty(p)
   }, [pools])
 
-  const disabeld = isLoading || isEmptyPools
+  const isLimit = BigNumber(userRemaining).lte(0)
+  const disabeld = isLoading || isEmptyPools || isLimit
 
   const onChange = (value: string) => {
     const v = BigNumber(value)
@@ -109,6 +110,9 @@ export const JoinInput = () => {
       >
         {t('ido.join')}
       </Button>
+      {isLimit && (
+        <p className="mt-2 text-zinc-500 text-sm">{t('ido.limit')}</p>
+      )}
       {isEmptyPools && (
         <p className="mt-2 text-zinc-500 font-bold">
           The pool with id "{poolId}" is empty

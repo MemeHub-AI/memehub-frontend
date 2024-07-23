@@ -496,7 +496,7 @@
   "ido.total-amount": "总额度",
   "ido.donate": "捐赠",
   "ido.ended1": "捐赠已结束。",
-  "ido.ended2": "等待公布抽奖结果。",
+  "ido.ended2": "等待公布结果",
   "ido.claim": "领取",
   "ido.ended-desc1": "恭喜，",
   "ido.ended-desc2": "您赢得了 {} 的奖品！",
@@ -547,5 +547,6 @@
   "ido.intro6": "玩家在交易代币时，自动通过407协议获得NFT，{}是川普NFT，{}是其他NFT。",
   "ido.intro7": "{}的交易税将流入奖金池；此外，项目发展到一定阶段，由Trump407基金会往奖金池注入代币。",
   "ido.intro8": "集齐以下张数，就可兑换奖金池奖金",
-  "ido.redeem": "兑换{}总奖金"
+  "ido.redeem": "兑换{}总奖金",
+  "ido.limit": "您的购买已达到上限"
 }
