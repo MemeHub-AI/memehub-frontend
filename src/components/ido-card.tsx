@@ -37,7 +37,7 @@ export const IdoCard = () => {
     <TokenCard
       card={card}
       isIdo
-      idoCreateAt={startAt}
+      idoCreateAt={dayjs().unix()}
       idoDuration={startAt - dayjs().unix()}
       idoProgress={progress}
     />
