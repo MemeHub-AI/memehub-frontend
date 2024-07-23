@@ -4,10 +4,10 @@ import { isUserReject } from '@/utils/contract'
 
 export const IDO_ERR = {
   message: (msg: string) => {
-    const lower = msg.toLowerCase()
+    const m = msg.toLowerCase()
 
     reportException(msg)
-    if (isUserReject(lower)) return
+    if (isUserReject(m)) return
     // more...
   },
 }
