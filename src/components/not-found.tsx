@@ -31,7 +31,7 @@ export const NotFound = (props: Props) => {
   return (
     <div
       className={cn(
-        'flex flex-col justify-center items-center h-body',
+        'flex flex-col justify-center items-center h-body px-3 sm:px-6 text-center break-all',
         className
       )}
     >
@@ -39,7 +39,7 @@ export const NotFound = (props: Props) => {
         <img
           src={src}
           alt="404"
-          className={cn('max-w-128 select-none', imgClass)}
+          className={cn('max-w-128 select-none max-sm:max-w-full', imgClass)}
         />
       )}
       {!isEmpty(title) && <h1 className="text-2xl font-bold mt-3">{title}</h1>}
