@@ -542,5 +542,20 @@
   "tx.submitting": "Transaction submitting...",
   "ido.tx.success": "Participation successful!",
   "already-refunded": "Already refunded",
-  "already-claimed": "Already claimed"
+  "already-claimed": "Already claimed",
+  "occurred-error": "A small error occurred, please try again later",
+  "ido.get-quota": "Acquired {} quota",
+  "ido.intro1": "After repeated communications with the 407 project team, it has been decided to launch with a small pool and no coins on the entire network, which is beneficial for laying a strong foundation for a hundredfold growth.",
+  "ido.intro2": "This will allow the first wave of users on the Memehub platform to make significant profits and help build the reputation of the 407 protocol, achieving a win-win situation.",
+  "ido.intro.title1": "{} donation, thousands of participants",
+  "ido.burn": "Burn",
+  "ido.intro3": "Trump407 is the first token of the ERC-407 protocol. Developed over six months, it achieves a perfect integration of token symbiosis and burning mechanisms.",
+  "ido.intro4": "Burn tokens to earn dividend rewards, continuously deflating the supply. For every 10,000 tokens held, you receive an NFT. This is the world's first deflationary mechanism NFT.",
+  "ido.intro.title3": "Collect the Trump series NFT",
+  "ido.intro.title4": "Win the jackpot from the prize pool",
+  "ido.intro5": "Trump407 is also the world's first NFT series with real empowerment.",
+  "ido.intro6": "When players trade tokens, they automatically receive NFTs through the 407 protocol, with {} being Trump NFTs and {} being other NFTs.",
+  "ido.intro7": "A {} transaction tax will flow into the prize pool. Additionally, as the project develops to a certain stage, the Trump407 Foundation will inject tokens into the prize pool.",
+  "ido.intro8": "Collect the following number of tokens to redeem the prize pool rewards",
+  "ido.redeem": "Redeem {} of the total prize pool"
 }

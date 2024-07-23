@@ -72,7 +72,6 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     const { isOverflow, current } = await checkForOverflow(amount)
     if (isOverflow) return getLastOrderAmount(current)
 
-    console.log('v3 buy', getReferrals(), current)
     writeContract({
       abi: v3BondingCurveAbi,
       address: bondingCurve!,
@@ -100,7 +99,6 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       return
     }
 
-    console.log('v3 sell', await getReferrals())
     writeContract({
       abi: v3BondingCurveAbi,
       address: bondingCurve!,

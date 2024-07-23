@@ -8,6 +8,7 @@ import { useSign } from './use-sign'
 import { useUser } from './use-user'
 import { useStorage } from './use-storage'
 import { useWalletStore } from '@/stores/use-wallet-store'
+import { reportException } from '@/errors'
 
 export const useLogin = () => {
   const { t } = useTranslation()
@@ -42,7 +43,7 @@ export const useLogin = () => {
         timestamp,
       })
     } catch (e) {
-      console.error((e as { message: string }).message)
+      reportException(e)
       throw e
     }
   }

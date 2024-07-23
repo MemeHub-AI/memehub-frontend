@@ -56,7 +56,6 @@ export const CONTRACT_ERR = {
 
     // Toast all other error.
     if (showToast) toast.error(t('contract.err.exec'))
-    console.error(msg)
   },
 
   // Not found error.

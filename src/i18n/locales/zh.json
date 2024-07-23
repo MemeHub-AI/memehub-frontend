@@ -532,5 +532,20 @@
   "tx.submitting": "交易提交中...",
   "ido.tx.success": "参与成功！",
   "already-refunded": "已退款",
-  "already-claimed": "已领取"
+  "already-claimed": "已领取",
+  "occurred-error": "发生了一点儿小意外，请稍后重试",
+  "ido.get-quota": "获得了{}额度",
+  "ido.intro1": "经与407项目方反复沟通，决定采用小池子开盘，全网无币的模式启动，有利于百倍打底。",
+  "ido.intro2": "让Memehub平台的第一波用户赚大钱，也有利于打出407协议名气，实现双赢。",
+  "ido.intro.title1": "{}捐赠，万人参与",
+  "ido.burn": "燃烧",
+  "ido.intro3": "Trump407是ERC-407协议的第一个代币，开发历时半年，实现了图币共生与燃烧机制的完美结合。",
+  "ido.intro4": "燃烧代币获得分红奖励，不断通缩；每持有10000个代币，就有一个NFT。全球首个通缩机制的NFT。",
+  "ido.intro.title3": "集齐川普系列 NFT",
+  "ido.intro.title4": "拿奖金池大奖",
+  "ido.intro5": "Trump407 同时也是全球首个有真实赋能的 NFT 系列。",
+  "ido.intro6": "玩家在交易代币时，自动通过407协议获得NFT，{}是川普NFT，{}是其他NFT。",
+  "ido.intro7": "{}的交易税将流入奖金池；此外，项目发展到一定阶段，由Trump407基金会往奖金池注入代币。",
+  "ido.intro8": "集齐以下张数，就可兑换奖金池奖金",
+  "ido.redeem": "兑换{}总奖金"
 }

@@ -15,6 +15,7 @@ import { Routes } from '@/routes'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUserStore } from '@/stores/use-user-store'
 import { cn } from '@/lib/utils'
+import { paginationSelect } from '@/utils/query'
 
 interface Props {
   className?: string
@@ -31,14 +32,13 @@ export const AIIdeaBar = (props: Props) => {
   const userStore = useUserStore()
   const { setConnectOpen } = useWalletStore()
 
-  const { data } = useQuery({
+  const { data: { list: ideas = [] } = {} } = useQuery({
     queryKey: ['getTrendingIdeas'],
     queryFn: () => {
       return newsApi.getOpportunity({ page: 1, page_size: 4 })
     },
-    select: ({ data }) => data,
+    select: ({ data }) => paginationSelect(data),
   })
-  const ideas = data?.results ?? []
 
   const onRandom = () => {
     if (userStore.userInfo?.id == null) {
@@ -68,7 +68,7 @@ export const AIIdeaBar = (props: Props) => {
           <img
             src="/images/ai.png"
             alt="img"
-            className="w-[30px] h-[30px] rounded-sm mr-5"
+            className="w-8 h-8 rounded-sm mr-5"
           />
           <div>{t('ai.generate.bio')}</div>
         </div>
@@ -122,7 +122,7 @@ export const AIIdeaBar = (props: Props) => {
                 <img
                   src={item.image}
                   alt="Logo"
-                  className="w-[30px] h-[30px] rounded-full object-cover max-sm:w-[25px] max-sm:h-[25px]"
+                  className="w-8 h-8 rounded-full object-cover max-sm:w-[25px] max-sm:h-[25px]"
                 />
                 <span className="ml-2 text-blue-700 truncate">
                   {item.title}

@@ -95,7 +95,6 @@ export const useDatafeed = () => {
         onResult(bars, { noData: isEmpty(bars) })
       },
       subscribeBars(_, resolution, onTick, uid, onRest) {
-        console.log('subscribe', uid)
         onUpdate(({ data }) => {
           data[datafeedUnit].forEach((bar) => {
             const lastTime = cache.getLastBar()?.time || 0
@@ -106,9 +105,7 @@ export const useDatafeed = () => {
           })
         })
       },
-      unsubscribeBars(uid) {
-        console.log('unsubscribe', uid)
-      },
+      unsubscribeBars(uid) {},
     } as IBasicDataFeed
   }
 

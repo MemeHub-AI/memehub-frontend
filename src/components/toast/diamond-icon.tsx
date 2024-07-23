@@ -22,12 +22,6 @@ export const DiamondIcon = ({ isZero, delay = 0, onEnd }: DiamondIconProps) => {
     const deltaX = endRect.left - startRect.left
     const deltaY = innerHeight - startRect.top + endRect.top - innerHeight
 
-    console.log(
-      `deltaX: ${deltaX}`,
-      `endRect.left: ${endRect.left}`,
-      `startRect.left: ${startRect.left}`
-    )
-
     const tween = gsap.to(diamondRef.current, {
       x: deltaX,
       y: deltaY,

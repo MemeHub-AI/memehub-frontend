@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 import { IdoTag } from '@/components/ido-tag'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { idoTrumpLink } from '@/config/link'
+import { IdoIntro } from './components/ido-intro'
 
 const DEFAULT_POOL_ID = 0
 
@@ -55,14 +56,14 @@ export const IdoPage = () => {
         poolId,
       }}
     >
-      <main className="bg-orange-500 min-h-body p-3 overflow-hidden">
+      <main className="bg-orange-500 min-h-body pt-3 overflow-hidden">
         <AvatarCard
           src="/images/ido/trump.jpeg"
           border="none"
           avatarClass="!border-orange-500"
           className={cn(
             'flex flex-col bg-white rounded max-w-100 mx-auto sm:mt-32',
-            isStart ? 'min-h-100' : 'min-h-96'
+            'min-h-100 mx-3'
           )}
         >
           <img
@@ -110,6 +111,8 @@ export const IdoPage = () => {
 
           <IdoTag className="text-base self-start mt-auto select-none px-2" />
         </AvatarCard>
+
+        <IdoIntro className="px-6 mt-8" />
       </main>
     </IdoProvider>
   )

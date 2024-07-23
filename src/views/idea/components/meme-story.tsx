@@ -22,8 +22,6 @@ export const MemeStory = memo(({ data }: MemeStoryData) => {
       .replace(/<br\s?\/?><br\s?\/?>/g, '')
       .replace(/<br\/>/g, '') || ''
 
-  // console.log(content)
-
   const memeInfo = data?.meme || {}
   const h2List = content.match(/<h2 id="[^"]*">[^<]+<\/h2>/g) || []
   let firstContent = ''

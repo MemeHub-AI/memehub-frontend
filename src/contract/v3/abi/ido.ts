@@ -165,12 +165,6 @@ export const idoAbi = [
         name: 'refundAmount',
         type: 'uint256',
       },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'refundTo',
-        type: 'address',
-      },
     ],
     name: 'IdoClaimEth',
     type: 'event',
@@ -195,12 +189,6 @@ export const idoAbi = [
         internalType: 'uint256',
         name: 'claimAmount',
         type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'address',
-        name: 'claimTo',
-        type: 'address',
       },
     ],
     name: 'IdoClaimToken',
@@ -369,11 +357,6 @@ export const idoAbi = [
         name: '_poolId',
         type: 'uint256',
       },
-      {
-        internalType: 'address',
-        name: '_to',
-        type: 'address',
-      },
     ],
     name: 'claimEth',
     outputs: [],
@@ -386,11 +369,6 @@ export const idoAbi = [
         internalType: 'uint256',
         name: '_poolId',
         type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '_to',
-        type: 'address',
       },
     ],
     name: 'claimToken',
@@ -406,6 +384,76 @@ export const idoAbi = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getAllPools',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'contract ERC20',
+            name: 'tokenAddress',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'tokenAmount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint8',
+            name: 'status',
+            type: 'uint8',
+          },
+          {
+            internalType: 'uint40',
+            name: 'startTime',
+            type: 'uint40',
+          },
+          {
+            internalType: 'uint40',
+            name: 'endTime',
+            type: 'uint40',
+          },
+          {
+            internalType: 'uint168',
+            name: 'perUserLimit',
+            type: 'uint168',
+          },
+          {
+            internalType: 'uint256',
+            name: 'ethBalance',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'totalETHAmount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'weightedSum',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'raisedEthAmount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'string',
+            name: 'uriId',
+            type: 'string',
+          },
+        ],
+        internalType: 'struct IDO.PoolInfo[]',
+        name: '',
+        type: 'tuple[]',
       },
     ],
     stateMutability: 'view',
@@ -588,23 +636,28 @@ export const idoAbi = [
     inputs: [
       {
         internalType: 'uint40',
-        name: 'startTime',
+        name: '_startTime',
         type: 'uint40',
       },
       {
         internalType: 'uint40',
-        name: 'endTime',
+        name: '_endTime',
         type: 'uint40',
       },
       {
         internalType: 'uint168',
-        name: 'perUserLimit',
+        name: '_perUserLimit',
         type: 'uint168',
       },
       {
         internalType: 'uint256',
-        name: 'totalETHAmount',
+        name: '_totalETHAmount',
         type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_uriId',
+        type: 'string',
       },
     ],
     name: 'initializePool',
@@ -775,6 +828,16 @@ export const idoAbi = [
         name: 'raisedEthAmount',
         type: 'uint256',
       },
+      {
+        internalType: 'string',
+        name: 'uriId',
+        type: 'string',
+      },
+      {
+        internalType: 'bool',
+        name: 'isWithdrawEth',
+        type: 'bool',
+      },
     ],
     stateMutability: 'view',
     type: 'function',
@@ -919,6 +982,24 @@ export const idoAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: '_uriId',
+        type: 'string',
+      },
+    ],
+    name: 'setUriId',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'address',
         name: '_whitelist',
         type: 'address',
@@ -980,8 +1061,37 @@ export const idoAbi = [
     type: 'function',
   },
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_amount',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_to',
+        type: 'address',
+      },
+    ],
     name: 'withdraw',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_poolId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '_to',
+        type: 'address',
+      },
+    ],
+    name: 'withdrawPoolEth',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

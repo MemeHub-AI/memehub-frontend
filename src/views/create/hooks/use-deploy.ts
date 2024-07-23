@@ -46,7 +46,7 @@ export const useDeploy = () => {
   } = useWaitForTx({ hash })
   const deployLogAddr = useMemo(
     () => getDeployLogAddr(data?.logs ?? []),
-    [data],
+    [data]
   )
 
   const { creationFee, deployV3 } = useDeployV3(writeContract)
@@ -66,7 +66,6 @@ export const useDeploy = () => {
 
     const vIs = versionOf(params.version)
 
-    console.log('deploy', deployParams, balance, creationFee)
     if (vIs(ContractVersion.V3)) return deployV3(deployParams)
   }
 

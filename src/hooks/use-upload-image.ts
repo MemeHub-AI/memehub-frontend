@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 
 import { otherApi } from '@/api/other'
 import { useStorage } from './use-storage'
-import { MAX_IMAGE_MB } from '@/constants/upload'
+import { UPLOAD_ERR } from '@/errors/upload'
 
 interface Options {
   inputEl?: HTMLInputElement | null
@@ -34,9 +34,9 @@ export const useUploadImage = (options?: Options) => {
       toast.dismiss(id)
       onFinally?.()
     },
-    onError: (e) => {
-      toast.error(t('upload.failed'))
-      onError?.(e.message)
+    onError: ({ message }) => {
+      UPLOAD_ERR.message(message)
+      onError?.(message)
       clearFile()
     },
     onSuccess: ({ data }) => {
@@ -54,18 +54,9 @@ export const useUploadImage = (options?: Options) => {
     }
 
     const file = first(e.target.files)!
-
-    if (!file.size) {
-      return
-    }
+    if (!file.size) return
 
     const formData = new FormData()
-    const mb = file.size / 1024 / 1024
-
-    if (mb > MAX_IMAGE_MB) {
-      toast.error(`${t('upload.large')}: ${MAX_IMAGE_MB} mb`)
-      return
-    }
 
     formData.append('avatar', file)
     setFile(file)
