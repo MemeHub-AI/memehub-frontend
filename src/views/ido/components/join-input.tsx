@@ -75,10 +75,10 @@ export const JoinInput = () => {
             <span
               className={cn(
                 'text-blue-600 text-sm mr-1 whitespace-nowrap',
-                isLoading && 'opacity-50',
+                disabeld && 'opacity-50'
               )}
               onClick={() => {
-                if (isLoading) return
+                if (disabeld) return
                 if (BigNumber(balance).lt(userRemaining)) {
                   return setValue(balance)
                 }
@@ -102,7 +102,7 @@ export const JoinInput = () => {
       </p>
       <Button
         variant="yellow"
-        className="mt-3 w-min"
+        className="mt-3 w-min select-none"
         size="lg"
         shadow="none"
         disabled={disabeld}
