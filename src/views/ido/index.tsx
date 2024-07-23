@@ -110,6 +110,7 @@ export const IdoPage = () => {
 
           <IdoTag className="text-base self-start mt-auto select-none px-2" />
         </AvatarCard>
+        <div>asdasdasd</div>
       </main>
     </IdoProvider>
   )
