@@ -75,7 +75,7 @@ export const JoinInput = () => {
           endIcon={
             <span
               className={cn(
-                'text-blue-600 text-sm mr-1 whitespace-nowrap',
+                'text-blue-600 text-sm mr-1 whitespace-nowrap cursor-pointer',
                 disabeld && 'opacity-50'
               )}
               onClick={() => {
