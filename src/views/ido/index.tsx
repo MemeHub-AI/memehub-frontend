@@ -15,6 +15,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useRouter } from 'next/router'
 import { IdoTag } from '@/components/ido-tag'
 import { useChainsStore } from '@/stores/use-chains-store'
+import { idoTrumpLink } from '@/config/link'
 
 const DEFAULT_POOL_ID = 0
 
@@ -75,9 +76,9 @@ export const IdoPage = () => {
 
           <h2 className="font-bold text-xl text-center">Trump407</h2>
           <TokenSocialLinks
-            x="https://x.com"
-            tg="https://t.me"
-            website="https://mememhub.ai"
+            x={idoTrumpLink.x}
+            tg={idoTrumpLink.tg}
+            website={idoTrumpLink.website}
             className="my-1 text-zinc-600"
           />
           <p>{t('ido.405')}</p>
