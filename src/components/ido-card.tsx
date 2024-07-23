@@ -1,5 +1,6 @@
 import React from 'react'
 import dayjs from 'dayjs'
+import { t } from 'i18next'
 
 import { useIdoInfo } from '@/views/ido/hooks/use-ido-info'
 import { TokenCard } from './token-cards/card'
@@ -17,7 +18,7 @@ const card = {
     logo: '',
     wallet_address: '',
   },
-  desc: 'Trump407',
+  desc: t('ido.405'),
   market_cap: 0,
   total_replies: 0,
   chain: {
