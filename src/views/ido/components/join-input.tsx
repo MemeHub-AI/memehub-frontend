@@ -14,13 +14,14 @@ import { formatEther, zeroAddress } from 'viem'
 import { fmt } from '@/utils/fmt'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { utilLang } from '@/utils/lang'
 
 export const JoinInput = () => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
   const { refetchIdoInfo } = useIdoContext()
   const { isLoading, buy } = useIdo(refetchIdoInfo)
-  const { reserveSymbol, chainId, userRemaining, pools, poolId } =
+  const { reserveSymbol, chainId, userRemaining, userAmount, pools, poolId } =
     useIdoContext()
   const { address } = useAccount()
   const { data: reserveBalance } = useBalance({ address, chainId })
@@ -32,7 +33,7 @@ export const JoinInput = () => {
     return isEmpty(p)
   }, [pools])
 
-  const isLimit = BigNumber(userRemaining).lte(0)
+  const isLimit = BigNumber(userRemaining).lte(0) && BigNumber(userAmount).gt(0)
   const disabeld = isLoading || isEmptyPools || isLimit
 
   const onChange = (value: string) => {
@@ -75,7 +76,8 @@ export const JoinInput = () => {
           endIcon={
             <span
               className={cn(
-                'text-blue-600 text-sm mr-1 whitespace-nowrap cursor-pointer',
+                'text-blue-600 text-sm mr-1 whitespace-nowrap select-none',
+                !disabeld && 'cursor-pointer',
                 disabeld && 'opacity-50'
               )}
               onClick={() => {
@@ -115,7 +117,7 @@ export const JoinInput = () => {
       )}
       {isEmptyPools && (
         <p className="mt-2 text-zinc-500 font-bold">
-          The pool with id "{poolId}" is empty
+          {utilLang.replace(t('ido.empty-pool'), [poolId])}
         </p>
       )}
     </form>

@@ -558,5 +558,6 @@
   "ido.intro7": "A {} transaction tax will flow into the prize pool. Additionally, as the project develops to a certain stage, the Trump407 Foundation will inject tokens into the prize pool.",
   "ido.intro8": "Collect the following number of tokens to redeem the prize pool rewards",
   "ido.redeem": "Redeem {} of the total prize pool",
-  "ido.limit": "Your purchase has reached the limit"
+  "ido.limit": "Your purchase has reached the limit",
+  "ido.empty-pool": "The pool with id \"{}\" is empty"
 }
