@@ -1,7 +1,6 @@
-import { captureException } from '@sentry/nextjs'
-
 import { useStorage } from './use-storage'
 import { ApiCode, ApiResponse } from '@/api/types'
+import { reportException } from '@/errors'
 import { REQUEST_ERR } from '@/errors/request'
 
 export enum CommonHeaders {
@@ -86,7 +85,7 @@ export const useFetch = (baseURL: string) => {
       // Response success.
       return response as T
     } catch (e) {
-      captureException(e)
+      reportException(e)
       if (e instanceof Response) {
         REQUEST_ERR.responseErr(e)
       } else if (e instanceof Error) {
