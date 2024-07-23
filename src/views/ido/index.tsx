@@ -34,7 +34,7 @@ export const IdoPage = () => {
   const { startAt, endAt, status } = idoInfo
 
   const [isStarted, duration] = useMemo(
-    () => [dayjs(startAt * 1000).diff() <= 0, endAt - startAt],
+    () => [dayjs.unix(startAt).diff() <= 0, endAt - startAt],
     [startAt, isStart]
   )
 
