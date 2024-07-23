@@ -27,7 +27,7 @@ enum RewardType {
 
 export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
-  const { findChain } = useChainsStore()
+  const { chainsMap } = useChainsStore()
 
   const columns: ColumnDef<RewardItem>[] = [
     {
@@ -41,7 +41,7 @@ export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
             {category === RewardType.Diamond ? (
               <DiamondIcon size={20} />
             ) : (
-              <Img src={findChain(chain)?.logo} alt="logo" className="w-5" />
+              <Img src={chainsMap[chain]?.logo} alt="logo" className="w-5" />
             )}
           </div>
         )

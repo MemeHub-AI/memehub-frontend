@@ -25,8 +25,8 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
   const { isGrauated } = usePools(tokenInfo?.address)
-  const { findChain } = useChainsStore()
-  const chain = findChain(tokenInfo?.chain?.name)
+  const { chainsMap } = useChainsStore()
+  const chain = chainsMap[tokenInfo?.chain?.id ?? 0]
 
   if (isLoadingTokenInfo) {
     return (

@@ -19,7 +19,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { marketCap } = useHoldersStore()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { findChain } = useChainsStore()
+  const { chainsMap } = useChainsStore()
 
   if (isLoadingTokenInfo) {
     return (
@@ -59,7 +59,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
               className="w-5 h-5 rounded"
             />
             <span className="ml-1">
-              {fmt.withChain(findChain(tokenInfo?.chain.id)?.displayName)}
+              {fmt.withChain(chainsMap[tokenInfo?.chain.id ?? 0]?.displayName)}
             </span>
           </div>
         </div>
