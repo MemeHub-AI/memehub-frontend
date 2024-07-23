@@ -10,7 +10,7 @@ import { useIdoContext } from '@/contexts/ido'
 import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
 import { addPrefix0x } from '@/utils/contract'
 
-let communityIdx = 0
+let communityIdx = 1
 
 export const useIdoCheck = () => {
   const { address } = useAccount()

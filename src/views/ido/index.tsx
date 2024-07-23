@@ -88,6 +88,7 @@ export const IdoPage = () => {
             />
           )}
 
+          {/* <IdoNotStart /> */}
           {isStarted ? <IdoStarted /> : <IdoNotStart onExpired={setIsStart} />}
 
           {!isConnected && (
