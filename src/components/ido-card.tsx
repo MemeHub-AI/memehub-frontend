@@ -35,6 +35,7 @@ export const IdoCard = () => {
   return (
     <TokenCard
       card={card}
+      isIdo
       idoCreateAt={startAt}
       idoDuration={startAt - dayjs().unix()}
       idoProgress={progress}

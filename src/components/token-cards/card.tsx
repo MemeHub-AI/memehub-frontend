@@ -20,6 +20,7 @@ import { Countdown } from '@/components/countdown'
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
   descClass?: string
+  isIdo?: boolean
   idoCreateAt?: number
   idoDuration?: number
   idoProgress?: number | string
@@ -31,6 +32,7 @@ export const TokenCard = (props: Props) => {
     className,
     descClass,
     onClick,
+    isIdo,
     idoCreateAt,
     idoDuration,
     idoProgress,
@@ -42,7 +44,6 @@ export const TokenCard = (props: Props) => {
   const chain = chainsMap[card.chain.id]
 
   const [isExpired, setIsExpired] = useState(false)
-  const isIdo = !!idoCreateAt && !!idoDuration
 
   const { progress, isGrauated } = useTokenProgressV3(
     card.address as Address,
@@ -113,8 +114,8 @@ export const TokenCard = (props: Props) => {
             <span>{t('ido.start-in')}</span>
             <Countdown
               className="text-blue-600"
-              createdAt={idoCreateAt}
-              duration={idoDuration}
+              createdAt={idoCreateAt || 0}
+              duration={idoDuration || 0}
               onExpired={setIsExpired}
               onInitExpired={setIsExpired}
             />
