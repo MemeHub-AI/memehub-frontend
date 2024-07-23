@@ -37,7 +37,7 @@ export const fmt = {
   },
   percent: (
     value: string | number | undefined,
-    { fixed = 2, label = '%' }: PercentOptions = {},
+    { fixed = 2, label = '%' }: PercentOptions = {}
   ) => {
     if (!value) return 0 + label
 
@@ -47,9 +47,9 @@ export const fmt = {
     const percent = BigNumber(value).multipliedBy(100).toFixed(fixed)
     return percent + label
   },
-  toHref(...args: string[]) {
+  toHref(...args: (string | number)[]) {
     // Adapt ends with '/' for the first arg.
-    const firstStr = first(args) || ''
+    const firstStr = String(first(args) || '')
     if (firstStr.endsWith('/')) {
       args.splice(0, 1, firstStr.slice(0, -1))
     }
