@@ -20,14 +20,15 @@ export const IdoNotStart = ({ onExpired }: Props) => {
       <div className="flex items-center space-x-1 mt-3">
         <span className="font-bold mr-1">{t('ido.total-amount')}:</span>
         {totalReserveAmount} {reserveSymbol}
-        <Dialog>
+        <InfoIcon className="w-4" />
+        {/* <Dialog>
           <DialogTrigger>
             <InfoIcon className="w-4" />
           </DialogTrigger>
           <DialogContent>
             <p>Waiting for fill</p>
           </DialogContent>
-        </Dialog>
+        </Dialog> */}
       </div>
       <div className="flex items-center space-x-1">
         <span className="font-bold mr-1"> {t('ido.start-in')}:</span>
