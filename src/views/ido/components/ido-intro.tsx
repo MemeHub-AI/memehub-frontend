@@ -25,7 +25,7 @@ export const IdoIntro = ({ className }: ComponentProps<'div'>) => {
         <p className="mt-3">{t('ido.intro1')}</p>
         <p className="mt-2">{t('ido.intro2')}</p>
         <img
-          src={`/images/ido/meme1/${i18n.language}.jpeg`}
+          src={`/images/ido/${i18n.language}/meme1.jpeg`}
           alt="meme"
           className="w-full mt-3"
         />
@@ -36,8 +36,8 @@ export const IdoIntro = ({ className }: ComponentProps<'div'>) => {
         <p className="mt-3">{t('ido.intro3')}</p>
         <p className="mt-2">{t('ido.intro4')}</p>
         <img
-          src={`/images/ido/trump-407/${i18n.language}.png`}
-          alt="trump-407"
+          src={`/images/ido/${i18n.language}/intro.png`}
+          alt="intro"
           className="w-full mt-3"
         />
 
