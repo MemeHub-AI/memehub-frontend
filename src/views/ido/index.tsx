@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
@@ -70,6 +70,8 @@ export const IdoPage = () => {
           />
 
           <h2 className="font-bold text-xl text-center">Trump407</h2>
+          <p className="text-center">{t('ido.time1')}</p>
+          <p className="text-center">{t('ido.time2')}</p>
           <TokenSocialLinks
             x={idoTrumpLink.x}
             tg={idoTrumpLink.tg}
