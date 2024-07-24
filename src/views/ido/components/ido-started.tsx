@@ -34,8 +34,8 @@ export const IdoStarted = () => {
     <div className="mb-3 z-10">
       <div className="w-full">
         <Progress
-          className="h-5 mt-3 rounded"
-          indicatorClass="bg-green-500"
+          className="h-5 mt-3 rounded text-white"
+          indicatorClass="bg-red-500"
           value={progress}
         />
         <div className="flex items-center justify-between">
