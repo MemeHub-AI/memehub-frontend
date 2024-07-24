@@ -558,6 +558,7 @@
   "ido.intro7": "A {} transaction tax will flow into the prize pool. Additionally, as the project develops to a certain stage, the Trump407 Foundation will inject tokens into the prize pool.",
   "ido.intro8": "Collect the following number of tokens to redeem the prize pool rewards",
   "ido.redeem": "Redeem {} of the total prize pool",
-  "ido.limit": "Your purchase has reached the limit",
-  "ido.empty-pool": "The pool with id \"{}\" is empty"
+  "ido.limit": "Your donation has reached the limit",
+  "ido.empty-pool": "The pool with id \"{}\" is empty",
+  "ido.guard": "All funds enter the smart contract address, and are automatically refunded after the project ends. Memehub is the second place winner of the Binance Hackathon, and the platform's security is guaranteed."
 }

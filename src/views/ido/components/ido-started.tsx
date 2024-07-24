@@ -63,6 +63,11 @@ export const IdoStarted = () => {
 
       {!BigNumber(userAmount).isZero() && <ParticipatedTips />}
 
+      <div className="flex items-center space-x-1 my-2 z-10">
+        <img src="/images/ido/guard.png" alt="guard" className="w-18 h-18" />
+        <p className="text-sm leading-none text-blue-600">{t('ido.guard')}</p>
+      </div>
+
       <p className="text-sm text-zinc-500 mt-3 w-5/6">
         {utilLang.replace(t('ido.policy1'), [
           `${totalReserveAmount} ${reserveSymbol}`,
