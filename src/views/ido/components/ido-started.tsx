@@ -63,9 +63,12 @@ export const IdoStarted = () => {
 
       {!BigNumber(userAmount).isZero() && <ParticipatedTips />}
 
-      <div className="flex items-center space-x-1 my-2 z-10">
+      <div className="flex items-center space-x-1 my-3 z-10">
         <img src="/images/ido/guard.png" alt="guard" className="w-18 h-18" />
-        <p className="text-sm leading-none text-blue-600">{t('ido.guard')}</p>
+        <div className="flex flex-col items-start text-sm leading-none text-blue-600 sm:leading-tight">
+          <p>{t('ido.guard1')}</p>
+          <p>{t('ido.guard2')}</p>
+        </div>
       </div>
 
       <p className="text-sm text-zinc-500 mt-3 w-5/6">
