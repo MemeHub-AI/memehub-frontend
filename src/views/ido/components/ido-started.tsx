@@ -19,6 +19,7 @@ export const IdoStarted = () => {
     totalReserveAmount,
     userAmount,
     userWeight,
+    isCommunityMember,
     isActive,
     isEnded,
     isCanceled,
@@ -47,7 +48,7 @@ export const IdoStarted = () => {
         </div>
       </div>
 
-      {isActive && !isExpired && (isKol || community) && <JoinInput />}
+      {isActive && !isExpired && (isKol || isCommunityMember) && <JoinInput />}
 
       {isExpired && !isEnded && <EndedButtons onlyRefund />}
 

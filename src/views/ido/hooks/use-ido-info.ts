@@ -49,6 +49,7 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
   const userWeight = BigNumber(userAmount).isZero()
     ? initUserWeight.toString()
     : weight.toString()
+  const isCommunityMember = BigNumber(userWeight).gt(0)
 
   const {
     data: pools = [],
@@ -127,5 +128,6 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     progress,
     userMax,
     userRemaining,
+    isCommunityMember,
   }
 }
