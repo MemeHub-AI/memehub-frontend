@@ -15,7 +15,7 @@ export const isUserReject = (err: string | unknown) => {
 /**
  * Add slippage to value.
  * @example
- * ```
+ * ```ts
  * addSlippage('1', '5') // amount, slippage
  * // 1050000000000000000n = 1.05
  * ```
@@ -35,7 +35,7 @@ export const addSlippage = (value: string, slippage: string) => {
 /**
  * Subtract slippage from value.
  * @example
- * ```
+ * ```ts
  * subSlippage('1', '5') // amount, slippage
  * // 950000000000000000n === 0.95
  * ```
@@ -54,8 +54,8 @@ export const subSlippage = (value: string, slippage: string) => {
 
 /** Add `0x` prefix. */
 export const addPrefix0x = (input: string | string[]) => {
-  const arr = Array.isArray(input) ? input : [input]
-  return arr.map((s) => (s.startsWith('0x') ? s : '0x' + s)) as Hash[]
+  input = Array.isArray(input) ? input : [input]
+  return input.map((s) => (s.startsWith('0x') ? s : '0x' + s)) as Hash[]
 }
 
 /**
@@ -84,7 +84,7 @@ export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
 
 /**
  * @example
- * ```
+ * ```ts
  * const vIs = versionOf('V3.0.1')
  * // false
  * if (vIs(ContractVersion.V2)) {...}
@@ -94,4 +94,16 @@ export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
  */
 export const versionOf = (originVersion: string) => {
   return (v: string) => originVersion.startsWith(v)
+}
+
+/**
+ * @example
+ * ```ts
+ * const hash = parseHash(BigInt('743682847302839237012018537797613726790590966769178093576926872255665103969'))
+ * // 0x01a4e8d9e9ec74503ba4d82cc1305e238cb3e9d9d40f062201a5a40aba356461
+ * ```
+ */
+export const parseHash = (value: bigint, with0x = true) => {
+  const hex = value.toString(16).padStart(64, '0')
+  return with0x ? addPrefix0x(hex)[0] : hex
 }

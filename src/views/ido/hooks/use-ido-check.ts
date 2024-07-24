@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { allianceApi } from '@/api/alliance'
 import { useIdoContext } from '@/contexts/ido'
 import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
-import { addPrefix0x } from '@/utils/contract'
+import { parseHash } from '@/utils/contract'
 import { COMMUNITY_IDX } from '@/config/ido'
 
 export const useIdoCheck = () => {
@@ -40,7 +40,7 @@ export const useIdoCheck = () => {
     queryKey: [allianceApi.getCommunityDetail.name, cId.toString(), address],
     queryFn: () => {
       return allianceApi.getCommunityDetail({
-        identity: addPrefix0x([communityId.toString(16)])[0],
+        identity: parseHash(communityId),
       })
     },
     select: ({ data }) => data,
