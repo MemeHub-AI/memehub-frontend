@@ -2,8 +2,6 @@ import { useAccount, useWriteContract } from 'wagmi'
 import { formatEther, isAddress, parseEther } from 'viem'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 
 import { DexTradeProps } from '../trade-dex/use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -13,7 +11,6 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
 import { usePools } from '../use-pools'
-import { utilLang } from '@/utils/lang'
 import { v3Addr } from '@/contract/v3/address'
 import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
 
@@ -23,8 +20,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
   const { getReferrals } = useInvite()
-  const { isGrauated } = usePools(tokenAddr, chainId)
-  const { t } = useTranslation()
+  const { isGraduated } = usePools(tokenAddr, chainId)
   const { bondingCurve } = v3Addr[chainId] ?? {}
 
   const {
@@ -41,8 +37,8 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   } = useWriteContract({
     mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
   })
-  const tradeHash = isGrauated ? dexHash : internalHash
-  const isSubmitting = isGrauated ? isDexTrading : isInternalTrading
+  const tradeHash = isGraduated ? dexHash : internalHash
+  const isSubmitting = isGraduated ? isDexTrading : isInternalTrading
 
   const checkForTrade = (amount: string) => {
     if (isEmpty(amount)) {
@@ -60,7 +56,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const buy = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGrauated) return dexBuy(tokenAddr, amount, slippage)
+    if (isGraduated) return dexBuy(tokenAddr, amount, slippage)
 
     const nativeAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
@@ -91,7 +87,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGrauated) return dexSell(tokenAddr, amount, slippage)
+    if (isGraduated) return dexSell(tokenAddr, amount, slippage)
 
     const nativeAmount = formatEther(await getNativeAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {
