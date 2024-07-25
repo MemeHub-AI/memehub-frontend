@@ -6,7 +6,7 @@ import { LiaTelegramPlane } from 'react-icons/lia'
 
 import { Button, buttonVariants } from './ui/button'
 import { cn } from '@/lib/utils'
-import { SOCIAL_LINKS } from '@/config/link'
+import { socialLink } from '@/config/link'
 
 export const SocialLinks = ({
   className,
@@ -18,12 +18,12 @@ export const SocialLinks = ({
     {
       name: t('twitter-x'),
       icon: <Twitter strokeWidth={1.5} size={20} />,
-      link: SOCIAL_LINKS.x,
+      link: socialLink.x,
     },
     {
       name: t('telegram'),
       icon: <LiaTelegramPlane size={20} />,
-      link: SOCIAL_LINKS.tg,
+      link: socialLink.tg,
     },
   ]
 

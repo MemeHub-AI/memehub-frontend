@@ -1,1 +1,2 @@
-export const COMMUNITY_IDX = 0 // Must be zero!!!
+// TODO: move to `/config/nft.ts`
+export const COMMUNITY_IDX = 0

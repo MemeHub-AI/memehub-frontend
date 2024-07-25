@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import Link from 'next/link'
@@ -11,20 +11,20 @@ import { CommunityCategory } from '@/api/airdrop/types'
 import { useIds } from '@/hooks/use-ids'
 import { cn } from '@/lib/utils'
 import { useUserStore } from '@/stores/use-user-store'
-import useAudioPlayer from '@/hooks/use-audio-player'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { utilLang } from '@/utils/lang'
-
-const kolHref = ''
-const communityHref = ''
+import { formLink } from '@/config/link'
+import { useCommunityNft } from '@/hooks/use-community-nft'
 
 export const Ids = () => {
   const { t } = useTranslation()
   const { isConnected } = useAccount()
   const { userInfo } = useUserStore()
   const { setConnectOpen } = useWalletStore()
-  const { ids } = useIds()
+  const { ids: { kol } = {} } = useIds()
   const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
+  // TOOD: should be dynamic `chainId`
+  const { communityId, community } = useCommunityNft(56)
 
   const communityMap = {
     [CommunityCategory.Chat]: t('member'),
@@ -44,7 +44,7 @@ export const Ids = () => {
       )
     }
 
-    if (ids?.kol == null && !ids?.community) {
+    if (!kol && !community) {
       return (
         <div className="my-3 flex items-center">
           <img src="/images/no-airdrop.png" alt="empty" />
@@ -55,35 +55,33 @@ export const Ids = () => {
 
     return (
       <div className="my-3 flex gap-4 flex-wrap">
-        {ids?.kol && (
+        {kol && (
           <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
             <Img
-              src={ids?.kol?.logo}
+              src={kol?.logo}
               alt="Avatar"
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {utilLang.locale(ids?.kol?.name)} {t('ambassador')}
+              {utilLang.locale(kol?.name)} {t('ambassador')}
             </span>
             <CheckIcon />
           </div>
         )}
-        {ids?.community?.map((c, i) => (
-          <div
-            className="flex items-center bg-lime-green rounded-sm overflow-hidden"
-            key={i}
-          >
+        {community && (
+          <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
             <Img
-              src={c.logo}
+              src={community.logo}
               alt="Avatar"
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {utilLang.locale(c.name)} {communityMap[c.category]}
+              {utilLang.locale(community.name)}{' '}
+              {communityMap[community.category as CommunityCategory]}
             </span>
             <CheckIcon />
           </div>
-        ))}
+        )}
       </div>
     )
   }
@@ -101,7 +99,7 @@ export const Ids = () => {
       {userInfo?.role?.kol ? null : (
         <div className="mt-4">
           <Link
-            href={kolHref}
+            href={formLink.kol}
             target="_blank"
             className="text-blue-700 cursor-pointer"
           >
@@ -113,7 +111,7 @@ export const Ids = () => {
       {userInfo?.role?.community ? null : (
         <div className={cn(userInfo?.role?.kol ? 'mt-4' : 'mt-1')}>
           <Link
-            href={communityHref}
+            href={formLink.community}
             target="_blank"
             className="text-blue-700 cursor-pointer"
           >
