@@ -64,6 +64,7 @@ const Airdrop = () => {
       <PrimaryLayout container="div" className="py-5">
         <Ids />
         <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
+
         <div className="flex space-x-2 items-center mt-3">
           <Switch
             id="airdrop-switch"
@@ -72,7 +73,6 @@ const Airdrop = () => {
           />
           <Label htmlFor="airdrop-switch">{t('airdrop.claimed.hide')}</Label>
         </div>
-
         {hasIdentity() ? (
           <>
             <CustomSuspense

@@ -8,10 +8,13 @@ import { cn } from '@/lib/utils'
 import { useHolders } from '../hooks/use-holders'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
+import { useTradeSearchParams } from '../hooks/use-search-params'
+import { idoTrumpCard } from '@/config/ido'
 
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { holders, clearHolders } = useHolders()
+  const { tokenAddr } = useTradeSearchParams()
 
   const getLabel = (holder: (typeof holders)[number]) => {
     const { contract_flag, address } = holder
@@ -44,6 +47,9 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   }
 
   useEffect(() => clearHolders, [])
+
+  // TODO: ido temp
+  if (tokenAddr === idoTrumpCard.address) return
 
   return (
     <>

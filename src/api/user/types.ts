@@ -130,6 +130,7 @@ export interface UserCoinsCreated {
   status: number
   // Custom prop
   isIdoToken?: boolean
+  poolAddr?: string
 }
 
 export interface UserReplies {

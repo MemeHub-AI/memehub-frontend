@@ -6,7 +6,8 @@ import { UserCoinsCreated } from '@/api/user/types'
 export const idoTrumpCard = {
   id: 0, // this is `poolId`
   image: '/images/ido/trump.jpeg',
-  address: '0xCb04d10e94d8bccB8AB2D516D61011eB7818A3e3', // token address
+  address: '', // token address
+  poolAddr: '',
   name: 'Trump407',
   ticker: 'Trump407',
   desc: t('ido.405'),

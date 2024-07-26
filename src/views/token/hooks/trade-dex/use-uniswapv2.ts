@@ -9,7 +9,7 @@ import { useApprove } from '@/hooks/use-approve'
 import { UNISWAP_ERR } from '@/errors/uniswap'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 import { getDeadline, subSlippage } from '@/utils/contract'
-import { useUniswapV2Info } from './use-uniswapv2-info'
+import { useUniswapV2Amount } from './use-uniswapv2-info'
 import { reserveAddr } from '@/contract/address'
 import { uniswapV2Addr } from '@/contract/uniswapv2/address'
 
@@ -20,7 +20,7 @@ export const useUniswapV2 = (
   const { t } = useTranslation()
   const { address } = useAccount()
   const { isApproving, approvalForAll } = useApprove()
-  const { getAmountOut } = useUniswapV2Info(poolAddr)
+  const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(poolAddr)
   const reserveToken = reserveAddr[chainId]
   const uniswapV2Address = uniswapV2Addr[chainId]
 
@@ -64,7 +64,7 @@ export const useUniswapV2 = (
     const isValid = checkForTrade(amount, token)
     if (!isValid) return
 
-    const tokenAmount = formatEther(await getAmountOut(amount))
+    const tokenAmount = formatEther(await getAmountForBuy(amount))
     if (BigNumber(tokenAmount).isZero()) {
       UNISWAP_ERR.amonutInvalid()
       return
@@ -96,7 +96,7 @@ export const useUniswapV2 = (
     const isApproved = await approvalForAll(token, uniswapV2Address, amount)
     if (!isApproved) return
 
-    const reserveAmount = formatEther(await getAmountOut(amount, true))
+    const reserveAmount = formatEther(await getAmountForSell(amount))
     if (BigNumber(reserveAmount).isZero()) {
       UNISWAP_ERR.amonutInvalid()
       return

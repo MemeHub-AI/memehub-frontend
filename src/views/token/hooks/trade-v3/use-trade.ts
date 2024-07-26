@@ -13,6 +13,7 @@ import { useInvite } from '../use-invite'
 import { usePools } from '../use-pools'
 import { v3Addr } from '@/contract/v3/address'
 import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
+import { useTokenContext } from '@/contexts/token'
 
 export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
@@ -22,6 +23,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { getReferrals } = useInvite()
   const { isGraduated } = usePools(tokenAddr, chainId)
   const { bondingCurve } = v3Addr[chainId] ?? {}
+  const { isIdoToken } = useTokenContext()
 
   const {
     getNativeAmount,
@@ -56,7 +58,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const buy = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGraduated) return dexBuy(tokenAddr, amount, slippage)
+    if (isGraduated || isIdoToken) return dexBuy(tokenAddr, amount, slippage)
 
     const nativeAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
@@ -87,7 +89,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGraduated) return dexSell(tokenAddr, amount, slippage)
+    if (isGraduated || isIdoToken) return dexSell(tokenAddr, amount, slippage)
 
     const nativeAmount = formatEther(await getNativeAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {

@@ -21,7 +21,8 @@ import { AvatarCard } from '@/components/avatar-card'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { tokenInfo, isLoadingTokenInfo, isNotFound } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo, isNotFound, isIdoToken } =
+    useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
   const { isGraduated } = usePools(tokenInfo?.address)
@@ -75,7 +76,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
 
       {/* Name/symbol */}
       <div className="font-bold leading-none text-center mt-2">
-        {isNotFound
+        {isNotFound && !isIdoToken
           ? t('token.not-found')
           : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
       </div>
@@ -106,7 +107,9 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       )}
 
       {/* Bonding curve description */}
-      {isNotFound ? (
+      {isIdoToken ? (
+        <></>
+      ) : isNotFound ? (
         <p className="text-xs text-zinc-500 max-sm:mt-2">
           {t('token.not-found-desc')}
         </p>

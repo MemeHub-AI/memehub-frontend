@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { formatEther } from 'viem'
+import { Address, formatEther } from 'viem'
 
 import { useTradeV3 } from './trade-v3/use-trade'
 import { useTokenContext } from '@/contexts/token'
@@ -15,6 +15,7 @@ import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
+import { idoTrumpCard } from '@/config/ido'
 
 // Used for trade success tips.
 const lastTrade: Options = {
@@ -25,7 +26,7 @@ const lastTrade: Options = {
 }
 
 export const useTrade = () => {
-  const { tokenInfo } = useTokenContext()
+  const { tokenInfo, isIdoToken } = useTokenContext()
   const { showToast } = useTradeToast()
   const { userInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
@@ -34,7 +35,10 @@ export const useTrade = () => {
   const [loading, setLoading] = useState(false)
   const { chainId } = useChainInfo()
 
-  const dexTrade = useDexTrade(chainId, tokenInfo?.pool_address)
+  const dexTrade = useDexTrade(
+    chainId,
+    (isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.pool_address) as Address
+  )
   const tradeV3 = useTradeV3(dexTrade)
   const { getNativeAmount, getTokenAmount } = useTradeInfoV3()
 
@@ -86,8 +90,8 @@ export const useTrade = () => {
       setLoading(false)
       return
     }
+    if (!isIdoToken) await updateLastTrade(TradeType.Buy, amount)
 
-    await updateLastTrade(TradeType.Buy, amount)
     return trade?.buy(amount, slippage)
   }
 
@@ -98,8 +102,8 @@ export const useTrade = () => {
       setLoading(false)
       return
     }
+    if (!isIdoToken) await updateLastTrade(TradeType.Sell, amount)
 
-    await updateLastTrade(TradeType.Sell, amount)
     return trade?.sell(amount, slippage)
   }
 

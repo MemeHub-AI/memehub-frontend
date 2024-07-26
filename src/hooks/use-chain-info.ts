@@ -13,7 +13,7 @@ export const useChainInfo = (nameOrId?: string | number) => {
   return {
     chainInfo: chain,
     chainName: chain?.name,
-    chainId: (chain?.id || 0) as ChainId,
+    chainId: Number(chain?.id || 0) as ChainId,
     walletChainId,
   }
 }
