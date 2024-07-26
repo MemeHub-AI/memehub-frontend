@@ -8,10 +8,12 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { IDO_ERR } from '@/errors/ido'
 import { useTranslation } from 'react-i18next'
 import { useIdoContext } from '@/contexts/ido'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 export const useIdo = (onFinally?: () => void) => {
   const { t } = useTranslation()
   const { chainId, poolId } = useIdoContext()
+  const { checkForConnect, checkForChain } = useCheckAccount()
   const { ido } = v3Addr[chainId] ?? {}
 
   const {
@@ -41,7 +43,16 @@ export const useIdo = (onFinally?: () => void) => {
     },
   })
 
-  const buy = (amount: string) => {
+  const checkForWrite = async () => {
+    if (!(await checkForConnect())) return false
+    if (!(await checkForChain(chainId))) return false
+
+    return true
+  }
+
+  const buy = async (amount: string) => {
+    if (!(await checkForWrite())) return
+
     writeContract({
       abi: idoAbi,
       address: ido!,
@@ -52,7 +63,9 @@ export const useIdo = (onFinally?: () => void) => {
     })
   }
 
-  const claim = () => {
+  const claim = async () => {
+    if (!(await checkForWrite())) return
+
     writeContract({
       abi: idoAbi,
       address: ido!,
@@ -62,7 +75,9 @@ export const useIdo = (onFinally?: () => void) => {
     })
   }
 
-  const refund = () => {
+  const refund = async () => {
+    if (!(await checkForWrite())) return
+
     writeContract({
       abi: idoAbi,
       address: ido!,
