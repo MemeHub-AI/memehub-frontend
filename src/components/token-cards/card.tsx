@@ -2,6 +2,7 @@ import React, { useState, type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { Address } from 'viem'
 import { useTranslation } from 'react-i18next'
+import { isNumber } from 'lodash'
 
 import type { UserCoinsCreated } from '@/api/user/types'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -20,9 +21,9 @@ import { Countdown } from '@/components/countdown'
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
   descClass?: string
-  isIdo?: boolean
   idoCreateAt?: number
   idoDuration?: number
+  idoEndAt?: number
   idoProgress?: number | string
 }
 
@@ -32,7 +33,6 @@ export const TokenCard = (props: Props) => {
     className,
     descClass,
     onClick,
-    isIdo,
     idoCreateAt,
     idoDuration,
     idoProgress,
@@ -49,8 +49,12 @@ export const TokenCard = (props: Props) => {
     card.address as Address,
     Number(card.chain.id)
   )
+  const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (isIdo && card.address) {
+      return router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
+    }
     if (isIdo) {
       return router.push(fmt.toHref(Routes.Ido, card.chain.name, card.id))
     }

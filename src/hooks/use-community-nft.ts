@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { BI_ZERO } from '@/constants/number'
 import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
 import { v3Addr } from '@/contract/v3/address'
-import { COMMUNITY_IDX } from '@/config/ido'
+import { COMMUNITY_IDX } from '@/config/nft'
 import { allianceApi } from '@/api/alliance'
 import { parseHash } from '@/utils/contract'
 

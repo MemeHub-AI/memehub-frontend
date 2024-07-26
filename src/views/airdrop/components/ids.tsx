@@ -24,7 +24,7 @@ export const Ids = () => {
   const { ids: { kol } = {} } = useIds()
   const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
   // TOOD: should be dynamic `chainId`
-  const { communityId, community } = useCommunityNft(56)
+  const { community } = useCommunityNft(56)
 
   const communityMap = {
     [CommunityCategory.Chat]: t('member'),

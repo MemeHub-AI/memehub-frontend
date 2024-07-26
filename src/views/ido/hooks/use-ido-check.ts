@@ -9,7 +9,7 @@ import { allianceApi } from '@/api/alliance'
 import { useIdoContext } from '@/contexts/ido'
 import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
 import { parseHash } from '@/utils/contract'
-import { COMMUNITY_IDX } from '@/config/ido'
+import { COMMUNITY_IDX } from '@/config/nft'
 
 export const useIdoCheck = () => {
   const { address } = useAccount()
