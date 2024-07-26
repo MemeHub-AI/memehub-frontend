@@ -128,6 +128,8 @@ export interface UserCoinsCreated {
   total_replies: number
   chain: Chain
   status: number
+  // Custom prop
+  isIdoToken?: boolean
 }
 
 export interface UserReplies {

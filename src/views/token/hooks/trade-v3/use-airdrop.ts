@@ -25,7 +25,7 @@ import { DeviceWidth } from '@/hooks/use-responsive'
 export const useAirdrop = (
   id: number = 0,
   type_list: string,
-  onFinlly?: () => void,
+  onFinlly?: () => void
 ) => {
   const { t } = useTranslation()
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -44,7 +44,8 @@ export const useAirdrop = (
 
   // Query airdrop details.
   const { data: { data } = {}, refetch } = useQuery({
-    enabled: !!chainName && !!type_list && !!tokenAddr,
+    // enabled: !!chainName && !!type_list && !!tokenAddr,
+    enabled: false,
     queryKey: [airdropApi.getProof.name + uniqueKey, type_list, tokenAddr],
     queryFn: () => {
       if (type_list == 'undefined') return Promise.reject()
@@ -99,12 +100,12 @@ export const useAirdrop = (
     onError: () =>
       toast.error(
         isClaim ? t('airdrop.claim.failed') : t('airdrop.burn.failed'),
-        toastConfig,
+        toastConfig
       ),
     onSuccess: () =>
       toast.success(
         isClaim ? t('airdrop.claim.success') : t('airdrop.burn.success'),
-        toastConfig,
+        toastConfig
       ),
     onFillay: () => {
       setBurning(false)

@@ -42,6 +42,7 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
   const { data: initUserWeight = BI_ZERO } = useReadContract({
     abi: idoAbi,
     address: v3Addr[chainId]?.ido,
+    chainId,
     functionName: 'getUserWeight',
     args: [address!, [], BigInt(0)],
     query: { enabled: !!address },

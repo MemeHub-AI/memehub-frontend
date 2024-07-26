@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useStorage } from './use-storage'
+import { utilTime } from '@/utils/time'
 
 export const useLang = () => {
   const { i18n } = useTranslation()
@@ -14,7 +15,8 @@ export const useLang = () => {
 
   useEffect(() => {
     const lang = getLang()
-    if (lang) setLang(lang)
+    if (lang) return setLang(lang)
+    if (utilTime.isUtcOffset8()) setLang('zh')
   }, [])
 
   return {

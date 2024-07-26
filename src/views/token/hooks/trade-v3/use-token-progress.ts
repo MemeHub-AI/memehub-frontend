@@ -33,15 +33,15 @@ export const useTokenProgressV3 = (
     chainId,
     query: { enabled: !!bondingCurve },
   })
-  const { tokenReserve, isGrauated, refetchPools } = usePools(token, chainId)
+  const { tokenReserve, isGraduated, refetchPools } = usePools(token, chainId)
 
   const total = formatEther(totalSupply || BI_ZERO)
   const current = formatEther(tokenReserve || BI_ZERO)
 
   const progress = useMemo(() => {
     if (BigNumber(total).isZero()) return '0.00'
-    if (isGrauated) return '100.00'
-    if (!isGrauated && BigNumber(current).isZero()) return '0.00'
+    if (isGraduated) return '100.00'
+    if (!isGraduated && BigNumber(current).isZero()) return '0.00'
 
     // Calc progress.
     return BigNumber(total)
@@ -49,7 +49,7 @@ export const useTokenProgressV3 = (
       .div(total)
       .multipliedBy(100)
       .toFixed(2)
-  }, [total, current, isGrauated])
+  }, [total, current, isGraduated])
 
   const refetchProgress = () => {
     refetchTotal()
@@ -62,7 +62,7 @@ export const useTokenProgressV3 = (
     progress,
     isLoadingProgress,
     isFetchingProgress,
-    isGrauated,
+    isGrauated: isGraduated,
     refetchProgress,
   }
 }

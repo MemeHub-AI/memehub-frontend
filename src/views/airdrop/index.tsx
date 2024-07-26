@@ -34,6 +34,7 @@ const Airdrop = () => {
         airdropList: data.pages.flatMap((p) => p?.results).filter(Boolean),
       }
     },
+    enabled: false,
   })
   const airdrops = data?.airdropList
 

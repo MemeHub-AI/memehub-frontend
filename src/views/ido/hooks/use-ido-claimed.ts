@@ -11,6 +11,7 @@ export const useIdoClaimed = (chainId: number, poolId: number) => {
   const { data: tokenAmountWei = BI_ZERO } = useReadContract({
     abi: idoAbi,
     address: v3Addr[chainId]?.ido,
+    chainId,
     functionName: 'getClaimTokenAmount',
     args: [BigInt(poolId), address!],
     query: { enabled: !!address },
@@ -18,6 +19,7 @@ export const useIdoClaimed = (chainId: number, poolId: number) => {
   const { data: reserveAmountWei = BI_ZERO } = useReadContract({
     abi: idoAbi,
     address: v3Addr[chainId]?.ido,
+    chainId,
     functionName: 'getClaimEthAmount',
     args: [BigInt(poolId), address!],
     query: { enabled: !!address },
@@ -32,6 +34,7 @@ export const useIdoClaimed = (chainId: number, poolId: number) => {
   } = useReadContract({
     abi: idoAbi,
     address: v3Addr[chainId]?.ido,
+    chainId,
     functionName: 'getIsClaimedToken',
     args: [BigInt(poolId), address!],
     query: { enabled: !!address },
@@ -43,6 +46,7 @@ export const useIdoClaimed = (chainId: number, poolId: number) => {
   } = useReadContract({
     abi: idoAbi,
     address: v3Addr[chainId]?.ido,
+    chainId,
     functionName: 'getIsClaimedEth',
     args: [BigInt(poolId), address!],
     query: { enabled: !!address },

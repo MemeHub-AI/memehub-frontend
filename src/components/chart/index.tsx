@@ -23,7 +23,7 @@ export const Chart = memo(() => {
   const { tokenInfo, isNotFound } = useTokenContext()
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
-  const { isGrauated } = usePools(tokenInfo?.address)
+  const { isGraduated } = usePools(tokenInfo?.address)
   const { chart } = useChartStore()
   const [, update] = useState(false)
   const activeChart = chart?.activeChart()
@@ -61,10 +61,10 @@ export const Chart = memo(() => {
         className={cn(
           'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
           'rounded-md overflow-hidden max-sm:mt-3',
-          isCreating && !isGrauated && 'scale-0 absolute'
+          isCreating && !isGraduated && 'scale-0 absolute'
         )}
       >
-        {isGrauated ? (
+        {isGraduated ? (
           <ChartDexScreener className="w-full h-full" />
         ) : (
           <div className="flex flex-col h-full">
@@ -95,7 +95,7 @@ export const Chart = memo(() => {
       </div>
 
       <ChartSkeleton
-        className={(!isCreating || isGrauated) && 'scale-0 absolute'}
+        className={(!isCreating || isGraduated) && 'scale-0 absolute'}
       />
     </>
   )

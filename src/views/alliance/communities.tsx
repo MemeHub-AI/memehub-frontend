@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
 import { CommunityCard } from '@/components/community-card'
 import { Input } from '@/components/ui/input'
+import { formLink } from '@/config/link'
 
 export const Communities = () => {
   const { t } = useTranslation()
@@ -79,7 +80,9 @@ export const Communities = () => {
           {t('community.desc').replace('$1', `${total}` || '-')}
         </div>
         {userInfo?.role?.community ? null : (
-          <Button>{t('apply.community')}</Button>
+          <Button onClick={() => open(formLink.community)}>
+            {t('apply.community')}
+          </Button>
         )}
         <Input
           placeholder={t('community.search')}

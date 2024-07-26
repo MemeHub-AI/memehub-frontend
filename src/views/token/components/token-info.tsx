@@ -24,7 +24,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { tokenInfo, isLoadingTokenInfo, isNotFound } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { isGrauated } = usePools(tokenInfo?.address)
+  const { isGraduated } = usePools(tokenInfo?.address)
   const { chainsMap } = useChainsStore()
   const chain = chainsMap[tokenInfo?.chain?.id ?? 0]
 
@@ -57,7 +57,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       src={tokenInfo?.image}
       className="mt-20"
       avatarChildren={
-        isGrauated && (
+        isGraduated && (
           <Badge
             variant="success"
             className="absolute -bottom-0 left-1/2 -translate-x-1/2 border-black"
@@ -112,7 +112,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
         </p>
       ) : (
         <p className="text-xs text-zinc-500 max-sm:mt-2">
-          {isGrauated
+          {isGraduated
             ? t('token.graduated-desc')
             : utilLang.replace(t('bonding-curve.desc'), [
                 BigNumber(LISTED_MARKET_CAP).toFormat(),
