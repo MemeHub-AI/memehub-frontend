@@ -562,6 +562,6 @@
   "airdrop.claiming": "领取中...",
   "ido.airdrop.not-enough": "你没有足够的 BNB",
   "ido.trump407-desc": "全球第一个基于ERC-407协议发行的代币，融合了404和燃烧机制，颠覆性地确保了代币不断上涨",
-  "balance-insufficient": "需要持有",
+  "balance-insufficient": "持有{}免费领取",
   "ido.airdrop.not-start": "未开始"
 }

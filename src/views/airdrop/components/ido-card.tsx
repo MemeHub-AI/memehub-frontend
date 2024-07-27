@@ -93,10 +93,11 @@ export const IdoAirdropCard = ({
         isKolAirdrop ? 'KOL' : t('pure.community'),
       ])
     }
+
     if (!isKolAirdrop && isBelowThreshold) {
-      return `${t('balance-insufficient')} ${communityThreshold} ${
-        idoChain.native.symbol
-      }`
+      return utilLang.replace(t('balance-insufficient'), [
+        `${communityThreshold} ${idoChain.native.symbol}`,
+      ])
     }
 
     return t('pure.claim')
