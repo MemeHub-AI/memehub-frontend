@@ -62,7 +62,7 @@ export const IdoAirdropCard = ({
     isClaimed ||
     BigNumber(amount).isZero() ||
     !hasId ||
-    (isCommunity && isBelowThreshold)
+    (!isKolAirdrop && isBelowThreshold)
 
   const buttonText = () => {
     if (isClaming) return t('airdrop.claiming')
@@ -77,7 +77,7 @@ export const IdoAirdropCard = ({
       ])
     }
 
-    if (isCommunity && isBelowThreshold) {
+    if (!isKolAirdrop && isBelowThreshold) {
       return `${t('balance-insufficient')} ${communityThreshold} ${
         idoChain.native.symbol
       }`
