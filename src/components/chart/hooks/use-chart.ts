@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 import {
   LanguageCode,
   ResolutionString,
-  widget,
 } from '../../../../public/js/charting_library/charting_library'
 import { useDatafeed } from './use-datafeed'
 import { useChartStore } from '@/stores/use-chart-store'
@@ -29,7 +28,7 @@ export const useChart = () => {
 
     setChartEl(container)
     try {
-      const chart = new (widget || window.TradingView.widget)({
+      const chart = new window.TradingView.widget({
         ...chartOptions,
         container,
         symbol,
