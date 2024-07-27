@@ -37,7 +37,7 @@ const dev: Record<number, Record<Keys, Address> | undefined> = {
     exchangeNft: '0x5f5EAC903c8CCf445671580C178a7B6815519a12',
     kolNft: '0x5859AdD7DA6107D1FA4FC3aB98D242aAF310d61e',
     ido: '0xF7dbaBCC9B132D3a5f726357ecf5dDDC49DfDC84',
-    idoAirdrop: '0xEFeA10E78F3D2a96A0A216C69ff530888C7de256',
+    idoAirdrop: '',
   },
   [base.id]: {
     bondingCurve: '0x15374e7000d9633a3E7782998407Eb98293E478f',

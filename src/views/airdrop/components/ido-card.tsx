@@ -51,9 +51,9 @@ export const IdoAirdropCard = ({
   } = useIdoCommunityAirdrop(!isKolAirdrop)
   const { isKol, isCommunity } = useIdoCheck(idoChain.id)
 
-  const amount = isKolAirdrop ? kolAmount : communityAmount
-  const current = isKolAirdrop ? kolCurrent : communityCurrent
-  const total = isKolAirdrop ? kolTotal : communityTotal
+  const amount = isKolAirdrop ? 6666 ?? kolAmount : 3000 ?? communityAmount
+  const current = isKolAirdrop ? 0 ?? kolCurrent : 0 ?? communityCurrent
+  const total = isKolAirdrop ? 300 ?? kolTotal : 2000 ?? communityTotal
   const isClaimed = isKolAirdrop ? isKolClaimed : isCommunityClaimed
   const hasId = isKolAirdrop ? isKol : isCommunity
 
@@ -70,7 +70,10 @@ export const IdoAirdropCard = ({
     refetchKolAirdrop()
     refetchCommunityAirdrop()
   })
+
+  // TODO: remove `true`
   const disabled =
+    true ||
     isClaming ||
     isClaimed ||
     BigNumber(amount).isZero() ||
@@ -78,7 +81,8 @@ export const IdoAirdropCard = ({
     (!isKolAirdrop && isBelowThreshold)
 
   const renderButtonText = () => {
-    if (isNotStart) return t('ido.airdrop.not-start')
+    // TODO: remove
+    return t('ido.airdrop.not-start')
 
     if (isClaming) return t('airdrop.claiming')
 
