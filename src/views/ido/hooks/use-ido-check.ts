@@ -4,13 +4,15 @@ import { useAccount, useReadContract } from 'wagmi'
 import { BI_ZERO } from '@/constants/number'
 import { kolNftAbi } from '@/contract/v3/abi/kol-nft'
 import { v3Addr } from '@/contract/v3/address'
-import { useIdoContext } from '@/contexts/ido'
-import { useCommunityNft } from '@/hooks/use-community-nft'
+import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
+import { COMMUNITY_IDX } from '@/config/nft'
+import { useQuery } from '@tanstack/react-query'
+import { allianceApi } from '@/api/alliance'
+import { parseHash } from '@/utils/contract'
 
-export const useIdoCheck = () => {
+export const useIdoCheck = (chainId: number) => {
   const { address } = useAccount()
-  const { chainId } = useIdoContext()
-  const { kolNft } = v3Addr[chainId] ?? {}
+  const { kolNft, exchangeNft } = v3Addr[chainId] ?? {}
 
   const { data: kolTokenId = BI_ZERO } = useReadContract({
     abi: kolNftAbi,
@@ -22,11 +24,33 @@ export const useIdoCheck = () => {
   })
   const isKol = !BigNumber(kolTokenId.toString()).isZero()
 
-  const { community } = useCommunityNft(chainId, !isKol)
+  const { data: communityId = BI_ZERO } = useReadContract({
+    abi: exchangeNftAbi,
+    address: exchangeNft,
+    chainId,
+    functionName: 'isClaimedOfId',
+    args: [address!, BigInt(COMMUNITY_IDX)],
+    query: { enabled: !!address },
+  })
+  const cId = BigNumber(communityId.toString())
+  const isCommunity = cId.gt(0)
+
+  const { data: community } = useQuery({
+    queryKey: [allianceApi.getCommunityDetail.name, cId.toString(), address],
+    queryFn: () => {
+      return allianceApi.getCommunityDetail({
+        identity: parseHash(communityId),
+      })
+    },
+    select: ({ data }) => data,
+    retry: (count) => count < 3,
+    enabled: cId.gt(0) && !!address,
+  })
 
   return {
     kolTokenId,
-    isKol,
     community,
+    isKol,
+    isCommunity,
   }
 }

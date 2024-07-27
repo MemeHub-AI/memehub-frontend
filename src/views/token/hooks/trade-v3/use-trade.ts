@@ -37,7 +37,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     writeContract,
     reset: resetInternalTrade,
   } = useWriteContract({
-    mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
+    mutation: { onError: (e) => CONTRACT_ERR.message(e) },
   })
   const tradeHash = isGraduated ? dexHash : internalHash
   const isSubmitting = isGraduated ? isDexTrading : isInternalTrading

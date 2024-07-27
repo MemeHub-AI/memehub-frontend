@@ -553,5 +553,13 @@
   "ido.guard2": "Memehub是币安黑客松第二名，平台安全有保障。",
   "ido.guard1": "所有资金进入智能合约地址，项目结束后自动退款，项目方不接触资金，一切都是程序自动执行的，捐赠合约代码已通过内部多重审计确保安全。",
   "ido.time1": "周五下午3:00截止捐赠",
-  "ido.time2": "07月27日晚8:30开盘"
+  "ido.time2": "07月27日晚8:30开盘",
+  "ido.airdrop.kol": "仅限 KOL",
+  "ido.airdrop.community": "仅限社区成员",
+  "pure.claim": "领取",
+  "tx.confirmation": "等待区块确认中...",
+  "ido.airdrop.claim-success": "领取成功！",
+  "ido.airdrop.no-claim": "暂无",
+  "ido.airdrop.no-id": "你还没有{} NFT",
+  "airdrop.claiming": "领取中..."
 }

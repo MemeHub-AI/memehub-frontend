@@ -14,23 +14,24 @@ import { useUserStore } from '@/stores/use-user-store'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { utilLang } from '@/utils/lang'
 import { formLink } from '@/config/link'
-import { useCommunityNft } from '@/hooks/use-community-nft'
+import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
+import { idoChain } from '@/config/ido'
 
 export const Ids = () => {
   const { t } = useTranslation()
-  const { isConnected } = useAccount()
-  const { userInfo } = useUserStore()
-  const { setConnectOpen } = useWalletStore()
-  const { ids: { kol } = {} } = useIds()
-  const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
-  // TOOD: should be dynamic `chainId`
-  const { community } = useCommunityNft(56)
-
   const communityMap = {
     [CommunityCategory.Chat]: t('member'),
     [CommunityCategory.Nft]: t('holder'),
     [CommunityCategory.Token]: t('holder'),
   }
+  const { isConnected } = useAccount()
+  const { userInfo } = useUserStore()
+  const { setConnectOpen } = useWalletStore()
+  // const { ids: { kol } = {} } = useIds()
+  const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
+
+  // TODO: ido temp
+  const { isKol, community } = useIdoCheck(idoChain.id)
 
   const getIdStatus = () => {
     if (!isConnected) {
@@ -44,7 +45,7 @@ export const Ids = () => {
       )
     }
 
-    if (!kol && !community) {
+    if (!isKol && !community) {
       return (
         <div className="my-3 flex items-center">
           <img src="/images/no-airdrop.png" alt="empty" />
@@ -55,15 +56,15 @@ export const Ids = () => {
 
     return (
       <div className="my-3 flex gap-4 flex-wrap">
-        {kol && (
+        {isKol && (
           <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
             <Img
-              src={kol?.logo}
+              src={userInfo?.logo}
               alt="Avatar"
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {utilLang.locale(kol?.name)} {t('ambassador')}
+              {userInfo?.name} {t('ambassador')}
             </span>
             <CheckIcon />
           </div>
@@ -96,7 +97,7 @@ export const Ids = () => {
       </audio>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
-      {userInfo?.role?.kol ? null : (
+      {!isKol && (
         <div className="mt-4">
           <Link
             href={formLink.kol}
@@ -108,8 +109,8 @@ export const Ids = () => {
           <span className="ml-2">{t('platform.airdrop')}</span>
         </div>
       )}
-      {userInfo?.role?.community ? null : (
-        <div className={cn(userInfo?.role?.kol ? 'mt-4' : 'mt-1')}>
+      {!community && (
+        <div className={cn(isKol ? 'mt-4' : 'mt-1')}>
           <Link
             href={formLink.community}
             target="_blank"

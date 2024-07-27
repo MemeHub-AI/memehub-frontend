@@ -6,12 +6,15 @@ import { Ids } from './components/ids'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { AirdropCard } from './components/card'
-import { data } from './data'
+import { airdropData } from './data'
 import { useUserStore } from '@/stores/use-user-store'
 import { airdropApi } from '@/api/airdrop'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { AirdropProvider } from '@/contexts/airdrop'
+import { useIdoCheck } from '../ido/hooks/use-ido-check'
+import { idoChain } from '@/config/ido'
+import { IdoAirdropCard } from './components/ido-card'
 
 const Airdrop = () => {
   const { t } = useTranslation()
@@ -38,6 +41,8 @@ const Airdrop = () => {
   })
   const airdrops = data?.airdropList
 
+  const { isKol, community } = useIdoCheck(idoChain.id)
+
   const handleLoadStatus = () => {
     if (isFetching && data?.total) {
       return (
@@ -61,26 +66,29 @@ const Airdrop = () => {
 
   return (
     <AirdropProvider value={{ hideClaimed: checked }}>
-      <PrimaryLayout container="div" className="py-5">
+      <PrimaryLayout container="div" className="py-5 flex-col gap-0 w-full">
         <Ids />
         <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
 
-        <div className="flex space-x-2 items-center mt-3">
+        {/* <div className="flex space-x-2 items-center mt-3">
           <Switch
             id="airdrop-switch"
             checked={checked}
             onCheckedChange={setChecked}
           />
           <Label htmlFor="airdrop-switch">{t('airdrop.claimed.hide')}</Label>
-        </div>
-        {hasIdentity() ? (
+        </div> */}
+
+        {isKol || community ? (
           <>
             <CustomSuspense
               isPending={isLoading}
-              fallback={<div>loading...</div>}
+              fallback={<div>{t('loading')}</div>}
               nullback={<div className="mt-3">{t('no.airdrop')}</div>}
-              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max"
+              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 2xl:w-3/4"
             >
+              <IdoAirdropCard tag={t('ido.airdrop.kol')} isKolAirdrop />
+              <IdoAirdropCard tag={t('ido.airdrop.community')} />
               {airdrops?.map((airdrop, i) => (
                 <AirdropCard key={i} airdrop={airdrop} />
               ))}
@@ -98,7 +106,7 @@ const Airdrop = () => {
 const AirdropSkeleton = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max">
-      {data?.map((airdrop, i) => (
+      {airdropData.map((airdrop, i) => (
         <AirdropCard
           key={i}
           className="blur-lg pointer-events-none select-none"

@@ -391,7 +391,7 @@
   "airdrop.claim.failed": "Claim failed",
   "airdrop.claim.success": "Claim successful!",
   "airdrop.claiming": "Claiming...",
-  "airdrop.claimed": "Claimed",
+  "airdrop.claimed": "Already claimed",
   "alliance": "Alliance",
   "alliance.kol": "KOL Ambassador",
   "alliance.communities": " COMMUNITIES",
@@ -563,5 +563,12 @@
   "ido.guard1": "All funds enter the smart contract address, and are automatically refunded after the project ends.",
   "ido.guard2": "Memehub is the second place winner of the Binance Hackathon, and the platform's security is guaranteed.",
   "ido.time1": "Donation deadline is Friday at 3:00 PM",
-  "ido.time2": "Market opens at 8:30 PM on July 27th"
+  "ido.time2": "Market opens at 8:30 PM on July 27th",
+  "ido.airdrop.kol": "KOL only",
+  "ido.airdrop.community": "Community member only",
+  "pure.claim": "Claim",
+  "tx.confirmation": "Waiting for block confirmation...",
+  "ido.airdrop.claim-success": "Claim successful!",
+  "ido.airdrop.no-claim": "No yet",
+  "ido.airdrop.no-id": "You do not have {} NFT yet"
 }

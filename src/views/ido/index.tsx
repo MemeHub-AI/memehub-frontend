@@ -17,6 +17,7 @@ import { IdoTag } from '@/components/ido-tag'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { idoTrumpLink } from '@/config/link'
 import { IdoIntro } from './components/ido-intro'
+import { idoChain } from '@/config/ido'
 
 export const IdoPage = () => {
   const { t } = useTranslation()
@@ -27,7 +28,7 @@ export const IdoPage = () => {
   const { query } = useRouter()
   const chain = (query.chain || '') as string
   const poolId = Number(query.id || 0)
-  const chainId = Number(chainsMap[chain]?.id || 56)
+  const chainId = Number(chainsMap[chain]?.id || idoChain.id)
   const reserveSymbol = chainsMap[chain]?.native.symbol || 'BNB'
 
   const idoInfo = useIdoInfo(chainId, poolId)

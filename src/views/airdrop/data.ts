@@ -1,6 +1,6 @@
 import { AirdropItem } from '@/api/airdrop/types'
 
-export const data: AirdropItem[] = [
+export const airdropData: AirdropItem[] = [
   {
     chain: 'bsc_testnet',
     name: 'PEPE',

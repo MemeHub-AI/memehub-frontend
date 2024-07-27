@@ -103,7 +103,7 @@ interface User {
 }
 
 export interface Chain {
-  id: string
+  id: string | number
   name: string
   displayName: string
   logo: string
