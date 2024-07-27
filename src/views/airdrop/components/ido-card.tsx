@@ -15,6 +15,10 @@ import { useIdoAirdropClaim } from '../hooks/use-ido-claim'
 import { useIdoCommunityAirdrop } from '../hooks/use-ido-community-airdrop'
 import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
 import { utilLang } from '@/utils/lang'
+import { useReadContract } from 'wagmi'
+import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
+import { v3Addr } from '@/contract/v3/address'
+import { zeroAddress } from 'viem'
 
 interface Props {
   tag: string
@@ -53,6 +57,17 @@ export const IdoAirdropCard = ({
   const isClaimed = isKolAirdrop ? isKolClaimed : isCommunityClaimed
   const hasId = isKolAirdrop ? isKol : isCommunity
 
+  const { data: tokenAddr = zeroAddress } = useReadContract({
+    abi: idoAirdropAbi,
+    address: v3Addr[idoChain.id]?.idoAirdrop,
+    chainId: idoChain.id,
+    functionName: 'tokenAddress',
+    query: { enabled: !!v3Addr[idoChain.id]?.idoAirdrop },
+  })
+  const isNotStart = tokenAddr === zeroAddress
+
+  console.log('addr', tokenAddr, isNotStart)
+
   const { isClaming, claim } = useIdoAirdropClaim(() => {
     refetchKolAirdrop()
     refetchCommunityAirdrop()
@@ -65,6 +80,8 @@ export const IdoAirdropCard = ({
     (!isKolAirdrop && isBelowThreshold)
 
   const buttonText = () => {
+    if (isNotStart) return t('ido.airdrop.not-start')
+
     if (isClaming) return t('airdrop.claiming')
 
     if (isClaimed) return t('airdrop.claimed')
@@ -96,7 +113,7 @@ export const IdoAirdropCard = ({
       </div>
       <div className="mt-3 flex justify-between space-x-4">
         <div className="self-end">
-          <div className="bg-lime-green rounded-md px-2 py-0.5 flex items-center">
+          <div className="bg-lime-green rounded-md px-2 py-0.5 flex items-center max-w-max">
             {tag}
           </div>
           <div className="mt-3 flex items-center">

@@ -563,5 +563,6 @@
   "ido.airdrop.no-id": "你还没有{} NFT",
   "airdrop.claiming": "领取中...",
   "ido.airdrop.not-enough": "你没有足够的 BNB",
-  "balance-insufficient": "余额不足"
+  "balance-insufficient": "余额不足",
+  "ido.airdrop.not-start": "未开始"
 }

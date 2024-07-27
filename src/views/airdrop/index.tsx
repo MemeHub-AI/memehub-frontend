@@ -85,7 +85,7 @@ const Airdrop = () => {
               isPending={isLoading}
               fallback={<div>{t('loading')}</div>}
               nullback={<div className="mt-3">{t('no.airdrop')}</div>}
-              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 2xl:w-3/4"
+              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 "
             >
               <IdoAirdropCard tag={t('ido.airdrop.kol')} isKolAirdrop />
               <IdoAirdropCard tag={t('ido.airdrop.community')} />

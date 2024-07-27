@@ -1,5 +1,5 @@
 import { useAccount, useReadContract } from 'wagmi'
-import { formatEther } from 'viem'
+import { formatEther, zeroAddress } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'react-use'
 
