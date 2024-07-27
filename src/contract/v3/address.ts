@@ -17,6 +17,7 @@ const prod: Record<number, Record<Keys, Address> | undefined> = {
     exchangeNft: '0xeB22DaC6525b0763AC0fEa2834Ca2C396859b3BF',
     kolNft: '0x4e1571c2460034A5Fe120aE312678cB3180BFC74',
     ido: '0xCa96dC5e86543cd185B39Fe48194890c57b6a38f',
+    idoAirdrop: '',
   },
   [base.id]: {
     exchangeNft: '0xeB22DaC6525b0763AC0fEa2834Ca2C396859b3BF',

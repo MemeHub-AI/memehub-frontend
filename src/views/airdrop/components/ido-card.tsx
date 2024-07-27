@@ -66,8 +66,6 @@ export const IdoAirdropCard = ({
   })
   const isNotStart = tokenAddr === zeroAddress
 
-  console.log('addr', tokenAddr, isNotStart)
-
   const { isClaming, claim } = useIdoAirdropClaim(() => {
     refetchKolAirdrop()
     refetchCommunityAirdrop()
@@ -79,7 +77,7 @@ export const IdoAirdropCard = ({
     !hasId ||
     (!isKolAirdrop && isBelowThreshold)
 
-  const buttonText = () => {
+  const renderButtonText = () => {
     if (isNotStart) return t('ido.airdrop.not-start')
 
     if (isClaming) return t('airdrop.claiming')
@@ -93,7 +91,6 @@ export const IdoAirdropCard = ({
         isKolAirdrop ? 'KOL' : t('pure.community'),
       ])
     }
-
     if (!isKolAirdrop && isBelowThreshold) {
       return `${t('balance-insufficient')} ${communityThreshold} ${
         idoChain.native.symbol
@@ -113,7 +110,7 @@ export const IdoAirdropCard = ({
       </div>
       <div className="mt-3 flex justify-between space-x-4">
         <div className="self-end">
-          <div className="bg-lime-green rounded-md px-2 py-0.5 flex items-center max-w-max">
+          <div className="bg-lime-green text-sm 2xl:text-base rounded-md px-2 py-0.5 flex items-center max-w-max">
             {tag}
           </div>
           <div className="mt-3 flex items-center">
@@ -129,11 +126,11 @@ export const IdoAirdropCard = ({
             </span>
           </div>
           <Button
-            className="mt-3 font-bold px-8"
+            className="mt-3 font-bold self-end !min-w-24"
             disabled={disabled}
             onClick={() => claim(isKolAirdrop)}
           >
-            {buttonText()}
+            {renderButtonText()}
           </Button>
         </div>
         <Img src={logo} className="w-36 h-36" />
