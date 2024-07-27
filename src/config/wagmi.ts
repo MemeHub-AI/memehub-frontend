@@ -1,4 +1,4 @@
-import { http, createConfig, fallback, unstable_connector } from 'wagmi'
+import { http, fallback, unstable_connector } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 import {
   mainnet,
