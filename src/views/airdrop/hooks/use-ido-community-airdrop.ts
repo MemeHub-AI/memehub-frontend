@@ -1,12 +1,12 @@
-import { useAccount, useReadContract } from 'wagmi'
+import { useAccount, useBalance, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
+import { useInterval } from 'react-use'
 
 import { idoChain } from '@/config/ido'
 import { BI_ZERO } from '@/constants/number'
 import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
 import { v3Addr } from '@/contract/v3/address'
-import { useIntersection, useInterval } from 'react-use'
 
 export const useIdoCommunityAirdrop = (enabled: boolean) => {
   const { address } = useAccount()
@@ -50,11 +50,27 @@ export const useIdoCommunityAirdrop = (enabled: boolean) => {
     })
   const communityAmount = formatEther(communityAmountData)
 
+  const { data: { value = BI_ZERO } = {} } = useBalance({
+    address,
+    chainId: idoChain.id,
+  })
+  const reserveBalance = formatEther(value)
+
+  const { data: threshold = BI_ZERO, refetch: refetchThreshold } =
+    useReadContract({
+      ...airdropConfig,
+      functionName: 'communityBnbThreshold',
+      query: { enabled },
+    })
+  const communityThreshold = formatEther(threshold)
+  const isBelowThreshold = BigNumber(reserveBalance).lt(communityThreshold)
+
   const refetchCommunityAirdrop = () => {
     refetchIsClaimed()
     refetchBalance()
     refetchAmount()
     refetchPerAmount()
+    refetchThreshold()
   }
 
   useInterval(refetchCommunityAirdrop, 10_000)
@@ -64,7 +80,9 @@ export const useIdoCommunityAirdrop = (enabled: boolean) => {
     communityTotal,
     communityCurrent,
     communityAmount,
+    communityThreshold,
     isCommunityClaimed,
+    isBelowThreshold,
     refetchCommunityAirdrop,
   }
 }

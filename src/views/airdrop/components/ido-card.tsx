@@ -41,6 +41,8 @@ export const IdoAirdropCard = ({
     communityCurrent,
     communityTotal,
     isCommunityClaimed,
+    communityThreshold,
+    isBelowThreshold,
     refetchCommunityAirdrop,
   } = useIdoCommunityAirdrop(!isKolAirdrop)
   const { isKol, isCommunity } = useIdoCheck(idoChain.id)
@@ -56,7 +58,11 @@ export const IdoAirdropCard = ({
     refetchCommunityAirdrop()
   })
   const disabled =
-    isClaming || isClaimed || BigNumber(amount).isZero() || !hasId
+    isClaming ||
+    isClaimed ||
+    BigNumber(amount).isZero() ||
+    !hasId ||
+    (isCommunity && isBelowThreshold)
 
   const buttonText = () => {
     if (isClaming) return t('airdrop.claiming')
@@ -69,6 +75,12 @@ export const IdoAirdropCard = ({
       return utilLang.replace(t('ido.airdrop.no-id'), [
         isKolAirdrop ? 'KOL' : t('pure.community'),
       ])
+    }
+
+    if (isCommunity && isBelowThreshold) {
+      return `${t('balance-insufficient')} ${communityThreshold} ${
+        idoChain.native.symbol
+      }`
     }
 
     return t('pure.claim')
