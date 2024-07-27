@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useAccount, useWriteContract } from 'wagmi'
 import { Address, erc20Abi, formatEther } from 'viem'
-import { readContract } from '@wagmi/core'
+import { readContract } from 'wagmi/actions'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 

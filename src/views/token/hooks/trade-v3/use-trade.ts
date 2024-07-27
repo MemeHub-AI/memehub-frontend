@@ -58,7 +58,9 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const buy = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGraduated || isIdoToken) return dexBuy(tokenAddr, amount, slippage)
+    if (isGraduated || isIdoToken) {
+      return dexBuy(tokenAddr, amount, slippage, isIdoToken)
+    }
 
     const nativeAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
@@ -89,7 +91,9 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGraduated || isIdoToken) return dexSell(tokenAddr, amount, slippage)
+    if (isGraduated || isIdoToken) {
+      return dexSell(tokenAddr, amount, slippage, isIdoToken)
+    }
 
     const nativeAmount = formatEther(await getNativeAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {
