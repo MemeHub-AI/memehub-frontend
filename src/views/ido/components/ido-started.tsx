@@ -11,6 +11,8 @@ import { JoinInput } from './join-input'
 import { EndedButtons } from './ended-buttons'
 import { utilLang } from '@/utils/lang'
 import { ParticipatedTips } from './participated-tips'
+import { Button } from '@/components/ui/button'
+import { idoTrumpLink } from '@/config/link'
 
 export const IdoStarted = () => {
   const { t } = useTranslation()
@@ -48,6 +50,15 @@ export const IdoStarted = () => {
           </span>
         </div>
       </div>
+
+      <Button
+        variant="yellow"
+        shadow="none"
+        className="mt-2"
+        onClick={() => open(idoTrumpLink.ca)}
+      >
+        {t('go-to.buy')}
+      </Button>
 
       {isActive && !isExpired && (isKol || isCommunityMember) && <JoinInput />}
 
