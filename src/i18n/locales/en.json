@@ -572,6 +572,6 @@
   "ido.airdrop.no-claim": "No yet",
   "ido.airdrop.no-id": "You do not have {} NFT yet",
   "ido.airdrop.not-enough": "You do not have enough BNB",
-  "balance-insufficient": "Need to hold",
+  "balance-insufficient": "Hold {} for free claim",
   "ido.airdrop.not-start": "Not started"
 }
