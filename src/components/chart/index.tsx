@@ -2,7 +2,6 @@ import React, { useEffect, useRef, memo, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
-import type { ClassValue } from 'class-variance-authority/types'
 import { useChart } from './hooks/use-chart'
 import { useTokenContext } from '@/contexts/token'
 import { useStorage } from '@/hooks/use-storage'
@@ -15,12 +14,13 @@ import { datafeedConfig } from '@/config/datafeed'
 import { Button } from '../ui/button'
 import { useChartStore } from '@/stores/use-chart-store'
 import { formatInterval } from '@/utils/chart'
+import { CustomSuspense } from '../custom-suspense'
 
 export const Chart = memo(() => {
   const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
   const { chainName, tokenAddr } = useTradeSearchParams()
-  const { tokenInfo, isNotFound } = useTokenContext()
+  const { tokenInfo, isNotFound, isIdoToken } = useTokenContext()
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
   const { isGraduated } = usePools(tokenInfo?.address)
@@ -29,7 +29,13 @@ export const Chart = memo(() => {
   const activeChart = chart?.activeChart()
 
   useEffect(() => {
-    if (!chartRef.current || isEmpty(tokenAddr) || !tokenInfo || isNotFound) {
+    if (
+      !chartRef.current ||
+      isEmpty(tokenAddr) ||
+      !tokenInfo ||
+      isNotFound ||
+      isIdoToken
+    ) {
       return
     }
 
@@ -42,7 +48,8 @@ export const Chart = memo(() => {
     return removeChart
   }, [tokenInfo])
 
-  if (isNotFound) {
+  // TODO: ido temp
+  if (isNotFound && !isIdoToken) {
     return (
       <div
         className={cn(
@@ -57,14 +64,15 @@ export const Chart = memo(() => {
 
   return (
     <>
-      <div
+      <CustomSuspense
+        isPending={isCreating && !isGraduated && !isIdoToken}
+        fallback={<ChartSkeleton />}
         className={cn(
           'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
-          'rounded-md overflow-hidden max-sm:mt-3',
-          isCreating && !isGraduated && 'scale-0 absolute'
+          'rounded-md overflow-hidden max-sm:mt-3'
         )}
       >
-        {isGraduated ? (
+        {isGraduated || isIdoToken ? (
           <ChartDexScreener className="w-full h-full" />
         ) : (
           <div className="flex flex-col h-full">
@@ -92,24 +100,13 @@ export const Chart = memo(() => {
             <div ref={chartRef} className="w-full h-full flex-1"></div>
           </div>
         )}
-      </div>
-
-      <ChartSkeleton
-        className={(!isCreating || isGraduated) && 'scale-0 absolute'}
-      />
+      </CustomSuspense>
     </>
   )
 })
 
-const ChartSkeleton = ({ className }: { className: ClassValue }) => (
-  <div
-    className={cn(
-      'min-h-[415px] border-2 border-black rounded-md',
-      'overflow-hidden max-sm:mt-3 max-sm:h-[20vh] py-2',
-      'flex flex-col',
-      className
-    )}
-  >
+const ChartSkeleton = () => (
+  <div className="flex flex-col h-full py-2">
     <Skeleton className="w-10 h-6 mx-2" />
     <hr className="my-2" />
     <div className="flex justify-between px-2 mb-2 flex-1">

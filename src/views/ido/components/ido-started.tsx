@@ -26,8 +26,9 @@ export const IdoStarted = () => {
     isExpired,
     reserveSymbol,
     progress,
+    chainId,
   } = useIdoContext()
-  const { isKol, community } = useIdoCheck()
+  const { isKol, community } = useIdoCheck(chainId)
   const { userInfo } = useUserStore()
 
   return (

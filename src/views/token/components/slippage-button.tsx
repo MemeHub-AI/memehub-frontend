@@ -35,7 +35,7 @@ export const SlippageButton = (props: Props) => {
                 shadow="none"
                 onClick={() => onChange?.(s)}
                 className={cn(
-                  value === s && 'bg-black text-white hover:bg-black',
+                  value === s && 'bg-black text-white hover:bg-black'
                 )}
               >
                 {s}%
@@ -53,7 +53,7 @@ export const SlippageButton = (props: Props) => {
               }}
               endIcon={
                 <p
-                  className="mx-2 text-sm cursor-pointer select-none"
+                  className="mx-2 text-sm cursor-pointer select-none shrink-0"
                   onClick={() => onChange?.(MAX_SLIPPAGE)}
                 >
                   {t('max')}

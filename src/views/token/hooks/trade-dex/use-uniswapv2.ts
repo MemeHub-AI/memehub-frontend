@@ -9,7 +9,7 @@ import { useApprove } from '@/hooks/use-approve'
 import { UNISWAP_ERR } from '@/errors/uniswap'
 import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
 import { getDeadline, subSlippage } from '@/utils/contract'
-import { useUniswapV2Info } from './use-uniswapv2-info'
+import { useUniswapV2Amount } from './use-uniswapv2-info'
 import { reserveAddr } from '@/contract/address'
 import { uniswapV2Addr } from '@/contract/uniswapv2/address'
 
@@ -20,9 +20,14 @@ export const useUniswapV2 = (
   const { t } = useTranslation()
   const { address } = useAccount()
   const { isApproving, approvalForAll } = useApprove()
-  const { getAmountOut } = useUniswapV2Info(poolAddr)
+  const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(poolAddr)
   const reserveToken = reserveAddr[chainId]
   const uniswapV2Address = uniswapV2Addr[chainId]
+  const uniswapV2Config = {
+    abi: uniswapV2RouterAbi,
+    address: uniswapV2Address,
+    chainId,
+  }
 
   const {
     data: hash,
@@ -37,8 +42,8 @@ export const useUniswapV2 = (
     },
   })
 
-  const checkForTrade = (amount: string, token: Address) => {
-    if (!address || isEmpty(address)) {
+  const checkForTrade = (token: Address, amount: string) => {
+    if (!address) {
       toast.error(t('trade.account.invalid'))
       return false
     }
@@ -51,7 +56,8 @@ export const useUniswapV2 = (
       return false
     }
     if (!reserveToken) {
-      return toast.error(t('chain.empty'))
+      toast.error(t('chain.empty'))
+      return false
     }
     return true
   }
@@ -59,22 +65,22 @@ export const useUniswapV2 = (
   const uniswapV2Buy = async (
     token: Address,
     amount: string,
-    slippage: string
+    slippage: string,
+    withTax = false
   ) => {
-    const isValid = checkForTrade(amount, token)
-    if (!isValid) return
+    if (!checkForTrade(token, amount)) return
 
-    const tokenAmount = formatEther(await getAmountOut(amount))
+    const tokenAmount = formatEther(await getAmountForBuy(amount))
     if (BigNumber(tokenAmount).isZero()) {
       UNISWAP_ERR.amonutInvalid()
       return
     }
 
     writeContract({
-      abi: uniswapV2RouterAbi,
-      address: uniswapV2Address,
-      chainId,
-      functionName: 'swapExactETHForTokens',
+      ...uniswapV2Config,
+      functionName: withTax
+        ? 'swapExactETHForTokensSupportingFeeOnTransferTokens'
+        : 'swapExactETHForTokens',
       args: [
         subSlippage(tokenAmount, slippage),
         [reserveToken, token],
@@ -88,25 +94,25 @@ export const useUniswapV2 = (
   const uniswapV2Sell = async (
     token: Address,
     amount: string,
-    slippage: string
+    slippage: string,
+    withTax = false
   ) => {
-    const isValid = checkForTrade(amount, token)
-    if (!isValid) return
+    if (!checkForTrade(token, amount)) return
 
     const isApproved = await approvalForAll(token, uniswapV2Address, amount)
     if (!isApproved) return
 
-    const reserveAmount = formatEther(await getAmountOut(amount, true))
+    const reserveAmount = formatEther(await getAmountForSell(amount))
     if (BigNumber(reserveAmount).isZero()) {
       UNISWAP_ERR.amonutInvalid()
       return
     }
 
     writeContract({
-      abi: uniswapV2RouterAbi,
-      address: uniswapV2Address,
-      chainId,
-      functionName: 'swapExactTokensForETH',
+      ...uniswapV2Config,
+      functionName: withTax
+        ? 'swapExactTokensForETHSupportingFeeOnTransferTokens'
+        : 'swapExactTokensForETH',
       args: [
         parseEther(amount),
         subSlippage(reserveAmount, slippage),

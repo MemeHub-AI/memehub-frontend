@@ -5,15 +5,25 @@ import { useUniswapV2 } from './use-uniswapv2'
 export interface DexTradeProps {
   dexHash: Hash | undefined
   isDexTrading: boolean
-  dexBuy: (token: Address, amount: string, slippage: string) => void
-  dexSell: (token: Address, amount: string, slippage: string) => void
+  dexBuy: (
+    token: Address,
+    amount: string,
+    slippage: string,
+    withTax?: boolean
+  ) => void
+  dexSell: (
+    token: Address,
+    amount: string,
+    slippage: string,
+    withTax?: boolean
+  ) => void
   dexReset: () => void
 }
 
 // TODO: Match dex from token's chain.
 export const useDexTrade = (
   chainId: number,
-  poolAddr: Address | undefined | null,
+  poolAddr: Address | undefined | null
 ) => {
   const {
     uniswapV2Hash,

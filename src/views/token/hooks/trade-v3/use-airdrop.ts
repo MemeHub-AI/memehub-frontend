@@ -82,7 +82,7 @@ export const useAirdrop = (
         setBurning(false)
       },
       onError: (e) => {
-        CONTRACT_ERR.exec(e)
+        CONTRACT_ERR.message(e)
         setBurning(false)
       },
       onSuccess: () => {

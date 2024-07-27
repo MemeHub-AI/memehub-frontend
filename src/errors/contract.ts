@@ -18,7 +18,7 @@ const ERR = {
 
 export const CONTRACT_ERR = {
   // Execute contract error.
-  exec: (err: unknown, showToast = true) => {
+  message: (err: unknown, showToast = true) => {
     const e = err as { message?: string }
     if (!e?.message) return
 

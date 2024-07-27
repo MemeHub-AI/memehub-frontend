@@ -39,14 +39,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const [commentOpen, setCommentOpen] = useState(false)
   const [isBuy, isSell] = useMemo(
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
-    [tab],
+    [tab]
   )
   const { isClaimingAirdrop } = useAirdropStore()
   const { tokenAddr } = useTradeSearchParams()
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
-  const { tokenInfo, isNotFound } = useTokenContext()
+  const { tokenInfo, isNotFound, isIdoToken } = useTokenContext()
   const { copy } = useClipboard()
   const { userInfo } = useUserStore()
   const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
@@ -55,7 +55,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { isConnected, checkForChain, checkForConnect } = useCheckAccount()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
-  const disabled = isSubmitting || isClaimingAirdrop || isNotFound
+  const disabled =
+    isSubmitting || isClaimingAirdrop || (isNotFound && !isIdoToken)
   const disableTrade =
     disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
 
@@ -86,7 +87,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       if (overflowValue) {
         setValue(overflowValue)
         toast.warning(
-          utilLang.replace(t('trade.limit'), [value, t('trade.buy')]),
+          utilLang.replace(t('trade.limit'), [value, t('trade.buy')])
         )
       }
       return playSuccess()
@@ -183,16 +184,16 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               className="!w-full font-bold bg-lime-green-deep"
               disabled={disableTrade}
               onClick={async () => {
-                const isValidChain = await checkForChain(tokenInfo?.chain.id)
-                if (!isValidChain) return
+                if (!(await checkForChain(tokenInfo?.chain.id))) return
+                if (isIdoToken) return onTrade()
                 setCommentOpen(true)
               }}
             >
               {isBalanceOverflow
                 ? t('balance.insufficient')
                 : isSubmitting
-                  ? t('trading')
-                  : t('trade')}
+                ? t('trading')
+                : t('trade')}
             </Button>
           ) : (
             <Button
@@ -208,9 +209,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
                 className="!w-full font-bold mt-3"
                 onClick={() => {
                   copy(
-                    location.origin +
-                      location.pathname +
-                      `?r=${userInfo?.code}`,
+                    location.origin + location.pathname + `?r=${userInfo?.code}`
                   )
                 }}
               >

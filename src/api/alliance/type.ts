@@ -37,5 +37,5 @@ export interface CommunityListItem {
 export interface CommunityReq {
   id?: string
   identity?: string
-  token_id?: number
+  token_id?: string
 }

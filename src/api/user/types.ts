@@ -103,7 +103,7 @@ interface User {
 }
 
 export interface Chain {
-  id: string
+  id: string | number
   name: string
   displayName: string
   logo: string
@@ -130,6 +130,7 @@ export interface UserCoinsCreated {
   status: number
   // Custom prop
   isIdoToken?: boolean
+  poolAddr?: string
 }
 
 export interface UserReplies {

@@ -13,6 +13,7 @@ import { TokenChainSelect } from './chain-select'
 import { TokenSearchInput } from './token-search-input'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { IdoCard } from '../ido-card'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 interface Props extends ComponentProps<'div'> {
   cards?: UserCoinsCreated[]
@@ -35,11 +36,18 @@ export const TokenCards = (props: Props) => {
   const [chianTag, setChainTag] = useState('all')
   const [filteredCards, setFilteredCards] = useState(cards)
   const { isPlayHomeAudio, setIsPlayHomeAudio } = useIsPlayAudio()
+  const { playHome } = useAudioPlayer()
   const { noMore } = useScrollLoad({
     onFetchNext,
     hasMore: cards.length < total,
   })
 
+  useEffect(() => {
+    if (isPlayHomeAudio) {
+      playHome()
+      setIsPlayHomeAudio(false)
+    }
+  }, [])
   const onChange = (chainId: string) => {
     setChainTag(chainId)
 
@@ -61,12 +69,6 @@ export const TokenCards = (props: Props) => {
 
   return (
     <div className={cn(className)}>
-      <audio
-        autoPlay={isPlayHomeAudio}
-        onPlay={() => setIsPlayHomeAudio(false)}
-      >
-        <source src="/audio/home.mp3" type="audio/mpeg" />
-      </audio>
       <CustomSuspense
         className="flex justify-between items-start gap-4 max-sm:justify-between mb-4 max-sm:gap-0"
         isPending={isLoading}

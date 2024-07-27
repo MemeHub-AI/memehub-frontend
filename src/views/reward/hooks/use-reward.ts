@@ -49,7 +49,7 @@ export const useReward = (chainId: number) => {
     writeContract,
     reset,
   } = useWriteContract({
-    mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
+    mutation: { onError: (e) => CONTRACT_ERR.message(e) },
   })
   const { isFetching } = useWaitForTx({
     hash,
