@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Kol } from './kol'
 import { Communities } from './communities'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 enum Tab {
   Kol = 'kol',
@@ -24,16 +25,21 @@ export const AlliancePage = () => {
     [Tab.Communities]: t('alliance.communities'),
   }
   const { isPlayAllianceAudio, setIsPlayAllianceAudio } = useIsPlayAudio()
+  const { playAlliance } = useAudioPlayer()
 
   const handleTabChange = (value: string) => {
     router.replace(`${router.pathname}?tab=${value}`)
   }
 
+  useEffect(() => {
+    if (isPlayAllianceAudio) {
+      playAlliance()
+      setIsPlayAllianceAudio(false)
+    }
+  }, [])
+
   return (
     <div>
-      <audio autoPlay={isPlayAllianceAudio} onPlay={() => setIsPlayAllianceAudio(false)}>
-        <source src="/audio/alliance.mp3" type="audio/mpeg"/>
-      </audio>
       <PrimaryLayout container="div" className="py-5">
         <Tabs value={defaultValue} onValueChange={handleTabChange}>
           <TabsList className="border-none space-x-2 h-10">

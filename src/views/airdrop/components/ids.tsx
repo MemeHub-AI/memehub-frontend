@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import Link from 'next/link'
@@ -15,6 +15,7 @@ import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { utilLang } from '@/utils/lang'
 import { formLink } from '@/config/link'
 import { useCommunityNft } from '@/hooks/use-community-nft'
+import useAudioPlayer from '@/hooks/use-audio-player'
 
 export const Ids = () => {
   const { t } = useTranslation()
@@ -23,6 +24,7 @@ export const Ids = () => {
   const { setConnectOpen } = useWalletStore()
   const { ids: { kol } = {} } = useIds()
   const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
+  const { playRap } = useAudioPlayer()
   // TOOD: should be dynamic `chainId`
   const { community } = useCommunityNft(56)
 
@@ -31,6 +33,13 @@ export const Ids = () => {
     [CommunityCategory.Nft]: t('holder'),
     [CommunityCategory.Token]: t('holder'),
   }
+
+  useEffect(() => {
+    if (isPlayAirdropAudio) {
+      playRap()
+      setIsPlayAirdropAudio(false)
+    }
+  }, [])
 
   const getIdStatus = () => {
     if (!isConnected) {
@@ -88,12 +97,6 @@ export const Ids = () => {
 
   return (
     <>
-      <audio
-        autoPlay={isPlayAirdropAudio}
-        onPlay={() => setIsPlayAirdropAudio(false)}
-      >
-        <source src="/audio/rap-dos-memes.mp3" type="audio/mpeg" />
-      </audio>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
       {userInfo?.role?.kol ? null : (
