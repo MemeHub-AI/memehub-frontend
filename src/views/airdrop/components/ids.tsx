@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import Link from 'next/link'
@@ -16,9 +16,11 @@ import { utilLang } from '@/utils/lang'
 import { formLink } from '@/config/link'
 import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
 import { idoChain } from '@/config/ido'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 export const Ids = () => {
   const { t } = useTranslation()
+
   const communityMap = {
     [CommunityCategory.Chat]: t('member'),
     [CommunityCategory.Nft]: t('holder'),
@@ -29,9 +31,17 @@ export const Ids = () => {
   const { setConnectOpen } = useWalletStore()
   // const { ids: { kol } = {} } = useIds()
   const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
+  const { playRap } = useAudioPlayer()
 
   // TODO: ido temp
   const { isKol, community } = useIdoCheck(idoChain.id)
+
+  useEffect(() => {
+    if (isPlayAirdropAudio) {
+      playRap()
+      setIsPlayAirdropAudio(false)
+    }
+  }, [])
 
   const getIdStatus = () => {
     if (!isConnected) {
@@ -89,12 +99,6 @@ export const Ids = () => {
 
   return (
     <>
-      <audio
-        autoPlay={isPlayAirdropAudio}
-        onPlay={() => setIsPlayAirdropAudio(false)}
-      >
-        <source src="/audio/rap-dos-memes.mp3" type="audio/mpeg" />
-      </audio>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
       {!isKol && (

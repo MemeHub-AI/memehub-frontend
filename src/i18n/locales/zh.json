@@ -561,5 +561,6 @@
   "ido.airdrop.claim-success": "领取成功！",
   "ido.airdrop.no-claim": "暂无",
   "ido.airdrop.no-id": "你还没有{} NFT",
-  "airdrop.claiming": "领取中..."
+  "airdrop.claiming": "领取中...",
+  "ido.airdrop.not-enough": "你没有足够的 BNB"
 }

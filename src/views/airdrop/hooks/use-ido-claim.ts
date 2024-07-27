@@ -4,10 +4,10 @@ import { toast } from 'sonner'
 import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { v3Addr } from '@/contract/v3/address'
-import { CONTRACT_ERR } from '@/errors/contract'
 import { useTranslation } from 'react-i18next'
 import { idoChain } from '@/config/ido'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { IDO_ERR } from '@/errors/ido'
 
 export const useIdoAirdropClaim = (onSuccess?: () => void) => {
   const { t } = useTranslation()
@@ -24,7 +24,7 @@ export const useIdoAirdropClaim = (onSuccess?: () => void) => {
       onMutate: () => toast.loading(t('tx.submitting')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
       onError: ({ message }) => {
-        CONTRACT_ERR.message(message)
+        IDO_ERR.airdrop(message)
         reset()
       },
     },
@@ -32,7 +32,7 @@ export const useIdoAirdropClaim = (onSuccess?: () => void) => {
   const { isLoading } = useWaitForTx({
     hash,
     onLoading: () => toast.loading(t('tx.confirmation')),
-    onError: ({ message }) => CONTRACT_ERR.message(message),
+    onError: ({ message }) => IDO_ERR.message(message),
     onSuccess: () => {
       onSuccess?.()
       toast.success(t('ido.airdrop.claim-success'))
