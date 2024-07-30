@@ -84,11 +84,7 @@ export const useFetch = (baseURL: string) => {
       // Response success.
       return response as T
     } catch (e) {
-      if (e instanceof Response) {
-        REQUEST_ERR.responseErr(e)
-      } else if (e instanceof Error) {
-        REQUEST_ERR.error(e)
-      }
+      REQUEST_ERR.message(e)
       throw e
     }
   }

@@ -61,6 +61,7 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
               className="w-24 h-24"
               hover="bg"
               shadow="none"
+              // TODO: use dialog search instead
               onClick={reset}
             />
           ))}

@@ -2,6 +2,7 @@ import React, { useState, type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { Address } from 'viem'
 import { useTranslation } from 'react-i18next'
+import { isNumber } from 'lodash'
 
 import type { UserCoinsCreated } from '@/api/user/types'
 import { Card, CardTitle } from '@/components/ui/card'
@@ -22,6 +23,8 @@ interface Props extends ComponentProps<typeof Card> {
   descClass?: string
   idoCreateAt?: number
   idoDuration?: number
+  idoEndAt?: number
+  idoProgress?: number | string
 }
 
 export const TokenCard = (props: Props) => {
@@ -32,6 +35,7 @@ export const TokenCard = (props: Props) => {
     onClick,
     idoCreateAt,
     idoDuration,
+    idoProgress,
     ...restProps
   } = props
   const router = useRouter()
@@ -40,12 +44,23 @@ export const TokenCard = (props: Props) => {
   const chain = chainsMap[card.chain.id]
 
   const [isExpired, setIsExpired] = useState(false)
-  const isIdo = !!idoCreateAt && !!idoDuration
 
   const { progress, isGrauated } = useTokenProgressV3(
     card.address as Address,
     Number(card.chain.id)
   )
+  const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (isIdo && card.address) {
+      return router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
+    }
+    if (isIdo) {
+      return router.push(fmt.toHref(Routes.Ido, card.chain.name, card.id))
+    }
+    router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
+    onClick?.(e)
+  }
 
   return (
     <Card
@@ -53,13 +68,7 @@ export const TokenCard = (props: Props) => {
         'flex items-stretch overflow-hidden gap-2 relative max-sm:gap-0',
         className
       )}
-      onClick={(e) => {
-        if (isIdo) {
-          return router.push(Routes.Ido)
-        }
-        router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
-        onClick?.(e)
-      }}
+      onClick={handleClick}
       {...restProps}
     >
       {isGrauated && (
@@ -109,16 +118,17 @@ export const TokenCard = (props: Props) => {
             <span>{t('ido.start-in')}</span>
             <Countdown
               className="text-blue-600"
-              createdAt={idoCreateAt}
-              duration={idoDuration}
+              createdAt={idoCreateAt || 0}
+              duration={idoDuration || 0}
               onExpired={setIsExpired}
+              onInitExpired={setIsExpired}
             />
           </div>
         ) : (
           <Progress
-            className="h-5 self-end w-full"
-            indicatorClass={isIdo ? 'bg-orange-500' : 'bg-green-500'}
-            value={isGrauated ? 100 : progress}
+            className={cn('h-5 self-end w-full', isIdo && 'text-white')}
+            indicatorClass={isIdo ? 'bg-red-500' : 'bg-green-500'}
+            value={idoProgress || (isGrauated ? 100 : progress)}
           />
         )}
       </div>

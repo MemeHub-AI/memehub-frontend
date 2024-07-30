@@ -7,6 +7,7 @@ import { isUserReject } from '@/utils/contract'
 import { SlippageError } from '@/components/toast/slippage-error'
 import { bottomLeft } from '@/config/toast'
 import { DeviceWidth } from '@/hooks/use-responsive'
+import { reportException } from '.'
 
 const ERR = {
   estimateGas: 'gap tip',
@@ -17,12 +18,13 @@ const ERR = {
 
 export const CONTRACT_ERR = {
   // Execute contract error.
-  exec: (err: unknown, showToast = true) => {
+  message: (err: unknown, showToast = true) => {
     const e = err as { message?: string }
     if (!e?.message) return
 
     const msg = (e.message ?? '').toLowerCase()
 
+    reportException(e)
     // Cannot estimate gas.
     if (msg.includes(ERR.estimateGas)) {
       toast.error(t('contract.err.gas-estimate'))
@@ -54,7 +56,6 @@ export const CONTRACT_ERR = {
 
     // Toast all other error.
     if (showToast) toast.error(t('contract.err.exec'))
-    console.error(msg)
   },
 
   // Not found error.

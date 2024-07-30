@@ -1,10 +1,10 @@
 import { useMutation } from '@tanstack/react-query'
-import { captureException } from '@sentry/nextjs'
 
 import { MarketType, Marketing } from '@/api/token/types'
 import { AirdropType, v3DistributorParams } from '@/config/v3'
 import { airdropApi } from '@/api/airdrop'
 import { AirdropMerkleRootRes } from '@/api/airdrop/types'
+import { reportException } from '@/errors'
 
 export const useAirdropParams = () => {
   const { isPending, mutateAsync } = useMutation({
@@ -61,8 +61,8 @@ export const useAirdropParams = () => {
         )
       }
       return v3DistributorParams
-    } catch (error) {
-      captureException(error)
+    } catch (e) {
+      reportException(e)
       return
     }
   }

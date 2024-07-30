@@ -12,4 +12,5 @@ export const utilTime = {
     const remainTime = dayjs().unix() - ts
     return remainTime >= duration
   },
+  isUtcOffset8: () => dayjs().utcOffset() / 60,
 }

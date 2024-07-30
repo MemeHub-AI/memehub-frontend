@@ -16,7 +16,7 @@ import { Routes } from '@/routes'
 import RewardButton from '../reward-button'
 import { cn } from '@/lib/utils'
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
-import { SOCIAL_LINKS } from '@/config/link'
+import { socialLink } from '@/config/link'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -34,12 +34,12 @@ export const HeaderMobile = (props: Props) => {
     {
       name: t('telegram'),
       icon: <FaTelegramPlane />,
-      link: SOCIAL_LINKS.tg,
+      link: socialLink.tg,
     },
     {
       name: t('twitter-x'),
       icon: <FaTwitter />,
-      link: SOCIAL_LINKS.x,
+      link: socialLink.x,
     },
   ]
 
@@ -115,14 +115,14 @@ export const HeaderMobile = (props: Props) => {
         {isConnected && (
           <RewardButton className="max-sm:px-2" showReferral={false} />
         )}
-        <Button
+        {/* <Button
           variant="outline"
           className="mx-3 max-sm:mx-0"
           size={'sm'}
           onClick={() => router.push(Routes.Create)}
         >
           {t('create.token')}
-        </Button>
+        </Button> */}
         <WalletConnect />
       </div>
     </>

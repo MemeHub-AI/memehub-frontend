@@ -1,7 +1,8 @@
+import { useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
+
 import { airdropApi } from '@/api/airdrop'
 import { useUserStore } from '@/stores/use-user-store'
-import { useQuery } from '@tanstack/react-query'
-import { useEffect } from 'react'
 
 export const useIds = () => {
   const { setUserIdentity, userInfo } = useUserStore()
@@ -13,6 +14,7 @@ export const useIds = () => {
       const { data } = await airdropApi.getIdentityList()
       return data
     },
+    enabled: false,
   })
   const ids = data
   useEffect(() => {

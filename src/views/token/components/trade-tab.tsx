@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { isAddress } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
-import { useAccount } from 'wagmi'
 import { isEmpty } from 'lodash'
 import { useDebounce } from 'react-use'
 
@@ -17,7 +16,7 @@ import { TradeProvider } from '@/contexts/trade'
 import { TradeItems } from './trade-items'
 import { TradeInput } from './trade-input'
 import { useTokenContext } from '@/contexts/token'
-import { useSlippage } from '../hooks/use-slippage'
+import { useSlippage } from '../../../hooks/use-slippage'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { INVITE_REWARD } from '@/constants/invite'
 import { useTrade } from '../hooks/use-trade'
@@ -27,9 +26,10 @@ import { TradeType } from '@/constants/trade'
 import { useAirdropStore } from '@/stores/use-airdrop'
 import { InviteTipsDialog } from './invite-tips-dialog'
 import { TradeCommentDialog } from './trade-comment-dialog'
-import { useCheckChain } from '@/hooks/use-check-chain'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useTradeSearchParams } from '../hooks/use-search-params'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { utilLang } from '@/utils/lang'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -41,75 +41,68 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
     [tab]
   )
-  const { isConnected } = useAccount()
   const { isClaimingAirdrop } = useAirdropStore()
   const { tokenAddr } = useTradeSearchParams()
 
   const { slippage, setSlippage } = useSlippage()
   const { setConnectOpen } = useWalletStore()
-  const { tokenInfo, isNotFound } = useTokenContext()
+  const { tokenInfo, isNotFound, isIdoToken } = useTokenContext()
   const { copy } = useClipboard()
   const { userInfo } = useUserStore()
   const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
     useTrade()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
-  const { checkForChain } = useCheckChain()
+  const { isConnected, checkForChain, checkForConnect } = useCheckAccount()
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
-  const disabled = isSubmitting || isClaimingAirdrop || isNotFound
+  const disabled =
+    isSubmitting || isClaimingAirdrop || (isNotFound && !isIdoToken)
   const disableTrade =
     disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
 
-  const {playAudio} = useAudioPlayer()
-  const onBuy = async () => {
-    // Check native token balance.
-    if (BigNumber(value).gt(nativeBalance)) {
-      toast.error(t('balance.illegality'))
-      setValue(nativeBalance)
-      playAudio('/audio/e.mp3')
-      return
-    }
-    buying(value, slippage, setValue)
-    playAudio('/audio/success.mp3')
-  }
+  const { playError, playSuccess } = useAudioPlayer()
 
-  const onSell = async () => {
-    // Check token balance.
-    if (BigNumber(value).gt(tokenBalance)) {
-      toast.error(t('balance.illegality'))
-      playAudio('/audio/e.mp3')
-      return
+  const checkForTrade = (balance: string) => {
+    if (!checkForConnect()) return false
+    if (isEmpty(tokenAddr) || !isAddress(tokenAddr)) {
+      toast.error(t('contract.err.token-addr'))
+      playError()
+      return false
     }
-    selling(value, slippage)
-    playAudio('/audio/success.mp3')
+    if (BigNumber(value).gt(balance)) {
+      toast.error(t('balance.illegality'))
+      playError()
+      setValue(nativeBalance)
+      return false
+    }
+
+    return true
   }
 
   const onTrade = async () => {
-    // Check wallet connect.
-    if (!isConnected) {
-      setConnectOpen(true)
-      return
-    }
+    if (!checkForTrade(isBuy ? nativeBalance : tokenBalance)) return
 
-    // Check token addr.
-    if (isEmpty(tokenAddr) || !isAddress(tokenAddr)) {
-      toast.error(t('contract.err.token-addr'))
-      playAudio('/audio/e.mp3')
-      return
-    }
-
-    isBuy ? onBuy() : onSell()
-  }
-
-  const checkForOverflow = () => {
     if (isBuy) {
-      setIsBalanceOverflow(BigNumber(value).gt(nativeBalance))
-    } else {
-      setIsBalanceOverflow(BigNumber(value).gt(tokenBalance))
+      const overflowValue = await buying(value, slippage)
+      if (overflowValue) {
+        setValue(overflowValue)
+        toast.warning(
+          utilLang.replace(t('trade.limit'), [value, t('trade.buy')])
+        )
+      }
+      return playSuccess()
     }
+
+    selling(value, slippage)
+    playSuccess()
   }
 
-  useDebounce(checkForOverflow, 300, [value])
+  const checkForBalance = () => {
+    const balance = isBuy ? nativeBalance : tokenBalance
+    setIsBalanceOverflow(BigNumber(value).gt(balance))
+  }
+
+  useDebounce(checkForBalance, 300, [value])
 
   // Refresh balance when trade completed.
   useEffect(() => {
@@ -191,8 +184,8 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               className="!w-full font-bold bg-lime-green-deep"
               disabled={disableTrade}
               onClick={async () => {
-                const isValidChain = await checkForChain(tokenInfo?.chain.id)
-                if (!isValidChain) return
+                if (!(await checkForChain(tokenInfo?.chain.id))) return
+                if (isIdoToken) return onTrade()
                 setCommentOpen(true)
               }}
             >

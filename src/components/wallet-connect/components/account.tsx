@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
+import { utilLang } from '@/utils/lang'
 
 export const WalletAccount = () => {
   const { t } = useTranslation()
@@ -38,15 +39,20 @@ export const WalletAccount = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button className="text-wrap h-8 w-12 p-2 text-xs">
-              <span className="line-clamp-1">
+              <span
+                className={cn(
+                  'line-clamp-1 leading-none',
+                  utilLang.isZh() && 'line-clamp-2 break-all leading-none',
+                )}
+              >
                 {userInfo?.name ? userInfo.name : t('login')}
               </span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem className="pb-0">
+            <DropdownMenuItem className="p-0">
               <Button
-                className="w-full space-x-2 justify-start px-0"
+                className="w-full space-x-2 justify-start p-0 px-2"
                 variant="ghost"
                 shadow="none"
                 onClick={() => {

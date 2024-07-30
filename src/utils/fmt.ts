@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { t } from 'i18next'
 import { first, isEmpty } from 'lodash'
+import { utilLang } from './lang'
 
 interface FmtAddrOptions {
   len?: number
@@ -46,9 +47,9 @@ export const fmt = {
     const percent = BigNumber(value).multipliedBy(100).toFixed(fixed)
     return percent + label
   },
-  toHref(...args: string[]) {
+  toHref(...args: (string | number)[]) {
     // Adapt ends with '/' for the first arg.
-    const firstStr = first(args) || ''
+    const firstStr = String(first(args) || '')
     if (firstStr.endsWith('/')) {
       args.splice(0, 1, firstStr.slice(0, -1))
     }
@@ -105,5 +106,14 @@ export const fmt = {
     if (value.endsWith(chain)) return value
 
     return `${value} ${chain}`
+  },
+  withCommunity(str: string | undefined) {
+    if (!str) return ''
+
+    const lower = str.toLowerCase()
+    const cmnt = t('pure.community')
+    if (lower.endsWith(cmnt.toLowerCase())) return str
+
+    return utilLang.isEn() ? `${str} ${cmnt}` : str + cmnt
   },
 }

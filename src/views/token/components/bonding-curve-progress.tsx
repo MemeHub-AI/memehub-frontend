@@ -8,6 +8,8 @@ import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { useTokenProgressV3 } from '../hooks/trade-v3/use-token-progress'
 import { Badge } from '@/components/ui/badge'
+import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
+import { idoTrumpCard } from '@/config/ido'
 
 interface Props extends ComponentProps<'div'> {
   showDesc?: boolean
@@ -15,8 +17,13 @@ interface Props extends ComponentProps<'div'> {
 
 export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   const { t } = useTranslation()
-  const { tokenInfo } = useTokenContext()
+  const { tokenInfo, isIdoToken } = useTokenContext()
   const { total, progress, isGrauated } = useTokenProgressV3()
+
+  const { progress: idoProgress } = useIdoProgress(
+    Number(idoTrumpCard.chain.id),
+    idoTrumpCard.id
+  )
 
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const threshold = BigNumber(total).lte(0)
@@ -26,9 +33,12 @@ export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   return (
     <div className={cn('flex-1 relative', className)}>
       <Progress
-        className="h-6 border-2 border-black rounded-md"
-        indicatorClass="bg-lime-green"
-        value={isGrauated ? 100 : progress}
+        className={cn(
+          'h-6 border-2 border-black rounded-md',
+          isIdoToken && 'text-white'
+        )}
+        indicatorClass={isIdoToken ? 'bg-red-500' : 'bg-lime-green'}
+        value={isIdoToken ? idoProgress : isGrauated ? 100 : progress}
       />
       {isGrauated && (
         <Badge

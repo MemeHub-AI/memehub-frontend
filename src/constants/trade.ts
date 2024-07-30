@@ -5,6 +5,6 @@ export enum TradeType {
 
 export const LISTED_MARKET_CAP = 30_000 // Listed to dex market cap
 
-export const DEADLINE_SECONDS = 300 // 5 minutes
+export const DEFAULT_SLIPPAGE = '5' // 5%
 
-export const TRADE_SERVICE_FEE = 1.01 // 1%
+export const MAX_SLIPPAGE = '49' // 49%

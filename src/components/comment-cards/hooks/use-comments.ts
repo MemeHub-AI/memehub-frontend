@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { nanoid } from 'nanoid'
+import { isAddress } from 'viem'
 
 import { tokenApi } from '@/api/token'
 import { TokenCommentListRes } from '@/api/token/types'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { useCommentsStore } from '@/stores/use-comments'
-import { useTokenContext } from '@/contexts/token'
 
 export const useComments = (enableFetchComments = true) => {
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -26,7 +26,7 @@ export const useComments = (enableFetchComments = true) => {
     refetchOnWindowFocus: false,
     initialPageParam: 1,
     queryFn: ({ pageParam }) => {
-      if (isEmpty(tokenAddr)) return Promise.reject()
+      return Promise.reject()
 
       // Claer when query.
       setComments([])

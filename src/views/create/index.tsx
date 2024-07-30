@@ -24,14 +24,14 @@ export const CreatePage = () => {
       }}
     >
       <PrimaryLayout>
-        <CreateTokenMain
+        <p className="mt-3 font-bold text-xl">Coming Soon</p>
+        {/* <CreateTokenMain
           className="flex-1 pb-5 max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0"
           tab={tab}
           setTab={setTab}
-        />
-
-        {/* All status dialog during create. */}
+        /> 
         <CreateTokenStatusDialog />
+        */}
       </PrimaryLayout>
       <AICreateMemecoinDialogLoading
         formHook={formData}

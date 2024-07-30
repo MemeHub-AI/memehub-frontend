@@ -10,6 +10,7 @@ import { first } from 'lodash'
 import { useLogin } from '@/hooks/use-login'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUserStore } from '@/stores/use-user-store'
+import { reportException } from '@/errors'
 
 export const useWallet = () => {
   const {
@@ -37,19 +38,18 @@ export const useWallet = () => {
       setConnectOpen(false)
       await signLogin(curAddress, chainId)
     } catch (e) {
-      console.error('[connectWallet error]:', e)
+      reportException(e)
       disconnectWallet()
     }
   }
 
   const disconnectWallet = async () => {
-    console.log('disconnect')
     try {
       await disconnectAsync()
       logout()
       setUserInfo(null)
     } catch (e) {
-      console.error(`[disconnectWallet error] : ${e}`)
+      reportException(e)
     }
   }
 

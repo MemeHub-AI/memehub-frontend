@@ -14,7 +14,7 @@ import { MarketType } from '@/api/token/types'
 import { addPrefix0x } from '@/utils/contract'
 import { useTradeSearchParams } from '../use-search-params'
 import { useAirdropStore } from '@/stores/use-airdrop'
-import { useCheckChain } from '@/hooks/use-check-chain'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 import { bottomLeft } from '@/config/toast'
 import { useLogin } from '@/hooks/use-login'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
@@ -34,9 +34,9 @@ export const useAirdrop = (
   const { setIsCalimingAirdrop } = useAirdropStore()
   const [isClaim, setIsCalim] = useState(false)
   const [isBurning, setBurning] = useState(false)
-  const { checkForChain } = useCheckChain()
+  const { checkForChain } = useCheckAccount()
   const { checkForLogin } = useLogin()
-  const { playAudio } = useAudioPlayer()
+  const { playFire } = useAudioPlayer()
 
   const { distributor } = v3Addr[chainId] ?? {}
   const toastConfig =
@@ -44,7 +44,8 @@ export const useAirdrop = (
 
   // Query airdrop details.
   const { data: { data } = {}, refetch } = useQuery({
-    enabled: !!chainName && !!type_list && !!tokenAddr,
+    // enabled: !!chainName && !!type_list && !!tokenAddr,
+    enabled: false,
     queryKey: [airdropApi.getProof.name + uniqueKey, type_list, tokenAddr],
     queryFn: () => {
       if (type_list == 'undefined') return Promise.reject()
@@ -81,11 +82,11 @@ export const useAirdrop = (
         setBurning(false)
       },
       onError: (e) => {
-        CONTRACT_ERR.exec(e)
+        CONTRACT_ERR.message(e)
         setBurning(false)
       },
       onSuccess: () => {
-        playAudio('/audio/fire.mp3')
+        playFire()
         setBurning(false)
       },
     },

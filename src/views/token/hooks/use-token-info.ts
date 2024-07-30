@@ -24,6 +24,7 @@ export const useTokenInfo = () => {
         token_address: tokenAddr,
       })
     },
+    enabled: false,
   })
 
   const {
@@ -35,7 +36,7 @@ export const useTokenInfo = () => {
     // Be careful, chart will be recreate when refetch.
     refetch: refetchInfo,
   } = useQuery({
-    enabled: !!tokenAddr,
+    enabled: !!chainName && !!tokenAddr,
     queryKey: [tokenApi.details.name, chainName, tokenAddr],
     queryFn: () => tokenApi.details(chainName, tokenAddr),
     refetchOnWindowFocus: false,

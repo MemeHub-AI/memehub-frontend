@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 
 import { useStorage } from '@/hooks/use-storage'
-
-const DEFAULT_SLIPPAGE = '5'
+import { DEFAULT_SLIPPAGE } from '@/constants/trade'
 
 export const useSlippage = () => {
   const { getSlippage, setSlippage: setCacheSlippage } = useStorage()

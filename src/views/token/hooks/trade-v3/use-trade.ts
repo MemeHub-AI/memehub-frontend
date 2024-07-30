@@ -11,11 +11,9 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
 import { usePools } from '../use-pools'
-import { utilLang } from '@/utils/lang'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 import { v3Addr } from '@/contract/v3/address'
 import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
+import { useTokenContext } from '@/contexts/token'
 
 export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
@@ -23,9 +21,9 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
   const { getReferrals } = useInvite()
-  const { isGrauated } = usePools(tokenAddr, chainId)
-  const { t } = useTranslation()
+  const { isGraduated } = usePools(tokenAddr, chainId)
   const { bondingCurve } = v3Addr[chainId] ?? {}
+  const { isIdoToken } = useTokenContext()
 
   const {
     getNativeAmount,
@@ -39,10 +37,10 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     writeContract,
     reset: resetInternalTrade,
   } = useWriteContract({
-    mutation: { onError: (e) => CONTRACT_ERR.exec(e) },
+    mutation: { onError: (e) => CONTRACT_ERR.message(e) },
   })
-  const tradeHash = isGrauated ? dexHash : internalHash
-  const isSubmitting = isGrauated ? isDexTrading : isInternalTrading
+  const tradeHash = isGraduated ? dexHash : internalHash
+  const isSubmitting = isGraduated ? isDexTrading : isInternalTrading
 
   const checkForTrade = (amount: string) => {
     if (isEmpty(amount)) {
@@ -58,13 +56,11 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     return true
   }
 
-  const buy = async (
-    amount: string,
-    slippage: string,
-    setValue?: (v: string) => void
-  ) => {
+  const buy = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGrauated) return dexBuy(amount, tokenAddr, slippage)
+    if (isGraduated || isIdoToken) {
+      return dexBuy(tokenAddr, amount, slippage, isIdoToken)
+    }
 
     const nativeAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
@@ -74,18 +70,8 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     }
 
     const { isOverflow, current } = await checkForOverflow(amount)
+    if (isOverflow) return getLastOrderAmount(current)
 
-    if (isOverflow) {
-      getLastOrderAmount(current).then((value) => {
-        setValue?.(value)
-        toast.warning(
-          utilLang.replace(t('trade.limit'), [value, t('trade.buy')])
-        )
-      })
-      return
-    }
-
-    console.log('v3 buy', getReferrals(), current)
     writeContract({
       abi: v3BondingCurveAbi,
       address: bondingCurve!,
@@ -105,7 +91,9 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
 
   const sell = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGrauated) return dexSell(amount, tokenAddr, slippage)
+    if (isGraduated || isIdoToken) {
+      return dexSell(tokenAddr, amount, slippage, isIdoToken)
+    }
 
     const nativeAmount = formatEther(await getNativeAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {
@@ -113,7 +101,6 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       return
     }
 
-    console.log('v3 sell', await getReferrals())
     writeContract({
       abi: v3BondingCurveAbi,
       address: bondingCurve!,

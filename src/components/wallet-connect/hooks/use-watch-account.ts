@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { watchAccount, WatchAccountParameters } from '@wagmi/core'
+import { watchAccount, WatchAccountParameters } from 'wagmi/actions'
 import { Address } from 'viem'
 
 import { wagmiConfig } from '@/config/wagmi'
@@ -8,12 +8,9 @@ export const useWatchAccount = (
   onAccountChange?: (addr: Address, prevAddr: Address) => void
 ) => {
   const onChange: WatchAccountParameters['onChange'] = (
-    account,
-    prevAccount
+    { address },
+    { address: prevAddress }
   ) => {
-    const { address } = account
-    const { address: prevAddress } = prevAccount
-
     if (!prevAddress || !address) return
     if (address === prevAddress) return
 

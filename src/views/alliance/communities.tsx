@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
 import { CommunityCard } from '@/components/community-card'
 import { Input } from '@/components/ui/input'
+import { formLink } from '@/config/link'
 
 export const Communities = () => {
   const { t } = useTranslation()
@@ -79,7 +80,9 @@ export const Communities = () => {
           {t('community.desc').replace('$1', `${total}` || '-')}
         </div>
         {userInfo?.role?.community ? null : (
-          <Button>{t('apply.community')}</Button>
+          <Button onClick={() => open(formLink.community)}>
+            {t('apply.community')}
+          </Button>
         )}
         <Input
           placeholder={t('community.search')}
@@ -87,9 +90,9 @@ export const Communities = () => {
           className="max-w-[270px] mt-4"
         />
         <CustomSuspense
-          className="mt-5 gap-4 w-full grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3"
+          className="mt-5 gap-4 w-full grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3"
           isPending={isLoading}
-          fallback={<CardSkeleton></CardSkeleton>}
+          fallback={<CardSkeleton />}
           nullback={<div className="mt-4">{t('no.communities')}</div>}
         >
           {communities?.map((c) => {

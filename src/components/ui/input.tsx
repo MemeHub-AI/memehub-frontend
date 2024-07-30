@@ -8,7 +8,7 @@ const inputVariants = cva(
     'flex h-9 w-full rounded-md placeholder:text-muted-foreground',
     'bg-transparent px-3 py-1 text-sm shadow-sm transition-colors',
     'file:border-0 file:bg-transparent file:text-sm file:font-medium',
-    'disabled:cursor-not-allowed disabled:opacity-50'
+    'disabled:cursor-not-allowed disabled:opacity-50',
   ),
   {
     variants: {
@@ -20,7 +20,7 @@ const inputVariants = cva(
     defaultVariants: {
       border: 'default',
     },
-  }
+  },
 )
 
 export interface InputProps
@@ -49,7 +49,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         className={cn(
           'flex items-center border-2 border-black rounded-md',
           'focus-within:shadow-input2 duration-150',
-          className
+          restProps.disabled && 'border-black/50',
+          className,
         )}
       >
         {startIcon}
@@ -67,7 +68,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     <input
       className={cn(
         inputVariants({ className, border }),
-        'focus:shadow-input2'
+        'focus:shadow-input2',
       )}
       ref={ref}
       {...restProps}

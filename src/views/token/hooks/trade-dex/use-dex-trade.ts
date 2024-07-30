@@ -1,24 +1,37 @@
-import { Hash } from 'viem'
+import { Address, Hash } from 'viem'
 
 import { useUniswapV2 } from './use-uniswapv2'
 
 export interface DexTradeProps {
   dexHash: Hash | undefined
   isDexTrading: boolean
-  dexBuy: (...args: any[]) => void
-  dexSell: (...args: any[]) => void
+  dexBuy: (
+    token: Address,
+    amount: string,
+    slippage: string,
+    withTax?: boolean
+  ) => void
+  dexSell: (
+    token: Address,
+    amount: string,
+    slippage: string,
+    withTax?: boolean
+  ) => void
   dexReset: () => void
 }
 
 // TODO: Match dex from token's chain.
-export const useDexTrade = () => {
+export const useDexTrade = (
+  chainId: number,
+  poolAddr: Address | undefined | null
+) => {
   const {
     uniswapV2Hash,
     isUniswapV2Trading,
     uniswapV2Buy,
     uniswapV2Sell,
     uniswapV2Reset,
-  } = useUniswapV2()
+  } = useUniswapV2(chainId, poolAddr)
 
   return {
     dexHash: uniswapV2Hash,

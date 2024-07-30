@@ -21,12 +21,13 @@ import { AvatarCard } from '@/components/avatar-card'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { tokenInfo, isLoadingTokenInfo, isNotFound } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo, isNotFound, isIdoToken } =
+    useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { isGrauated } = usePools(tokenInfo?.address)
-  const { findChain } = useChainsStore()
-  const chain = findChain(tokenInfo?.chain?.name)
+  const { isGraduated } = usePools(tokenInfo?.address)
+  const { chainsMap } = useChainsStore()
+  const chain = chainsMap[tokenInfo?.chain?.id ?? 0]
 
   if (isLoadingTokenInfo) {
     return (
@@ -57,7 +58,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       src={tokenInfo?.image}
       className="mt-20"
       avatarChildren={
-        isGrauated && (
+        isGraduated && (
           <Badge
             variant="success"
             className="absolute -bottom-0 left-1/2 -translate-x-1/2 border-black"
@@ -75,7 +76,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
 
       {/* Name/symbol */}
       <div className="font-bold leading-none text-center mt-2">
-        {isNotFound
+        {isNotFound && !isIdoToken
           ? t('token.not-found')
           : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
       </div>
@@ -106,13 +107,15 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       )}
 
       {/* Bonding curve description */}
-      {isNotFound ? (
+      {isIdoToken ? (
+        <></>
+      ) : isNotFound ? (
         <p className="text-xs text-zinc-500 max-sm:mt-2">
           {t('token.not-found-desc')}
         </p>
       ) : (
         <p className="text-xs text-zinc-500 max-sm:mt-2">
-          {isGrauated
+          {isGraduated
             ? t('token.graduated-desc')
             : utilLang.replace(t('bonding-curve.desc'), [
                 BigNumber(LISTED_MARKET_CAP).toFormat(),

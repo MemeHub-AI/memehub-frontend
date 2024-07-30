@@ -11,26 +11,37 @@ import { CommunityCategory } from '@/api/airdrop/types'
 import { useIds } from '@/hooks/use-ids'
 import { cn } from '@/lib/utils'
 import { useUserStore } from '@/stores/use-user-store'
-import useAudioPlayer from '@/hooks/use-audio-player'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { utilLang } from '@/utils/lang'
-
-const kolHref = ''
-const communityHref = ''
+import { formLink } from '@/config/link'
+import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
+import { idoChain } from '@/config/ido'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 export const Ids = () => {
   const { t } = useTranslation()
-  const { isConnected } = useAccount()
-  const { userInfo } = useUserStore()
-  const { setConnectOpen } = useWalletStore()
-  const { ids } = useIds()
-  const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
 
   const communityMap = {
     [CommunityCategory.Chat]: t('member'),
     [CommunityCategory.Nft]: t('holder'),
     [CommunityCategory.Token]: t('holder'),
   }
+  const { isConnected } = useAccount()
+  const { userInfo } = useUserStore()
+  const { setConnectOpen } = useWalletStore()
+  // const { ids: { kol } = {} } = useIds()
+  const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
+  const { playRap } = useAudioPlayer()
+
+  // TODO: ido temp
+  const { isKol, community } = useIdoCheck(idoChain.id)
+
+  useEffect(() => {
+    if (isPlayAirdropAudio) {
+      playRap()
+      setIsPlayAirdropAudio(false)
+    }
+  }, [])
 
   const getIdStatus = () => {
     if (!isConnected) {
@@ -44,7 +55,7 @@ export const Ids = () => {
       )
     }
 
-    if (ids?.kol == null && !ids?.community) {
+    if (!isKol && !community) {
       return (
         <div className="my-3 flex items-center">
           <img src="/images/no-airdrop.png" alt="empty" />
@@ -55,53 +66,45 @@ export const Ids = () => {
 
     return (
       <div className="my-3 flex gap-4 flex-wrap">
-        {ids?.kol && (
+        {isKol && (
           <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
             <Img
-              src={ids?.kol?.logo}
+              src={userInfo?.logo}
               alt="Avatar"
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {utilLang.locale(ids?.kol?.name)} {t('ambassador')}
+              {userInfo?.name} {t('ambassador')}
             </span>
             <CheckIcon />
           </div>
         )}
-        {ids?.community?.map((c, i) => (
-          <div
-            className="flex items-center bg-lime-green rounded-sm overflow-hidden"
-            key={i}
-          >
+        {community && (
+          <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
             <Img
-              src={c.logo}
+              src={community.logo}
               alt="Avatar"
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {utilLang.locale(c.name)} {communityMap[c.category]}
+              {utilLang.locale(community.name)}{' '}
+              {communityMap[community.category as CommunityCategory]}
             </span>
             <CheckIcon />
           </div>
-        ))}
+        )}
       </div>
     )
   }
 
   return (
     <>
-      <audio
-        autoPlay={isPlayAirdropAudio}
-        onPlay={() => setIsPlayAirdropAudio(false)}
-      >
-        <source src="/audio/rap-dos-memes.mp3" type="audio/mpeg" />
-      </audio>
       <h1 className="text-2xl">{t('my.identity')}</h1>
       {getIdStatus()}
-      {userInfo?.role?.kol ? null : (
+      {!isKol && (
         <div className="mt-4">
           <Link
-            href={kolHref}
+            href={formLink.kol}
             target="_blank"
             className="text-blue-700 cursor-pointer"
           >
@@ -110,10 +113,10 @@ export const Ids = () => {
           <span className="ml-2">{t('platform.airdrop')}</span>
         </div>
       )}
-      {userInfo?.role?.community ? null : (
-        <div className={cn(userInfo?.role?.kol ? 'mt-4' : 'mt-1')}>
+      {!community && (
+        <div className={cn(isKol ? 'mt-4' : 'mt-1')}>
           <Link
-            href={communityHref}
+            href={formLink.community}
             target="_blank"
             className="text-blue-700 cursor-pointer"
           >

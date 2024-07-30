@@ -1,5 +1,5 @@
 import { t } from 'i18next'
-import React, { use } from 'react'
+import React from 'react'
 
 import { Button } from '../ui/button'
 import { Dialog } from '../ui/dialog'
@@ -7,7 +7,7 @@ import { AIMemeInfo } from '@/api/ai/type'
 import { Img } from '@/components/img'
 import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUserStore } from '@/stores/use-user-store'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 interface Props {
   show: boolean
@@ -21,13 +21,13 @@ export const AICreateMemecoinDialog = (props: Props) => {
   const { show, isRandom, data, onConfirm, onCancel } = props
   const userStore = useUserStore()
   const { setConnectOpen } = useWalletStore()
-  const { playAudio } = useAudioPlayer()
+  const { playGuaGua } = useAudioPlayer()
 
   const confirm = () => {
     if (userStore.userInfo?.id == null) {
       return setConnectOpen(true)
     }
-    playAudio('/audio/guagua.mp3')
+    playGuaGua()
     onConfirm()
   }
 
@@ -43,7 +43,7 @@ export const AICreateMemecoinDialog = (props: Props) => {
               <h1 className="text-xl text-wrap">
                 {t('create,random.memecoin.with.ai.1').replace(
                   '$1',
-                  data?.name!
+                  data?.name!,
                 )}
               </h1>
             </div>

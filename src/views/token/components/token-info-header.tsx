@@ -15,11 +15,12 @@ import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { tokenInfo, isLoadingTokenInfo, isNotFound } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo, isNotFound, isIdoToken } =
+    useTokenContext()
   const { marketCap } = useHoldersStore()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { findChain } = useChainsStore()
+  const { chainsMap } = useChainsStore()
 
   if (isLoadingTokenInfo) {
     return (
@@ -47,7 +48,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
             />
 
             <span className="ml-1 font-bold text-blue-600">
-              {isNotFound
+              {isNotFound && !isIdoToken
                 ? t('token.not-found')
                 : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
             </span>
@@ -59,7 +60,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
               className="w-5 h-5 rounded"
             />
             <span className="ml-1">
-              {fmt.withChain(findChain(tokenInfo?.chain.id)?.displayName)}
+              {fmt.withChain(chainsMap[tokenInfo?.chain.id ?? 0]?.displayName)}
             </span>
           </div>
         </div>

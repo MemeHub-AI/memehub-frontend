@@ -41,7 +41,6 @@ export const useDeployV3 = (
       return
     }
 
-    console.log('v3 deploy', airdropParams)
     writeContract(
       {
         abi: v3BondingCurveAbi,

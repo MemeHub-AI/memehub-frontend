@@ -33,7 +33,7 @@ export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
     headmaster = zeroAddress,
   ] = pools
 
-  const isGrauated = headmaster !== zeroAddress
+  const isGraduated = headmaster !== zeroAddress
 
   return {
     token,
@@ -44,7 +44,7 @@ export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
     addPoolEthAmount,
     creator,
     headmaster,
-    isGrauated,
+    isGraduated,
     refetchPools,
   }
 }

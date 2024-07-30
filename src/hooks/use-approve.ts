@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useAccount, useWriteContract } from 'wagmi'
 import { Address, erc20Abi, formatEther } from 'viem'
-import { readContract } from '@wagmi/core'
+import { readContract } from 'wagmi/actions'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 
@@ -49,7 +49,7 @@ export const useApprove = () => {
       })
       return true
     } catch (error) {
-      CONTRACT_ERR.exec(error)
+      CONTRACT_ERR.message(error)
       return false
     } finally {
       resetApprove()
@@ -73,7 +73,7 @@ export const useApprove = () => {
 
       return BigNumber(formatEther(value)).gte(amount)
     } catch (error) {
-      CONTRACT_ERR.exec(error)
+      CONTRACT_ERR.message(error)
       return false
     }
   }

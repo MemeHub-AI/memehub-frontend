@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next'
 import {
   LanguageCode,
   ResolutionString,
-  widget,
 } from '../../../../public/js/charting_library/charting_library'
 import { useDatafeed } from './use-datafeed'
 import { useChartStore } from '@/stores/use-chart-store'
 import { chartOptions, chartOverrides } from '@/config/chart'
 import { parseInterval } from '@/utils/chart'
+import { reportException } from '@/errors'
 
 interface ChartOptions {
   symbol: string
@@ -28,7 +28,7 @@ export const useChart = () => {
 
     setChartEl(container)
     try {
-      const chart = new (widget || window.TradingView.widget)({
+      const chart = new window.TradingView.widget({
         ...chartOptions,
         container,
         symbol,
@@ -44,8 +44,8 @@ export const useChart = () => {
         chart.applyOverrides(chartOverrides)
       })
       return chart
-    } catch (error) {
-      console.error('[createChart Erorr]:', error)
+    } catch (e) {
+      reportException(e)
     } finally {
       setIsCreating(false)
     }

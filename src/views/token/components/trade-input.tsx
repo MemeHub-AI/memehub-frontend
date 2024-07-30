@@ -15,7 +15,8 @@ import { useTradeInfoV3 } from '../hooks/trade-v3/use-trade-info'
 import { Img } from '@/components/img'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { usePools } from '../hooks/use-pools'
-import { useUniswapV2Info } from '../hooks/trade-dex/use-uniswapv2-info'
+import { useUniswapV2Amount } from '../hooks/trade-dex/use-uniswapv2-info'
+import { idoTrumpCard } from '@/config/ido'
 
 interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
   onChange?: (value: string) => void
@@ -25,11 +26,13 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
   const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
     useTradeContext()
-  const { tokenInfo, isLoadingTokenInfo } = useTokenContext()
+  const { tokenInfo, isLoadingTokenInfo, isIdoToken } = useTokenContext()
   const { getTokenAmount, getNativeAmount } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
-  const { isGrauated } = usePools(tokenInfo?.address)
-  const { getAmountOut } = useUniswapV2Info(tokenInfo?.pool_address as Address)
+  const { isGraduated } = usePools(tokenInfo?.address)
+  const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(
+    (isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.pool_address) as Address
+  )
 
   const inputAmount = fmt.decimals(String(value || 0), { fixed: 3 })
   const [targetAmount, setTargetAmount] = useState('0')
@@ -49,8 +52,8 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
 
   const calcAmountForBuy = async () => {
     value = value as string
-    const tokenAmount = await (isGrauated
-      ? getAmountOut(value)
+    const tokenAmount = await (isGraduated || isIdoToken
+      ? getAmountForBuy(value)
       : getTokenAmount(value))
     const amount = fmt.decimals(BigNumber(formatEther(tokenAmount)))
 
@@ -59,8 +62,8 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
 
   const calcAmountForSell = async () => {
     value = String(value)
-    const nativeAmount = await (isGrauated
-      ? getAmountOut(value, true)
+    const nativeAmount = await (isGraduated || isIdoToken
+      ? getAmountForSell(value)
       : getNativeAmount(value))
     const amount = fmt.decimals(BigNumber(formatEther(nativeAmount)))
 

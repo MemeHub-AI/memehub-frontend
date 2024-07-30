@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
 import { KolCard } from '@/components/kol-card'
 import { Input } from '@/components/ui/input'
+import { formLink } from '@/config/link'
 
 export const Kol = () => {
   const { t } = useTranslation()
@@ -79,7 +80,9 @@ export const Kol = () => {
           {t('kol.desc').replace('$1', `${total}` || '-')}
         </div>
 
-        {userInfo?.role?.kol ? null : <Button>{t('apply.kol')}</Button>}
+        {userInfo?.role?.kol ? null : (
+          <Button onClick={() => open(formLink.kol)}>{t('apply.kol')}</Button>
+        )}
 
         <Input
           onChange={({ target }) => onChagne(target.value)}
@@ -89,7 +92,7 @@ export const Kol = () => {
         <CustomSuspense
           className="mt-5 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4 w-full"
           isPending={isLoading}
-          fallback={<CardSkeleton></CardSkeleton>}
+          fallback={<CardSkeleton />}
           nullback={<div className="mt-4">{t('no.kol')}</div>}
         >
           {kols?.map((kol) => {

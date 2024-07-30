@@ -1,3 +1,8 @@
+import { t } from 'i18next'
+import { useEffect } from 'react'
+import { toast } from 'sonner'
+import { LuRefreshCcw } from 'react-icons/lu'
+
 import {
   FormItem,
   FormControl,
@@ -5,31 +10,27 @@ import {
   FormField,
 } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
-import { t } from 'i18next'
 import { useCreateTokenForm } from '../../hooks/use-form'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import Input from '@/components/input'
-import { useEffect } from 'react'
 import { aiApi } from '@/api/ai'
 import { Button } from '@/components/ui/button'
-import { LuRefreshCcw } from 'react-icons/lu'
-import { toast } from 'sonner'
-import { Router } from 'next/router'
 import { useUserStore } from '@/stores/use-user-store'
 import { useWalletStore } from '@/stores/use-wallet-store'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
 }
 
 let memeLogoSign = new AbortController()
+
 export const FormLogo = ({ formData }: Props) => {
   const { form, formFields } = formData
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
   const userStore = useUserStore()
   const { setConnectOpen } = useWalletStore()
-  const { playAudio } = useAudioPlayer()
+  const { playGuaGua } = useAudioPlayer()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
@@ -55,7 +56,7 @@ export const FormLogo = ({ formData }: Props) => {
           name: form.getValues(formFields.fullname)! as string,
           description: form.getValues(formFields.description)! as string,
         },
-        memeLogoSign.signal
+        memeLogoSign.signal,
       )
       .then(({ data }) => {
         if (data) {
@@ -69,7 +70,7 @@ export const FormLogo = ({ formData }: Props) => {
 
   useEffect(() => {
     if (loadingLogo) {
-      playAudio('/audio/guagua.mp3')
+      playGuaGua()
       fetchMemeLogo()
     }
   }, [loadingLogo])
@@ -92,14 +93,14 @@ export const FormLogo = ({ formData }: Props) => {
                 className={cn(
                   'relative flex',
                   'border-2 border-black rounded-md overflow-hidden',
-                  'w-[150px] h-[150px]'
+                  'w-[150px] h-[150px]',
                 )}
               >
                 {loadingLogo ? (
                   <div
                     className={cn(
                       'absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2',
-                      !field.value && !loadingLogo ? 'justify-center' : ''
+                      !field.value && !loadingLogo ? 'justify-center' : '',
                     )}
                   >
                     <img
@@ -123,7 +124,7 @@ export const FormLogo = ({ formData }: Props) => {
                   <div
                     className={cn(
                       'absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2',
-                      !field.value && !loadingLogo ? 'justify-center' : ''
+                      !field.value && !loadingLogo ? 'justify-center' : '',
                     )}
                   >
                     <div className=" text-center">
