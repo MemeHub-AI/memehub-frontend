@@ -16,8 +16,8 @@ import Input from '@/components/input'
 import { aiApi } from '@/api/ai'
 import { Button } from '@/components/ui/button'
 import { useUserStore } from '@/stores/use-user-store'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -29,17 +29,14 @@ export const FormLogo = ({ formData }: Props) => {
   const { form, formFields } = formData
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
   const userStore = useUserStore()
-  const { setConnectOpen } = useWalletStore()
   const { playGuaGua } = useAudioPlayer()
+  const { checkForConnect } = useCheckAccount()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
 
-    if (userStore.userInfo?.id == null) {
-      return setConnectOpen(true)
-    }
-
+    if (!checkForConnect()) return
     if (form.getValues(formFields?.fullname) === '') {
       toast.warning(t('need.base.info.warning'))
       return
@@ -56,7 +53,7 @@ export const FormLogo = ({ formData }: Props) => {
           name: form.getValues(formFields.fullname)! as string,
           description: form.getValues(formFields.description)! as string,
         },
-        memeLogoSign.signal,
+        memeLogoSign.signal
       )
       .then(({ data }) => {
         if (data) {
@@ -93,14 +90,14 @@ export const FormLogo = ({ formData }: Props) => {
                 className={cn(
                   'relative flex',
                   'border-2 border-black rounded-md overflow-hidden',
-                  'w-[150px] h-[150px]',
+                  'w-[150px] h-[150px]'
                 )}
               >
                 {loadingLogo ? (
                   <div
                     className={cn(
                       'absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2',
-                      !field.value && !loadingLogo ? 'justify-center' : '',
+                      !field.value && !loadingLogo ? 'justify-center' : ''
                     )}
                   >
                     <img
@@ -124,7 +121,7 @@ export const FormLogo = ({ formData }: Props) => {
                   <div
                     className={cn(
                       'absolute top-0 left-0 flex flex-col items-center justify-end w-full h-full p-2',
-                      !field.value && !loadingLogo ? 'justify-center' : '',
+                      !field.value && !loadingLogo ? 'justify-center' : ''
                     )}
                   >
                     <div className=" text-center">

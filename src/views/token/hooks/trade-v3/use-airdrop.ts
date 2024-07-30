@@ -34,8 +34,7 @@ export const useAirdrop = (
   const { setIsCalimingAirdrop } = useAirdropStore()
   const [isClaim, setIsCalim] = useState(false)
   const [isBurning, setBurning] = useState(false)
-  const { checkForChain } = useCheckAccount()
-  const { checkForLogin } = useLogin()
+  const { checkForChain, checkForConnect } = useCheckAccount()
   const { playFire } = useAudioPlayer()
 
   const { distributor } = v3Addr[chainId] ?? {}
@@ -119,7 +118,7 @@ export const useAirdrop = (
   const isClaiming = isSubmittingClaim || isWaitingClaim || isBurning
 
   const claim = async () => {
-    if (!checkForLogin()) return
+    if (!checkForConnect()) return
 
     const isValidChain = await checkForChain(chainId)
     if (!isValidChain) return
@@ -152,7 +151,7 @@ export const useAirdrop = (
   }
 
   const burn = async () => {
-    if (!checkForLogin()) return
+    if (!checkForConnect()) return
 
     const isValidChain = await checkForChain(chainId)
     if (!isValidChain || !distributor) return

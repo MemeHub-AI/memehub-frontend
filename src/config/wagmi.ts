@@ -21,6 +21,7 @@ import {
   zkSyncSepoliaTestnet,
 } from 'wagmi/chains'
 import { dotenv } from '@/utils/env'
+import { getDefaultConfig, getDefaultWallets } from '@rainbow-me/rainbowkit'
 
 const dev = {
   chains: [
@@ -45,7 +46,13 @@ const dev = {
   },
 }
 
-export const wagmiConfig = createConfig({
+const { wallets } = getDefaultWallets()
+
+export const wagmiConfig = getDefaultConfig({
+  appName: 'Memehub',
+  projectId: '72584dc758deda964e371db486be5a0c',
+  ssr: true,
+  wallets,
   chains: [
     mainnet,
     bsc,
@@ -59,7 +66,6 @@ export const wagmiConfig = createConfig({
     // testnet
     ...(dotenv.isDev ? dev.chains : []),
   ],
-  connectors: [injected()],
   transports: {
     [mainnet.id]: fallback([http(), unstable_connector(injected)]),
     [bsc.id]: fallback([
@@ -91,7 +97,6 @@ export const wagmiConfig = createConfig({
     // testnet
     ...(dotenv.isDev ? dev.transports : ({} as typeof dev.transports)),
   },
-  ssr: true,
 })
 
 export type ChainId = (typeof wagmiConfig)['chains'][number]['id']

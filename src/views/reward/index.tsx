@@ -14,9 +14,9 @@ import { InviteTable } from './components/invite-table'
 import { useUserStore } from '@/stores/use-user-store'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { INVITE_REWARD } from '@/constants/invite'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { cn } from '@/lib/utils'
 import { useResponsive } from '@/hooks/use-responsive'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 export const RewardPage = () => {
   const { t } = useTranslation()
@@ -25,8 +25,8 @@ export const RewardPage = () => {
   const link = `${window.location.origin}?r=${userInfo?.code || ''}`
 
   const { isConnected } = useAccount()
-  const { setConnectOpen } = useWalletStore()
   const { isPad } = useResponsive()
+  const { checkForConnect } = useCheckAccount()
 
   return (
     <PrimaryLayout container="div" className="my-4">
@@ -96,7 +96,7 @@ export const RewardPage = () => {
               ) : (
                 <span
                   className="text-blue-600 hover:underline cursor-pointer"
-                  onClick={() => setConnectOpen(true)}
+                  onClick={() => checkForConnect()}
                 >
                   {t('wallet.connect')}
                 </span>
@@ -108,7 +108,7 @@ export const RewardPage = () => {
                     copy(link)
                     return
                   }
-                  setConnectOpen(true)
+                  checkForConnect()
                 }}
               >
                 {isCopied ? (
@@ -180,7 +180,7 @@ export const RewardPage = () => {
                 ) : (
                   <span
                     className="text-blue-600 hover:underline cursor-pointer"
-                    onClick={() => setConnectOpen(true)}
+                    onClick={() => checkForConnect()}
                   >
                     {t('wallet.connect')}
                   </span>
@@ -192,7 +192,7 @@ export const RewardPage = () => {
                       copy(link)
                       return
                     }
-                    setConnectOpen(true)
+                    checkForConnect()
                   }}
                 >
                   {isCopied ? (

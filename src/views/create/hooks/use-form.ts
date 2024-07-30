@@ -3,7 +3,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
 import { useAccount, useSwitchChain } from 'wagmi'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { toast } from 'sonner'
 
@@ -13,6 +12,7 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { CoinType, MarketType, Marketing } from '@/api/token/types'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
 import { deployVersion } from '@/config/contract'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 export const formFields = {
   fullname: 'fullname',
@@ -36,7 +36,7 @@ export const useCreateTokenForm = (
   const { switchChain } = useSwitchChain()
 
   const { formInfo } = useAimemeInfoStore()
-  const { setConnectOpen } = useWalletStore()
+  const { checkForConnect } = useCheckAccount()
   const { chains, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
   const { deploy, isDeploying } = useDeployResult
@@ -104,7 +104,7 @@ export const useCreateTokenForm = (
     const isValid = await form.trigger()
 
     if (!isValid) return
-    if (!isConnected) return setConnectOpen(true)
+    if (!checkForConnect()) return
     if (isDeploying) return
     const vChainId = Number(chains.find((c) => c.name === values.chainName)?.id)
     if (vChainId !== chainId) {

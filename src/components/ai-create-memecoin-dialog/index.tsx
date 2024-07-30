@@ -5,28 +5,28 @@ import { Button } from '../ui/button'
 import { Dialog } from '../ui/dialog'
 import { AIMemeInfo } from '@/api/ai/type'
 import { Img } from '@/components/img'
-import { useWalletStore } from '@/stores/use-wallet-store'
-import { useUserStore } from '@/stores/use-user-store'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 interface Props {
   show: boolean
   isRandom?: boolean
   data?: AIMemeInfo
   onCancel: () => void
-  onConfirm: () => any
+  onConfirm: () => void
 }
 
 export const AICreateMemecoinDialog = (props: Props) => {
   const { show, isRandom, data, onConfirm, onCancel } = props
-  const userStore = useUserStore()
-  const { setConnectOpen } = useWalletStore()
   const { playGuaGua } = useAudioPlayer()
+  const { checkForConnect } = useCheckAccount()
 
-  const confirm = () => {
-    if (userStore.userInfo?.id == null) {
-      return setConnectOpen(true)
+  const handleConfirm = () => {
+    if (!checkForConnect()) {
+      onCancel()
+      return
     }
+
     playGuaGua()
     onConfirm()
   }
@@ -43,7 +43,7 @@ export const AICreateMemecoinDialog = (props: Props) => {
               <h1 className="text-xl text-wrap">
                 {t('create,random.memecoin.with.ai.1').replace(
                   '$1',
-                  data?.name!,
+                  data?.name!
                 )}
               </h1>
             </div>
@@ -66,7 +66,7 @@ export const AICreateMemecoinDialog = (props: Props) => {
           </div>
         ) : null}
         <div className="flex space-x-10 mt-6 w-max mx-auto max-sm:mt-0">
-          <Button variant="default" size="lg" onClick={confirm}>
+          <Button variant="default" size="lg" onClick={handleConfirm}>
             {t('coinfirm')}
           </Button>
           <Button size="lg" onClick={onCancel}>

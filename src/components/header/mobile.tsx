@@ -10,10 +10,9 @@ import { Button } from '../ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
-import { WalletConnect } from '../wallet-connect'
-import { WalletDisconnector } from '../wallet-connect/components/disconnector'
+import { WalletButton } from '../wallet-button'
 import { Routes } from '@/routes'
-import RewardButton from '../reward-button'
+import { RewardButton } from '../reward-button'
 import { cn } from '@/lib/utils'
 import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 import { socialLink } from '@/config/link'
@@ -123,7 +122,7 @@ export const HeaderMobile = (props: Props) => {
         >
           {t('create.token')}
         </Button> */}
-        <WalletConnect />
+        <WalletButton />
       </div>
     </>
   )

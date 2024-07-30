@@ -9,7 +9,6 @@ import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { SlippageButton } from './slippage-button'
 import { TradeProvider } from '@/contexts/trade'
 import { TradeItems } from './trade-items'
@@ -43,7 +42,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { tokenAddr } = useTradeSearchParams()
 
   const { slippage, setSlippage } = useSlippage()
-  const { setConnectOpen } = useWalletStore()
   const { tokenInfo, isNotFound, isIdoToken } = useTokenContext()
   const { copy } = useClipboard()
   const { userInfo } = useUserStore()
@@ -202,9 +200,9 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           ) : (
             <Button
               className="!w-full font-bold bg-lime-green-deep"
-              onClick={() => setConnectOpen(true)}
+              onClick={() => checkForConnect}
             >
-              {t('connect.wallet')}
+              {t('wallet.connect')}
             </Button>
           )}
           {isConnected && !isIdoToken && (
