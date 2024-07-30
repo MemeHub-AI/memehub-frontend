@@ -29,7 +29,7 @@ export const OrtherPosts = ({ postObj }: PostsPro) => {
           <div className="flex items-center ">
             <div className="shrink-0">
               <img
-                className="inline-block h-10 w-10 rounƒded-full ml-1"
+                className="inline-block h-10 w-10 rounƒded-full"
                 src="/favicon.ico"
                 alt=""
               />
@@ -44,18 +44,18 @@ export const OrtherPosts = ({ postObj }: PostsPro) => {
                 </p>
               </div>
               {p.isLaunched ? (
-                <div className="bg-purple-500 rounded-md p-1 text-white ">
+                <div className="bg-purple-500 rounded-md p-1 text-white text-sm font-medium">
                   🚀 {t('succeed')}
                 </div>
               ) : (
-                <span className="text-sm font-medium text-green-500 lg:ml-[155px]">
+                <span className="text-sm font-medium text-green-700 lg:ml-[155px]">
                   20H:20M
                 </span>
               )}
             </div>
           </div>
           {p.isLaunched && (
-            <Button className=" bg-yellow-200 rounded-md h-8 ml-14 mb-2 gap-1">
+            <Button className=" bg-yellow-200 rounded-md h-8 ml-14 mb-2 gap-1 px-2 font-normal">
               {p.isAirdrop ? (
                 <div className="flex gap-1 items-center">
                   <RiEdit2Fill />
@@ -67,7 +67,7 @@ export const OrtherPosts = ({ postObj }: PostsPro) => {
             </Button>
           )}
           <div className="pl-14 ">
-            <p className="text-base width-auto font-medium text-black flex-shrink lg:w-[500px]">
+            <p className="text-base width-auto  text-black flex-shrink lg:w-[500px]">
               Day 07 of the challenge I was wondering what I can do with , so
               just started building Twitter UI using Tailwind and so far it
               looks so promising. I will post my code after completion. [07/100]
@@ -78,7 +78,7 @@ export const OrtherPosts = ({ postObj }: PostsPro) => {
             <InteractiveList className="py-1" />
             <Progress
               value={60}
-              className="text-black h-4 lg:w-[500px] rounded-sm mb-4 border border-solid border-black"
+              className="text-black h-5 lg:w-[500px] rounded-sm mb-4 border border-solid border-black"
               indicatorClass="bg-red-500"
             >
               60%

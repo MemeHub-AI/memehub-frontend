@@ -1,13 +1,19 @@
-import { t } from 'i18next'
 import React, { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 import { Posts } from '../type'
+import { Tabs } from '@/components/ui/tabs'
 interface HeaderProps {
   setPosts: React.Dispatch<React.SetStateAction<Posts | undefined>>
 }
 
 const Header = ({ setPosts }: HeaderProps) => {
+  // enum postTabs {
+  //   latest,
+  //   hot,
+  //   myIdea,
+  //   myParticipate,
+  // }
   const { t } = useTranslation()
   // useEffect(()=>{
   //   setPosts(ortherPosts)
@@ -67,17 +73,19 @@ const Header = ({ setPosts }: HeaderProps) => {
   return (
     <div
       className={cn(
-        'flex h-10 border-solid border-black border-b-2 mr-[-0.69rem] ml-[-1.5rem] md:mr-[-1.46rem]'
+        'flex h-10 border-solid border-black border-b-2 mr-[-0.78rem] ml-[-1.5rem] md:mr-[-1.48rem]'
       )}
     >
       {tabs.map((t, i) => {
         return (
-          <div className="relative ml-3">
+          <Tabs className="relative ml-3">
             <span
               className={cn(
                 'text-lg leading-[35px] pl-3 cursor-pointer',
                 i === selected &&
-                  'after:absolute after:w-8 after:left-1/2 after:-translate-x-1/2 after:bottom-0 after:h-0.5 after:bg-purple-500'
+                  cn(
+                    'after:absolute after:w-8 after:left-1/2 after:-translate-x-[calc(50%-6px)] after:bottom-0 after:h-0.5 after:bg-purple-500'
+                  )
               )}
               onClick={(e) => {
                 onChangeTab(i, e)
@@ -85,7 +93,7 @@ const Header = ({ setPosts }: HeaderProps) => {
             >
               {t}
             </span>
-          </div>
+          </Tabs>
         )
       })}
     </div>

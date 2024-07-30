@@ -12,7 +12,7 @@ interface props {
 
 export const TokenBlock = ({ type }: props) => {
   const { t } = useTranslation()
-  
+
   return (
     <div className=" border border-solid border-gray-400 rounded-md mt-2 lg:w-[500px]">
       <div className="relative">
@@ -47,7 +47,7 @@ export const TokenBlock = ({ type }: props) => {
       </div>
       <Progress
         value={60}
-        className="text-black h-4 w-[96%] ml-2 rounded-sm my-2 border border-black border-solid"
+        className="text-black h-5 w-[96%] ml-2 rounded-sm my-2 border border-black border-solid"
         indicatorClass="bg-[#97f6fb]"
       >
         60%
