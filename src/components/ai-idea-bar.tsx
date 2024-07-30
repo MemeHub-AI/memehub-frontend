@@ -12,10 +12,9 @@ import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipProvider, TooltipTrigger } from './ui/tooltip'
 import { newsApi } from '@/api/news'
 import { Routes } from '@/routes'
-import { useWalletStore } from '@/stores/use-wallet-store'
-import { useUserStore } from '@/stores/use-user-store'
 import { cn } from '@/lib/utils'
 import { paginationSelect } from '@/utils/query'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 interface Props {
   className?: string
@@ -28,9 +27,7 @@ export const AIIdeaBar = (props: Props) => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
   const { push } = useRouter()
-
-  const userStore = useUserStore()
-  const { setConnectOpen } = useWalletStore()
+  const { checkForConnect } = useCheckAccount()
 
   const { data: { list: ideas = [] } = {} } = useQuery({
     queryKey: ['getTrendingIdeas'],
@@ -41,9 +38,7 @@ export const AIIdeaBar = (props: Props) => {
   })
 
   const onRandom = () => {
-    if (userStore.userInfo?.id == null) {
-      return setConnectOpen(true)
-    }
+    if (!checkForConnect()) return
 
     onRandomGen()
   }

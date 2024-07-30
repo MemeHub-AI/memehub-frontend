@@ -51,7 +51,6 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       CONTRACT_ERR.tokenInvalid()
       return false
     }
-    if (!address || !bondingCurve) return false
 
     return true
   }

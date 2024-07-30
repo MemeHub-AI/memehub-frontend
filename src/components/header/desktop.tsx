@@ -4,7 +4,7 @@ import { clsx } from 'clsx'
 
 import type { Nav } from './'
 import { Logo } from '../logo'
-import { WalletConnect } from '../wallet-connect'
+import { WalletButton } from '../wallet-button'
 import { LangSelect } from '../lang-select'
 import { RewardButton } from '../reward-button'
 import { Button } from '../ui/button'
@@ -56,7 +56,7 @@ export const HeaderDesktop = (props: Props) => {
         {/* <Button onClick={() => router.push(Routes.Create)}>
           {t('create.token')}
         </Button> */}
-        <WalletConnect />
+        <WalletButton />
       </div>
     </>
   )

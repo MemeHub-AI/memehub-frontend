@@ -6,9 +6,8 @@ import { aiApi } from '@/api/ai'
 import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { AIMemeInfo } from '@/api/ai/type'
 import { toast } from 'sonner'
-import { Router } from 'next/router'
 import { useUserInfo } from '@/hooks/use-user-info'
-import { useWalletStore } from '@/stores/use-wallet-store'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 interface Props {
   formHook: ReturnType<typeof useCreateTokenForm>
@@ -28,7 +27,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     setLoadingInfoDialog,
   } = useAimemeInfoStore()
   const userStore = useUserInfo()
-  const { setConnectOpen } = useWalletStore()
+  const { checkForConnect } = useCheckAccount()
 
   const fetchMemeInfo = async () => {
     if (!loadingInfo) {
@@ -83,7 +82,7 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     if (loadingInfoDialog && info?.name !== undefined && !loadingInfo) {
       if (userStore.userInfo?.id == null) {
         setLoadingInfoDialog(false)
-        setConnectOpen(true)
+        checkForConnect()
         return
       }
       fetchMemeInfo()

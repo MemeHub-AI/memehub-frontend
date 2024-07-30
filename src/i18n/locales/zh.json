@@ -234,7 +234,6 @@
   "presale.failed": "预售失败",
   "total.supply": "总供应量",
   "1b": "1,000,000,000",
-  "connect.wallet": "连接钱包",
   "not.eligible": "你不在白名单中没有资格参与",
   "whitelist.close.presale": "距离白名单结束",
   "rate.whitelist": "汇率(白名单)",
@@ -504,7 +503,6 @@
   "ido.refund": "退款",
   "ido.no-win": "很抱歉，您未能赢得奖品。建议在市场开放后购买，市场开放后的价格与捐赠价格一致。",
   "ido.4052": "",
-  "ido.405": "全球第一个基于ERC-407协议发行的代币，融合了404和燃烧机制，颠覆性地确保了代币不断上涨",
   "kol.search": "搜索 KOL",
   "community.search": "搜索社区",
   "trump.reward-pool": "奖励池",
@@ -564,5 +562,6 @@
   "airdrop.claiming": "领取中...",
   "ido.airdrop.not-enough": "你没有足够的 BNB",
   "balance-insufficient": "余额不足",
-  "ido.airdrop.not-start": "未开始"
+  "ido.airdrop.not-start": "未开始",
+  "ido.trump407-desc": "全球第一个基于ERC-407协议发行的代币，融合了404和燃烧机制，颠覆性地确保了代币不断上涨"
 }

@@ -1,21 +1,18 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { ChevronDown, User } from 'lucide-react'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { LuUser } from 'react-icons/lu'
+import { useAccount } from 'wagmi'
+import { useTranslation } from 'react-i18next'
 
 import { useResponsive } from '@/hooks/use-responsive'
-import { WalletDisconnector } from './disconnector'
-import { Avatar } from '../../ui/avatar'
+import { Avatar } from '../ui/avatar'
 import { Routes } from '@/routes'
 import { useUserStore } from '@/stores/use-user-store'
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from '../../ui/hover-card'
-import { SocialLinks } from '../../social-links'
-import { Button } from '../../ui/button'
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '../ui/hover-card'
+import { SocialLinks } from '../social-links'
+import { Button } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,6 +22,7 @@ import {
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { utilLang } from '@/utils/lang'
+import { WalletDisconnector } from './disconnect'
 
 export const WalletAccount = () => {
   const { t } = useTranslation()
@@ -32,6 +30,7 @@ export const WalletAccount = () => {
   const { userInfo } = useUserStore()
   const { isMobile } = useResponsive()
   const [open, setOpen] = useState(false)
+  const { address } = useAccount()
 
   const getComp = () => {
     if (isMobile) {
@@ -42,7 +41,7 @@ export const WalletAccount = () => {
               <span
                 className={cn(
                   'line-clamp-1 leading-none',
-                  utilLang.isZh() && 'line-clamp-2 break-all leading-none',
+                  utilLang.isZh() && 'line-clamp-2 break-all leading-none'
                 )}
               >
                 {userInfo?.name ? userInfo.name : t('login')}
@@ -62,7 +61,7 @@ export const WalletAccount = () => {
                   router.push(`${Routes.Account}/${userInfo?.wallet_address}`)
                 }}
               >
-                <User size={20} className="shrink-0" />
+                <LuUser size={20} className="shrink-0" />
                 <span>{t('view.profile')}</span>
               </Button>
             </DropdownMenuItem>
@@ -88,16 +87,18 @@ export const WalletAccount = () => {
             <Button className="flex items-center px-1 gap-1">
               <Avatar
                 src={userInfo?.logo || ''}
-                fallback={userInfo?.wallet_address.slice(-2)}
+                fallback={userInfo?.name.slice(-2)}
                 size={28}
                 className="border-2 border-black"
               />
               <p>
-                {fmt.addr(userInfo?.wallet_address, { preLen: 2, sufLen: 4 })}
+                {fmt.addr(userInfo?.name || address, {
+                  preLen: 2,
+                  sufLen: 4,
+                })}
               </p>
-              <ChevronDown
-                size={18}
-                className={cn('duration-300', open && ' rotate-180')}
+              <ChevronDownIcon
+                className={cn('duration-300 w-4 h-4', open && ' rotate-180')}
               />
             </Button>
           </HoverCardTrigger>
@@ -113,7 +114,7 @@ export const WalletAccount = () => {
                 router.push(`${Routes.Account}/${userInfo?.wallet_address}`)
               }}
             >
-              <User size={20} className="shrink-0" />
+              <LuUser size={20} className="shrink-0" />
               {t('view.profile')}
             </Button>
             <SocialLinks className="flex-col" size="default" />

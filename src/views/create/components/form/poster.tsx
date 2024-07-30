@@ -19,8 +19,8 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Dialog } from '@/components/ui/dialog'
 import { aiApi } from '@/api/ai'
 import { useUserStore } from '@/stores/use-user-store'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -32,7 +32,7 @@ export const PosterForm = ({ formData }: Props) => {
   const [showPoster, setShowPoster] = useState(false)
   const [index, setIndex] = useState(0)
   const userStore = useUserStore()
-  const { setConnectOpen } = useWalletStore()
+  const { checkForConnect } = useCheckAccount()
 
   const { t } = useTranslation()
   const { loadingPoster, setLoadingPoster } = useAimemeInfoStore()
@@ -41,13 +41,9 @@ export const PosterForm = ({ formData }: Props) => {
     e.stopPropagation()
     e.preventDefault()
 
-    if (loadingPoster) {
-      return
-    }
+    if (loadingPoster) return
 
-    if (userStore.userInfo?.id == null) {
-      return setConnectOpen(true)
-    }
+    if (!checkForConnect()) return
 
     if (
       form.getValues(formFields?.fullname) === '' ||
@@ -82,9 +78,7 @@ export const PosterForm = ({ formData }: Props) => {
   }
 
   const fetchMemePoster = () => {
-    if (userStore.userInfo?.id == null) {
-      return setConnectOpen(true)
-    }
+    if (!checkForConnect()) return
 
     memePosterSign.abort('')
     memePosterSign = new AbortController()
@@ -94,7 +88,7 @@ export const PosterForm = ({ formData }: Props) => {
           name: form.getValues(formFields?.fullname) as string,
           description: form.getValues(formFields?.description) as string,
         },
-        memePosterSign.signal,
+        memePosterSign.signal
       )
       .then(({ data }) => {
         if (data) {
@@ -144,7 +138,7 @@ export const PosterForm = ({ formData }: Props) => {
                       <LuRefreshCcw
                         className={cn(
                           'ml-2',
-                          loadingPoster ? 'animate-spin' : 'cursor-pointer',
+                          loadingPoster ? 'animate-spin' : 'cursor-pointer'
                         )}
                         title="Regenerate"
                         onClick={createPoster}
@@ -169,7 +163,7 @@ export const PosterForm = ({ formData }: Props) => {
                               'flex-shrink-0 rounded-md overflow-hidden cursor-pointer',
                               i < 2
                                 ? 'w-[133px] h-[153px]'
-                                : 'w-[233px] h-[153px]',
+                                : 'w-[233px] h-[153px]'
                             )}
                             onClick={() => {
                               setShowPoster(true)
@@ -208,7 +202,7 @@ export const PosterForm = ({ formData }: Props) => {
               index < 2
                 ? 'w-[422px] h-[645px] max-h-[70vh] max-sm:h-[85%]'
                 : 'w-[422px] h-[295px] max-h-[70vh] max-sm:h-[85%]',
-              'rounded-md mb-4 select-none object-cover',
+              'rounded-md mb-4 select-none object-cover'
             )}
           />
           <div className="flex justify-center">
@@ -219,12 +213,12 @@ export const PosterForm = ({ formData }: Props) => {
                     key={item}
                     className={cn(
                       'w-[10px] h-[10px] mx-2 rounded-full cursor-pointer',
-                      i === index ? 'bg-black' : 'bg-gray-300',
+                      i === index ? 'bg-black' : 'bg-gray-300'
                     )}
                     onClick={() => setIndex(i)}
                   ></div>
                 )
-              },
+              }
             )}
           </div>
           <div
@@ -233,7 +227,7 @@ export const PosterForm = ({ formData }: Props) => {
               open(
                 (form?.getValues(formFields?.poster!) as string[])[
                   index
-                ].replace('mini', 'origin'),
+                ].replace('mini', 'origin')
               )
             }
           >

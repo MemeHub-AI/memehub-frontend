@@ -14,10 +14,10 @@ import { useCreateTokenForm } from '../../hooks/use-form'
 import { Textarea } from '@/components/ui/textarea'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useUserStore } from '@/stores/use-user-store'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { aiApi } from '@/api/ai'
 import { cn } from '@/lib/utils'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -30,17 +30,14 @@ export const Description = ({ formData }: Props) => {
   const { t } = useTranslation()
   const { loadingDesc, setLoadingDesc } = useAimemeInfoStore()
   const userStore = useUserStore()
-  const { setConnectOpen } = useWalletStore()
   const { playGuaGua } = useAudioPlayer()
+  const { checkForConnect } = useCheckAccount()
 
   const createDesc = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
 
-    if (userStore.userInfo?.id == null) {
-      return setConnectOpen(true)
-    }
-
+    if (!checkForConnect()) return
     if (form.getValues(formFields?.fullname) === '') {
       toast.warning(t('need.base.info.warning'))
       return
@@ -57,7 +54,7 @@ export const Description = ({ formData }: Props) => {
           input: form.getValues(formFields.fullname)! as string,
           type: 1,
         },
-        memeDescAbort.signal,
+        memeDescAbort.signal
       )
       .then(({ data }) => {
         if (data) {
@@ -93,7 +90,7 @@ export const Description = ({ formData }: Props) => {
             <LuRefreshCcw
               className={cn(
                 'ml-2',
-                loadingDesc ? 'animate-spin' : 'cursor-pointer',
+                loadingDesc ? 'animate-spin' : 'cursor-pointer'
               )}
               title="Regenerate"
               onClick={createDesc}

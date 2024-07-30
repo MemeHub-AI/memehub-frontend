@@ -1,12 +1,10 @@
 import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useAccount } from 'wagmi'
 import { BigNumber } from 'bignumber.js'
 import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { useTradeContext } from '@/contexts/trade'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { useTokenContext } from '@/contexts/token'
 import { Skeleton } from '@/components/ui/skeleton'
 import { tradeBuyItems, tradeDefaultItems } from '@/config/trade'
@@ -21,10 +19,8 @@ interface Props extends ComponentProps<'button'> {
 
 export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
   const { t } = useTranslation()
-  const { isLoadingTokenInfo, tokenInfo } = useTokenContext()
-  const { isBuy, nativeBalance, nativeSymbol, tokenBalance } = useTradeContext()
-  const { isConnected } = useAccount()
-  const { setConnectOpen } = useWalletStore()
+  const { isLoadingTokenInfo } = useTokenContext()
+  const { isBuy, nativeSymbol, tokenBalance } = useTradeContext()
   const { chainId } = useChainInfo()
   const buyItems =
     tradeBuyItems[chainId as keyof typeof tradeBuyItems] ?? tradeDefaultItems

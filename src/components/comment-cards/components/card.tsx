@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import dayjs from 'dayjs'
-import { MessageSquareReply } from 'lucide-react'
+import { MdOutlineMessage } from 'react-icons/md'
 
 import { Routes } from '@/routes'
 import { Card } from '@/components/ui/card'
@@ -91,9 +91,9 @@ export const CommentCard = (props: Props) => {
         <div className="flex items-center absolute right-3 top-2">
           {!readonly && (
             <Tooltip tip={t('replay')}>
-              <MessageSquareReply
+              <MdOutlineMessage
                 size={16}
-                className="text-zinc-500 hover:stroke-black"
+                className="text-zinc-500 hover:text-black cursor-pointer mt-1"
                 onClick={() => onReply?.(c.id.toString())}
               />
             </Tooltip>

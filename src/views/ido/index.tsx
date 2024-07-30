@@ -79,7 +79,7 @@ export const IdoPage = () => {
             website={idoTrumpLink.website}
             className="my-1 text-zinc-600"
           />
-          <p>{t('ido.405')}</p>
+          <p>{t('ido.trump407-desc')}</p>
 
           {isStarted && (
             <Countdown

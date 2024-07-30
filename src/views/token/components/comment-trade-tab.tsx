@@ -35,7 +35,7 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
       className={cn('mt-3', className)}
       onValueChange={(value) => setCommentTradeTab(value)}
     >
-      <TabsList className="rounded-md">
+      <TabsList className="rounded-md select-none">
         <TabsTrigger value={Tab.Comments} disabled={isNotFound}>
           {t('comments')}
         </TabsTrigger>

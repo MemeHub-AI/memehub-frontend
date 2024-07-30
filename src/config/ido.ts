@@ -20,11 +20,11 @@ export const idoChain = {
 export const idoTrumpCard = {
   id: 0, // this is `poolId`
   image: '/images/ido/trump.jpeg',
-  address: '', // token address
-  poolAddr: '',
+  address: '0xc5a74da1b62855697FD55276593D24F38292e11C', // dex token address
+  poolAddr: '0x8e32688152c820e004e270a677e0804168e5821d', // dex pool address
   name: 'Trump407',
   ticker: 'Trump407',
-  desc: t('ido.405'),
+  desc: t('ido.trump407-desc'),
   market_cap: 0,
   total_replies: 0,
   creator: {
@@ -38,7 +38,7 @@ export const idoTrumpCard = {
   },
   chain: idoChain,
   status: 3, // 3: graduated
-  isIdoToken: true,
+  isIdoToken: true, // custom field
 } as UserCoinsCreated
 
 export const idoTrumpAirdrop = {

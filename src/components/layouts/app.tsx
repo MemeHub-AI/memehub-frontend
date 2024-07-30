@@ -8,6 +8,7 @@ import dayjsEn from 'dayjs/locale/en'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { BigNumber } from 'bignumber.js'
 import { useTranslation } from 'react-i18next'
+import '@rainbow-me/rainbowkit/styles.css'
 
 import { Header } from '../header'
 import { Footer } from '../footer'
