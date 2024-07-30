@@ -1,8 +1,8 @@
 import React, { ComponentProps } from 'react'
-import { Twitter } from 'lucide-react'
 import { VariantProps } from 'class-variance-authority'
 import { useTranslation } from 'react-i18next'
 import { LiaTelegramPlane } from 'react-icons/lia'
+import { LuTwitter } from 'react-icons/lu'
 
 import { Button, buttonVariants } from './ui/button'
 import { cn } from '@/lib/utils'
@@ -17,7 +17,7 @@ export const SocialLinks = ({
   const links = [
     {
       name: t('twitter-x'),
-      icon: <Twitter strokeWidth={1.5} size={20} />,
+      icon: <LuTwitter size={20} />,
       link: socialLink.x,
     },
     {

@@ -2,7 +2,8 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { ChevronDown, User } from 'lucide-react'
+import { ChevronDownIcon } from '@radix-ui/react-icons'
+import { LuUser } from 'react-icons/lu'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { WalletDisconnector } from './disconnector'
@@ -42,7 +43,7 @@ export const WalletAccount = () => {
               <span
                 className={cn(
                   'line-clamp-1 leading-none',
-                  utilLang.isZh() && 'line-clamp-2 break-all leading-none',
+                  utilLang.isZh() && 'line-clamp-2 break-all leading-none'
                 )}
               >
                 {userInfo?.name ? userInfo.name : t('login')}
@@ -62,7 +63,7 @@ export const WalletAccount = () => {
                   router.push(`${Routes.Account}/${userInfo?.wallet_address}`)
                 }}
               >
-                <User size={20} className="shrink-0" />
+                <LuUser size={20} className="shrink-0" />
                 <span>{t('view.profile')}</span>
               </Button>
             </DropdownMenuItem>
@@ -95,9 +96,8 @@ export const WalletAccount = () => {
               <p>
                 {fmt.addr(userInfo?.wallet_address, { preLen: 2, sufLen: 4 })}
               </p>
-              <ChevronDown
-                size={18}
-                className={cn('duration-300', open && ' rotate-180')}
+              <ChevronDownIcon
+                className={cn('duration-300 w-4 h-4', open && ' rotate-180')}
               />
             </Button>
           </HoverCardTrigger>
@@ -113,7 +113,7 @@ export const WalletAccount = () => {
                 router.push(`${Routes.Account}/${userInfo?.wallet_address}`)
               }}
             >
-              <User size={20} className="shrink-0" />
+              <LuUser size={20} className="shrink-0" />
               {t('view.profile')}
             </Button>
             <SocialLinks className="flex-col" size="default" />

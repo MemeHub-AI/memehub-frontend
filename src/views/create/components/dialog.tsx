@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { CircleAlert } from 'lucide-react'
 import { useRouter } from 'next/router'
+import { PiWarningCircle } from 'react-icons/pi'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
@@ -37,7 +37,7 @@ export const CreateTokenStatusDialog = () => {
   const withIcon = (children: ReactNode) => {
     return (
       <div className="flex items-center gap-2 text-red-500">
-        <CircleAlert size={18} />
+        <PiWarningCircle size={18} />
         {children}
       </div>
     )

@@ -1,7 +1,8 @@
 import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Copy, Check } from 'lucide-react'
 import { BigNumber } from 'bignumber.js'
+import { IoCheckmark } from 'react-icons/io5'
+import { MdContentCopy } from 'react-icons/md'
 
 import { cn } from '@/lib/utils'
 import { useTokenContext } from '@/contexts/token'
@@ -102,7 +103,7 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
           <span className="truncate mx-2">
             {fmt.addr(tokenInfo?.address || '', { len: 12 })}
           </span>
-          {isCopied ? <Check size={16} /> : <Copy size={16} />}
+          {isCopied ? <IoCheckmark size={16} /> : <MdContentCopy size={16} />}
         </div>
       )}
 

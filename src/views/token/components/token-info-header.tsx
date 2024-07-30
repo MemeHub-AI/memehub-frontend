@@ -1,6 +1,7 @@
 import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Check, Copy } from 'lucide-react'
+import { IoCheckmark } from 'react-icons/io5'
+import { MdContentCopy } from 'react-icons/md'
 
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
@@ -78,7 +79,13 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
             <span className="truncate">
               {fmt.addr(tokenInfo?.address || '', { len: 14 })}
             </span>
-            <span>{isCopied ? <Check size={16} /> : <Copy size={16} />}</span>
+            <span>
+              {isCopied ? (
+                <IoCheckmark size={16} />
+              ) : (
+                <MdContentCopy size={16} />
+              )}
+            </span>
           </div>
         )}
 

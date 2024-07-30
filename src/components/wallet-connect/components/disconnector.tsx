@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LogOut } from 'lucide-react'
+import { MdLogout } from 'react-icons/md'
 
 import { Button, type ButtonProps } from '../../ui/button'
 import { useWallet } from '../hooks/use-wallet'
@@ -30,8 +30,8 @@ export const WalletDisconnector = (props: Props) => {
         className="space-x-2 !px-2 justify-start max-sm:!px-0 w-full"
         {...restProps}
       >
-        <LogOut
-          size={16}
+        <MdLogout
+          size={18}
           className="ml-[4px] mr-[2px] shrink-0 max-sm:ml-[3px] max-sm:mr-[2px]"
         />
         <span>{t('disconnect')}</span>

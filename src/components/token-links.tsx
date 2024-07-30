@@ -1,5 +1,5 @@
 import React, { ComponentProps } from 'react'
-import { Twitter } from 'lucide-react'
+import { LuTwitter } from 'react-icons/lu'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { RiGlobalLine } from 'react-icons/ri'
 
@@ -30,9 +30,10 @@ export const TokenSocialLinks = ({ className, x, tg, website }: Props) => {
           onClick={() => open(x)}
           className={classes}
         >
-          <Twitter size={20} />
+          <LuTwitter size={20} />
         </Button>
       )}
+
       {tg && (
         <Button
           shadow="none"
