@@ -11,6 +11,8 @@ import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Button } from '@/components/ui/button'
 import { ChainSelect } from '@/components/chain-select'
+import { DialogContent } from '@/components/ui/dialog'
+import { AlertDialogContent } from '@/components/ui/alert-dialog'
 
 const CreatePost = () => {
   const { t } = useTranslation()
@@ -29,8 +31,8 @@ const CreatePost = () => {
   const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (target.files && target.files[0]) {
       var name = target.files[0].name
-      if (name.length > 12) {
-        name = name.substring(0, 10) + '...'
+      if (name.length > 9) {
+        name = name.substring(0, 7) + '...'
       }
       setFilename(name)
     }
