@@ -32,7 +32,6 @@ export const useTrade = () => {
   const { referralCode } = useTradeSearchParams()
   const [inviteOpen, setInviteOpen] = useState(false)
   const { getCanBind } = useInvite()
-  const [loading, setLoading] = useState(false)
   const { chainId } = useChainInfo()
 
   const dexTrade = useDexTrade(
@@ -44,8 +43,7 @@ export const useTrade = () => {
 
   const trade = tradeV3
   const tradeHash = trade?.tradeHash
-  const isSubmitting = trade?.isSubmitting
-  const isTrading = isSubmitting || loading
+  const isTrading = trade?.isSubmitting
   // This `useWaitForTx` only track status
   const { isFetched: isTraded } = useWaitForTx({ hash: tradeHash })
 
@@ -84,10 +82,7 @@ export const useTrade = () => {
   }
 
   const buying = async (amount: string, slippage: string) => {
-    setLoading(true)
-    const isValid = await checkForTrade(amount)
-    if (!isValid) {
-      setLoading(false)
+    if (!(await checkForTrade(amount))) {
       return
     }
     if (!isIdoToken) await updateLastTrade(TradeType.Buy, amount)
@@ -96,10 +91,8 @@ export const useTrade = () => {
   }
 
   const selling = async (amount: string, slippage: string) => {
-    setLoading(true)
     const isValid = await checkForTrade(amount)
     if (!isValid) {
-      setLoading(false)
       return
     }
     if (!isIdoToken) await updateLastTrade(TradeType.Sell, amount)
@@ -119,13 +112,11 @@ export const useTrade = () => {
       ...lastTrade,
       txUrl: `${tokenInfo?.chain.explorer}/tx/${trade.tradeHash}`,
       hash: trade.tradeHash,
-      setLoading: () => setLoading(false),
     })
   }, [trade])
 
   return {
     tradeHash,
-    isSubmitting,
     isTrading,
     isTraded,
     buying,

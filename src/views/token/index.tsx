@@ -41,7 +41,6 @@ export const TokenPage = () => {
           'flex space-x-4 max-sm:flex-col max-sm:space-x-0 max-sm:pt-2 pb-4 max-sm:min-h-max'
         )}
       >
-        {/* Left */}
         {isMobile ? <TokenMobile /> : <TokenDesktop />}
       </main>
     </TokenProvider>

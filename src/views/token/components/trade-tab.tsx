@@ -4,7 +4,6 @@ import { isAddress } from 'viem'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash'
-import { useDebounce } from 'react-use'
 
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -35,7 +34,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const [tab, setTab] = useState(String(TradeType.Buy))
   const [value, setValue] = useState('')
-  const [isBalanceOverflow, setIsBalanceOverflow] = useState(false)
   const [commentOpen, setCommentOpen] = useState(false)
   const [isBuy, isSell] = useMemo(
     () => [tab === TradeType.Buy, tab === TradeType.Sell],
@@ -49,20 +47,24 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { tokenInfo, isNotFound, isIdoToken } = useTokenContext()
   const { copy } = useClipboard()
   const { userInfo } = useUserStore()
-  const { isSubmitting, isTraded, inviteOpen, setInviteOpen, buying, selling } =
+  const { isTrading, isTraded, inviteOpen, setInviteOpen, buying, selling } =
     useTrade()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
   const { isConnected, checkForChain, checkForConnect } = useCheckAccount()
 
+  const balance = isBuy ? nativeBalance : tokenBalance
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''
-  const disabled =
-    isSubmitting || isClaimingAirdrop || (isNotFound && !isIdoToken)
   const disableTrade =
-    disabled || !value || BigNumber(value).lte(0) || isBalanceOverflow
+    isTrading || isClaimingAirdrop || (isNotFound && !isIdoToken)
+  const disableButton =
+    disableTrade ||
+    !value ||
+    BigNumber(value).lte(0) ||
+    BigNumber(value).gt(balance)
 
   const { playError, playSuccess } = useAudioPlayer()
 
-  const checkForTrade = (balance: string) => {
+  const checkForTrade = () => {
     if (!checkForConnect()) return false
     if (isEmpty(tokenAddr) || !isAddress(tokenAddr)) {
       toast.error(t('contract.err.token-addr'))
@@ -80,8 +82,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   }
 
   const onTrade = async () => {
-    if (!checkForTrade(isBuy ? nativeBalance : tokenBalance)) return
-
+    if (!checkForTrade()) return
     if (isBuy) {
       const overflowValue = await buying(value, slippage)
       if (overflowValue) {
@@ -90,19 +91,22 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           utilLang.replace(t('trade.limit'), [value, t('trade.buy')])
         )
       }
-      return playSuccess()
+      playSuccess()
+      return
     }
 
     selling(value, slippage)
     playSuccess()
   }
 
-  const checkForBalance = () => {
-    const balance = isBuy ? nativeBalance : tokenBalance
-    setIsBalanceOverflow(BigNumber(value).gt(balance))
-  }
+  const renderButtonText = () => {
+    if (BigNumber(value).gt(balance)) {
+      return t('balance.insufficient')
+    }
+    if (isTrading) return t('trading')
 
-  useDebounce(checkForBalance, 300, [value])
+    return t('trade')
+  }
 
   // Refresh balance when trade completed.
   useEffect(() => {
@@ -138,22 +142,22 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         <Tabs
           value={tab}
           onValueChange={(v) => {
-            setValue('')
             setTab(v)
+            setValue('')
           }}
         >
           <TabsList className="grid grid-cols-2 h-11 mb-3">
             <TabsTrigger
               className="h-full font-bold"
               value={TradeType.Buy}
-              disabled={disabled}
+              disabled={disableTrade}
             >
               {t('trade.buy')}
             </TabsTrigger>
             <TabsTrigger
               className="h-full font-bold"
               value={TradeType.Sell}
-              disabled={disabled}
+              disabled={disableTrade}
             >
               {t('trade.sell')}
             </TabsTrigger>
@@ -163,16 +167,20 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <SlippageButton
             value={slippage}
             onChange={setSlippage}
-            disabled={disabled}
+            disabled={disableTrade}
           />
 
           <div className="flex flex-col my-3">
             {/* Input */}
-            <TradeInput value={value} onChange={setValue} disabled={disabled} />
+            <TradeInput
+              value={value}
+              onChange={setValue}
+              disabled={disableTrade}
+            />
 
             {/* Items button */}
             <TradeItems
-              disabled={disabled}
+              disabled={disableTrade}
               onResetClick={setValue}
               onItemClick={setValue}
             />
@@ -182,18 +190,14 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           {isConnected ? (
             <Button
               className="!w-full font-bold bg-lime-green-deep"
-              disabled={disableTrade}
+              disabled={disableButton}
               onClick={async () => {
                 if (!(await checkForChain(tokenInfo?.chain.id))) return
                 if (isIdoToken) return onTrade()
                 setCommentOpen(true)
               }}
             >
-              {isBalanceOverflow
-                ? t('balance.insufficient')
-                : isSubmitting
-                ? t('trading')
-                : t('trade')}
+              {renderButtonText()}
             </Button>
           ) : (
             <Button
@@ -203,7 +207,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               {t('connect.wallet')}
             </Button>
           )}
-          {isConnected && (
+          {isConnected && !isIdoToken && (
             <>
               <Button
                 className="!w-full font-bold mt-3"

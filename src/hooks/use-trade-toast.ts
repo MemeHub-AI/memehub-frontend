@@ -13,6 +13,7 @@ export interface Options {
   type: string
   hash?: `0x${string}`
   txUrl: string
+  // TODO: We don't need it.
   setLoading?: (loading: boolean) => void
 }
 
@@ -60,7 +61,7 @@ export const useTradeToast = () => {
           transition:
             'transformY 0s,transformX .4s,opacity .4s,height .4s,box-shadow .2s',
         },
-      },
+      }
     )
     setToastId(id)
 
