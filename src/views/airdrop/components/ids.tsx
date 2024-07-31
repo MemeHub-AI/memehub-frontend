@@ -3,11 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import Link from 'next/link'
 
-import { Button } from '@/components/ui/button'
 import { CheckIcon } from '@/components/check-icon'
 import { Img } from '@/components/img'
 import { CommunityCategory } from '@/api/airdrop/types'
-import { useIds } from '@/hooks/use-ids'
 import { cn } from '@/lib/utils'
 import { useUserStore } from '@/stores/use-user-store'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
@@ -16,7 +14,7 @@ import { formLink } from '@/config/link'
 import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
 import { idoChain } from '@/config/ido'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
-import { useCheckAccount } from '@/hooks/use-check-chain'
+import { ConnectWallet } from '@/components/connect-wallet'
 
 export const Ids = () => {
   const { t } = useTranslation()
@@ -31,7 +29,6 @@ export const Ids = () => {
   // const { ids: { kol } = {} } = useIds()
   const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
   const { playRap } = useAudioPlayer()
-  const { checkForConnect } = useCheckAccount()
 
   // TODO: ido temp
   const { isKol, community } = useIdoCheck(idoChain.id)
@@ -47,9 +44,7 @@ export const Ids = () => {
     if (!isConnected) {
       return (
         <div className="my-3 flex items-center">
-          <Button size="lg" onClick={() => checkForConnect()}>
-            {t('wallet.connect')}
-          </Button>
+          <ConnectWallet />
           <span className="ml-4">{t('check.wallet.airdrop')}</span>
         </div>
       )

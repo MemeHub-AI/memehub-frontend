@@ -17,15 +17,13 @@ import {
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
-export const LangSelect = (props: ComponentProps<'div'>) => {
-  const { className } = props
-  const { i18n } = useTranslation()
+export const LangSelect = ({ className }: ComponentProps<'div'>) => {
+  const { t, i18n } = useTranslation()
   const { setLang } = useLang()
-  const { t } = useTranslation()
 
   return (
-    <div>
-      <div className="max-lg:hidden">
+    <>
+      <div className={cn('max-lg:hidden', className)}>
         <HoverCard openDelay={100}>
           <HoverCardTrigger className="p-0">
             <Button size="icon" className={cn(className)}>
@@ -45,7 +43,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
                 className="w-full justify-start"
               >
                 {name}
-                {i18n.language === code ? <FaCheck className="ml-5" /> : null}
+                {i18n.language === code && <FaCheck className="ml-5" />}
               </Button>
             ))}
           </HoverCardContent>
@@ -65,7 +63,7 @@ export const LangSelect = (props: ComponentProps<'div'>) => {
           </AccordionItem>
         </Accordion>
       </div>
-    </div>
+    </>
   )
 }
 

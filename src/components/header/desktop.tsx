@@ -1,25 +1,21 @@
 import React, { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
-import { clsx } from 'clsx'
 
 import type { Nav } from './'
 import { Logo } from '../logo'
-import { WalletButton } from '../wallet-button'
+import { ConnectWallet } from '../connect-wallet'
 import { LangSelect } from '../lang-select'
 import { RewardButton } from '../reward-button'
-import { Button } from '../ui/button'
-import { useTranslation } from 'react-i18next'
-import { Routes } from '@/routes'
+import { cn } from '@/lib/utils'
+import { AccountDropdown } from '../accoun-dropdown'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
   onNavClick?: (nav: Nav) => void
 }
 
-export const HeaderDesktop = (props: Props) => {
-  const { navs, onNavClick } = props
+export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
   const router = useRouter()
-  const { t } = useTranslation()
 
   return (
     <>
@@ -28,12 +24,11 @@ export const HeaderDesktop = (props: Props) => {
         <nav className="ml-8 flex items-center">
           <ul className="flex items-center gap-2">
             {navs.map((n, i) => {
-              if (n.path === Routes.Moonshot || n.path === Routes.ClassicMeme)
-                return
+              if (n.mobileOnly) return
               return (
                 <li key={i}>
                   <div
-                    className={clsx(
+                    className={cn(
                       'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
                       'hover:border-black text-nowrap font-bold xl:px-4',
                       router.pathname === n.path &&
@@ -52,11 +47,13 @@ export const HeaderDesktop = (props: Props) => {
       <div className="flex items-center gap-3">
         {/* <SearchInput /> */}
         <RewardButton />
-        <LangSelect className="flex-shrink-0" />
+        <LangSelect />
         {/* <Button onClick={() => router.push(Routes.Create)}>
           {t('create.token')}
         </Button> */}
-        <WalletButton />
+        <ConnectWallet>
+          <AccountDropdown />
+        </ConnectWallet>
       </div>
     </>
   )

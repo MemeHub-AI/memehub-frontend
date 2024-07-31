@@ -44,7 +44,7 @@ export const useIdo = (onFinally?: () => void) => {
   })
 
   const checkForWrite = async () => {
-    if (!(await checkForConnect())) return false
+    if (!checkForConnect()) return false
     if (!(await checkForChain(chainId))) return false
 
     return true

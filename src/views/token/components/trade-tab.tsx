@@ -28,6 +28,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useTradeSearchParams } from '../hooks/use-search-params'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { utilLang } from '@/utils/lang'
+import ConnectWallet from '@/components/connect-wallet'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -185,7 +186,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           </div>
 
           {/* Trade button */}
-          {isConnected ? (
+          <ConnectWallet className="font-bold bg-lime-green-deep w-full">
             <Button
               className="!w-full font-bold bg-lime-green-deep"
               disabled={disableButton}
@@ -197,32 +198,28 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             >
               {renderButtonText()}
             </Button>
-          ) : (
-            <Button
-              className="!w-full font-bold bg-lime-green-deep"
-              onClick={() => checkForConnect}
-            >
-              {t('wallet.connect')}
-            </Button>
-          )}
-          {isConnected && !isIdoToken && (
-            <>
-              <Button
-                className="!w-full font-bold mt-3"
-                onClick={() => {
-                  copy(
-                    location.origin + location.pathname + `?r=${userInfo?.code}`
-                  )
-                }}
-              >
-                {t('referral.copy')}
-              </Button>
-              <p className="text-xs text-zinc-500 mt-3">
-                {t('referral.desc').split('$')[0]}
-                {INVITE_REWARD}%{t('referral.desc').split('$')[1]}
-              </p>
-            </>
-          )}
+
+            {!isIdoToken && (
+              <>
+                <Button
+                  className="!w-full font-bold mt-3"
+                  onClick={() => {
+                    copy(
+                      location.origin +
+                        location.pathname +
+                        `?r=${userInfo?.code}`
+                    )
+                  }}
+                >
+                  {t('referral.copy')}
+                </Button>
+                <p className="text-xs text-zinc-500 mt-3">
+                  {t('referral.desc').split('$')[0]}
+                  {INVITE_REWARD}%{t('referral.desc').split('$')[1]}
+                </p>
+              </>
+            )}
+          </ConnectWallet>
         </Tabs>
       </Card>
     </TradeProvider>

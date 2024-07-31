@@ -1,20 +1,20 @@
-import React, { useEffect, useState, type ComponentProps } from 'react'
+import React, { ComponentProps, ReactNode, useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { watchAccount } from 'wagmi/actions'
 
-import { WalletAccount } from './account'
 import { useStorage } from '@/hooks/use-storage'
 import { useLogin } from '@/hooks/use-login'
-import { AlertDialog } from '../ui/alert-dialog'
-import { Button } from '../ui/button'
+import { AlertDialog } from './ui/alert-dialog'
+import { Button } from './ui/button'
 import { useResponsive } from '@/hooks/use-responsive'
 import { wagmiConfig } from '@/config/wagmi'
 
-interface Props extends ComponentProps<'div'> {}
-
-export const WalletButton = (props: Props) => {
+export const ConnectWallet = ({
+  children,
+  className,
+}: ComponentProps<typeof Button>) => {
   const { t } = useTranslation()
   const { isConnected, isConnecting } = useAccount()
   const { getToken, setToken } = useStorage()
@@ -26,7 +26,7 @@ export const WalletButton = (props: Props) => {
   const token = getToken()
 
   useEffect(() => {
-    const unwatch = watchAccount(wagmiConfig, {
+    return watchAccount(wagmiConfig, {
       onChange: ({ address }, { address: prevAddress }) => {
         const isFirst = !!(address && !prevAddress)
         const isChanged = !!(address && prevAddress && address !== prevAddress)
@@ -36,11 +36,10 @@ export const WalletButton = (props: Props) => {
         if (isFirst || isChanged) setToken('')
       },
     })
-
-    return unwatch
   }, [])
 
   useEffect(() => {
+    console.log('sign', isConnected, token)
     if (isConnected && !token) {
       setOpen(true)
     } else {
@@ -51,9 +50,10 @@ export const WalletButton = (props: Props) => {
   return (
     <>
       {isConnected ? (
-        <WalletAccount />
+        children
       ) : (
         <Button
+          className={className}
           size={isMobile ? 'sm' : 'default'}
           disabled={isConnecting}
           onClick={() => openConnectModal?.()}
@@ -83,4 +83,4 @@ export const WalletButton = (props: Props) => {
   )
 }
 
-export default WalletButton
+export default ConnectWallet

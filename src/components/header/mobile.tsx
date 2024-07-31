@@ -4,18 +4,19 @@ import { SlMenu } from 'react-icons/sl'
 import { MdArrowDropDown } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
+import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 
 import type { Nav } from '.'
 import { Button } from '../ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
-import { WalletButton } from '../wallet-button'
+import { ConnectWallet } from '../connect-wallet'
 import { Routes } from '@/routes'
 import { RewardButton } from '../reward-button'
 import { cn } from '@/lib/utils'
-import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 import { socialLink } from '@/config/link'
+import { AccountDropdown } from '../accoun-dropdown'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -122,7 +123,9 @@ export const HeaderMobile = (props: Props) => {
         >
           {t('create.token')}
         </Button> */}
-        <WalletButton />
+        <ConnectWallet>
+          <AccountDropdown />
+        </ConnectWallet>
       </div>
     </>
   )
