@@ -51,6 +51,7 @@ export const useSignLogin = () => {
       setUserInfo(data.user)
     } catch (e) {
       reportException(e)
+      throw e
     }
   }
 
