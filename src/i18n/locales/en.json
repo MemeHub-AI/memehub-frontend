@@ -568,7 +568,7 @@
   "tx.confirmation": "Waiting for block confirmation...",
   "ido.airdrop.claim-success": "Claim successful!",
   "ido.airdrop.no-claim": "No yet",
-  "ido.airdrop.no-id": "You do not have {} NFT yet",
+  "ido.airdrop.no-id": "No {} NFT yet",
   "ido.airdrop.not-enough": "You do not have enough BNB",
   "ido.trump407-desc": "The world's first token issued based on the ERC-407 protocol, integrating the 404 and burning mechanisms, disruptively ensures a continuous surge in token value",
   "balance-insufficient": "Hold {} for free claim",

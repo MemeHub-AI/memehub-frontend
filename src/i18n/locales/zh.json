@@ -558,7 +558,7 @@
   "tx.confirmation": "等待区块确认中...",
   "ido.airdrop.claim-success": "领取成功！",
   "ido.airdrop.no-claim": "暂无",
-  "ido.airdrop.no-id": "你还没有{} NFT",
+  "ido.airdrop.no-id": "没有{} NFT",
   "airdrop.claiming": "领取中...",
   "ido.airdrop.not-enough": "你没有足够的 BNB",
   "ido.trump407-desc": "全球第一个基于ERC-407协议发行的代币，融合了404和燃烧机制，颠覆性地确保了代币不断上涨",

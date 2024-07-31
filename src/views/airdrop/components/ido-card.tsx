@@ -79,12 +79,12 @@ export const IdoAirdropCard = ({
     !hasId ||
     (!isKolAirdrop && isBelowThreshold)
 
-  const renderButtonText = () => {
+  const renderHints = () => {
     if (isNotStart) return t('ido.airdrop.not-start')
 
-    if (isClaming) return t('airdrop.claiming')
+    if (isClaming) return
 
-    if (isClaimed) return t('airdrop.claimed')
+    if (isClaimed) return
 
     if (BigNumber(amount).isZero()) return t('ido.airdrop.no-claim')
 
@@ -100,7 +100,7 @@ export const IdoAirdropCard = ({
       ])
     }
 
-    return t('pure.claim')
+    return
   }
 
   return (
@@ -113,7 +113,7 @@ export const IdoAirdropCard = ({
       </div>
       <div className="mt-3 flex justify-between space-x-4">
         <div className="self-end">
-          <div className="bg-lime-green text-sm 2xl:text-base rounded-md px-2 py-0.5 flex items-center max-w-max">
+          <div className="bg-lime-green text-sm 2xl:text-base rounded-md px-2 py-0.5 flex items-center max-w-max truncate">
             {tag}
           </div>
           <div className="mt-3 flex items-center">
@@ -133,10 +133,15 @@ export const IdoAirdropCard = ({
             disabled={disabled}
             onClick={() => claim(isKolAirdrop)}
           >
-            {renderButtonText()}
+            {isClaming
+              ? t('airdrop.claiming')
+              : isClaimed
+              ? t('airdrop.claimed')
+              : t('pure.claim')}
           </Button>
+          <p className="text-sm text-zinc-500 mt-1 ml-0.5">{renderHints()}</p>
         </div>
-        <Img src={logo} className="w-36 h-36" />
+        <Img src={logo} className="w-28 h-28 xl:w-36 xl:h-36" />
       </div>
     </Card>
   )
