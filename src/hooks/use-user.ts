@@ -5,7 +5,6 @@ import { toast } from 'sonner'
 import type { UserInfoRes } from '@/api/user/types'
 
 import { userApi } from '@/api/user'
-import { useStorage } from './use-storage'
 import { useUserStore } from '@/stores/use-user-store'
 
 interface Options {
@@ -18,22 +17,6 @@ export const useUser = (options?: Options) => {
   const { onUpdateSuccess, onFollowSuccess, onFollowFinlly } = options || {}
   const { t } = useTranslation()
   const { setUserInfo } = useUserStore()
-  const { setToken } = useStorage()
-
-  // Login/register a user.
-  const { isPending: isLoggingIn, mutateAsync: login } = useMutation({
-    mutationKey: [userApi.login.name],
-    mutationFn: userApi.login,
-    onMutate: () => toast.loading(t('user.login.loading')),
-    onSettled: (_, __, ___, id) => toast.dismiss(id),
-    onError: () => toast.error(t('user.login.failed')),
-    onSuccess({ data }) {
-      if (!data) return
-      setToken(data.token)
-      setUserInfo(data.user)
-      toast.success(t('user.login.success'))
-    },
-  })
 
   // Update user info.
   const { isPending: isUpdating, mutateAsync: update } = useMutation({
@@ -87,12 +70,9 @@ export const useUser = (options?: Options) => {
   })
 
   return {
-    isLoggingIn,
     isUpdating,
     isFollowing,
     isUnfollowing,
-    login,
-    logout: () => setToken(''),
     update,
     follow,
     unfollow,

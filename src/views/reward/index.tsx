@@ -15,7 +15,7 @@ import { useUserStore } from '@/stores/use-user-store'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { INVITE_REWARD } from '@/constants/invite'
 import { cn } from '@/lib/utils'
-import ConnectWallet from '@/components/connect-wallet'
+import { ConnectWallet } from '@/components/connect-wallet'
 
 export const RewardPage = () => {
   const { t } = useTranslation()

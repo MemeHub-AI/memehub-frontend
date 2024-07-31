@@ -9,14 +9,12 @@ import { useTranslation } from 'react-i18next'
 import { LiaTelegramPlane } from 'react-icons/lia'
 
 import { reportException } from '@/errors'
-import { useLogin } from '@/hooks/use-login'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Avatar } from './ui/avatar'
 import { Routes } from '@/routes'
 import { useUserStore } from '@/stores/use-user-store'
 import { Button } from './ui/button'
 import { fmt } from '@/utils/fmt'
-import { cn } from '@/lib/utils'
 import { AlertDialog } from './ui/alert-dialog'
 import { HoverCard, HoverCardContent, HoverCardTrigger } from './ui/hover-card'
 import {
@@ -33,16 +31,10 @@ export const AccountDropdown = () => {
   const { userInfo } = useUserStore()
   const { isMobile } = useResponsive()
   const { address } = useAccount()
-  const { logout } = useLogin()
-  const { setUserInfo } = useUserStore()
 
   const { disconnect } = useDisconnect({
     mutation: {
       onError: ({ message }) => reportException(message),
-      onSuccess: () => {
-        logout()
-        setUserInfo(null)
-      },
     },
   })
 
@@ -71,12 +63,7 @@ export const AccountDropdown = () => {
                 })}
           </span>
           {!isMobile && (
-            <ChevronDownIcon
-              className={cn(
-                'duration-300 w-4 h-4 duration-150',
-                'group-data-[state=open]:rotate-180'
-              )}
-            />
+            <ChevronDownIcon className="w-4 h-4 duration-150 group-data-[state=open]:rotate-180" />
           )}
         </Button>
       }

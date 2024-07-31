@@ -572,5 +572,6 @@
   "ido.airdrop.not-enough": "You do not have enough BNB",
   "ido.trump407-desc": "The world's first token issued based on the ERC-407 protocol, integrating the 404 and burning mechanisms, disruptively ensures a continuous surge in token value",
   "balance-insufficient": "Hold {} for free claim",
-  "ido.airdrop.not-start": "Not started"
+  "ido.airdrop.not-start": "Not started",
+  "sign.login": "Please sign message to login"
 }
