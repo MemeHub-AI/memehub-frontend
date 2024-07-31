@@ -570,7 +570,7 @@
   "ido.airdrop.no-claim": "No yet",
   "ido.airdrop.no-id": "You do not have {} NFT yet",
   "ido.airdrop.not-enough": "You do not have enough BNB",
-  "balance-insufficient": "Insufficient balance",
-  "ido.airdrop.not-start": "Not started",
-  "ido.trump407-desc": "The world's first token issued based on the ERC-407 protocol, integrating the 404 and burning mechanisms, disruptively ensures a continuous surge in token value"
+  "ido.trump407-desc": "The world's first token issued based on the ERC-407 protocol, integrating the 404 and burning mechanisms, disruptively ensures a continuous surge in token value",
+  "balance-insufficient": "Need to hold",
+  "ido.airdrop.not-start": "Not started"
 }
