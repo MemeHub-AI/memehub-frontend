@@ -7,7 +7,7 @@ import { ConnectWallet } from '../connect-wallet'
 import { LangSelect } from '../lang-select'
 import { RewardButton } from '../reward-button'
 import { cn } from '@/lib/utils'
-import { AccountDropdown } from '../accoun-dropdown'
+import { AccountDropdown } from '../account-dropdown'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]

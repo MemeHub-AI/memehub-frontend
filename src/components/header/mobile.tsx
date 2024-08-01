@@ -16,7 +16,7 @@ import { Routes } from '@/routes'
 import { RewardButton } from '../reward-button'
 import { cn } from '@/lib/utils'
 import { socialLink } from '@/config/link'
-import { AccountDropdown } from '../accoun-dropdown'
+import { AccountDropdown } from '../account-dropdown'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
