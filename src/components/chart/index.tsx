@@ -9,21 +9,18 @@ import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { ChartDexScreener } from '../chart-dexscrenner'
-import { usePools } from '@/views/token/hooks/use-pools'
 import { datafeedConfig } from '@/config/datafeed'
 import { Button } from '../ui/button'
 import { useChartStore } from '@/stores/use-chart-store'
 import { formatInterval } from '@/utils/chart'
-import { CustomSuspense } from '../custom-suspense'
 
 export const Chart = memo(() => {
   const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
   const { chainName, tokenAddr } = useTradeSearchParams()
-  const { tokenInfo, isNotFound, isIdoToken } = useTokenContext()
+  const { tokenInfo, isNotFound, isIdoToken, isGraduated } = useTokenContext()
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
-  const { isGraduated } = usePools(tokenInfo?.address)
   const { chart } = useChartStore()
   const [, update] = useState(false)
   const activeChart = chart?.activeChart()
@@ -64,14 +61,13 @@ export const Chart = memo(() => {
 
   return (
     <>
-      <CustomSuspense
-        isPending={isCreating && !isGraduated && !isIdoToken}
-        fallback={<ChartSkeleton />}
+      <div
         className={cn(
           'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
           'rounded-md overflow-hidden max-sm:mt-3'
         )}
       >
+        {isCreating && !isGraduated && !isIdoToken && <ChartSkeleton />}
         {isGraduated || isIdoToken ? (
           <ChartDexScreener className="w-full h-full" />
         ) : (
@@ -100,7 +96,7 @@ export const Chart = memo(() => {
             <div ref={chartRef} className="w-full h-full flex-1"></div>
           </div>
         )}
-      </CustomSuspense>
+      </div>
     </>
   )
 })
