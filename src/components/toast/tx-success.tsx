@@ -32,7 +32,7 @@ export const TxSuccess = (props: Props) => {
 
   const onEnd = async () => {
     try {
-      const { data } = await userApi.getInfo(address!)
+      const { data } = await userApi.getOtherInfo(address!)
       setUserInfo(data)
     } catch {}
   }
