@@ -1,5 +1,6 @@
 import React, { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
 
 import type { Nav } from './'
 import { Logo } from '../logo'
@@ -8,6 +9,8 @@ import { LangSelect } from '../lang-select'
 import { RewardButton } from '../reward-button'
 import { cn } from '@/lib/utils'
 import { AccountDropdown } from '../account-dropdown'
+import { Button } from '../ui/button'
+import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -16,6 +19,7 @@ interface Props extends ComponentProps<'div'> {
 
 export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
   const router = useRouter()
+  const { t } = useTranslation()
 
   return (
     <>
@@ -48,9 +52,9 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
         {/* <SearchInput /> */}
         <RewardButton />
         <LangSelect />
-        {/* <Button onClick={() => router.push(Routes.Create)}>
+        <Button onClick={() => router.push(Routes.Create)}>
           {t('create.token')}
-        </Button> */}
+        </Button>
         <ConnectWallet>
           <AccountDropdown />
         </ConnectWallet>

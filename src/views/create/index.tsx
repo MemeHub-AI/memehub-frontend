@@ -24,14 +24,12 @@ export const CreatePage = () => {
       }}
     >
       <PrimaryLayout>
-        <p className="mt-3 font-bold text-xl">Coming Soon</p>
-        {/* <CreateTokenMain
+        <CreateTokenMain
           className="flex-1 pb-5 max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0"
           tab={tab}
           setTab={setTab}
-        /> 
+        />
         <CreateTokenStatusDialog />
-        */}
       </PrimaryLayout>
       <AICreateMemecoinDialogLoading
         formHook={formData}
