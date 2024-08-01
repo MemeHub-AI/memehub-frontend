@@ -17,7 +17,7 @@ import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
 import { utilLang } from '@/utils/lang'
 import { useReadContract } from 'wagmi'
 import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
-import { v3Addr } from '@/contract/v3/address'
+import { v3Addr } from '@/contract/v1/address'
 import { zeroAddress } from 'viem'
 
 interface Props {

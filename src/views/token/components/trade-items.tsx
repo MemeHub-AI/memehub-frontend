@@ -50,6 +50,7 @@ export const TradeItems = ({ disabled, onItemClick }: Props) => {
           key={i}
           onClick={() => (isBuy ? onItemClick?.(v) : onSellClick(v))}
           disabled={disabled}
+          type="button"
         >
           {v} {isBuy ? reserveSymbol : '%'}
         </Button>

@@ -6,7 +6,7 @@ import { useTradeSearchParams } from './use-search-params'
 import { airdropApi } from '@/api/airdrop'
 import { useUserStore } from '@/stores/use-user-store'
 import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
-import { useAirdrop } from './trade-v3/use-airdrop'
+import { useAirdrop } from './trade-v1/use-airdrop'
 import { MarketType } from '@/api/token/types'
 import { ApiCode, ApiResponse } from '@/api/types'
 
@@ -46,7 +46,6 @@ export const useTokenInfo = () => {
     },
   })
   const isNotFound = error?.code === ApiCode.NotFound
-  const reserveSymbol = tokenInfo?.chain.native.symbol
 
   const [kol, communities, isOnlyOne] = useMemo(
     () => [
@@ -88,7 +87,6 @@ export const useTokenInfo = () => {
 
   return {
     tokenInfo,
-    reserveSymbol,
     isLoadingTokenInfo,
     isFetchingTokenInfo,
     isRefetchingTokenInfo,

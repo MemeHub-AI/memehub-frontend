@@ -3,8 +3,8 @@ import { Address, zeroAddress } from 'viem'
 
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/number'
-import { v3Addr } from '@/contract/v3/address'
-import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
+import { v3Addr } from '@/contract/v1/address'
+import { v3BondingCurveAbi } from '@/contract/v1/abi/bonding-curve'
 
 export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
   const { chainId } = useChainInfo()

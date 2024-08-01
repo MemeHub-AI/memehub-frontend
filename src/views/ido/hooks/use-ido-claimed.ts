@@ -2,8 +2,8 @@ import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 
 import { BI_ZERO } from '@/constants/number'
-import { idoAbi } from '@/contract/v3/abi/ido'
-import { v3Addr } from '@/contract/v3/address'
+import { idoAbi } from '@/contract/v1/abi/ido'
+import { v3Addr } from '@/contract/v1/address'
 
 export const useIdoClaimed = (chainId: number, poolId: number) => {
   const { address } = useAccount()

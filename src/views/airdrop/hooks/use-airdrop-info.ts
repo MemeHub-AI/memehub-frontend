@@ -4,10 +4,10 @@ import { formatEther } from 'viem'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { MarketType } from '@/api/token/types'
 import { BI_ZERO } from '@/constants/number'
-import { v3Addr } from '@/contract/v3/address'
-import { v3DistributorAbi } from '@/contract/v3/abi/distributor'
-import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
-import { v3TokenAbi } from '@/contract/v3/abi/token'
+import { v3Addr } from '@/contract/v1/address'
+import { v3DistributorAbi } from '@/contract/v1/abi/distributor'
+import { v3BondingCurveAbi } from '@/contract/v1/abi/bonding-curve'
+import { v3TokenAbi } from '@/contract/v1/abi/token'
 
 export const useAirdropInfo = (
   type: MarketType,

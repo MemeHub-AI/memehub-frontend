@@ -6,7 +6,7 @@ import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'react-use'
 import dayjs from 'dayjs'
 
-import { useAirdrop } from '../hooks/trade-v3/use-airdrop'
+import { useAirdrop } from '../hooks/trade-v1/use-airdrop'
 import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { Img } from '@/components/img'

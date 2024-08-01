@@ -2,8 +2,8 @@ import { isEmpty } from 'lodash'
 import { useReadContracts } from 'wagmi'
 import { bsc, base, blast } from 'wagmi/chains'
 
-import { exchangeNftAbi } from '@/contract/v3/abi/exchange-nft'
-import { v3Addr } from '@/contract/v3/address'
+import { exchangeNftAbi } from '@/contract/v1/abi/exchange-nft'
+import { v3Addr } from '@/contract/v1/address'
 
 const chains = [bsc, base, blast]
 

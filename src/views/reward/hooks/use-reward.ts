@@ -12,8 +12,8 @@ import { useTranslation } from 'react-i18next'
 import { BI_ZERO } from '@/constants/number'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { v3Addr } from '@/contract/v3/address'
-import { v3RecommendAbi } from '@/contract/v3/abi/recommend'
+import { v3Addr } from '@/contract/v1/address'
+import { v3RecommendAbi } from '@/contract/v1/abi/recommend'
 
 export const useReward = (chainId: number) => {
   const { t } = useTranslation()

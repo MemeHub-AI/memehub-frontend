@@ -25,6 +25,7 @@ export const ConnectWallet = ({
           size={isMobile ? 'sm' : 'default'}
           disabled={isConnecting}
           onClick={() => openConnectModal?.()}
+          type="button"
         >
           {isConnecting ? t('wallet.connecting') : t('wallet.connect')}
         </Button>

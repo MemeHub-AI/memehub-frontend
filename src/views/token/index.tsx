@@ -11,6 +11,7 @@ import { TokenQueryInvalid } from './components/query-invalid'
 import { useTradeSearchParams } from './hooks/use-search-params'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { idoTrumpCard } from '@/config/ido'
+import { usePools } from './hooks/use-pools'
 
 export const TokenPage = () => {
   const { chainName, tokenAddr, isReady } = useTradeSearchParams()
@@ -18,6 +19,7 @@ export const TokenPage = () => {
   const { isMobile } = useResponsive()
   const tokenInfo = useTokenInfo()
   const { isLoadingTokenInfo } = tokenInfo
+  const { isGraduated } = usePools(tokenInfo.tokenInfo?.address)
 
   const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
@@ -32,7 +34,9 @@ export const TokenPage = () => {
     <TokenProvider
       value={{
         ...tokenInfo,
+        reserveSymbol: tokenInfo.tokenInfo?.chain.native.symbol,
         isIdoToken,
+        isGraduated,
       }}
     >
       <main

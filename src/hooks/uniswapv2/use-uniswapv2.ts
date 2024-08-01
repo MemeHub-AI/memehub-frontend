@@ -12,15 +12,18 @@ import { getDeadline, subSlippage } from '@/utils/contract'
 import { useUniswapV2Amount } from './use-uniswapv2-info'
 import { reserveAddr } from '@/contract/address'
 import { uniswapV2Addr } from '@/contract/uniswapv2/address'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useUniswapV2 = (
-  chainId: number,
-  poolAddr: Address | undefined | null
+  tokenAddr: Address | undefined | null,
+  poolAddr: Address | undefined | null,
+  chainId: number
 ) => {
   const { t } = useTranslation()
   const { address } = useAccount()
   const { isApproving, approvalForAll } = useApprove()
   const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(poolAddr)
+
   const reserveToken = reserveAddr[chainId]
   const uniswapV2Address = uniswapV2Addr[chainId]
   const uniswapV2Config = {
@@ -30,7 +33,7 @@ export const useUniswapV2 = (
   }
 
   const {
-    data: hash,
+    data: uniswapV2Hash,
     isPending: isSubmitting,
     writeContract,
     reset: uniswapV2Reset,
@@ -38,43 +41,41 @@ export const useUniswapV2 = (
     mutation: {
       onMutate: () => toast.loading(t('trade.loading')),
       onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: ({ message }) => UNISWAP_ERR.message(message),
+      onError: ({ message }) => {
+        UNISWAP_ERR.message(message)
+        uniswapV2Reset()
+      },
     },
   })
 
-  const checkForTrade = (token: Address, amount: string) => {
-    if (!address) {
-      toast.error(t('trade.account.invalid'))
-      return false
-    }
+  const checkForTrade = (amount: string, amountInOut: string) => {
     if (isEmpty(amount)) {
-      toast.error(t('contract.err.amount'))
+      CONTRACT_ERR.amountInvlid()
       return false
     }
-    if (!isAddress(token)) {
-      toast.error(t('contract.err.token-addr'))
+    if (!tokenAddr || !isAddress(tokenAddr)) {
+      CONTRACT_ERR.tokenInvalid()
       return false
     }
     if (!reserveToken) {
-      toast.error(t('chain.empty'))
+      UNISWAP_ERR.reserveNotFound()
       return false
     }
+    if (BigNumber(amountInOut).isZero()) {
+      UNISWAP_ERR.amonutInvalid()
+      return false
+    }
+
     return true
   }
 
   const uniswapV2Buy = async (
-    token: Address,
     amount: string,
     slippage: string,
     withTax = false
   ) => {
-    if (!checkForTrade(token, amount)) return
-
     const tokenAmount = formatEther(await getAmountForBuy(amount))
-    if (BigNumber(tokenAmount).isZero()) {
-      UNISWAP_ERR.amonutInvalid()
-      return
-    }
+    if (!checkForTrade(amount, tokenAmount)) return
 
     // TODO: should simulate first.
     writeContract({
@@ -82,9 +83,10 @@ export const useUniswapV2 = (
       functionName: withTax
         ? 'swapExactETHForTokensSupportingFeeOnTransferTokens'
         : 'swapExactETHForTokens',
+      chainId,
       args: [
         subSlippage(tokenAmount, slippage),
-        [reserveToken, token],
+        [reserveToken, tokenAddr!],
         address!,
         await getDeadline(),
       ],
@@ -93,21 +95,19 @@ export const useUniswapV2 = (
   }
 
   const uniswapV2Sell = async (
-    token: Address,
     amount: string,
     slippage: string,
     withTax = false
   ) => {
-    if (!checkForTrade(token, amount)) return
-
-    const isApproved = await approvalForAll(token, uniswapV2Address, amount)
-    if (!isApproved) return
-
     const reserveAmount = formatEther(await getAmountForSell(amount))
-    if (BigNumber(reserveAmount).isZero()) {
-      UNISWAP_ERR.amonutInvalid()
-      return
-    }
+    if (!checkForTrade(amount, reserveAmount)) return
+
+    const isApproved = await approvalForAll(
+      tokenAddr!,
+      uniswapV2Address,
+      amount
+    )
+    if (!isApproved) return
 
     // TODO: should simulate first.
     writeContract({
@@ -115,10 +115,11 @@ export const useUniswapV2 = (
       functionName: withTax
         ? 'swapExactTokensForETHSupportingFeeOnTransferTokens'
         : 'swapExactTokensForETH',
+      chainId,
       args: [
         parseEther(amount),
         subSlippage(reserveAmount, slippage),
-        [token, reserveToken],
+        [tokenAddr!, reserveToken],
         address!,
         await getDeadline(),
       ],
@@ -126,7 +127,7 @@ export const useUniswapV2 = (
   }
 
   return {
-    uniswapV2Hash: hash,
+    uniswapV2Hash,
     isUniswapV2Trading: isSubmitting || isApproving,
     uniswapV2Buy,
     uniswapV2Sell,

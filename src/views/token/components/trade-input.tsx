@@ -11,11 +11,10 @@ import { cn } from '@/lib/utils'
 import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
-import { useTradeInfoV3 } from '../hooks/trade-v3/use-trade-info'
+import { useTradeInfoV3 } from '../hooks/trade-v1/use-trade-info'
 import { Img } from '@/components/img'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { usePools } from '../hooks/use-pools'
-import { useUniswapV2Amount } from '../hooks/trade-dex/use-uniswapv2-info'
+import { useUniswapV2Amount } from '../../../hooks/uniswapv2/use-uniswapv2-info'
 import { idoTrumpCard } from '@/config/ido'
 
 interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
@@ -24,35 +23,34 @@ interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
 
 export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
+  const {
+    tokenInfo,
+    reserveSymbol,
+    isLoadingTokenInfo,
+    isIdoToken,
+    isGraduated,
+  } = useTokenContext()
   const { isBuy, isSell, isTraded, nativeBalance, tokenBalance } =
     useTradeContext()
-  const { tokenInfo, reserveSymbol, isLoadingTokenInfo, isIdoToken } =
-    useTokenContext()
-  const { getTokenAmount, getNativeAmount } = useTradeInfoV3()
+  const { getTokenAmount, getReserveAmount: getNativeAmount } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
-  const { isGraduated } = usePools(tokenInfo?.address)
   const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(
     (isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.pool_address) as Address
   )
+  const [targetAmount, setTargetAmount] = useState('0')
 
   const inputAmount = fmt.decimals(String(value || 0), { fixed: 3 })
-  const [targetAmount, setTargetAmount] = useState('0')
   const tokenSymbol = tokenInfo?.ticker || ''
   const tokenAddr = tokenInfo?.address as Address
   const balance = fmt.decimals(isBuy ? nativeBalance : tokenBalance)
 
   const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (BigNumber(target.value).lt(0)) return
-    // if (BigNumber(balance).lte(0)) return
-    // if (BigNumber(target.value).gt(balance)) {
-    //   return onChange?.(balance)
-    // }
-
     onChange?.(target.value)
   }
 
   const calcAmountForBuy = async () => {
-    value = value as string
+    value = String(value)
     const tokenAmount = await (isGraduated || isIdoToken
       ? getAmountForBuy(value)
       : getTokenAmount(value))

@@ -6,7 +6,7 @@ import { useInterval } from 'react-use'
 import { idoChain } from '@/config/ido'
 import { BI_ZERO } from '@/constants/number'
 import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
-import { v3Addr } from '@/contract/v3/address'
+import { v3Addr } from '@/contract/v1/address'
 
 export const useIdoCommunityAirdrop = (enabled: boolean) => {
   const { address } = useAccount()

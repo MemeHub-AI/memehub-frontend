@@ -8,9 +8,9 @@ import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/number'
 import { useTradeSearchParams } from '../use-search-params'
-import { v3Addr } from '@/contract/v3/address'
-import { v3TokenAbi } from '@/contract/v3/abi/token'
-import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
+import { v3Addr } from '@/contract/v1/address'
+import { v3TokenAbi } from '@/contract/v1/abi/token'
+import { v3BondingCurveAbi } from '@/contract/v1/abi/bonding-curve'
 import { reportException } from '@/errors'
 
 export const useTradeInfoV3 = (overrideToken?: Address) => {
@@ -57,7 +57,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
     })
   }
 
-  const getNativeAmount = async (amount: string) => {
+  const getReserveAmount = async (amount: string) => {
     if (!bondingCurve) return BI_ZERO
 
     const value = await readContract(wagmiConfig, {
@@ -141,7 +141,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
     totalSupply,
     getMaxSupply,
     getDetails,
-    getNativeAmount,
+    getReserveAmount,
     getTokenAmount,
     getPrice,
     checkForOverflow,

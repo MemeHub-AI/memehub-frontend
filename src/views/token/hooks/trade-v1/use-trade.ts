@@ -3,44 +3,41 @@ import { formatEther, isAddress, parseEther } from 'viem'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 
-import { DexTradeProps } from '../trade-dex/use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { getDeadline, subSlippage } from '@/utils/contract'
 import { useTradeInfoV3 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
-import { usePools } from '../use-pools'
-import { v3Addr } from '@/contract/v3/address'
-import { v3BondingCurveAbi } from '@/contract/v3/abi/bonding-curve'
-import { useTokenContext } from '@/contexts/token'
+import { v3Addr } from '@/contract/v1/address'
+import { v3BondingCurveAbi } from '@/contract/v1/abi/bonding-curve'
 
-export const useTradeV3 = (dexProps: DexTradeProps) => {
-  const { dexHash, isDexTrading, dexBuy, dexSell, dexReset } = dexProps
+export const useTradeV3 = () => {
   const { address } = useAccount()
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
   const { getReferrals } = useInvite()
-  const { isGraduated } = usePools(tokenAddr, chainId)
   const { bondingCurve } = v3Addr[chainId] ?? {}
-  const { isIdoToken } = useTokenContext()
 
   const {
-    getNativeAmount,
+    getReserveAmount,
     getTokenAmount,
     checkForOverflow,
     getLastOrderAmount,
   } = useTradeInfoV3()
   const {
-    data: internalHash,
-    isPending: isInternalTrading,
+    data: hashV3,
+    isPending: isSubmittingV3,
     writeContract,
-    reset: resetInternalTrade,
+    reset: resetTradeV3,
   } = useWriteContract({
-    mutation: { onError: (e) => CONTRACT_ERR.message(e) },
+    mutation: {
+      onError: (e) => {
+        CONTRACT_ERR.message(e)
+        resetTradeV3()
+      },
+    },
   })
-  const tradeHash = isGraduated ? dexHash : internalHash
-  const isSubmitting = isGraduated ? isDexTrading : isInternalTrading
 
   const checkForTrade = (amount: string) => {
     if (isEmpty(amount)) {
@@ -55,13 +52,10 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     return true
   }
 
-  const buy = async (amount: string, slippage: string) => {
+  const buyV3 = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGraduated || isIdoToken) {
-      return dexBuy(tokenAddr, amount, slippage, isIdoToken)
-    }
 
-    const nativeAmount = parseEther(amount)
+    const reserveAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
     if (BigNumber(tokenAmount).lte(0)) {
       CONTRACT_ERR.balanceInvalid()
@@ -79,23 +73,20 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       chainId,
       args: [
         tokenAddr,
-        nativeAmount,
+        reserveAmount,
         subSlippage(tokenAmount, slippage),
         address!,
         await getDeadline(),
         await getReferrals(),
       ],
-      value: nativeAmount,
+      value: reserveAmount,
     })
   }
 
-  const sell = async (amount: string, slippage: string) => {
+  const sellV3 = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
-    if (isGraduated || isIdoToken) {
-      return dexSell(tokenAddr, amount, slippage, isIdoToken)
-    }
 
-    const nativeAmount = formatEther(await getNativeAmount(amount))
+    const nativeAmount = formatEther(await getReserveAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {
       CONTRACT_ERR.balanceInvalid()
       return
@@ -118,23 +109,13 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     })
   }
 
-  const resetTrade = () => {
-    resetInternalTrade()
-    dexReset()
-  }
-
   return {
-    tradeHash,
-    isSubmitting,
-    buy,
-    sell,
-    resetTrade,
-
-    // alias
-    tradeHashV3: tradeHash,
-    isSubmittingV3: isSubmitting,
-    buyV3: buy,
-    sellV3: sell,
-    resetTradeV3: resetTrade,
+    hashV3,
+    isSubmittingV3,
+    buyV3,
+    sellV3,
+    resetTradeV3,
+    getReserveAmountV3: getReserveAmount,
+    getTokenAmountV3: getTokenAmount,
   }
 }

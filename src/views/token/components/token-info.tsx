@@ -14,7 +14,6 @@ import { utilLang } from '@/utils/lang'
 import { LISTED_MARKET_CAP } from '@/constants/trade'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Badge } from '@/components/ui/badge'
-import { usePools } from '../hooks/use-pools'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { PosterImages } from '@/components/poster-images'
 import { TokenSocialLinks } from '../../../components/token-links'
@@ -22,11 +21,10 @@ import { AvatarCard } from '@/components/avatar-card'
 
 export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { tokenInfo, isLoadingTokenInfo, isNotFound, isIdoToken } =
+  const { tokenInfo, isLoadingTokenInfo, isNotFound, isIdoToken, isGraduated } =
     useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { isGraduated } = usePools(tokenInfo?.address)
   const { chainsMap } = useChainsStore()
   const chain = chainsMap[tokenInfo?.chain?.id ?? 0]
 

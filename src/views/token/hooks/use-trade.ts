@@ -1,20 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Address, formatEther } from 'viem'
 
-import { useTradeV3 } from './trade-v3/use-trade'
+import { useTradeV3 } from './trade-v1/use-trade'
 import { useTokenContext } from '@/contexts/token'
-import { useDexTrade } from './trade-dex/use-dex-trade'
 import { Options, useTradeToast } from '@/hooks/use-trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
-import { useTradeInfoV3 } from './trade-v3/use-trade-info'
-import { ContractVersion } from '@/constants/contract'
-import { versionOf } from '@/utils/contract'
 import { TradeType } from '@/constants/trade'
 import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
-import { useChainInfo } from '@/hooks/use-chain-info'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
+import { useDexTrade } from './use-dex-trade'
 import { idoTrumpCard } from '@/config/ido'
 
 // Used for trade success tips.
@@ -25,44 +21,41 @@ const lastTrade: Options = {
   txUrl: '',
 }
 
-export const useTrade = () => {
-  const { tokenInfo, isIdoToken } = useTokenContext()
+export const useTrade = (onSuccess?: () => void) => {
+  const { tokenInfo, isIdoToken, isGraduated } = useTokenContext()
+  const { address, pool_address, chain } = tokenInfo ?? {}
   const { showToast } = useTradeToast()
   const { userInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
-  const [inviteOpen, setInviteOpen] = useState(false)
+  const [inviteErrorOpen, setInviteErrorOpen] = useState(false)
   const { getCanBind } = useInvite()
-  const { chainId } = useChainInfo()
 
-  const dexTrade = useDexTrade(
-    chainId,
-    (isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.pool_address) as Address
+  const { dexHash, isDexTrading, dexBuy, dexSell } = useDexTrade(
+    address as Address,
+    (isIdoToken ? idoTrumpCard.poolAddr : pool_address) as Address,
+    Number(chain?.id)
   )
-  const tradeV3 = useTradeV3(dexTrade)
-  const { getNativeAmount, getTokenAmount } = useTradeInfoV3()
+  const {
+    hashV3,
+    isSubmittingV3,
+    buyV3,
+    sellV3,
+    resetTradeV3,
+    getReserveAmountV3,
+    getTokenAmountV3,
+  } = useTradeV3()
+  // const { hashV2 } = useTradeV2() // More version example
+  const hash = dexHash || hashV3
+  const isTrading = isDexTrading || isSubmittingV3
+  const getReserveAmount = getReserveAmountV3
+  const getTokenAmount = getTokenAmountV3
 
-  const trade = tradeV3
-  const tradeHash = trade?.tradeHash
-  const isTrading = trade?.isSubmitting
-  // This `useWaitForTx` only track status
-  const { isFetched: isTraded } = useWaitForTx({ hash: tradeHash })
-
-  const checkForTrade = async (amount: string) => {
-    // Cannot use self code to trade.
-    if (userInfo?.code === referralCode) {
-      setInviteOpen(true)
-      return false
-    }
-
-    // Backend check must be `true`.
-    const canBind = await getCanBind(referralCode)
-    if (!canBind) {
-      setInviteOpen(true)
-      return false
-    }
-
-    return true
-  }
+  // This `useWaitForTx` only track status.
+  const { isFetched: isTraded } = useWaitForTx({
+    hash,
+    onSuccess,
+    onFillay: () => resetTrade(),
+  })
 
   const updateLastTrade = async (type: TradeType, amount: string) => {
     const tokenSymbol = tokenInfo?.ticker
@@ -75,54 +68,72 @@ export const useTrade = () => {
       lastTrade.nativeAmount =
         fmt.decimals(amount, { fixed: 3 }) + reserveSymbol
     } else {
-      const value = await getNativeAmount(amount)
+      const value = await getReserveAmount(amount)
       lastTrade.tokenAmount = fmt.decimals(amount, { fixed: 3 }) + tokenSymbol
       lastTrade.nativeAmount = fmt.decimals(formatEther(value)) + reserveSymbol
     }
   }
 
-  const buying = async (amount: string, slippage: string) => {
-    if (!(await checkForTrade(amount))) {
-      return
+  const checkForTrade = async () => {
+    // Cannot use self code to trade.
+    if (userInfo?.code === referralCode) {
+      setInviteErrorOpen(true)
+      return false
     }
-    if (!isIdoToken) await updateLastTrade(TradeType.Buy, amount)
+    // Backend check.
+    if (!(await getCanBind(referralCode))) {
+      setInviteErrorOpen(true)
+      return false
+    }
 
-    return trade?.buy(amount, slippage)
+    return true
   }
 
-  const selling = async (amount: string, slippage: string) => {
-    const isValid = await checkForTrade(amount)
-    if (!isValid) {
-      return
+  const buy = async (amount: string, slippage: string) => {
+    if (!(await checkForTrade())) return
+    // DEX trade, ido token with trade tax
+    if (isGraduated || isIdoToken) {
+      return dexBuy(amount, slippage, isIdoToken)
     }
-    if (!isIdoToken) await updateLastTrade(TradeType.Sell, amount)
 
-    return trade?.sell(amount, slippage)
+    await updateLastTrade(TradeType.Buy, amount)
+    return buyV3(amount, slippage)
   }
 
-  const resetting = () => {
-    trade?.resetTrade()
+  const sell = async (amount: string, slippage: string) => {
+    if (!(await checkForTrade())) return
+    // DEX trade, ido token with trade tax
+    if (isGraduated || isIdoToken) {
+      return dexSell(amount, slippage, isIdoToken)
+    }
+
+    await updateLastTrade(TradeType.Sell, amount)
+    return sellV3(amount, slippage)
+  }
+
+  const resetTrade = () => {
+    resetTradeV3()
+    // More versions...
   }
 
   // Handle waiting tx with showToast.
   useEffect(() => {
-    if (!trade?.tradeHash) return
-    resetting()
+    if (!hash) return
+    resetTrade()
     showToast({
       ...lastTrade,
-      txUrl: `${tokenInfo?.chain.explorer}/tx/${trade.tradeHash}`,
-      hash: trade.tradeHash,
+      txUrl: `${tokenInfo?.chain.explorer}/tx/${hash}`,
+      hash: hash,
     })
-  }, [trade])
+  }, [hash])
 
   return {
-    tradeHash,
+    hash,
     isTrading,
     isTraded,
-    buying,
-    selling,
-    resetting,
-    inviteOpen,
-    setInviteOpen,
+    buy,
+    sell,
+    inviteErrorOpen,
+    setInviteErrorOpen,
   }
 }

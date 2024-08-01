@@ -8,6 +8,7 @@ interface Value {
   isTraded: boolean
   nativeBalance: string
   tokenBalance: string
+  value: string
 }
 
 const TradeContext = createContext<Value | null>(null)

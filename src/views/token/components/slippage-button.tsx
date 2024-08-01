@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import { MAX_SLIPPAGE } from '@/constants/trade'
 
-const slippages = ['0', '1', '3', '5', '49']
+const slippages = ['1', '3', '5', '49']
 
 interface Props {
   value: string
