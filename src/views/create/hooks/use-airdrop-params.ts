@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 
 import { MarketType, Marketing } from '@/api/token/types'
-import { AirdropType, v3DistributorParams } from '@/config/v3'
+import { AirdropType, v3DistributorParams } from '@/config/v1'
 import { airdropApi } from '@/api/airdrop'
 import { AirdropMerkleRootRes } from '@/api/airdrop/types'
 import { reportException } from '@/errors'
