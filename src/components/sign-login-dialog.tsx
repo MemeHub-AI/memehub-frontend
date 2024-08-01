@@ -28,12 +28,14 @@ export const SignLoginDialog = () => {
 
         // First connect or change account, sign.
         if (isFirst || isChanged) {
+          logout()
           setOpen(true)
           return
         }
 
         // Latest connected, but not token, re-sign.
         if (isAutoConnect && !getToken()) {
+          logout()
           setOpen(true)
           return
         }
