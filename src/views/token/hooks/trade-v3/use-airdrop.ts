@@ -140,6 +140,7 @@ export const useAirdrop = (
     }
 
     setIsCalim(true)
+    // TODO: should simulate first.
     writeContract({
       abi: v3DistributorAbi,
       address: distributor,
@@ -156,6 +157,7 @@ export const useAirdrop = (
     if (!isValidChain || !distributor) return
 
     setBurning(true)
+    // TODO: should simulate first.
     writeContract({
       abi: v3DistributorAbi,
       address: distributor,

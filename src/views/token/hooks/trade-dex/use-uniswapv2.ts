@@ -76,6 +76,7 @@ export const useUniswapV2 = (
       return
     }
 
+    // TODO: should simulate first.
     writeContract({
       ...uniswapV2Config,
       functionName: withTax
@@ -108,6 +109,7 @@ export const useUniswapV2 = (
       return
     }
 
+    // TODO: should simulate first.
     writeContract({
       ...uniswapV2Config,
       functionName: withTax

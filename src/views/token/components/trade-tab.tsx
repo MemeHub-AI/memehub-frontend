@@ -28,7 +28,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useTradeSearchParams } from '../hooks/use-search-params'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { utilLang } from '@/utils/lang'
-import ConnectWallet from '@/components/connect-wallet'
+import { ConnectWallet } from '@/components/connect-wallet'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -49,7 +49,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { isTrading, isTraded, inviteOpen, setInviteOpen, buying, selling } =
     useTrade()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
-  const { isConnected, checkForChain, checkForConnect } = useCheckAccount()
+  const { checkForChain, checkForConnect } = useCheckAccount()
 
   const balance = isBuy ? nativeBalance : tokenBalance
   const nativeSymbol = tokenInfo?.chain.native.symbol || ''

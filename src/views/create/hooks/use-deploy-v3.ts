@@ -41,6 +41,7 @@ export const useDeployV3 = (
       return
     }
 
+    // TODO: should simulate first.
     writeContract(
       {
         abi: v3BondingCurveAbi,

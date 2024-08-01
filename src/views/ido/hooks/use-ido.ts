@@ -53,6 +53,7 @@ export const useIdo = (onFinally?: () => void) => {
   const buy = async (amount: string) => {
     if (!(await checkForWrite())) return
 
+    // TODO: should simulate first.
     writeContract({
       abi: idoAbi,
       address: ido!,
@@ -66,6 +67,7 @@ export const useIdo = (onFinally?: () => void) => {
   const claim = async () => {
     if (!(await checkForWrite())) return
 
+    // TODO: should simulate first.
     writeContract({
       abi: idoAbi,
       address: ido!,
@@ -78,6 +80,7 @@ export const useIdo = (onFinally?: () => void) => {
   const refund = async () => {
     if (!(await checkForWrite())) return
 
+    // TODO: should simulate first.
     writeContract({
       abi: idoAbi,
       address: ido!,

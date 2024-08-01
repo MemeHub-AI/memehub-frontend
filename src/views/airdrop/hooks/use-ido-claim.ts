@@ -44,7 +44,7 @@ export const useIdoAirdropClaim = (onSuccess?: () => void) => {
   })
 
   const checkForClaim = async () => {
-    if (!(await checkForConnect())) return false
+    if (!checkForConnect()) return false
     if (!(await checkForChain(idoChain.id))) return false
     if (!idoAirdrop) return false
 
@@ -54,6 +54,7 @@ export const useIdoAirdropClaim = (onSuccess?: () => void) => {
   const claim = (isKol: boolean) => {
     if (!checkForClaim()) return
 
+    // TODO: should simulate first.
     writeContract({
       abi: idoAirdropAbi,
       address: idoAirdrop!,

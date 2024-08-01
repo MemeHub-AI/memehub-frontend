@@ -75,6 +75,7 @@ export const useReward = (chainId: number) => {
       return
     }
 
+    // TODO: should simulate first.
     writeContract({
       abi: v3RecommendAbi,
       address: recommend,

@@ -68,6 +68,7 @@ export const useAirdropParams = () => {
   }
 
   return {
+    initParams: v3DistributorParams,
     isPending,
     getParams,
   }

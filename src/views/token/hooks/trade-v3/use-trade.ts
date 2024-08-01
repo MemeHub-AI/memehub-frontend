@@ -71,6 +71,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
     const { isOverflow, current } = await checkForOverflow(amount)
     if (isOverflow) return getLastOrderAmount(current)
 
+    // TODO: should simulate first.
     writeContract({
       abi: v3BondingCurveAbi,
       address: bondingCurve!,
@@ -100,6 +101,7 @@ export const useTradeV3 = (dexProps: DexTradeProps) => {
       return
     }
 
+    // TODO: should simulate first.
     writeContract({
       abi: v3BondingCurveAbi,
       address: bondingCurve!,
