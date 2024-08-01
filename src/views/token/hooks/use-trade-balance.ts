@@ -11,10 +11,10 @@ export const useTradeBalance = () => {
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
 
-  // Native token balance.
+  // Reserve token balance.
   const {
-    data: nativeData,
-    isFetching: isFetchingNativeBalance,
+    data: { value = BI_ZERO } = {},
+    isFetching: isFetchingReserve,
     refetch: refetchNativeBalance,
   } = useBalance({
     address,
@@ -24,8 +24,8 @@ export const useTradeBalance = () => {
 
   // Token balance.
   const {
-    data: tokenData,
-    isFetching: isFetchingTokenBalance,
+    data: tokenData = BI_ZERO,
+    isFetching: isFetchingToken,
     refetch: refetchTokenBalance,
   } = useReadContract({
     abi: v3TokenAbi,
@@ -39,9 +39,9 @@ export const useTradeBalance = () => {
     },
   })
 
-  const nativeBalance = formatEther(nativeData?.value ?? BI_ZERO)
-  const tokenBalance = formatEther(tokenData ?? BI_ZERO)
-  const isFetchingBalance = isFetchingNativeBalance || isFetchingTokenBalance
+  const nativeBalance = formatEther(value)
+  const tokenBalance = formatEther(tokenData)
+  const isFetchingBalance = isFetchingReserve || isFetchingToken
 
   const refetchBalance = () => {
     refetchNativeBalance()

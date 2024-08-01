@@ -24,9 +24,10 @@ interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {
 
 export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const { t } = useTranslation()
-  const { isBuy, isSell, isTraded, nativeSymbol, nativeBalance, tokenBalance } =
+  const { isBuy, isSell, isTraded, nativeBalance, tokenBalance } =
     useTradeContext()
-  const { tokenInfo, isLoadingTokenInfo, isIdoToken } = useTokenContext()
+  const { tokenInfo, reserveSymbol, isLoadingTokenInfo, isIdoToken } =
+    useTokenContext()
   const { getTokenAmount, getNativeAmount } = useTradeInfoV3()
   const { chainInfo } = useChainInfo()
   const { isGraduated } = usePools(tokenInfo?.address)
@@ -106,7 +107,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
               )}
             >
               <span className="mr-2 text-zinc-600">
-                {isBuy ? nativeSymbol : tokenSymbol}
+                {isBuy ? reserveSymbol : tokenSymbol}
               </span>
               <Img
                 src={isBuy ? chainInfo?.logo : tokenInfo?.image}
@@ -129,11 +130,11 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         className="text-zinc-500 text-xs flex flex-col space-y-1 mt-1"
       >
         <span>
-          {inputAmount} {isBuy ? nativeSymbol : tokenSymbol} ≈ {targetAmount}{' '}
-          {isBuy ? tokenSymbol : nativeSymbol}
+          {inputAmount} {isBuy ? reserveSymbol : tokenSymbol} ≈ {targetAmount}{' '}
+          {isBuy ? tokenSymbol : reserveSymbol}
         </span>
         <span className="mt-1">
-          {t('balance')}: {balance} {isBuy ? nativeSymbol : tokenSymbol}
+          {t('balance')}: {balance} {isBuy ? reserveSymbol : tokenSymbol}
         </span>
       </CustomSuspense>
     </>

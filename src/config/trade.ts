@@ -16,7 +16,6 @@ const items = {
   zk: ['500', '1000', '3000', '5000'],
   ftm: ['150', '300', '600', '1000'],
   matic: ['150', '300', '600', '1000'],
-
   btc: ['0.004', '0.008', '0.016', '0.03'],
 } as const
 
@@ -45,3 +44,5 @@ export const tradeBuyItems = {
 
 // By default, use eth.
 export const tradeDefaultItems = items.eth
+
+export const tradeSellItems = ['25', '50', '75', '100']

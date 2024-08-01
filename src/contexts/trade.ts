@@ -6,7 +6,6 @@ interface Value {
   isBuy: boolean
   isSell: boolean
   isTraded: boolean
-  nativeSymbol: string
   nativeBalance: string
   tokenBalance: string
 }

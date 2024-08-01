@@ -46,6 +46,7 @@ export const useTokenInfo = () => {
     },
   })
   const isNotFound = error?.code === ApiCode.NotFound
+  const reserveSymbol = tokenInfo?.chain.native.symbol
 
   const [kol, communities, isOnlyOne] = useMemo(
     () => [
@@ -87,6 +88,7 @@ export const useTokenInfo = () => {
 
   return {
     tokenInfo,
+    reserveSymbol,
     isLoadingTokenInfo,
     isFetchingTokenInfo,
     isRefetchingTokenInfo,

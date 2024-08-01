@@ -1,50 +1,32 @@
 import React, { type ComponentProps } from 'react'
-import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 import { useTradeContext } from '@/contexts/trade'
 import { useTokenContext } from '@/contexts/token'
 import { Skeleton } from '@/components/ui/skeleton'
-import { tradeBuyItems, tradeDefaultItems } from '@/config/trade'
+import {
+  tradeBuyItems,
+  tradeDefaultItems,
+  tradeSellItems,
+} from '@/config/trade'
 import { useChainInfo } from '@/hooks/use-chain-info'
-
-const sellItems = ['25', '50', '75', '100']
 
 interface Props extends ComponentProps<'button'> {
   onItemClick?: (value: string) => void
-  onResetClick?: (value: '') => void
 }
 
-export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
-  const { t } = useTranslation()
-  const { isLoadingTokenInfo } = useTokenContext()
-  const { isBuy, nativeSymbol, tokenBalance } = useTradeContext()
+export const TradeItems = ({ disabled, onItemClick }: Props) => {
+  const { isLoadingTokenInfo, reserveSymbol } = useTokenContext()
+  const { isBuy, tokenBalance } = useTradeContext()
   const { chainId } = useChainInfo()
   const buyItems =
     tradeBuyItems[chainId as keyof typeof tradeBuyItems] ?? tradeDefaultItems
 
-  const onBuyClick = (value: string) => {
-    // if (BigNumber(nativeBalance).lte(0)) {
-    //   toast.warning(t('trade.balance.zero'))
-    //   return
-    // }
-    // if (BigNumber(value).gt(nativeBalance)) {
-    //   setValue(nativeBalance)
-    //   return
-    // }
-
-    onItemClick?.(value)
-  }
-
   const onSellClick = (value: string) => {
-    if (BigNumber(tokenBalance).lte(0)) {
-      toast.warning(t('trade.balance.zero'))
-      return
-    }
-    const percent = BigNumber(value).multipliedBy(tokenBalance).div(100)
+    const percent = BigNumber(value).div(100).multipliedBy(tokenBalance)
 
+    if (percent.lte(0)) return
     onItemClick?.(percent.toFixed())
   }
 
@@ -61,17 +43,15 @@ export const TradeItems = ({ disabled, onItemClick, onResetClick }: Props) => {
 
   return (
     <div className="flex mt-3 flex-nowrap space-x-2 overflow-x-auto">
-      {(isBuy ? buyItems : sellItems).map((v, i) => (
+      {(isBuy ? buyItems : tradeSellItems).map((v, i) => (
         <Button
           size="xs"
           shadow="none"
           key={i}
-          onClick={() => {
-            isBuy ? onBuyClick(v) : onSellClick(v)
-          }}
+          onClick={() => (isBuy ? onItemClick?.(v) : onSellClick(v))}
           disabled={disabled}
         >
-          {v} {isBuy ? nativeSymbol : '%'}
+          {v} {isBuy ? reserveSymbol : '%'}
         </Button>
       ))}
     </div>

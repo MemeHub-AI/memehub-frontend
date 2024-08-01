@@ -52,7 +52,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { checkForChain, checkForConnect } = useCheckAccount()
 
   const balance = isBuy ? nativeBalance : tokenBalance
-  const nativeSymbol = tokenInfo?.chain.native.symbol || ''
   const disableTrade =
     isTrading || isClaimingAirdrop || (isNotFound && !isIdoToken)
   const disableButton =
@@ -120,7 +119,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         isBuy,
         isSell,
         isTraded,
-        nativeSymbol,
         nativeBalance,
         tokenBalance,
       }}
@@ -162,7 +160,6 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             </TabsTrigger>
           </TabsList>
 
-          {/* Slippage button */}
           <SlippageButton
             value={slippage}
             onChange={setSlippage}
@@ -170,22 +167,15 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           />
 
           <div className="flex flex-col my-3">
-            {/* Input */}
             <TradeInput
               value={value}
               onChange={setValue}
               disabled={disableTrade}
             />
 
-            {/* Items button */}
-            <TradeItems
-              disabled={disableTrade}
-              onResetClick={setValue}
-              onItemClick={setValue}
-            />
+            <TradeItems disabled={disableTrade} onItemClick={setValue} />
           </div>
 
-          {/* Trade button */}
           <ConnectWallet className="font-bold bg-lime-green-deep w-full">
             <Button
               className="!w-full font-bold bg-lime-green-deep"
@@ -203,13 +193,11 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
               <>
                 <Button
                   className="!w-full font-bold mt-3"
-                  onClick={() => {
+                  onClick={() =>
                     copy(
-                      location.origin +
-                        location.pathname +
-                        `?r=${userInfo?.code}`
+                      `${location.origin}${location.pathname}?r=${userInfo?.code}`
                     )
-                  }}
+                  }
                 >
                   {t('referral.copy')}
                 </Button>
