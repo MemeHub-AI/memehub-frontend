@@ -60,7 +60,7 @@ export const ChainSelect = ({
       onValueChange={onValueChange}
       className={cn(
         'flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap max-w-[300px] max-sm:w-max',
-        className,
+        className
       )}
     >
       {chains.slice(0, 7)?.map((c, i) => (
@@ -71,7 +71,7 @@ export const ChainSelect = ({
           className={cn(
             'flex items-center justify-center min-w-9 p-0 min-h-8',
             chains.length - 1 !== i && 'border-r-2 border-black',
-            isChainSelected(c) && 'bg-black',
+            isChainSelected(c) && 'bg-black'
           )}
           onClick={() => switchChain(c)}
         >
@@ -87,7 +87,7 @@ export const ChainSelect = ({
         <div
           className={cn(
             'w-9 flex justify-center items-center cursor-pointer hover:bg-gray-100',
-            isSelected && 'bg-black text-white hover:bg-black',
+            isSelected && 'bg-black text-white hover:bg-black'
           )}
           onClick={() => setOpen(true)}
         >

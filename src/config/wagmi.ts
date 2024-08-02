@@ -99,4 +99,4 @@ export const wagmiConfig = getDefaultConfig({
   },
 })
 
-export type ChainId = (typeof wagmiConfig)['chains'][number]['id']
+export type ConfigChainId = (typeof wagmiConfig)['chains'][number]['id']
