@@ -75,25 +75,11 @@ export const getDeadline = async (seconds = 300) => {
   return BigInt(ts)
 }
 
-export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
+export const getDeployLogsAddr = (logs: Log<bigint, number, false>[]) => {
   const log = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_ADDR)
   const hashAddr = log?.topics?.[1]
 
   return hashAddr?.replace(/0x0+/, '0x') ?? ''
-}
-
-/**
- * @example
- * ```ts
- * const vIs = versionOf('V3.0.1')
- * // false
- * if (vIs(ContractVersion.V2)) {...}
- * // true
- * if (vIs(ContractVersion.V3)) {...}
- * ```
- */
-export const versionOf = (originVersion: string) => {
-  return (v: string) => originVersion.startsWith(v)
 }
 
 /**

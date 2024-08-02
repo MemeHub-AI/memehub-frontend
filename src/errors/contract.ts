@@ -1,7 +1,6 @@
 import { createElement } from 'react'
 import { toast } from 'sonner'
 import { t } from 'i18next'
-import { lowerCase } from 'lodash'
 
 import { isUserReject } from '@/utils/contract'
 import { SlippageError } from '@/components/toast/slippage-error'
@@ -9,29 +8,24 @@ import { bottomLeft } from '@/config/toast'
 import { DeviceWidth } from '@/hooks/use-responsive'
 import { reportException } from '.'
 
-const ERR = {
-  estimateGas: 'gap tip',
-  invalidSell: lowerCase('MEMEHUB_InvalidSell'),
-  isBurned: lowerCase('MEMEHUB_AlreadyBurn'),
-  transactionExecutionError: lowerCase('TransactionExecutionError'),
+const memehubErr = {
+  invalidSell: 'MEMEHUB_InvalidSell',
+  isBurned: 'MEMEHUB_AlreadyBurn',
 }
 
 export const CONTRACT_ERR = {
   // Execute contract error.
-  message: (err: unknown, showToast = true) => {
-    const e = err as { message?: string }
-    if (!e?.message) return
+  message: (msg: string, showToast = true) => {
+    if (isUserReject(msg)) return
 
-    const msg = (e.message ?? '').toLowerCase()
+    reportException(msg)
 
-    reportException(e)
-    // Cannot estimate gas.
-    if (msg.includes(ERR.estimateGas)) {
+    if (msg.includes('Gas Tip')) {
       toast.error(t('contract.err.gas-estimate'))
       return
     }
 
-    if (msg.includes(ERR.transactionExecutionError)) {
+    if (msg.includes('TransactionExecutionError')) {
       toast.message(
         createElement(SlippageError),
         window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined
@@ -39,22 +33,16 @@ export const CONTRACT_ERR = {
       return
     }
 
-    // Cannot to sell.
-    if (msg.includes(ERR.invalidSell)) {
+    if (msg.includes(memehubErr.invalidSell)) {
       toast.error(t('contract.err.sell'))
       return
     }
 
-    // Already burned.
-    if (msg.includes(ERR.isBurned)) {
+    if (msg.includes(memehubErr.isBurned)) {
       toast.error(t('contract.err.burn'))
       return
     }
 
-    // User reject.
-    if (isUserReject(msg)) return
-
-    // Toast all other error.
     if (showToast) toast.error(t('contract.err.exec'))
   },
 
@@ -63,6 +51,8 @@ export const CONTRACT_ERR = {
   proofNotFound: () => toast.error(t('contract.err.proof-not-found')),
   marketParamsNotFound: () => toast.error(t('contract.err.market-not-found')),
   versionNotFound: () => toast.error(t('contract.err.version-not-found')),
+  contractAddrNotFound: () =>
+    toast.error(t('contract.err.contract-addr-not-found')),
 
   // Failed error.
   retryCreateFailed: () => toast.error(t('contract.err.try-create')),
