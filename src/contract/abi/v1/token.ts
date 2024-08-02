@@ -26,6 +26,21 @@ export const v3TokenAbi = [
         name: '_creator',
         type: 'address',
       },
+      {
+        internalType: 'address',
+        name: '_distributor',
+        type: 'address',
+      },
+      {
+        internalType: 'string',
+        name: '_bondVersion',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: '_distributorVersion',
+        type: 'string',
+      },
     ],
     stateMutability: 'nonpayable',
     type: 'constructor',
@@ -295,6 +310,19 @@ export const v3TokenAbi = [
   },
   {
     inputs: [],
+    name: 'bondVersion',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'creator',
     outputs: [
       {
@@ -314,6 +342,32 @@ export const v3TokenAbi = [
         internalType: 'uint8',
         name: '',
         type: 'uint8',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'distributor',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'distributorVersion',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
       },
     ],
     stateMutability: 'view',
@@ -484,7 +538,7 @@ export const v3TokenAbi = [
   },
   {
     inputs: [],
-    name: 'version',
+    name: 'versions',
     outputs: [
       {
         internalType: 'string',
@@ -492,7 +546,7 @@ export const v3TokenAbi = [
         type: 'string',
       },
     ],
-    stateMutability: 'pure',
+    stateMutability: 'view',
     type: 'function',
   },
 ] as const

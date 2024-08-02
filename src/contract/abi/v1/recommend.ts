@@ -55,6 +55,12 @@ export const v3RecommendAbi = [
         name: 'flag',
         type: 'uint256',
       },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'version',
+        type: 'string',
+      },
     ],
     name: 'MemeHubContractDeploy',
     type: 'event',
@@ -285,7 +291,20 @@ export const v3RecommendAbi = [
         type: 'string',
       },
     ],
-    stateMutability: 'pure',
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'versions',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {

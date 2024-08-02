@@ -65,7 +65,7 @@ export const v3BondingCurveAbi = [
       },
       {
         indexed: true,
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -102,7 +102,7 @@ export const v3BondingCurveAbi = [
       },
       {
         indexed: true,
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -158,7 +158,7 @@ export const v3BondingCurveAbi = [
     inputs: [
       {
         indexed: true,
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -189,13 +189,13 @@ export const v3BondingCurveAbi = [
     inputs: [
       {
         indexed: true,
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
       {
         indexed: true,
-        internalType: 'contract MEMEHUB_Master',
+        internalType: 'address',
         name: 'headmaster',
         type: 'address',
       },
@@ -296,7 +296,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -340,7 +340,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -364,7 +364,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -388,7 +388,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -412,7 +412,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -431,14 +431,14 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
+        internalType: 'string[]',
+        name: '_infos',
+        type: 'string[]',
       },
       {
-        internalType: 'string',
-        name: 'symbol',
-        type: 'string',
+        internalType: 'uint256[]',
+        name: '_params',
+        type: 'uint256[]',
       },
       {
         components: [
@@ -477,6 +477,11 @@ export const v3BondingCurveAbi = [
             name: 'CommunityFlag',
             type: 'uint16',
           },
+          {
+            internalType: 'uint256[]',
+            name: 'flag',
+            type: 'uint256[]',
+          },
         ],
         internalType: 'struct IMEMEHUB_Distributor.DistributionParams',
         name: 'dp',
@@ -486,7 +491,7 @@ export const v3BondingCurveAbi = [
     name: 'createToken',
     outputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -512,7 +517,20 @@ export const v3BondingCurveAbi = [
     name: 'distributor_',
     outputs: [
       {
-        internalType: 'contract MEMEHUB_Distributor',
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'factory_',
+    outputs: [
+      {
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -575,7 +593,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -585,7 +603,7 @@ export const v3BondingCurveAbi = [
       {
         components: [
           {
-            internalType: 'contract MEMEHUB_Token',
+            internalType: 'address',
             name: 'token',
             type: 'address',
           },
@@ -664,7 +682,7 @@ export const v3BondingCurveAbi = [
     name: 'headmaster_',
     outputs: [
       {
-        internalType: 'contract MEMEHUB_Master',
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -714,7 +732,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -771,7 +789,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -779,7 +797,7 @@ export const v3BondingCurveAbi = [
     name: 'pools_',
     outputs: [
       {
-        internalType: 'contract MEMEHUB_Token',
+        internalType: 'address',
         name: 'token',
         type: 'address',
       },
@@ -846,7 +864,7 @@ export const v3BondingCurveAbi = [
     name: 'recommend_',
     outputs: [
       {
-        internalType: 'contract MEMEHUB_Recommend',
+        internalType: 'address',
         name: '',
         type: 'address',
       },
@@ -871,7 +889,7 @@ export const v3BondingCurveAbi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'feeRate',
+        name: 'airdropRate',
         type: 'uint256',
       },
     ],
@@ -889,6 +907,32 @@ export const v3BondingCurveAbi = [
       },
     ],
     name: 'setCreationFee',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_distributor',
+        type: 'address',
+      },
+    ],
+    name: 'setDistributor',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_factory',
+        type: 'address',
+      },
+    ],
+    name: 'setFactory',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -922,7 +966,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Master',
+        internalType: 'address',
         name: 'headmaster',
         type: 'address',
       },
@@ -979,7 +1023,7 @@ export const v3BondingCurveAbi = [
   {
     inputs: [
       {
-        internalType: 'contract MEMEHUB_Recommend',
+        internalType: 'address',
         name: '_recommend',
         type: 'address',
       },
@@ -1000,19 +1044,6 @@ export const v3BondingCurveAbi = [
     name: 'updateRecommedFee',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'version',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
