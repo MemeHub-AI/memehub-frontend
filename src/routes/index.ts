@@ -11,9 +11,9 @@ export enum Routes {
 
   // Community = '/communities',
 
-  Posts = '/posts',
+  Memex = '/memex',
 
-  createPost = '/create-post',
+  CreatePost = '/memex/create',
 
   // KOL = '/kol',
 

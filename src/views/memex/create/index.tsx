@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Button } from '@/components/ui/button'
 import { ChainSelect } from '@/components/chain-select'
+import { Textarea } from '@/components/ui/textarea'
 import { DialogContent } from '@/components/ui/dialog'
 import { AlertDialogContent } from '@/components/ui/alert-dialog'
 
@@ -45,15 +46,19 @@ const CreatePost = () => {
           {/* <span className='mr-1 text-3xl font-light mb-1'>&lt;</span> */}
           <div
             onClick={() => {
-              router.push(Routes.Posts)
+              router.push(Routes.Memex)
             }}
             className="flex items-center cursor-pointer h-[35px] gap-2"
           >
             {/* <IoIosArrowBack className="text-lg" /> */}
-            <span className="text-3xl leading-[35x] font-thin">&lt;</span>
-            <span className="leading-[35px] mt-[4px]">{t('create.post')}</span>
+            <span className="text-2xl leading-[35x] font-thin">
+              <IoIosArrowBack />
+            </span>
+            <span className="">{t('create.post')}</span>
           </div>
-          <Button className={cn('')}>{t('post')}</Button>
+          <Button className={cn('bg-blue-600 h-8 text-white')}>
+            {t('post')}
+          </Button>
         </div>
         <div className="">
           <Image
@@ -63,13 +68,13 @@ const CreatePost = () => {
             width={50}
             height={50}
           />
-          <textarea
+          <Textarea
             id="postContent"
             name="postContent"
             rows={5}
-            className=" ml-[-1.6em] sm:w-2/3 lg:w-[500px] max-sm:w-[calc(100%+34px)] border-b-2 py-2 pl-20 transition ease-in-out sm:text-sm sm:leading-5 md:w-[325px] resize-none focus:outline-none focus:border-blue-500"
+            className=" max-sm:ml-[-1.6rem] sm:w-2/3 text-lg text-gray-400 border-x-0 border-t-0 lg:w-[500px] max-sm:w-[calc(100%+34px)] py-2 pl-14 max-sm:pl-20  sm:leading-8 md:w-[325px]"
             placeholder={t('mind')}
-          ></textarea>
+          ></Textarea>
         </div>
         <div>{t('chain')}</div>
         <ChainSelect className="mb-2" />
@@ -127,12 +132,12 @@ const CreatePost = () => {
             </div>
           </div>
         </div>
-        <div className="  text-[#7aa93a]">{t('choose')}</div>
-        <div className="  text-[#7aa93a]">{t('least.string')}</div>
-        <div className=" text-[#7aa93a]">{t('least.img')}</div>
+        <div className="  text-[#7aa93a] font-medium">{t('choose')}</div>
+        <div className="  text-[#7aa93a] font-medium">{t('least.string')}</div>
+        <div className=" text-[#7aa93a]  font-medium">{t('least.img')}</div>
         <div
           className={cn(
-            ' mt-4 w-2/3  rounded-md max-sm:w-full p-2 text-black lg:w-[500px] bg-[#e3e9fd] md:w-[325px]'
+            ' mt-4 w-2/3 border border-black rounded-md max-sm:w-full p-2 text-black lg:w-[500px] bg-[#e3e9fd] md:w-[325px]'
           )}
         >
           <div>{t('build.consensus')}</div>

@@ -55,9 +55,9 @@ export const InteractiveList = ({ className }: Props) => {
             <DialogTrigger>
               <div className="flex items-center gap-2">
                 {confirm ? (
-                  <FcLike />
+                  <FcLike className="text-xl" />
                 ) : (
-                  <IoMdHeartEmpty className="cursor-pointer " />
+                  <IoMdHeartEmpty className="cursor-pointer text-xl" />
                 )}
                 <span className="cursor-pointer">10</span>
               </div>

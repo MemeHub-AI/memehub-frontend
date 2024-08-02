@@ -34,7 +34,7 @@ export const MyPosts = ({ postObj }: PostsPro) => {
           <div className="flex items-center">
             <div className="shrink-0">
               <Image
-                className="inline-block h-10 w-10 rounƒded-full ml-1"
+                className="inline-block h-10 w-10 rounƒded-full"
                 src="/favicon.ico"
                 alt=""
                 width={50}
@@ -53,12 +53,12 @@ export const MyPosts = ({ postObj }: PostsPro) => {
 
               {p.isLaunched ? (
                 p.isDetailed && (
-                  <span className="bg-purple-500 rounded-md p-1 text-white  font-bold">
+                  <span className="bg-purple-500 rounded-md p-1 text-white text-sm font-bold">
                     {t('started')}
                   </span>
                 )
               ) : (
-                <span className="text-sm font-medium text-green-500 lg:ml-[155px]">
+                <span className="text-sm font-medium text-green-600 lg:ml-[155px]">
                   20H:20M
                 </span>
               )}
@@ -67,12 +67,12 @@ export const MyPosts = ({ postObj }: PostsPro) => {
           <div className="ml-14 flex gap-2 ">
             {/* 只有未补充代币详情才会有编辑代币详情按钮，如果发射可以查看代币详情但是无法编辑 */}
             {(!p.isLaunched || !p.isDetailed) && (
-              <button className="border border-solid border-black px-2 rounded-md">
+              <Button className="border border-solid border-black rounded-md px-2 text-sm h-8 font-normal">
                 {t('edit')}
-              </button>
+              </Button>
             )}
             {(p.isLaunched || !p.isDetailed) && (
-              <Button className=" bg-yellow-200 rounded-md h-8 gap-1">
+              <Button className=" bg-yellow-200 rounded-md h-8 gap-1 text-sm px-2 font-normal">
                 {!p.isDetailed && <RiEdit2Fill />}
                 {t('token.detail')}
               </Button>
@@ -83,7 +83,7 @@ export const MyPosts = ({ postObj }: PostsPro) => {
             (p.isLaunched ? (
               <div className="ml-14 relative border border-solid border-yellow-600 text-yellow-500 rounded-md py-1 mt-2 lg:w-[500px]">
                 <FaBoltLightning className="m-1 absolute text-yellow-600 " />
-                <span className="absolute right-0 mr-1 text-green-400">
+                <span className="absolute right-0 mr-1 text-green-600">
                   59m:23s
                 </span>
                 <div className="pl-6 w-[88%]">{t('hundred.like')}</div>
@@ -98,7 +98,7 @@ export const MyPosts = ({ postObj }: PostsPro) => {
             ))}
 
           <div className="pl-14 mt-2">
-            <p className="text-base width-auto font-medium text-black flex-shrink lg:w-[500px]">
+            <p className="text-base width-auto text-black flex-shrink lg:w-[500px]">
               Day 07 of the challenge I was wondering what I can do with , so
               just started building Twitter UI using Tailwind and so far it
               looks so promising. I will post my code after completion. [07/100]
@@ -111,7 +111,7 @@ export const MyPosts = ({ postObj }: PostsPro) => {
             <InteractiveList className="py-1" />
             <Progress
               value={60}
-              className="mb-3 text-black h-4 lg:w-[500px] rounded-sm border border-black border-solid "
+              className="mb-3 text-black h-5 lg:w-[500px] rounded-sm border border-black border-solid "
               indicatorClass="bg-red-500"
             >
               <span className="text-white">60%</span>
@@ -120,7 +120,7 @@ export const MyPosts = ({ postObj }: PostsPro) => {
           {i !== posts.length - 1 && (
             <div
               className={cn(
-                '  bg-gray-400 h-[0.7px] mr-[-0.7rem] lg:w-[600px] pl-[-5px]  ml-[-1.5rem] sm:mr-[-1.4rem]',
+                '  bg-gray-400 h-[0.7px] mr-[-0.7rem] lg:w-[600px] pl-[-5px]  ml-[-1.5rem] sm:mr-[-1.4rem]'
               )}
             ></div>
           )}
