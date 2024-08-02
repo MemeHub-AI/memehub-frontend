@@ -1,4 +1,4 @@
-import { ChainId, wagmiConfig } from '@/config/wagmi'
+import { ConfigChainId, wagmiConfig } from '@/config/wagmi'
 import { useMutation } from '@tanstack/react-query'
 import { simulateContract, SimulateContractParameters } from 'wagmi/actions'
 
@@ -9,10 +9,11 @@ export const useSimulateWriteContract = () => {
     mutate: simulateWrite,
     mutateAsync: simulateWriteAsync,
     reset: resetSimulateWrite,
+    ...mutations
   } = useMutation({
     mutationKey: ['simulateWriteContract'],
     mutationFn: (params: SimulateContractParameters) => {
-      const p = { ...params, chainId: params.chainId as ChainId }
+      const p = { ...params, chainId: params.chainId as ConfigChainId }
       return simulateContract(wagmiConfig, p)
     },
   })
@@ -23,5 +24,6 @@ export const useSimulateWriteContract = () => {
     simulateWrite,
     simulateWriteAsync,
     resetSimulateWrite,
+    ...mutations,
   }
 }
