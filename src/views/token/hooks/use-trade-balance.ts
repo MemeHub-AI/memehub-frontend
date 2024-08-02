@@ -4,7 +4,7 @@ import { useAccount, useBalance, useReadContract } from 'wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from './use-search-params'
 import { BI_ZERO } from '@/constants/number'
-import { v3TokenAbi } from '@/contract/v1/abi/token'
+import { v3TokenAbi } from '@/contract/abi/v1/token'
 
 export const useTradeBalance = () => {
   const { address } = useAccount()

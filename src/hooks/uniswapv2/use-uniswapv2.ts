@@ -7,12 +7,11 @@ import { BigNumber } from 'bignumber.js'
 
 import { useApprove } from '@/hooks/use-approve'
 import { UNISWAP_ERR } from '@/errors/uniswap'
-import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
+import { uniswapV2RouterAbi } from '@/contract/abi/uniswapv2/router'
 import { getDeadline, subSlippage } from '@/utils/contract'
 import { useUniswapV2Amount } from './use-uniswapv2-info'
-import { reserveAddr } from '@/contract/address'
-import { uniswapV2Addr } from '@/contract/uniswapv2/address'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { reserveAddr, uniswapV2Addr } from '@/contract/address'
 
 export const useUniswapV2 = (
   tokenAddr: Address | undefined | null,

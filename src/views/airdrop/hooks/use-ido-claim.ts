@@ -1,9 +1,9 @@
 import { useWriteContract } from 'wagmi'
 import { toast } from 'sonner'
 
-import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
+import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { v3Addr } from '@/contract/v1/address'
+import { v3Addr } from '@/contract/address'
 import { useTranslation } from 'react-i18next'
 import { idoChain } from '@/config/ido'
 import { useCheckAccount } from '@/hooks/use-check-chain'

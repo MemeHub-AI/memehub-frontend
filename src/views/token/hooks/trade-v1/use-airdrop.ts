@@ -17,8 +17,8 @@ import { useAirdropStore } from '@/stores/use-airdrop'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { bottomLeft } from '@/config/toast'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
-import { v3Addr } from '@/contract/v1/address'
-import { v3DistributorAbi } from '@/contract/v1/abi/distributor'
+import { v3Addr } from '@/contract/address'
+import { v3DistributorAbi } from '@/contract/abi/v1/distributor'
 import { DeviceWidth } from '@/hooks/use-responsive'
 
 export const useAirdrop = (

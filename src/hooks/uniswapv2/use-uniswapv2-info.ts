@@ -2,12 +2,12 @@ import { readContract } from 'wagmi/actions'
 import { Address, parseEther } from 'viem'
 
 import { wagmiConfig } from '@/config/wagmi'
-import { uniswapV2RouterAbi } from '@/contract/uniswapv2/abi/router'
-import { uniswapV2LPAbi } from '@/contract/uniswapv2/abi/lp'
+import { uniswapV2RouterAbi } from '@/contract/abi/uniswapv2/router'
+import { uniswapV2LPAbi } from '@/contract/abi/uniswapv2/lp'
 import { BI_ZERO, BI_ZERO_TUPLE } from '@/constants/number'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { uniswapV2Addr } from '@/contract/uniswapv2/address'
 import { reportException } from '@/errors'
+import { uniswapV2Addr } from '@/contract/address'
 
 export const useUniswapV2Amount = (poolAddr?: Address | undefined | null) => {
   const { chainId } = useChainInfo()

@@ -7,8 +7,8 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { BI_ZERO } from '@/constants/number'
 import { usePools } from '../use-pools'
-import { v3Addr } from '@/contract/v1/address'
-import { v3BondingCurveAbi } from '@/contract/v1/abi/bonding-curve'
+import { v3Addr } from '@/contract/address'
+import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
 
 export const useTokenProgressV3 = (
   overrideToken?: Address,

@@ -5,8 +5,8 @@ import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'react-use'
 
 import { BI_ZERO } from '@/constants/number'
-import { idoAbi } from '@/contract/v1/abi/ido'
-import { v3Addr } from '@/contract/v1/address'
+import { idoAbi } from '@/contract/abi/ido'
+import { v3Addr } from '@/contract/address'
 import { useIdoClaimed } from './use-ido-claimed'
 
 export enum IdoStatus {

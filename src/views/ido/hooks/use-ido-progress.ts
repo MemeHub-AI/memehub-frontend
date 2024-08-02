@@ -4,8 +4,8 @@ import { formatEther } from 'viem'
 import { useReadContract } from 'wagmi'
 
 import { BI_ZERO } from '@/constants/number'
-import { idoAbi } from '@/contract/v1/abi/ido'
-import { v3Addr } from '@/contract/v1/address'
+import { idoAbi } from '@/contract/abi/ido'
+import { v3Addr } from '@/contract/address'
 
 export const useIdoProgress = (chainId: number, poolId: number) => {
   const { ido } = v3Addr[chainId] ?? {}

@@ -1,11 +1,11 @@
 import { useAccount, useReadContract } from 'wagmi'
-import { formatEther, zeroAddress } from 'viem'
+import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'react-use'
 
 import { idoChain } from '@/config/ido'
-import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
-import { v3Addr } from '@/contract/v1/address'
+import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
+import { v3Addr } from '@/contract/address'
 import { BI_ZERO } from '@/constants/number'
 
 export const useIdoKolAirdrop = (enabled: boolean) => {

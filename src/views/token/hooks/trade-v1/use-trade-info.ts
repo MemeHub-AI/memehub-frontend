@@ -8,9 +8,9 @@ import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/number'
 import { useTradeSearchParams } from '../use-search-params'
-import { v3Addr } from '@/contract/v1/address'
-import { v3TokenAbi } from '@/contract/v1/abi/token'
-import { v3BondingCurveAbi } from '@/contract/v1/abi/bonding-curve'
+import { v3Addr } from '@/contract/address'
+import { v3TokenAbi } from '@/contract/abi/v1/token'
+import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
 import { reportException } from '@/errors'
 
 export const useTradeInfoV3 = (overrideToken?: Address) => {
