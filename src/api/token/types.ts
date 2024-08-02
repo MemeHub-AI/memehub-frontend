@@ -24,13 +24,14 @@ export interface TokenNewReq {
   image: string
   hash: string
   chain: string
-  version: string
   twitter_url?: string
   telegram_url?: string
   website?: string
   coin_type?: CoinType
   marketing?: Marketing[]
   poster?: string[]
+  factory: string
+  configure: string
 }
 
 export enum CoinType {
@@ -110,4 +111,16 @@ export interface OnchainTokensItem {
   '24H_Volume': number
   logo: string
   publish_at: string
+}
+
+export interface TokenConfigRes {
+  name: string
+  value: {
+    kolFlag: number
+    CommunityFlag: number
+    walletCountKol: number
+    distributionRatioKol: number
+    walletCountCommunity: number
+    distributionRatioCommunity: number
+  }
 }

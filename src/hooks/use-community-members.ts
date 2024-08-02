@@ -11,7 +11,7 @@ export const useCommunityMembers = (id?: string) => {
   const { data = [] } = useReadContracts({
     contracts: chains.map((c) => ({
       abi: exchangeNftAbi,
-      address: v3Addr[c.id]?.exchangeNft,
+      address: v3Addr[c.id]?.exchangeNft!,
       functionName: 'idOfAmount',
       args: [id],
     })),

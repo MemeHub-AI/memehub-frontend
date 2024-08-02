@@ -1,5 +1,6 @@
 import React from 'react'
 import { isAddress } from 'viem'
+import { useTranslation } from 'react-i18next'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { TokenProvider } from '@/contexts/token'
@@ -7,13 +8,14 @@ import { useTokenInfo } from './hooks/use-token-info'
 import { cn } from '@/lib/utils'
 import { TokenDesktop } from './components/desktop'
 import { TokenMobile } from './components/mobile'
-import { TokenQueryInvalid } from './components/query-invalid'
 import { useTradeSearchParams } from './hooks/use-search-params'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { idoTrumpCard } from '@/config/ido'
 import { usePools } from './hooks/use-pools'
+import { NotFound } from '@/components/not-found'
 
 export const TokenPage = () => {
+  const { t } = useTranslation()
   const { chainName, tokenAddr, isReady } = useTradeSearchParams()
   const { chainsMap } = useChainsStore()
   const { isMobile } = useResponsive()
@@ -23,7 +25,13 @@ export const TokenPage = () => {
 
   const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
-    return <TokenQueryInvalid reason={`/${chainName}/${tokenAddr}`} />
+    return (
+      <NotFound
+        title={t('token.invalid.token')}
+        src="/images/empty.png"
+        imgClass="max-w-64 max-sm:max-w-1/2"
+      />
+    )
   }
 
   // TODO: ido temp

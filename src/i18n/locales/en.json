@@ -473,7 +473,7 @@
   "404.desc2": "Let's get back to the right place by clicking the button below",
   "goto.home": "Back home",
   "token.404.title": "Sorry, but we cannot find any information about this token",
-  "token.invalid.token": "Sorry, but the \"{}\" path you accessed is incorrect",
+  "token.invalid.token": "Sorry, but the path you accessed is incorrect",
   "token.not-found": "Invalid token",
   "token.not-found-desc": "Sorry, but this is an incorrect token and we are unable to find any information about it",
   "Languages": "Languages",
@@ -573,5 +573,8 @@
   "ido.trump407-desc": "The world's first token issued based on the ERC-407 protocol, integrating the 404 and burning mechanisms, disruptively ensures a continuous surge in token value",
   "balance-insufficient": "Hold {} for free claim",
   "ido.airdrop.not-start": "Not started",
-  "sign.login": "Please sign message to login"
+  "sign.login": "Please sign message to login",
+  "creating": "Creating...",
+  "airdrop.error.config-not-found": "Cannot find airdrop params, please try again",
+  "contract.err.contract-addr-not-found": "Cannot find contract address"
 }

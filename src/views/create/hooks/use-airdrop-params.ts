@@ -1,40 +1,60 @@
 import { useMutation } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
 
-import { MarketType, Marketing } from '@/api/token/types'
-import { AirdropType, v3DistributorParams } from '@/config/v1'
-import { airdropApi } from '@/api/airdrop'
-import { AirdropMerkleRootRes } from '@/api/airdrop/types'
+import { MarketType, Marketing, TokenConfigRes } from '@/api/token/types'
 import { reportException } from '@/errors'
+import { tokenApi } from '@/api/token'
+
+enum AirdropType {
+  None,
+  Assign,
+  All,
+}
+
+const distributorParams = {
+  isDistribution: false,
+  distributionRatioKol: 0,
+  distributionRatioCommunity: 0,
+  walletCountKol: 0,
+  walletCountCommunity: 0,
+  kolFlag: AirdropType.None,
+  CommunityFlag: AirdropType.None,
+  flag: [] as bigint[],
+}
 
 export const useAirdropParams = () => {
+  const { t } = useTranslation()
   const { isPending, mutateAsync } = useMutation({
-    mutationKey: [airdropApi.getMerkleRoot.name],
-    mutationFn: airdropApi.getMerkleRoot,
+    mutationKey: [tokenApi.getConfig.name],
+    mutationFn: tokenApi.getConfig,
   })
 
   const updateParams = (
-    params: typeof v3DistributorParams,
+    kol: Marketing | undefined,
+    cmnt: Marketing | undefined,
     {
-      kolRatio,
-      kol_count,
-      kol_root_hash,
-      cmntRatio,
-      community_count,
-      community_root_hash,
-    }: AirdropMerkleRootRes & { kolRatio: number; cmntRatio: number }
+      distributionRatioKol,
+      walletCountKol,
+      distributionRatioCommunity,
+      walletCountCommunity,
+    }: TokenConfigRes['value']
   ) => {
-    if (kol_count && kol_root_hash) {
+    const params = { ...distributorParams }
+
+    if (kol) {
       params.isDistribution = true
-      params.distributionRatioKol = kolRatio * 100
-      params.walletCountKol = kol_count
+      params.distributionRatioKol = distributionRatioKol * 100
+      params.walletCountKol = walletCountKol
       params.kolFlag = AirdropType.All
     }
-    if (community_count && community_root_hash) {
+    if (cmnt) {
       params.isDistribution = true
-      params.distributionRatioCommunity = cmntRatio * 100
-      params.walletCountCommunity = community_count
+      params.distributionRatioCommunity = distributionRatioCommunity * 100
+      params.walletCountCommunity = walletCountCommunity
       params.CommunityFlag = AirdropType.All
     }
+
     return params
   }
 
@@ -46,29 +66,32 @@ export const useAirdropParams = () => {
     const cmnt = marketing?.find((m) => m.type === MarketType.Community)
 
     // No selelct airdrop.
-    if (!marketing || !(kol && cmnt)) return v3DistributorParams
+    if (!marketing || (!kol && !cmnt)) {
+      return {
+        configure: '',
+        distributorParams,
+      }
+    }
 
     try {
-      const { data } = await mutateAsync({
-        chain,
-        type_list: [kol.type, cmnt.type].join(','),
-      })
-
-      if (data) {
-        return updateParams(
-          { ...v3DistributorParams },
-          { ...data, kolRatio: kol.percent, cmntRatio: cmnt.percent }
-        )
+      const { data } = await mutateAsync()
+      if (data.value) {
+        return {
+          configure: data.name,
+          distributorParams: updateParams(kol, cmnt, data.value),
+        }
       }
-      return v3DistributorParams
+
+      toast.error(t('airdrop.error.config-not-found'))
+      throw new Error(t('airdrop.error.config-not-found'))
     } catch (e) {
       reportException(e)
-      return
+      return {}
     }
   }
 
   return {
-    initParams: v3DistributorParams,
+    distributorParams,
     isPending,
     getParams,
   }

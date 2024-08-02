@@ -1,41 +1,50 @@
 import { useMemo } from 'react'
-import { useAccount, useBalance, useWriteContract } from 'wagmi'
-import { Hash, formatEther } from 'viem'
+import {
+  useAccount,
+  useBalance,
+  useReadContract,
+  useWriteContract,
+} from 'wagmi'
+import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 
-import { Marketing, TokenNewReq } from '@/api/token/types'
+import { TokenNewReq } from '@/api/token/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { useDeployV3 } from './use-deploy-v3'
-import { getDeployLogAddr, versionOf } from '@/utils/contract'
-import { ContractVersion } from '@/constants/contract'
+import { v3Addr } from '@/contract/address'
+import { useAirdropParams } from './use-airdrop-params'
+import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
+import { BI_ZERO } from '@/constants/number'
+import { getDeployLogsAddr } from '@/utils/contract'
 
-export interface DeployParams {
-  name: string
-  ticker: string
-  marketing?: Marketing[] | undefined
-  onSuccess?: (hash: Hash) => void
-}
+type FormParams = Omit<TokenNewReq, 'hash' | 'factory' | 'configure'>
 
-// Used for retry create.
-let cacheParams: Omit<TokenNewReq, 'hash'>
+// Used to retry create token.
+let cacheParams: FormParams
 
 export const useDeploy = () => {
-  const { createTokenData, createTokenError, isCreatingToken, create } =
-    useCreateToken()
-  const { address } = useAccount()
-  const { data: balanceData } = useBalance({ address })
-  const balance = String(balanceData?.value ?? 0)
+  const {
+    createTokenData,
+    createTokenError,
+    isCreatingToken,
+    createToken,
+    updateToken,
+  } = useCreateToken()
+  const { address, chainId = 0 } = useAccount()
+  const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
+  const { bondingCurve } = v3Addr[chainId] ?? {}
 
   const {
     data: hash,
     isPending: isSubmitting,
     error: submitError,
     writeContract,
-    reset: resetDeploy,
+    reset,
   } = useWriteContract({
-    mutation: { onError: (e) => CONTRACT_ERR.message(e) },
+    mutation: {
+      onError: ({ message }) => CONTRACT_ERR.message(message, false),
+    },
   })
   const {
     data,
@@ -44,29 +53,67 @@ export const useDeploy = () => {
     isSuccess,
     isError,
   } = useWaitForTx({ hash })
-  const deployLogAddr = useMemo(
-    () => getDeployLogAddr(data?.logs ?? []),
+  const deployedAddr = useMemo(
+    () => getDeployLogsAddr(data?.logs ?? []),
     [data]
   )
 
-  const { creationFee, deployV3 } = useDeployV3(writeContract)
+  const { data: creationFee = BI_ZERO } = useReadContract({
+    abi: v3BondingCurveAbi,
+    address: bondingCurve!,
+    chainId,
+    functionName: 'creationFee_',
+    query: { enabled: !!bondingCurve },
+  })
+  const { getParams } = useAirdropParams()
 
-  const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
-    cacheParams = params
-
-    const deployParams = {
-      ...params,
-      onSuccess: (hash: string) => create({ ...params, hash }),
-    }
-
-    if (BigNumber(balance).lt(creationFee.toString())) {
+  const checkForDeploy = (
+    config: string | undefined,
+    airdropParams: undefined | any
+  ) => {
+    if (BigNumber(balance.toString()).lt(creationFee.toString())) {
       CONTRACT_ERR.balanceInsufficient()
-      return
+      return false
+    }
+    if (!bondingCurve || BigNumber(chainId).isZero()) {
+      CONTRACT_ERR.configNotFound()
+      return false
+    }
+    if (!airdropParams || !config) {
+      CONTRACT_ERR.marketParamsNotFound()
+      return false
     }
 
-    const vIs = versionOf(params.version)
+    return true
+  }
 
-    if (vIs(ContractVersion.V3)) return deployV3(deployParams)
+  const deploy = async ({ marketing, ...params }: FormParams) => {
+    cacheParams = params // Exclude `marekting`
+    const { chain, name, ticker } = params
+
+    const { configure, distributorParams } = await getParams(chain, marketing)
+    if (!checkForDeploy(configure, distributorParams)) return
+    if (!bondingCurve) return
+
+    writeContract(
+      {
+        abi: v3BondingCurveAbi,
+        address: bondingCurve!,
+        functionName: 'createToken',
+        chainId,
+        args: [[name, ticker], [], distributorParams!],
+        value: creationFee,
+      },
+      {
+        onSuccess: (hash) =>
+          createToken({
+            ...params,
+            factory: bondingCurve!,
+            configure: configure!,
+            hash,
+          }),
+      }
+    )
   }
 
   const retryCreate = () => {
@@ -75,26 +122,26 @@ export const useDeploy = () => {
       return
     }
 
-    create({ ...cacheParams, hash })
+    createToken({ ...(cacheParams as Omit<TokenNewReq, 'hash'>), hash })
   }
 
   return {
     data,
     deployFee: formatEther(creationFee),
     deployHash: hash,
-    deployLogAddr,
+    deployedAddr,
     isDeploying: isSubmitting || isConfirming,
     isSubmitting,
     isConfirming,
     isCreatingToken,
     isDeploySuccess: isSuccess,
     isDeployError: isError,
-    submitError,
+    submitError: submitError,
     confirmError,
     createTokenData,
     createTokenError,
     deploy,
-    resetDeploy,
+    resetDeploy: reset,
     retryCreate,
   }
 }

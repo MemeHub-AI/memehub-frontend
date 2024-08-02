@@ -11,7 +11,7 @@ import { INVITE_REWARD } from '@/constants/invite'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useUserStore } from '@/stores/use-user-store'
 import { useCheckAccount } from '@/hooks/use-check-chain'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 interface Props {
   onTrade: () => void

@@ -23,7 +23,7 @@ export const useReward = (chainId: number) => {
 
   const { data: total = BI_ZERO, refetch: refetchAmount } = useReadContract({
     abi: v3RecommendAbi,
-    address: recommend,
+    address: recommend!,
     functionName: 'obtainedAmount',
     chainId,
     args: [address!],
@@ -31,7 +31,7 @@ export const useReward = (chainId: number) => {
   })
   const { data: claimed = BI_ZERO, refetch: refetchClaimed } = useReadContract({
     abi: v3RecommendAbi,
-    address: recommend,
+    address: recommend!,
     chainId,
     functionName: 'alreadyClaimed',
     args: [address!],
@@ -49,7 +49,7 @@ export const useReward = (chainId: number) => {
     writeContract,
     reset,
   } = useWriteContract({
-    mutation: { onError: (e) => CONTRACT_ERR.message(e) },
+    mutation: { onError: ({ message }) => CONTRACT_ERR.message(message) },
   })
   const { isFetching } = useWaitForTx({
     hash,

@@ -79,8 +79,8 @@ export const useAirdrop = (
         toast.dismiss(id)
         setBurning(false)
       },
-      onError: (e) => {
-        CONTRACT_ERR.message(e)
+      onError: ({ message }) => {
+        CONTRACT_ERR.message(message)
         setBurning(false)
       },
       onSuccess: () => {

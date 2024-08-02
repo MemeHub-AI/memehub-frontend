@@ -1,4 +1,4 @@
-import { useAccount, useWriteContract } from 'wagmi'
+import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { formatEther, isAddress, parseEther } from 'viem'
 import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
@@ -9,22 +9,29 @@ import { useTradeInfoV3 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
-import { v3Addr } from '@/contract/address'
 import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
+import { v3TokenAbi } from '@/contract/abi/v1/token'
 
 export const useTradeV3 = () => {
   const { address } = useAccount()
   const { chainId } = useChainInfo()
   const { tokenAddr } = useTradeSearchParams()
+
   const { getReferrals } = useInvite()
-  const { bondingCurve } = v3Addr[chainId] ?? {}
+
+  const { data: bondingCurveAddr } = useReadContract({
+    abi: v3TokenAbi,
+    address: tokenAddr,
+    chainId,
+    functionName: 'bond',
+  })
 
   const {
     getReserveAmount,
     getTokenAmount,
     checkForOverflow,
     getLastOrderAmount,
-  } = useTradeInfoV3()
+  } = useTradeInfoV3(tokenAddr)
   const {
     data: hashV3,
     isPending: isSubmittingV3,
@@ -32,8 +39,8 @@ export const useTradeV3 = () => {
     reset: resetTradeV3,
   } = useWriteContract({
     mutation: {
-      onError: (e) => {
-        CONTRACT_ERR.message(e)
+      onError: ({ message }) => {
+        CONTRACT_ERR.message(message)
         resetTradeV3()
       },
     },
@@ -46,6 +53,10 @@ export const useTradeV3 = () => {
     }
     if (!isAddress(tokenAddr)) {
       CONTRACT_ERR.tokenInvalid()
+      return false
+    }
+    if (!bondingCurveAddr) {
+      CONTRACT_ERR.contractAddrNotFound()
       return false
     }
 
@@ -68,7 +79,7 @@ export const useTradeV3 = () => {
     // TODO: should simulate first.
     writeContract({
       abi: v3BondingCurveAbi,
-      address: bondingCurve!,
+      address: bondingCurveAddr!,
       functionName: 'mint',
       chainId,
       args: [
@@ -95,7 +106,7 @@ export const useTradeV3 = () => {
     // TODO: should simulate first.
     writeContract({
       abi: v3BondingCurveAbi,
-      address: bondingCurve!,
+      address: bondingCurveAddr!,
       functionName: 'burn',
       chainId,
       args: [

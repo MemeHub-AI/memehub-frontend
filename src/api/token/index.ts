@@ -8,6 +8,7 @@ import type {
   TokenCommentListRes,
   TokenAddCommentReq,
   OnchainTokensRes,
+  TokenConfigRes,
 } from './types'
 import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 
@@ -57,5 +58,8 @@ export const tokenApi = {
     return api.GET<ApiResponse<OnchainTokensRes>>(
       '/api/v1/news/coinSearch/' + qs.stringify({ keyword })
     )
+  },
+  getConfig() {
+    return api.GET<ApiResponse<TokenConfigRes>>('/api/v1/coin/configure')
   },
 }

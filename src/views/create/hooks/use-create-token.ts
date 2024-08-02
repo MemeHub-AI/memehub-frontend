@@ -9,7 +9,7 @@ export const useCreateToken = () => {
     data: createData,
     error: createTokenError,
     isPending: isCreatingToken,
-    mutateAsync: create,
+    mutateAsync: createToken,
   } = useMutation({
     mutationKey: [tokenApi.create.name],
     mutationFn: tokenApi.create,
@@ -21,7 +21,7 @@ export const useCreateToken = () => {
     data: updateData,
     error: updateTokenError,
     isPending: isUpdatingToken,
-    mutateAsync: update,
+    mutateAsync: updateToken,
   } = useMutation({
     mutationKey: [tokenApi.update.name],
     mutationFn: (params: TokenUpdateReq & { addr: string }) => {
@@ -38,7 +38,7 @@ export const useCreateToken = () => {
     updateTokenError,
     isCreatingToken,
     isUpdatingToken,
-    create,
-    update,
+    createToken,
+    updateToken,
   }
 }

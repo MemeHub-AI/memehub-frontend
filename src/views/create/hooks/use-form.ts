@@ -2,16 +2,13 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useAccount, useSwitchChain } from 'wagmi'
 import { useUploadImage } from '@/hooks/use-upload-image'
-import { toast } from 'sonner'
 
 import { useDeploy } from './use-deploy'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { CoinType, MarketType, Marketing } from '@/api/token/types'
+import { CoinType, Marketing } from '@/api/token/types'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
-import { deployVersion } from '@/config/contract'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 
 export const formFields = {
@@ -32,12 +29,9 @@ export const useCreateTokenForm = (
   useDeployResult: ReturnType<typeof useDeploy>
 ) => {
   const { t } = useTranslation()
-  const { isConnected, chainId } = useAccount()
-  const { switchChain } = useSwitchChain()
-
   const { formInfo } = useAimemeInfoStore()
-  const { checkForConnect } = useCheckAccount()
-  const { chains, loadingChains } = useChainsStore()
+  const { checkForConnect, checkForChain } = useCheckAccount()
+  const { chainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
   const { deploy, isDeploying } = useDeployResult
 
@@ -101,17 +95,10 @@ export const useCreateTokenForm = (
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const isValid = await form.trigger()
-
-    if (!isValid) return
+    if (!(await form.trigger())) return
     if (!checkForConnect()) return
+    if (!(await checkForChain(chainsMap[values.chainName]?.id))) return
     if (isDeploying) return
-    const vChainId = Number(chains.find((c) => c.name === values.chainName)?.id)
-    if (vChainId !== chainId) {
-      toast.error(t('swatch.chain').replace('$1', values.chainName! as string))
-      switchChain({ chainId: vChainId })
-      return
-    }
 
     deploy({
       name: values.fullname! as string,
@@ -125,7 +112,6 @@ export const useCreateTokenForm = (
       coin_type: values.coinType as number,
       marketing: values.marketing as Marketing[],
       poster: values.poster,
-      version: deployVersion,
     })
   }
 
@@ -134,7 +120,6 @@ export const useCreateTokenForm = (
     form,
     formFields,
     formSchema,
-    chains,
     loadingChains: loadingChains,
     onSubmit,
     onChangeUpload,

@@ -15,7 +15,7 @@ import { ChainSelect } from '@/components/chain-select'
 import { useCreateTokenContext } from '@/contexts/create-token'
 
 export const ChainField = () => {
-  const { chainId } = useAccount()
+  const { chainId, chain } = useAccount()
   const { formData } = useCreateTokenContext()
   const { form, formFields } = formData
   const { chains, chainsMap } = useChainsStore()
@@ -35,7 +35,7 @@ export const ChainField = () => {
       render={({ field }) => (
         <FormItem className="mt-0">
           <FormLabel className="mt-0 font-bold">
-            *{fmt.withChain(chainsMap[field.value]?.displayName)}
+            *{fmt.withChain(chainsMap[field.value]?.displayName || chain?.name)}
           </FormLabel>
           <FormControl>
             <ChainSelect

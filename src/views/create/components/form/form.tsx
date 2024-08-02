@@ -181,7 +181,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
               className="px-10 mt-3"
               disabled={isDeploying}
             >
-              {t('create')}
+              {isDeploying ? t('creating') : t('create')}
             </Button>
             {symbol && (
               <p className="text-zinc-400 text-xs">

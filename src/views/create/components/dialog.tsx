@@ -15,7 +15,7 @@ export const CreateTokenStatusDialog = () => {
   const { t } = useTranslation()
   const {
     deployResult: {
-      deployLogAddr,
+      deployedAddr,
       createTokenData,
       createTokenError,
       isSubmitting,
@@ -31,7 +31,6 @@ export const CreateTokenStatusDialog = () => {
   const router = useRouter()
 
   const chainName = createTokenData?.chain?.name || ''
-  const deployedAddr = createTokenData?.address || ''
   const explorerUrl = createTokenData?.chain?.explorer_tx || ''
 
   const withIcon = (children: ReactNode) => {
@@ -155,11 +154,7 @@ export const CreateTokenStatusDialog = () => {
         onConfirm={() => {
           resetDeploy()
           router.push(
-            fmt.toHref(
-              Routes.Main,
-              chainName,
-              deployedAddr || deployLogAddr || ''
-            )
+            fmt.toHref(Routes.Main, chainName, deployedAddr || 'invalid')
           )
         }}
         showCancel={false}
