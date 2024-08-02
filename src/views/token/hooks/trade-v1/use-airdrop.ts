@@ -18,8 +18,8 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { bottomLeft } from '@/config/toast'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { v3Addr } from '@/contract/address'
-import { v3DistributorAbi } from '@/contract/abi/v1/distributor'
 import { DeviceWidth } from '@/hooks/use-responsive'
+import { distributorAbiMap } from '@/contract/abi/distributor'
 
 export const useAirdrop = (
   id: number = 0,
@@ -56,7 +56,7 @@ export const useAirdrop = (
   })
 
   const { data: isBurn, refetch: refetchIsBurn } = useReadContract({
-    abi: v3DistributorAbi,
+    abi: distributorAbiMap['0.1.0'], // TODO: match version
     address: distributor,
     functionName: 'isBurn',
     args: [BigInt(id)],
@@ -142,7 +142,7 @@ export const useAirdrop = (
     setIsCalim(true)
     // TODO: should simulate first.
     writeContract({
-      abi: v3DistributorAbi,
+      abi: distributorAbiMap['0.1.0'],
       address: distributor,
       functionName: 'claim',
       chainId,
@@ -159,7 +159,7 @@ export const useAirdrop = (
     setBurning(true)
     // TODO: should simulate first.
     writeContract({
-      abi: v3DistributorAbi,
+      abi: distributorAbiMap['0.1.0'],
       address: distributor,
       functionName: 'burnToken',
       chainId,

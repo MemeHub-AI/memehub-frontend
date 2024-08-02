@@ -4,7 +4,7 @@ import { Address, zeroAddress } from 'viem'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/number'
 import { v3Addr } from '@/contract/address'
-import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
+import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 
 export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
   const { chainId } = useChainInfo()
@@ -12,8 +12,8 @@ export const usePools = (tokenAddr?: string, overrideChainId?: number) => {
   const { bondingCurve } = v3Addr[cId] ?? {}
 
   const { data: pools = [], refetch: refetchPools } = useReadContract({
-    abi: v3BondingCurveAbi,
-    address: bondingCurve,
+    abi: bondingCurveAbiMap['0.1.0'], // TODO: match version
+    address: bondingCurve!,
     chainId: cId,
     functionName: 'pools_',
     args: [tokenAddr! as Address],

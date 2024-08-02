@@ -9,9 +9,9 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/number'
 import { useTradeSearchParams } from '../use-search-params'
 import { v3Addr } from '@/contract/address'
-import { v3TokenAbi } from '@/contract/abi/v1/token'
-import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
 import { reportException } from '@/errors'
+import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { tokenAbiMap } from '@/contract/abi/token'
 
 export const useTradeInfoV3 = (overrideToken?: Address) => {
   const { chainId } = useChainInfo()
@@ -19,8 +19,11 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
   const tokenAddr = overrideToken ?? queryToken
   const { bondingCurve } = v3Addr[chainId] ?? {}
 
+  // TODO: match version
+  const bcAbi = bondingCurveAbiMap['0.1.0']
+
   const { data = BI_ZERO } = useReadContract({
-    abi: v3TokenAbi,
+    abi: tokenAbiMap['0.2.0'],
     address: tokenAddr,
     chainId,
     functionName: 'totalSupply',
@@ -32,7 +35,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
     if (!bondingCurve) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      abi: v3BondingCurveAbi,
+      abi: bcAbi,
       address: bondingCurve,
       functionName: 'maxSupply_',
       chainId,
@@ -46,7 +49,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
     if (!bondingCurve) return [] as const
 
     return readContract(wagmiConfig, {
-      abi: v3BondingCurveAbi,
+      abi: bcAbi,
       address: bondingCurve,
       functionName: 'pools_',
       chainId,
@@ -61,7 +64,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
     if (!bondingCurve) return BI_ZERO
 
     const value = await readContract(wagmiConfig, {
-      abi: v3BondingCurveAbi,
+      abi: bcAbi,
       address: bondingCurve,
       functionName: 'calcAmountOutFromToken',
       args: [tokenAddr, parseEther(amount)],
@@ -77,7 +80,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
     if (!bondingCurve) return BI_ZERO
 
     const value = await readContract(wagmiConfig, {
-      abi: v3BondingCurveAbi,
+      abi: bcAbi,
       address: bondingCurve,
       functionName: 'calcAmountOutFromEth',
       chainId,
@@ -94,7 +97,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
     if (!bondingCurve) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      abi: v3BondingCurveAbi,
+      abi: bcAbi,
       address: bondingCurve,
       functionName: 'calcPrice',
       args: [tokenAddr],
@@ -128,7 +131,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
     if (!bondingCurve) return '0'
 
     const amount = await readContract(wagmiConfig, {
-      abi: v3BondingCurveAbi,
+      abi: bcAbi,
       address: bondingCurve,
       functionName: 'calcAmountOutFromTokenCutOff',
       args: [token, parseEther(currentLeft)],

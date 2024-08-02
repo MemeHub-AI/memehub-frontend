@@ -4,7 +4,7 @@ import { useAccount, useBalance, useReadContract } from 'wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from './use-search-params'
 import { BI_ZERO } from '@/constants/number'
-import { v3TokenAbi } from '@/contract/abi/v1/token'
+import { tokenAbiMap } from '@/contract/abi/token'
 
 export const useTradeBalance = () => {
   const { address } = useAccount()
@@ -28,7 +28,7 @@ export const useTradeBalance = () => {
     isFetching: isFetchingToken,
     refetch: refetchTokenBalance,
   } = useReadContract({
-    abi: v3TokenAbi,
+    abi: tokenAbiMap['0.2.0'],
     address: tokenAddr,
     functionName: 'balanceOf',
     chainId,

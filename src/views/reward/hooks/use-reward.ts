@@ -13,7 +13,7 @@ import { BI_ZERO } from '@/constants/number'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { v3Addr } from '@/contract/address'
-import { v3RecommendAbi } from '@/contract/abi/v1/recommend'
+import { recommendAbi } from '@/contract/abi/recommend'
 
 export const useReward = (chainId: number) => {
   const { t } = useTranslation()
@@ -22,7 +22,7 @@ export const useReward = (chainId: number) => {
   const { recommend } = v3Addr[chainId] ?? {}
 
   const { data: total = BI_ZERO, refetch: refetchAmount } = useReadContract({
-    abi: v3RecommendAbi,
+    abi: recommendAbi,
     address: recommend!,
     functionName: 'obtainedAmount',
     chainId,
@@ -30,7 +30,7 @@ export const useReward = (chainId: number) => {
     query: { enabled: !!recommend && !!address },
   })
   const { data: claimed = BI_ZERO, refetch: refetchClaimed } = useReadContract({
-    abi: v3RecommendAbi,
+    abi: recommendAbi,
     address: recommend!,
     chainId,
     functionName: 'alreadyClaimed',
@@ -77,7 +77,7 @@ export const useReward = (chainId: number) => {
 
     // TODO: should simulate first.
     writeContract({
-      abi: v3RecommendAbi,
+      abi: recommendAbi,
       address: recommend,
       functionName: 'claimTokens',
       chainId,

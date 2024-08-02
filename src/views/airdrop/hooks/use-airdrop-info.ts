@@ -5,9 +5,9 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { MarketType } from '@/api/token/types'
 import { BI_ZERO } from '@/constants/number'
 import { v3Addr } from '@/contract/address'
-import { v3DistributorAbi } from '@/contract/abi/v1/distributor'
-import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
-import { v3TokenAbi } from '@/contract/abi/v1/token'
+import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { distributorAbiMap } from '@/contract/abi/distributor'
+import { tokenAbiMap } from '@/contract/abi/token'
 
 export const useAirdropInfo = (
   type: MarketType,
@@ -23,7 +23,7 @@ export const useAirdropInfo = (
   const isKol = type === MarketType.Kol
 
   const { data: airdropInfo = [], refetch } = useReadContract({
-    abi: v3DistributorAbi,
+    abi: distributorAbiMap['0.1.0'], // TOOD: match version
     address: distributor,
     functionName: 'distributions',
     chainId,
@@ -47,14 +47,14 @@ export const useAirdropInfo = (
   const perAmount = formatEther(isKol ? kolAmount : communityAmount)
 
   const { data: ratio = BI_ZERO } = useReadContract({
-    abi: v3BondingCurveAbi,
-    address: bondingCurve,
+    abi: bondingCurveAbiMap['0.1.0'], // TODO: match version
+    address: bondingCurve!,
     functionName: 'airdropRate_',
     chainId,
     query: { enabled: !!bondingCurve },
   })
   const { data: totalSupply = BI_ZERO } = useReadContract({
-    abi: v3TokenAbi,
+    abi: tokenAbiMap['0.2.0'], // TODO: match version
     address: tokenAddr,
     chainId,
     functionName: 'totalSupply',
@@ -65,7 +65,7 @@ export const useAirdropInfo = (
   const remain = totalAirdrop - claimed * +perAmount
 
   const { data: duration = BI_ZERO } = useReadContract({
-    abi: v3DistributorAbi,
+    abi: distributorAbiMap['0.1.0'],
     address: distributor,
     functionName: 'duration',
     chainId,
@@ -79,7 +79,7 @@ export const useAirdropInfo = (
     isFetching: isFetchingKol,
     refetch: refetchKol,
   } = useReadContract({
-    abi: v3DistributorAbi,
+    abi: distributorAbiMap['0.1.0'],
     address: distributor,
     functionName: 'isClaimedKOL',
     args: [BigInt(id), address!],
@@ -93,7 +93,7 @@ export const useAirdropInfo = (
     isFetching: isFetchingCommunity,
     refetch: refetchCommunity,
   } = useReadContract({
-    abi: v3DistributorAbi,
+    abi: distributorAbiMap['0.1.0'],
     address: distributor,
     functionName: 'isClaimedCommunity',
     args: [BigInt(id), address!],

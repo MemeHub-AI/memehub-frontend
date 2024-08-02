@@ -1,4 +1,4 @@
-export const v3TokenAbi = [
+export const token0d2d0Abi = [
   {
     inputs: [
       {

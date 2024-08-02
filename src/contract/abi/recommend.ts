@@ -1,4 +1,4 @@
-export const v3RecommendAbi = [
+export const recommendAbi = [
   {
     inputs: [],
     stateMutability: 'nonpayable',

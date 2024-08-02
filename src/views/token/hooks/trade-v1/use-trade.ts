@@ -9,21 +9,54 @@ import { useTradeInfoV3 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
-import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
-import { v3TokenAbi } from '@/contract/abi/v1/token'
+import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { tokenAbiMap } from '@/contract/abi/token'
 
 export const useTradeV3 = () => {
   const { address } = useAccount()
-  const { chainId } = useChainInfo()
-  const { tokenAddr } = useTradeSearchParams()
-
+  // const { chainId } = useChainInfo()
+  // const { tokenAddr } = useTradeSearchParams()
+  const chainId = 97
+  const tokenAddr = '0x3b3497Ec50062f2983D29493c45fACaED3f757DD'
   const { getReferrals } = useInvite()
 
-  const { data: bondingCurveAddr } = useReadContract({
-    abi: v3TokenAbi,
+  const tokenConfig = {
+    abi: tokenAbiMap['0.2.0'],
     address: tokenAddr,
+  } as const
+
+  const { data: tokenVersion } = useReadContract({
+    ...tokenConfig,
+    chainId,
+    functionName: 'versions',
+  })
+  const { data: bondingVersion } = useReadContract({
+    ...tokenConfig,
+    chainId,
+    functionName: 'bondVersion',
+  })
+  const { data: bondingCurveAddr } = useReadContract({
+    ...tokenConfig,
     chainId,
     functionName: 'bond',
+  })
+  const { data: airdropVersion } = useReadContract({
+    ...tokenConfig,
+    chainId,
+    functionName: 'distributorVersion',
+  })
+  const { data: airdropAddr } = useReadContract({
+    ...tokenConfig,
+    chainId,
+    functionName: 'distributor',
+  })
+  console.log('version & addr', {
+    bondingVersion,
+    bondingCurveAddr,
+    airdropVersion,
+    airdropAddr,
+    tokenVersion,
+    tokenAddr,
   })
 
   const {
@@ -78,7 +111,7 @@ export const useTradeV3 = () => {
 
     // TODO: should simulate first.
     writeContract({
-      abi: v3BondingCurveAbi,
+      abi: bondingCurveAbiMap['0.1.0'], // TODO: match version
       address: bondingCurveAddr!,
       functionName: 'mint',
       chainId,
@@ -105,7 +138,7 @@ export const useTradeV3 = () => {
 
     // TODO: should simulate first.
     writeContract({
-      abi: v3BondingCurveAbi,
+      abi: bondingCurveAbiMap['0.1.0'],
       address: bondingCurveAddr!,
       functionName: 'burn',
       chainId,

@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'react-use'
 
 import { BI_ZERO } from '@/constants/number'
-import { idoAbi } from '@/contract/abi/ido'
+import { idoAbi } from '@/contract/abi/ido/ido'
 import { v3Addr } from '@/contract/address'
 import { useIdoClaimed } from './use-ido-claimed'
 
@@ -30,7 +30,7 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     refetch: refetchUserInfo,
   } = useReadContract({
     abi: idoAbi,
-    address: ido,
+    address: ido!,
     chainId,
     functionName: 'getUserInfo',
     args: [BigInt(poolId), address!],
@@ -41,11 +41,11 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
 
   const { data: initUserWeight = BI_ZERO } = useReadContract({
     abi: idoAbi,
-    address: v3Addr[chainId]?.ido,
+    address: ido!,
     chainId,
     functionName: 'getUserWeight',
     args: [address!, [], BigInt(0)],
-    query: { enabled: !!address },
+    query: { enabled: !!address && !!ido },
   })
   const userWeight = BigNumber(userAmount).isZero()
     ? initUserWeight.toString()
@@ -58,11 +58,11 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     refetch: refetchPools,
   } = useReadContract({
     abi: idoAbi,
-    address: ido,
+    address: ido!,
     chainId,
     functionName: 'pools',
     args: [BigInt(poolId)],
-    query: { refetchInterval: 10_000 },
+    query: { enabled: !!ido, refetchInterval: 10_000 },
   })
   const [
     tokenAddress,

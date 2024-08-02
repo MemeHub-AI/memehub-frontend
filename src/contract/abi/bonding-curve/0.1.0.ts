@@ -1,4 +1,4 @@
-export const v3BondingCurveAbi = [
+export const bondingCurve0d1d0Abi = [
   {
     inputs: [],
     stateMutability: 'nonpayable',

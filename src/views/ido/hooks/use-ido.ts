@@ -2,7 +2,7 @@ import { useWriteContract } from 'wagmi'
 import { parseEther } from 'viem'
 import { toast } from 'sonner'
 
-import { idoAbi } from '@/contract/abi/ido'
+import { idoAbi } from '@/contract/abi/ido/ido'
 import { v3Addr } from '@/contract/address'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { IDO_ERR } from '@/errors/ido'

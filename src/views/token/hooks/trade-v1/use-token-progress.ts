@@ -8,7 +8,7 @@ import { useTradeSearchParams } from '../use-search-params'
 import { BI_ZERO } from '@/constants/number'
 import { usePools } from '../use-pools'
 import { v3Addr } from '@/contract/address'
-import { v3BondingCurveAbi } from '@/contract/abi/v1/bonding-curve'
+import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 
 export const useTokenProgressV3 = (
   overrideToken?: Address,
@@ -27,8 +27,8 @@ export const useTokenProgressV3 = (
     isFetching: isFetchingProgress,
     refetch: refetchTotal,
   } = useReadContract({
-    abi: v3BondingCurveAbi,
-    address: bondingCurve,
+    abi: bondingCurveAbiMap['0.1.0'], // TODO: match version
+    address: bondingCurve!,
     functionName: 'maxSupply_',
     chainId,
     query: { enabled: !!bondingCurve },

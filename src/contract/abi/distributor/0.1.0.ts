@@ -1,4 +1,4 @@
-export const v3DistributorAbi = [
+export const distributor0d1d0Abi = [
   {
     inputs: [],
     stateMutability: 'nonpayable',

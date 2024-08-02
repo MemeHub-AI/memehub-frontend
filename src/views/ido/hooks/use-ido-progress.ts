@@ -4,7 +4,7 @@ import { formatEther } from 'viem'
 import { useReadContract } from 'wagmi'
 
 import { BI_ZERO } from '@/constants/number'
-import { idoAbi } from '@/contract/abi/ido'
+import { idoAbi } from '@/contract/abi/ido/ido'
 import { v3Addr } from '@/contract/address'
 
 export const useIdoProgress = (chainId: number, poolId: number) => {
@@ -16,11 +16,11 @@ export const useIdoProgress = (chainId: number, poolId: number) => {
     refetch: refetchProgress,
   } = useReadContract({
     abi: idoAbi,
-    address: ido,
+    address: ido!,
     chainId,
     functionName: 'pools',
     args: [BigInt(poolId)],
-    query: { refetchInterval: 5_000 },
+    query: { enabled: !!ido, refetchInterval: 5_000 },
   })
   const [, , , , , , , totalEthAmount = BI_ZERO, , raisedEthAmount = BI_ZERO] =
     pools
