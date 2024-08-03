@@ -11,7 +11,7 @@ import { useUserStore } from '@/stores/use-user-store'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { utilLang } from '@/utils/lang'
 import { formLink } from '@/config/link'
-import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
+import { useNftCheck } from '@/hooks/use-nft-check'
 import { idoChain } from '@/config/ido'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { ConnectWallet } from '@/components/connect-wallet'
@@ -31,7 +31,7 @@ export const Ids = () => {
   const { playRap } = useAudioPlayer()
 
   // TODO: ido temp
-  const { isKol, community } = useIdoCheck(idoChain.id)
+  const { isKol, community } = useNftCheck(idoChain.id)
 
   useEffect(() => {
     if (isPlayAirdropAudio) {

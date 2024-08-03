@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import { Progress } from '@/components/ui/progress'
 import { fmt } from '@/utils/fmt'
 import { useIdoContext } from '@/contexts/ido'
-import { useIdoCheck } from '../hooks/use-ido-check'
+import { useNftCheck } from '../../../hooks/use-nft-check'
 import { useUserStore } from '@/stores/use-user-store'
 import { JoinInput } from './join-input'
 import { EndedButtons } from './ended-buttons'
@@ -30,7 +30,7 @@ export const IdoStarted = () => {
     progress,
     chainId,
   } = useIdoContext()
-  const { isKol, community } = useIdoCheck(chainId)
+  const { isKol, community } = useNftCheck(chainId)
   const { userInfo } = useUserStore()
 
   return (

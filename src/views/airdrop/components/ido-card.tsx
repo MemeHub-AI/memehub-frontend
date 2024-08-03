@@ -2,9 +2,10 @@ import React, { ComponentProps } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { TbUsers } from 'react-icons/tb'
 import { useTranslation } from 'react-i18next'
+import { useReadContract } from 'wagmi'
+import { zeroAddress } from 'viem'
 
 import { Countdown } from '@/components/countdown'
-import { IdTag } from '@/components/id-tag'
 import { Img } from '@/components/img'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -13,12 +14,10 @@ import { idoChain, idoTrumpAirdrop } from '@/config/ido'
 import { useIdoKolAirdrop } from '../hooks/use-ido-kol-airdrop'
 import { useIdoAirdropClaim } from '../hooks/use-ido-claim'
 import { useIdoCommunityAirdrop } from '../hooks/use-ido-community-airdrop'
-import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
+import { useNftCheck } from '@/hooks/use-nft-check'
 import { utilLang } from '@/utils/lang'
-import { useReadContract } from 'wagmi'
 import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
 import { addrMap } from '@/contract/address'
-import { zeroAddress } from 'viem'
 
 interface Props {
   tag: string
@@ -49,17 +48,17 @@ export const IdoAirdropCard = ({
     isBelowThreshold,
     refetchCommunityAirdrop,
   } = useIdoCommunityAirdrop(!isKolAirdrop)
-  const { isKol, isCommunity } = useIdoCheck(idoChain.id)
+  const { isKol, hasCommunity } = useNftCheck(idoChain.id)
 
   const amount = isKolAirdrop ? kolAmount : communityAmount
   const current = isKolAirdrop ? kolCurrent : communityCurrent
   const total = isKolAirdrop ? kolTotal : communityTotal
   const isClaimed = isKolAirdrop ? isKolClaimed : isCommunityClaimed
-  const hasId = isKolAirdrop ? isKol : isCommunity
+  const hasId = isKolAirdrop ? isKol : hasCommunity
 
   const { data: tokenAddr = zeroAddress } = useReadContract({
     abi: idoAirdropAbi,
-    address: addrMap[idoChain.id]?.idoAirdrop,
+    address: addrMap[idoChain.id]?.idoAirdrop!,
     chainId: idoChain.id,
     functionName: 'tokenAddress',
     query: { enabled: !!addrMap[idoChain.id]?.idoAirdrop },
@@ -71,7 +70,6 @@ export const IdoAirdropCard = ({
     refetchCommunityAirdrop()
   })
 
-  // TODO: remove `true`
   const disabled =
     isClaming ||
     isClaimed ||
@@ -81,19 +79,14 @@ export const IdoAirdropCard = ({
 
   const renderHints = () => {
     if (isNotStart) return t('ido.airdrop.not-start')
-
     if (isClaming) return
-
     if (isClaimed) return
-
     if (BigNumber(amount).isZero()) return t('ido.airdrop.no-claim')
-
     if (!hasId) {
       return utilLang.replace(t('ido.airdrop.no-id'), [
         isKolAirdrop ? 'KOL' : t('pure.community'),
       ])
     }
-
     if (!isKolAirdrop && isBelowThreshold) {
       return utilLang.replace(t('balance-insufficient'), [
         `${communityThreshold} ${idoChain.native.symbol}`,

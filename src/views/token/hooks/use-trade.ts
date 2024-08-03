@@ -15,7 +15,7 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useDexTrade } from './use-dex-trade'
 import { idoTrumpCard } from '@/config/ido'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { BCVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { useChainsStore } from '@/stores/use-chains-store'
 
 // Used for trade success tips.
@@ -35,7 +35,7 @@ export const useTrade = (onSuccess?: () => void) => {
     tokenMetadata,
     chainId,
   } = useTokenContext()
-  const bcAbi = bondingCurveAbiMap[bcVersion as `${BCVersion}`]
+  const bcAbi = bondingCurveAbiMap[bcVersion as BcAbiVersion]
   const { address, pool_address, chain, ticker } = tokenInfo ?? {}
   const { showToast } = useTradeToast()
   const { userInfo } = useUserInfo()

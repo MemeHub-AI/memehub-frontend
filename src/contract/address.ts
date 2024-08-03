@@ -126,8 +126,8 @@ const dev: AddrMap = {
     bondingCurve: '0x06fa05905e63CEDfe9888a5F48fd25F0827b5AE0',
     recommend: '0xC2b2D1B0571638872d2E87AD46d18a6819DA6ACE',
 
-    exchangeNft: '0x07ACeD5E05c6eD73fD74cf1A524d6730681cc8A0',
-    kolNft: '0x6d2a5B705b08BaaE72bb3807fCB436e5eF7B1Edb',
+    exchangeNft: '0x2424e246609156F57cD53b4a9AA52B36Fd17fE45',
+    kolNft: '0xBfd8dE1F1542d25e66F089B1B4f07074ef41741e',
   },
   [baseSepolia.id]: {
     reserveToken: '0x4200000000000000000000000000000000000006',

@@ -1,1 +1,1 @@
-export const COMMUNITY_IDX = 0
+export const COMMUNITY_NFT_IDX = 0

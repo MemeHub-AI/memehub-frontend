@@ -25,6 +25,7 @@ const enum TabName {
 export const TokenMobile = () => {
   const { t } = useTranslation()
   const { query, replace } = useRouter()
+  // TODO: token info airdrop
   const { airdrop } = useTokenContext()
   const {
     kol,

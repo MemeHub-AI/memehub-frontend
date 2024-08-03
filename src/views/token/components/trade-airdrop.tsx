@@ -1,84 +1,85 @@
-import React, { ComponentProps, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TbUsers } from 'react-icons/tb'
-import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'react-use'
 import dayjs from 'dayjs'
 
 import { useAirdrop } from '../hooks/trade-v1/use-airdrop'
 import { cn } from '@/lib/utils'
-import { Card } from '@/components/ui/card'
-import { Img } from '@/components/img'
-import { Countdown } from '@/components/countdown'
 import { Button } from '@/components/ui/button'
 import { useTokenContext } from '@/contexts/token'
 import { AirdropItem } from '@/api/airdrop/types'
-import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
+import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
 import { MarketType } from '@/api/token/types'
 import { useResponsive } from '@/hooks/use-responsive'
-import { utilLang } from '@/utils/lang'
+import { TradeAirdropCard } from './airdrop-card'
+import { useNftCheck } from '@/hooks/use-nft-check'
+import { useUserInfo } from '@/hooks/use-user-info'
 
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
   const { isMobile } = useResponsive()
-  const { airdrop } = useTokenContext()
-
+  const { tokenAddr, chainId } = useTokenContext()
   const {
-    data,
-    communities,
-    isOnlyOne,
-    kol,
-    kolAirdrop,
-    kolAirdropInfo,
-    communitiesAirdrop,
-    communitiesAirdropInfo,
-  } = airdrop
+    createAt,
+    durationSeconds,
+    kolTotalAmount,
+    communityTotalAmount,
+    kolCount,
+    kolClaimedCount,
+    communityCount,
+    communityClaimedCount,
+  } = useAirdropInfo(
+    0, // TODO: should be dynamic
+    tokenAddr,
+    chainId
+  )
+  const { isKol, hasCommunity, community } = useNftCheck(chainId)
+  const { userInfo } = useUserInfo()
 
-  if (isEmpty(data)) return
+  if (!isKol && !hasCommunity) return
 
   return (
     <div className="flex gap-4 max-sm:flex-col max-sm:gap-0">
       <div
         className={cn(
-          'mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 max-sm:pt-2 flex-1',
-          isOnlyOne && 'flex max-sm:flex-col'
+          'mt-2.5 gap-4 border-2 border-black rounded-lg pt-4 pb-3 max-sm:pt-2 flex-1'
+          // isOnlyOne && 'flex max-sm:flex-col'
         )}
       >
-        <div className={isOnlyOne ? 'flex-1' : ''}>
+        <div className="flex-1">
           <h2 className="flex-1 font-bold text-lg ml-4 w-fit max-sm:ml-3">
             {t('airdrop')}
           </h2>
           <div className="flex items-center flex-wrap max-sm:flex-col max-sm:gap-0">
-            {kol && (
-              <AirdropCard
-                className={cn(
-                  'w-[50%] max-sm:w-full',
-                  !communities ? 'w-full' : ''
-                )}
+            {isKol && (
+              <TradeAirdropCard
+                className={cn('w-[50%] max-sm:w-full')}
+                kolInfo={userInfo}
                 suffix={t('ambassador')}
-                airdrop={kolAirdrop}
-                airdropInfo={kolAirdropInfo}
-                baseInfo={kol}
+                createAt={createAt}
+                duration={durationSeconds}
+                totalAmount={kolTotalAmount}
+                total={kolCount}
+                current={kolClaimedCount}
               />
             )}
-            {communities && (
-              <AirdropCard
-                className={cn(
-                  'w-[50%] max-sm:w-full max-sm:mt-3',
-                  !kol ? 'w-full' : '',
-                  isOnlyOne && 'max-sm:mt-0'
-                )}
-                suffix={t('holder')}
-                airdrop={communitiesAirdrop}
-                airdropInfo={communitiesAirdropInfo}
-                baseInfo={communities}
+            {hasCommunity && (
+              <TradeAirdropCard
+                className={cn('w-[50%] max-sm:w-full max-sm:mt-3')}
+                communityInfo={community}
+                suffix={t('member')}
+                createAt={createAt}
+                duration={durationSeconds}
+                totalAmount={communityTotalAmount}
+                total={communityCount}
+                current={communityClaimedCount}
               />
             )}
           </div>
         </div>
-        {(isOnlyOne || (kol && communities)) && !isMobile ? (
-          <Burn
+        {/* {(isOnlyOne || (kol && communities)) && !isMobile ? (
+          <BurnCard
             airdrop={kol! || communities!}
             suffix={t('ambassador')}
             className={cn(
@@ -89,26 +90,26 @@ export const TradeAirdrop = () => {
               isOnlyOne ? 'flex-1' : 'mt-2'
             )}
           />
-        ) : null}
+        ) : null} */}
       </div>
-      {(!kol && !communities) || isMobile ? (
-        <Burn
+      {/* {(!kol && !communities) || isMobile ? (
+        <BurnCard
           airdrop={kol! || communities!}
           suffix={t('ambassador')}
           className="flex-1 p-1 pt-2 max-sm:pb-3 max-sm:mt-2.5"
         />
-      ) : null}
+      ) : null} */}
     </div>
   )
 }
 
-interface BurmProps {
+interface BurnCardProps {
   className?: string
   airdrop: AirdropItem
   suffix: string
 }
 
-const Burn = (props: BurmProps) => {
+const BurnCard = (props: BurnCardProps) => {
   const { className, airdrop } = props
   const { t } = useTranslation()
   const { tokenInfo } = useTokenContext()
@@ -203,86 +204,6 @@ const Burn = (props: BurmProps) => {
         </Button>
       </div>
     </div>
-  )
-}
-
-interface AirdropCardProps extends ComponentProps<typeof Card> {
-  suffix: string
-  airdropInfo: ReturnType<typeof useAirdropInfo>
-  airdrop: ReturnType<typeof useAirdrop>
-  baseInfo: AirdropItem
-}
-
-const AirdropCard = (props: AirdropCardProps) => {
-  const { className, baseInfo, airdrop, suffix, airdropInfo } = props
-  const { t } = useTranslation()
-  const { tokenInfo } = useTokenContext()
-  const [isExpired, setIsExpired] = useState(false)
-  const { isClaiming, claim } = airdrop
-  const { isClaimed, durationSeconds, claimed, total } = airdropInfo
-
-  const disabled = isClaimed || isClaiming || isExpired
-
-  return (
-    <Card
-      padding="md"
-      shadow="none"
-      border="none"
-      className={cn('cursor-[unset] pb-0', className)}
-    >
-      <div className="flex items-center gap-2 justify-between">
-        <div className="bg-lime-green flex items-center  rounded-md pr-2">
-          <Img
-            src={baseInfo.kol_logo || baseInfo.community_logo}
-            alt="avatar"
-            className="w-10 h-10 rounded-r-none"
-          />
-          <span className="ml-2">
-            {utilLang.locale(baseInfo.kol_name || baseInfo.community_name)}
-            {suffix}
-          </span>
-          <img src="/images/check.png" alt="check" className="w-6 h-6 ml-2" />
-        </div>
-        <Countdown
-          createdAt={baseInfo.create ?? 0}
-          duration={durationSeconds}
-          onExpired={() => setIsExpired(true)}
-        />
-      </div>
-
-      <div className="mt-3 flex items-center justify-between">
-        <div className="flex items-center">
-          <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
-          <span className="ml-2">
-            {BigNumber(baseInfo.amount ?? 0).toFormat()} {tokenInfo?.ticker}
-          </span>
-        </div>
-
-        <div className="flex items-center">
-          <TbUsers size={20} />
-          <span className="ml-2">
-            {BigNumber(claimed).toFormat()} / {BigNumber(total).toFormat()}
-          </span>
-        </div>
-      </div>
-      <div className="mt-4 flex justify-between">
-        <Button
-          className={cn('flex-1 relative', !isClaimed && 'bg-lime-green-deep')}
-          disabled={disabled}
-          onClick={claim}
-        >
-          {isClaimed ? t('claimed') : t('airdrop.claim')}
-        </Button>
-        {/* <Button
-          className={cn('flex-1')}
-          variant="destructive"
-          disabled={isClaimed || isClaiming}
-          onClick={burn}
-        >
-          {t('airdrop.burn')}
-        </Button> */}
-      </div>
-    </Card>
   )
 }
 

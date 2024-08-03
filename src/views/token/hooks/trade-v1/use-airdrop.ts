@@ -1,183 +1,148 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import { useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
-import { isEmpty } from 'lodash'
-import { nanoid } from 'nanoid'
 
-import { airdropApi } from '@/api/airdrop'
-import { useChainInfo } from '@/hooks/use-chain-info'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { MarketType } from '@/api/token/types'
-import { addPrefix0x } from '@/utils/contract'
-import { useTradeSearchParams } from '../use-search-params'
-import { useAirdropStore } from '@/stores/use-airdrop'
 import { useCheckAccount } from '@/hooks/use-check-chain'
-import { bottomLeft } from '@/config/toast'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
-import { addrMap } from '@/contract/address'
-import { DeviceWidth } from '@/hooks/use-responsive'
-import { distributorAbiMap } from '@/contract/abi/distributor'
+import {
+  distributorAbiMap,
+  DistributorAbiVersion,
+} from '@/contract/abi/distributor'
+import { useTokenContext } from '@/contexts/token'
+import { Address, zeroAddress } from 'viem'
 
-export const useAirdrop = (
-  id: number = 0,
-  type_list: string,
-  onFinlly?: () => void
-) => {
+export const useAirdrop = (id: number) => {
   const { t } = useTranslation()
-  const { chainName, tokenAddr } = useTradeSearchParams()
-  const { chainId } = useChainInfo()
-  const uniqueKey = useMemo(nanoid, [])
-  const { setIsCalimingAirdrop } = useAirdropStore()
-  const [isClaim, setIsCalim] = useState(false)
-  const [isBurning, setBurning] = useState(false)
-  const { checkForChain, checkForConnect } = useCheckAccount()
   const { playFire } = useAudioPlayer()
+  const { address, checkForChain, checkForConnect } = useCheckAccount()
+  const { chainId, airdropVersion, airdropAddr } = useTokenContext()
 
-  const { distributor } = addrMap[chainId] ?? {}
-  const toastConfig =
-    window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined
-
-  // Query airdrop details.
-  const { data: { data } = {}, refetch } = useQuery({
-    // enabled: !!chainName && !!type_list && !!tokenAddr,
-    enabled: false,
-    queryKey: [airdropApi.getProof.name + uniqueKey, type_list, tokenAddr],
-    queryFn: () => {
-      if (type_list == 'undefined') return Promise.reject()
-      return airdropApi.getProof({
-        chain: chainName,
-        type_list,
-        token_address: tokenAddr,
-      })
-    },
-  })
-
-  const { data: isBurn, refetch: refetchIsBurn } = useReadContract({
-    abi: distributorAbiMap['0.1.0'], // TODO: match version
-    address: distributor,
-    functionName: 'isBurn',
-    args: [BigInt(id)],
+  const airdropConfig = {
+    abi: distributorAbiMap[airdropVersion as DistributorAbiVersion],
+    address: airdropAddr!,
     chainId,
-    query: {
-      refetchInterval: 5_000,
-    },
-  })
+  }
+
+  const { data: isKolClaimed = false, refetch: refetchKolClaimed } =
+    useReadContract({
+      ...airdropConfig,
+      functionName: 'isClaimedKOL',
+      args: [BigInt(id), address!],
+      query: { enabled: !!address && !!airdropAddr },
+    })
+
+  const { data: isCommunityClaimed = false, refetch: refetchCommunityCalimed } =
+    useReadContract({
+      ...airdropConfig,
+      functionName: 'isClaimedCommunity',
+      args: [BigInt(id), address!],
+      query: { enabled: !!address && !!airdropAddr },
+    })
+
+  const refetch = () => {
+    refetchKolClaimed()
+    refetchCommunityCalimed()
+  }
 
   const {
     data: hash,
-    isPending: isSubmittingClaim,
+    isPending,
     writeContract,
     reset,
   } = useWriteContract({
     mutation: {
-      onMutate: () =>
-        toast.loading(isClaim ? t('claiming') : t('burning'), toastConfig),
-      onSettled: (_, __, ___, id) => {
-        toast.dismiss(id)
-        setBurning(false)
-      },
+      onMutate: () => toast.loading(t('claiming')),
+      onSettled: (_, __, ___, id) => toast.dismiss(id),
       onError: ({ message }) => {
+        reset()
         CONTRACT_ERR.message(message)
-        setBurning(false)
       },
-      onSuccess: () => {
-        playFire()
-        setBurning(false)
-      },
+      onSuccess: playFire,
     },
   })
-
-  const { isFetching: isWaitingClaim } = useWaitForTx({
+  const { isLoading } = useWaitForTx({
     hash,
-    onLoading: () => {
-      toast.loading(t('tx.waiting'), toastConfig)
-    },
-    onError: () =>
-      toast.error(
-        isClaim ? t('airdrop.claim.failed') : t('airdrop.burn.failed'),
-        toastConfig
-      ),
-    onSuccess: () =>
-      toast.success(
-        isClaim ? t('airdrop.claim.success') : t('airdrop.burn.success'),
-        toastConfig
-      ),
+    onLoading: () => toast.loading(t('tx.waiting')),
+    onError: () => toast.error(t('airdrop.claim.failed')),
+    onSuccess: () => toast.success(t('airdrop.claim.success')),
     onFillay: () => {
-      setBurning(false)
-      toast.dismiss()
-      refetchIsBurn()
       reset()
       refetch()
-      onFinlly?.()
+      toast.dismiss()
     },
   })
-  const isClaiming = isSubmittingClaim || isWaitingClaim || isBurning
 
-  const claim = async () => {
-    if (!checkForConnect()) return
-
-    const isValidChain = await checkForChain(chainId)
-    if (!isValidChain) return
-    if (!distributor) {
+  const checkForClaim = async () => {
+    if (!checkForConnect()) return false
+    if (!(await checkForChain(chainId))) return false
+    if (!airdropAddr) {
       CONTRACT_ERR.configNotFound()
-      return
+      return false
     }
 
-    const { kol_proof = [], community_proof = [] } = data ?? {}
-    const isKol = type_list.includes(MarketType.Kol.toString())
-    const isCmnt = type_list.includes(MarketType.Community.toString())
+    return true
+  }
 
-    if (isKol && isEmpty(kol_proof)) {
-      CONTRACT_ERR.proofNotFound()
-      return
-    }
-    if (isCmnt && isEmpty(community_proof)) {
-      CONTRACT_ERR.proofNotFound()
-      return
-    }
+  const claimKol = async (kolId = 0) => {
+    if (!(await checkForClaim())) return
 
-    setIsCalim(true)
-    // TODO: should simulate first.
     writeContract({
-      abi: distributorAbiMap['0.1.0'],
-      address: distributor,
-      functionName: 'claim',
-      chainId,
-      args: [BigInt(id), addPrefix0x(kol_proof), addPrefix0x(community_proof)],
+      ...airdropConfig,
+      functionName: 'claimKol',
+      args: [BigInt(id), BigInt(kolId)],
     })
   }
 
-  const burn = async () => {
-    if (!checkForConnect()) return
+  const claimCommunity = async (
+    exchangeId = 0,
+    nftId: Address = zeroAddress,
+    tokenId: Address = zeroAddress
+  ) => {
+    if (!(await checkForClaim())) return
 
-    const isValidChain = await checkForChain(chainId)
-    if (!isValidChain || !distributor) return
-
-    setBurning(true)
-    // TODO: should simulate first.
     writeContract({
-      abi: distributorAbiMap['0.1.0'],
-      address: distributor,
-      functionName: 'burnToken',
-      chainId,
-      args: [BigInt(id)],
+      ...airdropConfig,
+      functionName: 'claimCommunity',
+      args: [BigInt(id), BigInt(exchangeId), nftId, tokenId],
     })
   }
 
-  useEffect(() => {
-    setIsCalimingAirdrop(isClaiming)
-  }, [isClaiming])
+  // const { data: isBurn, refetch: refetchIsBurn } = useReadContract({
+  //   abi: distributorAbiMap['0.1.0'], // TODO: match version
+  //   address: distributor,
+  //   functionName: 'isBurn',
+  //   args: [BigInt(id)],
+  //   chainId,
+  //   query: {
+  //     refetchInterval: 5_000,
+  //   },
+  // })
+
+  // const burn = async () => {
+  //   if (!checkForConnect()) return
+
+  //   const isValidChain = await checkForChain(chainId)
+  //   if (!isValidChain || !distributor) return
+
+  //   setBurning(true)
+  //   // TODO: should simulate first.
+  //   writeContract({
+  //     abi: distributorAbiMap['0.1.0'],
+  //     address: distributor,
+  //     functionName: 'burnToken',
+  //     chainId,
+  //     args: [BigInt(id)],
+  //   })
+  // }
 
   return {
-    isSubmittingClaim,
-    isClaiming,
-    isBurn,
-    isBurning,
-    claim,
-    burn,
+    isClaiming: isPending || isLoading,
+    isKolClaimed,
+    isCommunityClaimed,
+    claimKol,
+    claimCommunity,
     resetClaim: reset,
   }
 }

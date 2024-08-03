@@ -8,7 +8,7 @@ import { useTradeInfoV1 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
-import { BCVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
 
 export const useTradeV1 = () => {
@@ -17,7 +17,7 @@ export const useTradeV1 = () => {
   const { tokenAddr } = useTradeSearchParams()
   const { getReferrals } = useInvite()
   const { bcVersion, bcAddr } = useTokenContext()
-  const bcAbi = bondingCurveAbiMap[bcVersion as BCVersion.v0d1d0]
+  const bcAbi = bondingCurveAbiMap[bcVersion as BcAbiVersion.V0_1_0]
 
   const {
     getReserveAmount,

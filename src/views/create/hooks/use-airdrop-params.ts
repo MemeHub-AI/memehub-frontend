@@ -5,12 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { MarketType, Marketing, TokenConfigRes } from '@/api/token/types'
 import { reportException } from '@/errors'
 import { tokenApi } from '@/api/token'
-
-enum AirdropType {
-  None,
-  Assign,
-  All,
-}
+import { AirdropType } from '@/constants/airdrop'
 
 const distributorParams = {
   isDistribution: false,
