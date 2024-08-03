@@ -3,7 +3,7 @@ import { useAccount, useReadContract } from 'wagmi'
 
 import { BI_ZERO } from '@/constants/number'
 import { kolNftAbi } from '@/contract/abi/nft/kol-nft'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { exchangeNftAbi } from '@/contract/abi/nft/exchange-nft'
 import { COMMUNITY_IDX } from '@/config/nft'
 import { useQuery } from '@tanstack/react-query'
@@ -12,7 +12,7 @@ import { parseHash } from '@/utils/contract'
 
 export const useIdoCheck = (chainId: number) => {
   const { address } = useAccount()
-  const { kolNft, exchangeNft } = v3Addr[chainId] ?? {}
+  const { kolNft, exchangeNft } = addrMap[chainId] ?? {}
 
   const { data: kolTokenId = BI_ZERO } = useReadContract({
     abi: kolNftAbi,

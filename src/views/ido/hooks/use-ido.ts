@@ -3,7 +3,7 @@ import { parseEther } from 'viem'
 import { toast } from 'sonner'
 
 import { idoAbi } from '@/contract/abi/ido/ido'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { IDO_ERR } from '@/errors/ido'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +14,7 @@ export const useIdo = (onFinally?: () => void) => {
   const { t } = useTranslation()
   const { chainId, poolId } = useIdoContext()
   const { checkForConnect, checkForChain } = useCheckAccount()
-  const { ido } = v3Addr[chainId] ?? {}
+  const { ido } = addrMap[chainId] ?? {}
 
   const {
     data: hash,

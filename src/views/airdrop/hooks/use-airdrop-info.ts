@@ -4,7 +4,7 @@ import { formatEther } from 'viem'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { MarketType } from '@/api/token/types'
 import { BI_ZERO } from '@/constants/number'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { distributorAbiMap } from '@/contract/abi/distributor'
 import { tokenAbiMap } from '@/contract/abi/token'
@@ -19,7 +19,7 @@ export const useAirdropInfo = (
   const { address } = useAccount()
   const { chainId } = useChainInfo(chainName)
 
-  const { distributor, bondingCurve } = v3Addr[chainId] ?? {}
+  const { distributor, bondingCurve } = addrMap[chainId] ?? {}
   const isKol = type === MarketType.Kol
 
   const { data: airdropInfo = [], refetch } = useReadContract({

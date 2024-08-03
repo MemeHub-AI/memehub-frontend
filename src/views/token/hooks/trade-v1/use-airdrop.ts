@@ -17,7 +17,7 @@ import { useAirdropStore } from '@/stores/use-airdrop'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { bottomLeft } from '@/config/toast'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { DeviceWidth } from '@/hooks/use-responsive'
 import { distributorAbiMap } from '@/contract/abi/distributor'
 
@@ -36,7 +36,7 @@ export const useAirdrop = (
   const { checkForChain, checkForConnect } = useCheckAccount()
   const { playFire } = useAudioPlayer()
 
-  const { distributor } = v3Addr[chainId] ?? {}
+  const { distributor } = addrMap[chainId] ?? {}
   const toastConfig =
     window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined
 

@@ -6,7 +6,7 @@ import { useInterval } from 'react-use'
 
 import { BI_ZERO } from '@/constants/number'
 import { idoAbi } from '@/contract/abi/ido/ido'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { useIdoClaimed } from './use-ido-claimed'
 
 export enum IdoStatus {
@@ -17,7 +17,7 @@ export enum IdoStatus {
 
 export const useIdoInfo = (chainId: number, poolId: number) => {
   const { address } = useAccount()
-  const { ido } = v3Addr[chainId] ?? {}
+  const { ido } = addrMap[chainId] ?? {}
 
   const { isClaimedReserve, refetchClaimedReserve } = useIdoClaimed(
     chainId,

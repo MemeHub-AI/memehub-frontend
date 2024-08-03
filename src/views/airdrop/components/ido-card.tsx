@@ -17,7 +17,7 @@ import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
 import { utilLang } from '@/utils/lang'
 import { useReadContract } from 'wagmi'
 import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { zeroAddress } from 'viem'
 
 interface Props {
@@ -59,10 +59,10 @@ export const IdoAirdropCard = ({
 
   const { data: tokenAddr = zeroAddress } = useReadContract({
     abi: idoAirdropAbi,
-    address: v3Addr[idoChain.id]?.idoAirdrop,
+    address: addrMap[idoChain.id]?.idoAirdrop,
     chainId: idoChain.id,
     functionName: 'tokenAddress',
-    query: { enabled: !!v3Addr[idoChain.id]?.idoAirdrop },
+    query: { enabled: !!addrMap[idoChain.id]?.idoAirdrop },
   })
   const isNotStart = tokenAddr === zeroAddress
 

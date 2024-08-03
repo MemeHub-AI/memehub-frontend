@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 
 import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { useTranslation } from 'react-i18next'
 import { idoChain } from '@/config/ido'
 import { useCheckAccount } from '@/hooks/use-check-chain'
@@ -12,7 +12,7 @@ import { IDO_ERR } from '@/errors/ido'
 export const useIdoAirdropClaim = (onSuccess?: () => void) => {
   const { t } = useTranslation()
   const { checkForConnect, checkForChain } = useCheckAccount()
-  const { idoAirdrop } = v3Addr[idoChain.id] ?? {}
+  const { idoAirdrop } = addrMap[idoChain.id] ?? {}
 
   const {
     data: hash,

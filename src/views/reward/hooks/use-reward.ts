@@ -12,14 +12,14 @@ import { useTranslation } from 'react-i18next'
 import { BI_ZERO } from '@/constants/number'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { recommendAbi } from '@/contract/abi/recommend'
 
 export const useReward = (chainId: number) => {
   const { t } = useTranslation()
   const { address, chainId: accountChainId } = useAccount()
   const { switchChainAsync } = useSwitchChain()
-  const { recommend } = v3Addr[chainId] ?? {}
+  const { recommend } = addrMap[chainId] ?? {}
 
   const { data: total = BI_ZERO, refetch: refetchAmount } = useReadContract({
     abi: recommendAbi,

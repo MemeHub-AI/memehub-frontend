@@ -3,11 +3,11 @@ import { formatEther } from 'viem'
 
 import { BI_ZERO } from '@/constants/number'
 import { idoAbi } from '@/contract/abi/ido/ido'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 
 export const useIdoClaimed = (chainId: number, poolId: number) => {
   const { address } = useAccount()
-  const { ido } = v3Addr[chainId] ?? {}
+  const { ido } = addrMap[chainId] ?? {}
   const query = { enabled: !!address && !!ido }
 
   const { data: tokenAmountWei = BI_ZERO } = useReadContract({

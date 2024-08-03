@@ -12,7 +12,7 @@ import { TokenNewReq } from '@/api/token/types'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { useAirdropParams } from './use-airdrop-params'
 import { BI_ZERO } from '@/constants/number'
 import { getDeployLogsAddr } from '@/utils/contract'
@@ -33,7 +33,7 @@ export const useDeploy = () => {
   } = useCreateToken()
   const { address, chainId = 0 } = useAccount()
   const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
-  const { bondingCurve } = v3Addr[chainId] ?? {}
+  const { bondingCurve } = addrMap[chainId] ?? {}
 
   const {
     data: hash,

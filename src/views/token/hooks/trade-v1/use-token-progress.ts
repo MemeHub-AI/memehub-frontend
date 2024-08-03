@@ -7,7 +7,7 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { BI_ZERO } from '@/constants/number'
 import { usePools } from '../use-pools'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 
 export const useTokenProgressV3 = (
@@ -19,7 +19,7 @@ export const useTokenProgressV3 = (
 
   const token = overrideToken ?? tokenAddr
   const chainId = overrideChainId ?? cId
-  const { bondingCurve } = v3Addr[chainId] ?? {}
+  const { bondingCurve } = addrMap[chainId] ?? {}
 
   const {
     data: totalSupply,

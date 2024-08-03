@@ -8,7 +8,7 @@ import { wagmiConfig } from '@/config/wagmi'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { BI_ZERO } from '@/constants/number'
 import { useTradeSearchParams } from '../use-search-params'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 import { reportException } from '@/errors'
 import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { tokenAbiMap } from '@/contract/abi/token'
@@ -17,7 +17,7 @@ export const useTradeInfoV3 = (overrideToken?: Address) => {
   const { chainId } = useChainInfo()
   const { tokenAddr: queryToken } = useTradeSearchParams()
   const tokenAddr = overrideToken ?? queryToken
-  const { bondingCurve } = v3Addr[chainId] ?? {}
+  const { bondingCurve } = addrMap[chainId] ?? {}
 
   // TODO: match version
   const bcAbi = bondingCurveAbiMap['0.1.0']

@@ -3,7 +3,7 @@ import { useReadContracts } from 'wagmi'
 import { bsc, base, blast } from 'wagmi/chains'
 
 import { exchangeNftAbi } from '@/contract/abi/nft/exchange-nft'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 
 const chains = [bsc, base, blast]
 
@@ -11,7 +11,7 @@ export const useCommunityMembers = (id?: string) => {
   const { data = [] } = useReadContracts({
     contracts: chains.map((c) => ({
       abi: exchangeNftAbi,
-      address: v3Addr[c.id]?.exchangeNft!,
+      address: addrMap[c.id]?.exchangeNft!,
       functionName: 'idOfAmount',
       args: [id],
     })),

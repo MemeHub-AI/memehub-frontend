@@ -11,7 +11,7 @@ import { uniswapV2RouterAbi } from '@/contract/abi/uniswapv2/router'
 import { getDeadline, subSlippage } from '@/utils/contract'
 import { useUniswapV2Amount } from './use-uniswapv2-info'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { reserveAddr, uniswapV2Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 
 export const useUniswapV2 = (
   tokenAddr: Address | undefined | null,
@@ -23,11 +23,10 @@ export const useUniswapV2 = (
   const { isApproving, approvalForAll } = useApprove()
   const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(poolAddr)
 
-  const reserveToken = reserveAddr[chainId]
-  const uniswapV2Address = uniswapV2Addr[chainId]
+  const { reserveToken, uniswapv2Router } = addrMap[chainId] ?? {}
   const uniswapV2Config = {
     abi: uniswapV2RouterAbi,
-    address: uniswapV2Address,
+    address: uniswapv2Router!,
     chainId,
   }
 
@@ -56,7 +55,7 @@ export const useUniswapV2 = (
       CONTRACT_ERR.tokenInvalid()
       return false
     }
-    if (!reserveToken) {
+    if (!reserveToken || !uniswapv2Router) {
       UNISWAP_ERR.reserveNotFound()
       return false
     }
@@ -85,7 +84,7 @@ export const useUniswapV2 = (
       chainId,
       args: [
         subSlippage(tokenAmount, slippage),
-        [reserveToken, tokenAddr!],
+        [reserveToken!, tokenAddr!],
         address!,
         await getDeadline(),
       ],
@@ -103,7 +102,7 @@ export const useUniswapV2 = (
 
     const isApproved = await approvalForAll(
       tokenAddr!,
-      uniswapV2Address,
+      uniswapv2Router!,
       amount
     )
     if (!isApproved) return
@@ -118,7 +117,7 @@ export const useUniswapV2 = (
       args: [
         parseEther(amount),
         subSlippage(reserveAmount, slippage),
-        [tokenAddr!, reserveToken],
+        [tokenAddr!, reserveToken!],
         address!,
         await getDeadline(),
       ],

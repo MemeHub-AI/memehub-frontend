@@ -5,10 +5,10 @@ import { useReadContract } from 'wagmi'
 
 import { BI_ZERO } from '@/constants/number'
 import { idoAbi } from '@/contract/abi/ido/ido'
-import { v3Addr } from '@/contract/address'
+import { addrMap } from '@/contract/address'
 
 export const useIdoProgress = (chainId: number, poolId: number) => {
-  const { ido } = v3Addr[chainId] ?? {}
+  const { ido } = addrMap[chainId] ?? {}
 
   const {
     data: pools = [],
