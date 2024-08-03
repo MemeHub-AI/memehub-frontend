@@ -38,6 +38,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const symbol = native?.symbol || chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
+    return toast.info(t('coming-soon'))
     if (loadingInfo || loadingLogo) {
       toast.warning(t('onsubmit.createing.warning'))
       return

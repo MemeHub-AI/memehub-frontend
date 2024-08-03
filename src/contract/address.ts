@@ -94,8 +94,9 @@ const dev: AddrMap = {
     exchangeNft: '0x5f5EAC903c8CCf445671580C178a7B6815519a12',
     kolNft: '0x5859AdD7DA6107D1FA4FC3aB98D242aAF310d61e',
 
-    ido: '0xF7dbaBCC9B132D3a5f726357ecf5dDDC49DfDC84',
-    idoAirdrop: '0xEFeA10E78F3D2a96A0A216C69ff530888C7de256',
+    // Attention: this is mainnet ido.
+    ido: '0xCa96dC5e86543cd185B39Fe48194890c57b6a38f',
+    idoAirdrop: '0x00d39283788ebD6cc029E2001EEfE1DedBB5Fa96',
   },
   [base.id]: {
     reserveToken: prod[base.id]?.reserveToken,

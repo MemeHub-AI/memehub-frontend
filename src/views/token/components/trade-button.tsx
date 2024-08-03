@@ -12,6 +12,7 @@ import { useClipboard } from '@/hooks/use-clipboard'
 import { useUserStore } from '@/stores/use-user-store'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { toast } from 'sonner'
 
 interface Props {
   onTrade: () => void
@@ -36,6 +37,16 @@ export const TradeButton = ({
     isBuy ? nativeBalance : tokenBalance
   )
 
+  const onClick = async () => {
+    return toast.info(t('coming-soon'))
+    if (!(await checkForChain(tokenInfo?.chain.id))) {
+      playError()
+      return false
+    }
+    if (isIdoToken) return onTrade()
+    setCommentOpen(true)
+  }
+
   return (
     <>
       <TradeCommentDialog
@@ -53,14 +64,7 @@ export const TradeButton = ({
             BigNumber(value).lte(0) ||
             isBalanceInsufficient
           }
-          onClick={async () => {
-            if (!(await checkForChain(tokenInfo?.chain.id))) {
-              playError()
-              return false
-            }
-            if (isIdoToken) return onTrade()
-            setCommentOpen(true)
-          }}
+          onClick={onClick}
         >
           {isBalanceInsufficient
             ? t('balance.insufficient')
