@@ -70,14 +70,16 @@ const Airdrop = () => {
         <Ids />
         <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
 
-        {/* <div className="flex space-x-2 items-center mt-3">
-          <Switch
-            id="airdrop-switch"
-            checked={checked}
-            onCheckedChange={setChecked}
-          />
-          <Label htmlFor="airdrop-switch">{t('airdrop.claimed.hide')}</Label>
-        </div> */}
+        {(airdrops?.length ?? 0) > 5 && (
+          <div className="flex space-x-2 items-center mt-3">
+            <Switch
+              id="airdrop-switch"
+              checked={checked}
+              onCheckedChange={setChecked}
+            />
+            <Label htmlFor="airdrop-switch">{t('airdrop.claimed.hide')}</Label>
+          </div>
+        )}
 
         <CustomSuspense
           isPending={false}

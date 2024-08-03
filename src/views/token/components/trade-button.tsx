@@ -30,11 +30,20 @@ export const TradeButton = ({
   const { checkForChain } = useCheckAccount()
   const { playError } = useAudioPlayer()
 
-  const { isIdoToken, tokenInfo } = useTokenContext()
+  const { isIdoToken, isNotFound, chainId, tokenMetadata } = useTokenContext()
   const { isBuy, nativeBalance, tokenBalance, value } = useTradeContext()
   const isBalanceInsufficient = BigNumber(value).gt(
     isBuy ? nativeBalance : tokenBalance
   )
+
+  const onTradeClick = async () => {
+    if (!(await checkForChain(chainId))) {
+      playError()
+      return false
+    }
+    if (isIdoToken || (isNotFound && tokenMetadata)) return onTrade()
+    setCommentOpen(true)
+  }
 
   return (
     <>
@@ -53,14 +62,7 @@ export const TradeButton = ({
             BigNumber(value).lte(0) ||
             isBalanceInsufficient
           }
-          onClick={async () => {
-            if (!(await checkForChain(tokenInfo?.chain.id))) {
-              playError()
-              return false
-            }
-            if (isIdoToken) return onTrade()
-            setCommentOpen(true)
-          }}
+          onClick={onTradeClick}
         >
           {isBalanceInsufficient
             ? t('balance.insufficient')

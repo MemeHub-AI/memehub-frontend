@@ -22,6 +22,10 @@ export const TokenPage = () => {
   const tokenInfo = useTokenInfo()
   const { isLoadingTokenInfo } = tokenInfo
   const { isGraduated } = usePools(tokenInfo.tokenInfo?.address)
+  const reserveSymbol =
+    tokenInfo.tokenInfo?.chain.native.symbol ||
+    chainsMap[chainName]?.native.symbol
+  const chainId = +(chainsMap[chainName]?.id ?? 0)
 
   const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
@@ -42,9 +46,12 @@ export const TokenPage = () => {
     <TokenProvider
       value={{
         ...tokenInfo,
-        reserveSymbol: tokenInfo.tokenInfo?.chain.native.symbol,
+        reserveSymbol,
         isIdoToken,
         isGraduated,
+        chainName,
+        chainId,
+        tokenAddr,
       }}
     >
       <main

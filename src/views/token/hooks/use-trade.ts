@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Address, formatEther } from 'viem'
+import { Address, formatEther, isAddress } from 'viem'
+import { isEmpty } from 'lodash'
+import { useAccount } from 'wagmi'
 
 import { useTradeV1 } from './trade-v1/use-trade'
 import { useTokenContext } from '@/contexts/token'
@@ -12,22 +14,36 @@ import { fmt } from '@/utils/fmt'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useDexTrade } from './use-dex-trade'
 import { idoTrumpCard } from '@/config/ido'
+import { CONTRACT_ERR } from '@/errors/contract'
+import { BCVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 // Used for trade success tips.
 const lastTrade = {
-  type: '',
-  tokenAmount: '',
-  nativeAmount: '',
+  type: '' as TradeType | '',
+  tokenLabel: '',
+  reserveLabel: '',
 }
 
 export const useTrade = (onSuccess?: () => void) => {
-  const { tokenInfo, isIdoToken, isGraduated } = useTokenContext()
-  const { address, pool_address, chain } = tokenInfo ?? {}
+  const {
+    tokenInfo,
+    isIdoToken,
+    isGraduated,
+    tokenAddr,
+    bcVersion,
+    tokenMetadata,
+    chainId,
+  } = useTokenContext()
+  const bcAbi = bondingCurveAbiMap[bcVersion as `${BCVersion}`]
+  const { address, pool_address, chain, ticker } = tokenInfo ?? {}
   const { showToast } = useTradeToast()
   const { userInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
   const [inviteErrorOpen, setInviteErrorOpen] = useState(false)
   const { getCanBind } = useInvite()
+  const { chainsMap } = useChainsStore()
+  const { chain: walletChain } = useAccount()
 
   const { dexHash, isDexTrading, dexBuy, dexSell } = useDexTrade(
     address as Address,
@@ -44,6 +60,7 @@ export const useTrade = (onSuccess?: () => void) => {
     getTokenAmountV1,
   } = useTradeV1()
   // const { hashV2 } = useTradeV2() // More version example
+
   const hash = dexHash || hashV1
   const isTrading = isDexTrading || isSubmittingV1
   const getReserveAmount = getReserveAmountV1
@@ -57,23 +74,35 @@ export const useTrade = (onSuccess?: () => void) => {
   })
 
   const updateLastTrade = async (type: TradeType, amount: string) => {
-    const tokenSymbol = tokenInfo?.ticker
-    const reserveSymbol = tokenInfo?.chain.native.symbol
+    const tokenSymbol = ticker || tokenMetadata?.symbol
+    const reserveSymbol =
+      chain?.native.symbol || chainsMap[chainId]?.native.symbol
     lastTrade.type = type
 
+    const getNonFixedLabel = (value: bigint, symbol?: string) =>
+      `${fmt.decimals(formatEther(value))} ${symbol ?? ''}`
+
+    const getFixedLabel = (value: string, symbol?: string) =>
+      `${fmt.decimals(value, {
+        fixed: 3,
+      })} ${symbol}`
+
     if (type === TradeType.Buy) {
-      const value = await getTokenAmount(amount)
-      lastTrade.tokenAmount = fmt.decimals(formatEther(value)) + tokenSymbol
-      lastTrade.nativeAmount =
-        fmt.decimals(amount, { fixed: 3 }) + reserveSymbol
+      lastTrade.tokenLabel = getNonFixedLabel(
+        await getTokenAmount(amount),
+        tokenSymbol
+      )
+      lastTrade.reserveLabel = getFixedLabel(amount, reserveSymbol)
     } else {
-      const value = await getReserveAmount(amount)
-      lastTrade.tokenAmount = fmt.decimals(amount, { fixed: 3 }) + tokenSymbol
-      lastTrade.nativeAmount = fmt.decimals(formatEther(value)) + reserveSymbol
+      lastTrade.tokenLabel = getFixedLabel(amount, tokenSymbol)
+      lastTrade.reserveLabel = getNonFixedLabel(
+        await getReserveAmount(amount),
+        reserveSymbol
+      )
     }
   }
 
-  const checkForTrade = async () => {
+  const checkForTrade = async (amount: string) => {
     // Cannot use self code to trade.
     if (userInfo?.code === referralCode) {
       setInviteErrorOpen(true)
@@ -84,12 +113,25 @@ export const useTrade = (onSuccess?: () => void) => {
       setInviteErrorOpen(true)
       return false
     }
+    if (isEmpty(amount)) {
+      CONTRACT_ERR.amountInvlid()
+      return false
+    }
+    if (!isAddress(tokenAddr)) {
+      CONTRACT_ERR.tokenInvalid()
+      return false
+    }
+    if (!tokenMetadata || !bcAbi) {
+      CONTRACT_ERR.contractAddrNotFound()
+      return false
+    }
 
     return true
   }
 
   const buy = async (amount: string, slippage: string) => {
-    if (!(await checkForTrade())) return
+    if (!(await checkForTrade(amount))) return
+
     // DEX trade, ido token with trade tax
     if (isGraduated || isIdoToken) {
       return dexBuy(amount, slippage, isIdoToken)
@@ -100,7 +142,8 @@ export const useTrade = (onSuccess?: () => void) => {
   }
 
   const sell = async (amount: string, slippage: string) => {
-    if (!(await checkForTrade())) return
+    if (!(await checkForTrade(amount))) return
+
     // DEX trade, ido token with trade tax
     if (isGraduated || isIdoToken) {
       return dexSell(amount, slippage, isIdoToken)
@@ -115,15 +158,18 @@ export const useTrade = (onSuccess?: () => void) => {
     // More versions...
   }
 
-  // Handle waiting tx with showToast.
+  // show trade toast
   useEffect(() => {
     if (!hash) return
-    resetTrade()
+
     showToast({
       ...lastTrade,
-      txUrl: `${tokenInfo?.chain.explorer}/tx/${hash}`,
-      hash: hash,
+      hash,
+      txUrl: `${
+        chain?.explorer ?? walletChain?.blockExplorers?.default.url
+      }/tx/${hash}`,
     })
+    resetTrade()
   }, [hash])
 
   return {

@@ -19,14 +19,21 @@ import { PosterImages } from '@/components/poster-images'
 import { TokenSocialLinks } from '../../../components/token-links'
 import { AvatarCard } from '@/components/avatar-card'
 
-export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
+export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { tokenInfo, isLoadingTokenInfo, isNotFound, isIdoToken, isGraduated } =
-    useTokenContext()
+  const {
+    tokenInfo,
+    isLoadingTokenInfo,
+    isNotFound,
+    isIdoToken,
+    isGraduated,
+    tokenMetadata,
+    chainId,
+  } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
   const { chainsMap } = useChainsStore()
-  const chain = chainsMap[tokenInfo?.chain?.id ?? 0]
+  const chain = chainsMap[chainId]
 
   if (isLoadingTokenInfo) {
     return (
@@ -75,9 +82,11 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
 
       {/* Name/symbol */}
       <div className="font-bold leading-none text-center mt-2">
-        {isNotFound && !isIdoToken
+        {isNotFound && !isIdoToken && !tokenMetadata
           ? t('token.not-found')
-          : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
+          : `${tokenInfo?.name ?? tokenMetadata?.name}(${
+              tokenInfo?.ticker ?? tokenMetadata?.symbol
+            })`}
       </div>
 
       {/* Links */}
@@ -92,14 +101,16 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
       </div>
 
       {/* Contract address */}
-      {!isMobile && !isNotFound && (
+      {!isMobile && (!isNotFound || tokenMetadata) && (
         <div
           className="text-sm flex items-center cursor-pointer my-3"
-          onClick={() => copy(tokenInfo?.address || '')}
+          onClick={() => copy(tokenInfo?.address ?? tokenMetadata?.token ?? '')}
         >
           <span>{t('ca')}:</span>
           <span className="truncate mx-2">
-            {fmt.addr(tokenInfo?.address || '', { len: 12 })}
+            {fmt.addr(tokenInfo?.address ?? tokenMetadata?.token ?? '', {
+              len: 12,
+            })}
           </span>
           {isCopied ? <IoCheckmark size={16} /> : <MdContentCopy size={16} />}
         </div>
@@ -125,4 +136,4 @@ export const TokenInfo = ({ className }: ComponentProps<'div'>) => {
   )
 }
 
-export default TokenInfo
+export default TokenInfoCard

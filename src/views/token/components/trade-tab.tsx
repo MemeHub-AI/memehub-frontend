@@ -29,7 +29,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     [tab]
   )
   const { playSuccess } = useAudioPlayer()
-  const { isNotFound, isIdoToken } = useTokenContext()
+  const { isNotFound, isIdoToken, tokenMetadata } = useTokenContext()
 
   // TODO: maybe not needed.
   const { isClaimingAirdrop } = useAirdropStore()
@@ -46,7 +46,10 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
     setValue('')
     refetchBalance()
   })
-  const disabled = isTrading || isClaimingAirdrop || (isNotFound && !isIdoToken)
+  const disabled =
+    isTrading ||
+    isClaimingAirdrop ||
+    (isNotFound && !isIdoToken && !tokenMetadata)
 
   const onTrade = async () => {
     if (isBuy) {
@@ -123,7 +126,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
 
           <TradeButton
             disabled={disabled}
-            isTrading={isTraded}
+            isTrading={isTrading}
             onTrade={onTrade}
           />
         </Tabs>

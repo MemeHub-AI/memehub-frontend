@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'react'
+import { type Address } from 'viem'
 
 import { useTokenInfo } from './../views/token/hooks/use-token-info'
 import { CONTEXT_ERR } from '@/errors/context'
@@ -8,6 +9,9 @@ interface Context
   isIdoToken: boolean
   isGraduated: boolean
   reserveSymbol: string | undefined
+  chainId: number
+  chainName: string
+  tokenAddr: Address
 }
 
 const TokenContext = createContext<Context | null>(null)

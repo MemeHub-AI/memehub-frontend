@@ -3,7 +3,7 @@ import { toast } from 'sonner'
 import { t } from 'i18next'
 
 import { isUserReject } from '@/utils/contract'
-import { SlippageError } from '@/components/toast/slippage-error'
+import { SlippageError } from '@/components/trade-toast/slippage-error'
 import { bottomLeft } from '@/config/toast'
 import { DeviceWidth } from '@/hooks/use-responsive'
 import { reportException } from '.'

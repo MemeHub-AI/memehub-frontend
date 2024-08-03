@@ -1,6 +1,6 @@
 import React, { useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { formatEther, type Address } from 'viem'
+import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useDebounce } from 'react-use'
 
@@ -29,20 +29,16 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     isLoadingTokenInfo,
     isIdoToken,
     isGraduated,
+    tokenAddr,
   } = useTokenContext()
   const { isBuy, isSell, isTraded, nativeBalance, tokenBalance } =
     useTradeContext()
-  const { getTokenAmount, getReserveAmount: getNativeAmount } = useTradeInfoV1()
+  const { getTokenAmount, getReserveAmount } = useTradeInfoV1()
   const { chainInfo } = useChainInfo()
   const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(
-    (isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.pool_address) as Address
+    isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.pool_address
   )
   const [targetAmount, setTargetAmount] = useState('0')
-
-  const inputAmount = fmt.decimals(String(value || 0), { fixed: 3 })
-  const tokenSymbol = tokenInfo?.ticker || ''
-  const tokenAddr = tokenInfo?.address as Address
-  const balance = fmt.decimals(isBuy ? nativeBalance : tokenBalance)
 
   const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     if (BigNumber(target.value).lt(0)) return
@@ -63,7 +59,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     value = String(value)
     const nativeAmount = await (isGraduated || isIdoToken
       ? getAmountForSell(value)
-      : getNativeAmount(value))
+      : getReserveAmount(value))
     const amount = fmt.decimals(BigNumber(formatEther(nativeAmount)))
 
     setTargetAmount(amount)
@@ -105,7 +101,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
               )}
             >
               <span className="mr-2 text-zinc-600">
-                {isBuy ? reserveSymbol : tokenSymbol}
+                {isBuy ? reserveSymbol : tokenInfo?.ticker}
               </span>
               <Img
                 src={isBuy ? chainInfo?.logo : tokenInfo?.image}
@@ -128,11 +124,13 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
         className="text-zinc-500 text-xs flex flex-col space-y-1 mt-1"
       >
         <span>
-          {inputAmount} {isBuy ? reserveSymbol : tokenSymbol} ≈ {targetAmount}{' '}
-          {isBuy ? tokenSymbol : reserveSymbol}
+          {fmt.decimals(String(value || 0), { fixed: 3 })}{' '}
+          {isBuy ? reserveSymbol : tokenInfo?.ticker} ≈ {targetAmount}{' '}
+          {isBuy ? tokenInfo?.ticker : reserveSymbol}
         </span>
         <span className="mt-1">
-          {t('balance')}: {balance} {isBuy ? reserveSymbol : tokenSymbol}
+          {t('balance')}: {fmt.decimals(isBuy ? nativeBalance : tokenBalance)}{' '}
+          {isBuy ? reserveSymbol : tokenInfo?.ticker}
         </span>
       </CustomSuspense>
     </>

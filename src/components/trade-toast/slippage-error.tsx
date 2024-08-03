@@ -1,29 +1,26 @@
 import { useTranslation } from 'react-i18next'
-import { CloseButton } from './close-button'
+import Link from 'next/link'
+
 import { Container } from './container'
+import { useTradeToastContext } from '@/contexts/trade-toast'
 
-interface Props {
-  txUrl: string
-  toastId: string | number
-}
-
-export const SlippageError = ({ txUrl, toastId }: Props) => {
+export const SlippageError = () => {
   const { t } = useTranslation()
+  const { txUrl } = useTradeToastContext()
+
   return (
     <Container>
-      <CloseButton toastId={toastId}></CloseButton>
       <div className="font-bold">{t('tx.fail')}</div>
       <div className="flex justify-between">
         <div>
           <div className="my-2">{t('slippage.low.tips')}</div>
-          <span
-            className="text-blue-600 cursor-pointer"
-            onClick={() => {
-              open(txUrl)
-            }}
+          <Link
+            href={txUrl}
+            target="_blank"
+            className="text-blue-600 cursor-pointer hover:underline"
           >
             {t('tx')}
-          </span>
+          </Link>
         </div>
         <img
           src="/images/error.png"

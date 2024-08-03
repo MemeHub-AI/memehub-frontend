@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { TokenInfoHeader } from './token-info-header'
 import { TradeTab } from './trade-tab'
-import { TokenInfo } from './token-info'
+import { TokenInfoCard } from './token-info-card'
 import { CommentTradeTab } from './comment-trade-tab'
 import { Chart } from '@/components/chart'
 import { TradeAirdrop } from './trade-airdrop'
@@ -94,7 +94,7 @@ export const TokenMobile = () => {
         <TokenInfoHeader />
         <TradeTab className="mt-3" />
         <div className="pt-2"></div>
-        <TokenInfo />
+        <TokenInfoCard />
         <CommentTradeTab />
       </TabsContent>
       <TabsContent value={TabName.chart}>

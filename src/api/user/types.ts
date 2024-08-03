@@ -1,3 +1,4 @@
+import type { Address } from 'viem'
 import type { PaginationReq } from '../types'
 
 export interface UserLoginReq {
@@ -130,7 +131,7 @@ export interface UserCoinsCreated {
   status: number
   // Custom prop
   isIdoToken?: boolean
-  poolAddr?: string
+  poolAddr?: Address
 }
 
 export interface UserReplies {
