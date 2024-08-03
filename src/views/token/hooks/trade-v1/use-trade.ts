@@ -5,17 +5,18 @@ import { BigNumber } from 'bignumber.js'
 
 import { CONTRACT_ERR } from '@/errors/contract'
 import { getDeadline, subSlippage } from '@/utils/contract'
-import { useTradeInfoV3 } from './use-trade-info'
+import { useTradeInfoV1 } from './use-trade-info'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
 import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { tokenAbiMap } from '@/contract/abi/token'
 
-export const useTradeV3 = () => {
+export const useTradeV1 = () => {
   const { address } = useAccount()
   // const { chainId } = useChainInfo()
   // const { tokenAddr } = useTradeSearchParams()
+  // TODO: testing
   const chainId = 97
   const tokenAddr = '0x3b3497Ec50062f2983D29493c45fACaED3f757DD'
   const { getReferrals } = useInvite()
@@ -64,17 +65,17 @@ export const useTradeV3 = () => {
     getTokenAmount,
     checkForOverflow,
     getLastOrderAmount,
-  } = useTradeInfoV3(tokenAddr)
+  } = useTradeInfoV1(tokenAddr, chainId) // TODO: testing
   const {
-    data: hashV3,
-    isPending: isSubmittingV3,
+    data: hashV1,
+    isPending: isSubmittingV1,
     writeContract,
-    reset: resetTradeV3,
+    reset: resetTradeV1,
   } = useWriteContract({
     mutation: {
       onError: ({ message }) => {
         CONTRACT_ERR.message(message)
-        resetTradeV3()
+        resetTradeV1()
       },
     },
   })
@@ -96,7 +97,7 @@ export const useTradeV3 = () => {
     return true
   }
 
-  const buyV3 = async (amount: string, slippage: string) => {
+  const buyV1 = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
 
     const reserveAmount = parseEther(amount)
@@ -127,7 +128,7 @@ export const useTradeV3 = () => {
     })
   }
 
-  const sellV3 = async (amount: string, slippage: string) => {
+  const sellV1 = async (amount: string, slippage: string) => {
     if (!checkForTrade(amount)) return
 
     const nativeAmount = formatEther(await getReserveAmount(amount))
@@ -154,12 +155,12 @@ export const useTradeV3 = () => {
   }
 
   return {
-    hashV3,
-    isSubmittingV3,
-    buyV3,
-    sellV3,
-    resetTradeV3,
-    getReserveAmountV3: getReserveAmount,
-    getTokenAmountV3: getTokenAmount,
+    hashV1,
+    isSubmittingV1,
+    buyV1,
+    sellV1,
+    resetTradeV1,
+    getReserveAmountV1: getReserveAmount,
+    getTokenAmountV1: getTokenAmount,
   }
 }

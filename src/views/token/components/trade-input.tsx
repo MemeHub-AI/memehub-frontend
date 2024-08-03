@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
-import { useTradeInfoV3 } from '../hooks/trade-v1/use-trade-info'
+import { useTradeInfoV1 } from '../hooks/trade-v1/use-trade-info'
 import { Img } from '@/components/img'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useUniswapV2Amount } from '../../../hooks/uniswapv2/use-uniswapv2-info'
@@ -32,7 +32,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   } = useTokenContext()
   const { isBuy, isSell, isTraded, nativeBalance, tokenBalance } =
     useTradeContext()
-  const { getTokenAmount, getReserveAmount: getNativeAmount } = useTradeInfoV3()
+  const { getTokenAmount, getReserveAmount: getNativeAmount } = useTradeInfoV1()
   const { chainInfo } = useChainInfo()
   const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(
     (isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.pool_address) as Address

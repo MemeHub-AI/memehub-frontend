@@ -10,7 +10,7 @@ import { usePools } from '../use-pools'
 import { addrMap } from '@/contract/address'
 import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 
-export const useTokenProgressV3 = (
+export const useTokenProgressV1 = (
   overrideToken?: Address,
   overrideChainId?: number
 ) => {

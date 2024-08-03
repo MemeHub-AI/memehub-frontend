@@ -11,7 +11,7 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
-import { useTokenProgressV3 } from '@/views/token/hooks/trade-v1/use-token-progress'
+import { useTokenProgressV1 } from '@/views/token/hooks/trade-v1/use-token-progress'
 import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
 import { useChainsStore } from '@/stores/use-chains-store'
@@ -45,7 +45,7 @@ export const TokenCard = (props: Props) => {
 
   const [isExpired, setIsExpired] = useState(false)
 
-  const { progress, isGrauated } = useTokenProgressV3(
+  const { progress, isGrauated } = useTokenProgressV1(
     card.address as Address,
     Number(card.chain.id)
   )

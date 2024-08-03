@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Address, formatEther } from 'viem'
 
-import { useTradeV3 } from './trade-v1/use-trade'
+import { useTradeV1 } from './trade-v1/use-trade'
 import { useTokenContext } from '@/contexts/token'
-import { Options, useTradeToast } from '@/hooks/use-trade-toast'
+import { useTradeToast } from '@/hooks/use-trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
 import { TradeType } from '@/constants/trade'
@@ -14,11 +14,10 @@ import { useDexTrade } from './use-dex-trade'
 import { idoTrumpCard } from '@/config/ido'
 
 // Used for trade success tips.
-const lastTrade: Options = {
+const lastTrade = {
+  type: '',
   tokenAmount: '',
   nativeAmount: '',
-  type: '',
-  txUrl: '',
 }
 
 export const useTrade = (onSuccess?: () => void) => {
@@ -36,19 +35,19 @@ export const useTrade = (onSuccess?: () => void) => {
     Number(chain?.id)
   )
   const {
-    hashV3,
-    isSubmittingV3,
-    buyV3,
-    sellV3,
-    resetTradeV3,
-    getReserveAmountV3,
-    getTokenAmountV3,
-  } = useTradeV3()
+    hashV1: hashV1,
+    isSubmittingV1: isSubmittingV1,
+    buyV1,
+    sellV1,
+    resetTradeV1,
+    getReserveAmountV1,
+    getTokenAmountV1,
+  } = useTradeV1()
   // const { hashV2 } = useTradeV2() // More version example
-  const hash = dexHash || hashV3
-  const isTrading = isDexTrading || isSubmittingV3
-  const getReserveAmount = getReserveAmountV3
-  const getTokenAmount = getTokenAmountV3
+  const hash = dexHash || hashV1
+  const isTrading = isDexTrading || isSubmittingV1
+  const getReserveAmount = getReserveAmountV1
+  const getTokenAmount = getTokenAmountV1
 
   // This `useWaitForTx` only track status.
   const { isFetched: isTraded } = useWaitForTx({
@@ -97,7 +96,7 @@ export const useTrade = (onSuccess?: () => void) => {
     }
 
     await updateLastTrade(TradeType.Buy, amount)
-    return buyV3(amount, slippage)
+    return buyV1(amount, slippage)
   }
 
   const sell = async (amount: string, slippage: string) => {
@@ -108,11 +107,11 @@ export const useTrade = (onSuccess?: () => void) => {
     }
 
     await updateLastTrade(TradeType.Sell, amount)
-    return sellV3(amount, slippage)
+    return sellV1(amount, slippage)
   }
 
   const resetTrade = () => {
-    resetTradeV3()
+    resetTradeV1()
     // More versions...
   }
 
