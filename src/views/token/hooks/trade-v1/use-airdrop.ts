@@ -13,7 +13,7 @@ import {
 import { useTokenContext } from '@/contexts/token'
 import { Address, zeroAddress } from 'viem'
 
-export const useAirdrop = (id: number) => {
+export const useAirdrop = (id: number, onFinally?: () => void) => {
   const { t } = useTranslation()
   const { playFire } = useAudioPlayer()
   const { address, checkForChain, checkForConnect } = useCheckAccount()
@@ -70,6 +70,7 @@ export const useAirdrop = (id: number) => {
     onFillay: () => {
       reset()
       refetch()
+      onFinally?.()
       toast.dismiss()
     },
   })
@@ -108,34 +109,6 @@ export const useAirdrop = (id: number) => {
       args: [BigInt(id), BigInt(exchangeId), nftId, tokenId],
     })
   }
-
-  // const { data: isBurn, refetch: refetchIsBurn } = useReadContract({
-  //   abi: distributorAbiMap['0.1.0'], // TODO: match version
-  //   address: distributor,
-  //   functionName: 'isBurn',
-  //   args: [BigInt(id)],
-  //   chainId,
-  //   query: {
-  //     refetchInterval: 5_000,
-  //   },
-  // })
-
-  // const burn = async () => {
-  //   if (!checkForConnect()) return
-
-  //   const isValidChain = await checkForChain(chainId)
-  //   if (!isValidChain || !distributor) return
-
-  //   setBurning(true)
-  //   // TODO: should simulate first.
-  //   writeContract({
-  //     abi: distributorAbiMap['0.1.0'],
-  //     address: distributor,
-  //     functionName: 'burnToken',
-  //     chainId,
-  //     args: [BigInt(id)],
-  //   })
-  // }
 
   return {
     isClaiming: isPending || isLoading,

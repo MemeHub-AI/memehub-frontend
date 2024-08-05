@@ -433,8 +433,8 @@
   "chart.dex": "DEX 图表",
   "token.graduated": "已毕业",
   "burn": "燃烧代币",
-  "burn.token,desc": "当前有$1到期未领取，  你可以选择将他们销毁",
-  "burn.button": "🔥燃烧$1",
+  "airdrop.burn-desc": "当前有$1到期未领取，  你可以选择将他们销毁",
+  "burn.button": "燃烧",
   "pool": "池子",
   "holder.burning": "黑洞",
   "reward.title": "Memehub 奖励",
@@ -567,5 +567,8 @@
   "sign.login": "请签名以登录",
   "creating": "创建中...",
   "airdrop.error.config-not-found": "找不到空投参数，请重试",
-  "contract.err.contract-addr-not-found": "找不到合约地址"
+  "contract.err.contract-addr-not-found": "找不到合约地址",
+  "airdrop.not-kol-nft": "你没有 {} NFT",
+  "airdrop.not-nft": "没有 NFT",
+  "airdrop.burned": "已销毁"
 }

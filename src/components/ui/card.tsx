@@ -8,7 +8,7 @@ import {
 } from '@/styles/variants'
 
 const cardVariants = cva(
-  cn('rounded-lg bg-card text-card-foreground transition-all', 'duration-300'),
+  'rounded-lg bg-card text-card-foreground transition-all duration-300',
   {
     variants: {
       padding: {

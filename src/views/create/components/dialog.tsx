@@ -57,7 +57,7 @@ export const CreateTokenStatusDialog = () => {
     // User rejected.
     if (isUserReject(submitError)) {
       resetDeploy()
-      toast.error(t('user-rejected'))
+      toast.warning(t('user-rejected'))
       return
     }
     return (

@@ -1,6 +1,7 @@
 import { useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
+import { useInterval } from 'react-use'
 
 import { BI_ZERO } from '@/constants/number'
 import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
@@ -9,7 +10,6 @@ import {
   DistributorAbiVersion,
 } from '@/contract/abi/distributor'
 import { useTokenDetails } from '../use-token-details'
-import { useInterval } from 'react-use'
 
 export const useAirdropInfo = (id: number, token: string, chainId: number) => {
   const {
@@ -53,7 +53,7 @@ export const useAirdropInfo = (id: number, token: string, chainId: number) => {
     communityCount = 0,
     kolClaimedCount = 0,
     communityClaimedCount = 0,
-    startTime,
+    startTime = BI_ZERO,
     kolFlag, // AirdropType
     communityFlag, // AirdropType
     kolAmount = BI_ZERO,
@@ -62,6 +62,8 @@ export const useAirdropInfo = (id: number, token: string, chainId: number) => {
   const perKolAmount = formatEther(kolAmount)
   const perCommunityAmount = formatEther(communityAmount)
   const createAt = Number(startTime)
+  const hasKolAirdrop = kolCount !== 0
+  const hasCommunityAirdrop = communityCount !== 0
 
   const { data: ratio = BI_ZERO } = useReadContract({
     abi: bondingCurveAbiMap[bcVersion as BcAbiVersion],
@@ -80,6 +82,12 @@ export const useAirdropInfo = (id: number, token: string, chainId: number) => {
   const communityTotalAmount = BigNumber(totalAirdrop)
     .minus(BigNumber(communityCount).multipliedBy(perCommunityAmount))
     .toFixed()
+  const kolClaimedAmount = BigNumber(kolClaimedCount)
+    .multipliedBy(perKolAmount)
+    .toFixed()
+  const communityClaimedAmount = BigNumber(communityClaimedCount)
+    .multipliedBy(perCommunityAmount)
+    .toFixed()
 
   const refetchAirdrop = () => {
     refetchInfo()
@@ -89,6 +97,8 @@ export const useAirdropInfo = (id: number, token: string, chainId: number) => {
   useInterval(refetchAirdrop, 5_000)
 
   return {
+    hasKolAirdrop,
+    hasCommunityAirdrop,
     tokenAddr,
     kolCount,
     communityCount,
@@ -104,6 +114,8 @@ export const useAirdropInfo = (id: number, token: string, chainId: number) => {
     durationSeconds,
     kolTotalAmount,
     communityTotalAmount,
+    kolClaimedAmount,
+    communityClaimedAmount,
     isLoadingDetails,
     isLoadingInfo,
     refetchAirdrop,

@@ -48,9 +48,9 @@ export const useNftCheck = (chainId: number) => {
   })
 
   return {
-    kolId,
-    community,
     isKol,
     hasCommunity,
+    kolId,
+    community,
   }
 }

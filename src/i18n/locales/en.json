@@ -441,8 +441,8 @@
   "chart.dex": "DEX chart",
   "token.graduated": "Graduated",
   "burn": "Burn",
-  "burn.token,desc": "There are $1 expired and unclaimed. You can choose to destroy them.",
-  "burn.button": "🔥Burn $1",
+  "airdrop.burn-desc": "There are $1 expired and unclaimed. You can choose to destroy them.",
+  "burn.button": "Burn ",
   "pool": "Pool",
   "holder.burning": "Burning",
   "reward.title": "Memehub Reward",
@@ -576,5 +576,8 @@
   "sign.login": "Please sign message to login",
   "creating": "Creating...",
   "airdrop.error.config-not-found": "Cannot find airdrop params, please try again",
-  "contract.err.contract-addr-not-found": "Cannot find contract address"
+  "contract.err.contract-addr-not-found": "Cannot find contract address",
+  "airdrop.not-kol-nft": "You don't have {} NFT",
+  "airdrop.not-nft": "No NFT",
+  "airdrop.burned": "Already burned"
 }
