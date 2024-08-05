@@ -14,7 +14,7 @@ import { useAirdrop } from '../hooks/trade-v1/use-airdrop'
 import { fmt } from '@/utils/fmt'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
-import { airdropId } from './trade-airdrop'
+import { airdropId } from '..'
 
 interface Props extends ComponentProps<typeof Card> {
   type: 'kol' | 'community'

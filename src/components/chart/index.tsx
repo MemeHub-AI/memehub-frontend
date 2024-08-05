@@ -50,8 +50,8 @@ export const Chart = memo(() => {
     return (
       <div
         className={cn(
-          'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
-          'rounded-md overflow-hidden max-sm:mt-3 flex justify-center items-center'
+          'min-h-[415px] max-sm:h-[20vh] border-2 border-black rounded-md',
+          'overflow-hidden max-sm:mt-3 flex justify-center items-center text-center'
         )}
       >
         <p className="font-bold">{t('token.not-found-desc')}</p>

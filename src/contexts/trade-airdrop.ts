@@ -8,6 +8,7 @@ interface Value
   extends ReturnType<typeof useNftCheck>,
     ReturnType<typeof useAirdropInfo> {
   isOnlyOne: boolean
+  isAirdropExpired: boolean
 }
 
 const Context = createContext<Value | null>(null)

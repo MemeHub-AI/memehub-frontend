@@ -30,7 +30,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
       ...airdropConfig,
       functionName: 'isClaimedKOL',
       args: [BigInt(id), address!],
-      query: { enabled: !!address && !!airdropAddr },
+      query: { enabled: !!address && !!airdropAddr, refetchInterval: 5_000 },
     })
 
   const { data: isCommunityClaimed = false, refetch: refetchCommunityCalimed } =
@@ -38,7 +38,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
       ...airdropConfig,
       functionName: 'isClaimedCommunity',
       args: [BigInt(id), address!],
-      query: { enabled: !!address && !!airdropAddr },
+      query: { enabled: !!address && !!airdropAddr, refetchInterval: 5_000 },
     })
 
   const refetch = () => {

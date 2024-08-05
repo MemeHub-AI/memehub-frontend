@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useTokenContext } from '@/contexts/token'
 import { useBurnAirdrop } from '../hooks/trade-v1/use-burn-airdrop'
-import { airdropId } from './trade-airdrop'
+import { airdropId } from '..'
 
 export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
   const { t } = useTranslation()
@@ -38,7 +38,8 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
       shadow="none"
       border="none"
       className={cn(
-        'mt-2.5 w-1/2 gap-4 rounded-lg pt-3 pb-2 relative max-sm:mt-0 px-3',
+        'mt-2.5 w-1/2 gap-4 rounded-lg pt-3 pb-2 relative px-3',
+        'max-sm:mt-0 max-sm:w-full',
         isOnlyOne && 'mt-2 pt-2',
         className
       )}
@@ -53,7 +54,7 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
         <img src="/images/burn.png" alt="burn" className="w-28 h-28 -mt-6" />
       </div>
       <Button
-        className={cn('w-full mt-3', 'bg-lime-green-deep')}
+        className="w-full mt-3 bg-lime-green-deep"
         disabled={isBurned || isBurning}
         onClick={burn}
       >

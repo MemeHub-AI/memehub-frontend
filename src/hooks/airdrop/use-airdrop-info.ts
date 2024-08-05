@@ -1,7 +1,7 @@
 import { useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
-import { useInterval } from 'react-use'
+import { useInterval } from 'ahooks'
 
 import { BI_ZERO } from '@/constants/number'
 import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
