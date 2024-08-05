@@ -78,8 +78,12 @@ export const getDeadline = async (seconds = 300) => {
 export const getDeployLogsAddr = (logs: Log<bigint, number, false>[]) => {
   const log = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_ADDR)
   const hashAddr = log?.topics?.[1]
+  // Attention, here breaks the address starting with 0.
+  const normalAddr = hashAddr?.replace(/0x0+/, '') ?? ''
 
-  return hashAddr?.replace(/0x0+/, '0x') ?? ''
+  return normalAddr.length < 40
+    ? `$0x${normalAddr.padStart(40, '0')}`
+    : `0x${normalAddr}`
 }
 
 /**
