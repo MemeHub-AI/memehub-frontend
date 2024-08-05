@@ -19,7 +19,7 @@ import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
 import { useNftCheck } from '@/hooks/use-nft-check'
 import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
 
-export const airdropId = 19 // TODO: temp, should be backend id.
+export const airdropId = 20 // TODO: temp, should be backend id.
 
 export const TokenPage = () => {
   const { t } = useTranslation()

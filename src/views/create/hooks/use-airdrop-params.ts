@@ -53,7 +53,7 @@ export const useAirdropParams = () => {
     return params
   }
 
-  const getParams = async (
+  const getEvmParams = async (
     chain: string,
     marketing: Marketing[] | undefined
   ) => {
@@ -88,6 +88,6 @@ export const useAirdropParams = () => {
   return {
     distributorParams,
     isPending,
-    getParams,
+    getEvmParams,
   }
 }

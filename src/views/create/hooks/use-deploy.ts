@@ -1,27 +1,17 @@
-import { useMemo } from 'react'
-import {
-  useAccount,
-  useBalance,
-  useReadContract,
-  useWriteContract,
-} from 'wagmi'
 import { formatEther } from 'viem'
-import { BigNumber } from 'bignumber.js'
 
 import { TokenNewReq } from '@/api/token/types'
-import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { addrMap } from '@/contract/address'
-import { useAirdropParams } from './use-airdrop-params'
-import { BI_ZERO } from '@/constants/number'
-import { getDeployLogsAddr } from '@/utils/contract'
-import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { useEvmDeploy } from './use-evm-deployt'
 
-type FormParams = Omit<TokenNewReq, 'hash' | 'factory' | 'configure'>
+export type DeployFormParams = Omit<
+  TokenNewReq,
+  'hash' | 'factory' | 'configure'
+>
 
 // Used to retry create token.
-let cacheParams: FormParams
+let cacheParams: DeployFormParams
 
 export const useDeploy = () => {
   const {
@@ -31,117 +21,66 @@ export const useDeploy = () => {
     createToken,
     updateToken,
   } = useCreateToken()
-  const { address, chainId = 0 } = useAccount()
-  const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
-  const { bondingCurve } = addrMap[chainId] ?? {}
-
   const {
-    data: hash,
-    isPending: isSubmitting,
-    error: submitError,
-    writeContract,
-    reset,
-  } = useWriteContract({
-    mutation: {
-      onError: ({ message }) => CONTRACT_ERR.message(message, false),
-    },
-  })
-  const {
-    data,
-    error: confirmError,
-    isLoading: isConfirming,
-    isSuccess,
-    isError,
-  } = useWaitForTx({ hash })
-  const deployedAddr = useMemo(
-    () => getDeployLogsAddr(data?.logs ?? []),
-    [data]
-  )
+    evmHash,
+    evmCreationFee,
+    evmDeployedAddr,
+    evmSubmitError,
+    evmConfirmError,
+    isEvmSubmitting,
+    isEvmConfirming,
+    isEvmSuccess,
+    isEvmError,
+    evmDeploy,
+    resetEvmDeploy,
+  } = useEvmDeploy((params) => createToken(params))
 
-  const { data: creationFee = BI_ZERO } = useReadContract({
-    abi: bondingCurveAbiMap['0.1.0'], // TODO: match version
-    address: bondingCurve!,
-    chainId,
-    functionName: 'creationFee_',
-    query: { enabled: !!bondingCurve },
-  })
-  const { getParams } = useAirdropParams()
+  const deployFee = formatEther(evmCreationFee)
+  const deployHash = evmHash
+  const deployedAddr = evmDeployedAddr
+  const isSubmitting = isEvmSubmitting
+  const isConfirming = isEvmConfirming
+  const isDeploying = isSubmitting || isConfirming
+  const isDeploySuccess = isEvmSuccess
+  const isDeployError = isEvmError
+  const submitError = evmSubmitError
+  const confirmError = evmConfirmError
+  const resetDeploy = resetEvmDeploy
 
-  const checkForDeploy = (
-    config: string | undefined,
-    airdropParams: undefined | any
-  ) => {
-    if (BigNumber(balance.toString()).lt(creationFee.toString())) {
-      CONTRACT_ERR.balanceInsufficient()
-      return false
-    }
-    if (!bondingCurve || BigNumber(chainId).isZero()) {
-      CONTRACT_ERR.configNotFound()
-      return false
-    }
-    if (!airdropParams || !config) {
-      CONTRACT_ERR.marketParamsNotFound()
-      return false
-    }
-
-    return true
-  }
-
-  const deploy = async ({ marketing, ...params }: FormParams) => {
+  const deploy = async ({ marketing, ...params }: DeployFormParams) => {
     cacheParams = params // Exclude `marekting`
-    const { chain, name, ticker } = params
 
-    const { configure, distributorParams } = await getParams(chain, marketing)
-    if (!checkForDeploy(configure, distributorParams)) return
-    if (!bondingCurve) return
-
-    writeContract(
-      {
-        abi: bondingCurveAbiMap['0.1.0'],
-        address: bondingCurve!,
-        functionName: 'createToken',
-        chainId,
-        args: [[name, ticker], [], distributorParams!],
-        value: creationFee,
-      },
-      {
-        onSuccess: (hash) =>
-          createToken({
-            ...params,
-            factory: bondingCurve!,
-            configure: configure!,
-            hash,
-          }),
-      }
-    )
+    return evmDeploy({ marketing, ...params })
   }
 
   const retryCreate = () => {
-    if (!cacheParams || !hash) {
+    if (!cacheParams || !deployHash) {
       CONTRACT_ERR.retryCreateFailed()
       return
     }
 
-    createToken({ ...(cacheParams as Omit<TokenNewReq, 'hash'>), hash })
+    createToken({
+      ...(cacheParams as Omit<TokenNewReq, 'hash'>),
+      hash: deployHash,
+    })
   }
 
   return {
-    data,
-    deployFee: formatEther(creationFee),
-    deployHash: hash,
+    deployFee,
+    deployHash,
     deployedAddr,
-    isDeploying: isSubmitting || isConfirming,
     isSubmitting,
     isConfirming,
+    isDeploying,
     isCreatingToken,
-    isDeploySuccess: isSuccess,
-    isDeployError: isError,
-    submitError: submitError,
+    isDeploySuccess,
+    isDeployError,
+    submitError,
     confirmError,
     createTokenData,
     createTokenError,
     deploy,
-    resetDeploy: reset,
+    resetDeploy,
     retryCreate,
   }
 }
