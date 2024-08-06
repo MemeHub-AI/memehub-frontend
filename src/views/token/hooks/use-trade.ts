@@ -15,7 +15,6 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useDexTrade } from './use-dex-trade'
 import { idoTrumpCard } from '@/config/ido'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { useChainsStore } from '@/stores/use-chains-store'
 
 // Used for trade success tips.
@@ -31,24 +30,23 @@ export const useTrade = (onSuccess?: () => void) => {
     isIdoToken,
     isGraduated,
     tokenAddr,
-    bcVersion,
     tokenMetadata,
     chainId,
   } = useTokenContext()
-  const bcAbi = bondingCurveAbiMap[bcVersion as BcAbiVersion]
-  const { address, pool_address, chain, ticker } = tokenInfo ?? {}
+  const { address, pool_address, ticker } = tokenInfo ?? {}
   const { showToast } = useTradeToast()
   const { userInfo } = useUserInfo()
   const { referralCode } = useTradeSearchParams()
-  const [inviteErrorOpen, setInviteErrorOpen] = useState(false)
+  const [inviteOpen, setInviteOpen] = useState(false)
   const { getCanBind } = useInvite()
   const { evmChainsMap } = useChainsStore()
   const { chain: walletChain } = useAccount()
+  const { chain } = tokenInfo ?? {}
 
   const { dexHash, isDexTrading, dexBuy, dexSell } = useDexTrade(
     address as Address,
     (isIdoToken ? idoTrumpCard.poolAddr : pool_address) as Address,
-    Number(chain?.id)
+    chainId
   )
   const {
     hashV1: hashV1,
@@ -59,7 +57,6 @@ export const useTrade = (onSuccess?: () => void) => {
     getReserveAmountV1,
     getTokenAmountV1,
   } = useTradeV1()
-  // const { hashV2 } = useTradeV2() // More version example
 
   const hash = dexHash || hashV1
   const isTrading = isDexTrading || isSubmittingV1
@@ -73,10 +70,10 @@ export const useTrade = (onSuccess?: () => void) => {
     onFillay: () => resetTrade(),
   })
 
+  // TODO: add Sol, TON chains
   const updateLastTrade = async (type: TradeType, amount: string) => {
     const tokenSymbol = ticker || tokenMetadata?.symbol
-    const reserveSymbol =
-      chain?.native.symbol || evmChainsMap[chainId]?.native.symbol
+    const reserveSymbol = evmChainsMap[chainId]?.native.symbol
     lastTrade.type = type
 
     const getNonFixedLabel = (value: bigint, symbol?: string) =>
@@ -105,12 +102,12 @@ export const useTrade = (onSuccess?: () => void) => {
   const checkForTrade = async (amount: string) => {
     // Cannot use self code to trade.
     if (userInfo?.code === referralCode) {
-      setInviteErrorOpen(true)
+      setInviteOpen(true)
       return false
     }
     // Backend check.
     if (!(await getCanBind(referralCode))) {
-      setInviteErrorOpen(true)
+      setInviteOpen(true)
       return false
     }
     if (isEmpty(amount)) {
@@ -121,7 +118,7 @@ export const useTrade = (onSuccess?: () => void) => {
       CONTRACT_ERR.tokenInvalid()
       return false
     }
-    if (!tokenMetadata || !bcAbi) {
+    if (!tokenMetadata) {
       CONTRACT_ERR.contractAddrNotFound()
       return false
     }
@@ -178,7 +175,7 @@ export const useTrade = (onSuccess?: () => void) => {
     isTraded,
     buy,
     sell,
-    inviteErrorOpen,
-    setInviteErrorOpen,
+    inviteOpen,
+    setInviteOpen,
   }
 }

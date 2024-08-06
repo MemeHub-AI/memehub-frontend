@@ -7,7 +7,7 @@ import { TradeTabsProvider } from '@/contexts/trade-tabs'
 import { TradeItems } from './trade-items'
 import { TradeInput } from './trade-input'
 import { useTokenContext } from '@/contexts/token'
-import { useSlippage } from '../../../../hooks/use-slippage'
+import { useSlippage } from '@/hooks/use-slippage'
 import { useTrade } from '../../hooks/use-trade'
 import { useTradeBalance } from '../../hooks/use-trade-balance'
 import { TradeType } from '@/constants/trade'
@@ -27,31 +27,15 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { slippage, setSlippage } = useSlippage()
   const { isNotFound, isIdoToken, tokenMetadata } = useTokenContext()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
-  const {
-    isTrading,
-    isTraded,
-    inviteErrorOpen,
-    setInviteErrorOpen,
-    buy,
-    sell,
-  } = useTrade(() => {
-    setValue('')
-    refetchBalance()
-  })
+  const { isTrading, isTraded, inviteOpen, setInviteOpen, buy, sell } =
+    useTrade(() => {
+      setValue('')
+      refetchBalance()
+    })
   const disabled =
     isTrading ||
     isClaimingAirdrop ||
     (isNotFound && !isIdoToken && !tokenMetadata)
-
-  const onTrade = () => {
-    if (isBuy) {
-      buy(value, slippage)
-    } else {
-      sell(value, slippage)
-    }
-
-    playSuccess()
-  }
 
   return (
     <TradeTabsProvider
@@ -64,10 +48,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
         disabled,
       }}
     >
-      <InviteTipsDialog
-        open={inviteErrorOpen}
-        onOpenChange={setInviteErrorOpen}
-      />
+      <InviteTipsDialog open={inviteOpen} onOpenChange={setInviteOpen} />
       <Card
         hover="none"
         shadow="none"
@@ -94,7 +75,10 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <TradeButton
             disabled={disabled}
             isTrading={isTrading}
-            onTrade={onTrade}
+            onTrade={() => {
+              isBuy ? buy(value, slippage) : sell(value, slippage)
+              playSuccess()
+            }}
           />
         </TradeTabs>
       </Card>
