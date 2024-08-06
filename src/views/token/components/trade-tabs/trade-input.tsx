@@ -16,7 +16,7 @@ import { Img } from '@/components/img'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useUniswapV2Amount } from '../../../../hooks/uniswapv2/use-uniswapv2-info'
 import { idoTrumpCard } from '@/config/ido'
-import { useTradeAmount } from '../../hooks/v1/use-trade-amount'
+import { useTradeAmount } from '../../hooks/evm/use-trade-amount'
 import { utilLang } from '@/utils/lang'
 
 interface Props extends Omit<ComponentProps<'input'>, 'onChange'> {

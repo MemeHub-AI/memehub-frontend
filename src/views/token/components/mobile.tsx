@@ -15,9 +15,9 @@ import { TradeAirdrop } from './trade-airdrop'
 import { HoldersRank } from './holders-rank'
 import { cn } from '@/lib/utils'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
-import { useAirdrop } from '../hooks/v1/use-airdrop'
+import { useAirdrop } from '../hooks/evm/use-airdrop'
 import { airdropId } from '..'
-import { useBurnAirdrop } from '../hooks/v1/use-burn-airdrop'
+import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 
 const enum TabName {
   Trade = '0',

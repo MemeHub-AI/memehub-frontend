@@ -8,7 +8,7 @@ import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenDetails } from '@/hooks/use-token-details'
 import { TokenAbiVersion } from '@/contract/abi/token'
 
-export const useTokenProgressV1 = (
+export const useTokenProgress = (
   tokenAddr: Address | undefined,
   chainId: number,
   version: TokenAbiVersion

@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress'
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
-import { useTokenProgressV1 } from '../hooks/v1/use-token-progress'
+import { useTokenProgress } from '../hooks/evm/use-token-progress'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
 import { idoTrumpCard } from '@/config/ido'
@@ -21,7 +21,7 @@ export const TokenProgress = ({
   const { t } = useTranslation()
   const { tokenInfo, isIdoToken, chainId, tokenAddr, tokenVersion } =
     useTokenContext()
-  const { total, progress, isGrauated } = useTokenProgressV1(
+  const { total, progress, isGrauated } = useTokenProgress(
     tokenAddr,
     chainId,
     tokenVersion as TokenAbiVersion

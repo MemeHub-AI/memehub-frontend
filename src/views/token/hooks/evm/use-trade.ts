@@ -8,8 +8,9 @@ import { useInvite } from '../use-invite'
 import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeAmount } from './use-trade-amount'
+import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 
-export const useTradeV1 = () => {
+export const useEvmTrade = (onSuccess?: () => void) => {
   const { address } = useAccount()
   const { getReferrals } = useInvite()
   const { tokenAddr, chainId, bcVersion, bcAddr } = useTokenContext()
@@ -22,20 +23,27 @@ export const useTradeV1 = () => {
   }
 
   const {
-    data: hashV1,
-    isPending: isSubmittingV1,
+    data: hash,
+    isPending: isSubmitting,
     writeContract,
-    reset: resetTradeV1,
+    reset: resetTrade,
   } = useWriteContract({
     mutation: {
       onError: ({ message }) => {
         CONTRACT_ERR.message(message)
-        resetTradeV1()
+        resetTrade()
       },
     },
   })
 
-  const buyV1 = async (amount: string, slippage: string) => {
+  // This `useWaitForTx` only track status.
+  const { isFetched: isTraded } = useWaitForTx({
+    hash,
+    onSuccess,
+    onFillay: () => resetTrade(),
+  })
+
+  const buy = async (amount: string, slippage: string) => {
     const reserveAmount = parseEther(amount)
     const tokenAmount = formatEther(await getTokenAmount(amount))
     if (BigNumber(tokenAmount).lte(0)) {
@@ -58,7 +66,7 @@ export const useTradeV1 = () => {
     })
   }
 
-  const sellV1 = async (amount: string, slippage: string) => {
+  const sell = async (amount: string, slippage: string) => {
     const nativeAmount = formatEther(await getReserveAmount(amount))
     if (BigNumber(nativeAmount).lte(0)) {
       CONTRACT_ERR.balanceInvalid()
@@ -80,12 +88,13 @@ export const useTradeV1 = () => {
   }
 
   return {
-    hashV1,
-    isSubmittingV1,
-    buyV1,
-    sellV1,
-    resetTradeV1,
-    getReserveAmountV1: getReserveAmount,
-    getTokenAmountV1: getTokenAmount,
+    hash,
+    isSubmitting,
+    isTraded,
+    buy,
+    sell,
+    resetTrade,
+    getReserveAmount,
+    getTokenAmount,
   }
 }

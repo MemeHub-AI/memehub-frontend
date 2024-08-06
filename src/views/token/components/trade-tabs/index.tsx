@@ -27,11 +27,17 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { slippage, setSlippage } = useSlippage()
   const { isNotFound, isIdoToken, tokenMetadata } = useTokenContext()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
-  const { isTrading, isTraded, inviteOpen, setInviteOpen, buy, sell } =
-    useTrade(() => {
-      setValue('')
-      refetchBalance()
-    })
+  const {
+    isTrading,
+    isTraded,
+    inviteOpen,
+    setInviteOpen,
+    handleBuy,
+    handleSell,
+  } = useTrade(() => {
+    setValue('')
+    refetchBalance()
+  })
   const disabled =
     isTrading ||
     isClaimingAirdrop ||
@@ -76,7 +82,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             disabled={disabled}
             isTrading={isTrading}
             onTrade={() => {
-              isBuy ? buy(value, slippage) : sell(value, slippage)
+              isBuy ? handleBuy(value, slippage) : handleSell(value, slippage)
               playSuccess()
             }}
           />
