@@ -570,5 +570,6 @@
   "contract.err.contract-addr-not-found": "找不到合约地址",
   "airdrop.not-kol-nft": "你没有 {} NFT",
   "airdrop.not-nft": "没有 NFT",
-  "airdrop.burned": "已销毁"
+  "airdrop.burned": "已销毁",
+  "decide.chains": "请选择您的区块链"
 }

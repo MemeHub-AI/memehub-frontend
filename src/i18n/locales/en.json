@@ -579,5 +579,6 @@
   "contract.err.contract-addr-not-found": "Cannot find contract address",
   "airdrop.not-kol-nft": "You don't have {} NFT",
   "airdrop.not-nft": "No NFT",
-  "airdrop.burned": "Already burned"
+  "airdrop.burned": "Already burned",
+  "decide.chains": "Please select your blockchain"
 }
