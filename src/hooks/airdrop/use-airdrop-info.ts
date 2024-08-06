@@ -10,6 +10,7 @@ import {
   DistributorAbiVersion,
 } from '@/contract/abi/distributor'
 import { useTokenDetails } from '../use-token-details'
+import { TokenAbiVersion } from '@/contract/abi/token'
 
 export const useAirdropInfo = (id: number, token: string, chainId: number) => {
   const {
@@ -23,7 +24,7 @@ export const useAirdropInfo = (id: number, token: string, chainId: number) => {
   } = useTokenDetails(
     token,
     chainId,
-    '0.2.0' // TODO: dynamic token version
+    TokenAbiVersion.V0_2_0 // TODO: dynamic token version
   )
 
   const { data: duration = BI_ZERO } = useReadContract({

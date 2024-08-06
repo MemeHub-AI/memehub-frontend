@@ -7,7 +7,7 @@ import { BI_ZERO } from '@/constants/number'
 export const useTokenDetails = (
   tokenAddr: string | undefined,
   chainId: number,
-  version: `${TokenAbiVersion}`
+  version: TokenAbiVersion
 ) => {
   const tokenConfig = {
     abi: tokenAbiMap[version],
