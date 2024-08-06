@@ -593,5 +593,16 @@
   "airdrop.claiming": "领取中...",
   "ido.airdrop.not-enough": "你没有足够的 BNB",
   "balance-insufficient": "持有{}免费领取",
-  "ido.airdrop.not-start": "未开始"
+  "ido.airdrop.not-start": "未开始",
+  "game.introduce": "玩法介绍",
+  "post.idea": "发布Memecoin创意(花费~10 USDT)",
+  "accumulate.like": "48h内，如果成功集齐50个点赞，将进入内盘交易（每个点赞花费~5 USDT）",
+  "poster.reward": "发布者获得总量1%代币奖励，点赞者获得总量0.1%代币奖励",
+  "memecoin.detailed": "Memecoin详情",
+  "ticker": "代号",
+  "logo": "图标",
+  "show.options": "显示更多选项",
+  "hide.options": "隐藏更多选项",
+  "twitter.link": "推特链接",
+  "telegram.link": "电报链接"
 }

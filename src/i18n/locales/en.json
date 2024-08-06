@@ -602,5 +602,16 @@
   "ido.airdrop.no-id": "You do not have {} NFT yet",
   "ido.airdrop.not-enough": "You do not have enough BNB",
   "balance-insufficient": "Hold {} for free claim",
-  "ido.airdrop.not-start": "Not started"
+  "ido.airdrop.not-start": "Not started",
+  "game.introduce": "Gameplay Introduction",
+  "post.idea": "Publish a Memecoin idea (cost ~10 USDT)",
+  "accumulate.like": "Within 48 hours, if successfully gathering 50 likes, it will enter internal trading (each like costs ~5 USDT)",
+  "poster.reward": "The publisher receives a 1% token reward of the total amount, and each liker receives a 0.1% token reward of the total amount",
+  "memecoin.detailed": "Memecoin Details",
+  "ticker": "Ticker",
+  "logo": "Logo",
+  "show.options": "Show more options",
+  "hide.options": "Hide more options",
+  "twitter.link": "Twitter link",
+  "telegram.link": "Telegram link"
 }

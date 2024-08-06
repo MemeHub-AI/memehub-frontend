@@ -15,6 +15,8 @@ export enum Routes {
 
   CreatePost = '/memex/create',
 
+  MemexDetail = 'memex/create/detail',
+
   // KOL = '/kol',
 
   // Community = '/communities',

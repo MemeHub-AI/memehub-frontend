@@ -20,6 +20,7 @@ interface PostsPro {
 export const MyPosts = ({ postObj }: PostsPro) => {
   const posts = postObj.data
   const { t } = useTranslation()
+  const [Detailed, setDetailed] = useState(false)
   const imgs = [
     '/favicon.ico',
     '/images/ai.jpg',
