@@ -23,7 +23,7 @@ export const useTradeInfoV1 = (
   const { bondingCurve } = addrMap[overrideChainId ?? chainId] ?? {}
 
   const { data = BI_ZERO } = useReadContract({
-    abi: tokenAbiMap['0.2.0'],
+    abi: tokenAbiMap['0.2.0'], // TODO: match version
     address: tokenAddr,
     chainId,
     functionName: 'totalSupply',
@@ -49,7 +49,7 @@ export const useTradeInfoV1 = (
     if (!bondingCurve) return [] as const
 
     return readContract(wagmiConfig, {
-      abi: bondingCurveAbiMap['0.1.0'],
+      abi: bondingCurveAbiMap['0.1.0'], // TODO: match version
       address: bondingCurve,
       functionName: 'pools_',
       chainId,
