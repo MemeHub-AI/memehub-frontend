@@ -31,7 +31,7 @@ export const useCreateTokenForm = (
   const { t } = useTranslation()
   const { formInfo } = useAimemeInfoStore()
   const { checkForConnect, checkForChain } = useCheckAccount()
-  const { chainsMap, loadingChains } = useChainsStore()
+  const { evmChainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
   const { deploy, isDeploying } = useDeployResult
 
@@ -97,7 +97,7 @@ export const useCreateTokenForm = (
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!(await form.trigger())) return
     if (!checkForConnect()) return
-    if (!(await checkForChain(chainsMap[values.chainName]?.id))) return
+    if (!(await checkForChain(evmChainsMap[values.chainName]?.id))) return
     if (isDeploying) return
 
     deploy({
@@ -110,8 +110,9 @@ export const useCreateTokenForm = (
       telegram_url: utilsUrl.mediaUrl(values.telegram, URL_TYPE.TELEGRAM),
       website: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
       coin_type: values.coinType as number,
-      marketing: values.marketing as Marketing[],
       poster: values.poster,
+      // Below only used for frontend.
+      marketing: values.marketing as Marketing[],
     })
   }
 

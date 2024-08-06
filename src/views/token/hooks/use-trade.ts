@@ -42,7 +42,7 @@ export const useTrade = (onSuccess?: () => void) => {
   const { referralCode } = useTradeSearchParams()
   const [inviteErrorOpen, setInviteErrorOpen] = useState(false)
   const { getCanBind } = useInvite()
-  const { chainsMap } = useChainsStore()
+  const { evmChainsMap } = useChainsStore()
   const { chain: walletChain } = useAccount()
 
   const { dexHash, isDexTrading, dexBuy, dexSell } = useDexTrade(
@@ -76,7 +76,7 @@ export const useTrade = (onSuccess?: () => void) => {
   const updateLastTrade = async (type: TradeType, amount: string) => {
     const tokenSymbol = ticker || tokenMetadata?.symbol
     const reserveSymbol =
-      chain?.native.symbol || chainsMap[chainId]?.native.symbol
+      chain?.native.symbol || evmChainsMap[chainId]?.native.symbol
     lastTrade.type = type
 
     const getNonFixedLabel = (value: bigint, symbol?: string) =>

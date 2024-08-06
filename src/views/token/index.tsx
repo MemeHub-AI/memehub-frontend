@@ -24,15 +24,15 @@ export const airdropId = 20 // TODO: temp, should be backend id.
 export const TokenPage = () => {
   const { t } = useTranslation()
   const { chainName, tokenAddr, isReady } = useTradeSearchParams()
-  const { chainsMap } = useChainsStore()
+  const { evmChainsMap } = useChainsStore()
   const { isMobile } = useResponsive()
   const tokenInfo = useTokenInfo()
   const { isLoadingTokenInfo } = tokenInfo
   const { isGraduated } = usePools(tokenInfo.tokenInfo?.address)
   const reserveSymbol =
     tokenInfo.tokenInfo?.chain.native.symbol ||
-    chainsMap[chainName]?.native.symbol
-  const chainId = +(chainsMap[chainName]?.id ?? 0)
+    evmChainsMap[chainName]?.native.symbol
+  const chainId = +(evmChainsMap[chainName]?.id ?? 0)
 
   const airdropInfo = useAirdropInfo(airdropId, tokenAddr, chainId)
   const nftCheckInfo = useNftCheck(chainId)
@@ -51,7 +51,7 @@ export const TokenPage = () => {
   })
   const isAirdropExpired = countdown <= 0
 
-  const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
+  const invalidPath = !evmChainsMap[chainName] || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
     return (
       <NotFound

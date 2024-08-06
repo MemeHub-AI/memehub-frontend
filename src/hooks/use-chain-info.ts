@@ -7,8 +7,8 @@ import { useChainsStore } from '@/stores/use-chains-store'
 export const useChainInfo = (nameOrId?: string | number) => {
   const { query } = useRouter()
   const { chainId: walletChainId = 0 } = useAccount()
-  const { chainsMap } = useChainsStore()
-  const chain = chainsMap[String(nameOrId || query.chain || walletChainId)]
+  const { evmChainsMap } = useChainsStore()
+  const chain = evmChainsMap[String(nameOrId || query.chain || walletChainId)]
 
   return {
     chainInfo: chain,

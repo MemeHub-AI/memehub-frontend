@@ -5,7 +5,7 @@ import { getBlock } from 'wagmi/actions'
 
 import { DEPLOY_LOG_ADDR } from '@/constants/deploy'
 import { wagmiConfig } from '@/config/wagmi'
-import { Platform } from '@/constants/contract'
+import { Network } from '@/constants/contract'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -103,19 +103,19 @@ export const parseHash = (value: bigint, with0x = true) => {
 /**
  * @example
  * ```ts
- * const p1 = getPaltform('Solana')
- * // Platform.Sol
- * const p2 = getPaltform('Ton')
- * // Platform.Ton
- * const p3 = getPaltform('Ethereum')
- * // Platform.Evm
+ * const n1 = getNetwork('Solana')
+ * // Network.Sol
+ * const n2 = getNetwork('Ton')
+ * // Network.Ton
+ * const n3 = getNetwork('Ethereum')
+ * // Network.Evm
  * ```
  */
-export const getPaltform = (chainName: string) => {
+export const getNetwork = (chainName: string) => {
   const c = chainName.toLowerCase()
 
-  if (c.includes('sol')) return Platform.Sol
-  if (c.includes('ton')) return Platform.Ton
+  if (c.includes('sol')) return Network.Svm
+  if (c.includes('ton')) return Network.Tvm
 
-  return Platform.Evm
+  return Network.Evm
 }

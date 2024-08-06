@@ -9,7 +9,7 @@ import { AppLayout } from '@/components/layouts/app'
 
 export default function App({ Component, pageProps }: AppProps) {
   // If you want to initialize some global states,
-  // should write them in the `AppComponent`, not here.
+  // should write them in the `AppLayout`, not here.
 
   return (
     <>

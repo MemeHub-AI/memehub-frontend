@@ -16,6 +16,7 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { getDeployLogsAddr } from '@/utils/contract'
 import { useAirdropParams } from './use-airdrop-params'
 import { DeployFormParams } from './use-deploy'
+import { deployVersion } from '@/config/deploy'
 
 export const useEvmDeploy = (
   onSuccess?: (
@@ -29,11 +30,14 @@ export const useEvmDeploy = (
   const { address, chainId = 0 } = useAccount()
   const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
   const { bondingCurve } = addrMap[chainId] ?? {}
-
-  const { data: deployFee = BI_ZERO } = useReadContract({
-    abi: bondingCurveAbiMap['0.1.0'], // TODO: match version
+  const bcConfig = {
+    abi: bondingCurveAbiMap[deployVersion], // TODO: match version
     address: bondingCurve!,
     chainId,
+  }
+
+  const { data: deployFee = BI_ZERO } = useReadContract({
+    ...bcConfig,
     functionName: 'creationFee_',
     query: { enabled: !!bondingCurve },
   })
@@ -91,10 +95,8 @@ export const useEvmDeploy = (
 
     writeContract(
       {
-        abi: bondingCurveAbiMap['0.1.0'],
-        address: bondingCurve!,
+        ...bcConfig,
         functionName: 'createToken',
-        chainId,
         args: [[name, ticker], [], distributorParams!],
         value: deployFee,
       },

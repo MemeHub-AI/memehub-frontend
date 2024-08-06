@@ -32,8 +32,8 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
   } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { chainsMap } = useChainsStore()
-  const chain = chainsMap[chainId]
+  const { evmChainsMap } = useChainsStore()
+  const chain = evmChainsMap[chainId]
 
   if (isLoadingTokenInfo) {
     return (

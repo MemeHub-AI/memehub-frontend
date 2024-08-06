@@ -1,14 +1,15 @@
+import { Network } from '@/constants/contract'
+
 export interface ChainData {
   id: string
+  network: Network
   name: string
   displayName: string
-  logo: string
-  is_supported: boolean
-  contract_address: string
   native: {
     decimals: number
     name: string
     symbol: string
   }
-  explorer: string
+  is_supported: boolean
+  logo: string
 }

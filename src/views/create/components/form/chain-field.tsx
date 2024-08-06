@@ -18,15 +18,15 @@ export const ChainField = () => {
   const { chainId, chain } = useAccount()
   const { formData } = useCreateTokenContext()
   const { form, formFields } = formData
-  const { chains, chainsMap } = useChainsStore()
+  const { chains, evmChainsMap } = useChainsStore()
 
   // Default select.
   useEffect(() => {
     if (!chainId || isEmpty(chains)) return
-    if (!chainsMap[chainId]) return
+    if (!evmChainsMap[chainId]) return
 
-    form.setValue(formFields.chainName, chainsMap[chainId].name)
-  }, [chainId, chainsMap])
+    form.setValue(formFields.chainName, evmChainsMap[chainId].name)
+  }, [chainId, evmChainsMap])
 
   return (
     <FormField
@@ -35,7 +35,10 @@ export const ChainField = () => {
       render={({ field }) => (
         <FormItem className="mt-0">
           <FormLabel className="mt-0 font-bold">
-            *{fmt.withChain(chainsMap[field.value]?.displayName || chain?.name)}
+            *
+            {fmt.withChain(
+              evmChainsMap[field.value]?.displayName || chain?.name
+            )}
           </FormLabel>
           <FormControl>
             <ChainSelect

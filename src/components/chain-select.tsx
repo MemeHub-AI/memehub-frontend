@@ -28,7 +28,7 @@ export const ChainSelect = ({
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const { switchChainAsync } = useSwitchChain()
-  const { loadingChains, chains, chainsMap } = useChainsStore()
+  const { loadingChains, chains, evmChainsMap } = useChainsStore()
   const chainId = useChainId()
 
   const isSelected = useMemo(() => {
@@ -97,7 +97,7 @@ export const ChainSelect = ({
             value={value}
             onValueChange={(v) => {
               setOpen(false)
-              switchChain(chainsMap[v])
+              switchChain(evmChainsMap[v])
             }}
           >
             <SelectTrigger
@@ -106,7 +106,7 @@ export const ChainSelect = ({
             >
               {isSelected ? (
                 <img
-                  src={chainsMap[value || defaultValue || '']?.logo}
+                  src={evmChainsMap[value || defaultValue || '']?.logo}
                   alt="chain"
                   className="w-6 h-6 bg-black"
                 />

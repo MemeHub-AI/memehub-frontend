@@ -15,8 +15,10 @@ export const useQueryChains = () => {
   } = useQuery({
     queryKey: [chainApi.getChain.name],
     queryFn: chainApi.getChain,
-    refetchInterval: 30_000,
     select: ({ data }) => data,
+    refetchInterval: 30_000,
+    retry: 10,
+    retryDelay: 3_000,
   })
 
   useEffect(() => {

@@ -8,8 +8,8 @@ import { useTokenDetails } from '@/hooks/use-token-details'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
-  const { chainsMap } = useChainsStore()
-  const chainId = +(chainsMap[chainName]?.id ?? 0)
+  const { evmChainsMap } = useChainsStore()
+  const chainId = +(evmChainsMap[chainName]?.id ?? 0)
 
   const {
     data: tokenInfo,
