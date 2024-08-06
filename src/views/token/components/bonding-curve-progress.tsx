@@ -10,6 +10,7 @@ import { useTokenProgressV1 } from '../hooks/trade-v1/use-token-progress'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
 import { idoTrumpCard } from '@/config/ido'
+import { TokenAbiVersion } from '@/contract/abi/token'
 
 interface Props extends ComponentProps<'div'> {
   showDesc?: boolean
@@ -17,8 +18,13 @@ interface Props extends ComponentProps<'div'> {
 
 export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   const { t } = useTranslation()
-  const { tokenInfo, isIdoToken } = useTokenContext()
-  const { total, progress, isGrauated } = useTokenProgressV1()
+  const { tokenInfo, isIdoToken, chainId, tokenAddr, tokenVersion } =
+    useTokenContext()
+  const { total, progress, isGrauated } = useTokenProgressV1(
+    tokenAddr,
+    chainId,
+    tokenVersion as TokenAbiVersion
+  )
 
   const { progress: idoProgress } = useIdoProgress(
     Number(idoTrumpCard.chain.id),

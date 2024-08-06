@@ -17,6 +17,7 @@ import { Avatar } from '../ui/avatar'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { IdoTag } from '../ido-tag'
 import { Countdown } from '@/components/countdown'
+import { TokenAbiVersion } from '@/contract/abi/token'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserCoinsCreated
@@ -47,7 +48,8 @@ export const TokenCard = (props: Props) => {
 
   const { progress, isGrauated } = useTokenProgressV1(
     card.address as Address,
-    Number(card.chain.id)
+    +card.chain.id,
+    TokenAbiVersion.V0_2_0 // TODO: should be dynamic
   )
   const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
 
