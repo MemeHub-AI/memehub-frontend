@@ -2,7 +2,7 @@ import React, { type ComponentProps } from 'react'
 import { BigNumber } from 'bignumber.js'
 
 import { Button } from '@/components/ui/button'
-import { useTradeContext } from '@/contexts/trade'
+import { useTradeTabsContext } from '@/contexts/trade-tabs'
 import { useTokenContext } from '@/contexts/token'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
@@ -18,7 +18,7 @@ interface Props extends ComponentProps<'button'> {
 
 export const TradeItems = ({ disabled, onItemClick }: Props) => {
   const { isLoadingTokenInfo, reserveSymbol } = useTokenContext()
-  const { isBuy, tokenBalance } = useTradeContext()
+  const { isBuy, tokenBalance } = useTradeTabsContext()
   const { chainId } = useChainInfo()
   const buyItems =
     tradeBuyItems[chainId as keyof typeof tradeBuyItems] ?? tradeDefaultItems

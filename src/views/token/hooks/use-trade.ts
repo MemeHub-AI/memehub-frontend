@@ -3,7 +3,7 @@ import { Address, formatEther, isAddress } from 'viem'
 import { isEmpty } from 'lodash'
 import { useAccount } from 'wagmi'
 
-import { useTradeV1 } from './trade-v1/use-trade'
+import { useTradeV1 } from './v1/use-trade-v1'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeToast } from '@/hooks/use-trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'

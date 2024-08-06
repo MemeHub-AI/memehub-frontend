@@ -1,5 +1,5 @@
 import { useReadContract } from 'wagmi'
-import { formatEther } from 'viem'
+import { Address, formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'ahooks'
 
@@ -12,7 +12,7 @@ import {
 import { useTokenDetails } from '../use-token-details'
 import { TokenAbiVersion } from '@/contract/abi/token'
 
-export const useAirdropInfo = (id: number, token: string, chainId: number) => {
+export const useAirdropInfo = (id: number, token: Address, chainId: number) => {
   const {
     airdropAddr,
     airdropVersion,

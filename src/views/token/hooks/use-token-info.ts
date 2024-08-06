@@ -9,7 +9,8 @@ import { TokenAbiVersion } from '@/contract/abi/token'
 import { idoTrumpCard } from '@/config/ido'
 import { useReadContract } from 'wagmi'
 import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
-import { zeroAddress } from 'viem'
+import { formatEther, zeroAddress } from 'viem'
+import { BI_ZERO } from '@/constants/number'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -56,7 +57,16 @@ export const useTokenInfo = () => {
       refetchInterval: 10_000, // refresh each 10s.
     },
   })
-  const [, , , , , , , headmaster = zeroAddress] = pools
+  const [
+    ,
+    tokenLeft = BI_ZERO,
+    ,
+    reserveTotal = BI_ZERO,
+    ,
+    ,
+    ,
+    headmaster = zeroAddress,
+  ] = pools
   const isGraduated = headmaster !== zeroAddress
 
   const refetchTokenInfo = () => {
@@ -74,5 +84,7 @@ export const useTokenInfo = () => {
     ...tokenDetails,
     isGraduated,
     refetchTokenInfo,
+    tokenLeft: formatEther(tokenLeft),
+    reserveTotal: formatEther(reserveTotal),
   }
 }

@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { Address, zeroAddress } from 'viem'
 
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
@@ -11,13 +13,14 @@ import {
   DistributorAbiVersion,
 } from '@/contract/abi/distributor'
 import { useTokenContext } from '@/contexts/token'
-import { Address, zeroAddress } from 'viem'
+import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const useAirdrop = (id: number, onFinally?: () => void) => {
   const { t } = useTranslation()
   const { playFire } = useAudioPlayer()
   const { address, checkForChain, checkForConnect } = useCheckAccount()
   const { chainId, airdropVersion, airdropAddr } = useTokenContext()
+  const { setIsCalimingAirdrop } = useAirdropStore()
 
   const airdropConfig = {
     abi: distributorAbiMap[airdropVersion as DistributorAbiVersion],
@@ -74,6 +77,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
       toast.dismiss()
     },
   })
+  const isClaiming = isPending || isLoading
 
   const checkForClaim = async () => {
     if (!checkForConnect()) return false
@@ -110,8 +114,10 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
     })
   }
 
+  useEffect(() => setIsCalimingAirdrop(isClaiming), [isClaiming])
+
   return {
-    isClaiming: isPending || isLoading,
+    isClaiming,
     isKolClaimed,
     isCommunityClaimed,
     claimKol,

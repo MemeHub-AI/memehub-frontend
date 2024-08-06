@@ -4,27 +4,23 @@ import { BigNumber } from 'bignumber.js'
 
 import { CONTRACT_ERR } from '@/errors/contract'
 import { getDeadline, subSlippage } from '@/utils/contract'
-import { useTradeInfoV1 } from './use-trade-info'
-import { useChainInfo } from '@/hooks/use-chain-info'
-import { useTradeSearchParams } from '../use-search-params'
 import { useInvite } from '../use-invite'
 import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
+import { useTradeAmount } from './use-trade-amount'
 
 export const useTradeV1 = () => {
   const { address } = useAccount()
-  const { chainId } = useChainInfo()
-  const { tokenAddr } = useTradeSearchParams()
   const { getReferrals } = useInvite()
-  const { bcVersion, bcAddr } = useTokenContext()
+  const { tokenAddr, chainId, bcVersion, bcAddr } = useTokenContext()
   const bcAbi = bondingCurveAbiMap[bcVersion as BcAbiVersion.V0_1_0]
+  const { getReserveAmount, getTokenAmount } = useTradeAmount()
+  const bcConfig = {
+    abi: bcAbi,
+    address: bcAddr!,
+    chainId,
+  }
 
-  const {
-    getReserveAmount,
-    getTokenAmount,
-    checkForOverflow,
-    getLastOrderAmount,
-  } = useTradeInfoV1(tokenAddr, chainId) // TODO: testing
   const {
     data: hashV1,
     isPending: isSubmittingV1,
@@ -47,15 +43,9 @@ export const useTradeV1 = () => {
       return
     }
 
-    const { isOverflow, current } = await checkForOverflow(amount)
-    if (isOverflow) return getLastOrderAmount(current)
-
-    // TODO: should simulate first.
     writeContract({
-      abi: bcAbi,
-      address: bcAddr!,
+      ...bcConfig,
       functionName: 'mint',
-      chainId,
       args: [
         tokenAddr,
         reserveAmount,
@@ -75,12 +65,9 @@ export const useTradeV1 = () => {
       return
     }
 
-    // TODO: should simulate first.
     writeContract({
-      abi: bcAbi,
-      address: bcAddr!,
+      ...bcConfig,
       functionName: 'burn',
-      chainId,
       args: [
         tokenAddr,
         parseEther(amount),
