@@ -40,8 +40,8 @@ export const TokenCard = (props: Props) => {
   } = props
   const router = useRouter()
   const { t } = useTranslation()
-  const { chainsMap } = useChainsStore()
-  const chain = chainsMap[card.chain.id]
+  const { evmChainsMap } = useChainsStore()
+  const chain = evmChainsMap[card.chain.id]
 
   const [isExpired, setIsExpired] = useState(false)
 

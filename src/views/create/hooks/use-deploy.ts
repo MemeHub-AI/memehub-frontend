@@ -5,8 +5,8 @@ import type { TokenNewReq } from '@/api/token/types'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useEvmDeploy } from './use-evm-deploy'
-import { Platform } from '@/constants/contract'
-import { getPaltform } from '@/utils/contract'
+import { Network } from '@/constants/contract'
+import { getNetwork } from '@/utils/contract'
 
 export type DeployFormParams = Omit<
   TokenNewReq,
@@ -17,7 +17,7 @@ export type DeployFormParams = Omit<
 let cacheParams: DeployFormParams
 
 export const useDeploy = () => {
-  const [platform, setPlatform] = useState(Platform.Evm)
+  const [network, setNetwork] = useState(Network.Evm)
   const {
     createTokenData,
     createTokenError,
@@ -27,8 +27,8 @@ export const useDeploy = () => {
   } = useCreateToken()
 
   const evmDeploy = useEvmDeploy((params) => createToken(params))
-  // const solDeploy = useSolDeploy()
-  // const tonDeploy = useTonDeploy()
+  // const svmDeploy = useSvmDeploy()
+  // const tvmDeploy = useTvmDeploy()
 
   const {
     deployFee,
@@ -43,26 +43,26 @@ export const useDeploy = () => {
     resetDeploy,
   } = useMemo(() => {
     return {
-      [Platform.Evm]: {
+      [Network.Evm]: {
         ...evmDeploy,
         deployFee: formatEther(evmDeploy.deployFee),
       },
-      [Platform.Sol]: evmDeploy, // TODO: should be `solDeploy`
-      [Platform.Ton]: evmDeploy, // TODO: should be `tonDeploy`
-    }[platform]
-  }, [platform, evmDeploy]) // TODO: add more deps...
+      [Network.Svm]: evmDeploy, // TODO: should be `svmDeploy`
+      [Network.Tvm]: evmDeploy, // TODO: should be `tvmDeploy`
+    }[network]
+  }, [network, evmDeploy]) // TODO: add more deps...
 
   const deploy = async ({ marketing, ...params }: DeployFormParams) => {
     cacheParams = params // Exclude `marekting`
-    const p = getPaltform(params.chain)
+    const n = getNetwork(params.chain)
 
-    setPlatform(p)
-    if (p === Platform.Evm) {
+    setNetwork(n)
+    if (n === Network.Evm) {
       return evmDeploy.deploy({ marketing, ...params })
     }
-    if (p === Platform.Sol) {
+    if (n === Network.Svm) {
     }
-    if (p === Platform.Ton) {
+    if (n === Network.Tvm) {
     }
   }
 

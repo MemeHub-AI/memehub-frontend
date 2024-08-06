@@ -1,5 +1,10 @@
-export enum Platform {
+export enum Network {
+  /** Ethereum virtual machine */
   Evm = 'evm',
-  Sol = 'sol',
-  Ton = 'ton',
+
+  /** Solana virtual machine */
+  Svm = 'svm',
+
+  /** TON virtual machine */
+  Tvm = 'tvm',
 }

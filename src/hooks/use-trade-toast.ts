@@ -7,7 +7,6 @@ import { otherApi } from '@/api/other'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { TradeType } from '@/constants/trade'
 import { TxStatus } from '@/components/trade-toast/tx-status'
-import { useChainsStore } from '@/stores/use-chains-store'
 
 interface Options {
   hash: Hash
@@ -20,7 +19,6 @@ interface Options {
 export const useTradeToast = () => {
   const toastId = useRef<string | number>('')
   const { chainName, tokenAddr } = useTradeSearchParams()
-  const { chainsMap } = useChainsStore()
 
   const { mutateAsync, reset } = useMutation({
     mutationKey: [otherApi.getDiamondAmount.name],
