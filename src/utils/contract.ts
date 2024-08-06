@@ -5,6 +5,7 @@ import { getBlock } from 'wagmi/actions'
 
 import { DEPLOY_LOG_ADDR } from '@/constants/deploy'
 import { wagmiConfig } from '@/config/wagmi'
+import { Platform } from '@/constants/contract'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -75,7 +76,8 @@ export const getDeadline = async (seconds = 300) => {
   return BigInt(ts)
 }
 
-export const getDeployLogsAddr = (logs: Log<bigint, number, false>[]) => {
+export const getDeployLogsAddr = (logs?: Log<bigint, number, false>[]) => {
+  if (!logs) return
   const log = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_ADDR)
   const hashAddr = log?.topics?.[1]
   // Attention, here breaks the address starting with 0.
@@ -89,11 +91,31 @@ export const getDeployLogsAddr = (logs: Log<bigint, number, false>[]) => {
 /**
  * @example
  * ```ts
- * const hash = parseHash(BigInt('743682847302839237012018537797613726790590966769178093576926872255665103969'))
+ * const hash = parseHash(743682847302839237012018537797613726790590966769178093576926872255665103969n)
  * // 0x01a4e8d9e9ec74503ba4d82cc1305e238cb3e9d9d40f062201a5a40aba356461
  * ```
  */
 export const parseHash = (value: bigint, with0x = true) => {
   const hex = value.toString(16).padStart(64, '0')
   return with0x ? addPrefix0x(hex)[0] : hex
+}
+
+/**
+ * @example
+ * ```ts
+ * const p1 = getPaltform('Solana')
+ * // Platform.Sol
+ * const p2 = getPaltform('Ton')
+ * // Platform.Ton
+ * const p3 = getPaltform('Ethereum')
+ * // Platform.Evm
+ * ```
+ */
+export const getPaltform = (chainName: string) => {
+  const c = chainName.toLowerCase()
+
+  if (c.includes('sol')) return Platform.Sol
+  if (c.includes('ton')) return Platform.Ton
+
+  return Platform.Evm
 }

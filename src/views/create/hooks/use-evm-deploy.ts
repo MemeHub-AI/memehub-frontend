@@ -30,7 +30,7 @@ export const useEvmDeploy = (
   const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
   const { bondingCurve } = addrMap[chainId] ?? {}
 
-  const { data: evmCreationFee = BI_ZERO } = useReadContract({
+  const { data: deployFee = BI_ZERO } = useReadContract({
     abi: bondingCurveAbiMap['0.1.0'], // TODO: match version
     address: bondingCurve!,
     chainId,
@@ -40,10 +40,10 @@ export const useEvmDeploy = (
 
   const {
     data: hash,
-    isPending: isEvmSubmitting,
-    error: evmSubmitError,
+    isPending: isSubmitting,
+    error: submitError,
     writeContract,
-    reset: resetEvmDeploy,
+    reset: resetDeploy,
   } = useWriteContract({
     mutation: {
       onError: ({ message }) => CONTRACT_ERR.message(message, false),
@@ -51,21 +51,20 @@ export const useEvmDeploy = (
   })
   const {
     data,
-    error: evmConfirmError,
-    isLoading: isEvmConfirming,
-    isSuccess: isEvmSuccess,
-    isError: isEvmError,
+    error: confirmError,
+    isLoading: isConfirming,
+    isSuccess: isDeploySuccess,
+    isError: isDeployError,
   } = useWaitForTx({ hash })
-  const evmDeployedAddr = useMemo(
-    () => getDeployLogsAddr(data?.logs ?? []),
-    [data]
-  )
+  const deployedAddr = useMemo(() => getDeployLogsAddr(data?.logs), [data])
+
+  const { getEvmParams } = useAirdropParams()
 
   const checkForDeploy = (
     config: string | undefined,
     airdropParams: undefined | any
   ) => {
-    if (BigNumber(balance.toString()).lt(evmCreationFee.toString())) {
+    if (BigNumber(balance.toString()).lt(deployFee.toString())) {
       CONTRACT_ERR.balanceInsufficient()
       return false
     }
@@ -81,9 +80,7 @@ export const useEvmDeploy = (
     return true
   }
 
-  const { getEvmParams } = useAirdropParams()
-
-  const evmDeploy = async (params: DeployFormParams) => {
+  const deploy = async (params: DeployFormParams) => {
     const { name, ticker, chain, marketing } = params
     const { configure, distributorParams } = await getEvmParams(
       chain,
@@ -99,7 +96,7 @@ export const useEvmDeploy = (
         functionName: 'createToken',
         chainId,
         args: [[name, ticker], [], distributorParams!],
-        value: evmCreationFee,
+        value: deployFee,
       },
       {
         onSuccess: (hash) =>
@@ -114,16 +111,16 @@ export const useEvmDeploy = (
   }
 
   return {
-    evmDeployedAddr,
-    evmHash: hash,
-    evmSubmitError,
-    evmConfirmError,
-    evmCreationFee,
-    isEvmSubmitting,
-    isEvmConfirming,
-    isEvmSuccess,
-    isEvmError,
-    evmDeploy,
-    resetEvmDeploy,
+    deployFee,
+    deployHash: hash,
+    deployedAddr,
+    submitError,
+    confirmError,
+    isSubmitting,
+    isConfirming,
+    isDeploySuccess,
+    isDeployError,
+    deploy,
+    resetDeploy,
   }
 }
