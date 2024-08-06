@@ -7,6 +7,9 @@ import { useChainsStore } from '@/stores/use-chains-store'
 import { useTokenDetails } from '@/hooks/use-token-details'
 import { TokenAbiVersion } from '@/contract/abi/token'
 import { idoTrumpCard } from '@/config/ido'
+import { useReadContract } from 'wagmi'
+import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { zeroAddress } from 'viem'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -40,6 +43,26 @@ export const useTokenInfo = () => {
     chainId,
     TokenAbiVersion.V0_2_0 // TODO: should use `tokenInfo`
   )
+  const { bcVersion, bcAddr } = tokenDetails
+
+  const { data: pools = [], refetch: refetchPools } = useReadContract({
+    abi: bondingCurveAbiMap[bcVersion as BcAbiVersion],
+    address: bcAddr!,
+    chainId,
+    functionName: 'pools_',
+    args: [tokenAddr],
+    query: {
+      enabled: !!bcAddr && !!tokenAddr,
+      refetchInterval: 10_000, // refresh each 10s.
+    },
+  })
+  const [, , , , , , , headmaster = zeroAddress] = pools
+  const isGraduated = headmaster !== zeroAddress
+
+  const refetchTokenInfo = () => {
+    refetchInfo()
+    refetchPools()
+  }
 
   return {
     tokenInfo,
@@ -47,8 +70,9 @@ export const useTokenInfo = () => {
     isFetchingTokenInfo,
     isRefetchingTokenInfo,
     isNotFound,
-    refetchInfo,
     isLoadingDetails,
     ...tokenDetails,
+    isGraduated,
+    refetchTokenInfo,
   }
 }
