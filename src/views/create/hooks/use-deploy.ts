@@ -1,9 +1,12 @@
+import { useMemo, useState } from 'react'
 import { formatEther } from 'viem'
 
-import { TokenNewReq } from '@/api/token/types'
+import type { TokenNewReq } from '@/api/token/types'
 import { useCreateToken } from './use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { useEvmDeploy } from './use-evm-deployt'
+import { useEvmDeploy } from './use-evm-deploy'
+import { Platform } from '@/constants/contract'
+import { getPaltform } from '@/utils/contract'
 
 export type DeployFormParams = Omit<
   TokenNewReq,
@@ -14,6 +17,7 @@ export type DeployFormParams = Omit<
 let cacheParams: DeployFormParams
 
 export const useDeploy = () => {
+  const [platform, setPlatform] = useState(Platform.Evm)
   const {
     createTokenData,
     createTokenError,
@@ -21,36 +25,45 @@ export const useDeploy = () => {
     createToken,
     updateToken,
   } = useCreateToken()
-  const {
-    evmHash,
-    evmCreationFee,
-    evmDeployedAddr,
-    evmSubmitError,
-    evmConfirmError,
-    isEvmSubmitting,
-    isEvmConfirming,
-    isEvmSuccess,
-    isEvmError,
-    evmDeploy,
-    resetEvmDeploy,
-  } = useEvmDeploy((params) => createToken(params))
 
-  const deployFee = formatEther(evmCreationFee)
-  const deployHash = evmHash
-  const deployedAddr = evmDeployedAddr
-  const isSubmitting = isEvmSubmitting
-  const isConfirming = isEvmConfirming
-  const isDeploying = isSubmitting || isConfirming
-  const isDeploySuccess = isEvmSuccess
-  const isDeployError = isEvmError
-  const submitError = evmSubmitError
-  const confirmError = evmConfirmError
-  const resetDeploy = resetEvmDeploy
+  const evmDeploy = useEvmDeploy((params) => createToken(params))
+  // const solDeploy = useSolDeploy()
+  // const tonDeploy = useTonDeploy()
+
+  const {
+    deployFee,
+    deployHash,
+    deployedAddr,
+    isSubmitting,
+    isConfirming,
+    isDeploySuccess,
+    isDeployError,
+    submitError,
+    confirmError,
+    resetDeploy,
+  } = useMemo(() => {
+    return {
+      [Platform.Evm]: {
+        ...evmDeploy,
+        deployFee: formatEther(evmDeploy.deployFee),
+      },
+      [Platform.Sol]: evmDeploy, // TODO: should be `solDeploy`
+      [Platform.Ton]: evmDeploy, // TODO: should be `tonDeploy`
+    }[platform]
+  }, [platform, evmDeploy]) // TODO: add more deps...
 
   const deploy = async ({ marketing, ...params }: DeployFormParams) => {
     cacheParams = params // Exclude `marekting`
+    const p = getPaltform(params.chain)
 
-    return evmDeploy({ marketing, ...params })
+    setPlatform(p)
+    if (p === Platform.Evm) {
+      return evmDeploy.deploy({ marketing, ...params })
+    }
+    if (p === Platform.Sol) {
+    }
+    if (p === Platform.Ton) {
+    }
   }
 
   const retryCreate = () => {
@@ -71,7 +84,7 @@ export const useDeploy = () => {
     deployedAddr,
     isSubmitting,
     isConfirming,
-    isDeploying,
+    isDeploying: isSubmitting || isConfirming,
     isCreatingToken,
     isDeploySuccess,
     isDeployError,
