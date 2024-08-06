@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { formatEther } from 'viem'
 
 import type { TokenNewReq } from '@/api/token/types'
 import { useCreateToken } from './use-create-token'
@@ -43,10 +42,7 @@ export const useDeploy = () => {
     resetDeploy,
   } = useMemo(() => {
     return {
-      [Network.Evm]: {
-        ...evmDeploy,
-        deployFee: formatEther(evmDeploy.deployFee),
-      },
+      [Network.Evm]: evmDeploy,
       [Network.Svm]: evmDeploy, // TODO: should be `svmDeploy`
       [Network.Tvm]: evmDeploy, // TODO: should be `tvmDeploy`
     }[network]
@@ -61,8 +57,10 @@ export const useDeploy = () => {
       return evmDeploy.deploy({ marketing, ...params })
     }
     if (n === Network.Svm) {
+      // Solana
     }
     if (n === Network.Tvm) {
+      // TON
     }
   }
 

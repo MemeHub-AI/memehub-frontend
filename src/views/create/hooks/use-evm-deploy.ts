@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { Address, Hash } from 'viem'
+import { Address, formatEther, Hash } from 'viem'
 import {
   useAccount,
   useBalance,
@@ -113,7 +113,7 @@ export const useEvmDeploy = (
   }
 
   return {
-    deployFee,
+    deployFee: formatEther(deployFee),
     deployHash: hash,
     deployedAddr,
     submitError,
