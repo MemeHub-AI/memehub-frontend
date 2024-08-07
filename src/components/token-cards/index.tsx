@@ -8,15 +8,15 @@ import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { Routes } from '@/routes'
-import { UserCoinsCreated } from '@/api/user/types'
 import { TokenChainSelect } from './chain-select'
 import { TokenSearchInput } from './token-search-input'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { IdoCard } from '../ido-card'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { TokenListItem } from '@/api/token/types'
 
 interface Props extends ComponentProps<'div'> {
-  cards?: UserCoinsCreated[]
+  cards?: TokenListItem[]
   total: number
   isLoading: boolean
   isPending?: boolean
@@ -48,15 +48,15 @@ export const TokenCards = (props: Props) => {
       setIsPlayHomeAudio(false)
     }
   }, [])
-  const onChange = (chainId: string) => {
-    setChainTag(chainId)
+  const onChange = (chain: string) => {
+    setChainTag(chain)
 
-    if (chainId === 'all') {
+    if (chain === 'all') {
       setFilteredCards(cards)
       return
     }
 
-    setFilteredCards(cards.filter((c) => c.chain.id === chainId))
+    setFilteredCards(cards.filter((c) => c.chain === chain))
   }
 
   useEffect(() => {
@@ -85,7 +85,7 @@ export const TokenCards = (props: Props) => {
           chianTag={chianTag}
           onSearched={(tokens) => setFilteredCards(tokens)}
           onCleared={() =>
-            setFilteredCards(cards.filter((c) => c.chain.id === chianTag))
+            setFilteredCards(cards.filter((c) => c.chain === chianTag))
           }
           className="ml-4"
         />

@@ -1,18 +1,39 @@
-import type { UserCoinsCreated, UserInfoRes } from '../user/types'
+import type { UserInfoRes } from '../user/types'
 
-export interface TokenListItem extends UserCoinsCreated {
-  twitter_url: string
-  telegram_url: string
-  website: string
-  virtual_liquidity: string
-  replies: string
-  last_reply: null
-  create_time: null
+export interface TokenListItem {
+  airdrop_address: string
+  airdrop_index: number
+  airdrop_supply: string
+  airdrop_type: number
+  airdrop_version: string
+  chain: string
+  coin_type: number
+  coin_version: string
+  contract_address: string
+  created_at: string
+  creator_address: string
+  description: string
+  factory_address: string
+  graduated_eth: null
+  graduated_master: null
+  graduated_pool: null
+  graduated_token: null
   hash: string
-  explorer_tx: string
-  version: string
-  pool_address: null | string
-  poster: string[]
+  id: string
+  image_url: string
+  is_active: boolean
+  is_graduated: boolean
+  max_supply: string
+  name: string
+  network: string
+  poster_urls: string[]
+  start_price: string
+  symbol: string
+  telegram_url: string
+  total_supply: string
+  twitter_url: string
+  updated_at: string
+  website_url: string
 }
 
 export interface TokenCreateReq {

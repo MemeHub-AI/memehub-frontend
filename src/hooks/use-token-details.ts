@@ -7,13 +7,13 @@ import { BcVersion } from '@/contract/abi/bonding-curve'
 import { DistributorVersion } from '@/contract/abi/distributor'
 
 export const useTokenDetails = (
-  tokenAddr: Address | undefined,
+  tokenAddr: string | undefined,
   chainId: number,
   version: TokenVersion
 ) => {
   const tokenConfig = {
     abi: tokenAbiMap[version],
-    address: tokenAddr,
+    address: tokenAddr as Address,
     chainId,
   } as const
 

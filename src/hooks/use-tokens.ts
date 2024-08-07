@@ -4,7 +4,12 @@ import { tokenApi } from '@/api/token'
 import { TokenListItem } from '@/api/token/types'
 
 export const useTokens = () => {
-  const { data, isLoading, isFetching, fetchNextPage } = useInfiniteQuery({
+  const {
+    data: { tokens = [], totalToken = 0 } = {},
+    isLoading,
+    isFetching,
+    fetchNextPage,
+  } = useInfiniteQuery({
     queryKey: [tokenApi.getList.name],
     queryFn: ({ pageParam }) => {
       return tokenApi.getList({
@@ -23,8 +28,8 @@ export const useTokens = () => {
   })
 
   return {
-    totalToken: data?.totalToken ?? 0,
-    tokens: data?.tokens ?? [],
+    totalToken,
+    tokens,
     isLoading,
     isFetching,
     fetchNextPage,
