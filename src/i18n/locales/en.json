@@ -581,5 +581,6 @@
   "airdrop.not-nft": "No NFT",
   "airdrop.burned": "Already burned",
   "create-token.err.failed": "Creation failed, please try again",
-  "create-token.err.network-not-found": "Cannot find network"
+  "create-token.err.network-not-found": "Cannot find network",
+  "decide.chains": "Please select your blockchain"
 }

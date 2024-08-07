@@ -572,5 +572,6 @@
   "airdrop.not-nft": "没有 NFT",
   "airdrop.burned": "已销毁",
   "create-token.err.failed": "创建失败，请重试",
-  "create-token.err.network-not-found": "找不到目标网络"
+  "create-token.err.network-not-found": "找不到目标网络",
+  "decide.chains": "请选择您的区块链"
 }
