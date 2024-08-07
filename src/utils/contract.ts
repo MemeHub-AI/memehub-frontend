@@ -4,7 +4,7 @@ import dayjs from 'dayjs'
 import { getBlock } from 'wagmi/actions'
 
 import { wagmiConfig } from '@/config/wagmi'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 import { deployLogAddr, deployLogAddrIdx } from '@/config/deploy'
 
 // Whether user rejected error.

@@ -1,14 +1,14 @@
 import { useMemo, useState } from 'react'
 
-import type { TokenNewReq } from '@/api/token/types'
+import type { TokenCreateReq } from '@/api/token/types'
 import { useCreateToken } from './use-create-token'
 import { useEvmDeploy } from './use-evm-deploy'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { deployErr } from '@/errors/deploy'
 
 export type DeployFormParams = Omit<
-  TokenNewReq,
+  TokenCreateReq,
   'factory_address' | 'airdrop_address'
 >
 

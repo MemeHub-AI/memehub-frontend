@@ -46,3 +46,9 @@ export const tradeBuyItems = {
 export const tradeDefaultItems = items.eth
 
 export const tradeSellItems = ['25', '50', '75', '100']
+
+export const listedMarketCap = 30_000 // Listed to dex market cap
+
+export const defaultSlippage = '5' // 5%
+
+export const maxSlippage = '49' // 49%

@@ -7,7 +7,7 @@ import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { MAX_SLIPPAGE } from '@/constants/trade'
+import { maxSlippage } from '@/config/trade'
 
 const slippages = ['1', '3', '5', '49']
 
@@ -45,8 +45,8 @@ export const SlippageButton = (props: Props) => {
               value={value}
               onChange={({ target: { value } }) => {
                 if (isEmpty(value)) return onChange?.(value)
-                if (BigNumber(value).gt(MAX_SLIPPAGE)) {
-                  return onChange?.(MAX_SLIPPAGE)
+                if (BigNumber(value).gt(maxSlippage)) {
+                  return onChange?.(maxSlippage)
                 }
                 if (BigNumber(value).isNaN()) return
                 onChange?.(value)
@@ -54,7 +54,7 @@ export const SlippageButton = (props: Props) => {
               endIcon={
                 <p
                   className="mx-2 text-sm cursor-pointer select-none shrink-0"
-                  onClick={() => onChange?.(MAX_SLIPPAGE)}
+                  onClick={() => onChange?.(maxSlippage)}
                 >
                   {t('max')}
                 </p>

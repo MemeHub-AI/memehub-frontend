@@ -22,7 +22,7 @@ import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'
 import { utilLang } from '@/utils/lang'
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 
 export const TradeTable = () => {
   const { t, i18n } = useTranslation()

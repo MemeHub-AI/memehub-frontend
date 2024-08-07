@@ -8,14 +8,14 @@ import { useTokenContext } from '@/contexts/token'
 import { useTradeToast } from '@/hooks/use-trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useTradeSearchParams } from './use-search-params'
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
 import { useDexTrade } from './use-dex-trade'
 import { idoTrumpCard } from '@/config/ido'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 
 // Used for trade success tips.
 const lastTrade = {

@@ -1,4 +1,4 @@
-import { AirdropType } from '@/constants/airdrop'
+import { AirdropType } from '@/enums/airdrop'
 import { BcAbiVersion } from '@/contract/abi/bonding-curve'
 
 export const deployVersion = BcAbiVersion.V0_1_0

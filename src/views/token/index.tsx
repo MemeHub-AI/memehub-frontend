@@ -17,7 +17,7 @@ import { NotFound } from '@/components/not-found'
 import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
 import { useNftCheck } from '@/hooks/use-nft-check'
 import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 
 export const airdropId = 20 // TODO: temp, should be backend id.
 

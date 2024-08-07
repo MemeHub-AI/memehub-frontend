@@ -5,7 +5,7 @@ import { type Hash } from 'viem'
 
 import { otherApi } from '@/api/other'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 import { TxStatus } from '@/components/trade-toast/tx-status'
 
 interface Options {

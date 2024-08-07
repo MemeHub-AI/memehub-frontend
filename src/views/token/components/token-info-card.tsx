@@ -11,13 +11,13 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Avatar } from '@/components/ui/avatar'
 import { fmt } from '@/utils/fmt'
 import { utilLang } from '@/utils/lang'
-import { LISTED_MARKET_CAP } from '@/constants/trade'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Badge } from '@/components/ui/badge'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { PosterImages } from '@/components/poster-images'
 import { TokenSocialLinks } from '../../../components/token-links'
 import { AvatarCard } from '@/components/avatar-card'
+import { listedMarketCap } from '@/config/trade'
 
 export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -128,7 +128,7 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
           {isGraduated
             ? t('token.graduated-desc')
             : utilLang.replace(t('bonding-curve.desc'), [
-                BigNumber(LISTED_MARKET_CAP).toFormat(),
+                BigNumber(listedMarketCap).toFormat(),
               ])}
         </p>
       )}

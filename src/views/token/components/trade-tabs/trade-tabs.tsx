@@ -2,7 +2,7 @@ import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 import { useTradeTabsContext } from '@/contexts/trade-tabs'
 
 export const TradeTabs = ({
