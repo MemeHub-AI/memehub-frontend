@@ -1,10 +1,10 @@
 import { readContract } from 'wagmi/actions'
-import { formatEther, parseEther } from 'viem'
+import { parseEther } from 'viem'
 
 import { ConfigChainId, wagmiConfig } from '@/config/wagmi'
 import { BI_ZERO } from '@/constants/number'
 import { reportException } from '@/errors'
-import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
 
 export const useTradeAmount = () => {
@@ -15,7 +15,7 @@ export const useTradeAmount = () => {
     if (!bcVersion || !bcAddr) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      abi: bondingCurveAbiMap[bcVersion],
+      abi: bcAbiMap[bcVersion],
       address: bcAddr,
       chainId: chainId as ConfigChainId,
       functionName: 'calcAmountOutFromToken',
@@ -31,7 +31,7 @@ export const useTradeAmount = () => {
     if (!bcVersion || !bcAddr) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      abi: bondingCurveAbiMap[bcVersion],
+      abi: bcAbiMap[bcVersion],
       address: bcAddr,
       chainId: chainId as ConfigChainId,
       functionName: 'calcAmountOutFromEth',
@@ -47,7 +47,7 @@ export const useTradeAmount = () => {
     if (!bcVersion || !bcAddr) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      abi: bondingCurveAbiMap[bcVersion],
+      abi: bcAbiMap[bcVersion],
       address: bcAddr,
       functionName: 'calcAmountOutFromTokenCutOff',
       args: [tokenAddr, parseEther(tokenLeft)],

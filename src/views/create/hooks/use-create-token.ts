@@ -4,6 +4,8 @@ import { useQuery, useMutation } from '@tanstack/react-query'
 import { tokenApi } from '@/api/token'
 import { DeployFormParams } from './use-deploy'
 import { reportException } from '@/errors'
+import { BcVersion } from '@/contract/abi/bonding-curve'
+import { DistributorVersion } from '@/contract/abi/distributor'
 
 export const useCreateToken = () => {
   const {
@@ -15,8 +17,9 @@ export const useCreateToken = () => {
     select: ({ data }) => data,
     refetchInterval: 30_000,
   })
-  const bcAddress = contracts?.coin[0].address as Address | undefined
-  const airdropAddress = contracts?.airdrop[0].address as Address | undefined
+  const { address: bcAddress, version: bcVersion } = contracts?.coin[0] ?? {}
+  const { address: airdropAddress, version: airdropVersion } =
+    contracts?.airdrop[0] ?? {}
 
   const {
     data: createData,
@@ -47,8 +50,10 @@ export const useCreateToken = () => {
   return {
     configName,
     configValue,
-    bcAddress,
-    airdropAddress,
+    bcAddress: bcAddress as Address | undefined,
+    airdropAddress: airdropAddress as Address | undefined,
+    bcVersion: bcVersion as BcVersion | undefined,
+    airdropVersion: airdropVersion as DistributorVersion | undefined,
     createTokenData,
     createTokenError,
     isCreatingToken,

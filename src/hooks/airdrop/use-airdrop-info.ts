@@ -4,13 +4,12 @@ import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'ahooks'
 
 import { BI_ZERO } from '@/constants/number'
-import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import {
   distributorAbiMap,
-  DistributorAbiVersion,
+  DistributorVersion,
 } from '@/contract/abi/distributor'
 import { useTokenDetails } from '../use-token-details'
-import { TokenAbiVersion } from '@/contract/abi/token'
 
 export const useAirdropInfo = (id: number, token: Address, chainId: number) => {
   const {
@@ -24,11 +23,11 @@ export const useAirdropInfo = (id: number, token: Address, chainId: number) => {
   } = useTokenDetails(
     token,
     chainId,
-    TokenAbiVersion.V0_2_0 // TODO: dynamic token version
+    '0.2.0' // TODO: dynamic token version
   )
 
   const { data: duration = BI_ZERO } = useReadContract({
-    abi: distributorAbiMap[airdropVersion as DistributorAbiVersion],
+    abi: distributorAbiMap[airdropVersion as DistributorVersion],
     address: airdropAddr,
     chainId,
     functionName: 'duration',
@@ -41,7 +40,7 @@ export const useAirdropInfo = (id: number, token: Address, chainId: number) => {
     isLoading: isLoadingInfo,
     refetch: refetchInfo,
   } = useReadContract({
-    abi: distributorAbiMap[airdropVersion as DistributorAbiVersion],
+    abi: distributorAbiMap[airdropVersion as DistributorVersion],
     address: airdropAddr,
     chainId,
     functionName: 'distributions',
@@ -67,7 +66,7 @@ export const useAirdropInfo = (id: number, token: Address, chainId: number) => {
   const hasCommunityAirdrop = communityCount !== 0
 
   const { data: ratio = BI_ZERO } = useReadContract({
-    abi: bondingCurveAbiMap[bcVersion as BcAbiVersion],
+    abi: bcAbiMap[bcVersion!],
     address: bcAddr,
     chainId,
     functionName: 'airdropRate_',

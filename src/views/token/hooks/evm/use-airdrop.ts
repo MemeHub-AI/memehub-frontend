@@ -10,7 +10,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import {
   distributorAbiMap,
-  DistributorAbiVersion,
+  DistributorVersion,
 } from '@/contract/abi/distributor'
 import { useTokenContext } from '@/contexts/token'
 import { useAirdropStore } from '@/stores/use-airdrop'
@@ -23,7 +23,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
   const { setIsCalimingAirdrop } = useAirdropStore()
 
   const airdropConfig = {
-    abi: distributorAbiMap[airdropVersion as DistributorAbiVersion],
+    abi: distributorAbiMap[airdropVersion as DistributorVersion],
     address: airdropAddr!,
     chainId,
   }

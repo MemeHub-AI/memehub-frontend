@@ -1,15 +1,15 @@
 import { Address, formatEther } from 'viem'
 import { useReadContract, useReadContracts } from 'wagmi'
 
-import { tokenAbiMap, TokenAbiVersion } from '@/contract/abi/token'
+import { tokenAbiMap, TokenVersion } from '@/contract/abi/token'
 import { BI_ZERO } from '@/constants/number'
-import { BcAbiVersion } from '@/contract/abi/bonding-curve'
-import { DistributorAbiVersion } from '@/contract/abi/distributor'
+import { BcVersion } from '@/contract/abi/bonding-curve'
+import { DistributorVersion } from '@/contract/abi/distributor'
 
 export const useTokenDetails = (
   tokenAddr: Address | undefined,
   chainId: number,
-  version: TokenAbiVersion
+  version: TokenVersion
 ) => {
   const tokenConfig = {
     abi: tokenAbiMap[version],
@@ -57,9 +57,9 @@ export const useTokenDetails = (
   }
 
   return {
-    tokenVersion: tokenVersion as TokenAbiVersion | undefined,
-    bcVersion: bcVersion as BcAbiVersion | undefined,
-    airdropVersion: airdropVersion as DistributorAbiVersion | undefined,
+    tokenVersion: tokenVersion as TokenVersion | undefined,
+    bcVersion: bcVersion as BcVersion | undefined,
+    airdropVersion: airdropVersion as DistributorVersion | undefined,
     bcAddr: bcAddr as Address | undefined,
     airdropAddr: airdropAddr as Address | undefined,
     tokenMetadata,

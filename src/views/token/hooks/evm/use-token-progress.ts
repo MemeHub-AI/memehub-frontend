@@ -4,18 +4,18 @@ import { BigNumber } from 'bignumber.js'
 import { Address, formatEther, zeroAddress } from 'viem'
 
 import { BI_ZERO } from '@/constants/number'
-import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenDetails } from '@/hooks/use-token-details'
-import { TokenAbiVersion } from '@/contract/abi/token'
+import { TokenVersion } from '@/contract/abi/token'
 
 export const useTokenProgress = (
   tokenAddr: Address | undefined,
   chainId: number,
-  version: TokenAbiVersion
+  version: TokenVersion
 ) => {
   const { bcVersion, bcAddr } = useTokenDetails(tokenAddr, chainId, version)
   const bcConfig = {
-    abi: bondingCurveAbiMap[bcVersion as BcAbiVersion],
+    abi: bcAbiMap[bcVersion!],
     address: bcAddr!,
     chainId,
   }

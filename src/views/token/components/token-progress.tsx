@@ -10,7 +10,7 @@ import { useTokenProgress } from '../hooks/evm/use-token-progress'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
 import { idoTrumpCard } from '@/config/ido'
-import { TokenAbiVersion } from '@/contract/abi/token'
+import { TokenVersion } from '@/contract/abi/token'
 
 export const TokenProgress = ({
   showDesc = true,
@@ -24,7 +24,7 @@ export const TokenProgress = ({
   const { total, progress, isGrauated } = useTokenProgress(
     tokenAddr,
     chainId,
-    tokenVersion as TokenAbiVersion
+    tokenVersion as TokenVersion
   )
 
   const { progress: idoProgress } = useIdoProgress(
