@@ -4,9 +4,9 @@ import { BigNumber } from 'bignumber.js'
 
 import { ConnectWallet } from '@/components/connect-wallet'
 import { Button } from '@/components/ui/button'
-import { useTradeContext } from '@/contexts/trade'
+import { useTradeTabsContext } from '@/contexts/trade-tabs'
 import { useTokenContext } from '@/contexts/token'
-import { TradeCommentDialog } from './trade-comment-dialog'
+import { TradeCommentDialog } from '../trade-comment-dialog'
 import { INVITE_REWARD } from '@/constants/invite'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useUserStore } from '@/stores/use-user-store'
@@ -31,7 +31,7 @@ export const TradeButton = ({
   const { playError } = useAudioPlayer()
 
   const { isIdoToken, isNotFound, chainId, tokenMetadata } = useTokenContext()
-  const { isBuy, nativeBalance, tokenBalance, value } = useTradeContext()
+  const { isBuy, nativeBalance, tokenBalance, value } = useTradeTabsContext()
   const isBalanceInsufficient = BigNumber(value).gt(
     isBuy ? nativeBalance : tokenBalance
   )

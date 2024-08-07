@@ -102,15 +102,15 @@ export const useCreateTokenForm = (
 
     deploy({
       name: values.fullname! as string,
-      ticker: values.symbol! as string,
-      desc: values.description! as string,
-      image: (values.logo! as string).replace('mini', 'origin'),
+      symbol: values.symbol! as string,
+      description: values.description! as string,
+      image_url: (values.logo! as string).replace('mini', 'origin'),
       chain: values.chainName as string,
       twitter_url: utilsUrl.mediaUrl(values.twitter, URL_TYPE.TWITTER),
       telegram_url: utilsUrl.mediaUrl(values.telegram, URL_TYPE.TELEGRAM),
-      website: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
+      website_url: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
       coin_type: values.coinType as number,
-      poster: values.poster,
+      poster_urls: values.poster,
       // Below only used for frontend.
       marketing: values.marketing as Marketing[],
     })

@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useTokenContext } from '@/contexts/token'
-import { useBurnAirdrop } from '../hooks/trade-v1/use-burn-airdrop'
+import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 import { airdropId } from '..'
 
 export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {

@@ -1,15 +1,13 @@
 import { formatEther } from 'viem'
 import { useAccount, useBalance, useReadContract } from 'wagmi'
 
-import { useChainInfo } from '@/hooks/use-chain-info'
-import { useTradeSearchParams } from './use-search-params'
 import { BI_ZERO } from '@/constants/number'
 import { tokenAbiMap } from '@/contract/abi/token'
+import { useTokenContext } from '@/contexts/token'
 
 export const useTradeBalance = () => {
   const { address } = useAccount()
-  const { chainId } = useChainInfo()
-  const { tokenAddr } = useTradeSearchParams()
+  const { chainId, tokenAddr, tokenVersion } = useTokenContext()
 
   // Reserve token balance.
   const {
@@ -28,7 +26,7 @@ export const useTradeBalance = () => {
     isFetching: isFetchingToken,
     refetch: refetchTokenBalance,
   } = useReadContract({
-    abi: tokenAbiMap['0.2.0'],
+    abi: tokenAbiMap[tokenVersion!],
     address: tokenAddr,
     functionName: 'balanceOf',
     chainId,

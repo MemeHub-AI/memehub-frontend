@@ -1,4 +1,4 @@
-import { useMemo, useState, type ComponentProps } from 'react'
+import { useEffect, useMemo, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { BigNumber } from 'bignumber.js'
@@ -10,7 +10,7 @@ import { Card } from '@/components/ui/card'
 import { useTokenContext } from '@/contexts/token'
 import { cn } from '@/lib/utils'
 import { utilLang } from '@/utils/lang'
-import { useAirdrop } from '../hooks/trade-v1/use-airdrop'
+import { useAirdrop } from '../hooks/evm/use-airdrop'
 import { fmt } from '@/utils/fmt'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
@@ -106,6 +106,8 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
 
     return t('airdrop.claim')
   }
+
+  useEffect(() => {}, [isClaiming])
 
   return (
     <Card

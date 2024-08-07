@@ -13,11 +13,11 @@ import { TokenMobile } from './components/mobile'
 import { useTradeSearchParams } from './hooks/use-search-params'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { idoTrumpCard } from '@/config/ido'
-import { usePools } from './hooks/use-pools'
 import { NotFound } from '@/components/not-found'
 import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
 import { useNftCheck } from '@/hooks/use-nft-check'
 import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
+import { Network } from '@/constants/contract'
 
 export const airdropId = 20 // TODO: temp, should be backend id.
 
@@ -28,11 +28,10 @@ export const TokenPage = () => {
   const { isMobile } = useResponsive()
   const tokenInfo = useTokenInfo()
   const { isLoadingTokenInfo } = tokenInfo
-  const { isGraduated } = usePools(tokenInfo.tokenInfo?.address)
+  const chainId = +(evmChainsMap[chainName]?.id ?? 0)
   const reserveSymbol =
     tokenInfo.tokenInfo?.chain.native.symbol ||
     evmChainsMap[chainName]?.native.symbol
-  const chainId = +(evmChainsMap[chainName]?.id ?? 0)
 
   const airdropInfo = useAirdropInfo(airdropId, tokenAddr, chainId)
   const nftCheckInfo = useNftCheck(chainId)
@@ -72,10 +71,10 @@ export const TokenPage = () => {
         ...tokenInfo,
         reserveSymbol,
         isIdoToken,
-        isGraduated,
         chainName,
         chainId,
         tokenAddr,
+        network: Network.Evm,
       }}
     >
       <TradeAirdropProvider

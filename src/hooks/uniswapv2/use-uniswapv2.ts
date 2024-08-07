@@ -126,7 +126,7 @@ export const useUniswapV2 = (
 
   return {
     uniswapV2Hash,
-    isUniswapV2Trading: isSubmitting || isApproving,
+    isUniswapV2Submitting: isSubmitting || isApproving,
     uniswapV2Buy,
     uniswapV2Sell,
     uniswapV2Reset,

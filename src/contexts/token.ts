@@ -3,6 +3,7 @@ import { type Address } from 'viem'
 
 import { useTokenInfo } from './../views/token/hooks/use-token-info'
 import { CONTEXT_ERR } from '@/errors/context'
+import { Network } from '@/constants/contract'
 
 interface Context
   extends Omit<ReturnType<typeof useTokenInfo>, 'isRefetchingTokenInfo'> {
@@ -12,6 +13,7 @@ interface Context
   chainId: number
   chainName: string
   tokenAddr: Address
+  network: Network
 }
 
 const TokenContext = createContext<Context | null>(null)

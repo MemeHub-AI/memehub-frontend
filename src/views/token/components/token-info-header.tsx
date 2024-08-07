@@ -8,7 +8,7 @@ import { fmt } from '@/utils/fmt'
 import { useHoldersStore } from '@/stores/use-holders-store'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
-import { BondingCurveProgress } from './bonding-curve-progress'
+import { TokenProgress } from './token-progress'
 import { Avatar } from '@/components/ui/avatar'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useResponsive } from '@/hooks/use-responsive'
@@ -119,10 +119,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         </span>
       </div> */}
       </div>
-      <BondingCurveProgress
-        className="ml-2 w-full max-sm:ml-0"
-        showDesc={false}
-      />
+      <TokenProgress className="ml-2 w-full max-sm:ml-0" showDesc={false} />
     </div>
   )
 }

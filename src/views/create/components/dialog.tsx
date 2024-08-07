@@ -17,7 +17,6 @@ export const CreateTokenStatusDialog = () => {
     deployResult: {
       deployedAddr,
       createTokenData,
-      createTokenError,
       isSubmitting,
       isConfirming,
       isDeploySuccess,
@@ -25,13 +24,9 @@ export const CreateTokenStatusDialog = () => {
       submitError,
       confirmError,
       resetDeploy,
-      retryCreate,
     },
   } = useCreateTokenContext()
   const router = useRouter()
-
-  const chainName = createTokenData?.chain?.name || ''
-  const explorerUrl = createTokenData?.chain?.explorer_tx || ''
 
   const withIcon = (children: ReactNode) => {
     return (
@@ -39,6 +34,18 @@ export const CreateTokenStatusDialog = () => {
         <PiWarningCircle size={18} />
         {children}
       </div>
+    )
+  }
+
+  // Submit token info
+  if (isCreatingToken) {
+    return (
+      <AlertDialog
+        open={isCreatingToken}
+        title={t('deploy.backend.submitting')}
+        description={t('deploy.backend.submitting.desc')}
+        showFooter={false}
+      />
     )
   }
 
@@ -107,44 +114,6 @@ export const CreateTokenStatusDialog = () => {
     )
   }
 
-  // Submit token info
-  if (isCreatingToken) {
-    return (
-      <AlertDialog
-        open={isCreatingToken}
-        title={t('deploy.backend.submitting')}
-        description={t('deploy.backend.submitting.desc')}
-        onCancel={resetDeploy}
-        onConfirm={resetDeploy}
-      />
-    )
-  }
-
-  // Submit to backend error.
-  if (createTokenError) {
-    return (
-      <AlertDialog
-        open={!!createTokenError}
-        title={withIcon(t('deploy.backend.error') + ':')}
-        description={
-          <span>
-            <span className="break-all line-clamp-3">
-              {t('deploy.backend.error.desc')}
-              <span
-                className="text-blue-600 cursor-pointer hover:underline"
-                onClick={retryCreate}
-              >
-                {t('retry')}
-              </span>
-            </span>
-          </span>
-        }
-        onCancel={resetDeploy}
-        onConfirm={resetDeploy}
-      />
-    )
-  }
-
   // Successful!
   if (isDeploySuccess) {
     return (
@@ -154,7 +123,11 @@ export const CreateTokenStatusDialog = () => {
         onConfirm={() => {
           resetDeploy()
           router.push(
-            fmt.toHref(Routes.Main, chainName, deployedAddr || 'invalid')
+            fmt.toHref(
+              Routes.Main,
+              createTokenData?.chain ?? '',
+              deployedAddr || 'invalid'
+            )
           )
         }}
         showCancel={false}

@@ -3,15 +3,17 @@ import { useReadContract, useReadContracts } from 'wagmi'
 
 import { tokenAbiMap, TokenAbiVersion } from '@/contract/abi/token'
 import { BI_ZERO } from '@/constants/number'
+import { BcAbiVersion } from '@/contract/abi/bonding-curve'
+import { DistributorAbiVersion } from '@/contract/abi/distributor'
 
 export const useTokenDetails = (
-  tokenAddr: string | undefined,
+  tokenAddr: Address | undefined,
   chainId: number,
   version: TokenAbiVersion
 ) => {
   const tokenConfig = {
     abi: tokenAbiMap[version],
-    address: tokenAddr as Address,
+    address: tokenAddr,
     chainId,
   } as const
 
@@ -55,9 +57,9 @@ export const useTokenDetails = (
   }
 
   return {
-    tokenVersion,
-    bcVersion,
-    airdropVersion,
+    tokenVersion: tokenVersion as TokenAbiVersion | undefined,
+    bcVersion: bcVersion as BcAbiVersion | undefined,
+    airdropVersion: airdropVersion as DistributorAbiVersion | undefined,
     bcAddr: bcAddr as Address | undefined,
     airdropAddr: airdropAddr as Address | undefined,
     tokenMetadata,

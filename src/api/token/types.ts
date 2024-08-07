@@ -1,37 +1,48 @@
-import { Address } from 'viem'
+import type { UserInfoRes } from '../user/types'
 
-import type { UserCoinsCreated, UserInfoRes } from '../user/types'
-
-export interface TokenListItem extends UserCoinsCreated {
+export interface TokenListItem {
+  id: string
+  created_at: string
+  updated_at: string
+  chain: string
+  hash: null | string
+  name: string
+  symbol: string
+  description: string
+  image_url: string
+  poster_urls: string[]
   twitter_url: string
   telegram_url: string
-  website: string
-  virtual_liquidity: string
-  replies: string
-  last_reply: null
-  create_time: null
-  hash: string
-  explorer_tx: string
-  version: string
-  pool_address: null | Address
-  poster: string[]
+  website_url: string
+  creator_address: string
+  factory_address: string
+  contract_address: null | string
+  airdrop_address: string
+  airdrop_index: null
+  airdrop_supply: string
+  max_supply: string
+  total_supply: string
+  start_price: string
+  coin_type: number
+  is_active: boolean
 }
 
 export interface TokenNewReq {
-  name: string
-  ticker: string
-  desc: string
-  image: string
-  hash: string
   chain: string
+  name: string
+  symbol: string
+  description: string
+  image_url: string
+  poster_urls?: string[]
   twitter_url?: string
   telegram_url?: string
-  website?: string
+  website_url?: string
+  factory_address: string
+  airdrop_address: string
   coin_type?: CoinType
+
+  // Only used for frontend
   marketing?: Marketing[]
-  poster?: string[]
-  factory: string
-  configure: string
 }
 
 export enum CoinType {
@@ -115,12 +126,26 @@ export interface OnchainTokensItem {
 
 export interface TokenConfigRes {
   name: string
-  value: {
-    kolFlag: number
-    CommunityFlag: number
-    walletCountKol: number
-    distributionRatioKol: number
-    walletCountCommunity: number
-    distributionRatioCommunity: number
+  value: TokenConfigValue
+  contracts: {
+    coin: TokenConfigContract[]
+    airdrop: TokenConfigContract[]
   }
+}
+
+interface TokenConfigValue {
+  distributionRatioKol: number
+  distributionRatioCommunity: number
+  walletCountKol: number
+  walletCountCommunity: number
+  kolFlag: number
+  CommunityFlag: number
+}
+
+interface TokenConfigContract {
+  chain: string
+  creator: string
+  address: string
+  category: number
+  version: string
 }

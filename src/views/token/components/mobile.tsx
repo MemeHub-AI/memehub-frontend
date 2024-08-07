@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { TokenInfoHeader } from './token-info-header'
-import { TradeTab } from './trade-tab'
+import { TradeTab } from './trade-tabs'
 import { TokenInfoCard } from './token-info-card'
 import { CommentTradeTab } from './comment-trade-tab'
 import { Chart } from '@/components/chart'
@@ -15,9 +15,9 @@ import { TradeAirdrop } from './trade-airdrop'
 import { HoldersRank } from './holders-rank'
 import { cn } from '@/lib/utils'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
-import { useAirdrop } from '../hooks/trade-v1/use-airdrop'
+import { useAirdrop } from '../hooks/evm/use-airdrop'
 import { airdropId } from '..'
-import { useBurnAirdrop } from '../hooks/trade-v1/use-burn-airdrop'
+import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 
 const enum TabName {
   Trade = '0',
