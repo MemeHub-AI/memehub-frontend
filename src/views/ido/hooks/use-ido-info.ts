@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
-import { useInterval } from 'react-use'
+import { useInterval } from 'ahooks'
 
 import { BI_ZERO } from '@/constants/number'
 import { idoAbi } from '@/contract/abi/ido/ido'

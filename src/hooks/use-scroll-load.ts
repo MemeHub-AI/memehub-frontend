@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useWindowScroll } from 'react-use'
+import { useScroll } from 'ahooks'
 
 import type { VoidFn } from '@/utils/types'
 
@@ -11,17 +11,17 @@ interface Options {
 export const useScrollLoad = (options: Options) => {
   const { onFetchNext, hasMore } = options
   const [isCalled, setIsCalled] = useState(false)
-  const { y } = useWindowScroll()
+  const { top } = useScroll() ?? { top: 0 }
   const { scrollHeight, clientHeight } = document.documentElement
   const totalScrollHeight = scrollHeight - clientHeight
 
   useEffect(() => {
     if (!hasMore) return
-    if (y !== totalScrollHeight) return
+    if (top !== totalScrollHeight) return
 
     onFetchNext?.()
     !isCalled && setIsCalled(true)
-  }, [y])
+  }, [top])
 
   return {
     noMore: isCalled && !hasMore,
