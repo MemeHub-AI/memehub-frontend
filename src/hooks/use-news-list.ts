@@ -1,9 +1,10 @@
-import { newsApi } from '@/api/news'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
+import { useScroll } from 'ahooks'
+
+import { newsApi } from '@/api/news'
 import { useStorage } from './use-storage'
 import { defaultImg } from '@/config/link'
-import { useScroll } from 'react-use'
 import { utilTime } from '@/utils/time'
 
 interface Options {
@@ -16,7 +17,7 @@ export const useNewsList = (options?: Options) => {
   const { getArea } = useStorage()
   const [area, setArea] = useState(+getArea())
   const ref = useRef<HTMLDivElement>(null)
-  const { y } = useScroll(ref)
+  const { top } = useScroll(ref) ?? { top: 0 }
   const newsListKeys = [newsApi.getNews.name, area, isOpportunity]
 
   const {
@@ -101,7 +102,7 @@ export const useNewsList = (options?: Options) => {
     const { scrollHeight, clientHeight } = ref.current
 
     if (
-      scrollHeight - y < clientHeight * 1.5 &&
+      scrollHeight - top < clientHeight * 1.5 &&
       !isFetching &&
       !isFetchNextPageError &&
       hasNextPage &&
@@ -109,7 +110,7 @@ export const useNewsList = (options?: Options) => {
     ) {
       fetchNextPage()
     }
-  }, [y, isFetchNextPageError])
+  }, [top, isFetchNextPageError])
 
   return {
     ref,

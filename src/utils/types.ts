@@ -1,3 +1,4 @@
+// TODO: use VoidFunction instead
 export type VoidFn = () => void
 
 export enum Order {

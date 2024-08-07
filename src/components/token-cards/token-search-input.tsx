@@ -1,9 +1,9 @@
 import React, { ComponentProps, useEffect, useState } from 'react'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useTranslation } from 'react-i18next'
-import { useDebounce } from 'react-use'
 import { useMutation } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
+import { useDebounceEffect } from 'ahooks'
 
 import { Input } from '../ui/input'
 import { cn } from '@/lib/utils'
@@ -49,7 +49,13 @@ export const TokenSearchInput = (props: Props) => {
     onSearched(result)
   }
 
-  useDebounce(onSearch, 500, [value])
+  useDebounceEffect(
+    () => {
+      onSearch()
+    },
+    [value],
+    { wait: 500 }
+  )
 
   useEffect(() => {
     if (isEmpty(value.trim())) {

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
-import { useDebounce } from 'react-use'
+import { useDebounceEffect } from 'ahooks'
 
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
@@ -31,7 +31,7 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
     })
   }
 
-  useDebounce(onSearch, 500, [value])
+  useDebounceEffect(onSearch, [value], { wait: 500 })
 
   return (
     <>

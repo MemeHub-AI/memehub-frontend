@@ -2,7 +2,7 @@ import React, { useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
-import { useDebounce } from 'react-use'
+import { useDebounceEffect } from 'ahooks'
 import { toast } from 'sonner'
 
 import { Input } from '@/components/ui/input'
@@ -106,7 +106,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     }
   }
 
-  useDebounce(calcAmount, 500, [value, isBuy, isTraded])
+  useDebounceEffect(calcAmount, [value, isBuy, isTraded], { wait: 500 })
 
   return (
     <>
