@@ -10,6 +10,7 @@ import type {
   OnchainTokensRes,
   TokenConfigRes,
   TokenCreateRes,
+  TokenDetailReq,
 } from './types'
 import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 
@@ -32,9 +33,9 @@ export const tokenApi = {
       '/api/v2/coin/list' + qs.stringify(req)
     )
   },
-  getDetail: (chain: string, addr: string) => {
+  getDetail: (req: TokenDetailReq) => {
     return api.GET<ApiResponse<TokenListItem>>(
-      `/api/v1/coin/coins/${chain}/${addr}`
+      '/api/v2/coin/detail' + qs.stringify(req)
     )
   },
   getComments: (chain: string, addr: string, req: PaginationReq) => {

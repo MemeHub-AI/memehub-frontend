@@ -81,6 +81,12 @@ export interface TokenCreateRes {
   is_active: boolean
 }
 
+export interface TokenDetailReq {
+  id?: string
+  chain?: string
+  address?: string
+}
+
 export enum CoinType {
   Normal,
   Erc404,

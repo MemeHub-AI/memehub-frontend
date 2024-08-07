@@ -8,7 +8,7 @@ type ChainsMap = Record<string | number, ChainData | undefined>
 interface ChainsStore {
   chains: ChainData[]
   loadingChains: boolean
-  // All chains, only allowing matching by chainName.
+  /** All chains, only allowing matching by chainName. */
   chainsMap: ChainsMap
   evmChainsMap: ChainsMap // Matching by name and id.
   svmChiansMap: ChainsMap // Matching by name and id.

@@ -13,7 +13,6 @@ import { fmt } from '@/utils/fmt'
 import { utilLang } from '@/utils/lang'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Badge } from '@/components/ui/badge'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { PosterImages } from '@/components/poster-images'
 import { TokenSocialLinks } from '../../../components/token-links'
 import { AvatarCard } from '@/components/avatar-card'
@@ -28,12 +27,10 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
     isIdoToken,
     isGraduated,
     tokenMetadata,
-    chainId,
+    tokenChain,
   } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { evmChainsMap } = useChainsStore()
-  const chain = evmChainsMap[chainId]
 
   if (isLoadingTokenInfo) {
     return (
@@ -61,7 +58,7 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
 
   return (
     <AvatarCard
-      src={tokenInfo?.image}
+      src={tokenInfo?.image_url}
       className="mt-20"
       avatarChildren={
         isGraduated && (
@@ -76,8 +73,8 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
     >
       {/* Chain logo */}
       <div className="absolute left-2 top-2 flex items-center gap-1">
-        <Avatar src={chain?.logo} size={20} />
-        <p className="text-sm max-w-20 break-all">{chain?.displayName}</p>
+        <Avatar src={tokenChain?.logo} size={20} />
+        <p className="text-sm max-w-20 break-all">{tokenChain?.displayName}</p>
       </div>
 
       {/* Name/symbol */}
@@ -85,7 +82,7 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
         {isNotFound && !isIdoToken && !tokenMetadata
           ? t('token.not-found')
           : `${tokenInfo?.name ?? tokenMetadata?.name}(${
-              tokenInfo?.ticker ?? tokenMetadata?.symbol
+              tokenInfo?.symbol ?? tokenMetadata?.symbol
             })`}
       </div>
 
@@ -93,24 +90,27 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
       <TokenSocialLinks />
 
       {/* Poster */}
-      <PosterImages poster={tokenInfo?.poster} className="mt-2" />
+      <PosterImages poster={tokenInfo?.poster_urls} className="mt-2" />
 
       {/* Description */}
       <div className={cn('text-sm mt-1 break-all cursor-pointer')}>
-        {tokenInfo?.desc}
+        {tokenInfo?.description}
       </div>
 
       {/* Contract address */}
       {!isMobile && (!isNotFound || tokenMetadata) && (
         <div
           className="text-sm flex items-center cursor-pointer my-3"
-          onClick={() => copy(tokenInfo?.address ?? tokenMetadata?.token ?? '')}
+          onClick={() =>
+            copy(tokenInfo?.contract_address ?? tokenMetadata?.token ?? '')
+          }
         >
           <span>{t('ca')}:</span>
           <span className="truncate mx-2">
-            {fmt.addr(tokenInfo?.address ?? tokenMetadata?.token ?? '', {
-              len: 12,
-            })}
+            {fmt.addr(
+              tokenInfo?.contract_address ?? tokenMetadata?.token ?? '',
+              { len: 12 }
+            )}
           </span>
           {isCopied ? <IoCheckmark size={16} /> : <MdContentCopy size={16} />}
         </div>

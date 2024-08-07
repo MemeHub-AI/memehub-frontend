@@ -130,7 +130,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
           <span className="ml-2">
             {BigNumber(totalAmount).toFormat()}{' '}
-            {tokenInfo?.ticker || tokenMetadata?.symbol}
+            {tokenInfo?.symbol ?? tokenMetadata?.symbol}
           </span>
         </div>
 

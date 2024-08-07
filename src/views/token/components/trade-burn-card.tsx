@@ -30,7 +30,7 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
     refetchAirdrop
   )
 
-  const burnText = `${remaining} ${tokenInfo?.ticker || tokenMetadata?.symbol}`
+  const burnText = `${remaining} ${tokenInfo?.symbol ?? tokenMetadata?.symbol}`
 
   return (
     <Card

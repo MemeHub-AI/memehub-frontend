@@ -36,8 +36,10 @@ export const Chart = memo(() => {
       return
     }
 
+    // TODO: enable chart
+    return
     createChart(chartRef.current, {
-      symbol: tokenInfo.ticker,
+      symbol: tokenInfo.symbol,
       interval: getInterval(chainName, tokenAddr) || '1m',
       tokenAddr,
     })

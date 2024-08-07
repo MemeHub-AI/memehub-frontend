@@ -26,8 +26,7 @@ export const useHolders = () => {
 
   const { lastJsonMessage, sendJsonMessage, getWebSocket } =
     useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(
-      // isNotFound ? '' : wsApiURL.tokenInfo,
-      '', // TODO: enable ws
+      isNotFound ? '' : wsApiURL.tokenInfo,
       {
         heartbeat,
         onOpen: () => {
@@ -47,7 +46,8 @@ export const useHolders = () => {
           isDisconnectMessage(data),
         shouldReconnect: () => true,
       },
-      !isNotFound
+      // !isNotFound
+      false // TOOD: remove
     )
 
   const clearHolders = () => {

@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Address, formatEther, isAddress } from 'viem'
 import { isEmpty } from 'lodash'
-import { useAccount } from 'wagmi'
 
 import { useEvmTrade } from './evm/use-trade'
 import { useTokenContext } from '@/contexts/token'
@@ -38,12 +37,11 @@ export const useTrade = (onSuccess?: () => void) => {
     tokenAddr,
     tokenMetadata,
     chainId,
+    chainName,
     network,
+    tokenChain,
   } = useTokenContext()
-  const { pool_address, ticker } = tokenInfo ?? {}
-  const { evmChainsMap } = useChainsStore()
-  const { chain } = tokenInfo ?? {}
-  const { chain: walletChain } = useAccount()
+  const { chainsMap } = useChainsStore()
 
   const {
     dexHash,
@@ -54,7 +52,7 @@ export const useTrade = (onSuccess?: () => void) => {
     dexResetTrade,
   } = useDexTrade(
     tokenAddr,
-    (isIdoToken ? idoTrumpCard.poolAddr : pool_address) as Address,
+    (isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.graduated_pool) as Address,
     chainId
   )
   const evmTrade = useEvmTrade(onSuccess)
@@ -78,8 +76,8 @@ export const useTrade = (onSuccess?: () => void) => {
 
   // TODO: add Sol, TON chains
   const updateLastTrade = async (type: TradeType, amount: string) => {
-    const tokenSymbol = ticker || tokenMetadata?.symbol
-    const reserveSymbol = evmChainsMap[chainId]?.native.symbol
+    const tokenSymbol = tokenInfo?.symbol || tokenMetadata?.symbol
+    const reserveSymbol = chainsMap[chainName]?.native.symbol
     lastTrade.type = type
 
     const getNonFixedLabel = (value: bigint, symbol?: string) =>
@@ -170,9 +168,7 @@ export const useTrade = (onSuccess?: () => void) => {
     showToast({
       ...lastTrade,
       hash,
-      txUrl: `${
-        chain?.explorer ?? walletChain?.blockExplorers?.default.url
-      }/tx/${hash}`,
+      txUrl: `${tokenChain?.explorer}/tx/${hash}`,
     })
     handleResetTrade()
   }, [hash])

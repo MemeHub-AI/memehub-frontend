@@ -50,13 +50,13 @@ export const useTradeLogs = () => {
 
   const { lastJsonMessage, sendJsonMessage } =
     useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(
-      // wsApiURL.tradeLogs,
-      '', // TODO: enable ws
+      wsApiURL.tradeLogs,
       {
         heartbeat,
         onOpen: () => sendJsonMessage({ type: 'message', data: null }),
         shouldReconnect: () => true,
-      }
+      },
+      false // TODO: remove
     )
 
   const shwoLatestTrade = (lastTrade: TradeInfoLog) => {

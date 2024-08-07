@@ -9,13 +9,14 @@ import { DistributorVersion } from '@/contract/abi/distributor'
 export const useTokenDetails = (
   tokenAddr: string | undefined,
   chainId: number,
-  version: TokenVersion
+  version: TokenVersion | undefined
 ) => {
   const tokenConfig = {
-    abi: tokenAbiMap[version],
+    abi: tokenAbiMap[version!],
     address: tokenAddr as Address,
     chainId,
   } as const
+  const enabled = !!tokenAddr && !!chainId && !!version
 
   const {
     data: [tokenVersion, bcVersion, airdropVersion, bcAddr, airdropAddr] = [],
@@ -31,7 +32,7 @@ export const useTokenDetails = (
     ],
     query: {
       select: (data) => data.map((v) => v.result),
-      enabled: !!tokenAddr,
+      enabled,
     },
   })
 
@@ -42,13 +43,13 @@ export const useTokenDetails = (
   } = useReadContract({
     ...tokenConfig,
     functionName: 'getMetadata',
-    query: { enabled: !!tokenAddr },
+    query: { enabled },
   })
 
   const { data: totalSupply = BI_ZERO } = useReadContract({
     ...tokenConfig,
     functionName: 'totalSupply',
-    query: { enabled: !!tokenAddr },
+    query: { enabled },
   })
 
   const refetchDetails = () => {

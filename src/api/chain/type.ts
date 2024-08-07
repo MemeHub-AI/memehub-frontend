@@ -12,4 +12,5 @@ export interface ChainData {
   }
   is_supported: boolean
   logo: string
+  // explorer: string
 }

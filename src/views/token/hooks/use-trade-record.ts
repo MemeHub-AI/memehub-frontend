@@ -29,8 +29,7 @@ export const useTradeRecord = () => {
   const { lastJsonMessage, sendJsonMessage, getWebSocket } = useWebSocket<
     WSMessageBase<WSTradeRecordMessage[] | null>
   >(
-    // isNotFound ? '' : wsApiURL.tradeRecord,
-    '', // TODO: enable ws
+    isNotFound ? '' : wsApiURL.tradeRecord,
     {
       heartbeat,
       onOpen: () => {
@@ -50,7 +49,8 @@ export const useTradeRecord = () => {
         isDisconnectMessage(data),
       shouldReconnect: () => true,
     },
-    !isNotFound
+    // !isNotFound
+    false // TODO: remove
   )
 
   const fetchNextPage = () => {
