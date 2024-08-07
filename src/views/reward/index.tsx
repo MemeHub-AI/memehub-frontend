@@ -13,7 +13,7 @@ import { InviteReward } from './components/invite-reward'
 import { InviteTable } from './components/invite-table'
 import { useUserStore } from '@/stores/use-user-store'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { INVITE_REWARD } from '@/constants/invite'
+import { inviteReward } from '@/config/invite'
 import { cn } from '@/lib/utils'
 import { ConnectWallet } from '@/components/connect-wallet'
 
@@ -33,7 +33,7 @@ export const RewardPage = () => {
         <p className="leading-9">
           {t('reward.invite-desc').split('$')[0]}
           <span className="text-blue-600 font-bold text-xl">
-            {INVITE_REWARD}%
+            {inviteReward}%
           </span>
           {t('reward.invite-desc').split('$')[1]}
         </p>

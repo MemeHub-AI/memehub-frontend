@@ -23,7 +23,7 @@ import {
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
 import { Avatar } from '@/components/ui/avatar'
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 
 const toastBase = (children: ReactNode) => {
   toast.dismiss()

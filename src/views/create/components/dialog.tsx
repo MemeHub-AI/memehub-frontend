@@ -1,6 +1,5 @@
 import React, { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 import { useRouter } from 'next/router'
 import { PiWarningCircle } from 'react-icons/pi'
 
@@ -10,6 +9,16 @@ import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { isUserReject } from '@/utils/contract'
 import { fmt } from '@/utils/fmt'
 import { useCreateTokenContext } from '@/contexts/create-token'
+import { CONTRACT_ERR } from '@/errors/contract'
+
+const withWarningIcon = (children: ReactNode) => {
+  return (
+    <div className="flex items-center gap-2 text-red-500">
+      <PiWarningCircle size={20} />
+      {children}
+    </div>
+  )
+}
 
 export const CreateTokenStatusDialog = () => {
   const { t } = useTranslation()
@@ -28,20 +37,11 @@ export const CreateTokenStatusDialog = () => {
   } = useCreateTokenContext()
   const router = useRouter()
 
-  const withIcon = (children: ReactNode) => {
-    return (
-      <div className="flex items-center gap-2 text-red-500">
-        <PiWarningCircle size={18} />
-        {children}
-      </div>
-    )
-  }
-
-  // Submit token info
+  // Backend create
   if (isCreatingToken) {
     return (
       <AlertDialog
-        open={isCreatingToken}
+        defaultOpen
         title={t('deploy.backend.submitting')}
         description={t('deploy.backend.submitting.desc')}
         showFooter={false}
@@ -49,7 +49,7 @@ export const CreateTokenStatusDialog = () => {
     )
   }
 
-  // Submiting, create start.
+  // Contract submiting
   if (isSubmitting) {
     return (
       <Dialog open={isSubmitting} contentProps={{ onCloseClick: resetDeploy }}>
@@ -59,18 +59,14 @@ export const CreateTokenStatusDialog = () => {
     )
   }
 
-  // Submit error.
+  // Submit error
   if (submitError) {
-    // User rejected.
-    if (isUserReject(submitError)) {
-      resetDeploy()
-      toast.warning(t('user-rejected'))
-      return
-    }
+    if (isUserReject(submitError)) return CONTRACT_ERR.userReject()
+
     return (
       <AlertDialog
-        open={!!submitError}
-        title={withIcon(t('deploy.submit.error') + ':')}
+        defaultOpen
+        title={withWarningIcon(t('deploy.submit.error') + ':')}
         description={
           <span className="break-all line-clamp-3">{submitError?.message}</span>
         }
@@ -83,12 +79,7 @@ export const CreateTokenStatusDialog = () => {
   // Confirming, Submit success.
   if (isConfirming) {
     return (
-      <Dialog
-        open={isConfirming}
-        contentProps={{
-          onCloseClick: () => toast.info(t('deploy.confirm.close')),
-        }}
-      >
+      <Dialog open={isConfirming} contentProps={{ onCloseClick: resetDeploy }}>
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
           <span>{t('deploy.submit.success.desc')}</span>
@@ -102,7 +93,7 @@ export const CreateTokenStatusDialog = () => {
     return (
       <AlertDialog
         open={!!confirmError}
-        title={withIcon(t('deploy.confirm.error') + ':')}
+        title={withWarningIcon(t('deploy.confirm.error') + ':')}
         description={
           <span className="break-all line-clamp-3">
             {confirmError?.message}

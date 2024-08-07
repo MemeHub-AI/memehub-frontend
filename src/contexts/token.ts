@@ -3,7 +3,7 @@ import { type Address } from 'viem'
 
 import { useTokenInfo } from './../views/token/hooks/use-token-info'
 import { CONTEXT_ERR } from '@/errors/context'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 
 interface Context
   extends Omit<ReturnType<typeof useTokenInfo>, 'isRefetchingTokenInfo'> {

@@ -1,4 +1,4 @@
-import { AirdropType } from '@/constants/airdrop'
+import { AirdropType } from '@/enums/airdrop'
 import { BcAbiVersion } from '@/contract/abi/bonding-curve'
 
 export const deployVersion = BcAbiVersion.V0_1_0
@@ -13,3 +13,8 @@ export const deployEvmAirdropParams = {
   CommunityFlag: AirdropType.None,
   flag: [] as bigint[],
 }
+
+export const deployLogAddr =
+  '0x353a819cf6bf8092d77d188df7a4f24412519bf3c6426029a55e10fbebf0970e'
+
+export const deployLogAddrIdx = 1

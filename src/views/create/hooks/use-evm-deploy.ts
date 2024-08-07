@@ -17,7 +17,7 @@ import { DeployFormParams } from './use-deploy'
 import { deployEvmAirdropParams, deployVersion } from '@/config/deploy'
 import { useCreateToken } from './use-create-token'
 import { Marketing, MarketType } from '@/api/token/types'
-import { AirdropType } from '@/constants/airdrop'
+import { AirdropType } from '@/enums/airdrop'
 
 export const useEvmDeploy = () => {
   const { address, chainId = 0 } = useAccount()

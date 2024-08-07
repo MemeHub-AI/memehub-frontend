@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 
 import type { ChainData } from '@/api/chain/type'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 
 type ChainsMap = Record<string | number, ChainData | undefined>
 

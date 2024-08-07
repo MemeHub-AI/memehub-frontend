@@ -46,6 +46,8 @@ export const CONTRACT_ERR = {
     if (showToast) toast.error(t('contract.err.exec'))
   },
 
+  userReject: () => toast.warning(t('user-rejected')),
+
   // Not found error.
   configNotFound: () => toast.error(t('contract.err.config-not-found')),
   proofNotFound: () => toast.error(t('contract.err.proof-not-found')),

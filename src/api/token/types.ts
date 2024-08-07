@@ -1,6 +1,39 @@
-import type { UserInfoRes } from '../user/types'
+import type { UserCoinsCreated, UserInfoRes } from '../user/types'
 
-export interface TokenListItem {
+export interface TokenListItem extends UserCoinsCreated {
+  twitter_url: string
+  telegram_url: string
+  website: string
+  virtual_liquidity: string
+  replies: string
+  last_reply: null
+  create_time: null
+  hash: string
+  explorer_tx: string
+  version: string
+  pool_address: null | string
+  poster: string[]
+}
+
+export interface TokenCreateReq {
+  chain: string
+  name: string
+  symbol: string
+  description: string
+  image_url: string
+  poster_urls?: string[]
+  twitter_url?: string
+  telegram_url?: string
+  website_url?: string
+  factory_address: string
+  airdrop_address: string
+  coin_type?: CoinType
+
+  // Only used for frontend
+  marketing?: Marketing[]
+}
+
+export interface TokenCreateRes {
   id: string
   created_at: string
   updated_at: string
@@ -25,24 +58,6 @@ export interface TokenListItem {
   start_price: string
   coin_type: number
   is_active: boolean
-}
-
-export interface TokenNewReq {
-  chain: string
-  name: string
-  symbol: string
-  description: string
-  image_url: string
-  poster_urls?: string[]
-  twitter_url?: string
-  telegram_url?: string
-  website_url?: string
-  factory_address: string
-  airdrop_address: string
-  coin_type?: CoinType
-
-  // Only used for frontend
-  marketing?: Marketing[]
 }
 
 export enum CoinType {

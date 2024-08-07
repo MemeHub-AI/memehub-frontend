@@ -2,13 +2,14 @@ import { api } from '..'
 import { qs } from '@/hooks/use-fetch'
 
 import type {
-  TokenNewReq,
+  TokenCreateReq,
   TokenUpdateReq,
   TokenListItem,
   TokenCommentListRes,
   TokenAddCommentReq,
   OnchainTokensRes,
   TokenConfigRes,
+  TokenCreateRes,
 } from './types'
 import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 
@@ -21,8 +22,8 @@ export const tokenApi = {
   getConfig() {
     return api.GET<ApiResponse<TokenConfigRes>>('/api/v2/coin/configure')
   },
-  create(req: TokenNewReq) {
-    return api.POST<ApiResponse<TokenListItem>>('/api/v2/coin/create', {
+  create(req: TokenCreateReq) {
+    return api.POST<ApiResponse<TokenCreateRes>>('/api/v2/coin/create', {
       body: req,
     })
   },

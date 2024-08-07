@@ -9,7 +9,7 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { reportException } from '@/errors'
 import { addrMap } from '@/contract/address'
 
-export const useUniswapV2Amount = (poolAddr?: Address | undefined | null) => {
+export const useUniswapV2Amount = (poolAddr?: string | undefined | null) => {
   const { chainId } = useChainInfo()
   const { uniswapv2Router } = addrMap[chainId] ?? {}
   const config = {
@@ -23,7 +23,7 @@ export const useUniswapV2Amount = (poolAddr?: Address | undefined | null) => {
 
     return readContract(wagmiConfig, {
       abi: uniswapV2LPAbi,
-      address: poolAddr!,
+      address: poolAddr as Address,
       chainId,
       functionName: 'getReserves',
     }).catch(() => BI_ZERO_TUPLE)

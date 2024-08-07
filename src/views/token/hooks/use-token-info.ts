@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { formatEther, zeroAddress } from 'viem'
 
 import { tokenApi } from '@/api/token'
 import { useTradeSearchParams } from './use-search-params'
@@ -9,7 +10,6 @@ import { TokenAbiVersion } from '@/contract/abi/token'
 import { idoTrumpCard } from '@/config/ido'
 import { useReadContract } from 'wagmi'
 import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
-import { formatEther, zeroAddress } from 'viem'
 import { BI_ZERO } from '@/constants/number'
 
 export const useTokenInfo = () => {
@@ -40,7 +40,7 @@ export const useTokenInfo = () => {
 
   const { isLoadingDetails, ...tokenDetails } = useTokenDetails(
     // TODO: adapt ido token.
-    tokenAddr === idoTrumpCard.address ? undefined : tokenAddr,
+    tokenAddr === idoTrumpCard.address || isNotFound ? undefined : tokenAddr,
     chainId,
     TokenAbiVersion.V0_2_0 // TODO: should use `tokenInfo`
   )

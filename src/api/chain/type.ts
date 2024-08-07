@@ -1,4 +1,4 @@
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 
 export interface ChainData {
   id: string
