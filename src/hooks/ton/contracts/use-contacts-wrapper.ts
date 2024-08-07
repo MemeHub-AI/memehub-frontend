@@ -1,16 +1,16 @@
 import { Address, OpenedContract, toNano } from '@ton/core'
 
-import { useInit } from './useInit'
-import { useTonClient } from './useTonClient'
-import { useConnection } from './useConnection'
+import { useInit } from './use-init'
+import { useTonClient } from './use-ton-client'
+import { useConnection } from './use-connection'
 
 import { useTonMainAddress } from '../use-ton-address'
 import { Factory } from '@/contract/factory/factory'
-import { Bondingcurve } from '@/contract/factory/Bondingcurve'
+import { Bondingcurve } from '@/contract/factory/bonding-curve'
 import {
   buildOnchainMetadata,
   SendCoinsContent,
-} from '@/contract/factory/buildOnchain'
+} from '@/contract/factory/build-on-chain'
 
 export const useContactsWrapper = () => {
   const client = useTonClient()

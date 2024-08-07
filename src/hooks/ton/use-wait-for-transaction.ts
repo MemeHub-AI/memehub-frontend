@@ -1,5 +1,5 @@
 import { Address, beginCell, storeMessage } from '@ton/core'
-import { useTonClient } from './contracts/useTonClient'
+import { useTonClient } from './contracts/use-ton-client'
 import { toast } from 'sonner'
 
 interface Options {

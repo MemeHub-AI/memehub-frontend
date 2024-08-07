@@ -1,6 +1,6 @@
 import { Address } from '@ton/core'
-import { useInit } from './useInit'
-import { useTonClient } from './useTonClient'
+import { useInit } from './use-init'
+import { useTonClient } from './use-ton-client'
 import { useTonAddress } from '@tonconnect/ui-react'
 
 export const useBalance = () => {

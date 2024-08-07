@@ -1,5 +1,5 @@
 import { TonClient } from '@ton/ton'
-import { useInit } from './useInit'
+import { useInit } from './use-init'
 import { useTonMainAddress } from '../use-ton-address'
 
 export function useTonClient() {

@@ -22,7 +22,7 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Description } from './desc'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { ChainField } from './chain-field'
-import { useContactsWrapper } from '@/hooks/ton/contracts/useContactsWrapper'
+import { useContactsWrapper } from '@/hooks/ton/contracts/use-contacts-wrapper'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
@@ -41,6 +41,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const symbol = native?.symbol || chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
+    // TODO: Move to deploy
     console.log(values)
 
     const sendCoinOptions = {
@@ -56,6 +57,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
       toast.warning(t('onsubmit.createing.warning'))
       return
     }
+    // TODO: Multichain adaptation
     // onSubmit!(values!)
   }
 

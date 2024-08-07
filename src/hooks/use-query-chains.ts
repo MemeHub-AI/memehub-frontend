@@ -23,6 +23,7 @@ export const useQueryChains = () => {
     retryDelay: 3_000,
   })
 
+  // TODO: Remove this when tonchain is ready.
   const tonChain: ChainData = {
     id: '0',
     name: 'ton',

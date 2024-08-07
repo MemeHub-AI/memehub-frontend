@@ -1,6 +1,6 @@
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
 import { Cell, Sender, SenderArguments } from '@ton/core'
-import { useWaitForTransaction } from '../useWaitForTransaction'
+import { useWaitForTransaction } from '../use-wait-for-transaction'
 
 interface Interval {
   /** interval of request */
