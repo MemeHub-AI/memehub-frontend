@@ -25,7 +25,6 @@ import { dotenv } from '@/utils/env'
 type Keys =
   | 'reserveToken'
   | 'uniswapv2Router'
-  | 'bondingCurve'
   | 'recommend'
   | 'exchangeNft'
   | 'kolNft'
@@ -88,7 +87,6 @@ const dev: AddrMap = {
     reserveToken: prod[bsc.id]?.reserveToken,
     uniswapv2Router: prod[bsc.id]?.uniswapv2Router,
 
-    bondingCurve: '0x2d3b2Ff5930c1710204aE2c16E3C464De4a653EF',
     recommend: '0x80Ba6203Ac72bb8F4D807E3A58412Bc6B2A9f3da',
 
     exchangeNft: '0x5f5EAC903c8CCf445671580C178a7B6815519a12',
@@ -101,7 +99,6 @@ const dev: AddrMap = {
     reserveToken: prod[base.id]?.reserveToken,
     uniswapv2Router: prod[base.id]?.uniswapv2Router,
 
-    bondingCurve: '0x15374e7000d9633a3E7782998407Eb98293E478f',
     recommend: '0x9552e34D141725f812acE96014a6Bb5946cC3931',
 
     exchangeNft: '0xBe6544fb6041Fc0638D1E03A8ff41Fc718596758',
@@ -111,7 +108,6 @@ const dev: AddrMap = {
     reserveToken: prod[blast.id]?.reserveToken,
     uniswapv2Router: prod[blast.id]?.uniswapv2Router,
 
-    bondingCurve: '0x3558F554C56067cEa77457F7329FfB55189A29e3',
     recommend: '0x3e5E1904d24427441Fef1FdCFB2f7B9288b8BbeD',
 
     exchangeNft: '0xdBcf1F26CA92F61ba0C466a68F06460158339b05',
@@ -123,7 +119,6 @@ const dev: AddrMap = {
     reserveToken: '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
     uniswapv2Router: '0xD99D1c33F9fC3444f8101754aBC46c52416550D1',
 
-    bondingCurve: '0xA905f0C204f794733535fD28aa7e6315D1C8cDb9',
     recommend: '0xC2b2D1B0571638872d2E87AD46d18a6819DA6ACE',
 
     exchangeNft: '0x2424e246609156F57cD53b4a9AA52B36Fd17fE45',
@@ -141,7 +136,6 @@ const dev: AddrMap = {
     reserveToken: '0x4200000000000000000000000000000000000006',
     uniswapv2Router: '0x62ff25cfd64e55673168c3656f4902bd7aa5f0f4',
 
-    bondingCurve: '0x89C87817990F50b520f960C28b73e225E8C1Bbfc',
     recommend: '0x884B7a0044Eda9b3573409047e1a18a67f365E57',
   },
   [fantomTestnet.id]: {
