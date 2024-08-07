@@ -6,7 +6,7 @@ import { toast } from 'sonner'
 import { useTokenContext } from '@/contexts/token'
 import {
   distributorAbiMap,
-  DistributorAbiVersion,
+  DistributorVersion,
 } from '@/contract/abi/distributor'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -20,7 +20,7 @@ export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
   const { setIsCalimingAirdrop } = useAirdropStore()
 
   const airdropConfig = {
-    abi: distributorAbiMap[airdropVersion as DistributorAbiVersion],
+    abi: distributorAbiMap[airdropVersion as DistributorVersion],
     address: airdropAddr!,
     chainId,
   }

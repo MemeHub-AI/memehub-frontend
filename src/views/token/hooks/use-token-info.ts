@@ -6,10 +6,10 @@ import { useTradeSearchParams } from './use-search-params'
 import { ApiCode, ApiResponse } from '@/api/types'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useTokenDetails } from '@/hooks/use-token-details'
-import { TokenAbiVersion } from '@/contract/abi/token'
+import { TokenVersion } from '@/contract/abi/token'
 import { idoTrumpCard } from '@/config/ido'
 import { useReadContract } from 'wagmi'
-import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { BI_ZERO } from '@/constants/number'
 
 export const useTokenInfo = () => {
@@ -42,12 +42,12 @@ export const useTokenInfo = () => {
     // TODO: adapt ido token.
     tokenAddr === idoTrumpCard.address || isNotFound ? undefined : tokenAddr,
     chainId,
-    TokenAbiVersion.V0_2_0 // TODO: should use `tokenInfo`
+    '0.2.0' // TODO: should use `tokenInfo`
   )
   const { bcVersion, bcAddr } = tokenDetails
 
   const { data: pools = [], refetch: refetchPools } = useReadContract({
-    abi: bondingCurveAbiMap[bcVersion as BcAbiVersion],
+    abi: bcAbiMap[bcVersion!],
     address: bcAddr!,
     chainId,
     functionName: 'pools_',

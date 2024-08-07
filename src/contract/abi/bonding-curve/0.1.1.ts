@@ -1,4 +1,4 @@
-export const bcAbiV0_1_0 = [
+export const bcAbiV0_1_1 = [
   {
     inputs: [],
     stateMutability: 'nonpayable',
@@ -176,15 +176,39 @@ export const bcAbiV0_1_0 = [
       },
       {
         indexed: false,
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
+        internalType: 'uint256',
+        name: 'airdropAmount',
+        type: 'uint256',
       },
       {
         indexed: false,
-        internalType: 'string',
-        name: 'symbol',
-        type: 'string',
+        internalType: 'uint256',
+        name: 'maxSupply',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'totalSupply',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'initPrice',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'kol',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'community',
+        type: 'uint256',
       },
     ],
     name: 'MemeHubDeployToken',
@@ -736,6 +760,19 @@ export const bcAbiV0_1_0 = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'memeXFactory_',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -1009,6 +1046,19 @@ export const bcAbiV0_1_0 = [
       },
     ],
     name: 'setMaxSupply',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_memeXFactory',
+        type: 'address',
+      },
+    ],
+    name: 'setMemeXFactory',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

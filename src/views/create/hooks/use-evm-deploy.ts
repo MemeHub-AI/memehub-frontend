@@ -9,12 +9,12 @@ import {
 } from 'wagmi'
 
 import { BI_ZERO } from '@/constants/number'
-import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { getDeployLogsAddr } from '@/utils/contract'
 import { DeployFormParams } from './use-deploy'
-import { deployEvmAirdropParams, deployVersion } from '@/config/deploy'
+import { deployEvmAirdropParams } from '@/config/deploy'
 import { useCreateToken } from './use-create-token'
 import { Marketing, MarketType } from '@/api/token/types'
 import { AirdropType } from '@/enums/airdrop'
@@ -22,12 +22,12 @@ import { AirdropType } from '@/enums/airdrop'
 export const useEvmDeploy = () => {
   const { address, chainId = 0 } = useAccount()
   const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
-  const { bcAddress, configValue } = useCreateToken()
+  const { configValue, bcAddress, bcVersion } = useCreateToken()
   const bcConfig = {
-    abi: bondingCurveAbiMap[deployVersion],
+    abi: bcAbiMap[bcVersion!],
     address: bcAddress!,
     chainId,
-  }
+  } as const
 
   const { data: deployFee = BI_ZERO } = useReadContract({
     ...bcConfig,
@@ -87,8 +87,8 @@ export const useEvmDeploy = () => {
       CONTRACT_ERR.balanceInsufficient()
       return false
     }
-    if (!bcAddress || BigNumber(chainId).isZero()) {
-      CONTRACT_ERR.configNotFound()
+    if (!bcConfig.address || !bcConfig.abi || bcConfig.chainId <= 0) {
+      CONTRACT_ERR.configNotFound('address/abi/chain id')
       return false
     }
     if (!configValue) {

@@ -5,7 +5,7 @@ import { BigNumber } from 'bignumber.js'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { getDeadline, subSlippage } from '@/utils/contract'
 import { useInvite } from '../use-invite'
-import { BcAbiVersion, bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
+import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeAmount } from './use-trade-amount'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
@@ -14,10 +14,9 @@ export const useEvmTrade = (onSuccess?: () => void) => {
   const { address } = useAccount()
   const { getReferrals } = useInvite()
   const { tokenAddr, chainId, bcVersion, bcAddr } = useTokenContext()
-  const bcAbi = bondingCurveAbiMap[bcVersion as BcAbiVersion.V0_1_0]
   const { getReserveAmount, getTokenAmount } = useTradeAmount()
   const bcConfig = {
-    abi: bcAbi,
+    abi: bcAbiMap[bcVersion!],
     address: bcAddr!,
     chainId,
   }
