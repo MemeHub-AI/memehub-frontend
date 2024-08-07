@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { Address, formatEther, Hash } from 'viem'
+import { formatEther } from 'viem'
 import {
   useAccount,
   useBalance,
@@ -10,36 +10,29 @@ import {
 
 import { BI_ZERO } from '@/constants/number'
 import { bondingCurveAbiMap } from '@/contract/abi/bonding-curve'
-import { addrMap } from '@/contract/address'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { getDeployLogsAddr } from '@/utils/contract'
-import { useAirdropParams } from './use-airdrop-params'
 import { DeployFormParams } from './use-deploy'
-import { deployVersion } from '@/config/deploy'
+import { deployEvmAirdropParams, deployVersion } from '@/config/deploy'
+import { useCreateToken } from './use-create-token'
+import { Marketing, MarketType } from '@/api/token/types'
+import { AirdropType } from '@/constants/airdrop'
 
-export const useEvmDeploy = (
-  onSuccess?: (
-    parmas: DeployFormParams & {
-      hash: Hash
-      configure: string
-      factory: Address
-    }
-  ) => void
-) => {
+export const useEvmDeploy = () => {
   const { address, chainId = 0 } = useAccount()
   const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
-  const { bondingCurve } = addrMap[chainId] ?? {}
+  const { bcAddress, configValue } = useCreateToken()
   const bcConfig = {
-    abi: bondingCurveAbiMap[deployVersion], // TODO: match version
-    address: bondingCurve!,
+    abi: bondingCurveAbiMap[deployVersion],
+    address: bcAddress!,
     chainId,
   }
 
   const { data: deployFee = BI_ZERO } = useReadContract({
     ...bcConfig,
     functionName: 'creationFee_',
-    query: { enabled: !!bondingCurve },
+    query: { enabled: !!bcAddress },
   })
 
   const {
@@ -54,29 +47,51 @@ export const useEvmDeploy = (
     },
   })
   const {
-    data,
+    data: { logs } = {},
     error: confirmError,
     isLoading: isConfirming,
     isSuccess: isDeploySuccess,
     isError: isDeployError,
   } = useWaitForTx({ hash })
-  const deployedAddr = useMemo(() => getDeployLogsAddr(data?.logs), [data])
+  const deployedAddr = useMemo(() => getDeployLogsAddr(logs), [logs])
 
-  const { getEvmParams } = useAirdropParams()
+  const getAirdropParams = (marketing: Marketing[] | undefined) => {
+    const params = { ...deployEvmAirdropParams }
+    const {
+      distributionRatioKol,
+      walletCountKol,
+      distributionRatioCommunity,
+      walletCountCommunity,
+    } = configValue!
+    const hasKol = marketing?.find((m) => m.type === MarketType.Kol)
+    const hasCmnt = marketing?.find((m) => m.type === MarketType.Community)
 
-  const checkForDeploy = (
-    config: string | undefined,
-    airdropParams: undefined | any
-  ) => {
+    if (hasKol) {
+      params.isDistribution = true
+      params.distributionRatioKol = distributionRatioKol * 100
+      params.walletCountKol = walletCountKol
+      params.kolFlag = AirdropType.All
+    }
+    if (hasCmnt) {
+      params.isDistribution = true
+      params.distributionRatioCommunity = distributionRatioCommunity * 100
+      params.walletCountCommunity = walletCountCommunity
+      params.CommunityFlag = AirdropType.All
+    }
+
+    return params
+  }
+
+  const checkForDeploy = () => {
     if (BigNumber(balance.toString()).lt(deployFee.toString())) {
       CONTRACT_ERR.balanceInsufficient()
       return false
     }
-    if (!bondingCurve || BigNumber(chainId).isZero()) {
+    if (!bcAddress || BigNumber(chainId).isZero()) {
       CONTRACT_ERR.configNotFound()
       return false
     }
-    if (!airdropParams || !config) {
+    if (!configValue) {
       CONTRACT_ERR.marketParamsNotFound()
       return false
     }
@@ -84,32 +99,20 @@ export const useEvmDeploy = (
     return true
   }
 
-  const deploy = async (params: DeployFormParams) => {
-    const { name, ticker, chain, marketing } = params
-    const { configure, distributorParams } = await getEvmParams(
-      chain,
-      marketing
-    )
-    if (!checkForDeploy(configure, distributorParams)) return
-    if (!bondingCurve) return
+  const deploy = async ({
+    name,
+    symbol,
+    tokenId,
+    marketing,
+  }: DeployFormParams & { tokenId: string }) => {
+    if (!checkForDeploy()) return
 
-    writeContract(
-      {
-        ...bcConfig,
-        functionName: 'createToken',
-        args: [[name, ticker], [], distributorParams!],
-        value: deployFee,
-      },
-      {
-        onSuccess: (hash) =>
-          onSuccess?.({
-            ...params,
-            hash,
-            configure: configure!,
-            factory: bondingCurve!,
-          }),
-      }
-    )
+    writeContract({
+      ...bcConfig,
+      functionName: 'createToken',
+      args: [[name, symbol], [BigInt(tokenId)], getAirdropParams(marketing)],
+      value: deployFee,
+    })
   }
 
   return {

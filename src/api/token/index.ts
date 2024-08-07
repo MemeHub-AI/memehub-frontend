@@ -15,11 +15,14 @@ import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 export const tokenApi = {
   list(req: PaginationReq & { token?: string }) {
     return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
-      '/api/v1/coin/coinslist/' + qs.stringify(req)
+      '/api/v2/coin/list' + qs.stringify(req)
     )
   },
+  getConfig() {
+    return api.GET<ApiResponse<TokenConfigRes>>('/api/v2/coin/configure')
+  },
   create(req: TokenNewReq) {
-    return api.POST<ApiResponse<TokenListItem>>('/api/v1/coin/coins/', {
+    return api.POST<ApiResponse<TokenListItem>>('/api/v2/coin/create', {
       body: req,
     })
   },
@@ -58,8 +61,5 @@ export const tokenApi = {
     return api.GET<ApiResponse<OnchainTokensRes>>(
       '/api/v1/news/coinSearch/' + qs.stringify({ keyword })
     )
-  },
-  getConfig() {
-    return api.GET<ApiResponse<TokenConfigRes>>('/api/v1/coin/configure')
   },
 }

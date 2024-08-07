@@ -2,30 +2,22 @@ import { useMemo, useState } from 'react'
 
 import type { TokenNewReq } from '@/api/token/types'
 import { useCreateToken } from './use-create-token'
-import { CONTRACT_ERR } from '@/errors/contract'
 import { useEvmDeploy } from './use-evm-deploy'
 import { Network } from '@/constants/contract'
-import { getNetwork } from '@/utils/contract'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { deployErr } from '@/errors/deploy'
 
 export type DeployFormParams = Omit<
   TokenNewReq,
-  'hash' | 'factory' | 'configure'
+  'factory_address' | 'airdrop_address'
 >
-
-// Used to retry create token.
-let cacheParams: DeployFormParams
 
 export const useDeploy = () => {
   const [network, setNetwork] = useState(Network.Evm)
-  const {
-    createTokenData,
-    createTokenError,
-    isCreatingToken,
-    createToken,
-    updateToken,
-  } = useCreateToken()
+  const { createTokenData, isCreatingToken, createToken } = useCreateToken()
+  const { chainsMap } = useChainsStore()
 
-  const evmDeploy = useEvmDeploy((params) => createToken(params))
+  const evmDeploy = useEvmDeploy()
   // const svmDeploy = useSvmDeploy()
   // const tvmDeploy = useTvmDeploy()
 
@@ -48,32 +40,23 @@ export const useDeploy = () => {
     }[network]
   }, [network, evmDeploy]) // TODO: add more deps...
 
-  const deploy = async ({ marketing, ...params }: DeployFormParams) => {
-    cacheParams = params // Exclude `marekting`
-    const n = getNetwork(params.chain)
+  const deploy = async (params: DeployFormParams) => {
+    const tokenId = await createToken(params)
+    if (!tokenId) return deployErr.createFailed()
 
-    setNetwork(n)
-    if (n === Network.Evm) {
-      return evmDeploy.deploy({ marketing, ...params })
+    const { network } = chainsMap[params.chain] ?? {}
+    if (!network) return deployErr.networkNotFound()
+
+    setNetwork(network!)
+    if (network === Network.Evm) {
+      return evmDeploy.deploy({ ...params, tokenId: tokenId! })
     }
-    if (n === Network.Svm) {
+    if (network === Network.Svm) {
       // Solana
     }
-    if (n === Network.Tvm) {
+    if (network === Network.Tvm) {
       // TON
     }
-  }
-
-  const retryCreate = () => {
-    if (!cacheParams || !deployHash) {
-      CONTRACT_ERR.retryCreateFailed()
-      return
-    }
-
-    createToken({
-      ...(cacheParams as Omit<TokenNewReq, 'hash'>),
-      hash: deployHash,
-    })
   }
 
   return {
@@ -89,9 +72,7 @@ export const useDeploy = () => {
     submitError,
     confirmError,
     createTokenData,
-    createTokenError,
     deploy,
     resetDeploy,
-    retryCreate,
   }
 }

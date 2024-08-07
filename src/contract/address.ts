@@ -123,7 +123,7 @@ const dev: AddrMap = {
     reserveToken: '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd',
     uniswapv2Router: '0xD99D1c33F9fC3444f8101754aBC46c52416550D1',
 
-    bondingCurve: '0x06fa05905e63CEDfe9888a5F48fd25F0827b5AE0',
+    bondingCurve: '0xA905f0C204f794733535fD28aa7e6315D1C8cDb9',
     recommend: '0xC2b2D1B0571638872d2E87AD46d18a6819DA6ACE',
 
     exchangeNft: '0x2424e246609156F57cD53b4a9AA52B36Fd17fE45',

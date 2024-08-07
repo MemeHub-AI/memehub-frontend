@@ -36,7 +36,13 @@ const dev = {
   ],
   transports: {
     [sepolia.id]: fallback([http(), unstable_connector(injected)]),
-    [bscTestnet.id]: fallback([http(), unstable_connector(injected)]),
+    [bscTestnet.id]: fallback([
+      http(
+        'https://polished-old-valley.bsc-testnet.quiknode.pro/af2b2e4daee6f862aaff645c537377f3d4605d79/'
+      ),
+      http(),
+      unstable_connector(injected),
+    ]),
     [opBNBTestnet.id]: fallback([http(), unstable_connector(injected)]),
     [scrollSepolia.id]: fallback([http(), unstable_connector(injected)]),
     [baseSepolia.id]: fallback([http(), unstable_connector(injected)]),
