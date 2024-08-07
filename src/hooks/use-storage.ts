@@ -49,5 +49,9 @@ export const useStorage = (useSession = false) => {
 
     getInviteCode: () => get('invite_code'),
     setInviteCode: (v: string) => set('invite_code', v),
+
+    getMainChain: () => get('main_chain'),
+    setMainChain: (v: 'evm' | 'solana' | 'ton') => set('main_chain', v),
+    removeMainChain: () => remove('main_chain'),
   }
 }

@@ -3,12 +3,10 @@ import { useRouter } from 'next/router'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { LuTwitter, LuUser } from 'react-icons/lu'
 import { useAccount } from 'wagmi'
-import { useDisconnect } from 'wagmi'
 import { MdLogout } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { LiaTelegramPlane } from 'react-icons/lia'
 
-import { reportException } from '@/errors'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Avatar } from './ui/avatar'
 import { Routes } from '@/routes'
@@ -23,6 +21,8 @@ import {
   DropdownMenuContent,
 } from './ui/dropdown-menu'
 import { socialLink } from '@/config/link'
+import { useConnectWallet } from '@/hooks/use-connect-wallet'
+import { useWallet } from '@/hooks/use-wallet'
 
 export const AccountDropdown = () => {
   const { t } = useTranslation()
@@ -30,13 +30,8 @@ export const AccountDropdown = () => {
   const [disconnectOpen, setDisconnectOpen] = useState(false)
   const { userInfo } = useUserStore()
   const { isMobile } = useResponsive()
-  const { address } = useAccount()
-
-  const { disconnect } = useDisconnect({
-    mutation: {
-      onError: ({ message }) => reportException(message),
-    },
-  })
+  const { walletAddress } = useWallet()
+  const { walletDisconnect } = useConnectWallet()
 
   return (
     <Container
@@ -57,7 +52,7 @@ export const AccountDropdown = () => {
           <span>
             {userInfo?.name
               ? userInfo?.name.slice(0, 4)
-              : fmt.addr(userInfo?.name || address, {
+              : fmt.addr(userInfo?.name || walletAddress(), {
                   preLen: 2,
                   sufLen: 4,
                 })}
@@ -115,7 +110,7 @@ export const AccountDropdown = () => {
         onOpenChange={setDisconnectOpen}
         title={t('wallet.disconnect')}
         description={t('wallet.disconnect.confirm')}
-        onConfirm={() => disconnect()}
+        onConfirm={() => walletDisconnect()}
       />
     </Container>
   )

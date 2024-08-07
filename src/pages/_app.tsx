@@ -47,13 +47,14 @@ export default function App({ Component, pageProps }: AppProps) {
           `,
         }}
       ></Script>
-      <TonConnectUIProvider
-        manifestUrl={`${locationUrl}/tonconnect-manifest.json`}
-      >
-        <AppProviders>
+
+      <AppProviders>
+        <TonConnectUIProvider
+          manifestUrl={`${locationUrl}/tonconnect-manifest.json`}
+        >
           <AppLayout children={<Component {...pageProps} />} />
-        </AppProviders>
-      </TonConnectUIProvider>
+        </TonConnectUIProvider>
+      </AppProviders>
     </>
   )
 }

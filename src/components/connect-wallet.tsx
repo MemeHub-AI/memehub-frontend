@@ -1,20 +1,19 @@
 import React, { type ComponentProps } from 'react'
-import { useAccount } from 'wagmi'
 
 import { Button } from './ui/button'
 import { ChangeChainWallets } from './header/change-chain-wallets'
-import { useTonConnectUI } from '@tonconnect/ui-react'
+import { useConnectWallet } from '@/hooks/use-connect-wallet'
 
 export const ConnectWallet = ({
   children,
   className,
 }: ComponentProps<typeof Button>) => {
-  const { isConnected } = useAccount()
-  const [tonConnectUI, setOptions] = useTonConnectUI()
+  // const { getMainChain } = useStorage()
+  const { walletIsConnected } = useConnectWallet()
 
   return (
     <>
-      {isConnected || tonConnectUI.account?.address ? (
+      {walletIsConnected() ? (
         children
       ) : (
         <ChangeChainWallets className={className} />
@@ -24,15 +23,3 @@ export const ConnectWallet = ({
 }
 
 export default ConnectWallet
-
-/**
-  <Button
-    className={className}
-    size={isMobile ? 'sm' : 'default'}
-    disabled={isConnecting}
-    onClick={() => openConnectModal?.()}
-    type="button"
-  >
-    {isConnecting ? t('wallet.connecting') : t('wallet.connect')}
-  </Button>
- */
