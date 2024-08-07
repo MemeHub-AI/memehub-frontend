@@ -18,6 +18,7 @@ import { Button } from '@/components/ui/button'
 import { useUserStore } from '@/stores/use-user-store'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { useStorage } from '@/hooks/use-storage'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -31,6 +32,7 @@ export const FormLogo = ({ formData }: Props) => {
   const userStore = useUserStore()
   const { playGuaGua } = useAudioPlayer()
   const { checkForConnect } = useCheckAccount()
+  const { getMainChain } = useStorage()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
@@ -70,6 +72,11 @@ export const FormLogo = ({ formData }: Props) => {
       playGuaGua()
       fetchMemeLogo()
     }
+    if (getMainChain() === 'ton')
+      form.setValue(
+        formFields.logo,
+        'https://pfst.cf2.poecdn.net/base/image/aaaf3803de81a4702dbba8c6baab286dbddb24884340edbc372adcb1fd640349?w=1024&h=1024&pmaid=125142671'
+      )
   }, [loadingLogo])
 
   useEffect(() => {

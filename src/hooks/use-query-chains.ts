@@ -3,6 +3,8 @@ import { useQuery } from '@tanstack/react-query'
 
 import { chainApi } from '@/api/chain'
 import { useChainsStore } from '@/stores/use-chains-store'
+import { ChainData } from '@/api/chain/type'
+import { Network } from '@/constants/contract'
 
 export const useQueryChains = () => {
   const { setChains, setChainsMap } = useChainsStore()
@@ -21,9 +23,23 @@ export const useQueryChains = () => {
     retryDelay: 3_000,
   })
 
+  const tonChain: ChainData = {
+    id: '0',
+    name: 'ton',
+    logo: 'https://storage.memehub.ai/chains/logo/ton.png',
+    is_supported: true,
+    displayName: 'Ton',
+    network: Network.Tvm,
+    native: {
+      decimals: 9,
+      name: 'Ton',
+      symbol: 'TON',
+    },
+  }
+
   useEffect(() => {
     if (chains) {
-      setChains(chains)
+      setChains([...chains, tonChain])
       setChainsMap(chains)
     }
   }, [chains])

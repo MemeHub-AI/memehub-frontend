@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/select'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { ChainData } from '@/api/chain/type'
+import { Network } from '@/constants/contract'
 
 interface Props extends Omit<ComponentProps<typeof RadioGroup>, 'onChange'> {
   onChange?: (chain: ChainData) => void
@@ -46,9 +47,13 @@ export const ChainSelect = ({
 
   const switchChain = (c: ChainData | undefined) => {
     if (!c) return
-    switchChainAsync({ chainId: +c.id })
-      .then(() => onChange?.(c))
-      .catch(() => {})
+    if (Network.Evm === c.network) {
+      switchChainAsync({ chainId: +c.id })
+        .then(() => onChange?.(c))
+        .catch(() => {})
+    } else {
+      onChange?.(c)
+    }
   }
 
   if (loadingChains) return <div>{t('loading')}</div>
