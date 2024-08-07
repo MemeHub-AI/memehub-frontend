@@ -26,8 +26,8 @@ export const useTokenInfo = () => {
     // Be careful, chart will be recreate when refetch.
     refetch: refetchInfo,
   } = useQuery({
-    queryKey: [tokenApi.details.name, chainName, tokenAddr],
-    queryFn: () => tokenApi.details(chainName, tokenAddr),
+    queryKey: [tokenApi.getDetail.name, chainName, tokenAddr],
+    queryFn: () => tokenApi.getDetail(chainName, tokenAddr),
     retry: (count, e?: ApiResponse) => {
       if (e?.code === ApiCode.NotFound) return false
       return count < 2

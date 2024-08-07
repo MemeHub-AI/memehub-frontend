@@ -5,9 +5,9 @@ import { TokenListItem } from '@/api/token/types'
 
 export const useTokens = () => {
   const { data, isLoading, isFetching, fetchNextPage } = useInfiniteQuery({
-    queryKey: [tokenApi.list.name],
+    queryKey: [tokenApi.getList.name],
     queryFn: ({ pageParam }) => {
-      return tokenApi.list({
+      return tokenApi.getList({
         page: pageParam,
         page_size: 25,
       })

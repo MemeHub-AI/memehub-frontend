@@ -16,8 +16,8 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
   const [value, setValue] = useState('')
 
   const { data, isPending, mutateAsync, reset } = useMutation({
-    mutationKey: [tokenApi.list.name],
-    mutationFn: tokenApi.list,
+    mutationKey: [tokenApi.getList.name],
+    mutationFn: tokenApi.getList,
   })
   const tokens = data?.data?.results || []
 

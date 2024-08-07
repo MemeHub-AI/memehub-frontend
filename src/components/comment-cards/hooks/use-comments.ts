@@ -22,7 +22,7 @@ export const useComments = (enableFetchComments = true) => {
     fetchNextPage,
   } = useInfiniteQuery({
     enabled: enableFetchComments,
-    queryKey: [tokenApi.commentList.name + uniqueId, chainName, tokenAddr],
+    queryKey: [tokenApi.getComments.name + uniqueId, chainName, tokenAddr],
     refetchOnWindowFocus: false,
     initialPageParam: 1,
     queryFn: ({ pageParam }) => {
@@ -30,7 +30,7 @@ export const useComments = (enableFetchComments = true) => {
 
       // Claer when query.
       setComments([])
-      return tokenApi.commentList(chainName, tokenAddr, {
+      return tokenApi.getComments(chainName, tokenAddr, {
         page: pageParam,
         page_size: 25,
       })

@@ -22,8 +22,8 @@ export const TokenSearchInput = (props: Props) => {
   const [value, setValue] = useState('')
 
   const { data, mutateAsync, reset } = useMutation({
-    mutationKey: [tokenApi.list.name],
-    mutationFn: tokenApi.list,
+    mutationKey: [tokenApi.getList.name],
+    mutationFn: tokenApi.getList,
   })
 
   const onSearch = async () => {
