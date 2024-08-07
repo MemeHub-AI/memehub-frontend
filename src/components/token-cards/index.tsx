@@ -105,6 +105,7 @@ export const TokenCards = (props: Props) => {
           </div>
         }
       >
+        {/* TODO: use ido api */}
         <IdoCard />
         {!!cards.length &&
           filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
