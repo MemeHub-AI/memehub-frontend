@@ -11,27 +11,34 @@ import i18n from 'i18next'
 
 import i18nConfig from '@/i18n'
 import { wagmiConfig } from '@/config/wagmi'
+import { TonConnectUIProvider } from '@tonconnect/ui-react'
 
 export const queryClient = new QueryClient()
 
 export const AppProviders = ({ children }: ComponentProps<'div'>) => {
+  const locationUrl = typeof location !== 'undefined' ? location.origin : ''
+
   return (
     <I18nextProvider i18n={i18nConfig}>
-      <WagmiProvider config={wagmiConfig} reconnectOnMount>
-        <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider
-            modalSize="compact"
-            locale={i18n.language as Locale}
-            theme={lightTheme({
-              accentColor: 'black',
-              accentColorForeground: 'white',
-              borderRadius: 'medium',
-            })}
-          >
-            {children}
-          </RainbowKitProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
+      <TonConnectUIProvider
+        manifestUrl={`${locationUrl}/tonconnect-manifest.json`}
+      >
+        <WagmiProvider config={wagmiConfig} reconnectOnMount>
+          <QueryClientProvider client={queryClient}>
+            <RainbowKitProvider
+              modalSize="compact"
+              locale={i18n.language as Locale}
+              theme={lightTheme({
+                accentColor: 'black',
+                accentColorForeground: 'white',
+                borderRadius: 'medium',
+              })}
+            >
+              {children}
+            </RainbowKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      </TonConnectUIProvider>
     </I18nextProvider>
   )
 }

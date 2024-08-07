@@ -52,7 +52,7 @@ export const AccountDropdown = () => {
           <span>
             {userInfo?.name
               ? userInfo?.name.slice(0, 4)
-              : fmt.addr(userInfo?.name || walletAddress(), {
+              : fmt.addr(userInfo?.name || walletAddress, {
                   preLen: 2,
                   sufLen: 4,
                 })}

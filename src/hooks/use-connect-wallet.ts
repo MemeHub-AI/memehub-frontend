@@ -1,5 +1,5 @@
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
 import { useStorage } from './use-storage'
 import { reportException } from '@/errors'
 
@@ -12,6 +12,13 @@ export const useConnectWallet = () => {
   const { disconnect } = useDisconnect({
     mutation: {
       onError: ({ message }) => reportException(message),
+    },
+  })
+
+  // monitor evm's wallet disconnect
+  useAccountEffect({
+    onDisconnect() {
+      removeMainChain()
     },
   })
 
@@ -28,11 +35,11 @@ export const useConnectWallet = () => {
     if (getMainChain() === 'evm') {
       disconnect()
     } else if (getMainChain() === 'ton') {
-      tonConnectUI.disconnect()
+      tonConnectUI.disconnect().then(() => {
+        removeMainChain()
+      })
     }
     // more...
-
-    removeMainChain()
   }
 
   return { walletIsConnected, walletDisconnect }

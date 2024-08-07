@@ -5,17 +5,7 @@ export const useWallet = () => {
   const tonAddress = useTonAddress()
   const { address } = useAccount()
 
-  const walletAddress = () => {
-    if (tonAddress !== '') {
-      return tonAddress
-    }
-
-    if (address) {
-      return address
-    }
-
-    return 'no wallet'
-  }
+  const walletAddress = tonAddress || address
 
   return { walletAddress }
 }

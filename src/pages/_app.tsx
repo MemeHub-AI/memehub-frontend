@@ -7,14 +7,12 @@ import '@rainbow-me/rainbowkit/styles.css'
 import { AppProviders } from '@/components/app-providers'
 import { AppLayout } from '@/components/layouts/app'
 import { Buffer } from 'buffer'
-import { TonConnectUIProvider } from '@tonconnect/ui-react'
 
 export default function App({ Component, pageProps }: AppProps) {
   // If you want to initialize some global states,
   // should write them in the `AppLayout`, not here.
-  ;(global as any).Buffer = Buffer
 
-  const locationUrl = typeof location !== 'undefined' ? location.href : ''
+  ;(global as any).Buffer = Buffer
 
   return (
     <>
@@ -49,11 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
       ></Script>
 
       <AppProviders>
-        <TonConnectUIProvider
-          manifestUrl={`${locationUrl}/tonconnect-manifest.json`}
-        >
-          <AppLayout children={<Component {...pageProps} />} />
-        </TonConnectUIProvider>
+        <AppLayout children={<Component {...pageProps} />} />
       </AppProviders>
     </>
   )
