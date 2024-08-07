@@ -12,12 +12,12 @@ import { TokenDesktop } from './components/desktop'
 import { TokenMobile } from './components/mobile'
 import { useTradeSearchParams } from './hooks/use-search-params'
 import { useChainsStore } from '@/stores/use-chains-store'
-import { idoTrumpCard } from '@/config/ido'
 import { NotFound } from '@/components/not-found'
 import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
 import { useNftCheck } from '@/hooks/use-nft-check'
 import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
 import { Network } from '@/enums/contract'
+import { TokenType } from '@/enums/token'
 
 export const airdropId = 20 // TODO: temp, should be backend id.
 
@@ -26,9 +26,8 @@ export const TokenPage = () => {
   const { chainName, tokenAddr, isReady } = useTradeSearchParams()
   const { chainsMap } = useChainsStore()
   const { isMobile } = useResponsive()
-  const tokenInfo = useTokenInfo()
+  const { tokenInfo, isLoadingTokenInfo, ...oterInfo } = useTokenInfo()
 
-  const { isLoadingTokenInfo } = tokenInfo
   const tokenChain = chainsMap[chainName]
   const chainId = +(tokenChain?.id ?? 0)
   const reserveSymbol = tokenChain?.native.symbol
@@ -61,16 +60,14 @@ export const TokenPage = () => {
     )
   }
 
-  // TODO: ido temp
-  const isIdoToken = tokenAddr === idoTrumpCard.address
-  if (isIdoToken) tokenInfo.tokenInfo = idoTrumpCard as any
-
   return (
     <TokenProvider
       value={{
-        ...tokenInfo,
+        ...oterInfo,
+        tokenInfo,
+        isLoadingTokenInfo,
         reserveSymbol,
-        isIdoToken,
+        isIdoToken: tokenInfo?.coin_type === TokenType.Ido,
         chainName,
         chainId,
         tokenAddr,

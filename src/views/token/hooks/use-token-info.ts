@@ -6,11 +6,11 @@ import { useTradeSearchParams } from './use-search-params'
 import { ApiCode, ApiResponse } from '@/api/types'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useTokenDetails } from '@/hooks/use-token-details'
-import { idoTrumpCard } from '@/config/ido'
 import { useReadContract } from 'wagmi'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { BI_ZERO } from '@/constants/number'
 import { TokenVersion } from '@/contract/abi/token'
+import { TokenType } from '@/enums/token'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
@@ -37,10 +37,10 @@ export const useTokenInfo = () => {
     enabled: !!chainName && !!tokenAddr,
   })
   const isNotFound = tokenInfoErr?.code === ApiCode.NotFound
+  const isIdoToken = tokenInfo?.coin_type === TokenType.Ido
 
   const { isLoadingDetails, ...tokenDetails } = useTokenDetails(
-    // TODO: adapt ido token.
-    tokenAddr === idoTrumpCard.address || isNotFound ? undefined : tokenAddr,
+    isIdoToken || isNotFound ? undefined : tokenAddr,
     chainId,
     tokenInfo?.coin_version as TokenVersion
   )

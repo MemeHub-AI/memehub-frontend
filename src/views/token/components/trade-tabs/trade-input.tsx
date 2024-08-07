@@ -15,7 +15,6 @@ import { CustomSuspense } from '@/components/custom-suspense'
 import { Img } from '@/components/img'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useUniswapV2Amount } from '../../../../hooks/uniswapv2/use-uniswapv2-info'
-import { idoTrumpCard } from '@/config/ido'
 import { useTradeAmount } from '../../hooks/evm/use-trade-amount'
 import { utilLang } from '@/utils/lang'
 
@@ -42,7 +41,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
 
   const { chainInfo } = useChainInfo()
   const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(
-    isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.graduated_pool
+    tokenInfo?.graduated_pool
   )
   const [targetAmount, setTargetAmount] = useState('0')
 

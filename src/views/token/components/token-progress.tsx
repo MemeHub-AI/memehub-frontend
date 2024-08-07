@@ -9,7 +9,6 @@ import { cn } from '@/lib/utils'
 import { useTokenProgress } from '../hooks/evm/use-token-progress'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
-import { idoTrumpCard } from '@/config/ido'
 import { TokenVersion } from '@/contract/abi/token'
 import { useChainsStore } from '@/stores/use-chains-store'
 
@@ -29,8 +28,8 @@ export const TokenProgress = ({
     tokenVersion as TokenVersion
   )
   const { progress: idoProgress } = useIdoProgress(
-    Number(idoTrumpCard.chain.id),
-    idoTrumpCard.id
+    chainId,
+    tokenInfo?.airdrop_index ?? 0
   )
   const chain = chainsMap[tokenInfo?.chain ?? '']
 

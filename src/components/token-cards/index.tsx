@@ -11,12 +11,13 @@ import { Routes } from '@/routes'
 import { TokenChainSelect } from './chain-select'
 import { TokenSearchInput } from './token-search-input'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
-import { IdoCard } from '../ido-card'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TokenListItem } from '@/api/token/types'
+import IdoCard from '../ido-card'
 
 interface Props extends ComponentProps<'div'> {
   cards?: TokenListItem[]
+  idoTokens?: TokenListItem[]
   total: number
   isLoading: boolean
   isPending?: boolean
@@ -27,6 +28,7 @@ export const TokenCards = (props: Props) => {
   const {
     className,
     cards = [],
+    idoTokens = [],
     total,
     isLoading,
     isPending = false,
@@ -105,8 +107,9 @@ export const TokenCards = (props: Props) => {
           </div>
         }
       >
-        {/* TODO: use ido api */}
-        <IdoCard />
+        {idoTokens.map((t) => (
+          <IdoCard key={t.id} token={t} />
+        ))}
         {!!cards.length &&
           filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
       </CustomSuspense>

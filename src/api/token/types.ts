@@ -1,3 +1,4 @@
+import { TokenType } from '@/enums/token'
 import type { UserInfoRes } from '../user/types'
 
 export interface TokenListItem {
@@ -48,7 +49,7 @@ export interface TokenCreateReq {
   website_url?: string
   factory_address: string
   airdrop_address: string
-  coin_type?: CoinType
+  coin_type?: TokenType
 
   // Only used for frontend
   marketing?: Marketing[]
@@ -85,14 +86,6 @@ export interface TokenDetailReq {
   id?: string
   chain?: string
   address?: string
-}
-
-export enum CoinType {
-  Normal,
-  Erc404,
-  RewardLp,
-  RewardHolder,
-  Burning,
 }
 
 export interface Marketing {

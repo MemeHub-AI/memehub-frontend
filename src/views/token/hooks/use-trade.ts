@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Address, formatEther, isAddress } from 'viem'
+import { formatEther, isAddress } from 'viem'
 import { isEmpty } from 'lodash'
 
 import { useEvmTrade } from './evm/use-trade'
@@ -11,7 +11,6 @@ import { TradeType } from '@/enums/trade'
 import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
 import { useDexTrade } from './use-dex-trade'
-import { idoTrumpCard } from '@/config/ido'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { Network } from '@/enums/contract'
@@ -50,11 +49,7 @@ export const useTrade = (onSuccess?: () => void) => {
     dexBuy,
     dexSell,
     dexResetTrade,
-  } = useDexTrade(
-    tokenAddr,
-    (isIdoToken ? idoTrumpCard.poolAddr : tokenInfo?.graduated_pool) as Address,
-    chainId
-  )
+  } = useDexTrade(tokenAddr, tokenInfo?.graduated_pool, chainId)
   const evmTrade = useEvmTrade(onSuccess)
 
   const {

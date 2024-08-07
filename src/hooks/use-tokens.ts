@@ -27,11 +27,32 @@ export const useTokens = () => {
     }),
   })
 
+  const {
+    data: { idoTokens = [], idoTotal = 0 } = {},
+    isLoading: isLoadingIdo,
+    fetchNextPage: fetchNextpageIdo,
+  } = useInfiniteQuery({
+    queryKey: [tokenApi.getIdoList.name],
+    queryFn: () => tokenApi.getIdoList(),
+    initialPageParam: 1,
+    getNextPageParam: (_, __, page) => page + 1,
+    select: (data) => ({
+      idoTotal: data.pages[0].data.count,
+      idoTokens: data.pages
+        .flatMap((p) => p.data.results)
+        .filter(Boolean) as TokenListItem[],
+    }),
+  })
+
   return {
     totalToken,
     tokens,
+    idoTokens,
+    idoTotal,
     isLoading,
     isFetching,
+    isLoadingIdo,
     fetchNextPage,
+    fetchNextpageIdo,
   }
 }
