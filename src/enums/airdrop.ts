@@ -1,4 +1,4 @@
-export enum AirdropType {
+export enum AirdropFlag {
   None,
   Assign,
   All,

@@ -5,6 +5,16 @@ export interface TokenListItem {
   airdrop_address: string
   airdrop_index: number
   airdrop_supply: string
+  /**
+   * 1: Only select community
+   * 2: Only all community
+   * 4: Only select KOL
+   * 5: Select community & KOL
+   * 6: All community & select KOL
+   * 8: Only all KOL
+   * 9: All KOL & select community
+   * 10: All KOL & community
+   */
   airdrop_type: number
   airdrop_version: string
   chain: string

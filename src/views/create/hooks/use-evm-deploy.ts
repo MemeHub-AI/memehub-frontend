@@ -17,7 +17,7 @@ import { DeployFormParams } from './use-deploy'
 import { deployEvmAirdropParams } from '@/config/deploy'
 import { useCreateToken } from './use-create-token'
 import { Marketing, MarketType } from '@/api/token/types'
-import { AirdropType } from '@/enums/airdrop'
+import { AirdropFlag } from '@/enums/airdrop'
 
 export const useEvmDeploy = () => {
   const { address, chainId = 0 } = useAccount()
@@ -70,13 +70,13 @@ export const useEvmDeploy = () => {
       params.isDistribution = true
       params.distributionRatioKol = distributionRatioKol * 100
       params.walletCountKol = walletCountKol
-      params.kolFlag = AirdropType.All
+      params.kolFlag = AirdropFlag.All
     }
     if (hasCmnt) {
       params.isDistribution = true
       params.distributionRatioCommunity = distributionRatioCommunity * 100
       params.walletCountCommunity = walletCountCommunity
-      params.CommunityFlag = AirdropType.All
+      params.CommunityFlag = AirdropFlag.All
     }
 
     return params
