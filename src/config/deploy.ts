@@ -1,4 +1,4 @@
-import { AirdropType } from '@/enums/airdrop'
+import { AirdropFlag } from '@/enums/airdrop'
 
 export const deployEvmAirdropParams = {
   isDistribution: false,
@@ -6,8 +6,8 @@ export const deployEvmAirdropParams = {
   distributionRatioCommunity: 0,
   walletCountKol: 0,
   walletCountCommunity: 0,
-  kolFlag: AirdropType.None,
-  CommunityFlag: AirdropType.None,
+  kolFlag: AirdropFlag.None,
+  CommunityFlag: AirdropFlag.None,
   flag: [] as bigint[],
 }
 

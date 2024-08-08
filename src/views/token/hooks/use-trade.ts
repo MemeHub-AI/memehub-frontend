@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Address, formatEther, isAddress } from 'viem'
+import { formatEther, isAddress } from 'viem'
 import { isEmpty } from 'lodash'
-import { useAccount } from 'wagmi'
 
 import { useEvmTrade } from './evm/use-trade'
 import { useTokenContext } from '@/contexts/token'
@@ -12,7 +11,6 @@ import { TradeType } from '@/enums/trade'
 import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
 import { useDexTrade } from './use-dex-trade'
-import { idoTrumpCard } from '@/config/ido'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { Network } from '@/enums/contract'
@@ -38,12 +36,11 @@ export const useTrade = (onSuccess?: () => void) => {
     tokenAddr,
     tokenMetadata,
     chainId,
+    chainName,
     network,
+    tokenChain,
   } = useTokenContext()
-  const { pool_address, ticker } = tokenInfo ?? {}
-  const { evmChainsMap } = useChainsStore()
-  const { chain } = tokenInfo ?? {}
-  const { chain: walletChain } = useAccount()
+  const { chainsMap } = useChainsStore()
 
   const {
     dexHash,
@@ -52,11 +49,7 @@ export const useTrade = (onSuccess?: () => void) => {
     dexBuy,
     dexSell,
     dexResetTrade,
-  } = useDexTrade(
-    tokenAddr,
-    (isIdoToken ? idoTrumpCard.poolAddr : pool_address) as Address,
-    chainId
-  )
+  } = useDexTrade(tokenAddr, tokenInfo?.graduated_pool, chainId)
   const evmTrade = useEvmTrade(onSuccess)
 
   const {
@@ -78,8 +71,8 @@ export const useTrade = (onSuccess?: () => void) => {
 
   // TODO: add Sol, TON chains
   const updateLastTrade = async (type: TradeType, amount: string) => {
-    const tokenSymbol = ticker || tokenMetadata?.symbol
-    const reserveSymbol = evmChainsMap[chainId]?.native.symbol
+    const tokenSymbol = tokenInfo?.symbol || tokenMetadata?.symbol
+    const reserveSymbol = chainsMap[chainName]?.native.symbol
     lastTrade.type = type
 
     const getNonFixedLabel = (value: bigint, symbol?: string) =>
@@ -170,9 +163,7 @@ export const useTrade = (onSuccess?: () => void) => {
     showToast({
       ...lastTrade,
       hash,
-      txUrl: `${
-        chain?.explorer ?? walletChain?.blockExplorers?.default.url
-      }/tx/${hash}`,
+      txUrl: `${tokenChain?.explorer}/tx/${hash}`,
     })
     handleResetTrade()
   }, [hash])

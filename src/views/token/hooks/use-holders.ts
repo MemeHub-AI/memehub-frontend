@@ -46,7 +46,8 @@ export const useHolders = () => {
           isDisconnectMessage(data),
         shouldReconnect: () => true,
       },
-      !isNotFound
+      // !isNotFound
+      false // TOOD: remove
     )
 
   const clearHolders = () => {

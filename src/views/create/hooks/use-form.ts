@@ -7,9 +7,10 @@ import { useUploadImage } from '@/hooks/use-upload-image'
 import { useDeploy } from './use-deploy'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { CoinType, Marketing } from '@/api/token/types'
+import { Marketing } from '@/api/token/types'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { TokenType } from '@/enums/token'
 
 export const formFields = {
   fullname: 'fullname',
@@ -89,7 +90,7 @@ export const useCreateTokenForm = (
       [formFields.chainName]: '',
       [formFields.logo]: '',
       [formFields.poster]: [],
-      [formFields.coinType]: CoinType.Normal,
+      [formFields.coinType]: TokenType.Normal,
       [formFields.marketing]: [],
     },
   })

@@ -27,8 +27,8 @@ export const useCreateToken = () => {
     isPending: isCreatingToken,
     mutateAsync: create,
   } = useMutation({
-    mutationKey: [tokenApi.create.name],
-    mutationFn: tokenApi.create,
+    mutationKey: [tokenApi.createToken.name],
+    mutationFn: tokenApi.createToken,
   })
   const createTokenData = createData?.data
 

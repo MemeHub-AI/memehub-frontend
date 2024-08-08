@@ -49,11 +49,15 @@ export const useTradeLogs = () => {
   const [lastCreate, setLastCreate] = useState<CreateInfoLog>()
 
   const { lastJsonMessage, sendJsonMessage } =
-    useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(wsApiURL.tradeLogs, {
-      heartbeat,
-      onOpen: () => sendJsonMessage({ type: 'message', data: null }),
-      shouldReconnect: () => true,
-    })
+    useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(
+      wsApiURL.tradeLogs,
+      {
+        heartbeat,
+        onOpen: () => sendJsonMessage({ type: 'message', data: null }),
+        shouldReconnect: () => true,
+      },
+      false // TODO: remove
+    )
 
   const shwoLatestTrade = (lastTrade: TradeInfoLog) => {
     toastBase(

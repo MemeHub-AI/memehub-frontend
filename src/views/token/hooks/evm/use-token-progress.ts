@@ -9,7 +9,7 @@ import { useTokenDetails } from '@/hooks/use-token-details'
 import { TokenVersion } from '@/contract/abi/token'
 
 export const useTokenProgress = (
-  tokenAddr: Address | undefined,
+  tokenAddr: string | undefined,
   chainId: number,
   version: TokenVersion
 ) => {

@@ -9,10 +9,12 @@ import { exchangeNftAbi } from '@/contract/abi/nft/exchange-nft'
 import { COMMUNITY_NFT_IDX } from '@/config/nft'
 import { allianceApi } from '@/api/alliance'
 import { parseHash } from '@/utils/contract'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const useNftCheck = (chainId: number) => {
   const { address } = useAccount()
   const { kolNft, exchangeNft } = addrMap[chainId] ?? {}
+  const { userInfo: kol } = useUserStore()
 
   const { data: kolId = BI_ZERO } = useReadContract({
     abi: kolNftAbi,
@@ -20,7 +22,7 @@ export const useNftCheck = (chainId: number) => {
     chainId,
     functionName: 'userOfId',
     args: [address!],
-    query: { enabled: !!address && !!kolNft },
+    query: { enabled: !!address && !!kolNft && !!chainId },
   })
   const isKol = !BigNumber(kolId.toString()).isZero()
 
@@ -30,7 +32,7 @@ export const useNftCheck = (chainId: number) => {
     chainId,
     functionName: 'isClaimedOfId',
     args: [address!, BigInt(COMMUNITY_NFT_IDX)],
-    query: { enabled: !!address && !!exchangeNft },
+    query: { enabled: !!address && !!exchangeNft && !!chainId },
   })
   const cId = BigNumber(communityId.toString())
   const hasCommunity = cId.gt(0)
@@ -50,7 +52,7 @@ export const useNftCheck = (chainId: number) => {
   return {
     isKol,
     hasCommunity,
-    kolId,
+    kol,
     community,
   }
 }

@@ -13,21 +13,16 @@ export const useAirdropList = () => {
     fetchNextPage,
   } = useInfiniteQuery({
     queryKey: [airdropApi.getList.name, userInfo?.id],
-    queryFn: async ({ pageParam }) => {
-      if (userInfo?.id == null) return Promise.reject()
-
-      const { data } = await airdropApi.getList({ page: pageParam })
-      return data
-    },
+    queryFn: ({ pageParam }) => airdropApi.getList({ page: pageParam }),
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
-    select: (data) => {
+    select: ({ pages }) => {
       return {
-        total: data.pages[0].count,
-        airdrops: data.pages.flatMap((p) => p?.results).filter(Boolean),
+        total: pages[0].data.count,
+        airdrops: pages.flatMap((p) => p?.data.results).filter(Boolean),
       }
     },
-    enabled: false, // TODO: waiting for enable
+    enabled: !!userInfo,
   })
 
   return {

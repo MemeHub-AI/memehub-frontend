@@ -14,7 +14,6 @@ import { useAirdrop } from '../hooks/evm/use-airdrop'
 import { fmt } from '@/utils/fmt'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
-import { airdropId } from '..'
 
 interface Props extends ComponentProps<typeof Card> {
   type: 'kol' | 'community'
@@ -23,13 +22,16 @@ interface Props extends ComponentProps<typeof Card> {
 export const TradeAirdropCard = ({ className, type }: Props) => {
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
-  const { tokenInfo, tokenMetadata } = useTokenContext()
+  const { tokenInfo, tokenMetadata, chainId } = useTokenContext()
   const {
-    isKol,
-    hasCommunity,
+    airdrop_index = 0,
+    airdrop_address,
+    airdrop_version,
+  } = tokenInfo ?? {}
+
+  const {
     createAt,
     durationSeconds,
-    community,
     kolTotalAmount,
     kolCount,
     kolClaimedCount,
@@ -44,8 +46,14 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     isClaiming,
     claimKol,
     claimCommunity,
-  } = useAirdrop(airdropId, refetchAirdrop)
-  const { userInfo: kol } = useUserStore() // KOL is userself
+  } = useAirdrop(
+    airdrop_index, // TODO: should be `distributor_id`
+    airdrop_address,
+    airdrop_version,
+    chainId,
+    refetchAirdrop
+  )
+  const { isKol, hasCommunity, kolInfo, communityInfo } = useUserStore() // KOL is userself
   const [isKolCard, isCommunityCard] = useMemo(
     () => [type === 'kol', type === 'community'],
     [type]
@@ -83,14 +91,14 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     return (
       <div className="bg-lime-green flex items-center  rounded-md pr-2">
         <Img
-          src={kol?.logo ?? community?.logo}
+          src={kolInfo?.logo ?? communityInfo?.logo}
           alt="avatar"
           className="w-10 h-10 rounded-r-none"
         />
         <span className="ml-2">
-          {kol?.name
-            ? kol?.name
-            : fmt.withCommunity(utilLang.locale(community?.name))}{' '}
+          {kolInfo?.name
+            ? kolInfo?.name
+            : fmt.withCommunity(utilLang.locale(communityInfo?.name))}{' '}
           {suffix}
         </span>
         <img src="/images/check.png" alt="check" className="w-6 h-6 ml-2" />
@@ -130,7 +138,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
           <span className="ml-2">
             {BigNumber(totalAmount).toFormat()}{' '}
-            {tokenInfo?.ticker || tokenMetadata?.symbol}
+            {tokenInfo?.symbol ?? tokenMetadata?.symbol}
           </span>
         </div>
 

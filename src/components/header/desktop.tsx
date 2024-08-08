@@ -49,7 +49,6 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
         </nav>
       </div>
       <div className="flex items-center gap-3">
-        {/* <SearchInput /> */}
         <RewardButton />
         <LangSelect />
         <Button onClick={() => router.push(Routes.Create)}>

@@ -12,4 +12,9 @@ export interface ChainData {
   }
   is_supported: boolean
   logo: string
+  explorer: {
+    block: string
+    tx: string
+    address: string
+  }
 }

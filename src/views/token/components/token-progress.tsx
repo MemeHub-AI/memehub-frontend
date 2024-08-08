@@ -9,8 +9,8 @@ import { cn } from '@/lib/utils'
 import { useTokenProgress } from '../hooks/evm/use-token-progress'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
-import { idoTrumpCard } from '@/config/ido'
 import { TokenVersion } from '@/contract/abi/token'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenProgress = ({
   showDesc = true,
@@ -19,20 +19,21 @@ export const TokenProgress = ({
   showDesc?: boolean
 }) => {
   const { t } = useTranslation()
-  const { tokenInfo, isIdoToken, chainId, tokenAddr, tokenVersion } =
+  const { tokenInfo, isIdoToken, tokenAddr, tokenVersion, chainId } =
     useTokenContext()
+  const { chainsMap } = useChainsStore()
   const { total, progress, isGrauated } = useTokenProgress(
     tokenAddr,
     chainId,
     tokenVersion as TokenVersion
   )
-
   const { progress: idoProgress } = useIdoProgress(
-    Number(idoTrumpCard.chain.id),
-    idoTrumpCard.id
+    chainId,
+    tokenInfo?.airdrop_index ?? 0
   )
+  const chain = chainsMap[tokenInfo?.chain ?? '']
 
-  const nativeSymbol = tokenInfo?.chain.native.symbol || ''
+  const nativeSymbol = chain?.native.symbol ?? ''
   const threshold = BigNumber(total).lte(0)
     ? t('threshold')
     : ` ${fmt.decimals(total, { fixed: 3 })} ${nativeSymbol} `

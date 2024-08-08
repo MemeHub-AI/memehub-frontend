@@ -12,20 +12,29 @@ import {
   distributorAbiMap,
   DistributorVersion,
 } from '@/contract/abi/distributor'
-import { useTokenContext } from '@/contexts/token'
 import { useAirdropStore } from '@/stores/use-airdrop'
 
-export const useAirdrop = (id: number, onFinally?: () => void) => {
+export const useAirdrop = (
+  id: number,
+  addr: string | undefined,
+  version: DistributorVersion | undefined,
+  chainId: number | undefined,
+  onFinally?: () => void
+) => {
   const { t } = useTranslation()
   const { playFire } = useAudioPlayer()
   const { address, checkForChain, checkForConnect } = useCheckAccount()
-  const { chainId, airdropVersion, airdropAddr } = useTokenContext()
   const { setIsCalimingAirdrop } = useAirdropStore()
 
   const airdropConfig = {
-    abi: distributorAbiMap[airdropVersion as DistributorVersion],
-    address: airdropAddr!,
+    abi: distributorAbiMap[version!],
+    address: addr as Address,
     chainId,
+  }
+
+  const query = {
+    enabled: !!address && !!addr && !!chainId,
+    refetchInterval: 5_000,
   }
 
   const { data: isKolClaimed = false, refetch: refetchKolClaimed } =
@@ -33,7 +42,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
       ...airdropConfig,
       functionName: 'isClaimedKOL',
       args: [BigInt(id), address!],
-      query: { enabled: !!address && !!airdropAddr, refetchInterval: 5_000 },
+      query,
     })
 
   const { data: isCommunityClaimed = false, refetch: refetchCommunityCalimed } =
@@ -41,7 +50,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
       ...airdropConfig,
       functionName: 'isClaimedCommunity',
       args: [BigInt(id), address!],
-      query: { enabled: !!address && !!airdropAddr, refetchInterval: 5_000 },
+      query,
     })
 
   const refetch = () => {
@@ -82,7 +91,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
   const checkForClaim = async () => {
     if (!checkForConnect()) return false
     if (!(await checkForChain(chainId))) return false
-    if (!airdropAddr) {
+    if (!addr) {
       CONTRACT_ERR.configNotFound()
       return false
     }

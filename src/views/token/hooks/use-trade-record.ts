@@ -49,7 +49,8 @@ export const useTradeRecord = () => {
         isDisconnectMessage(data),
       shouldReconnect: () => true,
     },
-    !isNotFound,
+    // !isNotFound
+    false // TODO: remove
   )
 
   const fetchNextPage = () => {
