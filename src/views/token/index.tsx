@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react'
 import { isAddress } from 'viem'
 import { useTranslation } from 'react-i18next'
-import dayjs from 'dayjs'
-import { useCountDown } from 'ahooks'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { TokenProvider } from '@/contexts/token'
@@ -14,12 +12,9 @@ import { useTradeSearchParams } from './hooks/use-search-params'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { NotFound } from '@/components/not-found'
 import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
-import { useNftCheck } from '@/hooks/use-nft-check'
 import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
 import { Network } from '@/enums/contract'
 import { TokenType } from '@/enums/token'
-
-export const airdropId = 20 // TODO: temp, should be backend id.
 
 export const TokenPage = () => {
   const { t } = useTranslation()
@@ -32,10 +27,13 @@ export const TokenPage = () => {
   const chainId = +(tokenChain?.id ?? 0)
   const reserveSymbol = tokenChain?.native.symbol
 
-  const airdropInfo = useAirdropInfo(airdropId, tokenAddr, chainId)
-  const nftCheckInfo = useNftCheck(chainId)
-  const { createAt, durationSeconds, hasKolAirdrop, hasCommunityAirdrop } =
-    airdropInfo
+  const airdropInfo = useAirdropInfo(
+    tokenInfo?.airdrop_index ?? 0,
+    tokenAddr,
+    chainId,
+    tokenInfo?.coin_version
+  )
+  const { hasKolAirdrop, hasCommunityAirdrop } = airdropInfo
 
   const isOnlyOne = useMemo(() => {
     let count = 0
@@ -43,11 +41,6 @@ export const TokenPage = () => {
     if (hasCommunityAirdrop) count++
     return count === 1
   }, [hasKolAirdrop, hasCommunityAirdrop])
-
-  const [countdown] = useCountDown({
-    targetDate: dayjs.unix(createAt).add(durationSeconds, 'second'),
-  })
-  const isAirdropExpired = countdown <= 0
 
   const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
@@ -68,19 +61,17 @@ export const TokenPage = () => {
         isLoadingTokenInfo,
         reserveSymbol,
         isIdoToken: tokenInfo?.coin_type === TokenType.Ido,
-        chainName,
-        chainId,
         tokenAddr,
-        network: Network.Evm,
+        chainId,
+        chainName,
         tokenChain,
+        network: Network.Evm,
       }}
     >
       <TradeAirdropProvider
         value={{
-          ...nftCheckInfo,
           ...airdropInfo,
           isOnlyOne,
-          isAirdropExpired,
         }}
       >
         <main

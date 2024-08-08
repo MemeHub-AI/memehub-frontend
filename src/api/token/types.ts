@@ -1,5 +1,7 @@
 import { TokenType } from '@/enums/token'
 import type { UserInfoRes } from '../user/types'
+import { TokenVersion } from '@/contract/abi/token'
+import { DistributorVersion } from '@/contract/abi/distributor'
 
 export interface TokenListItem {
   airdrop_address: string
@@ -16,10 +18,10 @@ export interface TokenListItem {
    * 10: All KOL & community
    */
   airdrop_type: number
-  airdrop_version: string
+  airdrop_version: DistributorVersion
   chain: string
   coin_type: number
-  coin_version: string
+  coin_version: TokenVersion
   contract_address: string
   created_at: string
   creator_address: string

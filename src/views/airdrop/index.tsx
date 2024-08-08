@@ -1,21 +1,17 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { Ids } from './components/ids'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { AirdropCard } from './components/card'
 import { airdropData } from './data'
-import { useUserStore } from '@/stores/use-user-store'
-import { airdropApi } from '@/api/airdrop'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { AirdropProvider } from '@/contexts/airdrop'
-import { useNftCheck } from '../../hooks/use-nft-check'
-import { idoChain } from '@/config/ido'
 import { IdoAirdropCard } from './components/ido-card'
 import { useAirdropList } from './hooks/use-airdrop-list'
+import { AirdropDetailType } from '@/api/airdrop/types'
 
 export const AirdropPage = () => {
   const { t } = useTranslation()
@@ -66,11 +62,18 @@ export const AirdropPage = () => {
           nullback={<div className="mt-3">{t('no.airdrop')}</div>}
           className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 "
         >
-          <IdoAirdropCard tag={t('ido.airdrop.kol')} isKolAirdrop />
-          <IdoAirdropCard tag={t('ido.airdrop.community')} />
-          {airdrops?.map((airdrop, i) => (
-            <AirdropCard key={i} airdrop={airdrop} />
-          ))}
+          {/* <IdoAirdropCard tag={t('ido.airdrop.kol')} isKolAirdrop />
+          <IdoAirdropCard tag={t('ido.airdrop.community')} /> */}
+          {airdrops.map((a, i) =>
+            a?.airdrop.map((detail) => (
+              <AirdropCard
+                key={i}
+                airdrop={a}
+                detail={detail}
+                isKolCard={detail.type === AirdropDetailType.Kol}
+              />
+            ))
+          )}
         </CustomSuspense>
 
         {/* {isKol || community ? (

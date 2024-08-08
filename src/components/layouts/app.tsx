@@ -20,6 +20,7 @@ import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
 import { BackToTop } from '@/components/back-to-top'
 import { SignLoginDialog } from '../sign-login-dialog'
+import { useUserId } from '@/hooks/use-user-id'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -56,6 +57,8 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   useUserInfo() // init login
 
   useQueryChains() // init chains
+
+  useUserId() // init user identify
 
   useEffect(() => {
     dayjs.locale(i18n.language === 'zh' ? dayjsZh : dayjsEn)

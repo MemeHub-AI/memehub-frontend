@@ -1,17 +1,20 @@
 import { useReadContract } from 'wagmi'
-import { Address, formatEther } from 'viem'
+import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'ahooks'
 
 import { BI_ZERO } from '@/constants/number'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
-import {
-  distributorAbiMap,
-  DistributorVersion,
-} from '@/contract/abi/distributor'
+import { distributorAbiMap } from '@/contract/abi/distributor'
 import { useTokenDetails } from '../use-token-details'
+import { TokenVersion } from '@/contract/abi/token'
 
-export const useAirdropInfo = (id: number, token: Address, chainId: number) => {
+export const useAirdropInfo = (
+  id: number,
+  token: string | undefined,
+  chainId: number,
+  tokenVersion: TokenVersion | undefined
+) => {
   const {
     airdropAddr,
     airdropVersion,
@@ -20,16 +23,15 @@ export const useAirdropInfo = (id: number, token: Address, chainId: number) => {
     totalSupply,
     isLoadingDetails,
     refetchDetails,
-  } = useTokenDetails(
-    token,
-    chainId,
-    '0.2.0' // TODO: dynamic token version
-  )
-
-  const { data: duration = BI_ZERO } = useReadContract({
-    abi: distributorAbiMap[airdropVersion as DistributorVersion],
+  } = useTokenDetails(token, chainId, tokenVersion)
+  const distributorConfig = {
+    abi: distributorAbiMap[airdropVersion!],
     address: airdropAddr,
     chainId,
+  }
+
+  const { data: duration = BI_ZERO } = useReadContract({
+    ...distributorConfig,
     functionName: 'duration',
     query: { enabled: !!airdropAddr },
   })
@@ -40,9 +42,7 @@ export const useAirdropInfo = (id: number, token: Address, chainId: number) => {
     isLoading: isLoadingInfo,
     refetch: refetchInfo,
   } = useReadContract({
-    abi: distributorAbiMap[airdropVersion as DistributorVersion],
-    address: airdropAddr,
-    chainId,
+    ...distributorConfig,
     functionName: 'distributions',
     args: [BigInt(id)],
     query: { enabled: !!airdropAddr },

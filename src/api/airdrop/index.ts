@@ -14,19 +14,19 @@ import { qs } from '@/hooks/use-fetch'
 export const airdropApi = {
   getList: (query: PaginationReq) => {
     return api.GET<ApiResponse<PaginationRes<AirdropItem>>>(
-      '/api/v1/airdrop/airdrop_list' + qs.stringify(query),
+      '/api/v2/coin/airdrop-list' + qs.stringify(query)
     )
   },
   /** @deprecated */
   getMerkleRoot: (req: AirdropMerkleRootReq) => {
     return api.GET<ApiResponse<AirdropMerkleRootRes>>(
-      '/api/v1/airdrop/generate_root/' + qs.stringify(req),
+      '/api/v1/airdrop/generate_root/' + qs.stringify(req)
     )
   },
   /** @deprecated */
   getProof: (req: AirdropProofReq) => {
     return api.GET<ApiResponse<AirdropProofRes>>(
-      '/api/v1/airdrop/get_proof/' + qs.stringify(req),
+      '/api/v1/airdrop/get_proof/' + qs.stringify(req)
     )
   },
   /** @deprecated */
@@ -35,7 +35,7 @@ export const airdropApi = {
   },
   getDetails: (req: Omit<AirdropProofReq, 'type_list'>) => {
     return api.GET<ApiResponse<AirdropItem[]>>(
-      '/api/v1/airdrop/get_airdrop_detail/' + qs.stringify(req),
+      '/api/v1/airdrop/get_airdrop_detail/' + qs.stringify(req)
     )
   },
 }
