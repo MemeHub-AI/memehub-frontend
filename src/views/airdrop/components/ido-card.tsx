@@ -2,9 +2,10 @@ import React, { ComponentProps } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { TbUsers } from 'react-icons/tb'
 import { useTranslation } from 'react-i18next'
+import { useReadContract } from 'wagmi'
+import { zeroAddress } from 'viem'
 
 import { Countdown } from '@/components/countdown'
-import { IdTag } from '@/components/id-tag'
 import { Img } from '@/components/img'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -13,12 +14,10 @@ import { idoChain, idoTrumpAirdrop } from '@/config/ido'
 import { useIdoKolAirdrop } from '../hooks/use-ido-kol-airdrop'
 import { useIdoAirdropClaim } from '../hooks/use-ido-claim'
 import { useIdoCommunityAirdrop } from '../hooks/use-ido-community-airdrop'
-import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
+import { useNftCheck } from '@/hooks/use-nft-check'
 import { utilLang } from '@/utils/lang'
-import { useReadContract } from 'wagmi'
-import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
-import { v3Addr } from '@/contract/v3/address'
-import { zeroAddress } from 'viem'
+import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
+import { addrMap } from '@/contract/address'
 
 interface Props {
   tag: string
@@ -49,20 +48,20 @@ export const IdoAirdropCard = ({
     isBelowThreshold,
     refetchCommunityAirdrop,
   } = useIdoCommunityAirdrop(!isKolAirdrop)
-  const { isKol, isCommunity } = useIdoCheck(idoChain.id)
+  const { isKol, hasCommunity } = useNftCheck(idoChain.id)
 
   const amount = isKolAirdrop ? kolAmount : communityAmount
   const current = isKolAirdrop ? kolCurrent : communityCurrent
   const total = isKolAirdrop ? kolTotal : communityTotal
   const isClaimed = isKolAirdrop ? isKolClaimed : isCommunityClaimed
-  const hasId = isKolAirdrop ? isKol : isCommunity
+  const hasId = isKolAirdrop ? isKol : hasCommunity
 
   const { data: tokenAddr = zeroAddress } = useReadContract({
     abi: idoAirdropAbi,
-    address: v3Addr[idoChain.id]?.idoAirdrop,
+    address: addrMap[idoChain.id]?.idoAirdrop!,
     chainId: idoChain.id,
     functionName: 'tokenAddress',
-    query: { enabled: !!v3Addr[idoChain.id]?.idoAirdrop },
+    query: { enabled: !!addrMap[idoChain.id]?.idoAirdrop },
   })
   const isNotStart = tokenAddr === zeroAddress
 
@@ -71,7 +70,6 @@ export const IdoAirdropCard = ({
     refetchCommunityAirdrop()
   })
 
-  // TODO: remove `true`
   const disabled =
     isClaming ||
     isClaimed ||
@@ -79,15 +77,11 @@ export const IdoAirdropCard = ({
     !hasId ||
     (!isKolAirdrop && isBelowThreshold)
 
-  const renderButtonText = () => {
+  const renderHints = () => {
     if (isNotStart) return t('ido.airdrop.not-start')
-
-    if (isClaming) return t('airdrop.claiming')
-
-    if (isClaimed) return t('airdrop.claimed')
-
+    if (isClaming) return
+    if (isClaimed) return
     if (BigNumber(amount).isZero()) return t('ido.airdrop.no-claim')
-
     if (!hasId) {
       return utilLang.replace(t('ido.airdrop.no-id'), [
         isKolAirdrop ? 'KOL' : t('pure.community'),
@@ -100,7 +94,7 @@ export const IdoAirdropCard = ({
       ])
     }
 
-    return t('pure.claim')
+    return
   }
 
   return (
@@ -113,7 +107,7 @@ export const IdoAirdropCard = ({
       </div>
       <div className="mt-3 flex justify-between space-x-4">
         <div className="self-end">
-          <div className="bg-lime-green text-sm 2xl:text-base rounded-md px-2 py-0.5 flex items-center max-w-max">
+          <div className="bg-lime-green text-sm 2xl:text-base rounded-md px-2 py-0.5 flex items-center max-w-max truncate">
             {tag}
           </div>
           <div className="mt-3 flex items-center">
@@ -133,10 +127,15 @@ export const IdoAirdropCard = ({
             disabled={disabled}
             onClick={() => claim(isKolAirdrop)}
           >
-            {renderButtonText()}
+            {isClaming
+              ? t('airdrop.claiming')
+              : isClaimed
+              ? t('airdrop.claimed')
+              : t('pure.claim')}
           </Button>
+          <p className="text-sm text-zinc-500 mt-1 ml-0.5">{renderHints()}</p>
         </div>
-        <Img src={logo} className="w-36 h-36" />
+        <Img src={logo} className="w-28 h-28 xl:w-36 xl:h-36" />
       </div>
     </Card>
   )

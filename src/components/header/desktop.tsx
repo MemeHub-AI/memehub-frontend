@@ -1,14 +1,15 @@
 import React, { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
-import { clsx } from 'clsx'
+import { useTranslation } from 'react-i18next'
 
 import type { Nav } from './'
 import { Logo } from '../logo'
-import { WalletConnect } from '../wallet-connect'
+import { ConnectWallet } from '../connect-wallet'
 import { LangSelect } from '../lang-select'
 import { RewardButton } from '../reward-button'
+import { cn } from '@/lib/utils'
+import { AccountDropdown } from '../account-dropdown'
 import { Button } from '../ui/button'
-import { useTranslation } from 'react-i18next'
 import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'div'> {
@@ -16,8 +17,7 @@ interface Props extends ComponentProps<'div'> {
   onNavClick?: (nav: Nav) => void
 }
 
-export const HeaderDesktop = (props: Props) => {
-  const { navs, onNavClick } = props
+export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
   const router = useRouter()
   const { t } = useTranslation()
 
@@ -28,12 +28,11 @@ export const HeaderDesktop = (props: Props) => {
         <nav className="ml-8 flex items-center">
           <ul className="flex items-center gap-2">
             {navs.map((n, i) => {
-              if (n.path === Routes.Moonshot || n.path === Routes.ClassicMeme)
-                return
+              if (n.mobileOnly) return
               return (
                 <li key={i}>
                   <div
-                    className={clsx(
+                    className={cn(
                       'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
                       'hover:border-black text-nowrap font-bold xl:px-4',
                       router.pathname === n.path &&
@@ -50,13 +49,14 @@ export const HeaderDesktop = (props: Props) => {
         </nav>
       </div>
       <div className="flex items-center gap-3">
-        {/* <SearchInput /> */}
         <RewardButton />
-        <LangSelect className="flex-shrink-0" />
-        {/* <Button onClick={() => router.push(Routes.Create)}>
+        <LangSelect />
+        <Button onClick={() => router.push(Routes.Create)}>
           {t('create.token')}
-        </Button> */}
-        <WalletConnect />
+        </Button>
+        <ConnectWallet>
+          <AccountDropdown />
+        </ConnectWallet>
       </div>
     </>
   )

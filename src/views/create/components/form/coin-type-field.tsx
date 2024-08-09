@@ -14,7 +14,7 @@ import {
   FormLabel,
   FormControl,
 } from '@/components/ui/form'
-import { CoinType } from '@/api/token/types'
+import { TokenType } from '@/enums/token'
 
 export const CoinTypeField = () => {
   const { t } = useTranslation()
@@ -25,7 +25,7 @@ export const CoinTypeField = () => {
     {
       title: t('deploy.coin-type.normal'),
       desc: t('deploy.coin-type.normal.desc'),
-      value: CoinType.Normal,
+      value: TokenType.Normal,
     },
     // {
     //   title: t('deploy.coin-type.erc404'),
@@ -62,7 +62,7 @@ export const CoinTypeField = () => {
           <FormLabel className="font-bold">{t('deploy.coin-type')}</FormLabel>
           <FormControl>
             <Select
-              defaultValue={CoinType.Normal.toString()}
+              defaultValue={TokenType.Normal.toString()}
               onValueChange={field.onChange}
             >
               <SelectTrigger className="w-min" shadow="none">

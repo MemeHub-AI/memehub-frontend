@@ -1,100 +1,78 @@
-import { useMemo } from 'react'
-import { useAccount, useBalance, useWriteContract } from 'wagmi'
-import { Hash, formatEther } from 'viem'
-import { BigNumber } from 'bignumber.js'
+import { useMemo, useState } from 'react'
 
-import { Marketing, TokenNewReq } from '@/api/token/types'
-import { useWaitForTx } from '@/hooks/use-wait-for-tx'
+import type { TokenCreateReq } from '@/api/token/types'
 import { useCreateToken } from './use-create-token'
-import { CONTRACT_ERR } from '@/errors/contract'
-import { useDeployV3 } from './use-deploy-v3'
-import { getDeployLogAddr, versionOf } from '@/utils/contract'
-import { ContractVersion } from '@/constants/contract'
+import { useEvmDeploy } from './use-evm-deploy'
+import { Network } from '@/enums/contract'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { deployErr } from '@/errors/deploy'
 
-export interface DeployParams {
-  name: string
-  ticker: string
-  marketing?: Marketing[] | undefined
-  onSuccess?: (hash: Hash) => void
-}
-
-// Used for retry create.
-let cacheParams: Omit<TokenNewReq, 'hash'>
+export type DeployFormParams = Omit<
+  TokenCreateReq,
+  'factory_address' | 'airdrop_address'
+>
 
 export const useDeploy = () => {
-  const { createTokenData, createTokenError, isCreatingToken, create } =
-    useCreateToken()
-  const { address } = useAccount()
-  const { data: balanceData } = useBalance({ address })
-  const balance = String(balanceData?.value ?? 0)
+  const [network, setNetwork] = useState(Network.Evm)
+  const { createTokenData, isCreatingToken, createToken } = useCreateToken()
+  const { chainsMap } = useChainsStore()
+
+  const evmDeploy = useEvmDeploy()
+  // const svmDeploy = useSvmDeploy()
+  // const tvmDeploy = useTvmDeploy()
 
   const {
-    data: hash,
-    isPending: isSubmitting,
-    error: submitError,
-    writeContract,
-    reset: resetDeploy,
-  } = useWriteContract({
-    mutation: { onError: (e) => CONTRACT_ERR.message(e) },
-  })
-  const {
-    data,
-    error: confirmError,
-    isLoading: isConfirming,
-    isSuccess,
-    isError,
-  } = useWaitForTx({ hash })
-  const deployLogAddr = useMemo(
-    () => getDeployLogAddr(data?.logs ?? []),
-    [data]
-  )
+    deployFee,
+    deployHash,
+    deployedAddr,
+    isSubmitting,
+    isConfirming,
+    isDeploySuccess,
+    isDeployError,
+    submitError,
+    confirmError,
+    resetDeploy,
+  } = useMemo(() => {
+    return {
+      [Network.Evm]: evmDeploy,
+      [Network.Svm]: evmDeploy, // TODO: should be `svmDeploy`
+      [Network.Tvm]: evmDeploy, // TODO: should be `tvmDeploy`
+    }[network]
+  }, [network, evmDeploy]) // TODO: add more deps...
 
-  const { creationFee, deployV3 } = useDeployV3(writeContract)
+  const deploy = async (params: DeployFormParams) => {
+    const tokenId = await createToken(params)
+    if (!tokenId) return deployErr.createFailed()
 
-  const deploy = async (params: Omit<TokenNewReq, 'hash'>) => {
-    cacheParams = params
+    const { network } = chainsMap[params.chain] ?? {}
+    if (!network) return deployErr.networkNotFound()
 
-    const deployParams = {
-      ...params,
-      onSuccess: (hash: string) => create({ ...params, hash }),
+    setNetwork(network!)
+    if (network === Network.Evm) {
+      return evmDeploy.deploy({ ...params, tokenId: tokenId! })
     }
-
-    if (BigNumber(balance).lt(creationFee.toString())) {
-      CONTRACT_ERR.balanceInsufficient()
-      return
+    if (network === Network.Svm) {
+      // Solana
     }
-
-    const vIs = versionOf(params.version)
-
-    if (vIs(ContractVersion.V3)) return deployV3(deployParams)
-  }
-
-  const retryCreate = () => {
-    if (!cacheParams || !hash) {
-      CONTRACT_ERR.retryCreateFailed()
-      return
+    if (network === Network.Tvm) {
+      // TON
     }
-
-    create({ ...cacheParams, hash })
   }
 
   return {
-    data,
-    deployFee: formatEther(creationFee),
-    deployHash: hash,
-    deployLogAddr,
-    isDeploying: isSubmitting || isConfirming,
+    deployFee,
+    deployHash,
+    deployedAddr,
     isSubmitting,
     isConfirming,
+    isDeploying: isSubmitting || isConfirming,
     isCreatingToken,
-    isDeploySuccess: isSuccess,
-    isDeployError: isError,
+    isDeploySuccess,
+    isDeployError,
     submitError,
     confirmError,
     createTokenData,
-    createTokenError,
     deploy,
     resetDeploy,
-    retryCreate,
   }
 }

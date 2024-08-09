@@ -3,8 +3,9 @@ import { Hash, parseEther, Log } from 'viem'
 import dayjs from 'dayjs'
 import { getBlock } from 'wagmi/actions'
 
-import { DEPLOY_LOG_ADDR } from '@/constants/deploy'
 import { wagmiConfig } from '@/config/wagmi'
+import { Network } from '@/enums/contract'
+import { deployLogAddr, deployLogAddrIdx } from '@/config/deploy'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -75,35 +76,48 @@ export const getDeadline = async (seconds = 300) => {
   return BigInt(ts)
 }
 
-export const getDeployLogAddr = (logs: Log<bigint, number, false>[]) => {
-  const log = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_ADDR)
-  const hashAddr = log?.topics?.[1]
+export const getDeployLogsAddr = (logs?: Log<bigint, number, false>[]) => {
+  if (!logs) return
 
-  return hashAddr?.replace(/0x0+/, '0x') ?? ''
+  const log = logs.find((l) => l.topics?.[0] === deployLogAddr)
+  // 0 is event name, so you should +1 to the original index.
+  const hashAddr = log?.topics?.[deployLogAddrIdx + 1]
+  // Attention, here breaks the address starting with 0.
+  const normalAddr = hashAddr?.replace(/0x0+/, '') ?? ''
+
+  return normalAddr.length < 40
+    ? `0x${normalAddr.padStart(40, '0')}`
+    : `0x${normalAddr}`
 }
 
 /**
  * @example
  * ```ts
- * const vIs = versionOf('V3.0.1')
- * // false
- * if (vIs(ContractVersion.V2)) {...}
- * // true
- * if (vIs(ContractVersion.V3)) {...}
- * ```
- */
-export const versionOf = (originVersion: string) => {
-  return (v: string) => originVersion.startsWith(v)
-}
-
-/**
- * @example
- * ```ts
- * const hash = parseHash(BigInt('743682847302839237012018537797613726790590966769178093576926872255665103969'))
+ * const hash = parseHash(743682847302839237012018537797613726790590966769178093576926872255665103969n)
  * // 0x01a4e8d9e9ec74503ba4d82cc1305e238cb3e9d9d40f062201a5a40aba356461
  * ```
  */
 export const parseHash = (value: bigint, with0x = true) => {
   const hex = value.toString(16).padStart(64, '0')
   return with0x ? addPrefix0x(hex)[0] : hex
+}
+
+/**
+ * @example
+ * ```ts
+ * const n1 = getNetwork('Solana')
+ * // Network.Sol
+ * const n2 = getNetwork('Ton')
+ * // Network.Ton
+ * const n3 = getNetwork('Ethereum')
+ * // Network.Evm
+ * ```
+ */
+export const getNetwork = (chainName: string) => {
+  const c = chainName.toLowerCase()
+
+  if (c.includes('sol')) return Network.Svm
+  if (c.includes('ton')) return Network.Tvm
+
+  return Network.Evm
 }

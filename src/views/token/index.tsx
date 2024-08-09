@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { isAddress } from 'viem'
+import { useTranslation } from 'react-i18next'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { TokenProvider } from '@/contexts/token'
@@ -7,43 +8,81 @@ import { useTokenInfo } from './hooks/use-token-info'
 import { cn } from '@/lib/utils'
 import { TokenDesktop } from './components/desktop'
 import { TokenMobile } from './components/mobile'
-import { TokenQueryInvalid } from './components/query-invalid'
 import { useTradeSearchParams } from './hooks/use-search-params'
 import { useChainsStore } from '@/stores/use-chains-store'
-import { idoTrumpCard } from '@/config/ido'
+import { NotFound } from '@/components/not-found'
+import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
+import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
+import { Network } from '@/enums/contract'
+import { TokenType } from '@/enums/token'
 
 export const TokenPage = () => {
+  const { t } = useTranslation()
   const { chainName, tokenAddr, isReady } = useTradeSearchParams()
   const { chainsMap } = useChainsStore()
   const { isMobile } = useResponsive()
-  const tokenInfo = useTokenInfo()
-  const { isLoadingTokenInfo } = tokenInfo
+  const { tokenInfo, isLoadingTokenInfo, ...oterInfo } = useTokenInfo()
+
+  const tokenChain = chainsMap[chainName]
+  const chainId = +(tokenChain?.id ?? 0)
+  const reserveSymbol = tokenChain?.native.symbol
+
+  const airdropInfo = useAirdropInfo(
+    tokenInfo?.airdrop_index ?? 0,
+    tokenAddr,
+    chainId,
+    tokenInfo?.coin_version
+  )
+  const { hasKolAirdrop, hasCommunityAirdrop } = airdropInfo
+
+  const isOnlyOne = useMemo(() => {
+    let count = 0
+    if (hasKolAirdrop) count++
+    if (hasCommunityAirdrop) count++
+    return count === 1
+  }, [hasKolAirdrop, hasCommunityAirdrop])
 
   const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
-    return <TokenQueryInvalid reason={`/${chainName}/${tokenAddr}`} />
+    return (
+      <NotFound
+        title={t('token.invalid.token')}
+        src="/images/empty.png"
+        imgClass="max-w-64 max-sm:max-w-1/2"
+      />
+    )
   }
-
-  // TODO: ido temp
-  const isIdoToken = tokenAddr === idoTrumpCard.address
-  if (isIdoToken) tokenInfo.tokenInfo = idoTrumpCard as any
 
   return (
     <TokenProvider
       value={{
-        ...tokenInfo,
-        isIdoToken,
+        ...oterInfo,
+        tokenInfo,
+        isLoadingTokenInfo,
+        reserveSymbol,
+        isIdoToken: tokenInfo?.coin_type === TokenType.Ido,
+        tokenAddr,
+        chainId,
+        chainName,
+        tokenChain,
+        network: Network.Evm,
       }}
     >
-      <main
-        className={cn(
-          'px-4 max-sm:px-3 pt-6 max-w-main mx-auto min-h-main',
-          'flex space-x-4 max-sm:flex-col max-sm:space-x-0 max-sm:pt-2 pb-4 max-sm:min-h-max'
-        )}
+      <TradeAirdropProvider
+        value={{
+          ...airdropInfo,
+          isOnlyOne,
+        }}
       >
-        {/* Left */}
-        {isMobile ? <TokenMobile /> : <TokenDesktop />}
-      </main>
+        <main
+          className={cn(
+            'px-4 max-sm:px-3 pt-6 max-w-main mx-auto min-h-main',
+            'flex space-x-4 max-sm:flex-col max-sm:space-x-0 max-sm:pt-2 pb-4 max-sm:min-h-max'
+          )}
+        >
+          {isMobile ? <TokenMobile /> : <TokenDesktop />}
+        </main>
+      </TradeAirdropProvider>
     </TokenProvider>
   )
 }

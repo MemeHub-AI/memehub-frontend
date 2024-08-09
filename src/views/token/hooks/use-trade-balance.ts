@@ -1,20 +1,18 @@
 import { formatEther } from 'viem'
 import { useAccount, useBalance, useReadContract } from 'wagmi'
 
-import { useChainInfo } from '@/hooks/use-chain-info'
-import { useTradeSearchParams } from './use-search-params'
 import { BI_ZERO } from '@/constants/number'
-import { v3TokenAbi } from '@/contract/v3/abi/token'
+import { tokenAbiMap } from '@/contract/abi/token'
+import { useTokenContext } from '@/contexts/token'
 
 export const useTradeBalance = () => {
   const { address } = useAccount()
-  const { chainId } = useChainInfo()
-  const { tokenAddr } = useTradeSearchParams()
+  const { chainId, tokenAddr, tokenVersion } = useTokenContext()
 
-  // Native token balance.
+  // Reserve token balance.
   const {
-    data: nativeData,
-    isFetching: isFetchingNativeBalance,
+    data: { value = BI_ZERO } = {},
+    isFetching: isFetchingReserve,
     refetch: refetchNativeBalance,
   } = useBalance({
     address,
@@ -24,11 +22,11 @@ export const useTradeBalance = () => {
 
   // Token balance.
   const {
-    data: tokenData,
-    isFetching: isFetchingTokenBalance,
+    data: tokenData = BI_ZERO,
+    isFetching: isFetchingToken,
     refetch: refetchTokenBalance,
   } = useReadContract({
-    abi: v3TokenAbi,
+    abi: tokenAbiMap[tokenVersion!],
     address: tokenAddr,
     functionName: 'balanceOf',
     chainId,
@@ -39,9 +37,9 @@ export const useTradeBalance = () => {
     },
   })
 
-  const nativeBalance = formatEther(nativeData?.value ?? BI_ZERO)
-  const tokenBalance = formatEther(tokenData ?? BI_ZERO)
-  const isFetchingBalance = isFetchingNativeBalance || isFetchingTokenBalance
+  const nativeBalance = formatEther(value)
+  const tokenBalance = formatEther(tokenData)
+  const isFetchingBalance = isFetchingReserve || isFetchingToken
 
   const refetchBalance = () => {
     refetchNativeBalance()

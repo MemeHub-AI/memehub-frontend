@@ -1,9 +1,9 @@
 import { useWriteContract } from 'wagmi'
 import { toast } from 'sonner'
 
-import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
+import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { v3Addr } from '@/contract/v3/address'
+import { addrMap } from '@/contract/address'
 import { useTranslation } from 'react-i18next'
 import { idoChain } from '@/config/ido'
 import { useCheckAccount } from '@/hooks/use-check-chain'
@@ -12,7 +12,7 @@ import { IDO_ERR } from '@/errors/ido'
 export const useIdoAirdropClaim = (onSuccess?: () => void) => {
   const { t } = useTranslation()
   const { checkForConnect, checkForChain } = useCheckAccount()
-  const { idoAirdrop } = v3Addr[idoChain.id] ?? {}
+  const { idoAirdrop } = addrMap[idoChain.id] ?? {}
 
   const {
     data: hash,
@@ -44,7 +44,7 @@ export const useIdoAirdropClaim = (onSuccess?: () => void) => {
   })
 
   const checkForClaim = async () => {
-    if (!(await checkForConnect())) return false
+    if (!checkForConnect()) return false
     if (!(await checkForChain(idoChain.id))) return false
     if (!idoAirdrop) return false
 
@@ -54,6 +54,7 @@ export const useIdoAirdropClaim = (onSuccess?: () => void) => {
   const claim = (isKol: boolean) => {
     if (!checkForClaim()) return
 
+    // TODO: should simulate first.
     writeContract({
       abi: idoAirdropAbi,
       address: idoAirdrop!,

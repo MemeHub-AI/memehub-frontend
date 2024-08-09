@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 import dayjs from 'dayjs'
-import { ArrowLeftRight } from 'lucide-react'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
+import { AiOutlineSwap } from 'react-icons/ai'
 
 import {
   Table,
@@ -22,8 +22,7 @@ import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'
 import { utilLang } from '@/utils/lang'
-import { TradeType } from '@/constants/trade'
-import { Pagination } from '@/components/ui/pagination'
+import { TradeType } from '@/enums/trade'
 
 export const TradeTable = () => {
   const { t, i18n } = useTranslation()
@@ -44,7 +43,7 @@ export const TradeTable = () => {
 
   const formatFromTz = (ts: number) => {
     const date = dayjs.unix(ts)
-    return utilLang.isEn(i18n)
+    return utilLang.isEn()
       ? date.utc().format('YYYY-MM-DD HH:mm:ss')
       : date.format('YYYY-MM-DD HH:mm:ss')
   }
@@ -69,7 +68,7 @@ export const TradeTable = () => {
                     }}
                   >
                     <span>{t}</span>
-                    <ArrowLeftRight size={12} />
+                    <AiOutlineSwap className="ml-1" />
                   </div>
                 ) : (
                   t

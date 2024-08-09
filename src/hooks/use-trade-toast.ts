@@ -1,23 +1,23 @@
-import { createElement, useState } from 'react'
+import { createElement, useRef } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { type Hash } from 'viem'
 
 import { otherApi } from '@/api/other'
 import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
-import { TradeType } from '@/constants/trade'
-import { TxStatus } from '@/components/toast/tx-status'
+import { TradeType } from '@/enums/trade'
+import { TxStatus } from '@/components/trade-toast/tx-status'
 
-export interface Options {
-  nativeAmount: string
-  tokenAmount: string
-  type: string
-  hash?: `0x${string}`
+interface Options {
+  hash: Hash
   txUrl: string
-  setLoading?: (loading: boolean) => void
+  type: TradeType | ''
+  reserveLabel: string
+  tokenLabel: string
 }
 
 export const useTradeToast = () => {
-  const [toastId, setToastId] = useState<string | number>('')
+  const toastId = useRef<string | number>('')
   const { chainName, tokenAddr } = useTradeSearchParams()
 
   const { mutateAsync, reset } = useMutation({
@@ -25,54 +25,57 @@ export const useTradeToast = () => {
     mutationFn: otherApi.getDiamondAmount,
   })
 
-  const showToast = async (options: Options) => {
-    const { txUrl, type, tokenAmount, nativeAmount, hash, setLoading } = options
-    reset()
-
+  const getRewardAmount = async (
+    type: TradeType | '',
+    reserveAmount: string
+  ) => {
     const { data } = await mutateAsync({
       token_address: tokenAddr,
       chain: chainName,
-      quote_amount: parseFloat(nativeAmount).toString(),
       operation: type,
-    })
+      quote_amount: parseFloat(reserveAmount).toString(),
+    }).catch(() => ({ data: { reward_amount: 0 } }))
 
-    const rewardAmount = data?.reward_amount
-    const diamondQuantity =
-      rewardAmount < 100 ? +rewardAmount.toFixed(4) : +rewardAmount.toFixed(2)
+    const amount = data?.reward_amount
+    const rewardAmount = Number(
+      amount < 100 ? amount.toFixed(4) : amount.toFixed(2)
+    )
 
-    setLoading?.(false)
+    return rewardAmount
+  }
 
-    const id = toast(
+  const showToast = async (options: Options) => {
+    const { type, tokenLabel, reserveLabel, hash, txUrl } = options
+    reset()
+    toastId.current = toast(
       createElement(TxStatus, {
+        hash,
+        txUrl,
         isBuy: type === TradeType.Buy,
-        txUrl: txUrl,
-        tokenAmount,
-        hash: hash,
-        nativeTokenAmount: nativeAmount,
-        diamondQuantity,
-        getToastId: () => id,
+        tokenLabel,
+        reserveLabel,
+        rewardAmount: await getRewardAmount(type, reserveLabel),
+        getToastId: () => toastId.current,
       }),
       {
         position: 'bottom-left',
         className: 'w-100 moving-element',
-        duration: 1200_000,
+        duration: 1800_000, // 30m
         style: {
           transition:
             'transformY 0s,transformX .4s,opacity .4s,height .4s,box-shadow .2s',
         },
-      },
+      }
     )
-    setToastId(id)
-
-    return id
+    return toastId.current
   }
 
-  const dismissDiamond = () => {
-    toast.dismiss(toastId)
+  const dismissToast = () => {
+    toast.dismiss(toastId.current)
   }
 
   return {
     showToast,
-    dismissDiamond,
+    dismissToast,
   }
 }

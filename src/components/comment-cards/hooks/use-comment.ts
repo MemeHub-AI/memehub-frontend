@@ -35,8 +35,8 @@ export const useComment = (options?: Options) => {
 
   // Liked a comment.
   const { isPending: isLiking, mutateAsync: likeComment } = useMutation({
-    mutationKey: [tokenApi.like.name],
-    mutationFn: tokenApi.like,
+    mutationKey: [tokenApi.addLike.name],
+    mutationFn: tokenApi.addLike,
     onMutate: () => toast.loading(t('comment.like.loading')),
     onError: () => toast.error(t('comment.like.failed')),
     onSuccess: ({ data }) => {
@@ -48,8 +48,8 @@ export const useComment = (options?: Options) => {
 
   // Unliked a comment.
   const { isPending: isUnliking, mutateAsync: unlikeComment } = useMutation({
-    mutationKey: [tokenApi.unlike.name],
-    mutationFn: tokenApi.unlike,
+    mutationKey: [tokenApi.removeLike.name],
+    mutationFn: tokenApi.removeLike,
     onMutate: () => toast.loading(t('comment.unlike.loading')),
     onError: () => toast.error(t('comment.unlike.failed')),
     onSuccess: ({ data }) => {

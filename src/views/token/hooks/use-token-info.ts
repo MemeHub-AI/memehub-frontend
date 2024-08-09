@@ -1,106 +1,90 @@
-import { useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { formatEther, zeroAddress } from 'viem'
 
 import { tokenApi } from '@/api/token'
 import { useTradeSearchParams } from './use-search-params'
-import { airdropApi } from '@/api/airdrop'
-import { useUserStore } from '@/stores/use-user-store'
-import { useAirdropInfo } from '@/views/airdrop/hooks/use-airdrop-info'
-import { useAirdrop } from './trade-v3/use-airdrop'
-import { MarketType } from '@/api/token/types'
 import { ApiCode, ApiResponse } from '@/api/types'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { useTokenDetails } from '@/hooks/use-token-details'
+import { useReadContract } from 'wagmi'
+import { bcAbiMap } from '@/contract/abi/bonding-curve'
+import { BI_ZERO } from '@/constants/number'
+import { TokenVersion } from '@/contract/abi/token'
+import { TokenType } from '@/enums/token'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
-  const { userInfo } = useUserStore()
-
-  const { data: { data = [] } = {} } = useQuery({
-    queryKey: [airdropApi.getDetails.name, chainName, tokenAddr, userInfo?.id],
-    queryFn: () => {
-      if (userInfo?.id == null) return Promise.reject()
-
-      return airdropApi.getDetails({
-        chain: chainName,
-        token_address: tokenAddr,
-      })
-    },
-    enabled: false,
-  })
+  const { evmChainsMap } = useChainsStore()
+  const chainId = +(evmChainsMap[chainName]?.id ?? 0)
 
   const {
-    data: { data: tokenInfo } = {},
-    error,
+    data: tokenInfo,
+    error: tokenInfoErr,
     isLoading: isLoadingTokenInfo,
     isFetching: isFetchingTokenInfo,
     isRefetching: isRefetchingTokenInfo,
     // Be careful, chart will be recreate when refetch.
     refetch: refetchInfo,
   } = useQuery({
-    enabled: !!chainName && !!tokenAddr,
-    queryKey: [tokenApi.details.name, chainName, tokenAddr],
-    queryFn: () => tokenApi.details(chainName, tokenAddr),
-    refetchOnWindowFocus: false,
+    queryKey: [tokenApi.getDetail.name, chainName, tokenAddr],
+    queryFn: () => tokenApi.getDetail({ chain: chainName, address: tokenAddr }),
     retry: (count, e?: ApiResponse) => {
       if (e?.code === ApiCode.NotFound) return false
       return count < 2
     },
+    select: ({ data }) => data,
+    refetchOnWindowFocus: false,
+    enabled: !!chainName && !!tokenAddr,
   })
-  const isNotFound = error?.code === ApiCode.NotFound
+  const isNotFound = tokenInfoErr?.code === ApiCode.NotFound
+  const isIdoToken = tokenInfo?.coin_type === TokenType.Ido
 
-  const [kol, communities, isOnlyOne] = useMemo(
-    () => [
-      data?.find((a) => a.kol_name),
-      data?.find((a) => a.community_name),
-      data?.length === 1,
-    ],
-    [data]
+  const { isLoadingDetails, ...tokenDetails } = useTokenDetails(
+    isIdoToken || isNotFound ? undefined : tokenAddr,
+    chainId,
+    tokenInfo?.coin_version as TokenVersion
   )
+  const { bcVersion, bcAddr } = tokenDetails
 
-  const kolAirdropInfo = useAirdropInfo(
-    MarketType.Kol,
-    kol?.chain,
-    kol?.distribution_id
-  )
-  const communitiesAirdropInfo = useAirdropInfo(
-    MarketType.Community,
-    communities?.chain,
-    communities?.distribution_id
-  )
+  const { data: pools = [], refetch: refetchPools } = useReadContract({
+    abi: bcAbiMap[bcVersion!],
+    address: bcAddr!,
+    chainId,
+    functionName: 'pools_',
+    args: [tokenAddr],
+    query: {
+      enabled: !!bcAddr && !!tokenAddr,
+      refetchInterval: 10_000, // refresh each 10s.
+    },
+  })
+  const [
+    ,
+    tokenLeft = BI_ZERO,
+    ,
+    reserveTotal = BI_ZERO,
+    ,
+    ,
+    ,
+    headmaster = zeroAddress,
+  ] = pools
+  const isGraduated = headmaster !== zeroAddress
 
-  const kolAirdrop = useAirdrop(
-    kol?.distribution_id!,
-    `${kol?.airdrop_type}`,
-    () => {
-      kolAirdropInfo?.refetch()
-      kolAirdropInfo?.refetchIsClaimed()
-    }
-  )
-
-  const communitiesAirdrop = useAirdrop(
-    communities?.distribution_id!,
-    `${communities?.airdrop_type}`,
-    () => {
-      communitiesAirdropInfo?.refetch()
-      communitiesAirdropInfo?.refetchIsClaimed()
-    }
-  )
+  const refetchTokenInfo = () => {
+    refetchInfo()
+    refetchPools()
+  }
 
   return {
     tokenInfo,
-    isLoadingTokenInfo,
+    isLoadingTokenInfo: isLoadingTokenInfo || isLoadingDetails,
     isFetchingTokenInfo,
     isRefetchingTokenInfo,
     isNotFound,
-    refetchInfo,
-    airdrop: {
-      data,
-      kol,
-      communities,
-      isOnlyOne,
-      kolAirdropInfo,
-      communitiesAirdropInfo,
-      kolAirdrop,
-      communitiesAirdrop,
-    },
+    isLoadingDetails,
+    ...tokenDetails,
+    isGraduated,
+    refetchTokenInfo,
+    tokenLeft: formatEther(tokenLeft),
+    reserveTotal: formatEther(reserveTotal),
   }
 }

@@ -1,17 +1,17 @@
 import { useAccount, useBalance, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
-import { useInterval } from 'react-use'
+import { useInterval } from 'ahooks'
 
 import { idoChain } from '@/config/ido'
 import { BI_ZERO } from '@/constants/number'
-import { idoAirdropAbi } from '@/contract/ido/abi/airdrop'
-import { v3Addr } from '@/contract/v3/address'
+import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
+import { addrMap } from '@/contract/address'
 
 export const useIdoCommunityAirdrop = (enabled: boolean) => {
   const { address } = useAccount()
 
-  const { idoAirdrop } = v3Addr[idoChain.id] ?? {}
+  const { idoAirdrop } = addrMap[idoChain.id] ?? {}
   const airdropConfig = {
     abi: idoAirdropAbi,
     address: idoAirdrop,

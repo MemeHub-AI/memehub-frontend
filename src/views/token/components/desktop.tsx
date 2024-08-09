@@ -1,10 +1,10 @@
 import { Chart } from '@/components/chart'
 import { CommentTradeTab } from './comment-trade-tab'
 import { HoldersRank } from './holders-rank'
-import { TokenInfo } from './token-info'
+import { TokenInfoCard } from './token-info-card'
 import { TokenInfoHeader } from './token-info-header'
 import { TradeAirdrop } from './trade-airdrop'
-import { TradeTab } from './trade-tab'
+import { TradeTab } from './trade-tabs'
 
 export const TokenDesktop = () => {
   return (
@@ -19,7 +19,7 @@ export const TokenDesktop = () => {
 
       <div className="w-aside">
         <TradeTab />
-        <TokenInfo />
+        <TokenInfoCard />
         <HoldersRank />
       </div>
     </>

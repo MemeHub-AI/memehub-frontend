@@ -1,50 +1,23 @@
 import Head from 'next/head'
-import { useTranslation } from 'react-i18next'
+import Script from 'next/script'
 
 import type { AppProps } from 'next/app'
-
 import '@/styles/globals.css'
-import { AppLayout } from '@/components/layouts/app'
+import '@rainbow-me/rainbowkit/styles.css'
 import { AppProviders } from '@/components/app-providers'
-import Script from 'next/script'
-import { useStorage } from '@/hooks/use-storage'
-import { useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { qs } from '@/hooks/use-fetch'
+import { AppLayout } from '@/components/layouts/app'
+import { Buffer } from 'buffer'
 
 export default function App({ Component, pageProps }: AppProps) {
-  const { t } = useTranslation()
-  const { getInviteCode, setInviteCode } = useStorage()
-  const { query, ...router } = useRouter()
+  // If you want to initialize some global states,
+  // should write them in the `AppLayout`, not here.
 
-  const handleRouteChange = (url: string) => {
-    const code = getInviteCode()
-
-    if (code && !/(\?|&)r=/.test(location.search)) {
-      const url = new URL(location.origin + location.pathname)
-      const query = qs.parse(location.search)
-      Object.keys(query).forEach((key) => {
-        url.searchParams.set(key, query[key])
-      })
-      url.searchParams.set('r', code)
-      router.replace(url.toString(), undefined, { shallow: true })
-    }
-    router.events.off('routeChangeComplete', handleRouteChange)
-  }
-
-  useEffect(() => {
-    const inviteCode = location.search.match(/r=([^&]+)*/)?.[1] ?? ''
-
-    setInviteCode(inviteCode)
-    router.events.on('routeChangeStart', () => {
-      router.events.on('routeChangeComplete', handleRouteChange)
-    })
-  }, [])
+  ;(global as any).Buffer = Buffer
 
   return (
     <>
       <Head>
-        <title>{t('meme-hub')}</title>
+        <title>Memehub</title>
         <meta
           name="keywords"
           content="meme, memehub, memecoin, crypto, web3, blockchain"
@@ -72,6 +45,7 @@ export default function App({ Component, pageProps }: AppProps) {
           `,
         }}
       ></Script>
+
       <AppProviders>
         <AppLayout children={<Component {...pageProps} />} />
       </AppProviders>

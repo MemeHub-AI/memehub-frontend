@@ -1,13 +1,14 @@
 import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Check, Copy } from 'lucide-react'
+import { IoCheckmark } from 'react-icons/io5'
+import { MdContentCopy } from 'react-icons/md'
 
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
 import { useHoldersStore } from '@/stores/use-holders-store'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
-import { BondingCurveProgress } from './bonding-curve-progress'
+import { TokenProgress } from './token-progress'
 import { Avatar } from '@/components/ui/avatar'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useResponsive } from '@/hooks/use-responsive'
@@ -15,12 +16,18 @@ import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { tokenInfo, isLoadingTokenInfo, isNotFound, isIdoToken } =
-    useTokenContext()
+  const {
+    tokenInfo,
+    isLoadingTokenInfo,
+    isNotFound,
+    isIdoToken,
+    tokenMetadata,
+  } = useTokenContext()
   const { marketCap } = useHoldersStore()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
   const { chainsMap } = useChainsStore()
+  const chain = chainsMap[tokenInfo?.chain ?? '']
 
   if (isLoadingTokenInfo) {
     return (
@@ -42,26 +49,26 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         <div className="max-sm:flex max-sm:w-full max-sm:justify-between">
           <div className="flex items-center">
             <Avatar
-              src={tokenInfo?.image ?? ''}
+              src={tokenInfo?.image_url ?? ''}
               size={26}
               className="border-2 border-black"
             />
 
             <span className="ml-1 font-bold text-blue-600">
-              {isNotFound && !isIdoToken
+              {isNotFound && !isIdoToken && !tokenMetadata
                 ? t('token.not-found')
-                : `${tokenInfo?.name}(${tokenInfo?.ticker})`}
+                : `${tokenInfo?.name ?? tokenMetadata?.name}(${
+                    tokenInfo?.symbol ?? tokenMetadata?.symbol
+                  })`}
             </span>
           </div>
           <div className="sm:hidden flex items-center">
             <img
-              src={tokenInfo?.chain.logo}
-              alt={tokenInfo?.chain.name}
+              src={chain?.logo}
+              alt={chain?.displayName}
               className="w-5 h-5 rounded"
             />
-            <span className="ml-1">
-              {fmt.withChain(chainsMap[tokenInfo?.chain.id ?? 0]?.displayName)}
-            </span>
+            <span className="ml-1">{fmt.withChain(chain?.displayName)}</span>
           </div>
         </div>
         <span>
@@ -72,13 +79,19 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         {isMobile && (
           <div
             className="text-sm flex items-center space-x-2 cursor-pointer"
-            onClick={() => copy(tokenInfo?.address || '')}
+            onClick={() => copy(tokenInfo?.contract_address || '')}
           >
             <span>{t('ca')}:</span>
             <span className="truncate">
-              {fmt.addr(tokenInfo?.address || '', { len: 14 })}
+              {fmt.addr(tokenInfo?.contract_address || '', { len: 14 })}
             </span>
-            <span>{isCopied ? <Check size={16} /> : <Copy size={16} />}</span>
+            <span>
+              {isCopied ? (
+                <IoCheckmark size={16} />
+              ) : (
+                <MdContentCopy size={16} />
+              )}
+            </span>
           </div>
         )}
 
@@ -103,10 +116,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         </span>
       </div> */}
       </div>
-      <BondingCurveProgress
-        className="ml-2 w-full max-sm:ml-0"
-        showDesc={false}
-      />
+      <TokenProgress className="ml-2 w-full max-sm:ml-0" showDesc={false} />
     </div>
   )
 }

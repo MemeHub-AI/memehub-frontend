@@ -42,9 +42,9 @@ const InviteCard = ({ c }: { c: ChainData }) => {
   const { t } = useTranslation()
   const { totalAmount, unclaimedAmount, isClaiming, isClaimed, claimReward } =
     useReward(Number(c.id))
-  const { chainsMap } = useChainsStore()
+  const { evmChainsMap } = useChainsStore()
 
-  const { native } = chainsMap[c.id] ?? {}
+  const { native } = evmChainsMap[c.id] ?? {}
   const disabeld = isClaiming || isClaimed
 
   return (

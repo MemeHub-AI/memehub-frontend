@@ -2,11 +2,11 @@ import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
-import { useInterval } from 'react-use'
+import { useInterval } from 'ahooks'
 
 import { BI_ZERO } from '@/constants/number'
-import { idoAbi } from '@/contract/v3/abi/ido'
-import { v3Addr } from '@/contract/v3/address'
+import { idoAbi } from '@/contract/abi/ido/ido'
+import { addrMap } from '@/contract/address'
 import { useIdoClaimed } from './use-ido-claimed'
 
 export enum IdoStatus {
@@ -17,7 +17,7 @@ export enum IdoStatus {
 
 export const useIdoInfo = (chainId: number, poolId: number) => {
   const { address } = useAccount()
-  const { ido } = v3Addr[chainId] ?? {}
+  const { ido } = addrMap[chainId] ?? {}
 
   const { isClaimedReserve, refetchClaimedReserve } = useIdoClaimed(
     chainId,
@@ -30,7 +30,7 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     refetch: refetchUserInfo,
   } = useReadContract({
     abi: idoAbi,
-    address: ido,
+    address: ido!,
     chainId,
     functionName: 'getUserInfo',
     args: [BigInt(poolId), address!],
@@ -41,11 +41,11 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
 
   const { data: initUserWeight = BI_ZERO } = useReadContract({
     abi: idoAbi,
-    address: v3Addr[chainId]?.ido,
+    address: ido!,
     chainId,
     functionName: 'getUserWeight',
     args: [address!, [], BigInt(0)],
-    query: { enabled: !!address },
+    query: { enabled: !!address && !!ido },
   })
   const userWeight = BigNumber(userAmount).isZero()
     ? initUserWeight.toString()
@@ -58,11 +58,11 @@ export const useIdoInfo = (chainId: number, poolId: number) => {
     refetch: refetchPools,
   } = useReadContract({
     abi: idoAbi,
-    address: ido,
+    address: ido!,
     chainId,
     functionName: 'pools',
     args: [BigInt(poolId)],
-    query: { refetchInterval: 10_000 },
+    query: { enabled: !!ido, refetchInterval: 10_000 },
   })
   const [
     tokenAddress,

@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/hover-card'
 import { Button } from './ui/button'
 import { CirclePing } from './circle-ping'
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 
 export const TradeLogs = () => {
   const { t } = useTranslation()

@@ -11,6 +11,8 @@ import { Routes } from '@/routes'
 export interface Nav {
   title: string
   path: string
+  // only show on mobile
+  mobileOnly?: boolean
 }
 
 export const Header = () => {
@@ -20,8 +22,8 @@ export const Header = () => {
 
   const navs: Nav[] = [
     { title: t('home'), path: Routes.Main },
-    { title: t('next.moonshot'), path: Routes.Moonshot },
-    { title: t('classic.meme'), path: Routes.ClassicMeme },
+    { title: t('next.moonshot'), path: Routes.Moonshot, mobileOnly: true },
+    { title: t('classic.meme'), path: Routes.ClassicMeme, mobileOnly: true },
     // { title: t('create'), path: Routes.Create },
     { title: t('airdrop'), path: Routes.Airdrop },
     { title: t('alliance'), path: Routes.Alliance },

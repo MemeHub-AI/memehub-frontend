@@ -1,13 +1,21 @@
 import { createContext, useContext } from 'react'
+import { type Address } from 'viem'
 
 import { useTokenInfo } from './../views/token/hooks/use-token-info'
 import { CONTEXT_ERR } from '@/errors/context'
+import { Network } from '@/enums/contract'
+import { ChainData } from '@/api/chain/type'
 
-type Context = Omit<
-  ReturnType<typeof useTokenInfo>,
-  'isRefetchingTokenInfo'
-> & {
+interface Context
+  extends Omit<ReturnType<typeof useTokenInfo>, 'isRefetchingTokenInfo'> {
   isIdoToken: boolean
+  isGraduated: boolean
+  reserveSymbol: string | undefined
+  chainId: number
+  chainName: string
+  tokenAddr: Address
+  network: Network
+  tokenChain: ChainData | undefined
 }
 
 const TokenContext = createContext<Context | null>(null)

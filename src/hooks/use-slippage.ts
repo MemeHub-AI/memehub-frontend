@@ -2,13 +2,13 @@ import { useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 
 import { useStorage } from '@/hooks/use-storage'
-import { DEFAULT_SLIPPAGE } from '@/constants/trade'
+import { defaultSlippage } from '@/config/trade'
 
 export const useSlippage = () => {
   const { getSlippage, setSlippage: setCacheSlippage } = useStorage()
-  const cachedSlippage = getSlippage() || DEFAULT_SLIPPAGE
+  const cachedSlippage = getSlippage() || defaultSlippage
   const slip = BigNumber(cachedSlippage).isNaN()
-    ? DEFAULT_SLIPPAGE
+    ? defaultSlippage
     : cachedSlippage
 
   const [slippage, setSlip] = useState(slip)

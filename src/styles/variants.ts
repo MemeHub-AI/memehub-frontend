@@ -1,11 +1,15 @@
+import { cn } from '@/lib/utils'
 import { cva, VariantProps } from 'class-variance-authority'
 
 export const shadowVariants = cva('transition-all duration-100', {
   variants: {
     shadow: {
       none: '',
-      default:
-        'border-2 border-black shadow-offset hover:shadow-none hover:translate-x-offset hover:translate-y-offset',
+      default: cn(
+        'border-2 border-black shadow-offset active:shadow-none',
+        'active:translate-x-offset active:translate-y-offset',
+        'sm:hover:shadow-none sm:hover:translate-x-offset sm:hover:translate-y-offset'
+      ),
     },
   },
   defaultVariants: {
@@ -19,8 +23,11 @@ export const shadowBorderVariants = cva('transition-all duration-100', {
   variants: {
     shadow: {
       none: '',
-      default:
-        'border-2 border-black hover:shadow-offset-border hover:-translate-x-offset hover:-translate-y-offset',
+      default: cn(
+        'border-2 border-black active:shadow-offset-border',
+        'active:-translate-x-offset active:-translate-y-offset',
+        'sm:hover:shadow-offset-border sm:hover:-translate-x-offset sm:hover:-translate-y-offset'
+      ),
     },
   },
   defaultVariants: {

@@ -3,6 +3,7 @@ import { t } from 'i18next'
 import { UserCoinsCreated } from '@/api/user/types'
 import { AirdropItem } from '@/api/airdrop/types'
 
+// TODO: ido temp
 export const idoChain = {
   id: 56,
   name: 'bsc',
@@ -16,15 +17,14 @@ export const idoChain = {
   explorer_tx: 'https://bscscan.com/tx',
 }
 
-// TODO: ido temp
-export const idoTrumpCard = {
+const idoTrumpCard = {
   id: 0, // this is `poolId`
   image: '/images/ido/trump.jpeg',
-  address: '', // token address
-  poolAddr: '',
+  address: '0xc5a74da1b62855697FD55276593D24F38292e11C', // dex token address
+  poolAddr: '0x8e32688152c820e004e270a677e0804168e5821d', // dex pool address
   name: 'Trump407',
   ticker: 'Trump407',
-  desc: t('ido.405'),
+  desc: t('ido.trump407-desc'),
   market_cap: 0,
   total_replies: 0,
   creator: {
@@ -38,8 +38,8 @@ export const idoTrumpCard = {
   },
   chain: idoChain,
   status: 3, // 3: graduated
-  isIdoToken: true,
-} as UserCoinsCreated
+  isIdoToken: true, // custom field
+}
 
 export const idoTrumpAirdrop = {
   name: 'Trump407',

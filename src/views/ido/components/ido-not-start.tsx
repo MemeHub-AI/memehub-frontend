@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { InfoIcon } from 'lucide-react'
 import dayjs from 'dayjs'
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 import { useIdoContext } from '@/contexts/ido'
 import { Countdown } from '@/components/countdown'
@@ -20,7 +20,7 @@ export const IdoNotStart = ({ onExpired }: Props) => {
       <div className="flex items-center space-x-1 mt-3">
         <span className="font-bold mr-1">{t('ido.total-amount')}:</span>
         {totalReserveAmount} {reserveSymbol}
-        <InfoIcon className="w-4" />
+        <IoMdInformationCircleOutline className="w-4" />
         {/* <Dialog>
           <DialogTrigger>
             <InfoIcon className="w-4" />

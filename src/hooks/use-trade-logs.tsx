@@ -2,9 +2,10 @@ import { ReactNode, useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
 import { last, lowerCase } from 'lodash'
 import { toast } from 'sonner'
-import { Info, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
+import { IoCloseOutline } from 'react-icons/io5'
+import { IoMdInformationCircleOutline } from 'react-icons/io'
 
 import {
   type CreateInfoLog,
@@ -22,18 +23,18 @@ import {
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
 import { Avatar } from '@/components/ui/avatar'
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 
 const toastBase = (children: ReactNode) => {
   toast.dismiss()
   const id = toast(
     <div className="relative w-full h-full flex gap-3">
-      <X
+      <IoCloseOutline
         className="absolute top-0 right-0 text-zinc-500 hover:text-black cursor-pointer"
         size={20}
         onClick={() => toast.dismiss(id)}
       />
-      <Info className="mt-0.5" />
+      <IoMdInformationCircleOutline className="mt-0.5" />
       {children}
     </div>,
     { position: 'bottom-left', duration: Infinity }
@@ -48,11 +49,15 @@ export const useTradeLogs = () => {
   const [lastCreate, setLastCreate] = useState<CreateInfoLog>()
 
   const { lastJsonMessage, sendJsonMessage } =
-    useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(wsApiURL.tradeLogs, {
-      heartbeat,
-      onOpen: () => sendJsonMessage({ type: 'message', data: null }),
-      shouldReconnect: () => true,
-    })
+    useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(
+      wsApiURL.tradeLogs,
+      {
+        heartbeat,
+        onOpen: () => sendJsonMessage({ type: 'message', data: null }),
+        shouldReconnect: () => true,
+      },
+      false // TODO: remove
+    )
 
   const shwoLatestTrade = (lastTrade: TradeInfoLog) => {
     toastBase(

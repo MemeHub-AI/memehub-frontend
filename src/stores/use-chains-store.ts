@@ -1,20 +1,18 @@
 import { create } from 'zustand'
 
 import type { ChainData } from '@/api/chain/type'
+import { Network } from '@/enums/contract'
 
 type ChainsMap = Record<string | number, ChainData | undefined>
 
 interface ChainsStore {
   chains: ChainData[]
-  /**
-   * @example example for find a chain.
-   * ```ts
-   * const chain1 = chainsMap[56]
-   * const chain2 = chainsMap['bsc']
-   * ```
-   */
-  chainsMap: ChainsMap
   loadingChains: boolean
+  /** All chains, only allowing matching by chainName. */
+  chainsMap: ChainsMap
+  evmChainsMap: ChainsMap // Matching by name and id.
+  svmChiansMap: ChainsMap // Matching by name and id.
+  tvmChainsMap: ChainsMap // Matching by name and id.
 
   setChains: (chains: ChainData[]) => void
   setChainsMap: (chains: ChainData[]) => void
@@ -26,31 +24,47 @@ export const useChainsStore = create<ChainsStore>((set, get) => ({
   chains: [],
   loadingChains: true,
   chainsMap: {},
+  evmChainsMap: {},
+  svmChiansMap: {},
+  tvmChainsMap: {},
 
-  setChains: (chains) => {
+  setChains: (chains) => set({ chains, loadingChains: false }),
+  setChainsMap: (chains) => {
+    const chainsMap: ChainsStore['chainsMap'] = {}
+    const evmChainsMap: ChainsStore['evmChainsMap'] = {}
+    const svmChiansMap: ChainsStore['svmChiansMap'] = {}
+    const tvmChainsMap: ChainsStore['tvmChainsMap'] = {}
+
+    for (const c of chains) {
+      chainsMap[c.name] = c
+
+      if (c.network === Network.Evm) {
+        evmChainsMap[c.id] = c
+        evmChainsMap[c.name] = c
+      } else if (c.network === Network.Svm) {
+        svmChiansMap[c.id] = c
+        svmChiansMap[c.name] = c
+      } else if (c.network === Network.Tvm) {
+        tvmChainsMap[c.id] = c
+        tvmChainsMap[c.name] = c
+      }
+    }
+
     set({
-      chains: chains.filter((c) => c.is_supported),
+      chainsMap,
+      evmChainsMap,
+      svmChiansMap,
+      tvmChainsMap,
       loadingChains: false,
     })
   },
-  setChainsMap: (allChains) => {
-    const chains = allChains.filter((c) => c.is_supported)
-    // Trade space for time.
-    const chainsMap = chains.reduce((acc, cur) => {
-      acc[cur.id] = cur
-      acc[cur.name] = cur
-      return acc
-    }, {} as ChainsMap)
-
-    set({ chainsMap, loadingChains: false })
-  },
   findChains: (nameOrIds) => {
-    const { chainsMap } = get()
+    const { evmChainsMap } = get()
     const chains: ChainData[] = []
 
     for (let i = 0; i < nameOrIds.length; i++) {
       const key = nameOrIds[i]
-      if (key && chainsMap[key]) chains.push(chainsMap[key])
+      if (key && evmChainsMap[key]) chains.push(evmChainsMap[key])
     }
 
     return chains

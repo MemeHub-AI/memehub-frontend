@@ -16,8 +16,8 @@ export const useUserInfo = (addr?: string) => {
     isFetching: isFetchingOtherUserInfo,
     refetch: refetchOtherUserInfo,
   } = useQuery({
-    queryKey: [userApi.getInfo.name, addr],
-    queryFn: () => userApi.getInfo(addr!),
+    queryKey: [userApi.getOtherInfo.name, addr],
+    queryFn: () => userApi.getOtherInfo(addr!),
     enabled: !!addr,
   })
 
@@ -27,8 +27,8 @@ export const useUserInfo = (addr?: string) => {
     isFetching: isFetchingUserInfo,
     refetch: refetchUserInfo,
   } = useQuery({
-    queryKey: [userApi.getInfoFromToken.name, token],
-    queryFn: () => userApi.getInfoFromToken(),
+    queryKey: [userApi.getInfo.name, token],
+    queryFn: () => userApi.getInfo(),
     enabled: !!token,
   })
 

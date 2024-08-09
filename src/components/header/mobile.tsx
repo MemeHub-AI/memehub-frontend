@@ -4,19 +4,19 @@ import { SlMenu } from 'react-icons/sl'
 import { MdArrowDropDown } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
+import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 
 import type { Nav } from '.'
 import { Button } from '../ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
 import { Logo } from '../logo'
 import { LangSelect } from '../lang-select'
-import { WalletConnect } from '../wallet-connect'
-import { WalletDisconnector } from '../wallet-connect/components/disconnector'
+import { ConnectWallet } from '../connect-wallet'
 import { Routes } from '@/routes'
-import RewardButton from '../reward-button'
+import { RewardButton } from '../reward-button'
 import { cn } from '@/lib/utils'
-import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
 import { socialLink } from '@/config/link'
+import { AccountDropdown } from '../account-dropdown'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -103,7 +103,6 @@ export const HeaderMobile = (props: Props) => {
         </SheetContent>
       </Sheet>
 
-      {/* <SearchInput /> */}
       <div className="flex justify-between items-center space-x-2 ml-1">
         <Button
           className="bg-lime-green w-8 p-0"
@@ -115,15 +114,17 @@ export const HeaderMobile = (props: Props) => {
         {isConnected && (
           <RewardButton className="max-sm:px-2" showReferral={false} />
         )}
-        {/* <Button
+        <Button
           variant="outline"
           className="mx-3 max-sm:mx-0"
-          size={'sm'}
+          size="sm"
           onClick={() => router.push(Routes.Create)}
         >
           {t('create.token')}
-        </Button> */}
-        <WalletConnect />
+        </Button>
+        <ConnectWallet>
+          <AccountDropdown />
+        </ConnectWallet>
       </div>
     </>
   )

@@ -18,10 +18,10 @@ export const userApi = {
       body: req,
     })
   },
-  getInfo(addr: string) {
+  getOtherInfo(addr: string) {
     return api.GET<ApiResponse<UserInfoRes>>(`/api/v1/user/users/${addr}/`)
   },
-  getInfoFromToken() {
+  getInfo() {
     return api.GET<ApiResponse<UserInfoRes>>('/api/v1/user/users/')
   },
   list<T extends UserListType>(addr: string, req: UserListReq) {

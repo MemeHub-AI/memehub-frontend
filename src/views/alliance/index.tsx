@@ -7,7 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Kol } from './kol'
 import { Communities } from './communities'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
-import useAudioPlayer from '@/hooks/use-audio-player'
+import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 enum Tab {
   Kol = 'kol',

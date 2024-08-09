@@ -12,14 +12,11 @@ import { OnchainTokensChain, OnchainTokensRes } from '@/api/token/types'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { useRouter } from 'next/router'
-import clsx from 'clsx'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Img } from '@/components/img'
-import { useUserStore } from '@/stores/use-user-store'
-import { useWalletStore } from '@/stores/use-wallet-store'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 interface Props {
   ideaData: IdeaDataList | undefined
@@ -39,13 +36,11 @@ export const TokenInfo = ({ ideaData }: Props) => {
   const uniqueKey = useMemo(nanoid, [])
   const { onIdeaConfirm } = useGenAIIdea()
   const { setFormInfo, setLoadingLogo, setLoadingPoster } = useAimemeInfoStore()
-  const userStore = useUserStore()
-  const { setConnectOpen } = useWalletStore()
+  const { checkForConnect } = useCheckAccount()
 
   const onCreateNow = (item: IdeaDataList) => {
-    if (userStore.userInfo?.id == null) {
-      return setConnectOpen(true)
-    }
+    if (!checkForConnect()) return
+
     router.push(`${Routes.Create}`)
     setFormInfo({
       name: item?.name,
@@ -59,7 +54,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
   const { data } = useQuery({
     enabled: !!ideaData?.name,
     queryKey: [uniqueKey],
-    queryFn: () => tokenApi.onchainTokens(ideaData?.name ?? ''),
+    queryFn: () => tokenApi.searchTokens(ideaData?.name ?? ''),
   })
   const chains = data?.data || {}
 
@@ -225,7 +220,7 @@ const Desc = memo(({ description }: { description: string }) => {
   return (
     <>
       <div
-        className={clsx(
+        className={cn(
           'max-sm:px-3 min-h-[50px] text-sm cursor-pointer',
           show ? '' : 'line-clamp-4'
         )}

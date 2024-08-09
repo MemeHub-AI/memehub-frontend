@@ -1,25 +1,25 @@
 import React, { useState, type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
-import { Address } from 'viem'
 import { useTranslation } from 'react-i18next'
 import { isNumber } from 'lodash'
 
-import type { UserCoinsCreated } from '@/api/user/types'
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
-import { useTokenProgressV3 } from '@/views/token/hooks/trade-v3/use-token-progress'
+import { useTokenProgress } from '@/views/token/hooks/evm/use-token-progress'
 import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { IdoTag } from '../ido-tag'
 import { Countdown } from '@/components/countdown'
+import { TokenListItem } from '@/api/token/types'
+import { TokenVersion } from '@/contract/abi/token'
 
 interface Props extends ComponentProps<typeof Card> {
-  card: UserCoinsCreated
+  card: TokenListItem
   descClass?: string
   idoCreateAt?: number
   idoDuration?: number
@@ -40,25 +40,29 @@ export const TokenCard = (props: Props) => {
   } = props
   const router = useRouter()
   const { t } = useTranslation()
-  const { chainsMap } = useChainsStore()
-  const chain = chainsMap[card.chain.id]
-
   const [isExpired, setIsExpired] = useState(false)
+  const { chainsMap } = useChainsStore()
+  const chain = chainsMap[card.chain]
 
-  const { progress, isGrauated } = useTokenProgressV3(
-    card.address as Address,
-    Number(card.chain.id)
+  const { progress, isGrauated } = useTokenProgress(
+    card.contract_address,
+    +(chain?.id ?? 0),
+    card.coin_version as TokenVersion
   )
   const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (isIdo && card.address) {
-      return router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
+    if (isIdo && card.contract_address) {
+      return router.push(
+        fmt.toHref(Routes.Main, chain?.name ?? '', card.contract_address)
+      )
     }
     if (isIdo) {
-      return router.push(fmt.toHref(Routes.Ido, card.chain.name, card.id))
+      return router.push(fmt.toHref(Routes.Ido, chain?.name ?? '', card.id))
     }
-    router.push(fmt.toHref(Routes.Main, card.chain.name, card.address))
+    router.push(
+      fmt.toHref(Routes.Main, chain?.name ?? '', card.contract_address)
+    )
     onClick?.(e)
   }
 
@@ -80,7 +84,7 @@ export const TokenCard = (props: Props) => {
         </Badge>
       )}
       <Img
-        src={card.image}
+        src={card.image_url}
         alt="logo"
         title={card.name}
         className="shrink-0 w-32 h-32 xl:w-40 xl:h-40 rounded-r-none max-sm:mr-2"
@@ -91,10 +95,10 @@ export const TokenCard = (props: Props) => {
             <span
               className={cn('break-all line-clamp-2', isIdo && 'line-clamp-1')}
             >
-              {card?.ticker}({card?.name})
+              {card?.symbol}({card?.name})
             </span>
             <Avatar
-              src={card.chain.logo}
+              src={chain?.logo}
               alt="logo"
               size={20}
               className="mt-1"
@@ -110,7 +114,7 @@ export const TokenCard = (props: Props) => {
               descClass
             )}
           >
-            {card?.desc}
+            {card?.description}
           </p>
         </div>
         {isIdo && !isExpired ? (

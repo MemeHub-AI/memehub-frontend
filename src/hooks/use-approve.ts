@@ -48,8 +48,8 @@ export const useApprove = () => {
         args: [spender, APPROVE_MAX_VALUE],
       })
       return true
-    } catch (error) {
-      CONTRACT_ERR.message(error)
+    } catch (e) {
+      CONTRACT_ERR.message((e as Error).message)
       return false
     } finally {
       resetApprove()
@@ -72,8 +72,8 @@ export const useApprove = () => {
       })
 
       return BigNumber(formatEther(value)).gte(amount)
-    } catch (error) {
-      CONTRACT_ERR.message(error)
+    } catch (e) {
+      CONTRACT_ERR.message((e as Error).message)
       return false
     }
   }

@@ -67,6 +67,8 @@ export const useFetch = (baseURL: string) => {
             : JSON.stringify(options.body),
       })
 
+      if (response.status === ApiCode.AuthError) setToken('')
+
       // Response error.
       if (!response.ok) throw response
 

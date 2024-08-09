@@ -30,11 +30,11 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
 
   const { url, form, formFields, onSubmit } = formData
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
-  const { chainsMap } = useChainsStore()
+  const { evmChainsMap } = useChainsStore()
 
   const { isDeploying, deployFee } = deployResult || {}
 
-  const { native } = chainsMap[form.getValues(formFields.chainName)] || {}
+  const { native } = evmChainsMap[form.getValues(formFields.chainName)] || {}
   const symbol = native?.symbol || chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
@@ -181,7 +181,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
               className="px-10 mt-3"
               disabled={isDeploying}
             >
-              {t('create')}
+              {isDeploying ? t('creating') : t('create')}
             </Button>
             {symbol && (
               <p className="text-zinc-400 text-xs">

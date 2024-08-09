@@ -3,38 +3,29 @@ import { useTranslation } from 'react-i18next'
 import { useAccount } from 'wagmi'
 import Link from 'next/link'
 
-import { Button } from '@/components/ui/button'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { CheckIcon } from '@/components/check-icon'
 import { Img } from '@/components/img'
 import { CommunityCategory } from '@/api/airdrop/types'
-import { useIds } from '@/hooks/use-ids'
 import { cn } from '@/lib/utils'
 import { useUserStore } from '@/stores/use-user-store'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { utilLang } from '@/utils/lang'
 import { formLink } from '@/config/link'
-import { useIdoCheck } from '@/views/ido/hooks/use-ido-check'
-import { idoChain } from '@/config/ido'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { ConnectWallet } from '@/components/connect-wallet'
 
 export const Ids = () => {
   const { t } = useTranslation()
-
   const communityMap = {
     [CommunityCategory.Chat]: t('member'),
     [CommunityCategory.Nft]: t('holder'),
     [CommunityCategory.Token]: t('holder'),
   }
+
   const { isConnected } = useAccount()
-  const { userInfo } = useUserStore()
-  const { setConnectOpen } = useWalletStore()
-  // const { ids: { kol } = {} } = useIds()
   const { isPlayAirdropAudio, setIsPlayAirdropAudio } = useIsPlayAudio()
   const { playRap } = useAudioPlayer()
-
-  // TODO: ido temp
-  const { isKol, community } = useIdoCheck(idoChain.id)
+  const { isKol, hasCommunity, kolInfo, communityInfo } = useUserStore()
 
   useEffect(() => {
     if (isPlayAirdropAudio) {
@@ -47,15 +38,13 @@ export const Ids = () => {
     if (!isConnected) {
       return (
         <div className="my-3 flex items-center">
-          <Button size="lg" onClick={() => setConnectOpen(true)}>
-            {t('connect.wallet')}
-          </Button>
+          <ConnectWallet />
           <span className="ml-4">{t('check.wallet.airdrop')}</span>
         </div>
       )
     }
 
-    if (!isKol && !community) {
+    if (!isKol && !hasCommunity) {
       return (
         <div className="my-3 flex items-center">
           <img src="/images/no-airdrop.png" alt="empty" />
@@ -69,26 +58,26 @@ export const Ids = () => {
         {isKol && (
           <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
             <Img
-              src={userInfo?.logo}
+              src={kolInfo?.logo}
               alt="Avatar"
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {userInfo?.name} {t('ambassador')}
+              {kolInfo?.name} {t('ambassador')}
             </span>
             <CheckIcon />
           </div>
         )}
-        {community && (
+        {communityInfo && (
           <div className="flex items-center bg-lime-green rounded-sm overflow-hidden">
             <Img
-              src={community.logo}
+              src={communityInfo.logo}
               alt="Avatar"
               className="w-11 h-11 rounded-r-none"
             />
             <span className="mx-3 min-w-[50px] text-xl truncate">
-              {utilLang.locale(community.name)}{' '}
-              {communityMap[community.category as CommunityCategory]}
+              {utilLang.locale(communityInfo.name)}{' '}
+              {communityMap[communityInfo.category as CommunityCategory]}
             </span>
             <CheckIcon />
           </div>
@@ -113,7 +102,7 @@ export const Ids = () => {
           <span className="ml-2">{t('platform.airdrop')}</span>
         </div>
       )}
-      {!community && (
+      {!hasCommunity && (
         <div className={cn(isKol ? 'mt-4' : 'mt-1')}>
           <Link
             href={formLink.community}

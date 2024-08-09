@@ -8,7 +8,7 @@ import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 const buttonVariants = cva(
   cn(
-    'inline-flex items-center justify-center whitespace-nowrap ',
+    'inline-flex items-center justify-center whitespace-nowrap select-none',
     'rounded-md text-sm font-medium transition-colors',
     'focus-visible:outline-none focus-visible:ring-1',
     'focus-visible:ring-ring disabled:pointer-events-none',

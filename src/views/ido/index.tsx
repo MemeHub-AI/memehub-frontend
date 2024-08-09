@@ -24,12 +24,12 @@ export const IdoPage = () => {
   const [isExpired, setIsExpired] = useState(false)
   const [isStart, setIsStart] = useState(false)
   const { isConnected, checkForConnect } = useCheckAccount()
-  const { chainsMap } = useChainsStore()
+  const { evmChainsMap } = useChainsStore()
   const { query } = useRouter()
   const chain = (query.chain || '') as string
   const poolId = Number(query.id || 0)
-  const chainId = Number(chainsMap[chain]?.id || idoChain.id)
-  const reserveSymbol = chainsMap[chain]?.native.symbol || 'BNB'
+  const chainId = Number(evmChainsMap[chain]?.id || idoChain.id)
+  const reserveSymbol = evmChainsMap[chain]?.native.symbol || 'BNB'
 
   const idoInfo = useIdoInfo(chainId, poolId)
   const { startAt, endAt, status } = idoInfo
@@ -79,7 +79,7 @@ export const IdoPage = () => {
             website={idoTrumpLink.website}
             className="my-1 text-zinc-600"
           />
-          <p>{t('ido.405')}</p>
+          <p>{t('ido.trump407-desc')}</p>
 
           {isStarted && (
             <Countdown

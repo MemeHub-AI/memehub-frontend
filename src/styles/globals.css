@@ -94,7 +94,8 @@
   }
 }
 
-object,embed {
+object,
+embed {
   width: 100% !important;
   max-width: 600px;
   border-radius: 4px;

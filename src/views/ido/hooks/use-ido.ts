@@ -2,8 +2,8 @@ import { useWriteContract } from 'wagmi'
 import { parseEther } from 'viem'
 import { toast } from 'sonner'
 
-import { idoAbi } from '@/contract/v3/abi/ido'
-import { v3Addr } from '@/contract/v3/address'
+import { idoAbi } from '@/contract/abi/ido/ido'
+import { addrMap } from '@/contract/address'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { IDO_ERR } from '@/errors/ido'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +14,7 @@ export const useIdo = (onFinally?: () => void) => {
   const { t } = useTranslation()
   const { chainId, poolId } = useIdoContext()
   const { checkForConnect, checkForChain } = useCheckAccount()
-  const { ido } = v3Addr[chainId] ?? {}
+  const { ido } = addrMap[chainId] ?? {}
 
   const {
     data: hash,
@@ -44,7 +44,7 @@ export const useIdo = (onFinally?: () => void) => {
   })
 
   const checkForWrite = async () => {
-    if (!(await checkForConnect())) return false
+    if (!checkForConnect()) return false
     if (!(await checkForChain(chainId))) return false
 
     return true
@@ -53,6 +53,7 @@ export const useIdo = (onFinally?: () => void) => {
   const buy = async (amount: string) => {
     if (!(await checkForWrite())) return
 
+    // TODO: should simulate first.
     writeContract({
       abi: idoAbi,
       address: ido!,
@@ -66,6 +67,7 @@ export const useIdo = (onFinally?: () => void) => {
   const claim = async () => {
     if (!(await checkForWrite())) return
 
+    // TODO: should simulate first.
     writeContract({
       abi: idoAbi,
       address: ido!,
@@ -78,6 +80,7 @@ export const useIdo = (onFinally?: () => void) => {
   const refund = async () => {
     if (!(await checkForWrite())) return
 
+    // TODO: should simulate first.
     writeContract({
       abi: idoAbi,
       address: ido!,

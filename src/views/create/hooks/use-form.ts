@@ -2,17 +2,15 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { useAccount, useSwitchChain } from 'wagmi'
-import { useWalletStore } from '@/stores/use-wallet-store'
 import { useUploadImage } from '@/hooks/use-upload-image'
-import { toast } from 'sonner'
 
 import { useDeploy } from './use-deploy'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { CoinType, MarketType, Marketing } from '@/api/token/types'
+import { Marketing } from '@/api/token/types'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
-import { deployVersion } from '@/config/contract'
+import { useCheckAccount } from '@/hooks/use-check-chain'
+import { TokenType } from '@/enums/token'
 
 export const formFields = {
   fullname: 'fullname',
@@ -32,12 +30,9 @@ export const useCreateTokenForm = (
   useDeployResult: ReturnType<typeof useDeploy>
 ) => {
   const { t } = useTranslation()
-  const { isConnected, chainId } = useAccount()
-  const { switchChain } = useSwitchChain()
-
   const { formInfo } = useAimemeInfoStore()
-  const { setConnectOpen } = useWalletStore()
-  const { chains, loadingChains } = useChainsStore()
+  const { checkForConnect, checkForChain } = useCheckAccount()
+  const { evmChainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
   const { deploy, isDeploying } = useDeployResult
 
@@ -95,37 +90,30 @@ export const useCreateTokenForm = (
       [formFields.chainName]: '',
       [formFields.logo]: '',
       [formFields.poster]: [],
-      [formFields.coinType]: CoinType.Normal,
+      [formFields.coinType]: TokenType.Normal,
       [formFields.marketing]: [],
     },
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const isValid = await form.trigger()
-
-    if (!isValid) return
-    if (!isConnected) return setConnectOpen(true)
+    if (!(await form.trigger())) return
+    if (!checkForConnect()) return
+    if (!(await checkForChain(evmChainsMap[values.chainName]?.id))) return
     if (isDeploying) return
-    const vChainId = Number(chains.find((c) => c.name === values.chainName)?.id)
-    if (vChainId !== chainId) {
-      toast.error(t('swatch.chain').replace('$1', values.chainName! as string))
-      switchChain({ chainId: vChainId })
-      return
-    }
 
     deploy({
       name: values.fullname! as string,
-      ticker: values.symbol! as string,
-      desc: values.description! as string,
-      image: (values.logo! as string).replace('mini', 'origin'),
+      symbol: values.symbol! as string,
+      description: values.description! as string,
+      image_url: (values.logo! as string).replace('mini', 'origin'),
       chain: values.chainName as string,
       twitter_url: utilsUrl.mediaUrl(values.twitter, URL_TYPE.TWITTER),
       telegram_url: utilsUrl.mediaUrl(values.telegram, URL_TYPE.TELEGRAM),
-      website: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
+      website_url: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
       coin_type: values.coinType as number,
+      poster_urls: values.poster,
+      // Below only used for frontend.
       marketing: values.marketing as Marketing[],
-      poster: values.poster,
-      version: deployVersion,
     })
   }
 
@@ -134,7 +122,6 @@ export const useCreateTokenForm = (
     form,
     formFields,
     formSchema,
-    chains,
     loadingChains: loadingChains,
     onSubmit,
     onChangeUpload,
