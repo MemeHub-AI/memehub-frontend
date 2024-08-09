@@ -41,7 +41,7 @@ export const CreateTokenStatusDialog = () => {
   if (isCreatingToken) {
     return (
       <AlertDialog
-        defaultOpen
+        open={true}
         title={t('deploy.backend.submitting')}
         description={t('deploy.backend.submitting.desc')}
         showFooter={false}
@@ -52,7 +52,7 @@ export const CreateTokenStatusDialog = () => {
   // Contract submiting
   if (isSubmitting) {
     return (
-      <Dialog defaultOpen contentProps={{ onCloseClick: resetDeploy }}>
+      <Dialog open={true} contentProps={{ onCloseClick: resetDeploy }}>
         <DialogTitle>{t('deploy.submit.title')}</DialogTitle>
         <DialogDescription>{t('deploy.submit.description')}</DialogDescription>
       </Dialog>
@@ -65,7 +65,7 @@ export const CreateTokenStatusDialog = () => {
 
     return (
       <AlertDialog
-        defaultOpen
+        open={true}
         title={withWarningIcon(t('deploy.submit.error') + ':')}
         description={
           <span className="break-all line-clamp-3">{submitError?.message}</span>
@@ -79,7 +79,7 @@ export const CreateTokenStatusDialog = () => {
   // Confirming, Submit success.
   if (isConfirming) {
     return (
-      <Dialog defaultOpen contentProps={{ onCloseClick: resetDeploy }}>
+      <Dialog open={true} contentProps={{ onCloseClick: resetDeploy }}>
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
           <span>{t('deploy.submit.success.desc')}</span>
@@ -92,7 +92,7 @@ export const CreateTokenStatusDialog = () => {
   if (confirmError) {
     return (
       <AlertDialog
-        defaultOpen
+        open={true}
         title={withWarningIcon(t('deploy.confirm.error') + ':')}
         description={
           <span className="break-all line-clamp-3">
@@ -109,7 +109,7 @@ export const CreateTokenStatusDialog = () => {
   if (isDeploySuccess) {
     return (
       <AlertDialog
-        defaultOpen
+        open={true}
         showClose={true}
         onCancel={resetDeploy}
         onConfirm={() => {
