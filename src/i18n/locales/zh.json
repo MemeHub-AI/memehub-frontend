@@ -472,10 +472,10 @@
   "trade.tab": "买/卖",
   "kol.marketing": "空投给KOL大使",
   "community.marketing": "空投给社区",
-  "airdrop.kol.desc1": "Memehub将向$2名KOL大使空投$1%的代币，每人获得$3%。",
-  "airdrop.kol.desc2": "如未在$1小时内认领，所有空投代币将被销毁。",
+  "airdrop.kol.desc1": "Memehub 将向 <bold>{{count}}</bold> 位 KOL 大使空投 <bold>{{percent}}%</bold> 的代币，每个人都会收到 <bold>{{rewardPercent}}%</bold \n>。",
+  "airdrop.kol.desc2": "如果在 <bold>{{countdown}}</bold> 小时内未领取，所有空投代币将被销毁。",
   "airdrop.kol.desc3": "这将给您的Meme币带来更多热度。",
-  "airdrop.kol.desc4": "不要担心kol出售，因为KOL带来的资金远远超过了空投代币的销售额。",
+  "airdrop.kol.desc4": "不要担心 KOL 出售，因为 KOL 带来的资金远远超过了空投代币的销售额。",
   "airdrop.community.desc1": "Memehub将向许多知名社区的$2名成员进行空投，空投数量为代币总量的$1%，每人将获得$3%的空投。",
   "airdrop.community.desc2": "如果在$1小时内未领取，所有空投代币将被销毁。",
   "airdrop.community.desc3": "这将为您的Memecoin带来广泛的影响力。",
@@ -575,5 +575,6 @@
   "create-token.err.network-not-found": "找不到目标网络",
   "decide.chains": "请选择您的区块链",
   "airdrop.no-id": "你没有这个代币的空投",
-  "airdrop.not-nft2": "没有 {} NFT"
+  "airdrop.not-nft2": "没有 {} NFT",
+  "marketing.burn-desc": "如果选择不空投，这 <bold>{{percent}}%</bold> 的代币将会被打入黑洞销毁"
 }
