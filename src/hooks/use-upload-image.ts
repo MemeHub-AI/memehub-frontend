@@ -54,6 +54,8 @@ export const useUploadImage = (options?: Options) => {
     }
 
     const file = first(e.target.files)!
+    console.log(file)
+
     if (!file.size) return
 
     const formData = new FormData()

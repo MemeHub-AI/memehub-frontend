@@ -25,7 +25,7 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { useCreateDetailForm } from '../hooks/use-detail-form'
-import { useMemexDetailStore } from '@/stores/use-memex-detail'
+import { useMemexDetailStore } from '@/stores/use-memex-create'
 import { z } from 'zod'
 
 const Detailed = () => {

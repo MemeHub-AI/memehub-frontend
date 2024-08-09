@@ -27,18 +27,25 @@ import {
 // import { useCreateDetailForm } from '../hooks/use-form'
 import { z } from 'zod'
 import PrimaryLayout from '@/components/layouts/primary'
-import { useMemexDetailStore } from '@/stores/use-memex-detail'
+import { useMemexDetailStore } from '@/stores/use-memex-create'
 import { useCreateDetailForm } from '../hooks/use-detail-form'
+import { useUploadImage } from '@/hooks/use-upload-image'
 
 const Detailed = () => {
   const { t } = useTranslation()
   const router = useRouter()
 
   const form = useCreateDetailForm()
-  const { setFormData } = useMemexDetailStore()
-  const [isOpen, setIsOpen] = React.useState(false)
+  const { detailFormData: formData } = useMemexDetailStore()
+  console.log(formData?.getValues())
 
-  const onChange = () => {}
+  const [isOpen, setIsOpen] = React.useState(false)
+  const { onChangeUpload, isUploading } = useUploadImage({
+    onSuccess: (url) => {
+      form.setValue('logo', url)
+    },
+  })
+
   const navBack = () => {
     router.back()
   }
@@ -52,9 +59,7 @@ const Detailed = () => {
                 const isValid = await form.trigger()
 
                 if (!isValid) return
-                console.log('aaa')
-
-                setFormData(form)
+                console.log(form.getValues())
               })}
             >
               <div className=" flex justify-between mt-1 mb-2 text-center lg:w-[500px] pr-1 items-center sm:w-2/3 sm:pr-6 md:w-[325px]">
@@ -73,6 +78,7 @@ const Detailed = () => {
                 </div>
 
                 <Button
+                  disabled={isUploading}
                   className={cn('bg-black text-white rounded-3xl h-7 px-5')}
                 >
                   {t('confirm')}
@@ -87,7 +93,11 @@ const Detailed = () => {
                       {t('ticker')}
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} className="md:w-[325px] lg:w-[500px]" />
+                      <Input
+                        {...field}
+                        className="md:w-[325px] lg:w-[500px]"
+                        placeholder={field.value ? '' : field.value}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -102,7 +112,11 @@ const Detailed = () => {
                       {t('name')}
                     </FormLabel>
                     <FormControl>
-                      <Input {...field} className="md:w-[325px] lg:w-[500px]" />
+                      <Input
+                        {...field}
+                        className="md:w-[325px] lg:w-[500px]"
+                        placeholder={field.value ? '' : field.value}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -111,15 +125,31 @@ const Detailed = () => {
 
               <div>
                 <span className="font-medium">{t('logo')}</span>
-                <div className="relative px-1 border border-black w-10">
-                  <input
-                    type="file"
-                    className="absolute inset-0 opacity-0 cursor-pointer"
-                    accept="image/*"
-                    onChange={onChange}
-                  />
-                  <AiOutlinePicture className="text-3xl" />
-                </div>
+                <FormField
+                  control={form?.control}
+                  name="logo"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="relative px-1 border border-black w-10 cursor-pointer">
+                          <input
+                            type="file"
+                            {...field}
+                            value={''}
+                            className="absolute inset-0 opacity-0 cursor-pointer"
+                            accept="image/*"
+                            onChange={onChangeUpload}
+                          />
+                          {field.value ? (
+                            <img src={field.value} alt="" />
+                          ) : (
+                            <AiOutlinePicture className="text-3xl" />
+                          )}
+                        </div>
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
               </div>
               <FormField
                 control={form?.control}
@@ -133,6 +163,7 @@ const Detailed = () => {
                       <Textarea
                         {...field}
                         className="md:w-[325px] lg:w-[500px]"
+                        placeholder={field.value ? '' : field.value}
                       />
                     </FormControl>
                     <FormMessage />
@@ -167,7 +198,9 @@ const Detailed = () => {
                             <Input
                               className="md:w-[325px] lg:w-[500px]"
                               {...field}
-                              placeholder={`(${t('optional')})`}
+                              placeholder={
+                                field.value ? field.value : `(${t('optional')})`
+                              }
                             />
                           </FormControl>
                           <FormMessage />
@@ -186,7 +219,9 @@ const Detailed = () => {
                             <Input
                               className="md:w-[325px] lg:w-[500px]"
                               {...field}
-                              placeholder={`(${t('optional')})`}
+                              placeholder={
+                                field.value ? field.value : `(${t('optional')})`
+                              }
                             />
                           </FormControl>
                           <FormMessage />
@@ -205,7 +240,9 @@ const Detailed = () => {
                             <Input
                               className="md:w-[325px] lg:w-[500px]"
                               {...field}
-                              placeholder={`(${t('optional')})`}
+                              placeholder={
+                                field.value ? field.value : `(${t('optional')})`
+                              }
                             />
                           </FormControl>
                           <FormMessage />

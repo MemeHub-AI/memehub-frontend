@@ -46,6 +46,7 @@
     "copy-to-clipboard": "^3.3.3",
     "dayjs": "^1.11.11",
     "drawer": "^0.0.2",
+    "embla-carousel-react": "^8.1.8",
     "gsap": "^3.12.5",
     "i18next": "^23.11.3",
     "lodash": "^4.17.21",

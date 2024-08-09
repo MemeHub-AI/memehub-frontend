@@ -29,37 +29,46 @@ import {
   FormDescription,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { useMemexDetailStore } from '@/stores/use-memex-detail'
-import { useCreateMainForm } from './hooks/use-main-form'
-import { useChainsStore } from '@/stores/use-chains-store'
-import { useAccount } from 'wagmi'
+import { useCreateStore } from './hooks/use-create-store'
+import { useUploadImages } from './hooks/use-upload-images'
+import { useMemexDetailStore } from '@/stores/use-memex-create'
+import { usePost } from './hooks/use-post'
 
 const CreatePost = () => {
   const { t } = useTranslation()
   const router = useRouter()
+  const { postTweet, isPending } = usePost()
   const [selected, setSelected] = useState<string[]>([])
-  const { formData } = useMemexDetailStore()
-  const mainForm = useCreateMainForm()
-  const { chainId } = useAccount()
-  console.log(formData?.getValues())
+  useCreateStore()
+  const { mainFormData: mainForm, handleConfirm } = useMemexDetailStore()
+  console.log(mainForm)
 
-  console.log('a' + formData)
+  const { onUploadImages, isUploading, reset } = useUploadImages({
+    onSuccess(urls) {
+      if (!urls) return
+      mainForm!.setValue('images', urls)
+    },
+  })
 
-  const onChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(target.files!)
-    console.log(files)
+  // const { chainId } = useAccount()
 
-    if (files.length + selected.length > 4) {
+  const onChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUploading) {
+      toast(t('loading'))
+    }
+    const files = Array.from(e.target.files!)
+
+    if (files.length > 4) {
       toast('You can only upload a maximum of 4 images')
       return
     }
     const newImages = files.map((file) => URL.createObjectURL(file))
-    console.log(newImages)
+    setSelected(newImages)
+    await onUploadImages(files)
 
-    setSelected((prevImages) => [...prevImages, ...newImages])
+    reset()
   }
 
   const nav = () => {
@@ -67,17 +76,15 @@ const CreatePost = () => {
   }
 
   const removeImage = (index: number) => {
-    setSelected((prevImages) => prevImages.filter((_, i) => i !== index))
+    const newSelected = selected.filter((_, i) => i !== index)
+    setSelected(newSelected)
+    mainForm!.setValue('images', newSelected)
   }
   return (
     <PrimaryLayout className="w-full">
       <div className="pb-3">
-        <Form {...mainForm}>
-          <form
-            onSubmit={mainForm?.handleSubmit(() => {
-              console.log(mainForm.getValues())
-            })}
-          >
+        <Form {...mainForm!}>
+          <form onSubmit={mainForm?.handleSubmit(handleConfirm!)}>
             <div className=" flex justify-between mt-1 mb-3 text-center lg:w-[500px] pr-1 items-center sm:w-2/3 sm:pr-6 md:w-[325px]">
               <div
                 onClick={() => {
@@ -90,7 +97,10 @@ const CreatePost = () => {
                 </span>
                 <span className="font-medium">{t('create.post')}</span>
               </div>
-              <Button className={cn('bg-blue-600 h-8 text-white')}>
+              <Button
+                className={cn('bg-blue-600 h-8 text-white')}
+                disabled={isUploading}
+              >
                 {t('post')}
               </Button>
             </div>
@@ -115,11 +125,12 @@ const CreatePost = () => {
                       className=" max-sm:ml-[-1.6rem] sm:w-2/3 text-lg text-gray-400 border-0 lg:w-[500px] max-sm:w-[calc(100%+34px)] py-2 pl-14 max-sm:pl-20  sm:leading-8 md:w-[325px] shadow-none focus:shadow-none focus-visible:ring-0"
                       placeholder={t('mind')}
                     ></Textarea>
+                    <FormMessage />
                   </FormItem>
                 )}
               ></FormField>
               {selected.length !== 0 && (
-                <Carousel className="w-full">
+                <Carousel className="w-full md:w-[325px] lg:w-[500px]">
                   <CarouselContent className="pl-14 h-36 my-2">
                     {selected.map((image, index) => (
                       <CarouselItem key={index} className="relative basis-1/2 ">
@@ -148,13 +159,13 @@ const CreatePost = () => {
             <div>{t('chain')}</div>
 
             <FormField
-              control={mainForm.control}
+              control={mainForm!.control}
               name={'chainName'}
               render={({ field }) => (
                 <FormItem className="mt-0 mb-2">
                   <FormControl>
                     <ChainSelect
-                      defaultValue={chainId?.toString()}
+                      // defaultValue={chainId?.toString()}
                       value={field.value}
                       onChange={(c) => field.onChange(c.name)}
                     />
@@ -164,21 +175,30 @@ const CreatePost = () => {
               )}
             />
             <div className="flex gap-3 mb-4">
-              <div className="relative border-2 border-black rounded-md px-1 py-1 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out max-w-sm:w-[37%]">
-                <input
-                  type="file"
-                  multiple
-                  className="absolute inset-0 w-full  h-full opacity-0 cursor-pointer"
-                  accept="image/*"
-                  onChange={onChange}
-                />
-                <div className="flex items-center">
-                  <AiOutlinePicture className="w-8 h-8" />
-                  <span className="ml-2 text-sm text-gray-600">
-                    {t('picture')}
-                  </span>
-                </div>
-              </div>
+              <FormField
+                control={mainForm!.control}
+                name="images"
+                render={({ field }) => (
+                  <div>
+                    <div className="relative border-2 border-black rounded-md px-1 py-1 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out max-w-sm:w-[37%]">
+                      <input
+                        type="file"
+                        multiple
+                        className="absolute inset-0 w-full  h-full opacity-0 cursor-pointer"
+                        accept="image/*"
+                        onChange={onChange}
+                      />
+                      <div className="flex items-center">
+                        <AiOutlinePicture className="w-8 h-8" />
+                        <span className="ml-2 text-sm text-gray-600">
+                          {t('picture')}
+                        </span>
+                      </div>
+                    </div>
+                    <FormMessage className="absolute" />
+                  </div>
+                )}
+              />
               <div className="relative border-2 border-black rounded-md px-1 py-1 bg-white flex items-center justify-between hover:border-blue-500 transition duration-150 ease-in-out max-w-sm:w-[37%]">
                 <NavigationMenu>
                   <NavigationMenuList>
