@@ -22,7 +22,6 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Description } from './desc'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { ChainField } from './chain-field'
-import { useContactsWrapper } from '@/hooks/ton/contracts/use-contacts-wrapper'
 
 export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { t } = useTranslation()
@@ -33,32 +32,18 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
   const { evmChainsMap } = useChainsStore()
 
-  const { sendCoins } = useContactsWrapper()
-
   const { isDeploying, deployFee } = deployResult || {}
 
   const { native } = evmChainsMap[form.getValues(formFields.chainName)] || {}
   const symbol = native?.symbol || chain?.nativeCurrency.symbol || ''
 
   const beforeSubmit = (values: any) => {
-    // TODO: Move to deploy
-    console.log(values)
-
-    const sendCoinOptions = {
-      name: values.fullname,
-      description: values.description,
-      image: values.logo,
-      symbol: values.symbol,
-    }
-
-    sendCoins(sendCoinOptions)
-
     if (loadingInfo || loadingLogo) {
       toast.warning(t('onsubmit.createing.warning'))
       return
     }
     // TODO: Multichain adaptation
-    // onSubmit!(values!)
+    onSubmit!(values!)
   }
 
   useEffect(() => {

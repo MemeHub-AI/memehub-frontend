@@ -6,6 +6,7 @@ import { CONTRACT_ERR } from '@/errors/contract'
 import { useEvmDeploy } from './use-evm-deploy'
 import { Network } from '@/constants/contract'
 import { getNetwork } from '@/utils/contract'
+import { useTvmDeploy } from './use-tvm-deploy'
 
 export type DeployFormParams = Omit<
   TokenNewReq,
@@ -27,7 +28,7 @@ export const useDeploy = () => {
 
   const evmDeploy = useEvmDeploy((params) => createToken(params))
   // const svmDeploy = useSvmDeploy()
-  // const tvmDeploy = useTvmDeploy()
+  const tvmDeploy = useTvmDeploy()
 
   const {
     deployFee,
@@ -44,7 +45,7 @@ export const useDeploy = () => {
     return {
       [Network.Evm]: evmDeploy,
       [Network.Svm]: evmDeploy, // TODO: should be `svmDeploy`
-      [Network.Tvm]: evmDeploy, // TODO: should be `tvmDeploy`
+      [Network.Tvm]: tvmDeploy,
     }[network]
   }, [network, evmDeploy]) // TODO: add more deps...
 
@@ -61,6 +62,7 @@ export const useDeploy = () => {
     }
     if (n === Network.Tvm) {
       // TON
+      return tvmDeploy.deploy({ marketing, ...params })
     }
   }
 

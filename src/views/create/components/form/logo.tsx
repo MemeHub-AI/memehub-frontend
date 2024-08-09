@@ -19,6 +19,8 @@ import { useUserStore } from '@/stores/use-user-store'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useStorage } from '@/hooks/use-storage'
+import { useConnectWallet } from '@/hooks/use-connect-wallet'
+import ConnectWallet from '@/components/connect-wallet'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -31,14 +33,17 @@ export const FormLogo = ({ formData }: Props) => {
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
   const userStore = useUserStore()
   const { playGuaGua } = useAudioPlayer()
-  const { checkForConnect } = useCheckAccount()
+
+  // TODO: check for connect
+  // const { checkForConnect } = useCheckAccount()
+  const { walletIsConnected } = useConnectWallet()
   const { getMainChain } = useStorage()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
 
-    if (!checkForConnect()) return
+    if (!walletIsConnected()) return
     if (form.getValues(formFields?.fullname) === '') {
       toast.warning(t('need.base.info.warning'))
       return
@@ -72,10 +77,11 @@ export const FormLogo = ({ formData }: Props) => {
       playGuaGua()
       fetchMemeLogo()
     }
+    // TODO: Such back-end support
     if (getMainChain() === 'ton')
       form.setValue(
         formFields.logo,
-        'https://pfst.cf2.poecdn.net/base/image/aaaf3803de81a4702dbba8c6baab286dbddb24884340edbc372adcb1fd640349?w=1024&h=1024&pmaid=125142671'
+        'https://pfst.cf2.poecdn.net/base/image/00868fc9e8a38a5233d8fda3498c1d09c349b2e22431088fda96979a5f3c36cb?w=1024&h=1024&pmaid=126112100'
       )
   }, [loadingLogo])
 
@@ -151,10 +157,12 @@ export const FormLogo = ({ formData }: Props) => {
             <FormMessage />
 
             {!loadingLogo ? (
-              <Button className="mt-2 mb-2" onClick={createLogo}>
-                <LuRefreshCcw className="mr-1" />
-                {t('create.ai.logo')}
-              </Button>
+              <ConnectWallet>
+                <Button className="mt-2 mb-2" onClick={createLogo}>
+                  <LuRefreshCcw className="mr-1" />
+                  {t('create.ai.logo')}
+                </Button>
+              </ConnectWallet>
             ) : null}
           </FormItem>
         )}

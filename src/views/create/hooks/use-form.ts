@@ -10,6 +10,8 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { CoinType, Marketing } from '@/api/token/types'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { useConnectWallet } from '@/hooks/use-connect-wallet'
+import { useStorage } from '@/hooks/use-storage'
 
 export const formFields = {
   fullname: 'fullname',
@@ -31,9 +33,11 @@ export const useCreateTokenForm = (
   const { t } = useTranslation()
   const { formInfo } = useAimemeInfoStore()
   const { checkForConnect, checkForChain } = useCheckAccount()
+  const { walletIsConnected } = useConnectWallet()
   const { evmChainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
   const { deploy, isDeploying } = useDeployResult
+  const { getMainChain } = useStorage()
 
   const require = {
     message: t('fields.required'),
@@ -96,8 +100,17 @@ export const useCreateTokenForm = (
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!(await form.trigger())) return
-    if (!checkForConnect()) return
-    if (!(await checkForChain(evmChainsMap[values.chainName]?.id))) return
+
+    // TODO: Modified after having new library
+    // if (!checkForConnect()) return
+    if (
+      !(await checkForChain(evmChainsMap[values.chainName]?.id)) &&
+      getMainChain() === 'evm'
+    )
+      return
+
+    if (!walletIsConnected()) return
+
     if (isDeploying) return
 
     deploy({

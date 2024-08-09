@@ -15,6 +15,7 @@ import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
 import { paginationSelect } from '@/utils/query'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import ConnectWallet from './connect-wallet'
 
 interface Props {
   className?: string
@@ -93,7 +94,9 @@ export const AIIdeaBar = (props: Props) => {
             //   </TooltipProvider>
             // }
           />
-          <Button className="ml-2 bg-transparent">{t('ai.craete')}</Button>
+          <ConnectWallet className="ml-2 bg-transparent">
+            <Button className="ml-2 bg-transparent">{t('ai.craete')}</Button>
+          </ConnectWallet>
         </form>
       </div>
       <div className="w-full h-[1px] bg-[#e2e2e2] my-4 max-sm:hidden"></div>
