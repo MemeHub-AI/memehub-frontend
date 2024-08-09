@@ -73,7 +73,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormLabel className="mt-0 font-bold">
-                        *{t('fullname')}
+                        *{t('name')}
                       </FormLabel>
                       <FormControl className="w-full">
                         <Input
