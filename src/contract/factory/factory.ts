@@ -54,7 +54,6 @@ export class Factory implements Contract {
     })
   }
 
-  // 封装买币数据
   static buyJettonMessage(
     jetton_master_address: Address,
     user_pay_ton_for_jetton: bigint
@@ -67,7 +66,6 @@ export class Factory implements Contract {
       .endCell()
   }
 
-  // 封装卖币数据
   static sellJettonMessage(
     jetton_master_address: Address,
     user_pay_ton_for_jetton: bigint
@@ -80,7 +78,6 @@ export class Factory implements Contract {
       .endCell()
   }
 
-  // 封装发币数据
   static depJettonMessage(content: Cell) {
     return beginCell()
       .storeUint(0x8fd6e0fb, 32)
@@ -88,7 +85,6 @@ export class Factory implements Contract {
       .storeRef(content)
       .endCell()
   }
-  // 发币
   async sendDeployJetton(
     provider: ContractProvider,
     via: Sender,
@@ -101,7 +97,6 @@ export class Factory implements Contract {
     })
   }
 
-  // 买币
   async sendBuyJettonMessage(
     provider: ContractProvider,
     via: Sender,
@@ -118,7 +113,6 @@ export class Factory implements Contract {
     })
   }
 
-  // 卖币
   async sendSellJettonMessage(
     provider: ContractProvider,
     via: Sender,
@@ -139,7 +133,6 @@ export class Factory implements Contract {
     provider: ContractProvider,
     jetton_master_address: Address
   ): Promise<Address> {
-    //获取联合曲线地址
     const res = await provider.get('get_bongding_curve_address', [
       {
         type: 'slice',
