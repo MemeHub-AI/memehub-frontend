@@ -6,5 +6,5 @@ export enum Network {
   Svm = 'svm',
 
   /** TON virtual machine */
-  Tvm = 'tvm',
+  Tvm = 'ton',
 }
