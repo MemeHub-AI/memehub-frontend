@@ -571,5 +571,9 @@
   "airdrop.not-kol-nft": "你没有 {} NFT",
   "airdrop.not-nft": "没有 NFT",
   "airdrop.burned": "已销毁",
-  "decide.chains": "请选择您的区块链"
+  "create-token.err.failed": "创建失败，请重试",
+  "create-token.err.network-not-found": "找不到目标网络",
+  "decide.chains": "请选择您的区块链",
+  "airdrop.no-id": "你没有这个代币的空投",
+  "airdrop.not-nft2": "没有 {} NFT"
 }

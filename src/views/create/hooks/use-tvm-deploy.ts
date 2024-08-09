@@ -19,9 +19,9 @@ export const useTvmDeploy = () => {
   const deploy = async (values: DeployFormParams) => {
     const sendCoinOptions = {
       name: values.name,
-      description: values.desc,
-      image: values.image,
-      symbol: values.ticker,
+      description: values.description,
+      image: values.image_url,
+      symbol: values.symbol,
     }
 
     await sendCoins(sendCoinOptions)
@@ -43,10 +43,11 @@ export const useTvmDeploy = () => {
     isSuccess: isDeploySuccess,
     isError: isDeployError,
   } = useWaitForTransaction({ hash: hashBoc, address: userFriendlyAddress })
+  // TODO: Requires back-end compatible login
   const deployedAddr = useMemo(() => getDeployLogsAddr(), [data])
 
   return {
-    deployFee: '0.035',
+    deployFee: '0.13',
     deployHash: hashBoc,
     deployedAddr,
     isSubmitting,

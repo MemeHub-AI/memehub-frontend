@@ -1,16 +1,18 @@
 import { create } from 'zustand'
 
 import type { ChainData } from '@/api/chain/type'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 
 type ChainsMap = Record<string | number, ChainData | undefined>
 
 interface ChainsStore {
   chains: ChainData[]
   loadingChains: boolean
-  evmChainsMap: ChainsMap
-  svmChiansMap: ChainsMap
-  tvmChainsMap: ChainsMap
+  /** All chains, only allowing matching by chainName. */
+  chainsMap: ChainsMap
+  evmChainsMap: ChainsMap // Matching by name and id.
+  svmChiansMap: ChainsMap // Matching by name and id.
+  tvmChainsMap: ChainsMap // Matching by name and id.
 
   setChains: (chains: ChainData[]) => void
   setChainsMap: (chains: ChainData[]) => void
@@ -21,17 +23,21 @@ interface ChainsStore {
 export const useChainsStore = create<ChainsStore>((set, get) => ({
   chains: [],
   loadingChains: true,
+  chainsMap: {},
   evmChainsMap: {},
   svmChiansMap: {},
   tvmChainsMap: {},
 
   setChains: (chains) => set({ chains, loadingChains: false }),
   setChainsMap: (chains) => {
+    const chainsMap: ChainsStore['chainsMap'] = {}
     const evmChainsMap: ChainsStore['evmChainsMap'] = {}
     const svmChiansMap: ChainsStore['svmChiansMap'] = {}
     const tvmChainsMap: ChainsStore['tvmChainsMap'] = {}
 
     for (const c of chains) {
+      chainsMap[c.name] = c
+
       if (c.network === Network.Evm) {
         evmChainsMap[c.id] = c
         evmChainsMap[c.name] = c
@@ -45,6 +51,7 @@ export const useChainsStore = create<ChainsStore>((set, get) => ({
     }
 
     set({
+      chainsMap,
       evmChainsMap,
       svmChiansMap,
       tvmChainsMap,

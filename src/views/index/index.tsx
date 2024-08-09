@@ -8,8 +8,14 @@ import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
 import { PrimaryLayout } from '@/components/layouts/primary'
 
 export const MainPage = () => {
-  const { tokens, totalToken, isLoading, isFetching, fetchNextPage } =
-    useTokens()
+  const {
+    tokens,
+    idoTokens,
+    totalToken,
+    isLoading,
+    isFetching,
+    fetchNextPage,
+  } = useTokens()
 
   const {
     isRandom,
@@ -31,6 +37,7 @@ export const MainPage = () => {
         />
         <TokenCards
           className="flex-1 max-sm:mt-2 flex flex-col pb-4"
+          idoTokens={idoTokens}
           cards={tokens}
           total={totalToken}
           isLoading={isLoading}

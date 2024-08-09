@@ -3,9 +3,9 @@ import { Hash, parseEther, Log } from 'viem'
 import dayjs from 'dayjs'
 import { getBlock } from 'wagmi/actions'
 
-import { DEPLOY_LOG_ADDR } from '@/constants/deploy'
 import { wagmiConfig } from '@/config/wagmi'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
+import { deployLogAddr, deployLogAddrIdx } from '@/config/deploy'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -78,13 +78,15 @@ export const getDeadline = async (seconds = 300) => {
 
 export const getDeployLogsAddr = (logs?: Log<bigint, number, false>[]) => {
   if (!logs) return
-  const log = logs.find((l) => l.topics?.[0] === DEPLOY_LOG_ADDR)
-  const hashAddr = log?.topics?.[1]
+
+  const log = logs.find((l) => l.topics?.[0] === deployLogAddr)
+  // 0 is event name, so you should +1 to the original index.
+  const hashAddr = log?.topics?.[deployLogAddrIdx + 1]
   // Attention, here breaks the address starting with 0.
   const normalAddr = hashAddr?.replace(/0x0+/, '') ?? ''
 
   return normalAddr.length < 40
-    ? `$0x${normalAddr.padStart(40, '0')}`
+    ? `0x${normalAddr.padStart(40, '0')}`
     : `0x${normalAddr}`
 }
 

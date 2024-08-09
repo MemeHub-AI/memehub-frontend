@@ -1,4 +1,4 @@
-export const bondingCurveAbiV0_1_0 = [
+export const bcAbiV0_1_0 = [
   {
     inputs: [],
     stateMutability: 'nonpayable',
@@ -156,6 +156,12 @@ export const bondingCurveAbiV0_1_0 = [
   {
     anonymous: false,
     inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'id',
+        type: 'uint256',
+      },
       {
         indexed: true,
         internalType: 'address',

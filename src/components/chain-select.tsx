@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { ChainData } from '@/api/chain/type'
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 
 interface Props extends Omit<ComponentProps<typeof RadioGroup>, 'onChange'> {
   onChange?: (chain: ChainData) => void

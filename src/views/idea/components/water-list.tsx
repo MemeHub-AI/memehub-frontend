@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useWindowScroll, useWindowSize } from 'react-use'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { useScroll, useSize } from 'ahooks'
 
 import { ideaApi } from '@/api/idea'
 import { CustomSuspense } from '@/components/custom-suspense'
@@ -18,8 +18,8 @@ interface Props {
 
 export const WaterList = ({ newsId, type }: Props) => {
   const { t } = useTranslation()
-  const { y } = useWindowScroll()
-  const { width } = useWindowSize()
+  const { top } = useScroll(document) ?? { top: 0 }
+  const { width } = useSize(document.querySelector('html')) ?? { width: 0 }
 
   const queryKey = [ideaApi.getIdeaList.name, newsId, type]
 
@@ -80,7 +80,7 @@ export const WaterList = ({ newsId, type }: Props) => {
     ) {
       fetchNextPage()
     }
-  }, [y])
+  }, [top])
 
   useEffect(() => {
     queryClient.resetQueries({ queryKey, exact: true })

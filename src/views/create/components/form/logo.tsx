@@ -81,7 +81,7 @@ export const FormLogo = ({ formData }: Props) => {
     if (getMainChain() === 'ton')
       form.setValue(
         formFields.logo,
-        'https://pfst.cf2.poecdn.net/base/image/00868fc9e8a38a5233d8fda3498c1d09c349b2e22431088fda96979a5f3c36cb?w=1024&h=1024&pmaid=126112100'
+        'https://pfst.cf2.poecdn.net/base/image/52af7598e88bd3ea4acfa47a790cb2c63b86491e0b0cad383a1bba5aa55aa34d?w=1024&h=1024&pmaid=126316015'
       )
   }, [loadingLogo])
 

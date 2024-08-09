@@ -9,7 +9,7 @@ export const useDexTrade = (
 ) => {
   const {
     uniswapV2Hash,
-    isUniswapV2Trading,
+    isUniswapV2Submitting,
     uniswapV2Buy,
     uniswapV2Sell,
     uniswapV2Reset,
@@ -19,9 +19,10 @@ export const useDexTrade = (
 
   return {
     dexHash: uniswapV2Hash,
-    isDexTrading: isUniswapV2Trading,
+    isDexSubmitting: isUniswapV2Submitting,
+    isDexTraded: false,
     dexBuy: uniswapV2Buy,
     dexSell: uniswapV2Sell,
-    dexReset: uniswapV2Reset,
+    dexResetTrade: uniswapV2Reset,
   }
 }

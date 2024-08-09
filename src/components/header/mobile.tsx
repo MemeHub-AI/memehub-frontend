@@ -103,7 +103,6 @@ export const HeaderMobile = (props: Props) => {
         </SheetContent>
       </Sheet>
 
-      {/* <SearchInput /> */}
       <div className="flex justify-between items-center space-x-2 ml-1">
         <Button
           className="bg-lime-green w-8 p-0"

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -5,19 +6,21 @@ import { toast } from 'sonner'
 import { useTokenContext } from '@/contexts/token'
 import {
   distributorAbiMap,
-  DistributorAbiVersion,
+  DistributorVersion,
 } from '@/contract/abi/distributor'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
   const { t } = useTranslation()
   const { chainId, airdropVersion, airdropAddr } = useTokenContext()
   const { checkForConnect, checkForChain } = useCheckAccount()
+  const { setIsCalimingAirdrop } = useAirdropStore()
 
   const airdropConfig = {
-    abi: distributorAbiMap[airdropVersion as DistributorAbiVersion],
+    abi: distributorAbiMap[airdropVersion as DistributorVersion],
     address: airdropAddr!,
     chainId,
   }
@@ -30,7 +33,7 @@ export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
 
   const {
     data: hash,
-    isPending: isBurning,
+    isPending,
     writeContract,
     reset,
   } = useWriteContract({
@@ -53,6 +56,7 @@ export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
       reset()
     },
   })
+  const isBurning = isPending || isLoading
 
   const burn = async () => {
     if (!checkForConnect()) return
@@ -67,9 +71,11 @@ export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
     })
   }
 
+  useEffect(() => setIsCalimingAirdrop(isBurning), [isBurning])
+
   return {
     isBurned,
-    isBurning: isBurning || isLoading,
+    isBurning,
     burn,
   }
 }

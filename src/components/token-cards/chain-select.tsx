@@ -23,7 +23,7 @@ export const TokenChainSelect = (props: ComponentProps<typeof Select>) => {
       <SelectContent>
         <SelectItem value="all">{t('all')}</SelectItem>
         {chains.map((c, i) => (
-          <SelectItem key={i} value={c.id}>
+          <SelectItem key={i} value={c.name}>
             {c.displayName}
           </SelectItem>
         ))}

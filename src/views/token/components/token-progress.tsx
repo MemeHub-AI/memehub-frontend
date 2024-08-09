@@ -6,26 +6,34 @@ import { Progress } from '@/components/ui/progress'
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
-import { useTokenProgressV1 } from '../hooks/trade-v1/use-token-progress'
+import { useTokenProgress } from '../hooks/evm/use-token-progress'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
-import { idoTrumpCard } from '@/config/ido'
+import { TokenVersion } from '@/contract/abi/token'
+import { useChainsStore } from '@/stores/use-chains-store'
 
-interface Props extends ComponentProps<'div'> {
+export const TokenProgress = ({
+  showDesc = true,
+  className,
+}: ComponentProps<'div'> & {
   showDesc?: boolean
-}
-
-export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
+}) => {
   const { t } = useTranslation()
-  const { tokenInfo, isIdoToken } = useTokenContext()
-  const { total, progress, isGrauated } = useTokenProgressV1()
-
-  const { progress: idoProgress } = useIdoProgress(
-    Number(idoTrumpCard.chain.id),
-    idoTrumpCard.id
+  const { tokenInfo, isIdoToken, tokenAddr, tokenVersion, chainId } =
+    useTokenContext()
+  const { chainsMap } = useChainsStore()
+  const { total, progress, isGrauated } = useTokenProgress(
+    tokenAddr,
+    chainId,
+    tokenVersion as TokenVersion
   )
+  const { progress: idoProgress } = useIdoProgress(
+    chainId,
+    tokenInfo?.airdrop_index ?? 0
+  )
+  const chain = chainsMap[tokenInfo?.chain ?? '']
 
-  const nativeSymbol = tokenInfo?.chain.native.symbol || ''
+  const nativeSymbol = chain?.native.symbol ?? ''
   const threshold = BigNumber(total).lte(0)
     ? t('threshold')
     : ` ${fmt.decimals(total, { fixed: 3 })} ${nativeSymbol} `
@@ -57,4 +65,4 @@ export const BondingCurveProgress = ({ showDesc = true, className }: Props) => {
   )
 }
 
-export default BondingCurveProgress
+export default TokenProgress

@@ -7,9 +7,10 @@ import { useUploadImage } from '@/hooks/use-upload-image'
 import { useDeploy } from './use-deploy'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { CoinType, Marketing } from '@/api/token/types'
+import { Marketing } from '@/api/token/types'
 import { URL_TYPE, utilsUrl } from '@/utils/url'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { TokenType } from '@/enums/token'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { useStorage } from '@/hooks/use-storage'
 
@@ -93,7 +94,7 @@ export const useCreateTokenForm = (
       [formFields.chainName]: '',
       [formFields.logo]: '',
       [formFields.poster]: [],
-      [formFields.coinType]: CoinType.Normal,
+      [formFields.coinType]: TokenType.Normal,
       [formFields.marketing]: [],
     },
   })
@@ -115,15 +116,15 @@ export const useCreateTokenForm = (
 
     deploy({
       name: values.fullname! as string,
-      ticker: values.symbol! as string,
-      desc: values.description! as string,
-      image: (values.logo! as string).replace('mini', 'origin'),
+      symbol: values.symbol! as string,
+      description: values.description! as string,
+      image_url: (values.logo! as string).replace('mini', 'origin'),
       chain: values.chainName as string,
       twitter_url: utilsUrl.mediaUrl(values.twitter, URL_TYPE.TWITTER),
       telegram_url: utilsUrl.mediaUrl(values.telegram, URL_TYPE.TELEGRAM),
-      website: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
+      website_url: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
       coin_type: values.coinType as number,
-      poster: values.poster,
+      poster_urls: values.poster,
       // Below only used for frontend.
       marketing: values.marketing as Marketing[],
     })

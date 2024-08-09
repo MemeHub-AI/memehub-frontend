@@ -1,45 +1,103 @@
-import { Address } from 'viem'
+import { TokenType } from '@/enums/token'
+import type { UserInfoRes } from '../user/types'
+import { TokenVersion } from '@/contract/abi/token'
+import { DistributorVersion } from '@/contract/abi/distributor'
 
-import type { UserCoinsCreated, UserInfoRes } from '../user/types'
-
-export interface TokenListItem extends UserCoinsCreated {
-  twitter_url: string
-  telegram_url: string
-  website: string
-  virtual_liquidity: string
-  replies: string
-  last_reply: null
-  create_time: null
+export interface TokenListItem {
+  airdrop_address: string
+  airdrop_index: number
+  airdrop_supply: string
+  /**
+   * 1: Only select community
+   * 2: Only all community
+   * 4: Only select KOL
+   * 5: Select community & KOL
+   * 6: All community & select KOL
+   * 8: Only all KOL
+   * 9: All KOL & select community
+   * 10: All KOL & community
+   */
+  airdrop_type: number
+  airdrop_version: DistributorVersion
+  chain: string
+  coin_type: number
+  coin_version: TokenVersion
+  contract_address: string
+  created_at: string
+  creator_address: string
+  description: string
+  factory_address: string
+  graduated_eth: null
+  graduated_master: null
+  graduated_pool: null
+  graduated_token: null
   hash: string
-  explorer_tx: string
-  version: string
-  pool_address: null | Address
-  poster: string[]
+  id: string
+  image_url: string
+  is_active: boolean
+  is_graduated: boolean
+  max_supply: string
+  name: string
+  network: string
+  poster_urls: string[]
+  start_price: string
+  symbol: string
+  telegram_url: string
+  total_supply: string
+  twitter_url: string
+  updated_at: string
+  website_url: string
 }
 
-export interface TokenNewReq {
-  name: string
-  ticker: string
-  desc: string
-  image: string
-  hash: string
+export interface TokenCreateReq {
   chain: string
+  name: string
+  symbol: string
+  description: string
+  image_url: string
+  poster_urls?: string[]
   twitter_url?: string
   telegram_url?: string
-  website?: string
-  coin_type?: CoinType
+  website_url?: string
+  factory_address: string
+  airdrop_address: string
+  coin_type?: TokenType
+
+  // Only used for frontend
   marketing?: Marketing[]
-  poster?: string[]
-  factory: string
-  configure: string
 }
 
-export enum CoinType {
-  Normal,
-  Erc404,
-  RewardLp,
-  RewardHolder,
-  Burning,
+export interface TokenCreateRes {
+  id: string
+  created_at: string
+  updated_at: string
+  chain: string
+  hash: null | string
+  name: string
+  symbol: string
+  description: string
+  image_url: string
+  poster_urls: string[]
+  twitter_url: string
+  telegram_url: string
+  website_url: string
+  creator_address: string
+  factory_address: string
+  contract_address: null | string
+  airdrop_address: string
+  airdrop_index: null
+  airdrop_supply: string
+  max_supply: string
+  total_supply: string
+  start_price: string
+  coin_type: number
+  is_active: boolean
+}
+
+export interface TokenDetailReq {
+  id?: string
+  chain?: string
+  address?: string
 }
 
 export interface Marketing {
@@ -115,12 +173,26 @@ export interface OnchainTokensItem {
 
 export interface TokenConfigRes {
   name: string
-  value: {
-    kolFlag: number
-    CommunityFlag: number
-    walletCountKol: number
-    distributionRatioKol: number
-    walletCountCommunity: number
-    distributionRatioCommunity: number
+  value: TokenConfigValue
+  contracts: {
+    coin: TokenConfigContract[]
+    airdrop: TokenConfigContract[]
   }
+}
+
+interface TokenConfigValue {
+  distributionRatioKol: number
+  distributionRatioCommunity: number
+  walletCountKol: number
+  walletCountCommunity: number
+  kolFlag: number
+  CommunityFlag: number
+}
+
+interface TokenConfigContract {
+  chain: string
+  creator: string
+  address: string
+  category: number
+  version: string
 }

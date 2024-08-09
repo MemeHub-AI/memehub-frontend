@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
 import { shadowVariants } from '@/styles/variants'
+import { Cross2Icon } from '@radix-ui/react-icons'
 
 interface Props extends AlertDialogPrimitive.AlertDialogProps {
   title?: React.ReactNode
@@ -16,6 +17,7 @@ interface Props extends AlertDialogPrimitive.AlertDialogProps {
   showCancel?: boolean
   confirmText?: string
   align?: 'left' | 'center' | 'right'
+  showClose?: boolean
   onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
   onConfirm?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }
@@ -37,9 +39,11 @@ const AlertDialog = React.forwardRef<
     showCancel = true,
     align = 'left',
     confirmText,
+    showClose = false,
     ...restProps
   } = props
   const { t } = useTranslation()
+  const closeRef = React.useRef<HTMLButtonElement>(null)
 
   return (
     <AlertDialogPrimitive.Root {...restProps}>
@@ -48,9 +52,9 @@ const AlertDialog = React.forwardRef<
           {children}
         </AlertDialogTrigger>
       )}
-      <AlertDialogContent className="max-sm:w-[90%]" ref={ref}>
+      <AlertDialogContent className="max-sm:w-[90%] " ref={ref}>
         {title && (
-          <AlertDialogHeader>
+          <AlertDialogHeader className="relative">
             <AlertDialogTitle
               className={cn(align === 'center' && '!text-center')}
             >
@@ -60,6 +64,15 @@ const AlertDialog = React.forwardRef<
               <AlertDialogDescription>{description}</AlertDialogDescription>
             )}
           </AlertDialogHeader>
+        )}
+        {showClose && (
+          <div
+            className="absolute top-2 right-2 cursor-pointer"
+            onClick={() => closeRef.current?.click()}
+          >
+            <AlertDialogCancel ref={closeRef} className="hidden" />
+            <Cross2Icon className="h-6 w-6" />
+          </div>
         )}
         {content}
         {showFooter && (

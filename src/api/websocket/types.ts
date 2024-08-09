@@ -1,4 +1,4 @@
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 import { TokenListItem } from '../token/types'
 
 export interface WSMessageBase<T = null> {

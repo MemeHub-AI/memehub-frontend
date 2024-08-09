@@ -7,12 +7,12 @@ import { cn } from '@/lib/utils'
 import { Card } from '@/components/ui/card'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useTokenContext } from '@/contexts/token'
-import { useBurnAirdrop } from '../hooks/trade-v1/use-burn-airdrop'
-import { airdropId } from '..'
+import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 
 export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
   const { t } = useTranslation()
   const { tokenInfo, tokenMetadata } = useTokenContext()
+  const { airdrop_index = 0 } = tokenInfo ?? {}
   const {
     isOnlyOne,
     totalAirdrop,
@@ -26,11 +26,11 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
     .toFormat()
 
   const { isBurned, isBurning, burn } = useBurnAirdrop(
-    airdropId,
+    airdrop_index,
     refetchAirdrop
   )
 
-  const burnText = `${remaining} ${tokenInfo?.ticker || tokenMetadata?.symbol}`
+  const burnText = `${remaining} ${tokenInfo?.symbol ?? tokenMetadata?.symbol}`
 
   return (
     <Card

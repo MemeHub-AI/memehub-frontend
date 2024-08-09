@@ -1,4 +1,4 @@
-import { Network } from '@/constants/contract'
+import { Network } from '@/enums/contract'
 
 export interface ChainData {
   id: string
@@ -12,4 +12,9 @@ export interface ChainData {
   }
   is_supported: boolean
   logo: string
+  explorer: {
+    block: string
+    tx: string
+    address: string
+  }
 }

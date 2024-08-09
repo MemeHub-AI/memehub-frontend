@@ -580,5 +580,9 @@
   "airdrop.not-kol-nft": "You don't have {} NFT",
   "airdrop.not-nft": "No NFT",
   "airdrop.burned": "Already burned",
-  "decide.chains": "Please select your blockchain"
+  "create-token.err.failed": "Creation failed, please try again",
+  "create-token.err.network-not-found": "Cannot find network",
+  "decide.chains": "Please select your blockchain",
+  "airdrop.no-id": "You do not have an airdrop for this token",
+  "airdrop.not-nft2": "No {} NFT"
 }

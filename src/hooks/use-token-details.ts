@@ -1,19 +1,22 @@
 import { Address, formatEther } from 'viem'
 import { useReadContract, useReadContracts } from 'wagmi'
 
-import { tokenAbiMap, TokenAbiVersion } from '@/contract/abi/token'
+import { tokenAbiMap, TokenVersion } from '@/contract/abi/token'
 import { BI_ZERO } from '@/constants/number'
+import { BcVersion } from '@/contract/abi/bonding-curve'
+import { DistributorVersion } from '@/contract/abi/distributor'
 
 export const useTokenDetails = (
   tokenAddr: string | undefined,
   chainId: number,
-  version: TokenAbiVersion
+  version: TokenVersion | undefined
 ) => {
   const tokenConfig = {
-    abi: tokenAbiMap[version],
+    abi: tokenAbiMap[version!],
     address: tokenAddr as Address,
     chainId,
   } as const
+  const enabled = !!tokenAddr && !!chainId && !!version
 
   const {
     data: [tokenVersion, bcVersion, airdropVersion, bcAddr, airdropAddr] = [],
@@ -29,7 +32,7 @@ export const useTokenDetails = (
     ],
     query: {
       select: (data) => data.map((v) => v.result),
-      enabled: !!tokenAddr,
+      enabled,
     },
   })
 
@@ -40,13 +43,13 @@ export const useTokenDetails = (
   } = useReadContract({
     ...tokenConfig,
     functionName: 'getMetadata',
-    query: { enabled: !!tokenAddr },
+    query: { enabled },
   })
 
   const { data: totalSupply = BI_ZERO } = useReadContract({
     ...tokenConfig,
     functionName: 'totalSupply',
-    query: { enabled: !!tokenAddr },
+    query: { enabled },
   })
 
   const refetchDetails = () => {
@@ -55,9 +58,9 @@ export const useTokenDetails = (
   }
 
   return {
-    tokenVersion,
-    bcVersion,
-    airdropVersion,
+    tokenVersion: tokenVersion as TokenVersion | undefined,
+    bcVersion: bcVersion as BcVersion | undefined,
+    airdropVersion: airdropVersion as DistributorVersion | undefined,
     bcAddr: bcAddr as Address | undefined,
     airdropAddr: airdropAddr as Address | undefined,
     tokenMetadata,

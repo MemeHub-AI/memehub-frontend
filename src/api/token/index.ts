@@ -2,64 +2,71 @@ import { api } from '..'
 import { qs } from '@/hooks/use-fetch'
 
 import type {
-  TokenNewReq,
+  TokenCreateReq,
   TokenUpdateReq,
   TokenListItem,
   TokenCommentListRes,
   TokenAddCommentReq,
   OnchainTokensRes,
   TokenConfigRes,
+  TokenCreateRes,
+  TokenDetailReq,
 } from './types'
 import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 
 export const tokenApi = {
-  list(req: PaginationReq & { token?: string }) {
-    return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
-      '/api/v1/coin/coinslist/' + qs.stringify(req)
-    )
+  getConfig: () => {
+    return api.GET<ApiResponse<TokenConfigRes>>('/api/v2/coin/configure')
   },
-  create(req: TokenNewReq) {
-    return api.POST<ApiResponse<TokenListItem>>('/api/v1/coin/coins/', {
+  createToken: (req: TokenCreateReq) => {
+    return api.POST<ApiResponse<TokenCreateRes>>('/api/v2/coin/create', {
       body: req,
     })
   },
-  update(addr: string, req: TokenUpdateReq) {
+  updateToken: (addr: string, req: TokenUpdateReq) => {
     return api.PATCH<ApiResponse<null>>(`/api/v1/coin/coins/${addr}/`, {
       body: req,
     })
   },
-  details(chain: string, addr: string) {
-    return api.GET<ApiResponse<TokenListItem>>(
-      `/api/v1/coin/coins/${chain}/${addr}`
+  getList: (req: PaginationReq & { token?: string }) => {
+    return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
+      '/api/v2/coin/list' + qs.stringify(req)
     )
   },
-  commentList(chain: string, addr: string, req: PaginationReq) {
+  getIdoList: (req?: PaginationReq) => {
+    return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
+      '/api/v2/coin/ido-list' + qs.stringify(req)
+    )
+  },
+  getDetail: (req: TokenDetailReq) => {
+    return api.GET<ApiResponse<TokenListItem>>(
+      '/api/v2/coin/detail' + qs.stringify(req)
+    )
+  },
+  getComments: (chain: string, addr: string, req: PaginationReq) => {
     return api.GET<ApiResponse<PaginationRes<TokenCommentListRes>>>(
       `/api/v1/coin/comments/${chain}/${addr}/` + qs.stringify(req)
     )
   },
-  addComment(req: TokenAddCommentReq) {
+  addComment: (req: TokenAddCommentReq) => {
     return api.POST<ApiResponse<TokenCommentListRes>>(
       '/api/v1/coin/comments/',
       { body: req }
     )
   },
-  like(addr: string) {
+  addLike: (addr: string) => {
     return api.POST<ApiResponse<TokenCommentListRes>>(
       `/api/v1/coin/like/${addr}/`
     )
   },
-  unlike(addr: string) {
+  removeLike: (addr: string) => {
     return api.DELETE<ApiResponse<TokenCommentListRes>>(
       `/api/v1/coin/like/${addr}/`
     )
   },
-  onchainTokens(keyword: string) {
+  searchTokens: (keyword: string) => {
     return api.GET<ApiResponse<OnchainTokensRes>>(
       '/api/v1/news/coinSearch/' + qs.stringify({ keyword })
     )
-  },
-  getConfig() {
-    return api.GET<ApiResponse<TokenConfigRes>>('/api/v1/coin/configure')
   },
 }

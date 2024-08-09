@@ -23,7 +23,7 @@ import {
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
 import { Avatar } from '@/components/ui/avatar'
-import { TradeType } from '@/constants/trade'
+import { TradeType } from '@/enums/trade'
 
 const toastBase = (children: ReactNode) => {
   toast.dismiss()
@@ -49,11 +49,15 @@ export const useTradeLogs = () => {
   const [lastCreate, setLastCreate] = useState<CreateInfoLog>()
 
   const { lastJsonMessage, sendJsonMessage } =
-    useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(wsApiURL.tradeLogs, {
-      heartbeat,
-      onOpen: () => sendJsonMessage({ type: 'message', data: null }),
-      shouldReconnect: () => true,
-    })
+    useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(
+      wsApiURL.tradeLogs,
+      {
+        heartbeat,
+        onOpen: () => sendJsonMessage({ type: 'message', data: null }),
+        shouldReconnect: () => true,
+      },
+      false // TODO: remove
+    )
 
   const shwoLatestTrade = (lastTrade: TradeInfoLog) => {
     toastBase(

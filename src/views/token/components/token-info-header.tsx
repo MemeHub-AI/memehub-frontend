@@ -8,7 +8,7 @@ import { fmt } from '@/utils/fmt'
 import { useHoldersStore } from '@/stores/use-holders-store'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
-import { BondingCurveProgress } from './bonding-curve-progress'
+import { TokenProgress } from './token-progress'
 import { Avatar } from '@/components/ui/avatar'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useResponsive } from '@/hooks/use-responsive'
@@ -26,7 +26,8 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { marketCap } = useHoldersStore()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { evmChainsMap } = useChainsStore()
+  const { chainsMap } = useChainsStore()
+  const chain = chainsMap[tokenInfo?.chain ?? '']
 
   if (isLoadingTokenInfo) {
     return (
@@ -48,7 +49,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         <div className="max-sm:flex max-sm:w-full max-sm:justify-between">
           <div className="flex items-center">
             <Avatar
-              src={tokenInfo?.image ?? ''}
+              src={tokenInfo?.image_url ?? ''}
               size={26}
               className="border-2 border-black"
             />
@@ -57,21 +58,17 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
               {isNotFound && !isIdoToken && !tokenMetadata
                 ? t('token.not-found')
                 : `${tokenInfo?.name ?? tokenMetadata?.name}(${
-                    tokenInfo?.ticker ?? tokenMetadata?.symbol
+                    tokenInfo?.symbol ?? tokenMetadata?.symbol
                   })`}
             </span>
           </div>
           <div className="sm:hidden flex items-center">
             <img
-              src={tokenInfo?.chain.logo}
-              alt={tokenInfo?.chain.name}
+              src={chain?.logo}
+              alt={chain?.displayName}
               className="w-5 h-5 rounded"
             />
-            <span className="ml-1">
-              {fmt.withChain(
-                evmChainsMap[tokenInfo?.chain.id ?? 0]?.displayName
-              )}
-            </span>
+            <span className="ml-1">{fmt.withChain(chain?.displayName)}</span>
           </div>
         </div>
         <span>
@@ -82,11 +79,11 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         {isMobile && (
           <div
             className="text-sm flex items-center space-x-2 cursor-pointer"
-            onClick={() => copy(tokenInfo?.address || '')}
+            onClick={() => copy(tokenInfo?.contract_address || '')}
           >
             <span>{t('ca')}:</span>
             <span className="truncate">
-              {fmt.addr(tokenInfo?.address || '', { len: 14 })}
+              {fmt.addr(tokenInfo?.contract_address || '', { len: 14 })}
             </span>
             <span>
               {isCopied ? (
@@ -119,10 +116,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         </span>
       </div> */}
       </div>
-      <BondingCurveProgress
-        className="ml-2 w-full max-sm:ml-0"
-        showDesc={false}
-      />
+      <TokenProgress className="ml-2 w-full max-sm:ml-0" showDesc={false} />
     </div>
   )
 }

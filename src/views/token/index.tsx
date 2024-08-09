@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react'
 import { isAddress } from 'viem'
 import { useTranslation } from 'react-i18next'
-import dayjs from 'dayjs'
-import { useCountDown } from 'ahooks'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { TokenProvider } from '@/contexts/token'
@@ -12,32 +10,30 @@ import { TokenDesktop } from './components/desktop'
 import { TokenMobile } from './components/mobile'
 import { useTradeSearchParams } from './hooks/use-search-params'
 import { useChainsStore } from '@/stores/use-chains-store'
-import { idoTrumpCard } from '@/config/ido'
-import { usePools } from './hooks/use-pools'
 import { NotFound } from '@/components/not-found'
 import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
-import { useNftCheck } from '@/hooks/use-nft-check'
 import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
-
-export const airdropId = 20 // TODO: temp, should be backend id.
+import { Network } from '@/enums/contract'
+import { TokenType } from '@/enums/token'
 
 export const TokenPage = () => {
   const { t } = useTranslation()
   const { chainName, tokenAddr, isReady } = useTradeSearchParams()
-  const { evmChainsMap } = useChainsStore()
+  const { chainsMap } = useChainsStore()
   const { isMobile } = useResponsive()
-  const tokenInfo = useTokenInfo()
-  const { isLoadingTokenInfo } = tokenInfo
-  const { isGraduated } = usePools(tokenInfo.tokenInfo?.address)
-  const reserveSymbol =
-    tokenInfo.tokenInfo?.chain.native.symbol ||
-    evmChainsMap[chainName]?.native.symbol
-  const chainId = +(evmChainsMap[chainName]?.id ?? 0)
+  const { tokenInfo, isLoadingTokenInfo, ...oterInfo } = useTokenInfo()
 
-  const airdropInfo = useAirdropInfo(airdropId, tokenAddr, chainId)
-  const nftCheckInfo = useNftCheck(chainId)
-  const { createAt, durationSeconds, hasKolAirdrop, hasCommunityAirdrop } =
-    airdropInfo
+  const tokenChain = chainsMap[chainName]
+  const chainId = +(tokenChain?.id ?? 0)
+  const reserveSymbol = tokenChain?.native.symbol
+
+  const airdropInfo = useAirdropInfo(
+    tokenInfo?.airdrop_index ?? 0,
+    tokenAddr,
+    chainId,
+    tokenInfo?.coin_version
+  )
+  const { hasKolAirdrop, hasCommunityAirdrop } = airdropInfo
 
   const isOnlyOne = useMemo(() => {
     let count = 0
@@ -46,12 +42,7 @@ export const TokenPage = () => {
     return count === 1
   }, [hasKolAirdrop, hasCommunityAirdrop])
 
-  const [countdown] = useCountDown({
-    targetDate: dayjs.unix(createAt).add(durationSeconds, 'second'),
-  })
-  const isAirdropExpired = countdown <= 0
-
-  const invalidPath = !evmChainsMap[chainName] || !isAddress(tokenAddr)
+  const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
     return (
       <NotFound
@@ -62,28 +53,25 @@ export const TokenPage = () => {
     )
   }
 
-  // TODO: ido temp
-  const isIdoToken = tokenAddr === idoTrumpCard.address
-  if (isIdoToken) tokenInfo.tokenInfo = idoTrumpCard as any
-
   return (
     <TokenProvider
       value={{
-        ...tokenInfo,
+        ...oterInfo,
+        tokenInfo,
+        isLoadingTokenInfo,
         reserveSymbol,
-        isIdoToken,
-        isGraduated,
-        chainName,
-        chainId,
+        isIdoToken: tokenInfo?.coin_type === TokenType.Ido,
         tokenAddr,
+        chainId,
+        chainName,
+        tokenChain,
+        network: Network.Evm,
       }}
     >
       <TradeAirdropProvider
         value={{
-          ...nftCheckInfo,
           ...airdropInfo,
           isOnlyOne,
-          isAirdropExpired,
         }}
       >
         <main

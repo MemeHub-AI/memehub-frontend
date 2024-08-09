@@ -1,6 +1,8 @@
+import { useEffect } from 'react'
 import { useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { Address, zeroAddress } from 'viem'
 
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
@@ -8,21 +10,31 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import {
   distributorAbiMap,
-  DistributorAbiVersion,
+  DistributorVersion,
 } from '@/contract/abi/distributor'
-import { useTokenContext } from '@/contexts/token'
-import { Address, zeroAddress } from 'viem'
+import { useAirdropStore } from '@/stores/use-airdrop'
 
-export const useAirdrop = (id: number, onFinally?: () => void) => {
+export const useAirdrop = (
+  id: number,
+  addr: string | undefined,
+  version: DistributorVersion | undefined,
+  chainId: number | undefined,
+  onFinally?: () => void
+) => {
   const { t } = useTranslation()
   const { playFire } = useAudioPlayer()
   const { address, checkForChain, checkForConnect } = useCheckAccount()
-  const { chainId, airdropVersion, airdropAddr } = useTokenContext()
+  const { setIsCalimingAirdrop } = useAirdropStore()
 
   const airdropConfig = {
-    abi: distributorAbiMap[airdropVersion as DistributorAbiVersion],
-    address: airdropAddr!,
+    abi: distributorAbiMap[version!],
+    address: addr as Address,
     chainId,
+  }
+
+  const query = {
+    enabled: !!address && !!addr && !!chainId,
+    refetchInterval: 5_000,
   }
 
   const { data: isKolClaimed = false, refetch: refetchKolClaimed } =
@@ -30,7 +42,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
       ...airdropConfig,
       functionName: 'isClaimedKOL',
       args: [BigInt(id), address!],
-      query: { enabled: !!address && !!airdropAddr, refetchInterval: 5_000 },
+      query,
     })
 
   const { data: isCommunityClaimed = false, refetch: refetchCommunityCalimed } =
@@ -38,7 +50,7 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
       ...airdropConfig,
       functionName: 'isClaimedCommunity',
       args: [BigInt(id), address!],
-      query: { enabled: !!address && !!airdropAddr, refetchInterval: 5_000 },
+      query,
     })
 
   const refetch = () => {
@@ -74,11 +86,12 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
       toast.dismiss()
     },
   })
+  const isClaiming = isPending || isLoading
 
   const checkForClaim = async () => {
     if (!checkForConnect()) return false
     if (!(await checkForChain(chainId))) return false
-    if (!airdropAddr) {
+    if (!addr) {
       CONTRACT_ERR.configNotFound()
       return false
     }
@@ -110,8 +123,10 @@ export const useAirdrop = (id: number, onFinally?: () => void) => {
     })
   }
 
+  useEffect(() => setIsCalimingAirdrop(isClaiming), [isClaiming])
+
   return {
-    isClaiming: isPending || isLoading,
+    isClaiming,
     isKolClaimed,
     isCommunityClaimed,
     claimKol,

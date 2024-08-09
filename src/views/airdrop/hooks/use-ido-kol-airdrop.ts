@@ -1,7 +1,7 @@
 import { useAccount, useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
-import { useInterval } from 'react-use'
+import { useInterval } from 'ahooks'
 
 import { idoChain } from '@/config/ido'
 import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'

@@ -4,10 +4,12 @@ import { BsGraphUpArrow } from 'react-icons/bs'
 import { LuUsers } from 'react-icons/lu'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
+import dayjs from 'dayjs'
+import { useCountDown } from 'ahooks'
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { TokenInfoHeader } from './token-info-header'
-import { TradeTab } from './trade-tab'
+import { TradeTab } from './trade-tabs'
 import { TokenInfoCard } from './token-info-card'
 import { CommentTradeTab } from './comment-trade-tab'
 import { Chart } from '@/components/chart'
@@ -15,9 +17,10 @@ import { TradeAirdrop } from './trade-airdrop'
 import { HoldersRank } from './holders-rank'
 import { cn } from '@/lib/utils'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
-import { useAirdrop } from '../hooks/trade-v1/use-airdrop'
-import { airdropId } from '..'
-import { useBurnAirdrop } from '../hooks/trade-v1/use-burn-airdrop'
+import { useAirdrop } from '../hooks/evm/use-airdrop'
+import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
+import { useTokenContext } from '@/contexts/token'
+import { useUserStore } from '@/stores/use-user-store'
 
 const enum TabName {
   Trade = '0',
@@ -29,10 +32,26 @@ export const TokenMobile = () => {
   const { t } = useTranslation()
   const { query, replace } = useRouter()
   const tab = (query.tab || TabName.Trade) as string
-  const tradeAirdrop = useTradeAirdropContext()
-  const { isAirdropExpired, isKol, hasCommunity } = tradeAirdrop
-  const { isKolClaimed, isCommunityClaimed } = useAirdrop(airdropId)
-  const { isBurned } = useBurnAirdrop(airdropId)
+  const { tokenInfo, chainId } = useTokenContext()
+  const {
+    airdrop_index = 0,
+    airdrop_address,
+    airdrop_version,
+  } = tokenInfo ?? {}
+
+  const { createAt, durationSeconds } = useTradeAirdropContext()
+  const { isKol, hasCommunity } = useUserStore()
+  const { isKolClaimed, isCommunityClaimed } = useAirdrop(
+    airdrop_index, // TODO: should be `distirbutor_id`
+    airdrop_address,
+    airdrop_version,
+    chainId
+  )
+  const { isBurned } = useBurnAirdrop(airdrop_index)
+  const [countdown] = useCountDown({
+    targetDate: dayjs.unix(createAt).add(durationSeconds, 'second'),
+  })
+  const isAirdropExpired = countdown <= 0
 
   const tipsCount = useMemo(() => {
     if (isAirdropExpired || isBurned) return
@@ -42,7 +61,7 @@ export const TokenMobile = () => {
     if (hasCommunity && !isCommunityClaimed) count++
 
     return count
-  }, [tradeAirdrop, isKolClaimed, isCommunityClaimed, isBurned])
+  }, [createAt, durationSeconds, isKolClaimed, isCommunityClaimed, isBurned])
 
   return (
     <Tabs

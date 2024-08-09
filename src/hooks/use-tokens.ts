@@ -4,10 +4,15 @@ import { tokenApi } from '@/api/token'
 import { TokenListItem } from '@/api/token/types'
 
 export const useTokens = () => {
-  const { data, isLoading, isFetching, fetchNextPage } = useInfiniteQuery({
-    queryKey: [tokenApi.list.name],
+  const {
+    data: { tokens = [], totalToken = 0 } = {},
+    isLoading,
+    isFetching,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey: [tokenApi.getList.name],
     queryFn: ({ pageParam }) => {
-      return tokenApi.list({
+      return tokenApi.getList({
         page: pageParam,
         page_size: 25,
       })
@@ -22,11 +27,32 @@ export const useTokens = () => {
     }),
   })
 
+  const {
+    data: { idoTokens = [], idoTotal = 0 } = {},
+    isLoading: isLoadingIdo,
+    fetchNextPage: fetchNextpageIdo,
+  } = useInfiniteQuery({
+    queryKey: [tokenApi.getIdoList.name],
+    queryFn: () => tokenApi.getIdoList(),
+    initialPageParam: 1,
+    getNextPageParam: (_, __, page) => page + 1,
+    select: (data) => ({
+      idoTotal: data.pages[0].data.count,
+      idoTokens: data.pages
+        .flatMap((p) => p.data.results)
+        .filter(Boolean) as TokenListItem[],
+    }),
+  })
+
   return {
-    totalToken: data?.totalToken ?? 0,
-    tokens: data?.tokens ?? [],
+    totalToken,
+    tokens,
+    idoTokens,
+    idoTotal,
     isLoading,
     isFetching,
+    isLoadingIdo,
     fetchNextPage,
+    fetchNextpageIdo,
   }
 }
