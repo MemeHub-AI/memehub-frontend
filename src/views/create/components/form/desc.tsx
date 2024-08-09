@@ -18,6 +18,7 @@ import { aiApi } from '@/api/ai'
 import { cn } from '@/lib/utils'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { useConnectWallet } from '@/hooks/use-connect-wallet'
 
 interface Props {
   formData: ReturnType<typeof useCreateTokenForm>
@@ -32,12 +33,14 @@ export const Description = ({ formData }: Props) => {
   const userStore = useUserStore()
   const { playGuaGua } = useAudioPlayer()
   const { checkForConnect } = useCheckAccount()
+  const { walletIsConnected } = useConnectWallet()
 
   const createDesc = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
 
-    if (!checkForConnect()) return
+    // TODO: change it after find libraries
+    if (!walletIsConnected()) return
     if (form.getValues(formFields?.fullname) === '') {
       toast.warning(t('need.base.info.warning'))
       return

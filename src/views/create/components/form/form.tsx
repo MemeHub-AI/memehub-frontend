@@ -42,6 +42,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
       toast.warning(t('onsubmit.createing.warning'))
       return
     }
+    // TODO: Multichain adaptation
     onSubmit!(values!)
   }
 

@@ -6,6 +6,7 @@ import { useEvmDeploy } from './use-evm-deploy'
 import { Network } from '@/enums/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { deployErr } from '@/errors/deploy'
+import { useTvmDeploy } from './use-tvm-deploy'
 
 export type DeployFormParams = Omit<
   TokenCreateReq,
@@ -19,7 +20,7 @@ export const useDeploy = () => {
 
   const evmDeploy = useEvmDeploy()
   // const svmDeploy = useSvmDeploy()
-  // const tvmDeploy = useTvmDeploy()
+  const tvmDeploy = useTvmDeploy()
 
   const {
     deployFee,
@@ -36,9 +37,9 @@ export const useDeploy = () => {
     return {
       [Network.Evm]: evmDeploy,
       [Network.Svm]: evmDeploy, // TODO: should be `svmDeploy`
-      [Network.Tvm]: evmDeploy, // TODO: should be `tvmDeploy`
+      [Network.Tvm]: tvmDeploy,
     }[network]
-  }, [network, evmDeploy]) // TODO: add more deps...
+  }, [network, evmDeploy, tvmDeploy]) // TODO: add more deps...
 
   const deploy = async (params: DeployFormParams) => {
     const tokenId = await createToken(params)
@@ -56,6 +57,7 @@ export const useDeploy = () => {
     }
     if (network === Network.Tvm) {
       // TON
+      return tvmDeploy.deploy(params)
     }
   }
 
