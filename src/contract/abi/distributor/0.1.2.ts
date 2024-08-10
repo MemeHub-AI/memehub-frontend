@@ -459,6 +459,32 @@ export const distributorAbiV0_1_2 = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'communityCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'communityRatio',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         components: [
@@ -891,6 +917,32 @@ export const distributorAbiV0_1_2 = [
   },
   {
     inputs: [],
+    name: 'kolCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'kolRatio',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'owner',
     outputs: [
       {
@@ -905,6 +957,84 @@ export const distributorAbiV0_1_2 = [
   {
     inputs: [],
     name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_bond',
+        type: 'address',
+      },
+    ],
+    name: 'setBond',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_communityCheckMax',
+        type: 'uint256',
+      },
+    ],
+    name: 'setCommunityCheckMax',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_communityCount',
+        type: 'uint256',
+      },
+    ],
+    name: 'setCommunityCount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_communityRatio',
+        type: 'uint256',
+      },
+    ],
+    name: 'setCommunityRatio',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_kolCount',
+        type: 'uint256',
+      },
+    ],
+    name: 'setKolCount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_kolRatio',
+        type: 'uint256',
+      },
+    ],
+    name: 'setKolRatio',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -965,19 +1095,6 @@ export const distributorAbiV0_1_2 = [
     name: 'updateEndTime',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'verify',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
     type: 'function',
   },
   {
