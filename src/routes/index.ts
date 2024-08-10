@@ -7,21 +7,13 @@ export enum Routes {
 
   Alliance = '/alliance',
 
-  // KOL = '/kol',
-
-  // Community = '/communities',
+  Account = '/account',
 
   Memex = '/memex',
 
-  CreatePost = '/memex/create',
+  MemexCreate = '/memex/create',
 
   MemexDetail = 'memex/create/detail',
-
-  // KOL = '/kol',
-
-  // Community = '/communities',
-
-  Account = '/account',
 
   Idea = '/idea',
 
@@ -32,6 +24,4 @@ export enum Routes {
   ClassicMeme = '/moonshot/2',
 
   Ido = '/ido',
-
-  Trump = '/trump',
 }

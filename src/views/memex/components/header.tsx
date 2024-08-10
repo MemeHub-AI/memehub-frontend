@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useTranslation } from 'react-i18next'
 import { Posts } from '../type'
 import { Tabs } from '@/components/ui/tabs'
+
 interface HeaderProps {
   setPosts: React.Dispatch<React.SetStateAction<Posts | undefined>>
 }

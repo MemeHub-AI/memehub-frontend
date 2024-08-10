@@ -1,4 +1,4 @@
-import React, { ComponentProps, useRef } from 'react'
+import React, { type ComponentProps, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SlMenu } from 'react-icons/sl'
 import { MdArrowDropDown } from 'react-icons/md'
@@ -26,7 +26,7 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderMobile = (props: Props) => {
   const { navs, onNavClick } = props
   const { t } = useTranslation()
-  const router = useRouter()
+  const { pathname, ...router } = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
   const { isConnected } = useAccount()
 
@@ -51,7 +51,7 @@ export const HeaderMobile = (props: Props) => {
             <Logo
               src="/images/logo.png"
               alt="logo"
-              className="mt-1 w-10 max-[375px]:hidden"
+              className="mt-1 w-10 max-sm:hidden"
             />
             <div className="flex font-extraboldc text-xl mt-1">
               <SlMenu />
@@ -68,16 +68,18 @@ export const HeaderMobile = (props: Props) => {
         >
           <ul className="flex flex-col space-y-3 mt-3 mb-1">
             {navs.map((n, i) => (
-              <li key={i}>
-                <div
-                  className="w-full justify-start"
-                  onClick={() => {
-                    onNavClick?.(n)
-                    closeRef.current?.click()
-                  }}
-                >
-                  {n.title}
-                </div>
+              <li
+                key={i}
+                className={cn(
+                  'w-full justify-start',
+                  pathname === n.path && 'text-blue-600'
+                )}
+                onClick={() => {
+                  onNavClick?.(n)
+                  closeRef.current?.click()
+                }}
+              >
+                {n.title}
               </li>
             ))}
           </ul>
@@ -88,15 +90,13 @@ export const HeaderMobile = (props: Props) => {
             )}
           />
           <div className="flex space-x-6 text-2xl mt-20">
-            {links.map((l, i) => (
+            {links.map(({ link, icon }, i) => (
               <div
                 key={i}
                 className="gap-2 px-2 justify-start items-start max-sm:!px-0 max-sm:py-2"
-                onClick={() => {
-                  if (l.link) open(l.link)
-                }}
+                onClick={() => link && open(link)}
               >
-                {l.icon}
+                {icon}
               </div>
             ))}
           </div>

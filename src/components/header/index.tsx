@@ -27,7 +27,7 @@ export const Header = () => {
     // { title: t('create'), path: Routes.Create },
     { title: t('airdrop'), path: Routes.Airdrop },
     { title: t('alliance'), path: Routes.Alliance },
-    { title: t('posts'), path: Routes.Memex },
+    { title: 'Memex', path: Routes.Memex },
     // { title: t('KOL'), path: Routes.KOL },
     // { title: t('community'), path: Routes.Community },
   ]

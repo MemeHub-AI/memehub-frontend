@@ -626,5 +626,6 @@
   "airdrop.no-id": "You do not have an airdrop for this token",
   "airdrop.not-nft2": "No {} NFT",
   "marketing.burn-desc": "If you choose not to airdrop, these <bold>{{percent}}%</bold> of the tokens will be sent to a black hole for burning",
-  "loadmore": "Load more"
+  "loadmore": "Load more",
+  "memex": "Memex"
 }
