@@ -2,12 +2,17 @@ import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
 import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
 import { useStorage } from './use-storage'
 import { reportException } from '@/errors'
-
+import { useWalletDisconnectButton } from '@solana/wallet-adapter-base-ui'
+import { useWallet } from '@solana/wallet-adapter-react'
 export const useConnectWallet = () => {
   const tonAddress = useTonAddress()
   const { isConnected } = useAccount()
+  const { publicKey } = useWallet()
+  console.log('p' + publicKey)
+
   const [tonConnectUI] = useTonConnectUI()
   const { getMainChain, removeMainChain } = useStorage()
+  const { onButtonClick } = useWalletDisconnectButton()
 
   const { disconnect } = useDisconnect({
     mutation: {
@@ -24,7 +29,7 @@ export const useConnectWallet = () => {
 
   // check if wallet is connected
   const walletIsConnected = () => {
-    if (tonAddress !== '' || isConnected) {
+    if (isConnected || publicKey) {
       return true
     }
     return false
@@ -35,9 +40,9 @@ export const useConnectWallet = () => {
     if (getMainChain() === 'evm') {
       disconnect()
     } else if (getMainChain() === 'ton') {
-      tonConnectUI.disconnect().then(() => {
-        removeMainChain()
-      })
+      tonConnectUI.disconnect()
+    } else if (getMainChain() === 'solana') {
+      onButtonClick!()
     }
     // more...
   }

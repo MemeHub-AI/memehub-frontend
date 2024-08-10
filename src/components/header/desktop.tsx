@@ -1,7 +1,6 @@
 import React, { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
-
 import type { Nav } from './'
 import { Logo } from '../logo'
 import { ConnectWallet } from '../connect-wallet'
