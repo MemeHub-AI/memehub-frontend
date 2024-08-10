@@ -18,14 +18,10 @@ export const useSolDeploy = () => {
 
   const program = new Program(IDL, programId)
 
-  let identifier = uuidv4()
-  identifier = identifier.replace(/-/g, '')
+  let identifier = uuidv4().replace(/-/g, '')
 
   const [mintPDA, _] = anchor.web3.PublicKey.findProgramAddressSync(
-    [
-      Buffer.from('mint'),
-      Buffer.from(identifier), // 可以使用其他生成随机字符串的方法，但字符串长度不能大于 32 字节
-    ],
+    [Buffer.from('mint'), Buffer.from(identifier)],
     new anchor.web3.PublicKey(programId)
   )
   console.log('mintPDA:', mintPDA.toString())
