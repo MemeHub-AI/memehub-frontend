@@ -10,6 +10,8 @@ import { Button } from '../ui/button'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { useTonConnectModal, useTonConnectUI } from '@tonconnect/ui-react'
 import { useStorage } from '@/hooks/use-storage'
+import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui'
 
 export const ChangeChainWallets = ({ className }: { className?: string }) => {
   const { t } = useTranslation()
@@ -20,6 +22,14 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
   const [tonConnectUI] = useTonConnectUI()
   const [isOpening, setIsOpening] = useState(false)
   const { setMainChain } = useStorage()
+
+  const { setVisible } = useWalletModal()
+  const { buttonState } = useWalletMultiButton({
+    onSelectWallet() {},
+  })
+  if (buttonState === 'connecting') {
+    setMainChain('solana')
+  }
 
   // clear monitor
   useEffect(() => {
@@ -49,7 +59,9 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
     {
       name: 'Solana',
       image_url: 'https://storage.memehub.ai/chains/logo/solana.png',
-      connect_wallet: openConnectModal,
+      connect_wallet: () => {
+        setVisible(true)
+      },
     },
     {
       name: 'Ton',
