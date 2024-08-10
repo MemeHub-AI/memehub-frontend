@@ -9,32 +9,37 @@ import { airdropData } from './data'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { AirdropProvider } from '@/contexts/airdrop'
-import { IdoAirdropCard } from './components/ido-card'
 import { useAirdropList } from './hooks/use-airdrop-list'
 import { AirdropDetailType } from '@/api/airdrop/types'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const AirdropPage = () => {
   const { t } = useTranslation()
   const [checked, setChecked] = useState(true)
-  const { airdrops, total, isFetching, fetchNextPage } = useAirdropList()
+  const { airdrops, totalAirdrops, isLoading, isFetching, fetchNextPage } =
+    useAirdropList()
+  const { isKol, hasCommunity } = useUserStore()
 
-  const handleLoadStatus = () => {
-    if (isFetching && total) {
+  const renderLoadingStatus = () => {
+    if (isFetching && totalAirdrops) {
       return (
-        <div className="mt-2 text-center" onClick={() => fetchNextPage()}>
+        <p
+          className="mt-2 text-center lg:col-span-2 2xl:col-span-3"
+          onClick={() => fetchNextPage()}
+        >
           {t('loading')}
-        </div>
+        </p>
       )
     }
 
-    if (total > airdrops.length) {
+    if (totalAirdrops > airdrops.length) {
       return (
-        <div
-          className="mt-2 text-center text-blue-700 cursor-pointer hover:text-blue-500"
+        <p
+          className="mt-2 text-center text-blue-600 cursor-pointer hover:underline lg:col-span-2 2xl:col-span-3"
           onClick={() => fetchNextPage()}
         >
           {t('loading.more')}
-        </div>
+        </p>
       )
     }
   }
@@ -45,7 +50,7 @@ export const AirdropPage = () => {
         <Ids />
         <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
 
-        {(airdrops?.length ?? 0) > 5 && (
+        {(airdrops.length ?? 0) > 5 && (
           <div className="flex space-x-2 items-center mt-3">
             <Switch
               id="airdrop-switch"
@@ -56,43 +61,28 @@ export const AirdropPage = () => {
           </div>
         )}
 
-        <CustomSuspense
-          isPending={false}
-          fallback={<div>{t('loading')}</div>}
-          nullback={<div className="mt-3">{t('no.airdrop')}</div>}
-          className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 "
-        >
-          {/* <IdoAirdropCard tag={t('ido.airdrop.kol')} isKolAirdrop />
-          <IdoAirdropCard tag={t('ido.airdrop.community')} /> */}
-          {airdrops.map((a, i) =>
-            a?.airdrop.map((detail) => (
-              <AirdropCard
-                key={i}
-                airdrop={a}
-                detail={detail}
-                isKolCard={detail.type === AirdropDetailType.Kol}
-              />
-            ))
-          )}
-        </CustomSuspense>
-
-        {/* {isKol || community ? (
-          <>
-            <CustomSuspense
-              isPending={isLoading}
-              fallback={<div>{t('loading')}</div>}
-              nullback={<div className="mt-3">{t('no.airdrop')}</div>}
-              className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 "
-            >
-              {airdrops?.map((airdrop, i) => (
-                <AirdropCard key={i} airdrop={airdrop} />
-              ))}
-            </CustomSuspense>
-            {handleLoadStatus()}
-          </>
+        {isKol || hasCommunity ? (
+          <CustomSuspense
+            isPending={isLoading}
+            fallback={<div>{t('loading')}</div>}
+            nullback={<div className="mt-3">{t('no.airdrop')}</div>}
+            className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 "
+          >
+            {airdrops.map((a, i) =>
+              a?.airdrop.map((detail) => (
+                <AirdropCard
+                  key={i}
+                  airdrop={a}
+                  detail={detail}
+                  isKolCard={detail.type === AirdropDetailType.Kol}
+                />
+              ))
+            )}
+            {renderLoadingStatus()}
+          </CustomSuspense>
         ) : (
           <AirdropSkeleton />
-        )} */}
+        )}
       </PrimaryLayout>
     </AirdropProvider>
   )
@@ -101,13 +91,17 @@ export const AirdropPage = () => {
 const AirdropSkeleton = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max">
-      {airdropData.map((airdrop, i) => (
-        <AirdropCard
-          key={i}
-          className="blur-lg pointer-events-none select-none"
-          airdrop={airdrop}
-        />
-      ))}
+      {airdropData.map((a) =>
+        a.airdrop.map((detail, i) => (
+          <AirdropCard
+            key={i}
+            className="blur-lg pointer-events-none select-none"
+            airdrop={a}
+            detail={detail}
+            isKolCard
+          />
+        ))
+      )}
     </div>
   )
 }
