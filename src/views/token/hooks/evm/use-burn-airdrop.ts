@@ -13,7 +13,11 @@ import { CONTRACT_ERR } from '@/errors/contract'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useAirdropStore } from '@/stores/use-airdrop'
 
-export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
+export const useBurnAirdrop = (
+  id: number | undefined,
+  onFinally?: () => void
+) => {
+  id = id || 0
   const { t } = useTranslation()
   const { chainId, airdropVersion, airdropAddr } = useTokenContext()
   const { checkForConnect, checkForChain } = useCheckAccount()
@@ -29,6 +33,7 @@ export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
     ...airdropConfig,
     functionName: 'isBurn',
     args: [BigInt(id)],
+    query: { enabled: !!id && !!airdropConfig.address },
   })
 
   const {

@@ -7,7 +7,7 @@ export const useAirdropList = () => {
   const { userInfo } = useUserStore()
 
   const {
-    data: { total = 0, airdrops = [] } = {},
+    data: { totalAirdrops = 0, airdrops = [] } = {},
     isLoading,
     isFetching,
     fetchNextPage,
@@ -18,7 +18,7 @@ export const useAirdropList = () => {
     getNextPageParam: (_, __, page) => page + 1,
     select: ({ pages }) => {
       return {
-        total: pages[0].data.count,
+        totalAirdrops: pages[0].data.count,
         airdrops: pages.flatMap((p) => p?.data.results).filter(Boolean),
       }
     },
@@ -26,7 +26,7 @@ export const useAirdropList = () => {
   })
 
   return {
-    total,
+    totalAirdrops,
     airdrops,
     isLoading,
     isFetching,

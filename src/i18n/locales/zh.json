@@ -616,5 +616,6 @@
   "decide.chains": "请选择您的区块链",
   "airdrop.no-id": "你没有这个代币的空投",
   "airdrop.not-nft2": "没有 {} NFT",
-  "marketing.burn-desc": "如果选择不空投，这 <bold>{{percent}}%</bold> 的代币将会被打入黑洞销毁"
+  "marketing.burn-desc": "如果选择不空投，这 <bold>{{percent}}%</bold> 的代币将会被打入黑洞销毁",
+  "loadmore": "加载更多"
 }

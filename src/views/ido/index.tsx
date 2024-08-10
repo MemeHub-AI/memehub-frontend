@@ -17,19 +17,18 @@ import { IdoTag } from '@/components/ido-tag'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { idoTrumpLink } from '@/config/link'
 import { IdoIntro } from './components/ido-intro'
-import { idoChain } from '@/config/ido'
 
 export const IdoPage = () => {
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
   const [isStart, setIsStart] = useState(false)
   const { isConnected, checkForConnect } = useCheckAccount()
-  const { evmChainsMap } = useChainsStore()
+  const { chainsMap } = useChainsStore()
   const { query } = useRouter()
   const chain = (query.chain || '') as string
   const poolId = Number(query.id || 0)
-  const chainId = Number(evmChainsMap[chain]?.id || idoChain.id)
-  const reserveSymbol = evmChainsMap[chain]?.native.symbol || 'BNB'
+  const chainId = 56
+  const reserveSymbol = chainsMap[chain]?.native.symbol || 'BNB'
 
   const idoInfo = useIdoInfo(chainId, poolId)
   const { startAt, endAt, status } = idoInfo
@@ -38,8 +37,6 @@ export const IdoPage = () => {
     () => [dayjs.unix(startAt).diff() <= 0, endAt - startAt],
     [startAt, isStart]
   )
-
-  console.log('ido status', status)
 
   return (
     <IdoProvider

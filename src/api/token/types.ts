@@ -1,11 +1,12 @@
 import { TokenType } from '@/enums/token'
 import type { UserInfoRes } from '../user/types'
-import { TokenVersion } from '@/contract/abi/token'
-import { DistributorVersion } from '@/contract/abi/distributor'
+import type { TokenVersion } from '@/contract/abi/token'
+import type { DistributorVersion } from '@/contract/abi/distributor'
 
 export interface TokenListItem {
+  airdrop: AirdropItem[]
   airdrop_address: string
-  airdrop_index: number
+  airdrop_index: number | null
   airdrop_supply: string
   /**
    * 1: Only select community
@@ -47,6 +48,13 @@ export interface TokenListItem {
   twitter_url: string
   updated_at: string
   website_url: string
+}
+
+interface AirdropItem {
+  type: string
+  contract: string
+  distribution_id: number
+  is_all: boolean
 }
 
 export interface TokenCreateReq {

@@ -10,11 +10,13 @@ import { useTokenDetails } from '../use-token-details'
 import { TokenVersion } from '@/contract/abi/token'
 
 export const useAirdropInfo = (
-  id: number,
+  id: number | undefined,
   token: string | undefined,
   chainId: number,
   tokenVersion: TokenVersion | undefined
 ) => {
+  id = id || 0
+
   const {
     airdropAddr,
     airdropVersion,
@@ -33,7 +35,7 @@ export const useAirdropInfo = (
   const { data: duration = BI_ZERO } = useReadContract({
     ...distributorConfig,
     functionName: 'duration',
-    query: { enabled: !!airdropAddr },
+    query: { enabled: !!airdropAddr && !!id },
   })
   const durationSeconds = Number(duration)
 
@@ -45,7 +47,7 @@ export const useAirdropInfo = (
     ...distributorConfig,
     functionName: 'distributions',
     args: [BigInt(id)],
-    query: { enabled: !!airdropAddr },
+    query: { enabled: !!airdropAddr && !!id },
   })
   const [
     tokenAddr,
@@ -70,7 +72,7 @@ export const useAirdropInfo = (
     address: bcAddr,
     chainId,
     functionName: 'airdropRate_',
-    query: { enabled: !!bcAddr },
+    query: { enabled: !!bcAddr && !!id },
   })
   const airdropRatio = BigNumber(ratio.toString()).div(100).div(100).toFixed()
   const totalAirdrop = BigNumber(airdropRatio)
@@ -93,6 +95,8 @@ export const useAirdropInfo = (
     refetchInfo()
     refetchDetails()
   }
+
+  console.log('count', kolCount, communityCount)
 
   useInterval(refetchAirdrop, 5_000)
 

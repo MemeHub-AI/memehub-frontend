@@ -15,12 +15,13 @@ import {
 import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const useAirdrop = (
-  id: number,
+  id: number | undefined,
   addr: string | undefined,
   version: DistributorVersion | undefined,
   chainId: number | undefined,
   onFinally?: () => void
 ) => {
+  id = id || 0 // adapt id is null
   const { t } = useTranslation()
   const { playFire } = useAudioPlayer()
   const { address, checkForChain, checkForConnect } = useCheckAccount()
@@ -33,7 +34,7 @@ export const useAirdrop = (
   }
 
   const query = {
-    enabled: !!address && !!addr && !!chainId,
+    enabled: !!id && !!address && !!addr && !!chainId,
     refetchInterval: 5_000,
   }
 

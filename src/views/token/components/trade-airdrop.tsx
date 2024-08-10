@@ -16,7 +16,6 @@ export const TradeAirdrop = () => {
     createAt,
     durationSeconds,
   } = useTradeAirdropContext()
-
   const [countdown] = useCountDown({
     targetDate: dayjs.unix(createAt).add(durationSeconds, 'second'),
   })

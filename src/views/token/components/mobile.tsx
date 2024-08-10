@@ -33,21 +33,18 @@ export const TokenMobile = () => {
   const { query, replace } = useRouter()
   const tab = (query.tab || TabName.Trade) as string
   const { tokenInfo, chainId } = useTokenContext()
-  const {
-    airdrop_index = 0,
-    airdrop_address,
-    airdrop_version,
-  } = tokenInfo ?? {}
+  const { airdrop = [], airdrop_address, airdrop_version } = tokenInfo ?? {}
+  const airdropId = airdrop[0]?.distribution_id
 
   const { createAt, durationSeconds } = useTradeAirdropContext()
   const { isKol, hasCommunity } = useUserStore()
   const { isKolClaimed, isCommunityClaimed } = useAirdrop(
-    airdrop_index, // TODO: should be `distirbutor_id`
+    airdropId,
     airdrop_address,
     airdrop_version,
     chainId
   )
-  const { isBurned } = useBurnAirdrop(airdrop_index)
+  const { isBurned } = useBurnAirdrop(airdropId)
   const [countdown] = useCountDown({
     targetDate: dayjs.unix(createAt).add(durationSeconds, 'second'),
   })

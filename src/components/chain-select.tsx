@@ -70,8 +70,7 @@ export const ChainSelect = ({
     >
       {chains.slice(0, 7)?.map((c, i) => (
         <RadioGroupItem
-          // TODO: The back-end data key is the same
-          key={i}
+          key={c.name}
           value={c.id}
           title={c.displayName}
           className={cn(

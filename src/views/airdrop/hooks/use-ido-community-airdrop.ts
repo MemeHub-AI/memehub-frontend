@@ -3,19 +3,18 @@ import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'ahooks'
 
-import { idoChain } from '@/config/ido'
 import { BI_ZERO } from '@/constants/number'
 import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
 import { addrMap } from '@/contract/address'
 
-export const useIdoCommunityAirdrop = (enabled: boolean) => {
+export const useIdoCommunityAirdrop = (chainId: number, enabled: boolean) => {
   const { address } = useAccount()
 
-  const { idoAirdrop } = addrMap[idoChain.id] ?? {}
+  const { idoAirdrop } = addrMap[chainId] ?? {}
   const airdropConfig = {
     abi: idoAirdropAbi,
     address: idoAirdrop,
-    chainId: idoChain.id,
+    chainId,
   }
 
   const { data: isCommunityClaimed = false, refetch: refetchIsClaimed } =
@@ -52,7 +51,7 @@ export const useIdoCommunityAirdrop = (enabled: boolean) => {
 
   const { data: { value = BI_ZERO } = {} } = useBalance({
     address,
-    chainId: idoChain.id,
+    chainId,
   })
   const reserveBalance = formatEther(value)
 

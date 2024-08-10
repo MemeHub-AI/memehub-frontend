@@ -10,7 +10,7 @@ export const IdoCard = ({ token }: { token: TokenListItem }) => {
   const { chainsMap } = useChainsStore()
   const { startAt, progress } = useIdoInfo(
     Number(chainsMap[token.chain]?.id ?? 0),
-    token.airdrop_index
+    token.airdrop_index ?? 0
   )
 
   return (

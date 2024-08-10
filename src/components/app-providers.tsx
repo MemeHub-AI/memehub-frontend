@@ -23,6 +23,7 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react'
 
 export const queryClient = new QueryClient()
 
+const localUrl = typeof location !== 'undefined' ? location.origin : ''
 export const AppProviders = ({ children }: ComponentProps<'div'>) => {
   const network = WalletAdapterNetwork.Devnet
 
@@ -52,23 +53,27 @@ export const AppProviders = ({ children }: ComponentProps<'div'>) => {
   return (
     <I18nextProvider i18n={i18nConfig}>
       <WagmiProvider config={wagmiConfig} reconnectOnMount>
-        <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider
-            modalSize="compact"
-            locale={i18n.language as Locale}
-            theme={lightTheme({
-              accentColor: 'black',
-              accentColorForeground: 'white',
-              borderRadius: 'medium',
-            })}
-          >
-            <ConnectionProvider endpoint={endpoint}>
-              <WalletProvider wallets={wallets} autoConnect>
-                <WalletModalProvider>{children}</WalletModalProvider>
-              </WalletProvider>
-            </ConnectionProvider>
-          </RainbowKitProvider>
-        </QueryClientProvider>
+        <TonConnectUIProvider
+          manifestUrl={`${localUrl}/tonconnect-manifest.json`}
+        >
+          <QueryClientProvider client={queryClient}>
+            <RainbowKitProvider
+              modalSize="compact"
+              locale={i18n.language as Locale}
+              theme={lightTheme({
+                accentColor: 'black',
+                accentColorForeground: 'white',
+                borderRadius: 'medium',
+              })}
+            >
+              <ConnectionProvider endpoint={endpoint}>
+                <WalletProvider wallets={wallets} autoConnect>
+                  <WalletModalProvider>{children}</WalletModalProvider>
+                </WalletProvider>
+              </ConnectionProvider>
+            </RainbowKitProvider>
+          </QueryClientProvider>
+        </TonConnectUIProvider>
       </WagmiProvider>
     </I18nextProvider>
   )
