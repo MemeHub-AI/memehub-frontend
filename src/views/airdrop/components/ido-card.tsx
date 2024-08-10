@@ -10,7 +10,6 @@ import { Img } from '@/components/img'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { idoChain, idoTrumpAirdrop } from '@/config/ido'
 import { useIdoKolAirdrop } from '../hooks/use-ido-kol-airdrop'
 import { useIdoAirdropClaim } from '../hooks/use-ido-claim'
 import { useIdoCommunityAirdrop } from '../hooks/use-ido-community-airdrop'
@@ -18,19 +17,25 @@ import { useNftCheck } from '@/hooks/use-nft-check'
 import { utilLang } from '@/utils/lang'
 import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
 import { addrMap } from '@/contract/address'
+import { AirdropItem } from '@/api/airdrop/types'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 interface Props {
   tag: string
   isKolAirdrop?: boolean
+  airdrop: AirdropItem
 }
 
 export const IdoAirdropCard = ({
   className,
   tag,
   isKolAirdrop = false,
+  airdrop,
 }: ComponentProps<'div'> & Props) => {
   const { t } = useTranslation()
-  const { name, ticker, logo, create } = idoTrumpAirdrop
+  const { name, symbol, image_url, created_at, chain } = airdrop
+  const { chainsMap } = useChainsStore()
+  const chainId = Number(chainsMap[chain]?.id ?? 0)
   const {
     kolBalance,
     kolAmount,
@@ -48,7 +53,7 @@ export const IdoAirdropCard = ({
     isBelowThreshold,
     refetchCommunityAirdrop,
   } = useIdoCommunityAirdrop(!isKolAirdrop)
-  const { isKol, hasCommunity } = useNftCheck(idoChain.id)
+  const { isKol, hasCommunity } = useNftCheck(chainId)
 
   const amount = isKolAirdrop ? kolAmount : communityAmount
   const current = isKolAirdrop ? kolCurrent : communityCurrent
@@ -58,10 +63,10 @@ export const IdoAirdropCard = ({
 
   const { data: tokenAddr = zeroAddress } = useReadContract({
     abi: idoAirdropAbi,
-    address: addrMap[idoChain.id]?.idoAirdrop!,
-    chainId: idoChain.id,
+    address: addrMap[chainId]?.idoAirdrop!,
+    chainId: chainId,
     functionName: 'tokenAddress',
-    query: { enabled: !!addrMap[idoChain.id]?.idoAirdrop },
+    query: { enabled: !!addrMap[chainId]?.idoAirdrop },
   })
   const isNotStart = tokenAddr === zeroAddress
 
@@ -89,7 +94,7 @@ export const IdoAirdropCard = ({
     }
     if (!isKolAirdrop && isBelowThreshold) {
       return utilLang.replace(t('balance-insufficient'), [
-        `${communityThreshold} ${idoChain.native.symbol}`,
+        `${communityThreshold} ${chainsMap[chain]?.native.symbol ?? ''}`,
       ])
     }
 
@@ -100,9 +105,9 @@ export const IdoAirdropCard = ({
     <Card hover="none" className={cn('p-3', className)} shadow="none">
       <div className="flex justify-between">
         <span className="font-bold truncate">
-          {ticker}({name})
+          {symbol}({name})
         </span>
-        <Countdown createdAt={create ?? 0} duration={10} />
+        <Countdown createdAt={Number(created_at ?? 0)} duration={10} />
       </div>
       <div className="mt-3 flex justify-between space-x-4">
         <div className="self-end">
@@ -112,7 +117,7 @@ export const IdoAirdropCard = ({
           <div className="mt-3 flex items-center">
             <img src="/images/gift.png" alt="gift" className="w-6 h-6" />
             <span className="ml-2 text-gray-500 break-all line-clamp-1">
-              {BigNumber(amount).toFormat()} {ticker}
+              {BigNumber(amount).toFormat()} {symbol}
             </span>
           </div>
           <div className="mt-3 flex items-center text-gray-500">
@@ -134,7 +139,7 @@ export const IdoAirdropCard = ({
           </Button>
           <p className="text-sm text-zinc-500 mt-1 ml-0.5">{renderHints()}</p>
         </div>
-        <Img src={logo} className="w-28 h-28 xl:w-36 xl:h-36" />
+        <Img src={image_url} className="w-28 h-28 xl:w-36 xl:h-36" />
       </div>
     </Card>
   )

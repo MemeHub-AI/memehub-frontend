@@ -5,14 +5,13 @@ import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { addrMap } from '@/contract/address'
 import { useTranslation } from 'react-i18next'
-import { idoChain } from '@/config/ido'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { IDO_ERR } from '@/errors/ido'
 
-export const useIdoAirdropClaim = (onSuccess?: () => void) => {
+export const useIdoAirdropClaim = (chainId: number, onSuccess?: () => void) => {
   const { t } = useTranslation()
   const { checkForConnect, checkForChain } = useCheckAccount()
-  const { idoAirdrop } = addrMap[idoChain.id] ?? {}
+  const { idoAirdrop } = addrMap[chainId] ?? {}
 
   const {
     data: hash,
@@ -45,7 +44,7 @@ export const useIdoAirdropClaim = (onSuccess?: () => void) => {
 
   const checkForClaim = async () => {
     if (!checkForConnect()) return false
-    if (!(await checkForChain(idoChain.id))) return false
+    if (!(await checkForChain(chainId))) return false
     if (!idoAirdrop) return false
 
     return true
@@ -58,8 +57,8 @@ export const useIdoAirdropClaim = (onSuccess?: () => void) => {
     writeContract({
       abi: idoAirdropAbi,
       address: idoAirdrop!,
+      chainId,
       functionName: isKol ? 'kolClaim' : 'communityClaim',
-      chainId: idoChain.id,
     })
   }
 

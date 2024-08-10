@@ -3,19 +3,18 @@ import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'ahooks'
 
-import { idoChain } from '@/config/ido'
 import { idoAirdropAbi } from '@/contract/abi/ido/airdrop'
 import { addrMap } from '@/contract/address'
 import { BI_ZERO } from '@/constants/number'
 
-export const useIdoKolAirdrop = (enabled: boolean) => {
+export const useIdoKolAirdrop = (chainId: number, enabled: boolean) => {
   const { address } = useAccount()
 
-  const { idoAirdrop } = addrMap[idoChain.id] ?? {}
+  const { idoAirdrop } = addrMap[chainId] ?? {}
   const airdropConfig = {
     abi: idoAirdropAbi,
     address: idoAirdrop,
-    chainId: idoChain.id,
+    chainId,
   }
 
   const { data: isKolClaimed = false, refetch: refetchIsClaimed } =
