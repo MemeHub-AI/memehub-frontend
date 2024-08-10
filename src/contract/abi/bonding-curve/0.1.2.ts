@@ -21,6 +21,11 @@ export const bcAbiV0_1_2 = [
   },
   {
     inputs: [],
+    name: 'MEMEHUB_InvalidToken',
+    type: 'error',
+  },
+  {
+    inputs: [],
     name: 'MemeHub_AlreadyGraduated',
     type: 'error',
   },
@@ -244,6 +249,19 @@ export const bcAbiV0_1_2 = [
     ],
     name: 'MemeHubTokenGraduated',
     type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'DEAD',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],

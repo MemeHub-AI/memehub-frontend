@@ -283,19 +283,6 @@ export const recommendAbi = [
   },
   {
     inputs: [],
-    name: 'version',
-    outputs: [
-      {
-        internalType: 'string',
-        name: '',
-        type: 'string',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'versions',
     outputs: [
       {
