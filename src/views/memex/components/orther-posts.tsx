@@ -1,19 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
+import { RiEdit2Fill } from 'react-icons/ri'
+import { useTranslation } from 'react-i18next'
+
 import { cn } from '@/lib/utils'
 import { InteractiveList } from './ui/interactive-list'
-import { RiEdit2Fill } from 'react-icons/ri'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
-import Imgs from './ui/imgs'
-import { useTranslation } from 'react-i18next'
+import { Imgs } from './ui/imgs'
 import { TokenBlock } from './ui/token-block'
-import { Posts } from '../type'
-interface PostsPro {
-  postObj: Posts
-}
 
-export const OrtherPosts = ({ postObj }: PostsPro) => {
-  const posts = postObj.data
+export const OrtherPosts = () => {
   const { t } = useTranslation()
   const imgs = [
     '/images/404.png',
@@ -21,6 +17,21 @@ export const OrtherPosts = ({ postObj }: PostsPro) => {
     '/favicon.ico',
     '/images/cat.jpg',
   ]
+  const posts = [
+    {
+      isLaunched: true,
+      isAirdrop: true,
+    },
+    {
+      isLaunched: true,
+      isAirdrop: false,
+    },
+    {
+      isLaunched: false,
+      isAirdrop: false,
+    },
+  ]
+  const type = 1
 
   return (
     <div>
@@ -39,7 +50,7 @@ export const OrtherPosts = ({ postObj }: PostsPro) => {
                 <p className="text-base leading-6 font-medium text-black ">
                   Sonali Hiraveee
                   <span className="text-sm leading-5 font-medium text-gray-500 group-hover:text-gray-300 transition ease-in-out duration-150 pl-3">
-                    20分钟
+                    20m
                   </span>
                 </p>
               </div>
@@ -72,8 +83,7 @@ export const OrtherPosts = ({ postObj }: PostsPro) => {
               just started building Twitter UI using Tailwind and so far it
               looks so promising. I will post my code after completion. [07/100]
             </p>
-            {/* 判断这个币时候已经发射 */}
-            {p.isLaunched && <TokenBlock type={postObj.type} />}
+            {p.isLaunched && <TokenBlock type={type} />}
             <Imgs imgs={imgs} className="mt-3 mr-1" />
             <InteractiveList className="py-1" />
             <Progress

@@ -1,24 +1,18 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
-import { cn } from '@/lib/utils'
-import { InteractiveList } from './ui/interactive-list'
 import { RiEdit2Fill } from 'react-icons/ri'
 import { FaBoltLightning } from 'react-icons/fa6'
-import Imgs from './ui/imgs'
-import { Progress } from '@/components/ui/progress'
-import { Button } from '@/components/ui/button'
 import { useTranslation } from 'react-i18next'
 import { IoAlertCircleOutline } from 'react-icons/io5'
-import { Posts } from '../type'
+
+import { Imgs } from './ui/imgs'
+import { cn } from '@/lib/utils'
+import { InteractiveList } from './ui/interactive-list'
+import { Progress } from '@/components/ui/progress'
+import { Button } from '@/components/ui/button'
 import { TokenBlock } from './ui/token-block'
-import { DialogClose } from '@radix-ui/react-dialog'
 
-interface PostsPro {
-  postObj: Posts
-}
-
-export const MyPosts = ({ postObj }: PostsPro) => {
-  const posts = postObj.data
+export const MyPosts = () => {
   const { t } = useTranslation()
   const [Detailed, setDetailed] = useState(false)
   const imgs = [
@@ -27,6 +21,21 @@ export const MyPosts = ({ postObj }: PostsPro) => {
     '/images/ai.jpg',
     '/images/ai.jpg',
   ]
+  const posts = [
+    {
+      isLaunched: true,
+      isDetailed: true,
+    },
+    {
+      isLaunched: true,
+      isDetailed: false,
+    },
+    {
+      isLaunched: false,
+      isDetailed: false,
+    },
+  ]
+  const type = 1
 
   return (
     <div>
@@ -47,7 +56,7 @@ export const MyPosts = ({ postObj }: PostsPro) => {
                 <p className="text-base font-medium text-black ">
                   Sonali Hiraveee
                   <span className="text-sm leading-10 font-medium text-gray-500 group-hover:text-gray-300 transition ease-in-out duration-150 pl-3">
-                    20分钟
+                    20m
                   </span>
                 </p>
               </div>
@@ -66,7 +75,6 @@ export const MyPosts = ({ postObj }: PostsPro) => {
             </div>
           </div>
           <div className="ml-14 flex gap-2 ">
-            {/* 只有未补充代币详情才会有编辑代币详情按钮，如果发射可以查看代币详情但是无法编辑 */}
             {(!p.isLaunched || !p.isDetailed) && (
               <Button className="border border-solid border-black rounded-md px-2 text-sm h-8 font-normal">
                 {t('edit')}
@@ -79,7 +87,6 @@ export const MyPosts = ({ postObj }: PostsPro) => {
               </Button>
             )}
           </div>
-          {/* 先判断是否为未补充代币详情状态，在判断代币是否已经筹集结束，如果是的话显示已完成筹集尽快补充，如果不是显示尽快补充*/}
           {!p.isDetailed &&
             (p.isLaunched ? (
               <div className="ml-14 relative border border-solid border-yellow-600 text-yellow-500 rounded-md py-1 mt-2 lg:w-[500px]">
@@ -104,10 +111,7 @@ export const MyPosts = ({ postObj }: PostsPro) => {
               just started building Twitter UI using Tailwind and so far it
               looks so promising. I will post my code after completion. [07/100]
             </p>
-            {/* 判断已发射或者补全信息就可以显示 */}
-            {(!p.isLaunched || p.isDetailed) && (
-              <TokenBlock type={postObj.type} />
-            )}
+            {(!p.isLaunched || p.isDetailed) && <TokenBlock type={type} />}
             <Imgs imgs={imgs} className="mt-3 mr-1" />
             <InteractiveList className="py-1" />
             <Progress

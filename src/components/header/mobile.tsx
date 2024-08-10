@@ -47,13 +47,13 @@ export const HeaderMobile = (props: Props) => {
     <>
       <Sheet>
         <SheetTrigger asChild ref={closeRef}>
-          <div className="flex justify-start items-center space-x-2">
+          <div className="flex justify-start items-center space-x-2 max-sm:space-x-0">
             <Logo
               src="/images/logo.png"
               alt="logo"
               className="mt-1 w-10 max-sm:hidden"
             />
-            <div className="flex font-extraboldc text-xl mt-1">
+            <div className="flex text-xl mt-1">
               <SlMenu />
               <MdArrowDropDown />
             </div>

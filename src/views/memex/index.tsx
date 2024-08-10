@@ -1,57 +1,83 @@
-import React, { useEffect, useState } from 'react'
-import { t } from 'i18next'
-import { cn } from '@/lib/utils'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { PrimaryLayout } from '@/components/layouts/primary'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { cn } from '@/lib/utils'
 import { useRouter } from 'next/router'
 import { MyPosts } from './components/my-posts'
 import { OrtherPosts } from './components/orther-posts'
-import Header from './components/header'
-import { Posts } from './type'
-// enum Tab {
-//   Latest = 'latest',
-//   Hot = 'hot',
-//   MyIdea = 'my idea',
-//   MyParticipate = 'my participate'
-// }
-const PostPage = () => {
-  const [posts, setPosts] = useState<Posts | undefined>({
-    type: 1,
-    data: [
-      {
-        isLaunched: true,
-        isAirdrop: true,
-      },
-      {
-        isLaunched: true,
-        isAirdrop: false,
-      },
-      {
-        isLaunched: false,
-        isAirdrop: false,
-      },
-    ],
-  })
-  console.log(posts)
 
-  const renderCom = () => {
-    switch (posts?.type) {
-      case 0:
-        return <MyPosts postObj={posts} />
-      case 1:
-        return <OrtherPosts postObj={posts} />
-    }
-  }
+enum Tab {
+  Latest = '0',
+  Hot = '1',
+  MyParticipate = '2',
+  MyIdea = '3',
+  Successed = '4',
+}
+
+export const MemexPage = () => {
+  const { t } = useTranslation()
+  const [tab, setTab] = useState(Tab.Latest)
+  const { pathname, ...router } = useRouter()
+  const tabs = [
+    {
+      value: Tab.Latest,
+      title: t('latest'),
+      comp: <MyPosts />,
+    },
+    {
+      value: Tab.Hot,
+      title: t('hots'),
+      comp: <OrtherPosts />,
+    },
+    {
+      value: Tab.MyParticipate,
+      title: t('memex.myparticipate'),
+    },
+    {
+      value: Tab.MyIdea,
+      title: t('memex.my-idea'),
+    },
+    {
+      value: Tab.Successed,
+      title: t('successed'),
+    },
+  ]
+
   return (
-    <div>
-      <PrimaryLayout container="div" className={cn('w-full')}>
-        <Header setPosts={setPosts} />
-        {/* <OfflinePost/> */}
-        {renderCom()}
-        {/* <MyUnlaunchedPost />
-          <MyLaunchedPost /> */}
-      </PrimaryLayout>
-    </div>
+    <PrimaryLayout mainClass="!px-0">
+      <Tabs
+        value={tab}
+        onValueChange={(t) => {
+          setTab(t as Tab)
+          router.push({ pathname, query: { t } })
+        }}
+      >
+        <TabsList
+          className={cn(
+            'border-t-0 border-l-0 border-r-0 !border-b border-zinc-200',
+            'w-screen max-w-screen justify-start rounded-none h-10'
+          )}
+        >
+          {tabs.map(({ value, title }) => (
+            <TabsTrigger
+              key={value}
+              value={value}
+              className="!text-black font-normal data-[state=active]:!bg-transparent data-[state=active]:font-bold px-0 first:ml-3 mx-2 data-[state=active]:border-b-2 data-[state=active]:border-purple-600 duration-0"
+            >
+              {title}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+        {tabs.map(({ value, comp }) => (
+          <TabsContent value={value} className="px-3">
+            {comp}
+          </TabsContent>
+        ))}
+      </Tabs>
+    </PrimaryLayout>
   )
 }
 
-export default PostPage
+export default MemexPage

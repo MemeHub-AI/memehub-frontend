@@ -14,7 +14,7 @@ interface ImgsProps extends ComponentProps<'div'> {
   imgs: string[]
 }
 
-const Imgs = ({ className, imgs }: ImgsProps) => {
+export const Imgs = ({ className, imgs }: ImgsProps) => {
   const [detail, setDetail] = useState<ReactNode>(null)
 
   const showImg = (i: number) => {
@@ -52,4 +52,4 @@ const Imgs = ({ className, imgs }: ImgsProps) => {
   )
 }
 
-export default React.memo(Imgs)
+export default Imgs
