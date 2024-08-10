@@ -8,7 +8,7 @@ export const useConnectWallet = () => {
   const tonAddress = useTonAddress()
   const { isConnected } = useAccount()
   const { publicKey } = useWallet()
-  console.log('p' + publicKey)
+  // console.log('p' + publicKey)
 
   const [tonConnectUI] = useTonConnectUI()
   const { getMainChain, removeMainChain } = useStorage()
@@ -40,7 +40,9 @@ export const useConnectWallet = () => {
     if (getMainChain() === 'evm') {
       disconnect()
     } else if (getMainChain() === 'ton') {
-      tonConnectUI.disconnect()
+      tonConnectUI.disconnect().then(() => {
+        removeMainChain()
+      })
     } else if (getMainChain() === 'solana') {
       onButtonClick!()
     }
