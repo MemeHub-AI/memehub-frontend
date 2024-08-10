@@ -44,6 +44,11 @@ export const useTvmDeploy = () => {
     isError: isDeployError,
   } = useWaitForTransaction({ hash: hashBoc, address: userFriendlyAddress })
   // TODO: Requires back-end compatible login
+  // console.log('data: ', data?.hash().toString('hex'))
+  // console.log('hash data: ', data?.hash())
+  // console.log('result data: ', data)
+  // console.log('data: ', data)
+
   const deployedAddr = useMemo(() => getDeployLogsAddr(), [data])
 
   return {

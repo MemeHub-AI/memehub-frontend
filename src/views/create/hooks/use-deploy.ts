@@ -43,7 +43,7 @@ export const useDeploy = () => {
 
   const deploy = async (params: DeployFormParams) => {
     const tokenId = await createToken(params)
-    if (!tokenId) return deployErr.createFailed()
+    // if (!tokenId) return deployErr.createFailed()
 
     const { network } = chainsMap[params.chain] ?? {}
     if (!network) return deployErr.networkNotFound()
