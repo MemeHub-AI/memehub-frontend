@@ -6,15 +6,39 @@ import { RiGlobalLine } from 'react-icons/ri'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 
-const classes = 'border-transparent !bg-transparent hover:border-black'
-
 interface Props extends ComponentProps<'div'> {
   x?: string
   tg?: string
   website?: string
+  buttonProps?: ComponentProps<typeof Button>
 }
 
-export const TokenSocialLinks = ({ className, x, tg, website }: Props) => {
+export const TokenSocialLinks = ({
+  className,
+  x,
+  tg,
+  website,
+  buttonProps,
+}: Props) => {
+  const { className: buttonClass } = buttonProps ?? {}
+  const links = [
+    {
+      title: 'Twitter',
+      link: x,
+      icon: <LuTwitter size={20} />,
+    },
+    {
+      title: 'Telegram',
+      link: tg,
+      icon: <FaTelegramPlane size={20} />,
+    },
+    {
+      title: 'Website',
+      link: website,
+      icon: <RiGlobalLine size={20} />,
+    },
+  ]
+
   return (
     <div
       className={cn(
@@ -22,39 +46,22 @@ export const TokenSocialLinks = ({ className, x, tg, website }: Props) => {
         className
       )}
     >
-      {x && (
-        <Button
-          shadow="none"
-          size="icon"
-          title="twitter"
-          onClick={() => open(x)}
-          className={classes}
-        >
-          <LuTwitter size={20} />
-        </Button>
-      )}
-
-      {tg && (
-        <Button
-          shadow="none"
-          size="icon"
-          title="telegram"
-          onClick={() => open(tg)}
-          className={classes}
-        >
-          <FaTelegramPlane size={20} />
-        </Button>
-      )}
-      {website && (
-        <Button
-          shadow="none"
-          size="icon"
-          title="website"
-          onClick={() => open(website)}
-          className={classes}
-        >
-          <RiGlobalLine size={20} />
-        </Button>
+      {links.map(({ title, link, icon }) =>
+        !!link ? (
+          <Button
+            shadow="none"
+            size="icon"
+            title={title}
+            onClick={() => open(link)}
+            className={cn(
+              'border-transparent !bg-transparent hover:border-black',
+              buttonClass
+            )}
+            {...buttonProps}
+          >
+            {icon}
+          </Button>
+        ) : null
       )}
     </div>
   )

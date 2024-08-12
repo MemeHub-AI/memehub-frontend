@@ -1,37 +1,54 @@
-export interface PostsQuert {
-  page: string
-  size: string
-}
-
-export interface GetListRes {
+export interface MemexTweetItem {
+  chain: null | string
+  comment_count: number
+  content: string
+  contract_address: null | string
+  created_at: string
+  description: null
+  hash: null | string
+  ido_address: null | string
+  image_urls: string[]
+  logo_url: null
+  name: null | string
+  status: TweetStatus | null
+  symbol: null | string
+  telegram_url: null
+  twitter_url: null | string
+  user_address: string
   user_logo: string
   user_name: string
-  created_at: string
-  image_urls: string[]
-  user_address: string
-  ido_address: string | null
-  contract_address: string | null
-  content: string
-  chain: string | null
-  name: string | null
-  symbol: string | null
-  description: null
-  logo_url: null
-  twitter_url: string | null
-  telegram_url: null
   website_url: null
-  hash: string | null
-  status: number | null
-  comment_count: number
+  is_creator: number
+  is_liked: number
+  like_amount: number
 }
 
-export interface MemexPaginationRes<T> {
-  count: number
-  next: null
-  previous: null
-  results?: T[]
+export enum TweetStatus {
+  Inactivated, // Already tweet
+  Activated, // Start ido
+  Done, // Alread ido
 }
 
-export interface PostTweetRes {
+export interface MemexCreateReq {
+  chain: string
+  content: string
+  description?: string
+  image_urls: string[]
+  logo_url?: string
+  name?: string
+  symbol?: string
+  telegram_url?: string
+  twitter_url?: string
+  website_url?: string
+}
+
+export interface MemexTweetHash {
   hash: string
+}
+
+export interface MemexTweetComment {
+  content: string
+  created_at: string
+  user_logo: string
+  user_name: string
 }

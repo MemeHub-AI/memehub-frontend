@@ -2,10 +2,8 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useTranslation } from 'react-i18next'
-import { usePost } from './use-post'
 
 export const useCreateForm = () => {
-  const { postTweet, isPending, isError } = usePost()
   const { t } = useTranslation()
   const require = {
     message: t('fields.required'),

@@ -34,12 +34,10 @@ import {
 import { useCreateStore } from './hooks/use-create-store'
 import { useUploadImages } from './hooks/use-upload-images'
 import { useMemexDetailStore } from '@/stores/use-memex-create'
-import { usePost } from './hooks/use-post'
 
 const CreatePost = () => {
   const { t } = useTranslation()
   const router = useRouter()
-  const { postTweet, isPending } = usePost()
   const [selected, setSelected] = useState<string[]>([])
   useCreateStore()
   const { mainFormData: mainForm, handleConfirm } = useMemexDetailStore()

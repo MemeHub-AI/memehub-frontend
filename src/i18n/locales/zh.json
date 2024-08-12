@@ -620,6 +620,10 @@
   "loadmore": "加载更多",
   "hots": "热门",
   "memex.my-idea": "我的idea",
-  "memex.myparticipate": "我参与的",
-  "successed": "已成功"
+  "successed": "已成功",
+  "memex.my-involved": "我参与的",
+  "memex.successed": "已成功",
+  "memex.token-detail": "代币详情",
+  "memex.symbol": "代号",
+  "no-yet": "还没有数据"
 }

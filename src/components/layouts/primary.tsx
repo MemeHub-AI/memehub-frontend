@@ -1,13 +1,13 @@
-import React, { ComponentProps, ReactDOM, createElement } from 'react'
+import React, { type ComponentProps, type ReactDOM, createElement } from 'react'
 
 import { OpportunityMoonshot } from '../opportunity-moonshot'
 import { cn } from '@/lib/utils'
-import { useRouter } from 'next/router'
 
 interface Props extends ComponentProps<'div'> {
   mainClass?: string
   asideProps?: ComponentProps<typeof OpportunityMoonshot>
   container?: keyof ReactDOM | 'fragment'
+  padding?: boolean
 }
 
 export const PrimaryLayout = (props: Props) => {
@@ -16,6 +16,7 @@ export const PrimaryLayout = (props: Props) => {
     children,
     asideProps = {},
     container = 'fragment',
+    padding = true,
     ...restProps
   } = props
   const {
@@ -23,12 +24,12 @@ export const PrimaryLayout = (props: Props) => {
     containerClass: aContainerClass,
     ...restAsideProps
   } = asideProps
-  const { query } = useRouter()
 
   return (
     <main
       className={cn(
-        'min-h-main px-6 flex max-sm:px-3 max-sm:pt-0 gap-6',
+        'min-h-main max-sm:pt-0 ',
+        padding && 'px-6 flex max-sm:px-3 gap-6',
         mainClass
       )}
     >

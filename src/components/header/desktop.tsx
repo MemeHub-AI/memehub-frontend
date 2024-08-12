@@ -1,6 +1,7 @@
 import React, { type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
+
 import type { Nav } from './'
 import { Logo } from '../logo'
 import { ConnectWallet } from '../connect-wallet'
@@ -17,7 +18,7 @@ interface Props extends ComponentProps<'div'> {
 }
 
 export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
-  const router = useRouter()
+  const { pathname, ...router } = useRouter()
   const { t } = useTranslation()
 
   return (
@@ -34,7 +35,9 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
                     className={cn(
                       'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
                       'hover:border-black text-nowrap font-bold xl:px-4',
-                      router.pathname === n.path &&
+                      (pathname === n.path ||
+                        (pathname.includes(Routes.Memex) &&
+                          n.path.includes(Routes.Memex))) &&
                         'bg-black text-white border-black'
                     )}
                     onClick={() => onNavClick?.(n)}

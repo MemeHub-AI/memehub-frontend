@@ -630,6 +630,10 @@
   "memex": "Memex",
   "hots": "Hots",
   "memex.my-idea": "My idea",
-  "memex.myparticipate": "My participate",
-  "successed": "Succeeded"
+  "successed": "Succeeded",
+  "memex.my-involved": "My involved",
+  "memex.successed": "Successed",
+  "memex.token-detail": "Token details",
+  "memex.symbol": "Symbol",
+  "no-yet": "No data yet"
 }

@@ -17,6 +17,8 @@ export interface PaginationReq {
 
 export interface PaginationRes<T> {
   count: number
+  next: null | number
+  previous: null | number
   results?: T[]
 }
 
@@ -27,17 +29,4 @@ export interface Locale {
 
 export interface SearchReq {
   search?: string
-}
-
-export interface PostTweetData {
-  image_urls: string[]
-  content: string
-  chain: string
-  name?: string
-  symbol?: string
-  description?: string
-  logo_url?: string
-  twitter_url?: string
-  telegram_url?: string
-  website_url?: string
 }
