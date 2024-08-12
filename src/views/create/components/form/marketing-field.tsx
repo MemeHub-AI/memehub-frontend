@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
+import { z } from 'zod'
+import { UseFormReturn } from 'react-hook-form'
 
-import { useCreateTokenContext } from '@/contexts/create-token'
 import {
   FormControl,
   FormField,
@@ -26,15 +27,20 @@ const marketingActions = (
   removed: value.filter((market) => market.type !== m.value),
 })
 
-export const MarketingField = () => {
+export const marketingSchema = z.object({
+  marketing: z
+    .array(z.object({ type: z.number(), percent: z.number() }))
+    .optional(),
+})
+
+interface Props {
+  form: UseFormReturn<z.infer<typeof marketingSchema>>
+}
+
+export const MarketingField = ({ form }: Props) => {
   const { t } = useTranslation()
-  const {
-    formData: { form, formFields },
-  } = useCreateTokenContext()
   const { configValue } = useCreateToken()
   const { distributionRatioKol = 0 } = configValue ?? {}
-
-  console.log('configValue', configValue)
 
   const markets = [
     {
@@ -64,7 +70,7 @@ export const MarketingField = () => {
 
   // Default checke.
   useEffect(() => {
-    form.setValue(formFields.marketing, [
+    form.setValue('marketing', [
       {
         type: MarketType.Kol,
         percent: distributionRatioKol,
@@ -79,7 +85,7 @@ export const MarketingField = () => {
         <FormField
           key={m.value}
           control={form.control}
-          name={formFields.marketing}
+          name="marketing"
           render={({ field }) => {
             const checked = field.value?.some((v) => v.type === m.value)
             return (

@@ -116,7 +116,7 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
           </div>
 
           {/* Marketing */}
-          <MarketingField />
+          <MarketingField form={form} />
 
           {/* Description */}
           <Description formData={formData} />

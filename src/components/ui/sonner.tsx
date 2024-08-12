@@ -1,4 +1,3 @@
-import { useResponsive } from '@/hooks/use-responsive'
 import { useTheme } from 'next-themes'
 import React from 'react'
 import { Toaster as Sonner } from 'sonner'
@@ -7,13 +6,12 @@ type ToasterProps = React.ComponentProps<typeof Sonner>
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { theme = 'system' } = useTheme()
-  const { isMobile } = useResponsive()
 
   return (
     <Sonner
       theme={theme as ToasterProps['theme']}
       className="toaster group"
-      position={isMobile ? 'bottom-left' : 'top-center'}
+      position={'top-center'}
       toastOptions={{
         classNames: {
           toast:

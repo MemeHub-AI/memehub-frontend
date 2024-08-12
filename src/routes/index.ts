@@ -33,5 +33,5 @@ export enum Routes {
 
   MemexCreate = '/memex/create',
 
-  MemexDetail = 'memex/create/detail',
+  MemexCreateDetail = '/memex/create/detail',
 }

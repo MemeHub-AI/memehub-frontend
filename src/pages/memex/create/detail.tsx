@@ -1,1 +1,1 @@
-export { default } from '@/views/memex/create/detail/index'
+export { default } from '@/views/memex/create/detail'

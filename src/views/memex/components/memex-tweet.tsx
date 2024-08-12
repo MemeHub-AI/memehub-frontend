@@ -136,7 +136,7 @@ export const MemexTweet = ({
               key={i}
               src={src}
               alt="poster"
-              className="max-h-48 object-cover"
+              className="w-full h-full max-h-48 object-cover"
             />
           ))}
         </div>

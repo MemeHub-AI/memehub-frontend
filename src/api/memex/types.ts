@@ -32,13 +32,14 @@ export enum TweetStatus {
 export interface MemexCreateReq {
   chain: string
   content: string
-  description?: string
   image_urls: string[]
-  logo_url?: string
+
   name?: string
   symbol?: string
-  telegram_url?: string
+  logo_url?: string
+  description?: string
   twitter_url?: string
+  telegram_url?: string
   website_url?: string
 }
 

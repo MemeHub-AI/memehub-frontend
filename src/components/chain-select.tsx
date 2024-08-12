@@ -1,4 +1,4 @@
-import { ComponentProps, useMemo, useState } from 'react'
+import { ComponentProps, useEffect, useMemo, useState } from 'react'
 import { IoIosMore } from 'react-icons/io'
 import { useTranslation } from 'react-i18next'
 import { useChainId, useSwitchChain } from 'wagmi'
@@ -25,6 +25,7 @@ export const ChainSelect = ({
   value,
   onChange,
   onValueChange,
+  ...props
 }: Props) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
@@ -40,7 +41,7 @@ export const ChainSelect = ({
     return idx > 6
   }, [chains, value, defaultValue])
 
-  const isChainSelected = (c: ChainData) => {
+  const isChainSelected = (c: Partial<ChainData>) => {
     const v = value || defaultValue || chainId.toString()
     return v === c.id || v === c.name
   }
@@ -56,6 +57,15 @@ export const ChainSelect = ({
     }
   }
 
+  useEffect(() => {
+    const strId = chainId.toString()
+    const chain = evmChainsMap[strId]
+
+    if (isChainSelected({ id: strId }) && chain) {
+      onChange?.(chain)
+    }
+  }, [evmChainsMap])
+
   if (loadingChains) return <div>{t('loading')}</div>
 
   return (
@@ -67,6 +77,7 @@ export const ChainSelect = ({
         'flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap max-w-[300px] max-sm:w-max',
         className
       )}
+      {...props}
     >
       {chains.slice(0, 7)?.map((c, i) => (
         <RadioGroupItem
@@ -104,6 +115,7 @@ export const ChainSelect = ({
               setOpen(false)
               switchChain(evmChainsMap[v])
             }}
+            disabled={props.disabled}
           >
             <SelectTrigger
               showArrow={false}

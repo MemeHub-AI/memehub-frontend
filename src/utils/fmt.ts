@@ -116,4 +116,13 @@ export const fmt = {
 
     return utilLang.isEn() ? `${str} ${cmnt}` : str + cmnt
   },
+  fileName: (name: string | undefined, len = 10) => {
+    if (!name) return ''
+
+    if (name.length > len) {
+      return name.slice(0, len) + '...' + name.slice(-6)
+    } else {
+      return name
+    }
+  },
 }

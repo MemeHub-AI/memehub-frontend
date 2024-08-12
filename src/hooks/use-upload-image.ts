@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { otherApi } from '@/api/other'
 import { useStorage } from './use-storage'
 import { UPLOAD_ERR } from '@/errors/upload'
+import { reportException } from '@/errors'
 
 interface Options {
   inputEl?: HTMLInputElement | null
@@ -46,6 +47,8 @@ export const useUploadImage = (options?: Options) => {
   })
 
   const onChangeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    clearFile()
+
     // Cannot to upload image if not logged in.
     if (!getToken()) {
       e.preventDefault()
@@ -54,15 +57,19 @@ export const useUploadImage = (options?: Options) => {
     }
 
     const file = first(e.target.files)!
-    console.log(file)
-
     if (!file.size) return
 
     const formData = new FormData()
 
     formData.append('avatar', file)
     setFile(file)
-    mutateAsync(formData)
+
+    try {
+      const { data } = await mutateAsync(formData)
+      return data.image_url
+    } catch (error) {
+      reportException(error)
+    }
   }
 
   const clearFile = () => {
