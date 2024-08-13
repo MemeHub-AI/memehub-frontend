@@ -646,5 +646,7 @@
   "memex.create-detail.title": "Memecoin 详情",
   "meemx.crate-detail.optional-title": "显示更多选项",
   "twitter-link": "推特链接",
-  "telegram-link": "电报链接"
+  "telegram-link": "电报链接",
+  "show-more": "显示更多",
+  "show-less": "收起更多"
 }

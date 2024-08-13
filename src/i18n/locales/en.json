@@ -656,5 +656,7 @@
   "memex.create-detail.title": "Memecoin details",
   "meemx.crate-detail.optional-title": "Show more options",
   "twitter-link": "Twitter Link",
-  "telegram-link": "Telegram Link"
+  "telegram-link": "Telegram Link",
+  "show-more": "Show more",
+  "show-less": "Show less"
 }
