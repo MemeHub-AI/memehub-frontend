@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 export const TweetEmpty = () => {
   const { t } = useTranslation()
 
-  // TODO: Enrich it
+  // TODO/memex: Enrich it
   return <div className="text-center text-zinc-500 mt-10">{t('no-yet')}</div>
 }
 

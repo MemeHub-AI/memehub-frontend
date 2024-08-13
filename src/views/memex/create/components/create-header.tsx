@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
@@ -16,6 +16,11 @@ export const CreateHeader = () => {
   } = useCreateTweetContext()
   const hasError = !isEmpty(Object.keys(formState.errors))
 
+  // TODO/memex: should be dynamic
+  const fee = 0.0018
+  const symbol = 'BNB'
+  const publishFee = fee > 0 ? `(${fee} ${symbol})` : ''
+
   return (
     <div className="flex items-center justify-between space-x-2 mx-1">
       <div className="flex items-center space-x-1">
@@ -28,7 +33,9 @@ export const CreateHeader = () => {
         >
           <ChevronLeftIcon className="w-6 h-6" />
         </Button>
-        <span className="font-bold">{t('memex.create.title')}</span>
+        <span className="font-bold line-clamp-1">
+          {t('memex.create.title')}
+        </span>
       </div>
       <Button
         shadow="none"
@@ -37,7 +44,7 @@ export const CreateHeader = () => {
         type="submit"
         disabled={hasError || isPending}
       >
-        {isPending ? t('memex.creating') : t('memex.create')}
+        {isPending ? t('memex.creating') : `${t('memex.create')} ${publishFee}`}
       </Button>
     </div>
   )

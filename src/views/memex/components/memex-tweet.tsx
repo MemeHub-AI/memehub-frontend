@@ -17,6 +17,7 @@ import { useChainsStore } from '@/stores/use-chains-store'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
+import { EllipsisText } from '@/components/ellipsis-text'
 
 interface Props {
   tweet?: MemexTweetItem
@@ -49,7 +50,7 @@ export const MemexTweet = ({
   const chain = chainsMap[chainName || '']
   const hasToken = !!ido_address
 
-  // TODO: use contract progress & reward
+  // TODO/memex: use contract progress & reward
   const progress = 80
   const reward = '0.1%'
 
@@ -102,7 +103,13 @@ export const MemexTweet = ({
 
         {renderStatus()}
 
-        <div className="mt-1">{content}</div>
+        <EllipsisText
+          className="mt-1"
+          showMoreClass="text-purple-600"
+          maxLine={8}
+        >
+          {content}
+        </EllipsisText>
 
         {hasToken && (
           <TokenDetailCard

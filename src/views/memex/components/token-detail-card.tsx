@@ -26,7 +26,7 @@ export const TokenDetailCard = ({
   const { name, symbol, logo_url, twitter_url, telegram_url, website_url } =
     details ?? {}
   const { t } = useTranslation()
-  // TODO: use contract progress
+  // TODO/memex: use contract progress
   const progress = 34
 
   return (
