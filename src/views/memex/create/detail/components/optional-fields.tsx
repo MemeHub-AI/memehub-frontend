@@ -10,13 +10,17 @@ import {
 import { useCreateDetailContext } from '@/contexts/memex/create-detail'
 import { FormField, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { useMemexStore } from '@/stores/use-memex'
 
 export const OptionalFields = () => {
   const { t } = useTranslation()
   const { form } = useCreateDetailContext()
+  const { tweetDetails } = useMemexStore()
+  const { twitter_url, telegram_url, website_url } = tweetDetails ?? {}
+  const defaultOpen = !!twitter_url || !!telegram_url || !!website_url
 
   return (
-    <Collapsible className="mt-2 mb-3 group">
+    <Collapsible defaultOpen={defaultOpen} className="mt-2 mb-3 group">
       <CollapsibleTrigger className="flex items-center text-blue-600 font-bold space-x-1">
         <span>{t('meemx.crate-detail.optional-title')}</span>
         <FaArrowDown className="group-data-[state=open]:rotate-180 duration-150" />

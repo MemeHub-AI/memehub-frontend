@@ -13,6 +13,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { TokenType } from '@/enums/token'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { useStorage } from '@/hooks/use-storage'
+import { marketingSchema } from '@/components/marketing-field'
 
 export const formFields = {
   fullname: 'fullname',
@@ -61,26 +62,25 @@ export const useCreateTokenForm = (
     return !!pattern.test(v)
   }
 
-  const formSchema = z.object({
-    [formFields.fullname]: z.string().refine(validateInput, require),
-    [formFields.symbol]: z.string().refine(validateInput, require),
-    [formFields.description]: z.string().refine(validateInput, require),
-    [formFields.twitter]: z.string().optional(),
-    [formFields.telegram]: z.string().optional(),
-    [formFields.website]: z
-      .string()
-      .optional()
-      .refine(isWebsite, {
-        message: t('url.error'),
-      }),
-    [formFields.chainName]: z.string().refine(validateInput, require),
-    [formFields.logo]: z.string().refine(validateInput, require),
-    [formFields.poster]: z.array(z.string()).optional(),
-    [formFields.coinType]: z.number(),
-    [formFields.marketing]: z
-      .array(z.object({ type: z.number(), percent: z.number() }))
-      .optional(),
-  })
+  const formSchema = z
+    .object({
+      [formFields.fullname]: z.string().refine(validateInput, require),
+      [formFields.symbol]: z.string().refine(validateInput, require),
+      [formFields.description]: z.string().refine(validateInput, require),
+      [formFields.twitter]: z.string().optional(),
+      [formFields.telegram]: z.string().optional(),
+      [formFields.website]: z
+        .string()
+        .optional()
+        .refine(isWebsite, {
+          message: t('url.error'),
+        }),
+      [formFields.chainName]: z.string().refine(validateInput, require),
+      [formFields.logo]: z.string().refine(validateInput, require),
+      [formFields.poster]: z.array(z.string()).optional(),
+      [formFields.coinType]: z.number(),
+    })
+    .merge(marketingSchema)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

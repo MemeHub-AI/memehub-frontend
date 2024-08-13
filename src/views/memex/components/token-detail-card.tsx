@@ -1,5 +1,6 @@
 import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
+import { AiOutlineEdit } from 'react-icons/ai'
 
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
@@ -7,27 +8,23 @@ import { TokenSocialLinks } from '@/components/token-links'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
+import { MemexCreateReq } from '@/api/memex/types'
 
 interface Props {
-  name: string
-  symbol: string
-  logoUrl: string
-  xUrl: string
-  tgUrl: string
-  websiteUrl: string
+  details?: Omit<MemexCreateReq, 'chain' | 'content' | 'image_urls'>
+  editable?: boolean
   onBuyClick?: () => void
 }
 
 export const TokenDetailCard = ({
   className,
-  name,
-  symbol,
-  logoUrl,
-  xUrl,
-  tgUrl,
-  websiteUrl,
+  details,
+  editable = false,
   onBuyClick,
+  ...props
 }: ComponentProps<typeof Card> & Props) => {
+  const { name, symbol, logo_url, twitter_url, telegram_url, website_url } =
+    details ?? {}
   const { t } = useTranslation()
   // TODO: use contract progress
   const progress = 34
@@ -36,10 +33,21 @@ export const TokenDetailCard = ({
     <Card
       shadow="none"
       padding="sm"
-      className={cn('border-zinc-300 border rounded', className)}
+      className={cn(
+        'border-zinc-300 border rounded relative',
+        editable && 'border-blue-600 border-2',
+        className
+      )}
+      {...props}
     >
+      {editable && (
+        <AiOutlineEdit
+          size={22}
+          className="text-blue-600 absolute top-1 right-1"
+        />
+      )}
       <div className="flex space-x-2">
-        <Avatar src={logoUrl} fallback={symbol?.[0]} />
+        <Avatar src={logo_url} fallback={symbol?.[0]} />
         <div className="text-zinc-500 text-sm flex flex-col justify-between">
           <p>
             {t('memex.symbol')}: <span className="text-black">{symbol}</span>
@@ -57,25 +65,30 @@ export const TokenDetailCard = ({
             size: 'icon-sm',
             className: 'border-none hover:bg-transparent',
           }}
-          x={xUrl}
-          tg={tgUrl}
-          website={websiteUrl}
+          x={twitter_url}
+          tg={telegram_url}
+          website={website_url}
+          onClick={(e) => e.stopPropagation()}
         />
-        <Button
-          shadow="none"
-          size="xs"
-          className="bg-transparent py-3"
-          onClick={onBuyClick}
-        >
-          {t('go-to.buy')}
-        </Button>
+        {!editable && (
+          <Button
+            shadow="none"
+            size="xs"
+            className="bg-transparent py-3"
+            onClick={onBuyClick}
+          >
+            {t('go-to.buy')}
+          </Button>
+        )}
       </div>
 
-      <Progress
-        value={progress}
-        className="h-5 border-2 border-black rounded bg-white"
-        indicatorClass="bg-cyan-400"
-      />
+      {!editable && (
+        <Progress
+          value={progress}
+          className="h-5 border-2 border-black rounded bg-white"
+          indicatorClass="bg-cyan-400"
+        />
+      )}
     </Card>
   )
 }

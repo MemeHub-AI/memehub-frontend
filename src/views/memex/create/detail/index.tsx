@@ -8,11 +8,14 @@ import { CreateDetailProvider } from '@/contexts/memex/create-detail'
 import { CreateDetailHeader } from './components/create-detail-header'
 import { RequiredFields } from './components/required-fields'
 import { OptionalFields } from './components/optional-fields'
-import { MarketingField } from '@/views/create/components/form/marketing-field'
+import { MarketingField } from '@/components/marketing-field'
+import { useMemexClear } from '../hooks/use-memex-clear'
 
 const CreateDetail = () => {
   const craeteDetail = useCreateDetail()
   const { form, onSubmit } = craeteDetail
+
+  useMemexClear()
 
   return (
     <PrimaryLayout className="w-full">

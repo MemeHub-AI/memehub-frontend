@@ -2,7 +2,7 @@ import { create } from 'zustand'
 import { z } from 'zod'
 
 import type { MemexCreateReq } from '@/api/memex/types'
-import { marketingSchema } from '@/views/create/components/form/marketing-field'
+import { marketingSchema } from '@/components/marketing-field'
 
 type TweetRequired = Pick<MemexCreateReq, 'content' | 'chain' | 'image_urls'>
 

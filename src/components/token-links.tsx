@@ -1,7 +1,7 @@
 import React, { ComponentProps } from 'react'
-import { LuTwitter } from 'react-icons/lu'
 import { FaTelegramPlane } from 'react-icons/fa'
-import { RiGlobalLine } from 'react-icons/ri'
+import { FaTwitter } from 'react-icons/fa'
+import { FaGlobe } from 'react-icons/fa'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -19,23 +19,24 @@ export const TokenSocialLinks = ({
   tg,
   website,
   buttonProps,
+  ...props
 }: Props) => {
   const { className: buttonClass } = buttonProps ?? {}
   const links = [
     {
       title: 'Twitter',
       link: x,
-      icon: <LuTwitter size={20} />,
+      icon: <FaTwitter size={20} />,
     },
     {
       title: 'Telegram',
       link: tg,
-      icon: <FaTelegramPlane size={20} />,
+      icon: <FaTelegramPlane size={22} />,
     },
     {
       title: 'Website',
       link: website,
-      icon: <RiGlobalLine size={20} />,
+      icon: <FaGlobe size={18} />,
     },
   ]
 
@@ -45,6 +46,7 @@ export const TokenSocialLinks = ({
         'flex justify-center items-center mt-1 space-x-1',
         className
       )}
+      {...props}
     >
       {links.map(({ title, link, icon }) =>
         !!link ? (

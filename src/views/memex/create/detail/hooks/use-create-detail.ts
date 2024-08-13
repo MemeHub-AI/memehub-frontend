@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { t } from 'i18next'
 
 import { useMemexStore } from '@/stores/use-memex'
-import { marketingSchema } from '@/views/create/components/form/marketing-field'
+import { marketingSchema } from '@/components/marketing-field'
 
 const withNonNull = (value: string) => value + t('memex.non-null')
 

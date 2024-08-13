@@ -40,7 +40,6 @@ export const MemexTweet = ({
     like_amount,
     chain: chainName,
     symbol,
-    name,
     ido_address,
   } = tweet ?? {}
   const isCreated = status === TweetStatus.Inactivated
@@ -108,12 +107,7 @@ export const MemexTweet = ({
         {hasToken && (
           <TokenDetailCard
             className="mt-1"
-            name={name || ''}
-            symbol={symbol || ''}
-            logoUrl={tweet?.logo_url || ''}
-            xUrl={tweet?.twitter_url || ''}
-            tgUrl={tweet?.telegram_url || ''}
-            websiteUrl={tweet?.website_url || ''}
+            details={tweet as NonNullable<keyof typeof tweet>}
             onClick={() =>
               router.push(
                 fmt.toHref(Routes.Main, chain?.name || '', ido_address || '')

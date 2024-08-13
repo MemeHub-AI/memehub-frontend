@@ -16,7 +16,7 @@ import { fmt } from '@/utils/fmt'
 import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { DialogContent, DialogTitle } from '@radix-ui/react-dialog'
 import { Button } from '@/components/ui/button'
-import { useCreateToken } from '../../hooks/use-create-token'
+import { useCreateToken } from '../views/create/hooks/use-create-token'
 import { CheckedState } from '@radix-ui/react-checkbox'
 
 const marketingActions = (
