@@ -5,7 +5,7 @@ import { ChevronLeftIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash'
 
 import { Button } from '@/components/ui/button'
-import { useCreateTweetContext } from '@/contexts/memex/create-tweet'
+import { useCreatePostContext } from '@/contexts/memex/create-post'
 
 export const CreateHeader = () => {
   const { t } = useTranslation()
@@ -13,7 +13,7 @@ export const CreateHeader = () => {
   const {
     form: { formState },
     isPending,
-  } = useCreateTweetContext()
+  } = useCreatePostContext()
   const hasError = !isEmpty(Object.keys(formState.errors))
 
   // TODO/memex: should be dynamic

@@ -1,16 +1,16 @@
 import React from 'react'
 
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { useCreateTweet } from './hooks/use-create-tweet'
-import { CreateTweetProvider } from '@/contexts/memex/create-tweet'
+import { useCreatePost } from './hooks/use-create-post'
+import { CreatePostProvider } from '@/contexts/memex/create-post'
 import { Form } from '@/components/ui/form'
 import { CreateHeader } from './components/create-header'
 import { CreateTextareaField } from './components/fields/textarea-field'
 import { CreatePicturesField } from './components/fields/pictures-field'
 import { CreateChainField } from './components/fields/chain-field'
 import { CreateTokenDetail } from './components/token-detail'
-import { CreateTweetMessages } from './components/create-tweet-messages'
-import { CreateTweetIntro } from './components/create-tweet-intro'
+import { CreatePostMessages } from './components/create-post-messages'
+import { CreatePostIntro } from './components/create-post-intro'
 import { useMemexStore } from '@/stores/use-memex'
 import { TokenDetailCard } from '../components/token-detail-card'
 import { useRouter } from 'next/router'
@@ -18,7 +18,7 @@ import { Routes } from '@/routes'
 import { useMemexClear } from './hooks/use-memex-clear'
 
 export const CreatePost = () => {
-  const createTweet = useCreateTweet()
+  const createTweet = useCreatePost()
   const { form, onSubmit } = createTweet
   const { tweetDetails } = useMemexStore()
   const router = useRouter()
@@ -27,7 +27,7 @@ export const CreatePost = () => {
 
   return (
     <PrimaryLayout padding={false} mainClass="flex">
-      <CreateTweetProvider value={createTweet}>
+      <CreatePostProvider value={createTweet}>
         <Form {...form}>
           <form
             className="flex-1 pt-1 pb-3"
@@ -52,12 +52,12 @@ export const CreatePost = () => {
                   onClick={() => router.push(Routes.MemexCreateDetail)}
                 />
               )}
-              <CreateTweetMessages />
-              <CreateTweetIntro />
+              <CreatePostMessages />
+              <CreatePostIntro />
             </div>
           </form>
         </Form>
-      </CreateTweetProvider>
+      </CreatePostProvider>
     </PrimaryLayout>
   )
 }

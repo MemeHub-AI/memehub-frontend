@@ -19,7 +19,7 @@ const schema = z.object({
   pictures: z.array(z.string()).min(1).max(4),
 })
 
-export const useCreateTweet = () => {
+export const useCreatePost = () => {
   const { t } = useTranslation()
   const router = useRouter()
   const { tweet, tweetDetails, setTweetDetails, setTweet } = useMemexStore()

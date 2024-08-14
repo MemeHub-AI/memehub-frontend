@@ -3,7 +3,7 @@ import React from 'react'
 import { Form } from '@/components/ui/form'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { useCreateDetail } from './hooks/use-create-detail'
-import { CreateTweetIntro } from '../components/create-tweet-intro'
+import { CreatePostIntro } from '../components/create-post-intro'
 import { CreateDetailProvider } from '@/contexts/memex/create-detail'
 import { CreateDetailHeader } from './components/create-detail-header'
 import { RequiredFields } from './components/required-fields'
@@ -26,7 +26,7 @@ export const CreateDetail = () => {
             <RequiredFields />
             <MarketingField form={form} />
             <OptionalFields />
-            <CreateTweetIntro />
+            <CreatePostIntro />
           </form>
         </Form>
       </CreateDetailProvider>

@@ -4,14 +4,14 @@ import { useTranslation } from 'react-i18next'
 import { Avatar } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
 import { Separator } from '@/components/ui/separator'
-import { useCreateTweetContext } from '@/contexts/memex/create-tweet'
 import { FormField, FormItem } from '@/components/ui/form'
 import { PicturesPreview } from '../pictures-preview'
 import { useUserStore } from '@/stores/use-user-store'
+import { useCreatePostContext } from '@/contexts/memex/create-post'
 
 export const CreateTextareaField = () => {
   const { t } = useTranslation()
-  const { form } = useCreateTweetContext()
+  const { form } = useCreatePostContext()
   const { userInfo } = useUserStore()
 
   return (

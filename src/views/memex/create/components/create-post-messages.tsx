@@ -2,12 +2,12 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { utilLang } from '@/utils/lang'
-import { useCreateTweetContext } from '@/contexts/memex/create-tweet'
-import { createTweetMinChar } from '../hooks/use-create-tweet'
+import { useCreatePostContext } from '@/contexts/memex/create-post'
+import { createTweetMinChar } from '../hooks/use-create-post'
 
-export const CreateTweetMessages = () => {
+export const CreatePostMessages = () => {
   const { t } = useTranslation()
-  const { form } = useCreateTweetContext()
+  const { form } = useCreatePostContext()
   const {
     formState: { errors },
   } = form
@@ -31,4 +31,4 @@ export const CreateTweetMessages = () => {
   )
 }
 
-export default CreateTweetMessages
+export default CreatePostMessages

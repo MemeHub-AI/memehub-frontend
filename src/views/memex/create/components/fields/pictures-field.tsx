@@ -3,15 +3,15 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlinePicture } from 'react-icons/ai'
 
 import { FormField } from '@/components/ui/form'
-import { useCreateTweetContext } from '@/contexts/memex/create-tweet'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/image-upload'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { Label } from '@/components/ui/label'
+import { useCreatePostContext } from '@/contexts/memex/create-post'
 
 export const CreatePicturesField = () => {
   const { t } = useTranslation()
-  const { form } = useCreateTweetContext()
+  const { form } = useCreatePostContext()
   const { onChangeUpload } = useUploadImage()
 
   return (

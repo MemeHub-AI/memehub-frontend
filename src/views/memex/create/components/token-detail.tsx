@@ -6,12 +6,12 @@ import { useRouter } from 'next/router'
 import { Button } from '@/components/ui/button'
 import { Routes } from '@/routes'
 import { useMemexStore } from '@/stores/use-memex'
-import { useCreateTweetContext } from '@/contexts/memex/create-tweet'
+import { useCreatePostContext } from '@/contexts/memex/create-post'
 
 export const CreateTokenDetail = () => {
   const { t } = useTranslation()
   const router = useRouter()
-  const { form } = useCreateTweetContext()
+  const { form } = useCreatePostContext()
   const { setTweet } = useMemexStore()
 
   return (

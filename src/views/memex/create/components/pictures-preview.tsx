@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 
-import { useCreateTweetContext } from '@/contexts/memex/create-tweet'
 import { Button } from '@/components/ui/button'
 import { ImagesPreviewDialog } from '@/components/images-preview-dialog'
+import { useCreatePostContext } from '@/contexts/memex/create-post'
 
 export const PicturesPreview = () => {
   const [srcIdx, setSrcIdx] = useState(-1)
-  const { form } = useCreateTweetContext()
+  const { form } = useCreatePostContext()
   const pictures = form.watch('pictures')
 
   return (

@@ -13,7 +13,7 @@ const likeFee = '5 USDT'
 const totalPercent = '1%'
 const rewardPercent = '0.1%'
 
-export const CreateTweetIntro = () => {
+export const CreatePostIntro = () => {
   const { t } = useTranslation()
 
   return (
@@ -37,4 +37,4 @@ export const CreateTweetIntro = () => {
   )
 }
 
-export default CreateTweetIntro
+export default CreatePostIntro
