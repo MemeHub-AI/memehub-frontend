@@ -35,10 +35,7 @@ export const EllipsisText = ({
   return (
     <>
       <div
-        style={{
-          // @ts-ignore
-          '-webkit-line-clamp': `${maxLine}`,
-        }}
+        style={{ WebkitLineClamp: maxLine }}
         className={cn('break-all', lineClampClass, className)}
         ref={ref}
         {...props}
