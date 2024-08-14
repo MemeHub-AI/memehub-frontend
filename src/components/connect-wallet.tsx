@@ -8,7 +8,6 @@ export const ConnectWallet = ({
   children,
   className,
 }: ComponentProps<typeof Button>) => {
-  // const { getMainChain } = useStorage()
   const { walletIsConnected } = useConnectWallet()
 
   return (
