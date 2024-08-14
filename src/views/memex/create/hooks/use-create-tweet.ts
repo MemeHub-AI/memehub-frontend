@@ -34,8 +34,8 @@ export const useCreateTweet = () => {
   })
 
   const { isPending, mutateAsync, reset } = useMutation({
-    mutationKey: [memexApi.createTweet.name],
-    mutationFn: memexApi.createTweet,
+    mutationKey: [memexApi.createPost.name],
+    mutationFn: memexApi.createPost,
     onMutate: () => toast.loading(t('memex.creating')),
     onSettled: (_, __, ___, id) => toast.dismiss(id),
     onSuccess: () => toast.success(t('memex.create-susccess')),

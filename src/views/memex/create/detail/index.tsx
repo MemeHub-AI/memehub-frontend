@@ -11,7 +11,7 @@ import { OptionalFields } from './components/optional-fields'
 import { MarketingField } from '@/components/marketing-field'
 import { useMemexClear } from '../hooks/use-memex-clear'
 
-const CreateDetail = () => {
+export const CreateDetail = () => {
   const craeteDetail = useCreateDetail()
   const { form, onSubmit } = craeteDetail
 

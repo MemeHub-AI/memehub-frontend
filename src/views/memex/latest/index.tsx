@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { MemexLayout } from '../components/memex-layout'
-import { MemexTweet } from '../components/memex-tweet'
+import { MemexPost } from '../components/memex-post'
 import { useLatestList } from './hooks/use-latest-list'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { TweetEmpty } from '../components/tweet-empty'
@@ -18,7 +18,7 @@ export const Latest = () => {
         nullback={<TweetEmpty />}
       >
         {list.map((t) => (
-          <MemexTweet key={t?.hash} tweet={t} />
+          <MemexPost key={t?.hash} post={t} />
         ))}
       </CustomSuspense>
     </MemexLayout>

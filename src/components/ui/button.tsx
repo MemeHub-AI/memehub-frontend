@@ -29,7 +29,7 @@ const buttonVariants = cva(
         warning: 'bg-orange-500 text-primary-foreground hover:bg-orange-500/90',
         yellow: 'bg-yellow-200 border-2 border-black sm:hover:bg-yellow-200/90',
         purple:
-          'bg-purple-600 border-none sm:hover:bg-purple-600/90 active:bg-purple-600/90',
+          'bg-purple-700 border-none sm:hover:bg-purple-700/90 active:bg-purple-700/90 text-white',
         circle:
           'h-9 w-9 rounded-full bg-black/60 text-white sm:hover:bg-black/80 active:bg-black/80',
       },

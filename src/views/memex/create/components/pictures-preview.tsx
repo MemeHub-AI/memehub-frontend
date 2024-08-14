@@ -21,9 +21,9 @@ export const PicturesPreview = () => {
       }}
     >
       <ImagesPreviewDialog
-        pictures={pictures}
+        images={pictures}
         value={srcIdx}
-        onChange={(i) => setSrcIdx(i)}
+        onChange={setSrcIdx}
       />
       {pictures.map((src, i) => (
         <div className="w-full h-full max-h-64 relative">

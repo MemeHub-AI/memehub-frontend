@@ -658,5 +658,17 @@
   "twitter-link": "Twitter Link",
   "telegram-link": "Telegram Link",
   "show-more": "Show more",
-  "show-less": "Show less"
+  "show-less": "Show less",
+  "memex.details.comment-placehoder": "Share your comment...",
+  "iamges.max": "You can upload a maximum of {} images",
+  "refund": "Refund",
+  "memex.done-desc1": "Goal achieved",
+  "memex.done-desc2": "Please add token details immediately to launch the internal market",
+  "memex.done-desc3": "Waiting for the initiator to add token details to launch the internal market",
+  "memex.done-desc4": "Otherwise, the idea will fail",
+  "like-success": "Like successful",
+  "post-comment": "Post a comment...",
+  "memex.like.confirm-title": "Are you sure you want to like this Idea?",
+  "memex.like.desc": "After liking, if the consensus is successful, you will receive {} tokens",
+  "memex.like.desc2": "If the consensus fails after {}, you will receive a refund"
 }

@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import { useMemexClear } from './hooks/use-memex-clear'
 
-export const CreateTweet = () => {
+export const CreatePost = () => {
   const createTweet = useCreateTweet()
   const { form, onSubmit } = createTweet
   const { tweetDetails } = useMemexStore()
@@ -62,4 +62,4 @@ export const CreateTweet = () => {
   )
 }
 
-export default CreateTweet
+export default CreatePost

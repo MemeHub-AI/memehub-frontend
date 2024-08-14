@@ -7,18 +7,20 @@ import { cn } from '@/lib/utils'
 
 interface Props
   extends Omit<ComponentProps<typeof Dialog>, 'open' | 'onOpenChange'> {
-  pictures: string[]
+  images: string[]
   value: number
   onChange: (index: number) => void
   controllable?: boolean
 }
 
 export const ImagesPreviewDialog = ({
-  pictures,
+  images,
   value,
   onChange,
   controllable = true,
 }: Props) => {
+  const isSingle = images.length === 1
+
   return (
     <Dialog
       open={value >= 0}
@@ -28,7 +30,7 @@ export const ImagesPreviewDialog = ({
         className: 'p-0 gap-2 border-none',
       }}
     >
-      {controllable && (
+      {controllable && !isSingle && (
         <>
           <Button
             shadow="none"
@@ -44,27 +46,27 @@ export const ImagesPreviewDialog = ({
             variant="circle"
             size="icon-sm"
             className="absolute right-1 top-1/2 -translate-y-1/2"
-            onClick={() => onChange?.(Math.min(value + 1, pictures.length - 1))}
+            onClick={() => onChange?.(Math.min(value + 1, images.length - 1))}
           >
             <ArrowRightIcon className="w-5 h-5" />
           </Button>
         </>
       )}
       <img
-        src={pictures[value]}
+        src={images[value]}
         alt="picture"
         className="w-full h-full object-cover rounded-lg border"
       />
       <div className="flex items-center space-x-2 absolute bottom-2 left-1/2 -translate-x-1/2">
-        {pictures.map((p, i) => (
+        {images.map((p, i) => (
           <span
             key={i}
             className={cn(
               'w-3 h-3 rounded-full bg-zinc-500',
-              p === pictures[value] && 'bg-black'
+              p === images[value] && 'bg-black'
             )}
             onClick={() => {
-              if (controllable) onChange?.(i)
+              if (controllable && !isSingle) onChange?.(i)
             }}
           ></span>
         ))}

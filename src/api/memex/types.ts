@@ -1,4 +1,4 @@
-export interface MemexTweetItem {
+export interface MemexPostItem {
   chain: null | string
   comment_count: number
   content: string
@@ -10,7 +10,7 @@ export interface MemexTweetItem {
   image_urls: string[]
   logo_url: null
   name: null | string
-  status: TweetStatus | null
+  status: PostStatus | null
   symbol: null | string
   telegram_url: null
   twitter_url: null | string
@@ -23,8 +23,8 @@ export interface MemexTweetItem {
   like_amount: number
 }
 
-export enum TweetStatus {
-  Inactivated, // Already tweet
+export enum PostStatus {
+  Inactivated, // Already create post
   Activated, // Start ido
   Done, // Alread ido
 }
@@ -43,13 +43,19 @@ export interface MemexCreateReq {
   website_url?: string
 }
 
-export interface MemexTweetHash {
+export interface MemexPostHash {
   hash: string
 }
 
-export interface MemexTweetComment {
+export interface MemexPostComment {
   content: string
   created_at: string
   user_logo: string
   user_name: string
+  image_urls: string[]
+}
+
+export interface MemexPostCommentReq {
+  content: string
+  image_urls: string[]
 }

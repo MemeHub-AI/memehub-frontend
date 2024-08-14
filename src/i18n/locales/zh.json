@@ -648,5 +648,17 @@
   "twitter-link": "推特链接",
   "telegram-link": "电报链接",
   "show-more": "显示更多",
-  "show-less": "收起更多"
+  "show-less": "收起更多",
+  "memex.details.comment-placehoder": "发布你的评论...",
+  "iamges.max": "最多只能上传{}张图片",
+  "refund": "退款",
+  "memex.done-desc1": "集赞已达到目标",
+  "memex.done-desc2": "请立即补充代币详情以发射内盘",
+  "memex.done-desc3": "等待发起人补充代币详情以发射内盘",
+  "memex.done-desc4": "否则创意将失败",
+  "like-success": "点赞成功",
+  "post-comment": "发表一个评论吧...",
+  "memex.like.confirm-title": "是否确定给这条Idea点赞？",
+  "memex.like.desc": "点赞后如果共识成功，你将获得{}代币",
+  "memex.like.desc2": "如果{}后共识失败，你将获得退款"
 }

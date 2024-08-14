@@ -2,55 +2,56 @@ import { qs } from '@/hooks/use-fetch'
 import { api } from '..'
 import { ApiResponse, PaginationReq, PaginationRes } from '../types'
 import {
-  MemexTweetItem,
+  MemexPostItem,
   MemexCreateReq,
-  MemexTweetHash,
-  MemexTweetComment,
+  MemexPostHash,
+  MemexPostComment,
+  MemexPostCommentReq,
 } from './types'
 
 export const memexApi = {
   getLatest: (req: PaginationReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexTweetItem>>>(
+    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
       '/api/v1/memex/tweets' + qs.stringify(req)
     )
   },
   getHots: (req: PaginationReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexTweetItem>>>(
+    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
       '/api/v1/memex/tweets/hot' + qs.stringify(req)
     )
   },
   getMyJoin: (req: PaginationReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexTweetItem>>>(
+    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
       '/api/v1/memex/tweets/join' + qs.stringify(req)
     )
   },
   getMyIdea: (req: PaginationReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexTweetItem>>>(
+    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
       '/api/v1/memex/tweets/my' + qs.stringify(req)
     )
   },
   getSuccessed: (req: PaginationReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexTweetItem>>>(
+    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
       '/api/v1/memex/tweets/published' + qs.stringify(req)
     )
   },
-  getTweetDetail: (hash: string) => {
-    return api.GET<ApiResponse<MemexTweetItem>>(`/api/v1/memex/tweet/${hash}`)
+  getPostDetail: (hash: string) => {
+    return api.GET<ApiResponse<MemexPostItem>>(`/api/v1/memex/tweet/${hash}`)
   },
-  createTweet: (req: MemexCreateReq) => {
-    return api.POST<ApiResponse<MemexTweetHash>>('/api/v1/memex/tweets', {
+  createPost: (req: MemexCreateReq) => {
+    return api.POST<ApiResponse<MemexPostHash>>('/api/v1/memex/tweets', {
       body: req,
     })
   },
-  updateTweet: (req: MemexCreateReq & MemexTweetHash) => {
+  updatePost: (req: MemexCreateReq & MemexPostHash) => {
     return api.PUT<ApiResponse<null>>('/api/v1/memex/tweets', { body: req })
   },
-  getTweetComments: (req: PaginationReq & MemexTweetHash) => {
-    return api.GET<ApiResponse<PaginationRes<MemexTweetComment>>>(
+  getPostComments: (req: PaginationReq & MemexPostHash) => {
+    return api.GET<ApiResponse<PaginationRes<MemexPostComment>>>(
       '/api/v1/memex/tweets/comments' + qs.stringify(req)
     )
   },
-  addTweetComment: (req: MemexTweetHash & { content: string }) => {
+  addPostComment: (req: MemexPostHash & MemexPostCommentReq) => {
     return api.POST('/api/v1/memex/tweets/comments', { body: req })
   },
 }
