@@ -1,5 +1,6 @@
 import type { Address } from 'viem'
 import type { PaginationReq } from '../types'
+import type { TokenListItem } from '../token/types'
 
 export interface UserLoginReq {
   name?: string
@@ -117,8 +118,7 @@ export interface Chain {
   explorer_tx: string
 }
 
-export interface UserCoinsCreated {
-  id: number
+export interface UserCoinsCreated extends TokenListItem {
   image: string
   address: string
   ticker: string
@@ -127,7 +127,6 @@ export interface UserCoinsCreated {
   desc: string
   market_cap: number
   total_replies: number
-  chain: Chain
   status: number
   // Custom prop
   isIdoToken?: boolean

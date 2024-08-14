@@ -77,7 +77,7 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
         size={isMobile ? 'sm' : 'default'}
         disabled={isConnecting}
         type="button"
-        onClick={() => setIsOpening(true)}
+        onClick={() => openConnectModal?.()}
       >
         {isConnecting ? t('wallet.connecting') : t('wallet.connect')}
       </Button>

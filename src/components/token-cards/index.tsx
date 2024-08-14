@@ -13,7 +13,7 @@ import { TokenSearchInput } from './token-search-input'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TokenListItem } from '@/api/token/types'
-import IdoCard from '../ido-card'
+import { IdoCard } from '../ido-card'
 
 interface Props extends ComponentProps<'div'> {
   cards?: TokenListItem[]
