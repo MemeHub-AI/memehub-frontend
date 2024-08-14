@@ -43,8 +43,10 @@ export const useTvmDeploy = () => {
     isSuccess: isDeploySuccess,
     isError: isDeployError,
   } = useWaitForTransaction({ hash: hashBoc, address: userFriendlyAddress })
-  // TODO: Requires back-end compatible login
-  const deployedAddr = useMemo(() => getDeployLogsAddr(), [data])
+  console.log('data: ', data)
+
+  // TODO: Modified after connecting to the contract
+  const deployedAddr = data
 
   return {
     deployFee: '0.13',

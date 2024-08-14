@@ -1,6 +1,9 @@
 import { Address, beginCell, storeMessage, Transaction } from '@ton/core'
 import { useTonClient } from './contracts/use-ton-client'
 import { useEffect, useState } from 'react'
+import { useHttpClient } from './use-http-client'
+import { Trace } from 'tonapi-sdk-js'
+import { CONTEXT_ERR } from '@/errors/context'
 
 interface Options {
   /** boc hash */
@@ -24,11 +27,12 @@ export const useWaitForTransaction = (options: Options) => {
   const [isPending, setIsPending] = useState(false)
   const [isError, setIsError] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [data, setData] = useState<Transaction>()
-  const [error, setError] = useState('')
+  const [data, setData] = useState('')
+  const [error, setError] = useState({ message: '' })
+  const { getTraceApi } = useHttpClient()
 
   useEffect(() => {
-    if (userFriendlyAddress === '' || hashBoc === '') return
+    if (userFriendlyAddress === '') return
 
     getResult()
   }, [userFriendlyAddress, hashBoc])
@@ -37,7 +41,54 @@ export const useWaitForTransaction = (options: Options) => {
     setIsPending(false)
     setIsError(false)
     setIsSuccess(false)
-    setData(undefined)
+    setError({ message: '' })
+    setData('')
+  }
+
+  const getJttonAddress = async (hash: string) => {
+    // await getTraceApi(hash)
+    const trace = await getTraceApi(hash)
+
+    console.log('trace:', trace)
+
+    if (!trace.transaction.success) {
+      return false
+    }
+
+    // if (!trace.children) {
+    //   await new Promise((resolve) => setTimeout(resolve, 10000))
+    //   return await getJttonAddress(hash)
+    // }
+
+    if (trace.transaction.success && trace.children) {
+      return TraceChildrenIsSucess(trace.children)
+    }
+  }
+
+  const TraceChildrenIsSucess = (children: Trace[]) => {
+    const result = children.every((item) => {
+      // console.log('22222222222222222')
+      if (item.interfaces[0] === 'jetton_wallet') {
+        // console.log(11111111111111)
+
+        setData(item.transaction.account.address)
+      }
+
+      if (!item.transaction.success) {
+        return false
+      }
+
+      // recursion
+      if (item.children !== undefined) {
+        if (!TraceChildrenIsSucess(item.children)) {
+          return false
+        }
+      }
+
+      return true
+    })
+
+    return result
   }
 
   const getResult = () => {
@@ -47,42 +98,55 @@ export const useWaitForTransaction = (options: Options) => {
     const interval = setInterval(async () => {
       refetches += 1
 
-      const state = await client?.getContractState(walletAddress)
-      if (!state || !state.lastTransaction) {
-        // can not find transaction, continue
-
-        return
-      }
-
-      const { lt: lastLt, hash: lastHash } = state.lastTransaction
-      const lastTx = await client?.getTransaction(
-        walletAddress,
-        lastLt,
-        lastHash
+      console.log(
+        await getJttonAddress(
+          'd458125e20bfdbcb944b18721452532e65ec565db8e692a9a8d17cd6f694faa6'
+        )
       )
 
-      if (lastTx && lastTx.inMessage) {
-        const msgCell = beginCell()
-          .store(storeMessage(lastTx.inMessage))
-          .endCell()
-        const inMsgHash = msgCell.hash().toString('base64')
+      // const state = await client?.getContractState(walletAddress)
+      // if (!state || !state.lastTransaction) {
+      //   // can not find transaction, continue
 
-        if (inMsgHash === hashBoc) {
-          clearInterval(interval)
-          // success
-          setIsError(false)
-          setIsPending(false)
-          setIsSuccess(true)
-          setData(lastTx)
-        }
-      }
+      //   return
+      // }
+
+      // const { lt: lastLt, hash: lastHash } = state.lastTransaction
+      // const lastTx = await client?.getTransaction(
+      //   walletAddress,
+      //   lastLt,
+      //   lastHash
+      // )
+
+      // if (lastTx && lastTx.inMessage) {
+      //   const msgCell = beginCell()
+      //     .store(storeMessage(lastTx.inMessage))
+      //     .endCell()
+      //   const inMsgHash = msgCell.hash().toString('base64')
+
+      //   if (inMsgHash === hashBoc) {
+      //     clearInterval(interval)
+      //     if (await getJttonAddress(lastTx.hash().toString('hex'))) {
+      //       // success
+      //       setIsError(false)
+      //       setIsPending(false)
+      //       setIsSuccess(true)
+      //     } else {
+      //       // error
+      //       setIsError(true)
+      //       setError({ message: 'Transaction error' })
+      //       setIsPending(false)
+      //       setIsSuccess(false)
+      //     }
+      //   }
+      // }
 
       if (refetchLimit && refetches >= refetchLimit) {
         clearInterval(interval)
 
         // timeout error
         setIsError(true)
-        setError('Transaction timeout')
+        setError({ message: 'Transaction not found' })
         setIsPending(false)
         setIsSuccess(false)
       }

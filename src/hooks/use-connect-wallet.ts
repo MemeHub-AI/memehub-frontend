@@ -29,7 +29,7 @@ export const useConnectWallet = () => {
 
   // check if wallet is connected
   const walletIsConnected = () => {
-    if (isConnected || publicKey) {
+    if (isConnected || publicKey || tonAddress !== '') {
       return true
     }
     return false

@@ -72,6 +72,7 @@
     "sonner": "^1.4.3",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "tonapi-sdk-js": "^1.0.16",
     "uuid": "^10.0.0",
     "vaul": "^0.9.1",
     "viem": "^2.10.2",

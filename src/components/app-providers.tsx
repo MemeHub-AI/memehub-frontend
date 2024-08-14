@@ -23,8 +23,8 @@ import { TonConnectUIProvider } from '@tonconnect/ui-react'
 
 export const queryClient = new QueryClient()
 
-const localUrl = typeof location !== 'undefined' ? location.origin : ''
 export const AppProviders = ({ children }: ComponentProps<'div'>) => {
+  const localUrl = typeof location !== 'undefined' ? location.origin : ''
   const network = WalletAdapterNetwork.Devnet
 
   // You can also provide a custom RPC endpoint.
