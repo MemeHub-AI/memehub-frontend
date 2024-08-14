@@ -26,7 +26,7 @@ export const PicturesPreview = () => {
         onChange={setSrcIdx}
       />
       {pictures.map((src, i) => (
-        <div className="w-full h-full max-h-64 relative">
+        <div key={i} className="w-full h-full max-h-64 relative">
           <img
             src={src}
             alt="picture"
