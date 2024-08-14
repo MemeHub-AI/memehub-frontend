@@ -11,6 +11,8 @@ import { PostFooter } from '../components/post-footer'
 import { DetailsCommentForm } from './components/details-comment-form'
 import { DetailsCommentCard } from './components/details-comment-card'
 import { useCommentList } from './hooks/use-comment-list'
+import { CustomSuspense } from '@/components/custom-suspense'
+import { DetailsSkeleton } from './components/details-skeleton'
 
 export const PostDetailsPage = () => {
   const { query } = useRouter()
@@ -18,32 +20,37 @@ export const PostDetailsPage = () => {
   const postDetails = usePostDetails(id)
   const postComments = useCommentList(id)
 
-  const { details } = postDetails
-  const { comments } = postComments
+  const { details, isLoadingDetails } = postDetails
+  const { comments, isLoadingComments } = postComments
   const progress = 80 // TODO/memex: calc from contract
 
   return (
     <PostDetailsProvider value={{ ...postDetails, ...postComments }}>
       <PrimaryLayout padding={false}>
-        <DetailsHeader />
-        <div className="px-3">
-          <DetailsProfile />
-          <div>{details?.content}</div>
+        <CustomSuspense
+          isPending={isLoadingDetails || isLoadingComments}
+          fallback={<DetailsSkeleton />}
+        >
+          <DetailsHeader />
+          <div className="px-3">
+            <DetailsProfile />
+            <div>{details?.content}</div>
 
-          <GridImages urls={details?.image_urls ?? []} />
-          <PostFooter
-            isLiked={!!details?.is_liked}
-            likeAmount={details?.like_amount}
-            commentAmount={details?.comment_count}
-            chainName={details?.chain || ''}
-            progress={progress}
-          />
-        </div>
+            <GridImages urls={details?.image_urls ?? []} />
+            <PostFooter
+              isLiked={!!details?.is_liked}
+              likeAmount={details?.like_amount}
+              commentAmount={details?.comment_count}
+              chainName={details?.chain || ''}
+              progress={progress}
+            />
+          </div>
 
-        <DetailsCommentForm />
-        {comments.map((c) => (
-          <DetailsCommentCard key={c?.created_at} comment={c} />
-        ))}
+          <DetailsCommentForm />
+          {comments.map((c) => (
+            <DetailsCommentCard key={c?.created_at} comment={c} />
+          ))}
+        </CustomSuspense>
       </PrimaryLayout>
     </PostDetailsProvider>
   )
