@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { utilLang } from '@/utils/lang'
 import { useCreatePostContext } from '@/contexts/memex/create-post'
-import { createTweetMinChar } from '../hooks/use-create-post'
+import { createPostCharMin } from '@/config/memex/post'
 
 export const CreatePostMessages = () => {
   const { t } = useTranslation()
@@ -23,7 +23,7 @@ export const CreatePostMessages = () => {
       {errors.chain && <p>{t('memex.create-message1')}</p>}
       {errors.content && (
         <p>
-          {utilLang.replace(t('memex.create-message2'), [createTweetMinChar])}
+          {utilLang.replace(t('memex.create-message2'), [createPostCharMin])}
         </p>
       )}
       {errors.pictures && <p>{t('memex.create-message3')}</p>}

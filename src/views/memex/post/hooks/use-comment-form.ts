@@ -11,13 +11,12 @@ import { useMutation } from '@tanstack/react-query'
 import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
 import { usePostDetailsContext } from '@/contexts/memex/post-details'
-
-export const memexCommentImageMax = 2
+import { postCommentImgMax } from '@/config/memex/post'
 
 const schema = z.object({
   comment: z.string().min(1, { message: t('comment.empty') }),
-  images: z.array(z.string()).max(memexCommentImageMax, {
-    message: utilLang.replace(t('iamges.max'), [memexCommentImageMax]),
+  images: z.array(z.string()).max(postCommentImgMax, {
+    message: utilLang.replace(t('iamges.max'), [postCommentImgMax]),
   }),
 })
 

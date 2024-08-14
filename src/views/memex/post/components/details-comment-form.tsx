@@ -6,12 +6,13 @@ import { Textarea } from '@/components/ui/textarea'
 import { useUserStore } from '@/stores/use-user-store'
 import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/image-upload'
-import { memexCommentImageMax, useCommentForm } from '../hooks/use-comment-form'
+import { useCommentForm } from '../hooks/use-comment-form'
 import { Form, FormField } from '@/components/ui/form'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { Label } from '@/components/ui/label'
 import { GridImages } from '@/components/grid-images'
 import { utilLang } from '@/utils/lang'
+import { postCommentImgMax } from '@/config/memex/post'
 
 export const DetailsCommentForm = () => {
   const { t } = useTranslation()
@@ -62,10 +63,10 @@ export const DetailsCommentForm = () => {
                     className="hidden"
                     disabled={field.disabled}
                     onChange={async (e) => {
-                      if (field.value.length >= memexCommentImageMax) {
+                      if (field.value.length >= postCommentImgMax) {
                         form.setError('images', {
                           message: utilLang.replace(t('iamges.max'), [
-                            memexCommentImageMax,
+                            postCommentImgMax,
                           ]),
                         })
                         return

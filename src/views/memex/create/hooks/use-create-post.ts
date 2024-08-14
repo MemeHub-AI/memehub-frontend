@@ -10,11 +10,10 @@ import { useRouter } from 'next/router'
 import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
 import { useMemexStore } from '@/stores/use-memex'
-
-export const createTweetMinChar = 10
+import { createPostCharMin } from '@/config/memex/post'
 
 const schema = z.object({
-  content: z.string().min(createTweetMinChar),
+  content: z.string().min(createPostCharMin),
   chain: z.string().min(1),
   pictures: z.array(z.string()).min(1).max(4),
 })
