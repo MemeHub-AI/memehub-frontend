@@ -11,7 +11,7 @@ import { useCreatePostContext } from '@/contexts/memex/create-post'
 
 export const CreateTextareaField = () => {
   const { t } = useTranslation()
-  const { form } = useCreatePostContext()
+  const { form, isCreating } = useCreatePostContext()
   const { userInfo } = useUserStore()
 
   return (
@@ -32,8 +32,9 @@ export const CreateTextareaField = () => {
                 rows={5}
                 maxLength={500}
                 {...field}
+                disabled={isCreating || field.disabled}
               />
-              <PicturesPreview />
+              <PicturesPreview disabled={isCreating || field.disabled} />
             </div>
           </div>
 

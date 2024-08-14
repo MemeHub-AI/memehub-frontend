@@ -12,7 +12,7 @@ interface Options {
 // Clear memex store
 export const useMemexClear = ({ type = 'all', onClear }: Options = {}) => {
   const router = useRouter()
-  const { setTweet, setTweetDetails } = useMemexStore()
+  const { setPost: setTweet, setPostDetails: setTweetDetails } = useMemexStore()
 
   const clear = () => {
     if (type === 'tweet') return setTweet(null)

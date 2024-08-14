@@ -11,6 +11,7 @@ import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
 import { useMemexStore } from '@/stores/use-memex'
 import { createPostCharMin } from '@/config/memex/post'
+import { useDeployIdo } from './use-deploy-ido'
 
 const schema = z.object({
   content: z.string().min(createPostCharMin),
@@ -21,7 +22,8 @@ const schema = z.object({
 export const useCreatePost = () => {
   const { t } = useTranslation()
   const router = useRouter()
-  const { tweet, tweetDetails, setTweetDetails, setTweet } = useMemexStore()
+  const { post, postDetails, setPostDetails, setPost } = useMemexStore()
+
   const form = useForm<z.infer<typeof schema>>({
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -37,7 +39,6 @@ export const useCreatePost = () => {
     mutationFn: memexApi.createPost,
     onMutate: () => toast.loading(t('memex.creating')),
     onSettled: (_, __, ___, id) => toast.dismiss(id),
-    onSuccess: () => toast.success(t('memex.create-susccess')),
     onError: ({ message }) => {
       reset()
       reportException(message)
@@ -45,32 +46,46 @@ export const useCreatePost = () => {
     },
   })
 
+  const { deployFee, isDeploying, deploy } = useDeployIdo(() => {
+    setPost(null)
+    setPostDetails(null)
+    router.back()
+  })
+
   const onSubmit = async (values: z.infer<typeof schema>) => {
     if (!(await form.trigger())) return
 
-    mutateAsync({
-      ...values,
-      image_urls: values.pictures,
-      ...tweetDetails,
-    }).then(() => {
-      setTweet(null)
-      setTweetDetails(null)
-      router.back()
-    })
+    try {
+      const { data } = await mutateAsync({
+        ...values,
+        image_urls: values.pictures,
+        ...postDetails,
+      })
+
+      await deploy(
+        data.hash,
+        postDetails?.name,
+        postDetails?.symbol,
+        postDetails?.marketing
+      )
+    } catch (e) {
+      reportException(e)
+    }
   }
 
   useEffect(() => {
-    if (!tweet) return
+    if (!post) return
 
-    form.setValue('content', tweet.content)
-    form.setValue('chain', tweet.chain)
-    form.setValue('pictures', tweet.image_urls)
+    form.setValue('content', post.content)
+    form.setValue('chain', post.chain)
+    form.setValue('pictures', post.image_urls)
     form.trigger()
-  }, [tweet])
+  }, [post])
 
   return {
     form,
     onSubmit,
-    isPending,
+    isCreating: isPending || isDeploying,
+    deployFee,
   }
 }

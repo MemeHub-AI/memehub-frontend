@@ -4,10 +4,11 @@ import { useTranslation } from 'react-i18next'
 import { FormField, FormControl } from '@/components/ui/form'
 import { ChainSelect } from '@/components/chain-select'
 import { useCreatePostContext } from '@/contexts/memex/create-post'
+import { cn } from '@/lib/utils'
 
 export const CreateChainField = () => {
   const { t } = useTranslation()
-  const { form } = useCreatePostContext()
+  const { form, isCreating } = useCreatePostContext()
 
   return (
     <FormField
@@ -15,9 +16,20 @@ export const CreateChainField = () => {
       name="chain"
       render={({ field }) => (
         <div>
-          <p className="text-sm font-semibold">{t('chain')}</p>
+          <p
+            className={cn(
+              'text-sm font-semibold',
+              (isCreating || field.disabled) && 'opacity-50'
+            )}
+          >
+            {t('chain')}
+          </p>
           <FormControl>
-            <ChainSelect {...field} onChange={(c) => field.onChange(c.name)} />
+            <ChainSelect
+              {...field}
+              disabled={isCreating || field.disabled}
+              onChange={(c) => field.onChange(c.name)}
+            />
           </FormControl>
         </div>
       )}

@@ -670,5 +670,7 @@
   "post-comment": "Post a comment...",
   "memex.like.confirm-title": "Are you sure you want to like this Idea?",
   "memex.like.desc": "After liking, if the consensus is successful, you will receive {} tokens",
-  "memex.like.desc2": "If the consensus fails after {}, you will receive a refund"
+  "memex.like.desc2": "If the consensus fails after {}, you will receive a refund",
+  "memex.deploying": "Idea creating...",
+  "memex.deploy-success": "Idea create successful!"
 }

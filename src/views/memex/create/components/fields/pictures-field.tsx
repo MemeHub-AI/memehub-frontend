@@ -11,7 +11,7 @@ import { useCreatePostContext } from '@/contexts/memex/create-post'
 
 export const CreatePicturesField = () => {
   const { t } = useTranslation()
-  const { form } = useCreatePostContext()
+  const { form, isCreating } = useCreatePostContext()
   const { onChangeUpload } = useUploadImage()
 
   return (
@@ -23,7 +23,7 @@ export const CreatePicturesField = () => {
           type="button"
           shadow="none"
           className="px-2"
-          disabled={field.disabled}
+          disabled={field.disabled || isCreating}
         >
           <Label
             htmlFor="memex-upload"

@@ -11,18 +11,19 @@ import { useCreatePostContext } from '@/contexts/memex/create-post'
 export const CreateTokenDetail = () => {
   const { t } = useTranslation()
   const router = useRouter()
-  const { form } = useCreatePostContext()
-  const { setTweet } = useMemexStore()
+  const { form, isCreating } = useCreatePostContext()
+  const { setPost } = useMemexStore()
 
   return (
     <Button
       shadow="none"
       type="button"
       className="px-2"
+      disabled={isCreating}
       onClick={() => {
         const values = form.getValues()
 
-        setTweet({ ...values, image_urls: values.pictures })
+        setPost({ ...values, image_urls: values.pictures })
         router.push(Routes.MemexCreateDetail)
       }}
     >

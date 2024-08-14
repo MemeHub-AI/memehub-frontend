@@ -5,7 +5,13 @@ import { getBlock } from 'wagmi/actions'
 
 import { wagmiConfig } from '@/config/wagmi'
 import { Network } from '@/enums/contract'
-import { deployLogAddr, deployLogAddrIdx } from '@/config/deploy'
+import {
+  deployEvmAirdropParams,
+  deployLogAddr,
+  deployLogAddrIdx,
+} from '@/config/deploy'
+import { Marketing, MarketType } from '@/api/token/types'
+import { AirdropFlag } from '@/enums/airdrop'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -120,4 +126,40 @@ export const getNetwork = (chainName: string) => {
   if (c.includes('ton')) return Network.Tvm
 
   return Network.Evm
+}
+
+export const getEvmAirdropParams = (
+  config: Pick<
+    typeof deployEvmAirdropParams,
+    | 'distributionRatioKol'
+    | 'distributionRatioCommunity'
+    | 'walletCountKol'
+    | 'walletCountCommunity'
+  >,
+  marketing: Marketing[] | undefined
+) => {
+  const params = { ...deployEvmAirdropParams }
+  const {
+    distributionRatioKol,
+    walletCountKol,
+    distributionRatioCommunity,
+    walletCountCommunity,
+  } = config
+  const hasKol = marketing?.find((m) => m.type === MarketType.Kol)
+  const hasCmnt = marketing?.find((m) => m.type === MarketType.Community)
+
+  if (hasKol) {
+    params.isDistribution = true
+    params.distributionRatioKol = distributionRatioKol * 100
+    params.walletCountKol = walletCountKol
+    params.kolFlag = AirdropFlag.All
+  }
+  if (hasCmnt) {
+    params.isDistribution = true
+    params.distributionRatioCommunity = distributionRatioCommunity * 100
+    params.walletCountCommunity = walletCountCommunity
+    params.CommunityFlag = AirdropFlag.All
+  }
+
+  return params
 }

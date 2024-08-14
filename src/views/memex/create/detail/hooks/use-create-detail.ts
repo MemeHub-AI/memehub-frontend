@@ -24,7 +24,8 @@ export const createDetailSchema = z
 
 export const useCreateDetail = () => {
   const router = useRouter()
-  const { tweetDetails, setTweetDetails } = useMemexStore()
+  const { postDetails: tweetDetails, setPostDetails: setTweetDetails } =
+    useMemexStore()
 
   const form = useForm<z.infer<typeof createDetailSchema>>({
     resolver: zodResolver(createDetailSchema),

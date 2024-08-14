@@ -11,6 +11,7 @@ interface Props
   value: number
   onChange: (index: number) => void
   controllable?: boolean
+  disabled?: boolean
 }
 
 export const ImagesPreviewDialog = ({
@@ -18,12 +19,13 @@ export const ImagesPreviewDialog = ({
   value,
   onChange,
   controllable = true,
+  disabled,
 }: Props) => {
   const isSingle = images.length === 1
 
   return (
     <Dialog
-      open={value >= 0}
+      open={!disabled && value >= 0}
       onOpenChange={(open) => !open && onChange?.(-1)}
       contentProps={{
         closeClass: 'top-1 right-1',
@@ -37,6 +39,7 @@ export const ImagesPreviewDialog = ({
             variant="circle"
             size="icon-sm"
             className="absolute left-1 top-1/2 -translate-y-1/2"
+            disabled={disabled}
             onClick={() => onChange?.(Math.max(value - 1, 0))}
           >
             <ArrowLeftIcon className="w-5 h-5" />
@@ -46,6 +49,7 @@ export const ImagesPreviewDialog = ({
             variant="circle"
             size="icon-sm"
             className="absolute right-1 top-1/2 -translate-y-1/2"
+            disabled={disabled}
             onClick={() => onChange?.(Math.min(value + 1, images.length - 1))}
           >
             <ArrowRightIcon className="w-5 h-5" />
@@ -66,6 +70,7 @@ export const ImagesPreviewDialog = ({
               p === images[value] && 'bg-black'
             )}
             onClick={() => {
+              if (disabled) return
               if (controllable && !isSingle) onChange?.(i)
             }}
           ></span>

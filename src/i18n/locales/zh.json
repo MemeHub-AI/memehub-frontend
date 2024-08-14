@@ -660,5 +660,7 @@
   "post-comment": "发表一个评论吧...",
   "memex.like.confirm-title": "是否确定给这条Idea点赞？",
   "memex.like.desc": "点赞后如果共识成功，你将获得{}代币",
-  "memex.like.desc2": "如果{}后共识失败，你将获得退款"
+  "memex.like.desc2": "如果{}后共识失败，你将获得退款",
+  "memex.deploying": "Idea 创建中...",
+  "memex.deploy-success": "Idea 创建成功！"
 }

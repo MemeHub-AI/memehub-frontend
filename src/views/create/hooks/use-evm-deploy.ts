@@ -12,12 +12,9 @@ import { BI_ZERO } from '@/constants/number'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { getDeployLogsAddr } from '@/utils/contract'
+import { getDeployLogsAddr, getEvmAirdropParams } from '@/utils/contract'
 import { DeployFormParams } from './use-deploy'
-import { deployEvmAirdropParams } from '@/config/deploy'
 import { useCreateToken } from './use-create-token'
-import { Marketing, MarketType } from '@/api/token/types'
-import { AirdropFlag } from '@/enums/airdrop'
 
 export const useEvmDeploy = () => {
   const { address, chainId = 0 } = useAccount()
@@ -55,33 +52,6 @@ export const useEvmDeploy = () => {
   } = useWaitForTx({ hash })
   const deployedAddr = useMemo(() => getDeployLogsAddr(logs), [logs])
 
-  const getAirdropParams = (marketing: Marketing[] | undefined) => {
-    const params = { ...deployEvmAirdropParams }
-    const {
-      distributionRatioKol,
-      walletCountKol,
-      distributionRatioCommunity,
-      walletCountCommunity,
-    } = configValue!
-    const hasKol = marketing?.find((m) => m.type === MarketType.Kol)
-    const hasCmnt = marketing?.find((m) => m.type === MarketType.Community)
-
-    if (hasKol) {
-      params.isDistribution = true
-      params.distributionRatioKol = distributionRatioKol * 100
-      params.walletCountKol = walletCountKol
-      params.kolFlag = AirdropFlag.All
-    }
-    if (hasCmnt) {
-      params.isDistribution = true
-      params.distributionRatioCommunity = distributionRatioCommunity * 100
-      params.walletCountCommunity = walletCountCommunity
-      params.CommunityFlag = AirdropFlag.All
-    }
-
-    return params
-  }
-
   const checkForDeploy = () => {
     if (BigNumber(balance.toString()).lt(deployFee.toString())) {
       CONTRACT_ERR.balanceInsufficient()
@@ -110,7 +80,11 @@ export const useEvmDeploy = () => {
     writeContract({
       ...bcConfig,
       functionName: 'createToken',
-      args: [[name, symbol], [BigInt(tokenId)], getAirdropParams(marketing)],
+      args: [
+        [name, symbol],
+        [BigInt(tokenId)],
+        getEvmAirdropParams(configValue!, marketing),
+      ],
       value: deployFee,
     })
   }

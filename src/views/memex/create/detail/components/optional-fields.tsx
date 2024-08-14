@@ -15,7 +15,7 @@ import { useMemexStore } from '@/stores/use-memex'
 export const OptionalFields = () => {
   const { t } = useTranslation()
   const { form } = useCreateDetailContext()
-  const { tweetDetails } = useMemexStore()
+  const { postDetails: tweetDetails } = useMemexStore()
   const { twitter_url, telegram_url, website_url } = tweetDetails ?? {}
   const defaultOpen = !!twitter_url || !!telegram_url || !!website_url
 

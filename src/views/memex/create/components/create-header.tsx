@@ -3,23 +3,27 @@ import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 import { isEmpty } from 'lodash'
+import { BigNumber } from 'bignumber.js'
 
 import { Button } from '@/components/ui/button'
 import { useCreatePostContext } from '@/contexts/memex/create-post'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const CreateHeader = () => {
   const { t } = useTranslation()
   const router = useRouter()
   const {
-    form: { formState },
-    isPending,
+    form: { formState, ...form },
+    isCreating,
+    deployFee,
   } = useCreatePostContext()
-  const hasError = !isEmpty(Object.keys(formState.errors))
+  const { chainsMap } = useChainsStore()
 
-  // TODO/memex: should be dynamic
-  const fee = 0.0018
-  const symbol = 'BNB'
-  const publishFee = fee > 0 ? `(${fee} ${symbol})` : ''
+  const hasError = !isEmpty(Object.keys(formState.errors))
+  const chain = chainsMap[form.getValues('chain')]
+  const publishFee = BigNumber(deployFee).gt(0)
+    ? `(${deployFee} ${chain?.native.symbol})`
+    : ''
 
   return (
     <div className="flex items-center justify-between space-x-2 mx-1">
@@ -29,6 +33,7 @@ export const CreateHeader = () => {
           size="icon-sm"
           className="border-none rounded-full"
           type="button"
+          disabled={isCreating}
           onClick={router.back}
         >
           <ChevronLeftIcon className="w-6 h-6" />
@@ -42,9 +47,11 @@ export const CreateHeader = () => {
         size="sm"
         className="rounded-full bg-yellow-600 border-none text-white h-7 !mr-1.5"
         type="submit"
-        disabled={hasError || isPending}
+        disabled={hasError || isCreating}
       >
-        {isPending ? t('memex.creating') : `${t('memex.create')} ${publishFee}`}
+        {isCreating
+          ? t('memex.creating')
+          : `${t('memex.create')} ${publishFee}`}
       </Button>
     </div>
   )

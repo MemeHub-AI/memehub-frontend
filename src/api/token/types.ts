@@ -181,14 +181,14 @@ export interface OnchainTokensItem {
 
 export interface TokenConfigRes {
   name: string
-  value: TokenConfigValue
+  value: TokenCreateConfigValue
   contracts: {
-    coin: TokenConfigContract[]
-    airdrop: TokenConfigContract[]
+    coin: TokenCreateConfigContract[]
+    airdrop: TokenCreateConfigContract[]
   }
 }
 
-interface TokenConfigValue {
+export interface TokenCreateConfigValue {
   distributionRatioKol: number
   distributionRatioCommunity: number
   walletCountKol: number
@@ -197,7 +197,7 @@ interface TokenConfigValue {
   CommunityFlag: number
 }
 
-interface TokenConfigContract {
+export interface TokenCreateConfigContract {
   chain: string
   creator: string
   address: string

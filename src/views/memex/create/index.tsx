@@ -20,7 +20,7 @@ import { useMemexClear } from './hooks/use-memex-clear'
 export const CreatePost = () => {
   const createTweet = useCreatePost()
   const { form, onSubmit } = createTweet
-  const { tweetDetails } = useMemexStore()
+  const { postDetails: tweetDetails } = useMemexStore()
   const router = useRouter()
 
   useMemexClear()

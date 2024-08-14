@@ -77,6 +77,7 @@ export const ChainSelect = forwardRef<HTMLDivElement, Props>((p, ref) => {
       onValueChange={onValueChange}
       className={cn(
         'flex w-max gap-0 border-2 border-black rounded-md overflow-hidden flex-wrap max-w-[300px] max-sm:w-max',
+        props.disabled && 'opacity-50',
         className
       )}
       {...props}
