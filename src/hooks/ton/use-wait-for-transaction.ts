@@ -1,9 +1,16 @@
-import { Address, beginCell, storeMessage, Transaction } from '@ton/core'
+import {
+  Address,
+  beginCell,
+  CommonMessageInfoInternal,
+  storeMessage,
+  Transaction,
+} from '@ton/core'
 import { useTonClient } from './contracts/use-ton-client'
 import { useEffect, useState } from 'react'
 import { useHttpClient } from './use-http-client'
 import { Trace } from 'tonapi-sdk-js'
 import { CONTEXT_ERR } from '@/errors/context'
+import { TonClient } from '@ton/ton'
 
 interface Options {
   /** boc hash */
@@ -89,6 +96,37 @@ export const useWaitForTransaction = (options: Options) => {
     })
 
     return result
+  }
+
+  async function findIncomingTransaction(
+    client: TonClient,
+    transaction: Transaction
+  ): Promise<Transaction | null> {
+    const inMessage = transaction.inMessage?.info
+    if (inMessage?.type !== 'internal') return null
+    return client.tryLocateSourceTx(
+      inMessage.src,
+      inMessage.dest,
+      inMessage.createdLt.toString()
+    )
+  }
+
+  async function findOutgoingTransactions(
+    client: TonClient,
+    transaction: Transaction
+  ): Promise<Transaction[]> {
+    const outMessagesInfos = transaction.outMessages
+      .values()
+      .map((message) => message.info)
+      .filter(
+        (info): info is CommonMessageInfoInternal => info.type === 'internal'
+      )
+
+    return Promise.all(
+      outMessagesInfos.map((info) =>
+        client.tryLocateResultTx(info.src, info.dest, info.createdLt.toString())
+      )
+    )
   }
 
   const getResult = () => {
