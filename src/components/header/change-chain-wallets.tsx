@@ -46,9 +46,14 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
   })
 
   // Ton monitor connection
-  const unsubscribe = tonConnectUI.onStatusChange(() => {
-    setMainChain('ton')
-  })
+  const unsubscribe = tonConnectUI.onStatusChange(
+    (wallet) => {
+      if (wallet !== null) setMainChain('ton')
+    },
+    (error) => {
+      console.log('ton error: ', error)
+    }
+  )
 
   const chainList = [
     {
