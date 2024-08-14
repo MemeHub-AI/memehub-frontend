@@ -1,4 +1,10 @@
-import { ComponentProps, useEffect, useMemo, useState } from 'react'
+import {
+  type ComponentProps,
+  forwardRef,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { IoIosMore } from 'react-icons/io'
 import { useTranslation } from 'react-i18next'
 import { useChainId, useSwitchChain } from 'wagmi'
@@ -19,14 +25,9 @@ interface Props extends Omit<ComponentProps<typeof RadioGroup>, 'onChange'> {
   onChange?: (chain: ChainData) => void
 }
 
-export const ChainSelect = ({
-  className,
-  defaultValue,
-  value,
-  onChange,
-  onValueChange,
-  ...props
-}: Props) => {
+export const ChainSelect = forwardRef<HTMLDivElement, Props>((p, ref) => {
+  const { className, defaultValue, value, onChange, onValueChange, ...props } =
+    p
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const { switchChainAsync } = useSwitchChain()
@@ -70,6 +71,7 @@ export const ChainSelect = ({
 
   return (
     <RadioGroup
+      ref={ref}
       defaultValue={defaultValue}
       value={value}
       onValueChange={onValueChange}
@@ -150,4 +152,4 @@ export const ChainSelect = ({
       )}
     </RadioGroup>
   )
-}
+})
