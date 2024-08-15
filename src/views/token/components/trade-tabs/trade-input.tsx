@@ -13,7 +13,6 @@ import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { Img } from '@/components/img'
-import { useChainInfo } from '@/hooks/use-chain-info'
 import { useUniswapV2Amount } from '../../../../hooks/uniswapv2/use-uniswapv2-info'
 import { useTradeAmount } from '../../hooks/evm/use-trade-amount'
 import { utilLang } from '@/utils/lang'
@@ -33,14 +32,16 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     tokenAddr,
     tokenMetadata,
     tokenLeft,
+    chainId,
+    tokenChain,
   } = useTokenContext()
   const { isBuy, isTraded, nativeBalance, tokenBalance } = useTradeTabsContext()
   const { getTokenAmount, getReserveAmount, getLastOrderAmount } =
     useTradeAmount()
   const tokenSymbol = tokenInfo?.symbol || tokenMetadata?.symbol
 
-  const { chainInfo } = useChainInfo()
   const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(
+    chainId,
     tokenInfo?.graduated_pool
   )
   const [targetAmount, setTargetAmount] = useState('0')
@@ -134,7 +135,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
                 {isBuy ? reserveSymbol : tokenSymbol}
               </span>
               <Img
-                src={isBuy ? chainInfo?.logo : tokenInfo?.image_url}
+                src={isBuy ? tokenChain?.logo : tokenInfo?.image_url}
                 width={20}
                 height={20}
                 className="object-contain rounded"

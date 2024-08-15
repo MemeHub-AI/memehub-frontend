@@ -17,9 +17,8 @@ interface Props extends ComponentProps<'button'> {
 }
 
 export const TradeItems = ({ disabled, onItemClick }: Props) => {
-  const { isLoadingTokenInfo, reserveSymbol } = useTokenContext()
+  const { isLoadingTokenInfo, reserveSymbol, chainId } = useTokenContext()
   const { isBuy, tokenBalance } = useTradeTabsContext()
-  const { chainId } = useChainInfo()
   const buyItems =
     tradeBuyItems[chainId as keyof typeof tradeBuyItems] ?? tradeDefaultItems
 
