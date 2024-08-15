@@ -36,6 +36,7 @@ export const IdeaLikeComment = ({
   const { isLiking, like } = useIdeaLike(idea?.ido_address, () => {
     setLikeOpen(false)
     setCommentOpen(true)
+    ideaInfo.refetchInfo()
   })
   const { isEnded } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),

@@ -10,7 +10,7 @@ import { memexIdoAbi } from '@/contract/abi/memex/ido'
 
 export const useIdeaLike = (
   addr: string | null | undefined,
-  onSuccess?: () => void
+  onFillay?: () => void
 ) => {
   const { t } = useTranslation()
   const { chainId = 0 } = useAccount()
@@ -34,12 +34,10 @@ export const useIdeaLike = (
     hash,
     onLoading: () => toast.loading(t('tx.confirmation')),
     onError: ({ message }) => CONTRACT_ERR.message(message),
-    onSuccess: () => {
-      toast.success(t('tx.success'))
-      onSuccess?.()
-    },
+    onSuccess: () => toast.success(t('tx.success')),
     onFillay: () => {
       toast.dismiss()
+      onFillay?.()
       reset()
     },
   })
