@@ -40,6 +40,7 @@ export const PicturesPreview = ({ disabled }: { disabled?: boolean }) => {
             variant="circle"
             size="icon-sm2"
             className="absolute top-2 right-2"
+            disabled={disabled}
             onClick={() => {
               form.setValue(
                 'pictures',
