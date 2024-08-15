@@ -14,12 +14,12 @@ import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { getDeployLogsAddr, getEvmAirdropParams } from '@/utils/contract'
 import { DeployFormParams } from './use-deploy'
-import { useCreateToken } from './use-create-token'
+import { useTokenConfig } from '@/hooks/use-token-config'
 
 export const useEvmDeploy = () => {
   const { address, chainId = 0 } = useAccount()
   const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
-  const { configValue, bcAddress, bcVersion } = useCreateToken()
+  const { configValue, bcAddress, bcVersion } = useTokenConfig()
   const bcConfig = {
     abi: bcAbiMap[bcVersion!],
     address: bcAddress!,

@@ -10,12 +10,12 @@ import { reportException } from '@/errors'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { getEvmAirdropParams } from '@/utils/contract'
 import { Marketing } from '@/api/token/types'
-import { useCreateToken } from '@/views/create/hooks/use-create-token'
+import { useTokenConfig } from '@/hooks/use-token-config'
 
 export const useDeployIdea = (onFinally?: () => void) => {
   const { t } = useTranslation()
   const { chainId = 0 } = useAccount()
-  const { configValue, memexFactoryAddr } = useCreateToken()
+  const { configValue, memexFactoryAddr } = useTokenConfig()
 
   const deployConfig = {
     abi: memexFactoryAbi,

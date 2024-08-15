@@ -1,38 +1,12 @@
-import { type Address } from 'viem'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import { tokenApi } from '@/api/token'
 import { DeployFormParams } from './use-deploy'
 import { reportException } from '@/errors'
-import { BcVersion } from '@/contract/abi/bonding-curve'
-import { DistributorVersion } from '@/contract/abi/distributor'
+import { useTokenConfig } from '@/hooks/use-token-config'
 
 export const useCreateToken = () => {
-  const {
-    data: {
-      name: configName,
-      value: configValue,
-      contracts: {
-        coin: [coin] = [],
-        airdrop: [airdrop] = [],
-        memex: [memex] = [],
-      } = {},
-    } = {},
-    refetch: refetchConfig,
-  } = useQuery({
-    queryKey: [tokenApi.getConfig.name],
-    queryFn: tokenApi.getConfig,
-    select: ({ data }) => data,
-    refetchInterval: 30_000,
-  })
-  const bcAddress = coin?.address as Address | undefined
-  const bcVersion = coin?.version as BcVersion | undefined
-
-  const airdropAddress = airdrop?.address as Address | undefined
-  const airdropVersion = airdrop?.version as DistributorVersion | undefined
-
-  const memexFactoryAddr = memex?.address as Address | undefined
-  const memexFactoryVersion = memex?.version
+  const { bcAddress, airdropAddress } = useTokenConfig()
 
   const {
     data: createData,
@@ -61,22 +35,9 @@ export const useCreateToken = () => {
   }
 
   return {
-    configName,
-    configValue,
-
-    bcAddress,
-    bcVersion,
-
-    airdropAddress,
-    airdropVersion,
-
-    memexFactoryAddr,
-    memexFactoryVersion,
-
     createTokenData,
     createTokenError,
     isCreatingToken,
     createToken,
-    refetchConfig,
   }
 }

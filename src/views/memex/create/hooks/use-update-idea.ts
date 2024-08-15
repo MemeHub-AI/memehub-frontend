@@ -11,14 +11,14 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { usePostDetails } from '../../post/hooks/use-post-details'
 import { Marketing } from '@/api/token/types'
 import { getEvmAirdropParams } from '@/utils/contract'
-import { useCreateToken } from '@/views/create/hooks/use-create-token'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { useTokenConfig } from '@/hooks/use-token-config'
 
 export const useUpdateIdea = (hashId: string | undefined) => {
   const { t } = useTranslation()
   const chainId = useChainId()
   const { details } = usePostDetails(hashId)
-  const { configValue } = useCreateToken()
+  const { configValue } = useTokenConfig()
 
   const {
     data: hash,

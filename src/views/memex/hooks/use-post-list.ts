@@ -1,11 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { memexApi } from '@/api/memex'
-import { useCreateToken } from '@/views/create/hooks/use-create-token'
 import { MemexListType } from '@/api/memex/types'
+import { useTokenConfig } from '@/hooks/use-token-config'
 
 export const usePostList = (type: MemexListType) => {
-  const { memexFactoryAddr } = useCreateToken()
+  const { memexFactoryAddr } = useTokenConfig()
 
   const {
     data: { total = 0, list = [] } = {},

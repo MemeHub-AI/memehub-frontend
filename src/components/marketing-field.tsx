@@ -1,4 +1,4 @@
-import React, { ComponentProps, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { z } from 'zod'
@@ -18,6 +18,7 @@ import { DialogContent, DialogTitle } from '@radix-ui/react-dialog'
 import { Button } from '@/components/ui/button'
 import { useCreateToken } from '../views/create/hooks/use-create-token'
 import { CheckedState } from '@radix-ui/react-checkbox'
+import { useTokenConfig } from '@/hooks/use-token-config'
 
 const marketingActions = (
   value: Marketing[],
@@ -40,7 +41,7 @@ interface Props {
 
 export const MarketingField = ({ form, disabled }: Props) => {
   const { t } = useTranslation()
-  const { configValue } = useCreateToken()
+  const { configValue } = useTokenConfig()
   const { distributionRatioKol = 0 } = configValue ?? {}
 
   const markets = [
@@ -135,7 +136,7 @@ interface DialogProps {
 export const DialogMarketing = ({ type }: DialogProps) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
-  const { configValue } = useCreateToken()
+  const { configValue } = useTokenConfig()
   const [isKol, isCommunity] = useMemo(
     () => [type === MarketType.Kol, type === MarketType.Community],
     [type]
