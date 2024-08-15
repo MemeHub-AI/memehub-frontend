@@ -36,6 +36,7 @@ export const PicturesPreview = ({ disabled }: { disabled?: boolean }) => {
             onClick={() => setSrcIdx(i)}
           />
           <Button
+            type="button"
             shadow="none"
             variant="circle"
             size="icon-sm2"
