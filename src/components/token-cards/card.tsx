@@ -12,11 +12,11 @@ import { Img } from '@/components/img'
 import { useTokenProgress } from '@/views/token/hooks/evm/use-token-progress'
 import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { IdoTag } from '../ido-tag'
 import { Countdown } from '@/components/countdown'
 import { TokenListItem } from '@/api/token/types'
 import { TokenVersion } from '@/contract/abi/token'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props extends ComponentProps<typeof Card> {
   card: TokenListItem
@@ -41,12 +41,11 @@ export const TokenCard = (props: Props) => {
   const router = useRouter()
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
-  const { chainsMap } = useChainsStore()
-  const chain = chainsMap[card.chain]
+  const { chain, chainId, chainName } = useChainInfo(card.chain)
 
   const { progress, isGrauated } = useTokenProgress(
     card.contract_address,
-    +(chain?.id ?? 0),
+    chainId,
     card.coin_version as TokenVersion
   )
   const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
@@ -54,15 +53,13 @@ export const TokenCard = (props: Props) => {
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     if (isIdo && card.contract_address) {
       return router.push(
-        fmt.toHref(Routes.Main, chain?.name ?? '', card.contract_address)
+        fmt.toHref(Routes.Main, chainName, card.contract_address)
       )
     }
     if (isIdo) {
-      return router.push(fmt.toHref(Routes.Ido, chain?.name ?? '', card.id))
+      return router.push(fmt.toHref(Routes.Ido, chainName, card.id))
     }
-    router.push(
-      fmt.toHref(Routes.Main, chain?.name ?? '', card.contract_address)
-    )
+    router.push(fmt.toHref(Routes.Main, chainName, card.contract_address))
     onClick?.(e)
   }
 

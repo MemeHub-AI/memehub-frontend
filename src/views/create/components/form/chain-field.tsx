@@ -18,6 +18,7 @@ export const ChainField = () => {
   const { chainId, chain } = useAccount()
   const { formData } = useCreateTokenContext()
   const { form, formFields } = formData
+  // TODO: may need to compatible the all chains
   const { chains, evmChainsMap } = useChainsStore()
 
   // Default select.

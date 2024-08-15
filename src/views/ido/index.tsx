@@ -14,7 +14,6 @@ import { Countdown } from '@/components/countdown'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useRouter } from 'next/router'
 import { IdoTag } from '@/components/ido-tag'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { idoTrumpLink } from '@/config/link'
 import { IdoIntro } from './components/ido-intro'
 
@@ -23,12 +22,11 @@ export const IdoPage = () => {
   const [isExpired, setIsExpired] = useState(false)
   const [isStart, setIsStart] = useState(false)
   const { isConnected, checkForConnect } = useCheckAccount()
-  const { chainsMap } = useChainsStore()
   const { query } = useRouter()
-  const chain = (query.chain || '') as string
+
   const poolId = Number(query.id || 0)
   const chainId = 56
-  const reserveSymbol = chainsMap[chain]?.native.symbol || 'BNB'
+  const reserveSymbol = 'BNB'
 
   const idoInfo = useIdoInfo(chainId, poolId)
   const { startAt, endAt, status } = idoInfo

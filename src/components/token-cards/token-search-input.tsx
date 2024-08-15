@@ -9,7 +9,6 @@ import { Input } from '../ui/input'
 import { cn } from '@/lib/utils'
 import { tokenApi } from '@/api/token'
 import { TokenListItem } from '@/api/token/types'
-import { useChainsStore } from '@/stores/use-chains-store'
 
 interface Props extends ComponentProps<typeof Input> {
   chianTag: string
@@ -25,7 +24,6 @@ export const TokenSearchInput = ({
 }: Props) => {
   const { t } = useTranslation()
   const [value, setValue] = useState('')
-  const { chainsMap } = useChainsStore()
 
   const { data, mutateAsync, reset } = useMutation({
     mutationKey: [tokenApi.getList.name],

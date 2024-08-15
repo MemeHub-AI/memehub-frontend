@@ -1,4 +1,4 @@
-import React, { ComponentProps, useMemo } from 'react'
+import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Card } from '@/components/ui/card'
@@ -10,11 +10,11 @@ import { useRewardList } from '../hooks/use-reward-list'
 import { ChainData } from '@/api/chain/type'
 import { fmt } from '@/utils/fmt'
 import { useReward } from '../hooks/use-reward'
-import { useChainsStore } from '@/stores/use-chains-store'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const InviteReward = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
-  const { isLoading, rewardList } = useRewardList()
+  const { rewardList } = useRewardList()
 
   return (
     <>
@@ -42,9 +42,8 @@ const InviteCard = ({ c }: { c: ChainData }) => {
   const { t } = useTranslation()
   const { totalAmount, unclaimedAmount, isClaiming, isClaimed, claimReward } =
     useReward(Number(c.id))
-  const { evmChainsMap } = useChainsStore()
+  const { chain } = useChainInfo(c.name)
 
-  const { native } = evmChainsMap[c.id] ?? {}
   const disabeld = isClaiming || isClaimed
 
   return (
@@ -57,7 +56,7 @@ const InviteCard = ({ c }: { c: ChainData }) => {
       <div className="mt-3">
         <p>{t('reward.invite.total-earned')}</p>
         <span className="text-2xl font-bold">{fmt.decimals(totalAmount)}</span>
-        <span className="ml-2">{native?.symbol}</span>
+        <span className="ml-2">{chain?.native.symbol}</span>
       </div>
 
       <div className="mt-3">
@@ -65,7 +64,7 @@ const InviteCard = ({ c }: { c: ChainData }) => {
         <span className="text-2xl font-bold">
           {fmt.decimals(unclaimedAmount)}
         </span>
-        <span className="ml-2">{native?.symbol}</span>
+        <span className="ml-2">{chain?.native.symbol}</span>
       </div>
 
       <Button

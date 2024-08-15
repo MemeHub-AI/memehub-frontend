@@ -9,21 +9,20 @@ import { cn } from '@/lib/utils'
 import { TokenDesktop } from './components/desktop'
 import { TokenMobile } from './components/mobile'
 import { useTradeSearchParams } from './hooks/use-search-params'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { NotFound } from '@/components/not-found'
 import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
 import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
 import { Network } from '@/enums/contract'
 import { TokenType } from '@/enums/token'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const TokenPage = () => {
   const { t } = useTranslation()
   const { chainName, tokenAddr, isReady } = useTradeSearchParams()
-  const { chainsMap } = useChainsStore()
   const { isMobile } = useResponsive()
   const { tokenInfo, isLoadingTokenInfo, ...oterInfo } = useTokenInfo()
+  const { chain: tokenChain } = useChainInfo(chainName)
 
-  const tokenChain = chainsMap[chainName]
   const chainId = +(tokenChain?.id ?? 0)
   const reserveSymbol = tokenChain?.native.symbol
 
@@ -42,7 +41,7 @@ export const TokenPage = () => {
     return count === 1
   }, [hasKolAirdrop, hasCommunityAirdrop])
 
-  const invalidPath = !chainsMap[chainName] || !isAddress(tokenAddr)
+  const invalidPath = !tokenChain || !isAddress(tokenAddr)
   if (invalidPath && !isLoadingTokenInfo && isReady) {
     return (
       <NotFound
