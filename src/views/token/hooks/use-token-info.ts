@@ -4,18 +4,17 @@ import { formatEther, zeroAddress } from 'viem'
 import { tokenApi } from '@/api/token'
 import { useTradeSearchParams } from './use-search-params'
 import { ApiCode, ApiResponse } from '@/api/types'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { useTokenDetails } from '@/hooks/use-token-details'
 import { useReadContract } from 'wagmi'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { BI_ZERO } from '@/constants/number'
 import { TokenVersion } from '@/contract/abi/token'
 import { TokenType } from '@/enums/token'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const useTokenInfo = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
-  const { evmChainsMap } = useChainsStore()
-  const chainId = +(evmChainsMap[chainName]?.id ?? 0)
+  const { chainId } = useChainInfo(chainName)
 
   const {
     data: tokenInfo,

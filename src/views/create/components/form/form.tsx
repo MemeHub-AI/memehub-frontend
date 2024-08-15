@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useAccount } from 'wagmi'
@@ -20,22 +20,20 @@ import { useCreateTokenContext } from '@/contexts/create-token'
 import { MarketingField } from './marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Description } from './desc'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { ChainField } from './chain-field'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
-export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
+export const CreateTokenForm = () => {
   const { t } = useTranslation()
   const { deployResult, formData } = useCreateTokenContext()
-  const { chain } = useAccount()
+  const { chain: { nativeCurrency } = {} } = useAccount()
 
   const { url, form, formFields, onSubmit } = formData
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
-  const { evmChainsMap } = useChainsStore()
+  const { chain } = useChainInfo(form.getValues(formFields.chainName))
 
   const { isDeploying, deployFee } = deployResult || {}
-
-  const { native } = evmChainsMap[form.getValues(formFields.chainName)] || {}
-  const symbol = native?.symbol || chain?.nativeCurrency.symbol || ''
+  const symbol = chain?.native.symbol || nativeCurrency?.symbol
 
   const beforeSubmit = (values: any) => {
     if (loadingInfo || loadingLogo) {
@@ -194,6 +192,6 @@ export const CreateTokenForm = forwardRef<{}, {}>((props, ref) => {
       </Form>
     </>
   )
-})
+}
 
 export default CreateTokenForm

@@ -12,7 +12,7 @@ import { TokenProgress } from './token-progress'
 import { Avatar } from '@/components/ui/avatar'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useResponsive } from '@/hooks/use-responsive'
-import { useChainsStore } from '@/stores/use-chains-store'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -22,12 +22,11 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
     isNotFound,
     isIdoToken,
     tokenMetadata,
+    tokenChain,
   } = useTokenContext()
   const { marketCap } = useHoldersStore()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
-  const { chainsMap } = useChainsStore()
-  const chain = chainsMap[tokenInfo?.chain ?? '']
 
   if (isLoadingTokenInfo) {
     return (
@@ -64,11 +63,13 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
           </div>
           <div className="sm:hidden flex items-center">
             <img
-              src={chain?.logo}
-              alt={chain?.displayName}
+              src={tokenChain?.logo}
+              alt={tokenChain?.displayName}
               className="w-5 h-5 rounded"
             />
-            <span className="ml-1">{fmt.withChain(chain?.displayName)}</span>
+            <span className="ml-1">
+              {fmt.withChain(tokenChain?.displayName)}
+            </span>
           </div>
         </div>
         <span>

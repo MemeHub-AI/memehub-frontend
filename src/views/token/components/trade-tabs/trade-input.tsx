@@ -13,7 +13,7 @@ import { fmt } from '@/utils/fmt'
 import { Skeleton } from '@/components/ui/skeleton'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { Img } from '@/components/img'
-import { useUniswapV2Amount } from '../../../../hooks/uniswapv2/use-uniswapv2-info'
+import { useUniswapV2Amount } from '@/hooks/uniswapv2/use-uniswapv2-info'
 import { useTradeAmount } from '../../hooks/evm/use-trade-amount'
 import { utilLang } from '@/utils/lang'
 

@@ -14,9 +14,9 @@ import { fmt } from '@/utils/fmt'
 import { useAirdropContext } from '@/contexts/airdrop'
 import { utilLang } from '@/utils/lang'
 import { IdTag } from '@/components/id-tag'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { useAirdrop } from '@/views/token/hooks/evm/use-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props {
   className?: string
@@ -34,7 +34,7 @@ export const AirdropCard = ({
   const {
     image_url,
     symbol,
-    chain: chainName = '',
+    chain,
     contract_address = '',
     coin_version,
     airdrop_address,
@@ -44,9 +44,7 @@ export const AirdropCard = ({
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
   const { hideClaimed } = useAirdropContext()
-  const { chainsMap } = useChainsStore()
-  const chain = chainsMap[chainName]
-  const chainId = Number(chain?.id ?? 0)
+  const { chainId, chainName } = useChainInfo(chain)
 
   const { isKol, hasCommunity, kolInfo, communityInfo } = useUserStore()
   const {

@@ -10,7 +10,6 @@ import {
   tradeDefaultItems,
   tradeSellItems,
 } from '@/config/trade'
-import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props extends ComponentProps<'button'> {
   onItemClick?: (value: string) => void

@@ -12,7 +12,6 @@ import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
 import { useDexTrade } from './use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { Network } from '@/enums/contract'
 
 // Used for trade success tips.
@@ -40,7 +39,6 @@ export const useTrade = (onSuccess?: () => void) => {
     network,
     tokenChain,
   } = useTokenContext()
-  const { chainsMap } = useChainsStore()
 
   const {
     dexHash,
@@ -72,7 +70,7 @@ export const useTrade = (onSuccess?: () => void) => {
   // TODO: add Sol, TON chains
   const updateLastTrade = async (type: TradeType, amount: string) => {
     const tokenSymbol = tokenInfo?.symbol || tokenMetadata?.symbol
-    const reserveSymbol = chainsMap[chainName]?.native.symbol
+    const reserveSymbol = tokenChain?.native.symbol
     lastTrade.type = type
 
     const getNonFixedLabel = (value: bigint, symbol?: string) =>
