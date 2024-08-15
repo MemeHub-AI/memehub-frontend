@@ -8,11 +8,11 @@ export interface MemexIdeaItem {
   hash: null | string
   ido_address: null | string
   image_urls: string[]
-  logo_url: null
+  logo_url: null | string
   name: null | string
   status: IdeaStatus | null
   symbol: null | string
-  telegram_url: null
+  telegram_url: null | string
   twitter_url: null | string
   user_address: string
   user_logo: string

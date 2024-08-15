@@ -2,7 +2,7 @@ import React from 'react'
 
 import { MemexLayout } from '../components/memex-layout'
 import { CustomSuspense } from '@/components/custom-suspense'
-import { MemexPost } from '../components/idea-card'
+import { MemexIdeaCard } from '../components/idea-card'
 import { IdeaEmpty } from '../components/idea-empty'
 import { IdeaCardSkeleton } from '../components/idea-card-skeleton'
 import { useIdeaList } from '../hooks/use-idea-list'
@@ -21,7 +21,7 @@ export const MyInvolved = () => {
         nullback={<IdeaEmpty />}
       >
         {list.map((t) => (
-          <MemexPost key={t?.hash} post={t} />
+          <MemexIdeaCard key={t?.hash} idea={t} />
         ))}
       </CustomSuspense>
     </MemexLayout>

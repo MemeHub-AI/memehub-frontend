@@ -9,11 +9,15 @@ import { useTokenDetails } from '@/hooks/use-token-details'
 import { TokenVersion } from '@/contract/abi/token'
 
 export const useTokenProgress = (
-  tokenAddr: string | undefined,
+  tokenAddr: string | undefined | null,
   chainId: number,
   version: TokenVersion
 ) => {
-  const { bcVersion, bcAddr } = useTokenDetails(tokenAddr, chainId, version)
+  const { bcVersion, bcAddr } = useTokenDetails(
+    tokenAddr || '',
+    chainId,
+    version
+  )
   const bcConfig = {
     abi: bcAbiMap[bcVersion!],
     address: bcAddr!,

@@ -1,6 +1,7 @@
 import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEdit } from 'react-icons/ai'
+import { MdContentCopy } from 'react-icons/md'
 
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
@@ -8,14 +9,16 @@ import { TokenSocialLinks } from '@/components/token-links'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
-import { MemexCreateReq } from '@/api/memex/types'
+import { MemexIdeaItem } from '@/api/memex/types'
+import { useTokenProgress } from '@/views/token/hooks/evm/use-token-progress'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { fmt } from '@/utils/fmt'
+import CopyIcon from '@/components/copy-icon'
 
 interface Props {
-  details?: Omit<
-    MemexCreateReq,
-    'chain' | 'content' | 'image_urls' | 'factory_address'
-  >
+  details?: MemexIdeaItem
   editable?: boolean
+  tokenAddr?: string
   onBuyClick?: () => void
 }
 
@@ -23,14 +26,27 @@ export const TokenDetailsCard = ({
   className,
   details,
   editable = false,
+  tokenAddr,
   onBuyClick,
   ...props
 }: ComponentProps<typeof Card> & Props) => {
-  const { name, symbol, logo_url, twitter_url, telegram_url, website_url } =
-    details ?? {}
+  const {
+    name,
+    symbol,
+    logo_url,
+    twitter_url,
+    telegram_url,
+    website_url,
+    chain: chainName,
+  } = details ?? {}
   const { t } = useTranslation()
-  // TODO/memex: use contract progress
-  const progress = 34
+  const { chainsMap } = useChainsStore()
+
+  const { progress } = useTokenProgress(
+    details?.ido_address,
+    +(chainsMap[chainName || '']?.id || 0),
+    '0.1.2' // TODO: dynamic version
+  )
 
   return (
     <Card
@@ -54,7 +70,7 @@ export const TokenDetailsCard = ({
         />
       )}
       <div className="flex space-x-2">
-        <Avatar src={logo_url} fallback={symbol?.[0]} />
+        <Avatar src={logo_url || ''} fallback={symbol?.[0]} />
         <div className="text-zinc-500 text-sm flex flex-col justify-between">
           <p>
             {t('memex.symbol')}: <span className="text-black">{symbol}</span>
@@ -72,9 +88,9 @@ export const TokenDetailsCard = ({
             size: 'icon-sm',
             className: 'border-none hover:bg-transparent',
           }}
-          x={twitter_url}
-          tg={telegram_url}
-          website={website_url}
+          x={twitter_url || ''}
+          tg={telegram_url || ''}
+          website={website_url || ''}
           onClick={(e) => e.stopPropagation()}
         />
         {!editable && (
@@ -93,8 +109,15 @@ export const TokenDetailsCard = ({
         <Progress
           value={progress}
           className="h-5 border-2 border-black rounded bg-white"
-          indicatorClass="bg-cyan-400"
+          indicatorClass="bg-purple-600"
         />
+      )}
+
+      {tokenAddr && (
+        <div className="flex items-center space-x-1 mt-1">
+          <span>CA: {fmt.addr(tokenAddr)}</span>
+          <CopyIcon content={tokenAddr} onClick={(e) => e.stopPropagation()} />
+        </div>
       )}
     </Card>
   )

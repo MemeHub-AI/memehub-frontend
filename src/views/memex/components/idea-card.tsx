@@ -24,23 +24,23 @@ import { getIdeaStatus } from '@/utils/memex/idea'
 import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 
 interface Props {
-  post?: MemexIdeaItem
+  idea?: MemexIdeaItem
   onCommentSuccess?: () => void
 }
 
-export const MemexPost = ({
+export const MemexIdeaCard = ({
   className,
-  post,
+  idea,
   onCommentSuccess,
 }: ComponentProps<'div'> & Props) => {
-  const { chain: chainName, content, image_urls, ...p } = post ?? {}
+  const { chain: chainName, content, image_urls, ...restIdea } = idea ?? {}
   const { t } = useTranslation()
   const router = useRouter()
   const { chainsMap } = useChainsStore()
-  const ideaInfo = useIdeaInfo(post?.ido_address)
+  const ideaInfo = useIdeaInfo(idea?.ido_address)
   const { hasDetails, isFailed, isSuccess, isProcessing } = useMemo(
-    () => getIdeaStatus(post, ideaInfo),
-    [post, ideaInfo]
+    () => getIdeaStatus(idea, ideaInfo),
+    [idea, ideaInfo]
   )
   const {
     startAt,
@@ -48,6 +48,7 @@ export const MemexPost = ({
     progress,
     ownerPercent,
     userPercent,
+    tokenAddr,
     refetchInfo,
   } = ideaInfo
 
@@ -59,16 +60,16 @@ export const MemexPost = ({
     isPending,
     claim,
     refund,
-  } = useIdeaClaimRefund(post?.ido_address, refetchInfo)
+  } = useIdeaClaimRefund(idea?.ido_address, refetchInfo)
 
-  const rewardPercent = post?.is_creator ? ownerPercent : userPercent
+  const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
   const chain = chainsMap[chainName || '']
 
   return (
     <div
       className={cn('flex space-x-2 px-3 py-3 border-b-2 relative', className)}
       onClick={() =>
-        router.push(fmt.toHref(Routes.MemexIdea, post?.hash ?? ''))
+        router.push(fmt.toHref(Routes.MemexIdea, idea?.hash ?? ''))
       }
     >
       {isSuccess && (
@@ -84,18 +85,18 @@ export const MemexPost = ({
       )}
 
       <Avatar
-        src={post?.user_logo}
-        fallback={post?.user_name?.[0]}
+        src={idea?.user_logo}
+        fallback={idea?.user_name?.[0]}
         className="rounded-md"
       />
 
       <div className="flex-1">
         <div className="space-x-1 text-zinc-500 text-sm">
           <span className="font-bold text-base text-black">
-            {post?.user_name}
+            {idea?.user_name}
           </span>
           <span>·</span>
-          <span className="">{dayjs(post?.created_at).fromNow()}</span>
+          <span className="">{dayjs(idea?.created_at).fromNow()}</span>
         </div>
 
         <div className="flex flex-col items-start">
@@ -107,7 +108,7 @@ export const MemexPost = ({
             />
           )}
 
-          {!hasDetails && post?.is_creator && (
+          {!hasDetails && idea?.is_creator && (
             <Button
               variant="yellow"
               shadow="none"
@@ -117,7 +118,7 @@ export const MemexPost = ({
                 e.stopPropagation()
                 router.push({
                   pathname: Routes.MemexCreateDetails,
-                  query: { hash: post.hash },
+                  query: { hash: idea.hash },
                 })
               }}
             >
@@ -138,7 +139,7 @@ export const MemexPost = ({
                     className="text-green-600 self-end"
                   />
                 </div>
-                {post?.is_creator ? (
+                {idea?.is_creator ? (
                   <p>{t('memex.done-desc2')}</p>
                 ) : (
                   <p>{t('memex.done-desc3')}</p>
@@ -164,7 +165,7 @@ export const MemexPost = ({
                 ? t('already-claimed')
                 : isPending
                 ? t('claiming')
-                : `${t('pure.claim')} ${rewardPercent} $${post?.symbol}`}
+                : `${t('pure.claim')} ${rewardPercent} $${idea?.symbol}`}
             </Button>
           )}
 
@@ -184,7 +185,7 @@ export const MemexPost = ({
                 ? t('already-refunded')
                 : isPending
                 ? t('refunding')
-                : `${t('refund')} ${rewardPercent} $${post?.symbol}`}
+                : `${t('refund')} ${rewardPercent} $${idea?.symbol}`}
             </Button>
           )}
         </div>
@@ -194,28 +195,23 @@ export const MemexPost = ({
           showMoreClass="text-purple-600"
           maxLine={8}
         >
-          {post?.content}
+          {idea?.content}
         </EllipsisText>
 
         {hasDetails && (
           <TokenDetailsCard
             className="mt-1"
-            details={p as NonNullable<keyof typeof p>}
+            details={restIdea as NonNullable<keyof typeof restIdea>}
+            tokenAddr={tokenAddr}
             onClick={() =>
-              router.push(
-                fmt.toHref(
-                  Routes.Main,
-                  chain?.name || '',
-                  post?.ido_address || ''
-                )
-              )
+              router.push(fmt.toHref(Routes.Main, chain?.name || '', tokenAddr))
             }
           />
         )}
 
         <GridImages urls={image_urls} />
 
-        <IdeaLikeComment idea={post} onCommentSuccess={onCommentSuccess} />
+        <IdeaLikeComment idea={idea} onCommentSuccess={onCommentSuccess} />
 
         <IdeaProgress value={progress} />
       </div>
@@ -223,4 +219,4 @@ export const MemexPost = ({
   )
 }
 
-export default MemexPost
+export default MemexIdeaCard

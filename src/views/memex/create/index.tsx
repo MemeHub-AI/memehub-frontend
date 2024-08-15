@@ -14,6 +14,7 @@ import { TokenDetailsCard } from '../components/token-detail-card'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import { useMemexClear } from './hooks/use-memex-clear'
+import { MemexIdeaItem } from '@/api/memex/types'
 
 export const CreateIdeaPage = () => {
   const createTweet = useCreateIdea()
@@ -45,7 +46,7 @@ export const CreateIdeaPage = () => {
               {!!ideaDetails && (
                 <TokenDetailsCard
                   className="pb-0"
-                  details={ideaDetails}
+                  details={ideaDetails as unknown as MemexIdeaItem}
                   editable={true}
                   onClick={() => router.push(Routes.MemexCreateDetails)}
                 />
