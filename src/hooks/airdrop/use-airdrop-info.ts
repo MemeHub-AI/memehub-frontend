@@ -42,7 +42,7 @@ export const useAirdropInfo = (
   const {
     data: airdropInfo = [],
     isLoading: isLoadingInfo,
-    refetch: refetchInfo,
+    refetch: refetchAirdrop,
   } = useReadContract({
     ...distributorConfig,
     functionName: 'distributions',
@@ -91,13 +91,7 @@ export const useAirdropInfo = (
     .multipliedBy(perCommunityAmount)
     .toFixed()
 
-  const refetchAirdrop = () => {
-    refetchInfo()
-    refetchDetails()
-  }
-
-  console.log('count', kolCount, communityCount)
-
+  // TODO: may need to `refetchDetails`, but it will refresh the page
   useInterval(refetchAirdrop, 5_000)
 
   return {
