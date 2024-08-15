@@ -42,6 +42,10 @@ export const TokenDetailsCard = ({
         className
       )}
       {...props}
+      onClick={(e) => {
+        e.stopPropagation()
+        props.onClick?.(e)
+      }}
     >
       {editable && (
         <AiOutlineEdit
