@@ -51,6 +51,7 @@ export const TokenSocialLinks = ({
       {links.map(({ title, link, icon }) =>
         !!link ? (
           <Button
+            key={title}
             shadow="none"
             size="icon"
             title={title}
