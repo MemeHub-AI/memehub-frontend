@@ -24,7 +24,16 @@ export interface MemexPostItem {
 }
 
 export interface MemexListReq {
+  type: MemexListType
   factory_address: string
+}
+
+export enum MemexListType {
+  Latest = 'lastest',
+  Hot = 'hot',
+  Join = 'join',
+  My = 'my',
+  Published = 'published',
 }
 
 export enum PostStatus {

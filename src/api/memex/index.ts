@@ -11,29 +11,9 @@ import {
 } from './types'
 
 export const memexApi = {
-  getLatest: (req: PaginationReq & MemexListReq) => {
+  getPostList: (req: PaginationReq & MemexListReq) => {
     return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
       '/api/v1/memex/tweets' + qs.stringify(req)
-    )
-  },
-  getHots: (req: PaginationReq & MemexListReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
-      '/api/v1/memex/tweets/hot' + qs.stringify(req)
-    )
-  },
-  getMyJoin: (req: PaginationReq & MemexListReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
-      '/api/v1/memex/tweets/join' + qs.stringify(req)
-    )
-  },
-  getMyIdea: (req: PaginationReq & MemexListReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
-      '/api/v1/memex/tweets/my' + qs.stringify(req)
-    )
-  },
-  getSuccessed: (req: PaginationReq & MemexListReq) => {
-    return api.GET<ApiResponse<PaginationRes<MemexPostItem>>>(
-      '/api/v1/memex/tweets/published' + qs.stringify(req)
     )
   },
   getPostDetail: (hash: string) => {
