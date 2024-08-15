@@ -2,14 +2,14 @@ import React from 'react'
 
 import { MemexLayout } from '../components/memex-layout'
 import { CustomSuspense } from '@/components/custom-suspense'
-import { MemexPost } from '../components/memex-post'
-import { PostEmpty } from '../components/post-empty'
-import { PostSkeleton } from '../components/post-skeleton'
-import { usePostList } from '../hooks/use-post-list'
+import { MemexPost } from '../components/idea-card'
+import { IdeaEmpty } from '../components/idea-empty'
+import { IdeaCardSkeleton } from '../components/idea-card-skeleton'
+import { useIdeaList } from '../hooks/use-idea-list'
 import { MemexListType } from '@/api/memex/types'
 
 export const Hots = () => {
-  const { list, total, isLoading, fetchNextPage } = usePostList(
+  const { list, total, isLoading, fetchNextPage } = useIdeaList(
     MemexListType.Hot
   )
 
@@ -17,8 +17,8 @@ export const Hots = () => {
     <MemexLayout>
       <CustomSuspense
         isPending={isLoading}
-        fallback={<PostSkeleton />}
-        nullback={<PostEmpty />}
+        fallback={<IdeaCardSkeleton />}
+        nullback={<IdeaEmpty />}
       >
         {list.map((t) => (
           <MemexPost key={t?.hash} post={t} />

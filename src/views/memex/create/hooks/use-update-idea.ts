@@ -8,7 +8,7 @@ import { memexApi } from '@/api/memex'
 import { REQUEST_ERR } from '@/errors/request'
 import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { usePostDetails } from '../../post/hooks/use-post-details'
+import { useIdeaDetails } from '../../idea/hooks/use-idea-details'
 import { Marketing } from '@/api/token/types'
 import { getEvmAirdropParams } from '@/utils/contract'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -17,7 +17,7 @@ import { useTokenConfig } from '@/hooks/use-token-config'
 export const useUpdateIdea = (hashId: string | undefined) => {
   const { t } = useTranslation()
   const chainId = useChainId()
-  const { details } = usePostDetails(hashId)
+  const { details } = useIdeaDetails(hashId)
   const { configValue } = useTokenConfig()
 
   const {
@@ -51,8 +51,8 @@ export const useUpdateIdea = (hashId: string | undefined) => {
     mutateAsync,
     reset: resetUpdate,
   } = useMutation({
-    mutationKey: [memexApi.updatePost.name, hashId],
-    mutationFn: memexApi.updatePost,
+    mutationKey: [memexApi.updateIdea.name, hashId],
+    mutationFn: memexApi.updateIdea,
     onMutate: () => toast.loading(t('updating')),
     onSettled: (_, __, ___, id) => toast.dismiss(id),
     onError: ({ message }) => {
@@ -64,7 +64,7 @@ export const useUpdateIdea = (hashId: string | undefined) => {
   const update = async ({
     marketing,
     ...params
-  }: Parameters<typeof memexApi.updatePost>[0] & {
+  }: Parameters<typeof memexApi.updateIdea>[0] & {
     marketing: Marketing[] | undefined
   }) => {
     if (!configValue) {

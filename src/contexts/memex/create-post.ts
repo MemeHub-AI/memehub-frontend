@@ -1,17 +1,17 @@
 import { createContext, useContext } from 'react'
 
 import { CONTEXT_ERR } from '@/errors/context'
-import { useCreatePost } from '@/views/memex/create/hooks/use-create-post'
+import { useCreateIdea } from '@/views/memex/create/hooks/use-create-idea'
 
-interface Value extends ReturnType<typeof useCreatePost> {}
+interface Value extends ReturnType<typeof useCreateIdea> {}
 
 const Context = createContext<Value | null>(null)
 
-export const CreatePostProvider = Context.Provider
+export const CreateIdeaProvider = Context.Provider
 
-export const useCreatePostContext = () => {
+export const useCreateIdeaContext = () => {
   const context = useContext(Context)
 
-  if (!context) throw CONTEXT_ERR.notFound('CreateTweetProvider')
+  if (!context) throw CONTEXT_ERR.notFound('CreateIdeaProvider')
   return context
 }

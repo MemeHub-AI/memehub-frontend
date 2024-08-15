@@ -7,7 +7,7 @@ import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
 
-export const useClaimRefund = (
+export const useIdeaClaimRefund = (
   addr: string | undefined | null,
   onFinally?: () => void
 ) => {

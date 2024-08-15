@@ -3,12 +3,12 @@ import { useTranslation } from 'react-i18next'
 
 import { FormField, FormControl } from '@/components/ui/form'
 import { ChainSelect } from '@/components/chain-select'
-import { useCreatePostContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-post'
 import { cn } from '@/lib/utils'
 
-export const CreateChainField = () => {
+export const CreateIdeaChainField = () => {
   const { t } = useTranslation()
-  const { form, isCreating } = useCreatePostContext()
+  const { form, isCreating } = useCreateIdeaContext()
 
   return (
     <FormField
@@ -37,4 +37,4 @@ export const CreateChainField = () => {
   )
 }
 
-export default CreateChainField
+export default CreateIdeaChainField

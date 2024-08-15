@@ -1,17 +1,17 @@
 import { createContext, useContext } from 'react'
 
-import { useCreateDetail } from './../../views/memex/create/detail/hooks/use-create-detail'
+import { useCreateIdeaDetails } from '../../views/memex/create/details/hooks/use-create-idea-details'
 import { CONTEXT_ERR } from './../../errors/context'
 
-interface Value extends ReturnType<typeof useCreateDetail> {}
+interface Value extends ReturnType<typeof useCreateIdeaDetails> {}
 
 const Context = createContext<Value | null>(null)
 
-export const CreateDetailProvider = Context.Provider
+export const CreateIdeaDetailsProvider = Context.Provider
 
-export const useCreateDetailContext = () => {
+export const useCreateIdeaDetailsContext = () => {
   const context = useContext(Context)
 
-  if (!context) throw CONTEXT_ERR.notFound('CreateDetailProvider')
+  if (!context) throw CONTEXT_ERR.notFound('CreateIdeaDetailsProvider')
   return context
 }

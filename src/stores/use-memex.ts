@@ -4,10 +4,7 @@ import { z } from 'zod'
 import type { MemexCreateReq } from '@/api/memex/types'
 import { marketingSchema } from '@/components/marketing-field'
 
-type PostRequired = Pick<
-  MemexCreateReq,
-  'content' | 'chain' | 'image_urls' | 'factory_address'
->
+type PostRequired = Pick<MemexCreateReq, 'content' | 'chain' | 'image_urls'>
 
 type PostOptional = Omit<
   MemexCreateReq,
@@ -16,17 +13,17 @@ type PostOptional = Omit<
   z.infer<typeof marketingSchema>
 
 interface MemexStore {
-  post: PostRequired | null
-  postDetails: PostOptional | null
+  idea: PostRequired | null
+  ideaDetails: PostOptional | null
 
-  setPost: (post: MemexStore['post']) => void
-  setPostDetails: (postDetails: MemexStore['postDetails']) => void
+  setIdea: (post: MemexStore['idea']) => void
+  setIdeaDetails: (postDetails: MemexStore['ideaDetails']) => void
 }
 
 export const useMemexStore = create<MemexStore>((set) => ({
-  post: null,
-  postDetails: null,
+  idea: null,
+  ideaDetails: null,
 
-  setPost: (post) => set({ post }),
-  setPostDetails: (postDetails) => set({ postDetails }),
+  setIdea: (idea) => set({ idea }),
+  setIdeaDetails: (ideaDetails) => set({ ideaDetails }),
 }))

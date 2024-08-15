@@ -1,15 +1,15 @@
 import dayjs from 'dayjs'
 
-import { MemexPostItem, PostStatus } from '@/api/memex/types'
+import { MemexIdeaItem, IdeaStatus } from '@/api/memex/types'
 import { useIdeaInfo } from '@/views/memex/hooks/use-idea-info'
 
 export const getIdeaStatus = (
-  post: MemexPostItem | undefined,
+  post: MemexIdeaItem | undefined,
   info: ReturnType<typeof useIdeaInfo>
 ) => {
   const { name, symbol, logo_url, description } = post ?? {}
 
-  const isStarted = post?.status === PostStatus.Activated
+  const isStarted = post?.status === IdeaStatus.Activated
   const isEnded = dayjs().isAfter(dayjs.unix(info.endAt))
   const isSuccess = info.isOver
   const isDeployed = info.isDeploy

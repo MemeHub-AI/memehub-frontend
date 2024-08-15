@@ -7,11 +7,11 @@ import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/image-upload'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { Label } from '@/components/ui/label'
-import { useCreatePostContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-post'
 
-export const CreatePicturesField = () => {
+export const CreateIdeaPicturesField = () => {
   const { t } = useTranslation()
-  const { form, isCreating } = useCreatePostContext()
+  const { form, isCreating } = useCreateIdeaContext()
   const { onChangeUpload } = useUploadImage()
 
   return (
@@ -48,4 +48,4 @@ export const CreatePicturesField = () => {
   )
 }
 
-export default CreatePicturesField
+export default CreateIdeaPicturesField

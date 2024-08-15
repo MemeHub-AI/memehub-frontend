@@ -7,11 +7,11 @@ import { Separator } from '@/components/ui/separator'
 import { FormField, FormItem } from '@/components/ui/form'
 import { PicturesPreview } from '../pictures-preview'
 import { useUserStore } from '@/stores/use-user-store'
-import { useCreatePostContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-post'
 
-export const CreateTextareaField = () => {
+export const CreateIdeaTextareaField = () => {
   const { t } = useTranslation()
-  const { form, isCreating } = useCreatePostContext()
+  const { form, isCreating } = useCreateIdeaContext()
   const { userInfo } = useUserStore()
 
   return (
@@ -45,4 +45,4 @@ export const CreateTextareaField = () => {
   )
 }
 
-export default CreateTextareaField
+export default CreateIdeaTextareaField

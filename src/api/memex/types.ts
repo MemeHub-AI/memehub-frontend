@@ -1,4 +1,4 @@
-export interface MemexPostItem {
+export interface MemexIdeaItem {
   chain: null | string
   comment_count: number
   content: string
@@ -10,7 +10,7 @@ export interface MemexPostItem {
   image_urls: string[]
   logo_url: null
   name: null | string
-  status: PostStatus | null
+  status: IdeaStatus | null
   symbol: null | string
   telegram_url: null
   twitter_url: null | string
@@ -36,7 +36,7 @@ export enum MemexListType {
   Published = 'published',
 }
 
-export enum PostStatus {
+export enum IdeaStatus {
   Inactivated, // Created
   Activated, // Started
   Done, // Successed
@@ -47,6 +47,7 @@ export interface MemexCreateReq {
   content: string
   image_urls: string[]
   factory_address: string
+  airdrop_address: string
 
   name?: string
   symbol?: string
@@ -57,11 +58,11 @@ export interface MemexCreateReq {
   website_url?: string
 }
 
-export interface MemexPostHash {
+export interface MemexIdeaHash {
   hash: string
 }
 
-export interface MemexPostComment {
+export interface MemexIdeaComment {
   content: string
   created_at: string
   user_logo: string
@@ -69,7 +70,7 @@ export interface MemexPostComment {
   image_urls: string[]
 }
 
-export interface MemexPostCommentReq {
+export interface MemexIdeaCommentReq {
   content: string
   image_urls: string[]
 }

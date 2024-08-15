@@ -3,12 +3,13 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 
 import { Button } from '@/components/ui/button'
 import { ImagesPreviewDialog } from '@/components/images-preview-dialog'
-import { useCreatePostContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-post'
 import { cn } from '@/lib/utils'
 
+// TODO: refactor to public comp
 export const PicturesPreview = ({ disabled }: { disabled?: boolean }) => {
   const [srcIdx, setSrcIdx] = useState(-1)
-  const { form } = useCreatePostContext()
+  const { form } = useCreateIdeaContext()
   const pictures = form.watch('pictures')
 
   return (

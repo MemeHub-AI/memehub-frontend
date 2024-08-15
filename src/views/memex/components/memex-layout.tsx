@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
-import { CreateButton } from './create-button'
+import { IdeaFloatButton } from './idea-float-button'
 import { PrimaryLayout } from '@/components/layouts/primary'
 
 export const MemexLayout = ({ children }: { children?: ReactNode }) => {
@@ -68,7 +68,7 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
         </div>
       </Tabs>
 
-      <CreateButton />
+      <IdeaFloatButton />
     </PrimaryLayout>
   )
 }

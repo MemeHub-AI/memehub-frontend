@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEdit } from 'react-icons/ai'
 
@@ -11,12 +11,15 @@ import { cn } from '@/lib/utils'
 import { MemexCreateReq } from '@/api/memex/types'
 
 interface Props {
-  details?: Omit<MemexCreateReq, 'chain' | 'content' | 'image_urls'>
+  details?: Omit<
+    MemexCreateReq,
+    'chain' | 'content' | 'image_urls' | 'factory_address'
+  >
   editable?: boolean
   onBuyClick?: () => void
 }
 
-export const TokenDetailCard = ({
+export const TokenDetailsCard = ({
   className,
   details,
   editable = false,
@@ -93,4 +96,4 @@ export const TokenDetailCard = ({
   )
 }
 
-export default TokenDetailCard
+export default TokenDetailsCard
