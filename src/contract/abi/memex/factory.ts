@@ -72,6 +72,37 @@ export const memexFactoryAbi = [
     inputs: [
       {
         indexed: true,
+        internalType: 'uint256',
+        name: 'projectId',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'memeXAddress',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'startTime',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubProjectCreate',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: 'address',
         name: 'previousOwner',
         type: 'address',
@@ -115,9 +146,9 @@ export const memexFactoryAbi = [
   {
     inputs: [
       {
-        internalType: 'uint256[]',
-        name: '_idoParams',
-        type: 'uint256[]',
+        internalType: 'uint256',
+        name: '_startTime',
+        type: 'uint256',
       },
       {
         internalType: 'string[]',
@@ -274,6 +305,19 @@ export const memexFactoryAbi = [
   },
   {
     inputs: [],
+    name: 'receiveRemainToken',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'renounceOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
@@ -371,6 +415,19 @@ export const memexFactoryAbi = [
       },
     ],
     name: 'setOwnerRatio',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_receiveRemainToken',
+        type: 'address',
+      },
+    ],
+    name: 'setReceiveRemainToken',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

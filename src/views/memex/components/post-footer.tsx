@@ -1,14 +1,16 @@
 import { useState, type ComponentProps } from 'react'
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
+import { useTranslation } from 'react-i18next'
 
 import { Progress } from '@/components/ui/progress'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
-import { useTranslation } from 'react-i18next'
 import { Textarea } from '@/components/ui/textarea'
 import { utilLang } from '@/utils/lang'
 import { Button } from '@/components/ui/button'
+import { usePostLike } from '../hooks/use-post-like'
+import { useIdoInfo } from '../hooks/use-ido-info'
 
 interface Props {
   isLiked?: boolean
@@ -16,8 +18,9 @@ interface Props {
   commentAmount?: number
   chainName?: string
   progress?: number
-  onLike?: () => void
-  onUnlike?: () => void
+
+  idoAddr: string | null | undefined
+  isCreator: boolean
 }
 
 export const PostFooter = ({
@@ -26,21 +29,28 @@ export const PostFooter = ({
   commentAmount = 0,
   chainName = '',
   progress = 0,
-  onLike,
-  onUnlike,
+  idoAddr,
+  isCreator,
 }: ComponentProps<'div'> & Props) => {
   const { t } = useTranslation()
   const [likeOpen, setLikeOpen] = useState(false)
   const [commentOpen, setCommentOpen] = useState(false)
   const { chainsMap } = useChainsStore()
 
+  const { likeValue, ownerPercent, userPercent, durationHours } =
+    useIdoInfo(idoAddr)
+  const { isLiking, like } = usePostLike(idoAddr, () => {
+    setLikeOpen(false)
+    setCommentOpen(true)
+  })
+
   const chain = chainsMap[chainName]
-  const reserveAmount = 0.009
-  const reserveSymbol = 'BNB'
+  const reserveAmount = likeValue
+  const reserveSymbol = chain?.native.symbol
+  // TODO/memex: usdt should be dynamic
   const usdtAmount = 5
   const usdtSymbol = 'USDT'
-  const tokenPercent = '0.5%'
-  const duration = '48h'
+  const percent = (isCreator ? ownerPercent : userPercent).toFixed() + '%'
 
   return (
     <>
@@ -67,14 +77,29 @@ export const PostFooter = ({
           </span>
         </div>
         <div className="text-zinc-500 text-sm">
-          <p>{utilLang.replace(t('memex.like.desc'), [tokenPercent])}</p>
-          <p>{utilLang.replace(t('memex.like.desc2'), [duration])}</p>
+          <p>{utilLang.replace(t('memex.like.desc'), [percent])}</p>
+          <p>
+            {utilLang.replace(t('memex.like.desc2'), [
+              durationHours + t('hours'),
+            ])}
+          </p>
         </div>
         <DialogFooter className="flex-row space-x-4">
-          <Button variant="yellow" shadow="none" size="sm">
-            {t('confirm')}
+          <Button
+            variant="yellow"
+            shadow="none"
+            size="sm"
+            disabled={isLiking}
+            onClick={() => like(likeValue)}
+          >
+            {isLiking ? t('confirming') : t('confirm')}
           </Button>
-          <Button shadow="none" size="sm" onClick={() => setLikeOpen(false)}>
+          <Button
+            shadow="none"
+            size="sm"
+            disabled={isLiking}
+            onClick={() => setLikeOpen(false)}
+          >
             {t('cancel')}
           </Button>
         </DialogFooter>

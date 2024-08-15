@@ -1,8 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { memexApi } from '@/api/memex'
+import { useCreateToken } from '@/views/create/hooks/use-create-token'
 
+// TODO/memex: should merge all list of memex
 export const useLatestList = () => {
+  const { memexFactoryAddr } = useCreateToken()
+
   const {
     data: { total = 0, list = [] } = {},
     isError,
@@ -11,13 +15,18 @@ export const useLatestList = () => {
     fetchNextPage,
   } = useInfiniteQuery({
     queryKey: [memexApi.getLatest.name],
-    queryFn: ({ pageParam }) => memexApi.getLatest({ page: pageParam }),
+    queryFn: ({ pageParam }) =>
+      memexApi.getLatest({
+        page: pageParam,
+        factory_address: memexFactoryAddr!,
+      }),
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
     select: ({ pages }) => ({
       total: pages[0].data.count,
       list: pages.flatMap((p) => p.data.results),
     }),
+    enabled: !!memexFactoryAddr,
   })
 
   return {

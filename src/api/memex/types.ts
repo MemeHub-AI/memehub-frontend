@@ -23,6 +23,10 @@ export interface MemexPostItem {
   like_amount: number
 }
 
+export interface MemexListReq {
+  factory_address: string
+}
+
 export enum PostStatus {
   Inactivated, // Already create post
   Activated, // Start ido
@@ -33,6 +37,7 @@ export interface MemexCreateReq {
   chain: string
   content: string
   image_urls: string[]
+  factory_address: string
 
   name?: string
   symbol?: string

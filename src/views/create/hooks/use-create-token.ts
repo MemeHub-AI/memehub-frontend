@@ -9,7 +9,15 @@ import { DistributorVersion } from '@/contract/abi/distributor'
 
 export const useCreateToken = () => {
   const {
-    data: { name: configName, value: configValue, contracts } = {},
+    data: {
+      name: configName,
+      value: configValue,
+      contracts: {
+        coin: [coin] = [],
+        airdrop: [airdrop] = [],
+        memex: [memex] = [],
+      } = {},
+    } = {},
     refetch: refetchConfig,
   } = useQuery({
     queryKey: [tokenApi.getConfig.name],
@@ -17,9 +25,14 @@ export const useCreateToken = () => {
     select: ({ data }) => data,
     refetchInterval: 30_000,
   })
-  const { address: bcAddress, version: bcVersion } = contracts?.coin[0] ?? {}
-  const { address: airdropAddress, version: airdropVersion } =
-    contracts?.airdrop[0] ?? {}
+  const bcAddress = coin?.address as Address | undefined
+  const bcVersion = coin?.version as BcVersion | undefined
+
+  const airdropAddress = airdrop?.address as Address | undefined
+  const airdropVersion = airdrop?.version as DistributorVersion | undefined
+
+  const memexFactoryAddr = memex?.address as Address | undefined
+  const memexFactoryVersion = memex?.version
 
   const {
     data: createData,
@@ -50,10 +63,16 @@ export const useCreateToken = () => {
   return {
     configName,
     configValue,
-    bcAddress: bcAddress as Address | undefined,
-    airdropAddress: airdropAddress as Address | undefined,
-    bcVersion: bcVersion as BcVersion | undefined,
-    airdropVersion: airdropVersion as DistributorVersion | undefined,
+
+    bcAddress,
+    bcVersion,
+
+    airdropAddress,
+    airdropVersion,
+
+    memexFactoryAddr,
+    memexFactoryVersion,
+
     createTokenData,
     createTokenError,
     isCreatingToken,

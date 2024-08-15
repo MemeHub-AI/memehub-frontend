@@ -172,6 +172,8 @@ export const MemexPost = ({
           commentAmount={post?.comment_count}
           chainName={post?.chain || ''}
           progress={progress}
+          idoAddr={post?.ido_address}
+          isCreator={!!post?.is_creator}
         />
       </div>
     </div>

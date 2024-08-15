@@ -30,7 +30,6 @@ type Keys =
   | 'kolNft'
   | 'ido'
   | 'idoAirdrop'
-  | 'memexFactory'
 
 type AddrMap = Record<number, Partial<Record<Keys, Address>> | undefined>
 
@@ -124,8 +123,6 @@ const dev: AddrMap = {
 
     exchangeNft: '0x2424e246609156F57cD53b4a9AA52B36Fd17fE45',
     kolNft: '0xBfd8dE1F1542d25e66F089B1B4f07074ef41741e',
-
-    memexFactory: '0xaf246ECD3D78e6462fCF0e22e00Eb1b0E05db014',
   },
   [baseSepolia.id]: {
     reserveToken: '0x4200000000000000000000000000000000000006',

@@ -17,9 +17,14 @@ export const memexIdoAbi = [
         type: 'address',
       },
       {
-        internalType: 'uint256[]',
-        name: '_idoParams',
-        type: 'uint256[]',
+        internalType: 'uint256',
+        name: '_startTime',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_endTime',
+        type: 'uint256',
       },
       {
         internalType: 'uint256[]',
@@ -89,11 +94,6 @@ export const memexIdoAbi = [
   },
   {
     inputs: [],
-    name: 'MEMEHUB_AlreadyClaim',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'MEMEHUB_AlreadyDeploy',
     type: 'error',
   },
@@ -104,22 +104,7 @@ export const memexIdoAbi = [
   },
   {
     inputs: [],
-    name: 'MEMEHUB_AlreadyMaxCount',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'MEMEHUB_AlreadyOver',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_ClaimOver',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_NoDeploy',
     type: 'error',
   },
   {
@@ -144,11 +129,6 @@ export const memexIdoAbi = [
   },
   {
     inputs: [],
-    name: 'MEMEHUB_NotLike',
-    type: 'error',
-  },
-  {
-    inputs: [],
     name: 'MEMEHUB_NotTime',
     type: 'error',
   },
@@ -164,7 +144,7 @@ export const memexIdoAbi = [
   },
   {
     inputs: [],
-    name: 'NotPermission',
+    name: 'MEMEHUB_TokenAmountNoEnough',
     type: 'error',
   },
   {
@@ -187,11 +167,6 @@ export const memexIdoAbi = [
       },
     ],
     name: 'OwnableUnauthorizedAccount',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'TokenAmountNoEnough',
     type: 'error',
   },
   {
@@ -312,9 +287,9 @@ export const memexIdoAbi = [
     name: 'CommunityFlag',
     outputs: [
       {
-        internalType: 'uint16',
+        internalType: 'uint256',
         name: '',
-        type: 'uint16',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -397,9 +372,9 @@ export const memexIdoAbi = [
     name: 'distributionRatioCommunity',
     outputs: [
       {
-        internalType: 'uint40',
+        internalType: 'uint256',
         name: '',
-        type: 'uint40',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -410,9 +385,9 @@ export const memexIdoAbi = [
     name: 'distributionRatioKol',
     outputs: [
       {
-        internalType: 'uint40',
+        internalType: 'uint256',
         name: '',
-        type: 'uint40',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -645,9 +620,9 @@ export const memexIdoAbi = [
     name: 'kolFlag',
     outputs: [
       {
-        internalType: 'uint16',
+        internalType: 'uint256',
         name: '',
-        type: 'uint16',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -938,9 +913,9 @@ export const memexIdoAbi = [
     name: 'walletCountCommunity',
     outputs: [
       {
-        internalType: 'uint40',
+        internalType: 'uint256',
         name: '',
-        type: 'uint40',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -951,9 +926,9 @@ export const memexIdoAbi = [
     name: 'walletCountKol',
     outputs: [
       {
-        internalType: 'uint40',
+        internalType: 'uint256',
         name: '',
-        type: 'uint40',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',

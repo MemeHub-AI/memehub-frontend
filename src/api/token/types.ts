@@ -2,6 +2,7 @@ import { TokenType } from '@/enums/token'
 import type { UserInfoRes } from '../user/types'
 import type { TokenVersion } from '@/contract/abi/token'
 import type { DistributorVersion } from '@/contract/abi/distributor'
+import { Address } from 'viem'
 
 export interface TokenListItem {
   airdrop: AirdropItem[]
@@ -185,6 +186,7 @@ export interface TokenConfigRes {
   contracts: {
     coin: TokenCreateConfigContract[]
     airdrop: TokenCreateConfigContract[]
+    memex: TokenCreateConfigContract[]
   }
 }
 

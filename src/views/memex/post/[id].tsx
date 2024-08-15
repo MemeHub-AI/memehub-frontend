@@ -38,6 +38,8 @@ export const PostDetailsPage = () => {
 
             <GridImages urls={details?.image_urls ?? []} />
             <PostFooter
+              idoAddr={details?.ido_address}
+              isCreator={!!details?.is_creator}
               isLiked={!!details?.is_liked}
               likeAmount={details?.like_amount}
               commentAmount={details?.comment_count}

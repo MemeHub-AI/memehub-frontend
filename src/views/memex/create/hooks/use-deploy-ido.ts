@@ -1,12 +1,11 @@
 import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
-import { formatEther, parseEther } from 'viem'
+import { Address, formatEther, parseEther } from 'viem'
 import { toast } from 'sonner'
 import dayjs from 'dayjs'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { memexFactoryAbi } from '@/contract/abi/memex/factory'
-import { addrMap } from '@/contract/address'
 import { reportException } from '@/errors'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { getEvmAirdropParams } from '@/utils/contract'
@@ -16,12 +15,11 @@ import { useCreateToken } from '@/views/create/hooks/use-create-token'
 export const useDeployIdo = (onFinally?: () => void) => {
   const { t } = useTranslation()
   const { chainId = 0 } = useAccount()
-  const { configValue } = useCreateToken()
+  const { configValue, memexFactoryAddr } = useCreateToken()
 
-  const { memexFactory } = addrMap[chainId] ?? {}
   const deployConfig = {
     abi: memexFactoryAbi,
-    address: memexFactory!,
+    address: memexFactoryAddr as Address,
     chainId,
   }
 
@@ -33,7 +31,7 @@ export const useDeployIdo = (onFinally?: () => void) => {
     ...deployConfig,
     functionName: 'ethAmount',
     query: {
-      enabled: !!memexFactory,
+      enabled: !!memexFactoryAddr,
       select: (data) => formatEther(data),
     },
   })
@@ -75,7 +73,7 @@ export const useDeployIdo = (onFinally?: () => void) => {
     symbol: string | undefined,
     marketing: Marketing[] | undefined
   ) => {
-    if (!memexFactory || !configValue) {
+    if (!memexFactoryAddr || !configValue) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -85,8 +83,7 @@ export const useDeployIdo = (onFinally?: () => void) => {
       ...deployConfig,
       functionName: 'create',
       args: [
-        // TODO: remove endTime
-        [BigInt(dayjs().unix()), BigInt(dayjs().unix() + 7200)],
+        BigInt(dayjs().unix()),
         hasInfo ? [name, symbol] : [],
         [BigInt(projectId)],
         getEvmAirdropParams(configValue, marketing),
@@ -96,6 +93,7 @@ export const useDeployIdo = (onFinally?: () => void) => {
   }
 
   return {
+    memexFactoryAddr,
     deployFee,
     isLoadingFee,
     isDeploying: isPending || isLoading,

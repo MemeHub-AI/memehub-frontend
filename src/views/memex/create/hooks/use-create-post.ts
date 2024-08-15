@@ -46,19 +46,22 @@ export const useCreatePost = () => {
     },
   })
 
-  const { deployFee, isDeploying, deploy } = useDeployIdo(() => {
-    setPost(null)
-    setPostDetails(null)
-    router.back()
-  })
+  const { memexFactoryAddr, deployFee, isDeploying, deploy } = useDeployIdo(
+    () => {
+      setPost(null)
+      setPostDetails(null)
+      router.back()
+    }
+  )
 
-  const onSubmit = async (values: z.infer<typeof schema>) => {
-    if (!(await form.trigger())) return
+  const onSubmit = async ({ pictures, ...values }: z.infer<typeof schema>) => {
+    if (!(await form.trigger()) || !memexFactoryAddr) return
 
     try {
       const { data } = await mutateAsync({
+        image_urls: pictures,
+        factory_address: memexFactoryAddr,
         ...values,
-        image_urls: values.pictures,
         ...postDetails,
       })
 

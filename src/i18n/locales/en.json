@@ -414,7 +414,7 @@
   "invite.invalid.reason2": "This referral link has caused a circular invitation",
   "balance.insufficient": "Balance insufficient",
   "airdrop.claim": "Claim",
-  "hours": "Hours",
+  "hours": " Hours",
   "airdrop.go-burn": "Go to burn",
   "airdrop.burn": "Burn",
   "burning": "Burning...",
@@ -672,5 +672,6 @@
   "memex.like.desc": "After liking, if the consensus is successful, you will receive {} tokens",
   "memex.like.desc2": "If the consensus fails after {}, you will receive a refund",
   "memex.deploying": "Idea creating...",
-  "memex.deploy-success": "Idea create successful!"
+  "memex.deploy-success": "Idea create successful!",
+  "confirming": "Confirming..."
 }
