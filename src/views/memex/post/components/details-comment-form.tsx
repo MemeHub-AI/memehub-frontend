@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { AiOutlinePicture } from 'react-icons/ai'
+import { useRouter } from 'next/router'
 
 import { Avatar } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
@@ -13,12 +14,15 @@ import { Label } from '@/components/ui/label'
 import { GridImages } from '@/components/grid-images'
 import { utilLang } from '@/utils/lang'
 import { postCommentImgMax } from '@/config/memex/post'
+import { usePostDetailsContext } from '@/contexts/memex/post-details'
 
 export const DetailsCommentForm = () => {
   const { t } = useTranslation()
+  const { query } = useRouter()
   const { userInfo } = useUserStore()
   const { onChangeUpload } = useUploadImage()
-  const { form, onSubmit } = useCommentForm()
+  const { refetchComments } = usePostDetailsContext()
+  const { form, onSubmit } = useCommentForm(query.id as string, refetchComments)
 
   return (
     <Form {...form}>

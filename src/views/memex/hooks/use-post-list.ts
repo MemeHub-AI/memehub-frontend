@@ -12,9 +12,10 @@ export const usePostList = (type: MemexListType) => {
     isError,
     isLoading,
     isFetching,
+    refetch,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: [memexApi.getPostList.name],
+    queryKey: [memexApi.getPostList.name, type, memexFactoryAddr],
     queryFn: ({ pageParam }) =>
       memexApi.getPostList({
         page: pageParam,
@@ -28,6 +29,7 @@ export const usePostList = (type: MemexListType) => {
       list: pages.flatMap((p) => p.data.results),
     }),
     enabled: !!memexFactoryAddr,
+    refetchInterval: 5_000,
   })
 
   return {
@@ -36,6 +38,7 @@ export const usePostList = (type: MemexListType) => {
     isError,
     isLoading,
     isFetching,
+    refetch,
     fetchNextPage,
   }
 }

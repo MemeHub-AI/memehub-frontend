@@ -13,7 +13,7 @@ import { useMemexClear } from '../hooks/use-memex-clear'
 
 export const CreateDetail = () => {
   const craeteDetail = useCreateDetail()
-  const { form, onSubmit } = craeteDetail
+  const { form, onSubmit, isUpdating } = craeteDetail
 
   useMemexClear()
 
@@ -24,7 +24,7 @@ export const CreateDetail = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="pt-2 pb-3">
             <CreateDetailHeader />
             <RequiredFields />
-            <MarketingField form={form} />
+            <MarketingField form={form} disabled={isUpdating} />
             <OptionalFields />
             <CreatePostIntro />
           </form>

@@ -2,12 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlinePicture } from 'react-icons/ai'
 
-import {
-  FormControl,
-  FormField,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
+import { FormField, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { useUploadImage } from '@/hooks/use-upload-image'
@@ -18,7 +13,7 @@ import { fmt } from '@/utils/fmt'
 
 export const RequiredFields = () => {
   const { t } = useTranslation()
-  const { form } = useCreateDetailContext()
+  const { form, isUpdating } = useCreateDetailContext()
   const { file, onChangeUpload } = useUploadImage()
 
   return (
@@ -30,7 +25,12 @@ export const RequiredFields = () => {
           <div>
             <FormLabel className="font-bold">{t('ticker')}</FormLabel>
             <div>
-              <Input placeholder={t('ticker')} className="px-2" {...field} />
+              <Input
+                placeholder={t('ticker')}
+                className="px-2"
+                {...field}
+                disabled={isUpdating || field.disabled}
+              />
               <FormMessage />
             </div>
           </div>
@@ -44,7 +44,12 @@ export const RequiredFields = () => {
           <div>
             <FormLabel className="font-bold">{t('name')}</FormLabel>
             <div>
-              <Input placeholder={t('name')} className="px-2" {...field} />
+              <Input
+                placeholder={t('name')}
+                className="px-2"
+                {...field}
+                disabled={isUpdating || field.disabled}
+              />
               <FormMessage />
             </div>
           </div>
@@ -61,6 +66,7 @@ export const RequiredFields = () => {
               <Label
                 className="border-2 border-black p-1.5 rounded-md w-fit"
                 htmlFor="create-detail-logo"
+                disabled={isUpdating || field.disabled}
               >
                 <AiOutlinePicture size={28} />
                 <ImageUpload
@@ -71,6 +77,7 @@ export const RequiredFields = () => {
                     const src = await onChangeUpload(e)
                     if (src) field.onChange(src)
                   }}
+                  disabled={isUpdating || field.disabled}
                 />
               </Label>
             </div>
@@ -92,6 +99,7 @@ export const RequiredFields = () => {
                 className="px-2"
                 rows={5}
                 {...field}
+                disabled={isUpdating || field.disabled}
               />
               <FormMessage />
             </div>

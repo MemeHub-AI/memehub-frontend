@@ -673,5 +673,8 @@
   "memex.like.desc2": "If the consensus fails after {}, you will receive a refund",
   "memex.deploying": "Idea creating...",
   "memex.deploy-success": "Idea create successful!",
-  "confirming": "Confirming..."
+  "confirming": "Confirming...",
+  "updating": "Updating...",
+  "update-failed": "Update failed, please try again",
+  "update-success": "Update successful!"
 }

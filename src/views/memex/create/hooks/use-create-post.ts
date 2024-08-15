@@ -11,7 +11,7 @@ import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
 import { useMemexStore } from '@/stores/use-memex'
 import { createPostCharMin } from '@/config/memex/post'
-import { useDeployIdo } from './use-deploy-ido'
+import { useDeployIdea } from './use-deploy-idea'
 
 const schema = z.object({
   content: z.string().min(createPostCharMin),
@@ -46,7 +46,7 @@ export const useCreatePost = () => {
     },
   })
 
-  const { memexFactoryAddr, deployFee, isDeploying, deploy } = useDeployIdo(
+  const { memexFactoryAddr, deployFee, isDeploying, deploy } = useDeployIdea(
     () => {
       setPost(null)
       setPostDetails(null)

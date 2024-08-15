@@ -24,8 +24,10 @@ export const memexApi = {
       body: req,
     })
   },
-  updatePost: (req: MemexCreateReq & MemexPostHash) => {
-    return api.PUT<ApiResponse<null>>('/api/v1/memex/tweets', { body: req })
+  updatePost: (req: Partial<MemexCreateReq> & MemexPostHash) => {
+    return api.PUT<ApiResponse<MemexPostHash>>('/api/v1/memex/tweets', {
+      body: req,
+    })
   },
   getPostComments: (req: PaginationReq & MemexPostHash) => {
     return api.GET<ApiResponse<PaginationRes<MemexPostComment>>>(

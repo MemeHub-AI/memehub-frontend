@@ -1,56 +1,54 @@
-import { useState, type ComponentProps } from 'react'
+import { useMemo, useState, type ComponentProps } from 'react'
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 
-import { Progress } from '@/components/ui/progress'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import { utilLang } from '@/utils/lang'
 import { Button } from '@/components/ui/button'
 import { usePostLike } from '../hooks/use-post-like'
-import { useIdoInfo } from '../hooks/use-ido-info'
+import { useCommentForm } from '../post/hooks/use-comment-form'
+import { Form, FormField } from '@/components/ui/form'
+import { MemexPostItem } from '@/api/memex/types'
+import { useIdeaInfo } from '../hooks/use-idea-info'
+import { getIdeaStatus } from '@/utils/memex/idea'
 
 interface Props {
-  isLiked?: boolean
-  likeAmount?: number
-  commentAmount?: number
-  chainName?: string
-  progress?: number
-
-  idoAddr: string | null | undefined
-  isCreator: boolean
+  post: MemexPostItem | undefined
+  onCommentSuccess?: () => void
 }
 
-export const PostFooter = ({
-  isLiked,
-  likeAmount = 0,
-  commentAmount = 0,
-  chainName = '',
-  progress = 0,
-  idoAddr,
-  isCreator,
+export const PostLikeComment = ({
+  post,
+  onCommentSuccess,
 }: ComponentProps<'div'> & Props) => {
   const { t } = useTranslation()
   const [likeOpen, setLikeOpen] = useState(false)
   const [commentOpen, setCommentOpen] = useState(false)
   const { chainsMap } = useChainsStore()
-
-  const { likeValue, ownerPercent, userPercent, durationHours } =
-    useIdoInfo(idoAddr)
-  const { isLiking, like } = usePostLike(idoAddr, () => {
+  const { form, isPending, onSubmit } = useCommentForm(post?.hash || '', () => {
+    setCommentOpen(false)
+    onCommentSuccess?.()
+  })
+  const ideaInfo = useIdeaInfo(post?.ido_address)
+  const { isLiking, like } = usePostLike(post?.ido_address, () => {
     setLikeOpen(false)
     setCommentOpen(true)
   })
+  const { isEnded } = useMemo(
+    () => getIdeaStatus(post, ideaInfo),
+    [post, ideaInfo]
+  )
 
-  const chain = chainsMap[chainName]
-  const reserveAmount = likeValue
-  const reserveSymbol = chain?.native.symbol
+  const { likeValue, likedCount, durationSeconds, ownerPercent, userPercent } =
+    ideaInfo
+  const chain = chainsMap[post?.chain || '']
+
   // TODO/memex: usdt should be dynamic
   const usdtAmount = 5
   const usdtSymbol = 'USDT'
-  const percent = (isCreator ? ownerPercent : userPercent).toFixed() + '%'
 
   return (
     <>
@@ -73,14 +71,18 @@ export const PostFooter = ({
           <span>1</span>
           <HeartFilledIcon className="w-6 h-6 text-red-500" />
           <span>
-            = {reserveAmount} {reserveSymbol}({usdtAmount} {usdtSymbol})
+            = {likeValue} {chain?.native.symbol}({usdtAmount} {usdtSymbol})
           </span>
         </div>
         <div className="text-zinc-500 text-sm">
-          <p>{utilLang.replace(t('memex.like.desc'), [percent])}</p>
+          <p>
+            {utilLang.replace(t('memex.like.desc'), [
+              post?.is_creator ? ownerPercent : userPercent + '%',
+            ])}
+          </p>
           <p>
             {utilLang.replace(t('memex.like.desc2'), [
-              durationHours + t('hours'),
+              durationSeconds / 60 / 60 + t('hours'),
             ])}
           </p>
         </div>
@@ -109,22 +111,49 @@ export const PostFooter = ({
         open={commentOpen}
         onOpenChange={setCommentOpen}
         contentProps={{
-          className: 'flex flex-col items-center',
+          className: 'p-0',
           showClose: false,
           onClick: (e) => e.stopPropagation(),
         }}
       >
-        <DialogTitle>{t('like-success')}</DialogTitle>
-        <HeartFilledIcon className="w-20 h-20 text-red-500" />
-        <Textarea rows={5} placeholder={t('post-comment')} />
-        <DialogFooter className="flex-row space-x-4">
-          <Button variant="yellow" shadow="none" size="sm">
-            {t('confirm')}
-          </Button>
-          <Button shadow="none" size="sm" onClick={() => setCommentOpen(false)}>
-            {t('cancel')}
-          </Button>
-        </DialogFooter>
+        <Form {...form}>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col items-center p-6 space-y-3"
+          >
+            <DialogTitle>{t('like-success')}</DialogTitle>
+            <HeartFilledIcon className="w-20 h-20 text-red-500" />
+
+            <FormField
+              control={form.control}
+              name="comment"
+              render={({ field }) => (
+                <Textarea rows={5} placeholder={t('post-comment')} {...field} />
+              )}
+            />
+
+            <DialogFooter className="flex-row space-x-4">
+              <Button
+                variant="yellow"
+                shadow="none"
+                size="sm"
+                type="submit"
+                disabled={isPending}
+              >
+                {isPending ? t('comment.loading') : t('confirm')}
+              </Button>
+              <Button
+                type="button"
+                shadow="none"
+                size="sm"
+                disabled={isPending}
+                onClick={() => setCommentOpen(false)}
+              >
+                {t('cancel')}
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </Dialog>
 
       <div className="flex items-center justify-between mt-2">
@@ -133,19 +162,22 @@ export const PostFooter = ({
             className="flex items-center space-x-1 text-sm"
             onClick={(e) => e.stopPropagation()}
           >
-            {isLiked ? (
+            {!!post?.is_liked ? (
               <HeartFilledIcon className="w-5 h-5 text-red-500" />
             ) : (
               <HeartIcon
                 className="w-5 h-5"
-                onClick={() => setLikeOpen(true)}
+                onClick={() => {
+                  if (isEnded) return
+                  setLikeOpen(true)
+                }}
               />
             )}
-            <span>{likeAmount}</span>
+            <span>{likedCount}</span>
           </div>
           <div className="flex items-center space-x-1 text-sm">
             <GoComment className="w-5 h-5" />
-            <span>{commentAmount}</span>
+            <span>{post?.comment_count ?? 0}</span>
           </div>
         </div>
 
@@ -154,14 +186,8 @@ export const PostFooter = ({
           <span>{chain?.displayName}</span>
         </div>
       </div>
-
-      <Progress
-        value={progress}
-        className="mt-2 h-5 rounded border-2 border-black"
-        indicatorClass="bg-red-500"
-      />
     </>
   )
 }
 
-export default PostFooter
+export default PostLikeComment

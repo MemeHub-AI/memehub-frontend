@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { ComponentProps, useEffect, useMemo, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { InfoCircledIcon } from '@radix-ui/react-icons'
 import { z } from 'zod'
@@ -35,9 +35,10 @@ export const marketingSchema = z.object({
 
 interface Props {
   form: UseFormReturn<z.infer<typeof marketingSchema>>
+  disabled?: boolean
 }
 
-export const MarketingField = ({ form }: Props) => {
+export const MarketingField = ({ form, disabled }: Props) => {
   const { t } = useTranslation()
   const { configValue } = useCreateToken()
   const { distributionRatioKol = 0 } = configValue ?? {}
@@ -93,7 +94,7 @@ export const MarketingField = ({ form }: Props) => {
                 <FormItem className="flex items-center space-x-2 mt-2">
                   <FormControl>
                     <Checkbox
-                      disabled={field.disabled}
+                      disabled={field.disabled || disabled}
                       checked={checked}
                       onCheckedChange={(checked: CheckedState) => {
                         const value = field.value as Marketing[]

@@ -14,9 +14,9 @@ import { useMemexStore } from '@/stores/use-memex'
 
 export const OptionalFields = () => {
   const { t } = useTranslation()
-  const { form } = useCreateDetailContext()
-  const { postDetails: tweetDetails } = useMemexStore()
-  const { twitter_url, telegram_url, website_url } = tweetDetails ?? {}
+  const { form, isUpdating } = useCreateDetailContext()
+  const { postDetails } = useMemexStore()
+  const { twitter_url, telegram_url, website_url } = postDetails ?? {}
   const defaultOpen = !!twitter_url || !!telegram_url || !!website_url
 
   return (
@@ -36,6 +36,7 @@ export const OptionalFields = () => {
                 placeholder={`(${t('optional')})`}
                 className="px-2"
                 {...field}
+                disabled={field.disabled || isUpdating}
               />
             </div>
           )}
@@ -51,6 +52,7 @@ export const OptionalFields = () => {
                 placeholder={`(${t('optional')})`}
                 className="px-2"
                 {...field}
+                disabled={field.disabled || isUpdating}
               />
             </div>
           )}
@@ -66,6 +68,7 @@ export const OptionalFields = () => {
                 placeholder={`(${t('optional')})`}
                 className="px-2"
                 {...field}
+                disabled={field.disabled || isUpdating}
               />
             </div>
           )}

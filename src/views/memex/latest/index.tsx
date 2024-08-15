@@ -9,7 +9,7 @@ import { MemexListType } from '@/api/memex/types'
 import { usePostList } from '../hooks/use-post-list'
 
 export const Latest = () => {
-  const { list, total, isLoading, fetchNextPage } = usePostList(
+  const { list, total, isLoading, refetch, fetchNextPage } = usePostList(
     MemexListType.Latest
   )
 
@@ -21,7 +21,7 @@ export const Latest = () => {
         nullback={<PostEmpty />}
       >
         {list.map((t) => (
-          <MemexPost key={t?.hash} post={t} />
+          <MemexPost key={t?.hash} post={t} onCommentSuccess={refetch} />
         ))}
       </CustomSuspense>
     </MemexLayout>

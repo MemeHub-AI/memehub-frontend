@@ -2,15 +2,14 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { t } from 'i18next'
-import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { isEmpty } from 'lodash'
 
 import { utilLang } from '@/utils/lang'
 import { useMutation } from '@tanstack/react-query'
 import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
-import { usePostDetailsContext } from '@/contexts/memex/post-details'
 import { postCommentImgMax } from '@/config/memex/post'
 
 const schema = z.object({
@@ -20,14 +19,11 @@ const schema = z.object({
   }),
 })
 
-export const useCommentForm = () => {
+export const useCommentForm = (hash: string, onSuccess?: () => void) => {
   const { t } = useTranslation()
-  const { refetchComments } = usePostDetailsContext()
-  const { query } = useRouter()
-  const id = query.id as string
 
   const form = useForm<z.infer<typeof schema>>({
-    mode: 'onChange',
+    mode: 'onSubmit',
     resolver: zodResolver(schema),
     defaultValues: {
       comment: '',
@@ -45,15 +41,16 @@ export const useCommentForm = () => {
       reset()
     },
     onSuccess: () => {
-      refetchComments()
+      onSuccess?.()
       form.reset()
       toast.success(t('comment.success'))
     },
   })
 
   const onSubmit = (values: z.infer<typeof schema>) => {
+    if (isEmpty(hash)) return
     mutateAsync({
-      hash: id,
+      hash,
       content: values.comment,
       image_urls: values.images,
     })

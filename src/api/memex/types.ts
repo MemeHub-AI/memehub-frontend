@@ -37,9 +37,9 @@ export enum MemexListType {
 }
 
 export enum PostStatus {
-  Inactivated, // Already create post
-  Activated, // Start ido
-  Done, // Alread ido
+  Inactivated, // Created
+  Activated, // Started
+  Done, // Successed
 }
 
 export interface MemexCreateReq {

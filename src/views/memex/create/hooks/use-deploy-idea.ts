@@ -12,7 +12,7 @@ import { getEvmAirdropParams } from '@/utils/contract'
 import { Marketing } from '@/api/token/types'
 import { useCreateToken } from '@/views/create/hooks/use-create-token'
 
-export const useDeployIdo = (onFinally?: () => void) => {
+export const useDeployIdea = (onFinally?: () => void) => {
   const { t } = useTranslation()
   const { chainId = 0 } = useAccount()
   const { configValue, memexFactoryAddr } = useCreateToken()

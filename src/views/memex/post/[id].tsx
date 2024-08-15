@@ -7,22 +7,24 @@ import { DetailsHeader } from './components/details-header'
 import { DetailsProfile } from './components/details-profile'
 import { PostDetailsProvider } from '@/contexts/memex/post-details'
 import { GridImages } from '@/components/grid-images'
-import { PostFooter } from '../components/post-footer'
+import { PostLikeComment } from '../components/post-like-comment'
 import { DetailsCommentForm } from './components/details-comment-form'
 import { DetailsCommentCard } from './components/details-comment-card'
 import { useCommentList } from './hooks/use-comment-list'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { DetailsSkeleton } from './components/details-skeleton'
+import { useIdeaInfo } from '../hooks/use-idea-info'
+import { PostProgress } from '../components/post-progress'
 
 export const PostDetailsPage = () => {
   const { query } = useRouter()
   const id = query.id as string | undefined
   const postDetails = usePostDetails(id)
   const postComments = useCommentList(id)
-
   const { details, isLoadingDetails } = postDetails
   const { comments, isLoadingComments } = postComments
-  const progress = 80 // TODO/memex: calc from contract
+
+  const { progress } = useIdeaInfo(details?.ido_address)
 
   return (
     <PostDetailsProvider value={{ ...postDetails, ...postComments }}>
@@ -37,15 +39,8 @@ export const PostDetailsPage = () => {
             <div>{details?.content}</div>
 
             <GridImages urls={details?.image_urls ?? []} />
-            <PostFooter
-              idoAddr={details?.ido_address}
-              isCreator={!!details?.is_creator}
-              isLiked={!!details?.is_liked}
-              likeAmount={details?.like_amount}
-              commentAmount={details?.comment_count}
-              chainName={details?.chain || ''}
-              progress={progress}
-            />
+            <PostLikeComment post={details} />
+            <PostProgress value={progress} />
           </div>
 
           <DetailsCommentForm />

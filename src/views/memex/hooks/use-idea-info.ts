@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { BI_ZERO } from '@/constants/number'
 
-export const useIdoInfo = (addr: string | null | undefined) => {
+export const useIdeaInfo = (addr: string | null | undefined) => {
   const { chainId = 0 } = useAccount()
 
   const {
@@ -33,25 +33,45 @@ export const useIdoInfo = (addr: string | null | undefined) => {
     functionName: 'getProjectInfo',
     query: {
       enabled: !!addr && !!chainId,
+      refetchInterval: 5_000,
     },
   })
   const likeValue = formatEther(ETHAmountOfLike)
-  const ownerPercent = BigNumber(ownerRatio.toString()).div(100)
-  const userPercent = BigNumber(userRatio.toString()).div(100)
-  const durationHours = dayjs
-    .unix(Number(endTime))
-    .diff(dayjs.unix(Number(startTime)), 'hours')
+  const likedCount = likeCount.toString()
+  const maxLikeCount = maxCount.toString()
+  const progress = BigNumber(likedCount).isZero()
+    ? '0'
+    : BigNumber(likedCount).div(maxLikeCount).multipliedBy(100).toFixed()
+
+  const claimedCount = alreadyClaimCount.toString()
+  const ownerPercent = BigNumber(ownerRatio.toString()).div(100).toFixed()
+  const userPercent = BigNumber(userRatio.toString()).div(100).toFixed()
+
+  const startAt = Number(startTime)
+  const endAt = Number(endTime)
+  const durationSeconds = dayjs.unix(endAt).diff(dayjs.unix(startAt), 'seconds')
 
   return {
     isLoadingInfo,
     refetchInfo,
+
     owner,
     tokenAddr: token,
-    likeCount: likeCount.toString(),
-    maxLikeCount: maxCount.toString(),
+
     likeValue,
+    likedCount,
+    maxLikeCount,
+    progress,
+    claimedCount,
+
     ownerPercent,
     userPercent,
-    durationHours,
+
+    startAt,
+    endAt,
+    durationSeconds,
+
+    isOver,
+    isDeploy,
   }
 }

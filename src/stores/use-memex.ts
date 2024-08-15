@@ -4,9 +4,15 @@ import { z } from 'zod'
 import type { MemexCreateReq } from '@/api/memex/types'
 import { marketingSchema } from '@/components/marketing-field'
 
-type PostRequired = Pick<MemexCreateReq, 'content' | 'chain' | 'image_urls'>
+type PostRequired = Pick<
+  MemexCreateReq,
+  'content' | 'chain' | 'image_urls' | 'factory_address'
+>
 
-type PostOptional = Omit<MemexCreateReq, 'content' | 'chain' | 'image_urls'> &
+type PostOptional = Omit<
+  MemexCreateReq,
+  'content' | 'chain' | 'image_urls' | 'factory_address'
+> &
   z.infer<typeof marketingSchema>
 
 interface MemexStore {
