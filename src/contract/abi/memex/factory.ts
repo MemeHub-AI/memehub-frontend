@@ -147,17 +147,17 @@ export const memexFactoryAbi = [
     inputs: [
       {
         internalType: 'uint256',
-        name: '_startTime',
+        name: '_projectId',
         type: 'uint256',
       },
       {
         internalType: 'string[]',
-        name: '_infos',
+        name: '_tokenInfos',
         type: 'string[]',
       },
       {
         internalType: 'uint256[]',
-        name: '_params',
+        name: '_tokenParams',
         type: 'uint256[]',
       },
       {
