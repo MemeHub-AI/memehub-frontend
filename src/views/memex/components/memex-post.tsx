@@ -21,6 +21,7 @@ import { PostLikeComment } from './post-like-comment'
 import { useIdeaInfo } from '../hooks/use-idea-info'
 import { PostProgress } from './post-progress'
 import { getIdeaStatus } from '@/utils/memex/idea'
+import { useClaimRefund } from '../hooks/use-claim-refund'
 
 interface Props {
   post?: MemexPostItem
@@ -37,34 +38,31 @@ export const MemexPost = ({
   const router = useRouter()
   const { chainsMap } = useChainsStore()
   const ideaInfo = useIdeaInfo(post?.ido_address)
-  const { startAt, durationSeconds, progress, ownerPercent, userPercent } =
-    ideaInfo
-
   const { hasDetails, isFailed, isSuccess, isProcessing } = useMemo(
     () => getIdeaStatus(post, ideaInfo),
     [post, ideaInfo]
   )
+  const {
+    startAt,
+    durationSeconds,
+    progress,
+    ownerPercent,
+    userPercent,
+    refetchInfo,
+  } = ideaInfo
+
+  const {
+    canRefund,
+    canClaim,
+    isClaimed,
+    isRefunded,
+    isPending,
+    claim,
+    refund,
+  } = useClaimRefund(post?.ido_address, refetchInfo)
 
   const rewardPercent = post?.is_creator ? ownerPercent : userPercent
   const chain = chainsMap[chainName || '']
-
-  const renderDoneButton = () => {
-    if (isSuccess) {
-      return (
-        <Button variant="yellow" shadow="none" size="xs" className="py-3 mt-1">
-          {t('pure.claim')} {rewardPercent} ${post?.symbol}
-        </Button>
-      )
-    }
-
-    if (isFailed) {
-      return (
-        <Button variant="yellow" shadow="none" size="xs" className="py-3 mt-1">
-          {t('refund')} {rewardPercent} ${post?.symbol}
-        </Button>
-      )
-    }
-  }
 
   return (
     <div
@@ -77,6 +75,12 @@ export const MemexPost = ({
         <Badge className="absolute top-4 right-2 px-0.5 bg-purple-600">
           🚀 {t('memex.successed')}
         </Badge>
+      )}
+
+      {isFailed && (
+        <p className="absolute top-2 right-3 font-bold text-zinc-400">
+          {t('fail').toUpperCase()}
+        </p>
       )}
 
       <Avatar
@@ -103,7 +107,7 @@ export const MemexPost = ({
             />
           )}
 
-          {!hasDetails && !!post?.is_creator && (
+          {!hasDetails && post?.is_creator && (
             <Button
               variant="yellow"
               shadow="none"
@@ -144,7 +148,45 @@ export const MemexPost = ({
             </div>
           )}
 
-          {renderDoneButton()}
+          {isSuccess && canClaim && (
+            <Button
+              variant="yellow"
+              shadow="none"
+              size="xs"
+              className="py-3 mt-1"
+              disabled={isPending}
+              onClick={(e) => {
+                e.stopPropagation()
+                claim()
+              }}
+            >
+              {isClaimed
+                ? t('already-claimed')
+                : isPending
+                ? t('claiming')
+                : `${t('pure.claim')} ${rewardPercent} $${post?.symbol}`}
+            </Button>
+          )}
+
+          {isFailed && canRefund && (
+            <Button
+              variant="yellow"
+              shadow="none"
+              size="xs"
+              className="py-3 mt-1"
+              disabled={isPending}
+              onClick={(e) => {
+                e.stopPropagation()
+                refund()
+              }}
+            >
+              {isRefunded
+                ? t('already-refunded')
+                : isPending
+                ? t('refunding')
+                : `${t('refund')} ${rewardPercent} $${post?.symbol}`}
+            </Button>
+          )}
         </div>
 
         <EllipsisText

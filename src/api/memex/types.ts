@@ -18,8 +18,8 @@ export interface MemexPostItem {
   user_logo: string
   user_name: string
   website_url: null
-  is_creator: number
-  is_liked: number
+  is_creator: boolean
+  is_liked: boolean
   like_amount: number
 }
 

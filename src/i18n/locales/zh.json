@@ -666,5 +666,8 @@
   "confirming": "确认中...",
   "updating": "更新中...",
   "update-failed": "更新失败，请重试",
-  "update-success": "更新成功！"
+  "update-success": "更新成功！",
+  "fail": "失败",
+  "refunding": "退款中...",
+  "refund-success": "退款成功！"
 }

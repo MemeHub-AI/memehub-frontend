@@ -676,5 +676,8 @@
   "confirming": "Confirming...",
   "updating": "Updating...",
   "update-failed": "Update failed, please try again",
-  "update-success": "Update successful!"
+  "update-success": "Update successful!",
+  "fail": "Fail",
+  "refunding": "Refunding...",
+  "refund-success": "Refund successful!"
 }

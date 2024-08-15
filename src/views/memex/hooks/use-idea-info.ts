@@ -7,7 +7,18 @@ import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { BI_ZERO } from '@/constants/number'
 
 export const useIdeaInfo = (addr: string | null | undefined) => {
-  const { chainId = 0 } = useAccount()
+  const { chainId = 0, address } = useAccount()
+  const idoConfig = {
+    abi: memexIdoAbi,
+    address: addr as Address,
+    chainId,
+  }
+
+  const { data: isLiked = false, refetch: refetchIsLiked } = useReadContract({
+    ...idoConfig,
+    functionName: 'isLike',
+    args: [address!],
+  })
 
   const {
     data: {
@@ -25,11 +36,9 @@ export const useIdeaInfo = (addr: string | null | undefined) => {
       isDeploy = false,
     } = {},
     isLoading: isLoadingInfo,
-    refetch: refetchInfo,
+    refetch,
   } = useReadContract({
-    abi: memexIdoAbi,
-    address: addr as Address,
-    chainId,
+    ...idoConfig,
     functionName: 'getProjectInfo',
     query: {
       enabled: !!addr && !!chainId,
@@ -50,6 +59,11 @@ export const useIdeaInfo = (addr: string | null | undefined) => {
   const startAt = Number(startTime)
   const endAt = Number(endTime)
   const durationSeconds = dayjs.unix(endAt).diff(dayjs.unix(startAt), 'seconds')
+
+  const refetchInfo = () => {
+    refetchIsLiked()
+    refetch()
+  }
 
   return {
     isLoadingInfo,
@@ -73,5 +87,6 @@ export const useIdeaInfo = (addr: string | null | undefined) => {
 
     isOver,
     isDeploy,
+    isLiked,
   }
 }

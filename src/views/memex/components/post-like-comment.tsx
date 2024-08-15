@@ -42,8 +42,14 @@ export const PostLikeComment = ({
     [post, ideaInfo]
   )
 
-  const { likeValue, likedCount, durationSeconds, ownerPercent, userPercent } =
-    ideaInfo
+  const {
+    isLiked,
+    likeValue,
+    likedCount,
+    durationSeconds,
+    ownerPercent,
+    userPercent,
+  } = ideaInfo
   const chain = chainsMap[post?.chain || '']
 
   // TODO/memex: usdt should be dynamic
@@ -162,7 +168,7 @@ export const PostLikeComment = ({
             className="flex items-center space-x-1 text-sm"
             onClick={(e) => e.stopPropagation()}
           >
-            {!!post?.is_liked ? (
+            {isLiked ? (
               <HeartFilledIcon className="w-5 h-5 text-red-500" />
             ) : (
               <HeartIcon
