@@ -1,19 +1,26 @@
-import { useAccount } from 'wagmi'
-import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 
-import type { ConfigChainId } from '@/config/wagmi'
+import { type ConfigChainId } from '@/config/wagmi'
 import { useChainsStore } from '@/stores/use-chains-store'
 
-export const useChainInfo = (nameOrId?: string | number) => {
-  const { query } = useRouter()
-  const { chainId: walletChainId = 0 } = useAccount()
-  const { evmChainsMap } = useChainsStore()
-  const chain = evmChainsMap[String(nameOrId || query.chain || walletChainId)]
+/**
+ * Getting chain info from `useChainStore`,
+ * compatible all chains, not just EVM.
+ */
+export const useChainInfo = (name: string | null | undefined) => {
+  const { chains, chainsMap } = useChainsStore()
 
-  return {
-    chainInfo: chain,
-    chainName: chain?.name,
-    chainId: Number(chain?.id || 0) as ConfigChainId,
-    walletChainId,
-  }
+  return useMemo(() => {
+    const chain = chainsMap[name || '']
+    const chainName = chain?.name || ''
+    const chainId = Number(chain?.id || 0)
+    const configChainId = chainId as ConfigChainId
+
+    return {
+      chain,
+      chainName,
+      chainId,
+      configChainId,
+    }
+  }, [chains, chainsMap, name])
 }

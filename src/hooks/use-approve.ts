@@ -5,18 +5,16 @@ import { readContract } from 'wagmi/actions'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
 
-import { wagmiConfig } from '@/config/wagmi'
-import { useChainInfo } from './use-chain-info'
+import { ConfigChainId, wagmiConfig } from '@/config/wagmi'
 import { CONTRACT_ERR } from '@/errors/contract'
 
 const APPROVE_MAX_VALUE = BigInt(
   '115792089237316195423570985008687907853269984665640564039457584007913129639935'
 )
 
-export const useApprove = () => {
+export const useApprove = (chainId: number) => {
   const { t } = useTranslation()
   const { address } = useAccount()
-  const { chainId } = useChainInfo()
 
   const {
     isPending: isApproving,
@@ -67,7 +65,7 @@ export const useApprove = () => {
         abi: erc20Abi,
         address: token,
         functionName: 'allowance',
-        chainId,
+        chainId: chainId as ConfigChainId,
         args: [address, spender],
       })
 

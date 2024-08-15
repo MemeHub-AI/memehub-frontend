@@ -1,21 +1,22 @@
 import { readContract } from 'wagmi/actions'
 import { Address, parseEther } from 'viem'
 
-import { wagmiConfig } from '@/config/wagmi'
+import { ConfigChainId, wagmiConfig } from '@/config/wagmi'
 import { uniswapV2RouterAbi } from '@/contract/abi/uniswapv2/router'
 import { uniswapV2LPAbi } from '@/contract/abi/uniswapv2/lp'
 import { BI_ZERO, BI_ZERO_TUPLE } from '@/constants/number'
-import { useChainInfo } from '@/hooks/use-chain-info'
 import { reportException } from '@/errors'
 import { addrMap } from '@/contract/address'
 
-export const useUniswapV2Amount = (poolAddr?: string | undefined | null) => {
-  const { chainId } = useChainInfo()
+export const useUniswapV2Amount = (
+  chainId: number,
+  poolAddr?: string | undefined | null
+) => {
   const { uniswapv2Router } = addrMap[chainId] ?? {}
   const config = {
     abi: uniswapV2RouterAbi,
     address: uniswapv2Router!,
-    chainId,
+    chainId: chainId as ConfigChainId,
   }
 
   const getReserves = async () => {
@@ -24,7 +25,7 @@ export const useUniswapV2Amount = (poolAddr?: string | undefined | null) => {
     return readContract(wagmiConfig, {
       abi: uniswapV2LPAbi,
       address: poolAddr as Address,
-      chainId,
+      chainId: config.chainId,
       functionName: 'getReserves',
     }).catch(() => BI_ZERO_TUPLE)
   }

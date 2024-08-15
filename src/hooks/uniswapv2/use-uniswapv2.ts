@@ -20,8 +20,11 @@ export const useUniswapV2 = (
 ) => {
   const { t } = useTranslation()
   const { address } = useAccount()
-  const { isApproving, approvalForAll } = useApprove()
-  const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(poolAddr)
+  const { isApproving, approvalForAll } = useApprove(chainId)
+  const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(
+    chainId,
+    poolAddr
+  )
 
   const { reserveToken, uniswapv2Router } = addrMap[chainId] ?? {}
   const uniswapV2Config = {
