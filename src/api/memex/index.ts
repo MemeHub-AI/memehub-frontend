@@ -20,9 +20,10 @@ export const memexApi = {
     return api.GET<ApiResponse<MemexIdeaItem>>(`/api/v1/memex/tweet/${hash}`)
   },
   createIdea: (req: MemexCreateReq) => {
-    return api.POST<ApiResponse<MemexIdeaHash>>('/api/v1/memex/tweets', {
-      body: req,
-    })
+    return api.POST<ApiResponse<MemexIdeaHash & { coin_id: string | null }>>(
+      '/api/v1/memex/tweets',
+      { body: req }
+    )
   },
   updateIdea: (req: Partial<MemexCreateReq> & MemexIdeaHash) => {
     return api.PUT<ApiResponse<MemexIdeaHash>>('/api/v1/memex/tweets', {

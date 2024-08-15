@@ -74,6 +74,7 @@ export const useCreateIdea = () => {
 
       await deploy(
         data.hash,
+        data.coin_id,
         postDetails?.name,
         postDetails?.symbol,
         postDetails?.marketing

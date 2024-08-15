@@ -2,7 +2,6 @@ import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { Address, formatEther, parseEther } from 'viem'
 import { toast } from 'sonner'
-import dayjs from 'dayjs'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { memexFactoryAbi } from '@/contract/abi/memex/factory'
@@ -69,6 +68,7 @@ export const useDeployIdea = (onFinally?: () => void) => {
 
   const deploy = async (
     projectId: string,
+    tokenId: string | null,
     name: string | undefined,
     symbol: string | undefined,
     marketing: Marketing[] | undefined
@@ -83,9 +83,9 @@ export const useDeployIdea = (onFinally?: () => void) => {
       ...deployConfig,
       functionName: 'create',
       args: [
-        BigInt(dayjs().unix()),
+        BigInt(projectId),
         hasInfo ? [name, symbol] : [],
-        [BigInt(projectId)],
+        [BigInt(tokenId || 0)],
         getEvmAirdropParams(configValue, marketing),
       ],
       value: parseEther(deployFee),
