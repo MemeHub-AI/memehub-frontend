@@ -48,6 +48,7 @@ export interface MemexCreateReq {
   image_urls: string[]
   factory_address: string
   airdrop_address: string
+  coin_factory_address: string
 
   name?: string
   symbol?: string

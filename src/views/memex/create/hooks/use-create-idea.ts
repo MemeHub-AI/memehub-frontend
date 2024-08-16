@@ -52,7 +52,7 @@ export const useCreateIdea = () => {
     },
   })
 
-  const { memexFactoryAddr, airdropAddress } = useTokenConfig()
+  const { memexFactoryAddr, airdropAddress, bcAddress } = useTokenConfig()
   const { deployFee, isDeploying, deploy } = useDeployIdea(() => {
     setPost(null)
     setPostDetails(null)
@@ -60,13 +60,21 @@ export const useCreateIdea = () => {
   })
 
   const onSubmit = async ({ pictures, ...values }: z.infer<typeof schema>) => {
-    if (!(await form.trigger()) || !memexFactoryAddr || !airdropAddress) return
+    if (
+      !(await form.trigger()) ||
+      !memexFactoryAddr ||
+      !airdropAddress ||
+      !bcAddress
+    ) {
+      return
+    }
 
     try {
       const { data } = await mutateAsync({
         image_urls: pictures,
         factory_address: memexFactoryAddr,
         airdrop_address: airdropAddress!,
+        coin_factory_address: bcAddress!,
 
         ...values,
         ...postDetails,
