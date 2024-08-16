@@ -1,53 +1,59 @@
-import React, { useEffect, type ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { zeroAddress } from 'viem'
+import { BigNumber } from 'bignumber.js'
 
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
-import { useHolders } from '../hooks/use-holders'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useTradeSearchParams } from '../hooks/use-search-params'
 import { useTokenContext } from '@/contexts/token'
+import { useChainsStore } from '@/stores/use-chains-store'
+
+enum Flag {
+  Bc = 'Bonding Curve',
+  Airdrop = 'Airdrop',
+  Black = 'Black Hole',
+}
 
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { holders, clearHolders } = useHolders()
-  const { tokenAddr } = useTradeSearchParams()
-  const { isIdoToken } = useTokenContext()
+  const { chainsMap } = useChainsStore()
+  const { isIdoToken, holders, tokenInfo } = useTokenContext()
+  const { total_supply } = tokenInfo ?? {}
 
-  const getLabel = (holder: (typeof holders)[number]) => {
-    const { contract_flag, address } = holder
-    const flag = (contract_flag || '').toLowerCase()
+  const getLabel = ({ flag, holder = '' }: (typeof holders)[number]) => {
+    const f = flag || ''
 
     // Zero addr.
-    if (address === zeroAddress) {
+    if (holder === zeroAddress) {
       return `🔥${t('holder.burning')}`
     }
 
     // Bonding curve.
-    if (flag.includes('bonding')) {
-      return `(💰${t('pool')})`
-    }
+    if (f === Flag.Bc) return `(💰${t('pool')})`
 
     // Creator or dev.
-    if (flag.includes('dev') || flag.includes('creator')) {
+    if (f.includes('dev') || f.includes('creator')) {
       return `(🧑‍💻${t('creator')})`
     }
 
     // Dex.
-    if (flag.includes('dex')) {
+    if (f.includes('dex')) {
       return `(👑${t('dex')})`
     }
 
     // Airdrop.
-    if (flag.includes('air')) {
+    if (f === Flag.Airdrop) {
       return `(${t('airdrop')})`
     }
   }
 
-  useEffect(() => clearHolders, [])
+  const getPercent = (amount: string) => {
+    if (!total_supply) return 0
+    return BigNumber(amount).div(total_supply).toFixed()
+  }
 
   if (isIdoToken) return
 
@@ -66,21 +72,21 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
         >
           {holders?.map((r, i) => {
             // Exclude airdrop.
-            if (r.contract_flag?.includes('Air')) return null
+            if (r.flag?.includes('Air')) return null
             return (
               <li key={i} className="flex items-center justify-between">
                 <p>
                   {i + 1}.{' '}
                   <Link
-                    href={r.scan_url}
+                    href={`${chainsMap[r.chain]?.explorer}/address/${r.holder}`}
                     target="_blank"
                     className="hover:text-black hover:underline transition-all cursor-pointer"
                   >
-                    {fmt.addr(r.address)}
+                    {fmt.addr(r.holder)}
                   </Link>
                   {getLabel(r)}
                 </p>
-                <span>{fmt.percent(r.percentage)}</span>
+                <span>{fmt.percent(getPercent(r.amount))}</span>
               </li>
             )
           })}

@@ -15,3 +15,5 @@ export type RequirePick<T, K extends keyof T> = Required<Pick<T, K>> &
   Omit<T, K>
 
 export type Tuple<T = unknown> = [T, T]
+
+export type ObjectLike<T> = Record<string | number, T>

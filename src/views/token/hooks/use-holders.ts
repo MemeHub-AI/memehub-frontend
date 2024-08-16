@@ -12,21 +12,21 @@ import {
   heartbeat,
   isSuccessMessage,
   isDisconnectMessage,
-  wsApiURL,
+  wsApiUrl,
   isUpdateMessage,
 } from '@/api/websocket'
 import { useHoldersStore } from '@/stores/use-holders-store'
-import { useTradeSearchParams } from './use-search-params'
+import { useTokenQuery } from './use-token-query'
 import { useTokenContext } from '@/contexts/token'
 
 export const useHolders = () => {
   const { marketCap, holders, setHolders, setMarketCap } = useHoldersStore()
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
   const { isNotFound } = useTokenContext()
 
   const { lastJsonMessage, sendJsonMessage, getWebSocket } =
     useWebSocket<WSMessageBase<WSTradeInfoMessage> | null>(
-      isNotFound ? '' : wsApiURL.tokenInfo,
+      isNotFound ? '' : wsApiUrl.tokenInfo,
       {
         heartbeat,
         onOpen: () => {

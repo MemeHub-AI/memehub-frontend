@@ -12,13 +12,13 @@ import {
   datafeedUnit,
   symbolInfoConfig,
 } from '@/config/datafeed'
-import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { formatInterval, parsePricescale } from '@/utils/chart'
 import { withPair } from '@/utils/datafeed'
 
 // TODO: should refactor it
 export const useDatafeed = () => {
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
   const { getInterval, setInterval } = useStorage()
   const interval = getInterval(chainName, tokenAddr) || '1m'
   const cache = useDatafeedCache()

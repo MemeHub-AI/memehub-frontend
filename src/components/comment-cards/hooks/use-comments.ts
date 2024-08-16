@@ -6,11 +6,11 @@ import { isAddress } from 'viem'
 
 import { tokenApi } from '@/api/token'
 import { TokenCommentListRes } from '@/api/token/types'
-import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { useCommentsStore } from '@/stores/use-comments'
 
 export const useComments = (enableFetchComments = true) => {
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
   const uniqueId = useMemo(nanoid, [])
   const { setRefetchComments } = useCommentsStore()
 

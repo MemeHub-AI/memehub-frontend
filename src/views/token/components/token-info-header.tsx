@@ -2,6 +2,7 @@ import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoCheckmark } from 'react-icons/io5'
 import { MdContentCopy } from 'react-icons/md'
+import { BigNumber } from 'bignumber.js'
 
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
@@ -12,7 +13,6 @@ import { TokenProgress } from './token-progress'
 import { Avatar } from '@/components/ui/avatar'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useResponsive } from '@/hooks/use-responsive'
-import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -23,8 +23,10 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
     isIdoToken,
     tokenMetadata,
     tokenChain,
+    tradePrice,
+    tradeRecords,
   } = useTokenContext()
-  const { marketCap } = useHoldersStore()
+  // const { marketCap } = useHoldersStore() // TODO: should remove
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
 
@@ -74,7 +76,12 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         </div>
         <span>
           <span className="font-bold">{t('market-cap')}: </span>$
-          {fmt.decimals(marketCap)}
+          {fmt.decimals(
+            BigNumber(tokenInfo?.total_supply || 0)
+              .multipliedBy(tradeRecords[0]?.price || 0)
+              .multipliedBy(tradePrice?.price || 0)
+              .toFixed()
+          )}
         </span>
 
         {isMobile && (
@@ -95,27 +102,6 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
             </span>
           </div>
         )}
-
-        {/* Creator */}
-        {/* <div className="flex items-center gap-1">
-        <div className="mr-1 font-bold">{t('creator')}:</div>
-        <img
-          src={tokenInfo?.creator.logo || ''}
-          className="h-5 w-5 rounded-md"
-        />
-        <span
-          className="hover:underline cursor-pointer"
-          onClick={() => {
-            const href = fmt.toHref(
-              Routes.Account,
-              tokenInfo?.creator.wallet_address || ''
-            )
-            router.push(href)
-          }}
-        >
-          {tokenInfo?.creator.name}
-        </span>
-      </div> */}
       </div>
       <TokenProgress className="ml-2 w-full max-sm:ml-0" showDesc={false} />
     </div>

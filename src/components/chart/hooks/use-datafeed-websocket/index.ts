@@ -10,7 +10,7 @@ import type {
   DatafeedEventBase,
   DatafeedOnEvents,
 } from './types'
-import { wsApiURL } from '@/api/websocket'
+import { wsApiUrl } from '@/api/websocket'
 import { useEmitter } from '@/hooks/use-emitter'
 import { useChartStore } from '@/stores/use-chart-store'
 import { reportException } from '@/errors'
@@ -62,7 +62,7 @@ export const useDatafeedWebsocket = ({
   // Connect websocket.
   const connect = () => {
     return new Promise<Event>((resolve, reject) => {
-      wsRef.current = new WebSocket(wsApiURL.candlestick)
+      wsRef.current = new WebSocket(wsApiUrl.candlestick)
       wsRef.current.addEventListener('open', (e) => {
         onOpen()
         resolve(e)

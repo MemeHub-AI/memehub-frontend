@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { formatEther, zeroAddress } from 'viem'
 
 import { tokenApi } from '@/api/token'
-import { useTradeSearchParams } from './use-search-params'
+import { useTokenQuery } from './use-token-query'
 import { ApiCode, ApiResponse } from '@/api/types'
 import { useTokenDetails } from '@/hooks/use-token-details'
 import { useReadContract } from 'wagmi'
@@ -13,7 +13,7 @@ import { TokenType } from '@/enums/token'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const useTokenInfo = () => {
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
   const { chainId } = useChainInfo(chainName)
 
   const {

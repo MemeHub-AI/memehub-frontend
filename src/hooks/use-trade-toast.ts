@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { type Hash } from 'viem'
 
 import { otherApi } from '@/api/other'
-import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { TradeType } from '@/enums/trade'
 import { TxStatus } from '@/components/trade-toast/tx-status'
 
@@ -17,7 +17,7 @@ interface Options {
 }
 
 export const useTradeToast = () => {
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
 
   const { mutateAsync, reset } = useMutation({
     mutationKey: [otherApi.getDiamondAmount.name],

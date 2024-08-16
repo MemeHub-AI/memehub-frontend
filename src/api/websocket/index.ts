@@ -2,13 +2,15 @@ import { isEmpty } from 'lodash'
 
 import { WSMessageBase, WSMessageType } from './types'
 
-const baseURL = process.env.NEXT_PUBLIC_WS_URL
+const baseUrl = process.env.NEXT_PUBLIC_WS_URL
 
-export const wsApiURL = {
-  tradeLogs: baseURL + '/chat/trade_log',
-  tokenInfo: baseURL + '/chat/coin_info',
-  tradeRecord: baseURL + '/chat/trade_record',
-  candlestick: baseURL + '/ws/v2/coin/candles',
+export const wsApiUrl = {
+  tradeLogs: baseUrl + '/chat/trade_log',
+  tokenInfo: baseUrl + '/chat/coin_info',
+  tradeRecord: baseUrl + '/chat/trade_record',
+
+  candlestick: baseUrl + '/ws/v2/coin/candles',
+  trades: baseUrl + '/ws/v2/coin/trades',
 }
 
 export const heartbeat = {
