@@ -11,6 +11,7 @@ import { useCommentList } from './hooks/use-comment-list'
 import { IdeaDetailsSkeleton } from './components/details-skeleton'
 import { useIdeaInfo } from '../hooks/use-idea-info'
 import { MemexIdeaCard } from '../components/idea-card'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const IdeaDetailsPage = () => {
   const { query } = useRouter()
@@ -19,7 +20,8 @@ export const IdeaDetailsPage = () => {
   const ideaComments = useCommentList(hash)
   const { details, isLoadingDetails } = ideaDetails
   const { comments, isLoadingComments, refetchComments } = ideaComments
-  const ideaInfo = useIdeaInfo(details?.ido_address)
+  const { chainId } = useChainInfo(details?.chain)
+  const ideaInfo = useIdeaInfo(details?.ido_address, chainId)
 
   return (
     <IdeaDetailsProvider

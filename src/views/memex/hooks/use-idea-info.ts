@@ -6,8 +6,11 @@ import dayjs from 'dayjs'
 import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { BI_ZERO } from '@/constants/number'
 
-export const useIdeaInfo = (addr: string | null | undefined) => {
-  const { chainId = 0, address } = useAccount()
+export const useIdeaInfo = (
+  addr: string | null | undefined,
+  chainId: number
+) => {
+  const { address } = useAccount()
   const idoConfig = {
     abi: memexIdoAbi,
     address: addr as Address,

@@ -28,13 +28,13 @@ export const IdeaLikeComment = ({
   const { t } = useTranslation()
   const [likeOpen, setLikeOpen] = useState(false)
   const [commentOpen, setCommentOpen] = useState(false)
-  const { chain } = useChainInfo(idea?.chain)
+  const { chain, chainId } = useChainInfo(idea?.chain)
   const { form, isPending, onSubmit } = useCommentForm(idea?.hash || '', () => {
     setCommentOpen(false)
     onCommentSuccess?.()
   })
-  const ideaInfo = useIdeaInfo(idea?.ido_address)
-  const { isLiking, like } = useIdeaLike(idea?.ido_address, () => {
+  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId)
+  const { isLiking, like } = useIdeaLike(idea?.ido_address, chainId, () => {
     setLikeOpen(false)
     setCommentOpen(true)
     ideaInfo.refetchInfo()

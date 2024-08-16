@@ -1,4 +1,4 @@
-import { useAccount, useWriteContract } from 'wagmi'
+import { useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { parseEther, type Address } from 'viem'
@@ -10,10 +10,10 @@ import { memexIdoAbi } from '@/contract/abi/memex/ido'
 
 export const useIdeaLike = (
   addr: string | null | undefined,
+  chainId: number,
   onFillay?: () => void
 ) => {
   const { t } = useTranslation()
-  const { chainId = 0 } = useAccount()
 
   const {
     data: hash,

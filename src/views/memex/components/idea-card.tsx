@@ -41,8 +41,8 @@ export const MemexIdeaCard = ({
   const { content, image_urls, ...restIdea } = idea ?? {}
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
-  const ideaInfo = useIdeaInfo(idea?.ido_address)
   const { chain, chainId, chainName } = useChainInfo(idea?.chain)
+  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId)
   const { hasDetails, isFailed, isSuccess, isProcessing } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
