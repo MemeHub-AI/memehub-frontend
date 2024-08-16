@@ -5,7 +5,6 @@ import { ComponentProps } from 'react'
 import { MemexIdeaComment } from '@/api/memex/types'
 import { GridImages } from '@/components/grid-images'
 import { Avatar } from '@/components/ui/avatar'
-import { useIdeaDetailsContext } from '@/contexts/memex/idea-details'
 import { cn } from '@/lib/utils'
 
 export const IdeaCommentCard = ({
@@ -14,8 +13,6 @@ export const IdeaCommentCard = ({
 }: ComponentProps<'div'> & {
   comment: MemexIdeaComment | undefined
 }) => {
-  const {} = useIdeaDetailsContext()
-
   return (
     <div className={cn('flex space-x-2 border-b p-3', className)}>
       <Avatar
