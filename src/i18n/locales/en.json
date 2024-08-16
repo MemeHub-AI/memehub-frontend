@@ -685,5 +685,7 @@
   "claim-success": "Claim successful!",
   "refunded": "Refunded",
   "commenting": "Commenting...",
-  "update": "Update"
+  "update": "Update",
+  "already-liked": "Already liked",
+  "alread-ended": "Already over"
 }

@@ -2,8 +2,8 @@ import React from 'react'
 
 import { Skeleton } from '@/components/ui/skeleton'
 
-export const IdeaCardSkeleton = () => {
-  return Array.from({ length: 3 }).map((_, i) => (
+export const IdeaCardSkeleton = ({ length = 3 }: { length?: number }) => {
+  return Array.from({ length }).map((_, i) => (
     <div key={i} className="px-3 py-2 flex space-x-2 border-b-2">
       <Skeleton className="w-10 h-10 rounded-full" />
 

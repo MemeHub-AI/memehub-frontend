@@ -2,6 +2,7 @@ import { useMemo, useState, type ComponentProps } from 'react'
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
+import { toast } from 'sonner'
 
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
@@ -52,6 +53,12 @@ export const IdeaLikeComment = ({
     ownerPercent,
     userPercent,
   } = ideaInfo
+
+  const onLikeClick = () => {
+    if (isEnded) return toast.error(t('alread-ended'))
+
+    setLikeOpen(true)
+  }
 
   return (
     <>
@@ -160,25 +167,22 @@ export const IdeaLikeComment = ({
       </Dialog>
 
       <div className="flex items-center justify-between mt-2">
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-3 select-none">
           <div
-            className="flex items-center space-x-1 text-sm"
+            className="flex items-center space-x-1 text-sm cursor-pointer"
             onClick={(e) => e.stopPropagation()}
           >
             {isLiked ? (
-              <HeartFilledIcon className="w-5 h-5 text-red-500" />
-            ) : (
-              <HeartIcon
-                className="w-5 h-5"
-                onClick={() => {
-                  if (isEnded) return
-                  setLikeOpen(true)
-                }}
+              <HeartFilledIcon
+                className="w-5 h-5 text-red-500"
+                onClick={() => isLiked && toast.info(t('already-liked'))}
               />
+            ) : (
+              <HeartIcon className="w-5 h-5" onClick={onLikeClick} />
             )}
             <span>{likedCount}</span>
           </div>
-          <div className="flex items-center space-x-1 text-sm">
+          <div className="flex items-center space-x-1 text-sm cursor-pointer">
             <GoComment className="w-5 h-5" />
             <span>{idea?.comment_count ?? 0}</span>
           </div>

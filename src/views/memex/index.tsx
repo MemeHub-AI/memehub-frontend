@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 
 import { MemexLayout } from './components/memex-layout'
 import { Routes } from '@/routes'
+import { IdeaCardSkeleton } from './components/idea-card-skeleton'
 
 export const MemexPage = () => {
   const router = useRouter()
@@ -13,7 +14,7 @@ export const MemexPage = () => {
 
   return (
     <MemexLayout>
-      <p>No yet</p>
+      <IdeaCardSkeleton />
     </MemexLayout>
   )
 }

@@ -675,5 +675,7 @@
   "claim-success": "领取成功！",
   "refunded": "已退款",
   "commenting": "评论中...",
-  "update": "更新"
+  "update": "更新",
+  "already-liked": "已经点过赞了",
+  "alread-ended": "已经结束"
 }
