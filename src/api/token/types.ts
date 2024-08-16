@@ -2,8 +2,10 @@ import { TokenType } from '@/enums/token'
 import type { UserInfoRes } from '../user/types'
 import { TokenVersion } from '@/contract/abi/token'
 import { DistributorVersion } from '@/contract/abi/distributor'
+import { AirdropDetail } from '../airdrop/types'
 
 export interface TokenListItem {
+  airdrop: AirdropDetail[]
   airdrop_address: string
   airdrop_index: number
   airdrop_supply: string

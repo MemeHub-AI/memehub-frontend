@@ -19,24 +19,27 @@ export interface DatafeedBar {
 }
 
 export interface DatafeedOnEvents {
-  listen: DatafeedEventBase<'listen', DatafeedBar[]>
-  update: DatafeedEventBase<'update', DatafeedBar[]>
-  history: DatafeedEventBase<'history', DatafeedBar[]>
+  candles: DatafeedEventBase<'listen', DatafeedBar[]>
+  update: DatafeedEventBase<
+    'update',
+    DatafeedEventBase<'candles', DatafeedBaseData<DatafeedBar[]>>
+  >
   connect_invalid: DatafeedEventBase<'connect_invalid'>
-}
-
-export interface DatafeedEmitListen {
-  interval: string
-  token_address: string
-  chain: string
-}
-
-export interface DatafeedEmitHistory extends DatafeedEmitListen {
-  start: number
-  limit: number
 }
 
 export interface DatafeedEmitEvents {
   listen: DatafeedEventBase<'listen', DatafeedEmitListen>
   history: DatafeedEventBase<'history', DatafeedEmitHistory>
+  // unlisten:
+}
+
+export interface DatafeedEmitListen {
+  chain: string
+  token: string
+  interval: string
+}
+
+export interface DatafeedEmitHistory {
+  start: number
+  end: number
 }

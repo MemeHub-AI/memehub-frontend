@@ -16,6 +16,7 @@ import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
 import { formatInterval, parsePricescale } from '@/utils/chart'
 import { withPair } from '@/utils/datafeed'
 
+// TODO: should refactor it
 export const useDatafeed = () => {
   const { chainName, tokenAddr } = useTradeSearchParams()
   const { getInterval, setInterval } = useStorage()
@@ -26,7 +27,7 @@ export const useDatafeed = () => {
       onReconnect: () =>
         listenAsync({
           interval,
-          token_address: tokenAddr,
+          token: tokenAddr,
           chain: chainName,
         }),
     })
@@ -41,7 +42,7 @@ export const useDatafeed = () => {
       async resolveSymbol(symbolName, onResolve, onError, extension) {
         const { data } = await listenAsync({
           interval,
-          token_address: tokenAddr,
+          token: tokenAddr,
           chain: chainName,
         })
         const bars = data[datafeedUnit]
@@ -64,6 +65,7 @@ export const useDatafeed = () => {
         if (period.firstDataRequest) {
           const cachedBars = cache.getBars() || []
           const cachedInterval = getInterval(chainName, tokenAddr)
+
           // Have cached bars & interval no change, use cache.
           if (!isEmpty(cachedBars) && cachedInterval === interval) {
             onResult(cachedBars, { noData: false })
@@ -72,7 +74,7 @@ export const useDatafeed = () => {
 
           const { data } = await listenAsync({
             interval,
-            token_address: tokenAddr,
+            token: tokenAddr,
             chain: chainName,
           })
           const bars = data[datafeedUnit]
@@ -83,11 +85,8 @@ export const useDatafeed = () => {
         }
 
         const { data } = await historyAsync({
-          interval,
-          token_address: tokenAddr,
           start: period.from,
-          limit: period.countBack,
-          chain: chainName,
+          end: period.to,
         })
         const bars = data[datafeedUnit]
 
@@ -95,8 +94,8 @@ export const useDatafeed = () => {
         onResult(bars, { noData: isEmpty(bars) })
       },
       subscribeBars(_, resolution, onTick, uid, onRest) {
-        onUpdate(({ data }) => {
-          data[datafeedUnit].forEach((bar) => {
+        onUpdate((data) => {
+          data.data[datafeedUnit].forEach((bar) => {
             const lastTime = cache.getLastBar()?.time || 0
             if (bar.time < lastTime) return
 

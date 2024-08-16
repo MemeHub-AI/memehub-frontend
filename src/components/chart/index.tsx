@@ -36,8 +36,6 @@ export const Chart = memo(() => {
       return
     }
 
-    // TODO: enable chart
-    return
     createChart(chartRef.current, {
       symbol: tokenInfo.symbol,
       interval: getInterval(chainName, tokenAddr) || '1m',
@@ -47,7 +45,6 @@ export const Chart = memo(() => {
     return removeChart
   }, [tokenInfo])
 
-  // TODO: ido temp
   if (isNotFound && !isIdoToken) {
     return (
       <div
