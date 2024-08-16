@@ -679,5 +679,7 @@
   "update-success": "Update successful!",
   "fail": "Fail",
   "refunding": "Refunding...",
-  "refund-success": "Refund successful!"
+  "refund-success": "Refund successful!",
+  "go-to.trade": "Go to trade",
+  "coin-detail": "Coin detail"
 }

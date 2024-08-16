@@ -669,5 +669,7 @@
   "update-success": "更新成功！",
   "fail": "失败",
   "refunding": "退款中...",
-  "refund-success": "退款成功！"
+  "refund-success": "退款成功！",
+  "go-to.trade": "前往交易",
+  "coin-detail": "代币详情"
 }

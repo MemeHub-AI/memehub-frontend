@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button'
 import { TokenDetailsCard } from './token-detail-card'
 import { MemexIdeaItem } from '@/api/memex/types'
 import { cn } from '@/lib/utils'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
@@ -33,10 +32,9 @@ export const MemexIdeaCard = ({
   idea,
   onCommentSuccess,
 }: ComponentProps<'div'> & Props) => {
-  const { chain: chainName, content, image_urls, ...restIdea } = idea ?? {}
+  const { chain, content, image_urls, ...restIdea } = idea ?? {}
   const { t } = useTranslation()
   const router = useRouter()
-  const { chainsMap } = useChainsStore()
   const ideaInfo = useIdeaInfo(idea?.ido_address)
   const { hasDetails, isFailed, isSuccess, isProcessing } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
@@ -63,7 +61,6 @@ export const MemexIdeaCard = ({
   } = useIdeaClaimRefund(idea?.ido_address, refetchInfo)
 
   const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
-  const chain = chainsMap[chainName || '']
 
   return (
     <div
@@ -123,7 +120,7 @@ export const MemexIdeaCard = ({
               }}
             >
               <AiOutlineEdit size={16} className="mr-0.5" />
-              {t('memex.token-detail')}
+              {t('coin-detail')}
             </Button>
           )}
 
@@ -204,7 +201,7 @@ export const MemexIdeaCard = ({
             details={restIdea as NonNullable<keyof typeof restIdea>}
             tokenAddr={tokenAddr}
             onClick={() =>
-              router.push(fmt.toHref(Routes.Main, chain?.name || '', tokenAddr))
+              router.push(fmt.toHref(Routes.Main, chain || '', tokenAddr))
             }
           />
         )}

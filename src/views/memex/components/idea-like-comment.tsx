@@ -3,7 +3,6 @@ import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 
-import { useChainsStore } from '@/stores/use-chains-store'
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
 import { utilLang } from '@/utils/lang'
@@ -14,6 +13,7 @@ import { Form, FormField } from '@/components/ui/form'
 import { MemexIdeaItem } from '@/api/memex/types'
 import { useIdeaInfo } from '../hooks/use-idea-info'
 import { getIdeaStatus } from '@/utils/memex/idea'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -27,7 +27,7 @@ export const IdeaLikeComment = ({
   const { t } = useTranslation()
   const [likeOpen, setLikeOpen] = useState(false)
   const [commentOpen, setCommentOpen] = useState(false)
-  const { chainsMap } = useChainsStore()
+  const { chain } = useChainInfo(idea?.chain)
   const { form, isPending, onSubmit } = useCommentForm(idea?.hash || '', () => {
     setCommentOpen(false)
     onCommentSuccess?.()
@@ -51,7 +51,6 @@ export const IdeaLikeComment = ({
     ownerPercent,
     userPercent,
   } = ideaInfo
-  const chain = chainsMap[idea?.chain || '']
 
   // TODO/memex: usdt should be dynamic
   const usdtAmount = 5

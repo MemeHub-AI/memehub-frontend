@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router'
+
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { useCreateIdea } from './hooks/use-create-idea'
 import { CreateIdeaProvider } from '@/contexts/memex/create-post'
@@ -11,7 +13,6 @@ import { CreateIdeaMessages } from './components/idea-messages'
 import { CreateIdeaIntro } from './components/idea-intro'
 import { useMemexStore } from '@/stores/use-memex'
 import { TokenDetailsCard } from '../components/token-detail-card'
-import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import { useMemexClear } from './hooks/use-memex-clear'
 import { MemexIdeaItem } from '@/api/memex/types'

@@ -7,7 +7,7 @@ import { BigNumber } from 'bignumber.js'
 
 import { Button } from '@/components/ui/button'
 import { useCreateIdeaContext } from '@/contexts/memex/create-post'
-import { useChainsStore } from '@/stores/use-chains-store'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const CreateIdeaHeader = () => {
   const { t } = useTranslation()
@@ -17,10 +17,9 @@ export const CreateIdeaHeader = () => {
     isCreating,
     deployFee,
   } = useCreateIdeaContext()
-  const { chainsMap } = useChainsStore()
+  const { chain } = useChainInfo(form.getValues('chain'))
 
   const hasError = !isEmpty(Object.keys(formState.errors))
-  const chain = chainsMap[form.getValues('chain')]
   const publishFee = BigNumber(deployFee).gt(0)
     ? `(${deployFee} ${chain?.native.symbol})`
     : ''

@@ -1,7 +1,7 @@
 import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEdit } from 'react-icons/ai'
-import { MdContentCopy } from 'react-icons/md'
+import { zeroAddress } from 'viem'
 
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
@@ -11,9 +11,9 @@ import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 import { MemexIdeaItem } from '@/api/memex/types'
 import { useTokenProgress } from '@/views/token/hooks/evm/use-token-progress'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { fmt } from '@/utils/fmt'
-import CopyIcon from '@/components/copy-icon'
+import { CopyIcon } from '@/components/copy-icon'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props {
   details?: MemexIdeaItem
@@ -37,14 +37,14 @@ export const TokenDetailsCard = ({
     twitter_url,
     telegram_url,
     website_url,
-    chain: chainName,
+    chain,
   } = details ?? {}
   const { t } = useTranslation()
-  const { chainsMap } = useChainsStore()
+  const { chainId } = useChainInfo(chain)
 
   const { progress } = useTokenProgress(
     details?.ido_address,
-    +(chainsMap[chainName || '']?.id || 0),
+    chainId,
     '0.1.2' // TODO: dynamic version
   )
 
@@ -96,11 +96,11 @@ export const TokenDetailsCard = ({
         {!editable && (
           <Button
             shadow="none"
-            size="xs"
-            className="bg-transparent py-3"
+            size="sm"
+            className="bg-transparent bg-yellow-600 border-none text-white h-7"
             onClick={onBuyClick}
           >
-            {t('go-to.buy')}
+            {t('go-to.trade')}
           </Button>
         )}
       </div>
@@ -113,7 +113,7 @@ export const TokenDetailsCard = ({
         />
       )}
 
-      {tokenAddr && (
+      {tokenAddr && tokenAddr !== zeroAddress && (
         <div className="flex items-center space-x-1 mt-1">
           <span>CA: {fmt.addr(tokenAddr)}</span>
           <CopyIcon content={tokenAddr} onClick={(e) => e.stopPropagation()} />
