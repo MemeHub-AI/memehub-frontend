@@ -14,9 +14,9 @@ import { MemexIdeaCard } from '../components/idea-card'
 
 export const IdeaDetailsPage = () => {
   const { query } = useRouter()
-  const id = query.id as string | undefined
-  const ideaDetails = useIdeaDetails(id)
-  const ideaComments = useCommentList(id)
+  const hash = query.hash as string
+  const ideaDetails = useIdeaDetails(hash)
+  const ideaComments = useCommentList(hash)
   const { details, isLoadingDetails } = ideaDetails
   const { comments, isLoadingComments, refetchComments } = ideaComments
   const ideaInfo = useIdeaInfo(details?.ido_address)

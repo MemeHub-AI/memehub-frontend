@@ -23,7 +23,7 @@ export const IdeaCommentForm = () => {
   const { onChangeUpload } = useUploadImage()
   const { refetchComments } = useIdeaDetailsContext()
   const { form, onSubmit, isPending } = useCommentForm(
-    query.id as string,
+    query.hash as string,
     refetchComments
   )
 
