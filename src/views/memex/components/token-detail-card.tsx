@@ -42,9 +42,9 @@ export const TokenDetailsCard = ({
   const { t } = useTranslation()
   const { chainId } = useChainInfo(chain)
   const { progress } = useTokenProgress(
-    details?.ido_address,
+    tokenAddr,
     chainId,
-    '0.1.2' // TODO: dynamic version
+    '0.1.6' // TODO: dynamic version
   )
 
   const isFailed = tokenAddr === zeroAddress
@@ -112,7 +112,7 @@ export const TokenDetailsCard = ({
       {!editable && !isFailed && (
         <Progress
           value={progress}
-          className="h-5 border-2 border-black rounded bg-white"
+          className="h-5 border-2 border-black rounded mt-2 text-white"
           indicatorClass="bg-purple-600"
         />
       )}

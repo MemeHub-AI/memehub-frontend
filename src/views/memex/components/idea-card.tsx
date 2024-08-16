@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { BsLightningFill } from 'react-icons/bs'
 import { zeroAddress } from 'viem'
+import { useRouter } from 'next/router'
 
 import { Avatar } from '@/components/ui/avatar'
 import { Countdown } from '@/components/countdown'
@@ -12,7 +13,6 @@ import { Button } from '@/components/ui/button'
 import { TokenDetailsCard } from './token-detail-card'
 import { MemexIdeaItem } from '@/api/memex/types'
 import { cn } from '@/lib/utils'
-import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
 import { EllipsisText } from '@/components/ellipsis-text'
@@ -62,12 +62,11 @@ export const MemexIdeaCard = ({
     claim,
     refund,
   } = useIdeaClaimRefund(idea?.ido_address, chainId, refetchInfo)
-
   const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
 
   return (
     <div
-      className={cn('flex space-x-2 px-3 py-3 border-b-2 relative', className)}
+      className={cn('flex px-3 py-3 border-b-2 relative', className)}
       onClick={() =>
         router.push(fmt.toHref(Routes.MemexIdea, idea?.hash ?? ''))
       }
@@ -87,7 +86,7 @@ export const MemexIdeaCard = ({
       <Avatar
         src={idea?.user_logo}
         fallback={idea?.user_name?.[0]}
-        className="rounded-md"
+        className="rounded-md mr-2"
       />
 
       <div className="flex-1">
@@ -149,40 +148,40 @@ export const MemexIdeaCard = ({
             </div>
           )}
 
-          {isSuccess && canClaim && (
+          {isSuccess && (canClaim || isClaimed) && (
             <Button
               variant="yellow"
               shadow="none"
               size="xs"
-              className="py-3 mt-1"
-              disabled={isPending}
+              className="py-3 mt-1 rounded-md"
+              disabled={isPending || !canClaim || isClaimed}
               onClick={(e) => {
                 e.stopPropagation()
                 claim()
               }}
             >
               {isClaimed
-                ? t('already-claimed')
+                ? t('claimed')
                 : isPending
                 ? t('claiming')
                 : `${t('pure.claim')} ${rewardPercent}% $${idea?.symbol}`}
             </Button>
           )}
 
-          {isFailed && canRefund && (
+          {isFailed && (canRefund || isClaimed) && (
             <Button
               variant="yellow"
               shadow="none"
               size="xs"
-              className="py-3 mt-1"
-              disabled={isPending}
+              className="py-3 mt-1 rounded-md"
+              disabled={isPending || !canRefund || isClaimed}
               onClick={(e) => {
                 e.stopPropagation()
                 refund()
               }}
             >
               {isRefunded
-                ? t('already-refunded')
+                ? t('refunded')
                 : isPending
                 ? t('refunding')
                 : `${t('refund')} ${likeValue} ${chain?.native.symbol}`}
