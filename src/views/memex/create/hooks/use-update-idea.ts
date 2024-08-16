@@ -37,7 +37,7 @@ export const useUpdateIdea = (hashId: string | undefined) => {
   })
   const { isLoading } = useWaitForTx({
     hash,
-    onLoading: () => toast.loading(t('tx.confirmation')),
+    onLoading: () => toast.loading(t('tx.confirming')),
     onError: ({ message }) => CONTRACT_ERR.message(message),
     onSuccess: () => toast.success(t('update-success')),
     onFillay: () => {

@@ -53,7 +53,7 @@ export const useDeployIdea = (onFinally?: () => void) => {
   })
   const { isLoading } = useWaitForTx({
     hash,
-    onLoading: () => toast.loading(t('tx.confirmation')),
+    onLoading: () => toast.loading(t('tx.confirming')),
     onSuccess: () => toast.success(t('memex.deploy-success')),
     onError: ({ message }) => {
       CONTRACT_ERR.message(message)

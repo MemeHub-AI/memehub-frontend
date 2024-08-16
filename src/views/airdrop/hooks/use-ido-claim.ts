@@ -30,7 +30,7 @@ export const useIdoAirdropClaim = (chainId: number, onSuccess?: () => void) => {
   })
   const { isLoading } = useWaitForTx({
     hash,
-    onLoading: () => toast.loading(t('tx.confirmation')),
+    onLoading: () => toast.loading(t('tx.confirming')),
     onError: ({ message }) => IDO_ERR.message(message),
     onSuccess: () => {
       onSuccess?.()

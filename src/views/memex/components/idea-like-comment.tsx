@@ -14,6 +14,7 @@ import { MemexIdeaItem } from '@/api/memex/types'
 import { useIdeaInfo } from '../hooks/use-idea-info'
 import { getIdeaStatus } from '@/utils/memex/idea'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { memexIdeaLikeFeeUsdt } from '@/config/memex/idea'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -52,10 +53,6 @@ export const IdeaLikeComment = ({
     userPercent,
   } = ideaInfo
 
-  // TODO/memex: usdt should be dynamic
-  const usdtAmount = 5
-  const usdtSymbol = 'USDT'
-
   return (
     <>
       <Dialog
@@ -77,7 +74,7 @@ export const IdeaLikeComment = ({
           <span>1</span>
           <HeartFilledIcon className="w-6 h-6 text-red-500" />
           <span>
-            = {likeValue} {chain?.native.symbol}({usdtAmount} {usdtSymbol})
+            = {likeValue} {chain?.native.symbol}({memexIdeaLikeFeeUsdt} USDT)
           </span>
         </div>
         <div className="text-zinc-500 text-sm">

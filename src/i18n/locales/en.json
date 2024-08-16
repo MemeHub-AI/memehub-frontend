@@ -594,7 +594,6 @@
   "ido.airdrop.kol": "KOL only",
   "ido.airdrop.community": "Community member only",
   "pure.claim": "Claim",
-  "tx.confirmation": "Waiting for block confirmation...",
   "ido.airdrop.claim-success": "Claim successful!",
   "ido.airdrop.no-claim": "No yet",
   "ido.airdrop.no-id": "No {} NFT yet",
@@ -681,5 +680,6 @@
   "refunding": "Refunding...",
   "refund-success": "Refund successful!",
   "go-to.trade": "Go to trade",
-  "coin-detail": "Coin detail"
+  "coin-detail": "Coin detail",
+  "tx.confirming": "Waiting for block confirmation..."
 }

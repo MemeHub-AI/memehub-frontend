@@ -584,7 +584,6 @@
   "ido.airdrop.kol": "仅限 KOL",
   "ido.airdrop.community": "仅限社区成员",
   "pure.claim": "领取",
-  "tx.confirmation": "等待区块确认中...",
   "ido.airdrop.claim-success": "领取成功！",
   "ido.airdrop.no-claim": "暂无",
   "ido.airdrop.no-id": "没有{} NFT",
@@ -671,5 +670,6 @@
   "refunding": "退款中...",
   "refund-success": "退款成功！",
   "go-to.trade": "前往交易",
-  "coin-detail": "代币详情"
+  "coin-detail": "代币详情",
+  "tx.confirming": "等待区块确认中..."
 }

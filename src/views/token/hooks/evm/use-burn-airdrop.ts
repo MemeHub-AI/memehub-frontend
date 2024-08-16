@@ -53,7 +53,7 @@ export const useBurnAirdrop = (
   })
   const { isLoading } = useWaitForTx({
     hash,
-    onLoading: () => toast.loading(t('tx.confirmation')),
+    onLoading: () => toast.loading(t('tx.confirming')),
     onSuccess: () => toast.success(t('airdrop.burn.success')),
     onFillay: () => {
       refetchBurned()

@@ -41,12 +41,14 @@ export const TokenDetailsCard = ({
   } = details ?? {}
   const { t } = useTranslation()
   const { chainId } = useChainInfo(chain)
-
   const { progress } = useTokenProgress(
     details?.ido_address,
     chainId,
     '0.1.2' // TODO: dynamic version
   )
+
+  const isFailed = tokenAddr === zeroAddress
+  const hasLinks = !!twitter_url || !!telegram_url || !!website_url
 
   return (
     <Card
@@ -81,31 +83,33 @@ export const TokenDetailsCard = ({
         </div>
       </div>
 
-      <div className="flex justify-between items-center my-1">
-        <TokenSocialLinks
-          className="mt-0 space-x-0"
-          buttonProps={{
-            size: 'icon-sm',
-            className: 'border-none hover:bg-transparent',
-          }}
-          x={twitter_url || ''}
-          tg={telegram_url || ''}
-          website={website_url || ''}
-          onClick={(e) => e.stopPropagation()}
-        />
-        {!editable && (
-          <Button
-            shadow="none"
-            size="sm"
-            className="bg-transparent bg-yellow-600 border-none text-white h-7"
-            onClick={onBuyClick}
-          >
-            {t('go-to.trade')}
-          </Button>
-        )}
-      </div>
+      {hasLinks && !isFailed && (
+        <div className="flex justify-between items-center my-1">
+          <TokenSocialLinks
+            className="mt-0 space-x-0"
+            buttonProps={{
+              size: 'icon-sm',
+              className: 'border-none hover:bg-transparent',
+            }}
+            x={twitter_url!}
+            tg={telegram_url!}
+            website={website_url!}
+            onClick={(e) => e.stopPropagation()}
+          />
+          {!editable && (
+            <Button
+              shadow="none"
+              size="sm"
+              className="bg-transparent bg-yellow-600 border-none text-white h-7"
+              onClick={onBuyClick}
+            >
+              {t('go-to.trade')}
+            </Button>
+          )}
+        </div>
+      )}
 
-      {!editable && (
+      {!editable && !isFailed && (
         <Progress
           value={progress}
           className="h-5 border-2 border-black rounded bg-white"
@@ -113,7 +117,7 @@ export const TokenDetailsCard = ({
         />
       )}
 
-      {tokenAddr && tokenAddr !== zeroAddress && (
+      {tokenAddr && !isFailed && (
         <div className="flex items-center space-x-1 mt-1">
           <span>CA: {fmt.addr(tokenAddr)}</span>
           <CopyIcon content={tokenAddr} onClick={(e) => e.stopPropagation()} />

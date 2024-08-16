@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { BsLightningFill } from 'react-icons/bs'
+import { zeroAddress } from 'viem'
 
 import { Avatar } from '@/components/ui/avatar'
 import { Countdown } from '@/components/countdown'
@@ -21,6 +22,7 @@ import { useIdeaInfo } from '../hooks/use-idea-info'
 import { IdeaProgress } from './idea-progress'
 import { getIdeaStatus } from '@/utils/memex/idea'
 import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props {
   idea?: MemexIdeaItem
@@ -32,15 +34,17 @@ export const MemexIdeaCard = ({
   idea,
   onCommentSuccess,
 }: ComponentProps<'div'> & Props) => {
-  const { chain, content, image_urls, ...restIdea } = idea ?? {}
+  const { content, image_urls, ...restIdea } = idea ?? {}
   const { t } = useTranslation()
   const router = useRouter()
   const ideaInfo = useIdeaInfo(idea?.ido_address)
+  const { chain, chainId, chainName } = useChainInfo(idea?.chain)
   const { hasDetails, isFailed, isSuccess, isProcessing } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
   )
   const {
+    likeValue,
     startAt,
     durationSeconds,
     progress,
@@ -49,7 +53,6 @@ export const MemexIdeaCard = ({
     tokenAddr,
     refetchInfo,
   } = ideaInfo
-
   const {
     canRefund,
     canClaim,
@@ -58,7 +61,7 @@ export const MemexIdeaCard = ({
     isPending,
     claim,
     refund,
-  } = useIdeaClaimRefund(idea?.ido_address, refetchInfo)
+  } = useIdeaClaimRefund(idea?.ido_address, chainId, refetchInfo)
 
   const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
 
@@ -162,7 +165,7 @@ export const MemexIdeaCard = ({
                 ? t('already-claimed')
                 : isPending
                 ? t('claiming')
-                : `${t('pure.claim')} ${rewardPercent} $${idea?.symbol}`}
+                : `${t('pure.claim')} ${rewardPercent}% $${idea?.symbol}`}
             </Button>
           )}
 
@@ -182,7 +185,7 @@ export const MemexIdeaCard = ({
                 ? t('already-refunded')
                 : isPending
                 ? t('refunding')
-                : `${t('refund')} ${rewardPercent} $${idea?.symbol}`}
+                : `${t('refund')} ${likeValue} ${chain?.native.symbol}`}
             </Button>
           )}
         </div>
@@ -200,9 +203,10 @@ export const MemexIdeaCard = ({
             className="mt-1"
             details={restIdea as NonNullable<keyof typeof restIdea>}
             tokenAddr={tokenAddr}
-            onClick={() =>
-              router.push(fmt.toHref(Routes.Main, chain || '', tokenAddr))
-            }
+            onClick={() => {
+              if (tokenAddr === zeroAddress) return
+              router.push(fmt.toHref(Routes.Main, chainName, tokenAddr))
+            }}
           />
         )}
 
