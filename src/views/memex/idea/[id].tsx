@@ -11,10 +11,6 @@ import { useCommentList } from './hooks/use-comment-list'
 import { IdeaDetailsSkeleton } from './components/details-skeleton'
 import { useIdeaInfo } from '../hooks/use-idea-info'
 import { MemexIdeaCard } from '../components/idea-card'
-import { GridImages } from '@/components/grid-images'
-import { IdeaDetailsProfile } from './components/details-profile'
-import { IdeaLikeComment } from '../components/idea-like-comment'
-import { IdeaProgress } from '../components/idea-progress'
 
 export const IdeaDetailsPage = () => {
   const { query } = useRouter()
