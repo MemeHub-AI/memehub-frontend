@@ -14,6 +14,9 @@ import { memexCreateIdeaCharMin } from '@/config/memex/idea'
 import { useDeployIdea } from './use-deploy-idea'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { REQUEST_ERR } from '@/errors/request'
+import { useEditIdeaAutofill } from './use-edit-idea-autofill'
+import { useUpdateIdea } from './use-update-idea'
 
 const schema = z.object({
   content: z.string().min(memexCreateIdeaCharMin),
@@ -23,13 +26,9 @@ const schema = z.object({
 
 export const useCreateIdea = () => {
   const { t } = useTranslation()
-  const router = useRouter()
-  const {
-    idea: post,
-    ideaDetails: postDetails,
-    setIdeaDetails: setPostDetails,
-    setIdea: setPost,
-  } = useMemexStore()
+  const { query, ...router } = useRouter()
+  const { idea, ideaDetails, setIdea, setIdeaDetails } = useMemexStore()
+  const hash = query.hash as string
 
   const form = useForm<z.infer<typeof schema>>({
     mode: 'onChange',
@@ -48,15 +47,19 @@ export const useCreateIdea = () => {
     onSettled: (_, __, ___, id) => toast.dismiss(id),
     onError: ({ message }) => {
       reset()
-      reportException(message)
+      REQUEST_ERR.message(message)
       toast.success(t('memex.create-failed'))
     },
+  })
+  const { isUpdating, update } = useUpdateIdea(hash, {
+    showSuccessTips: true,
+    onSuccess: router.back,
   })
 
   const { memexFactoryAddr, airdropAddress, bcAddress } = useTokenConfig()
   const { deployFee, isDeploying, deploy } = useDeployIdea(() => {
-    setPost(null)
-    setPostDetails(null)
+    setIdea(null)
+    setIdeaDetails(null)
     router.back()
   })
 
@@ -65,9 +68,20 @@ export const useCreateIdea = () => {
       !(await form.trigger()) ||
       !memexFactoryAddr ||
       !airdropAddress ||
-      !bcAddress
+      !bcAddress ||
+      !ideaDetails?.airdrop_marketing
     ) {
       CONTRACT_ERR.configNotFound()
+      return
+    }
+
+    if (hash) {
+      update({
+        hash,
+        image_urls: pictures,
+        ...ideaDetails,
+        ...values,
+      })
       return
     }
 
@@ -77,35 +91,37 @@ export const useCreateIdea = () => {
         airdrop_address: airdropAddress,
         coin_factory_address: bcAddress,
         image_urls: pictures,
+        ...ideaDetails,
         ...values,
-        ...postDetails,
       })
 
       await deploy(
         data.hash,
         data.coin_id,
-        postDetails?.name,
-        postDetails?.symbol,
-        postDetails?.marketing
+        ideaDetails?.name,
+        ideaDetails?.symbol,
+        ideaDetails?.airdrop_marketing
       )
     } catch (e) {
       reportException(e)
     }
   }
 
-  useEffect(() => {
-    if (!post) return
+  useEditIdeaAutofill()
 
-    form.setValue('content', post.content)
-    form.setValue('chain', post.chain)
-    form.setValue('pictures', post.image_urls)
+  useEffect(() => {
+    if (!idea) return
+
+    form.setValue('content', idea.content)
+    form.setValue('chain', idea.chain)
+    form.setValue('pictures', idea.image_urls)
     form.trigger()
-  }, [post])
+  }, [idea])
 
   return {
     form,
     onSubmit,
-    isCreating: isPending || isDeploying,
+    isCreating: isPending || isDeploying || isUpdating,
     deployFee,
   }
 }

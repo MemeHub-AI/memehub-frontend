@@ -11,7 +11,7 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const CreateIdeaHeader = () => {
   const { t } = useTranslation()
-  const router = useRouter()
+  const { query, ...router } = useRouter()
   const {
     form: { formState, ...form },
     isCreating,
@@ -19,6 +19,7 @@ export const CreateIdeaHeader = () => {
   } = useCreateIdeaContext()
   const { chain } = useChainInfo(form.getValues('chain'))
 
+  const isUpdate = typeof query.hash === 'string'
   const hasError = !isEmpty(Object.keys(formState.errors))
   const publishFee = BigNumber(deployFee).gt(0)
     ? `(${deployFee} ${chain?.native.symbol})`
@@ -50,6 +51,8 @@ export const CreateIdeaHeader = () => {
       >
         {isCreating
           ? t('memex.creating')
+          : isUpdate
+          ? t('update')
           : `${t('memex.create')} ${publishFee}`}
       </Button>
     </div>

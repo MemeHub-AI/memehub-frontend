@@ -8,6 +8,7 @@ import {
   MemexIdeaComment,
   MemexIdeaCommentReq,
   MemexListReq,
+  MemexIdeaCoinId,
 } from './types'
 
 export const memexApi = {
@@ -20,13 +21,13 @@ export const memexApi = {
     return api.GET<ApiResponse<MemexIdeaItem>>(`/api/v1/memex/tweet/${hash}`)
   },
   createIdea: (req: MemexCreateReq) => {
-    return api.POST<ApiResponse<MemexIdeaHash & { coin_id: string | null }>>(
+    return api.POST<ApiResponse<MemexIdeaHash & MemexIdeaCoinId>>(
       '/api/v1/memex/tweets',
       { body: req }
     )
   },
   updateIdea: (req: Partial<MemexCreateReq> & MemexIdeaHash) => {
-    return api.PUT<ApiResponse<MemexIdeaHash>>('/api/v1/memex/tweets', {
+    return api.PUT<ApiResponse<MemexIdeaCoinId>>('/api/v1/memex/tweets', {
       body: req,
     })
   },

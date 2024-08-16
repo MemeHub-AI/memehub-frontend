@@ -1,4 +1,3 @@
-import React from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
@@ -8,8 +7,9 @@ import { useCreateIdeaDetailsContext } from '@/contexts/memex/create-idea-detail
 
 export const CreateIdeaDetailsHeader = () => {
   const { t } = useTranslation()
-  const router = useRouter()
+  const { query, ...router } = useRouter()
   const { isUpdating } = useCreateIdeaDetailsContext()
+  const isUpdate = typeof query.hash === 'string'
 
   return (
     <div className="flex justify-between items-center">
@@ -32,7 +32,7 @@ export const CreateIdeaDetailsHeader = () => {
         className="rounded-full h-7 bg-black text-white"
         disabled={isUpdating}
       >
-        {t('confirm')}
+        {isUpdate ? t('update') : t('confirm')}
       </Button>
     </div>
   )

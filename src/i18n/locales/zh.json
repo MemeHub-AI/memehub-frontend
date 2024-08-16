@@ -674,5 +674,6 @@
   "tx.confirming": "等待区块确认中...",
   "claim-success": "领取成功！",
   "refunded": "已退款",
-  "commenting": "评论中..."
+  "commenting": "评论中...",
+  "update": "更新"
 }

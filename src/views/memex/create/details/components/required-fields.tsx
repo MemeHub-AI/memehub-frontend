@@ -72,7 +72,7 @@ export const RequiredFields = () => {
                 <ImageUpload
                   id="create-detail-logo"
                   placeholder={t('name')}
-                  className="invisible absolute"
+                  className="hidden"
                   onChange={async (e) => {
                     const src = await onChangeUpload(e)
                     if (src) field.onChange(src)
@@ -81,7 +81,7 @@ export const RequiredFields = () => {
                 />
               </Label>
             </div>
-            {file && <p>{fmt.fileName(file?.name)}</p>}
+            {field.value && <p>{fmt.fileName(field.value)}</p>}
             <FormMessage />
           </div>
         )}

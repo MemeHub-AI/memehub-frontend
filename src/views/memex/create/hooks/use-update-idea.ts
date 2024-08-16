@@ -9,12 +9,20 @@ import { REQUEST_ERR } from '@/errors/request'
 import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useIdeaDetails } from '../../idea/hooks/use-idea-details'
-import { Marketing } from '@/api/token/types'
 import { getEvmAirdropParams } from '@/utils/contract'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useTokenConfig } from '@/hooks/use-token-config'
 
-export const useUpdateIdea = (hashId: string | undefined) => {
+interface Options {
+  showSuccessTips?: boolean
+  onSuccess?: () => void
+  onContractSuccess?: () => void
+}
+
+export const useUpdateIdea = (
+  hashId: string | undefined,
+  { showSuccessTips = false, onSuccess, onContractSuccess }: Options = {}
+) => {
   const { t } = useTranslation()
   const chainId = useChainId()
   const { details } = useIdeaDetails(hashId)
@@ -41,41 +49,44 @@ export const useUpdateIdea = (hashId: string | undefined) => {
     onError: ({ message }) => CONTRACT_ERR.message(message),
     onSuccess: () => toast.success(t('update-success')),
     onFillay: () => {
-      toast.dismiss()
       reset()
+      onContractSuccess?.()
+      toast.dismiss()
     },
   })
 
   const {
     isPending: isPendingInfo,
-    mutateAsync,
+    mutateAsync: update,
     reset: resetUpdate,
   } = useMutation({
     mutationKey: [memexApi.updateIdea.name, hashId],
     mutationFn: memexApi.updateIdea,
     onMutate: () => toast.loading(t('updating')),
     onSettled: (_, __, ___, id) => toast.dismiss(id),
+    onSuccess: () => {
+      if (showSuccessTips) toast.success(t('update-success'))
+      onSuccess?.()
+    },
+
     onError: ({ message }) => {
       REQUEST_ERR.message(message)
       resetUpdate()
     },
   })
 
-  const update = async ({
-    marketing,
-    ...params
-  }: Parameters<typeof memexApi.updateIdea>[0] & {
-    marketing: Marketing[] | undefined
-  }) => {
+  const updateWithContract = async (
+    params: Parameters<typeof memexApi.updateIdea>[0]
+  ) => {
     if (!configValue) {
       CONTRACT_ERR.configNotFound()
       return
     }
 
     try {
-      const { data } = await mutateAsync(params)
-      if (!data?.hash || !details?.ido_address) {
-        toast.error(t('update-failed'))
+      const { data } = await update(params)
+      if (!data?.coin_id || !details?.ido_address) {
+        CONTRACT_ERR.configNotFound('coin_id, ido_address')
         return
       }
 
@@ -86,8 +97,8 @@ export const useUpdateIdea = (hashId: string | undefined) => {
         functionName: 'setTokenInfo',
         args: [
           [params.name!, params.symbol!],
-          [BigInt(data.hash)],
-          getEvmAirdropParams(configValue, marketing),
+          [BigInt(data.coin_id)],
+          getEvmAirdropParams(configValue, params.airdrop_marketing),
         ],
       })
     } catch (error) {}
@@ -96,5 +107,6 @@ export const useUpdateIdea = (hashId: string | undefined) => {
   return {
     isUpdating: isPending || isLoading || isPendingInfo,
     update,
+    updateWithContract,
   }
 }

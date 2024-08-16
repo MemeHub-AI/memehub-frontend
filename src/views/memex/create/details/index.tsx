@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { Form } from '@/components/ui/form'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { useCreateIdeaDetails } from './hooks/use-create-idea-details'

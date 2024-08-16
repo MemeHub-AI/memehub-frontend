@@ -1,16 +1,18 @@
 import { create } from 'zustand'
-import { z } from 'zod'
 
 import type { MemexCreateReq } from '@/api/memex/types'
-import { marketingSchema } from '@/components/marketing-field'
 
 type IdeaRequired = Pick<MemexCreateReq, 'content' | 'chain' | 'image_urls'>
 
 type IdeaOptional = Omit<
   MemexCreateReq,
-  'content' | 'chain' | 'image_urls' | 'factory_address'
-> &
-  z.infer<typeof marketingSchema>
+  | 'content'
+  | 'chain'
+  | 'image_urls'
+  | 'factory_address'
+  | 'airdrop_address'
+  | 'coin_factory_address'
+>
 
 interface MemexStore {
   idea: IdeaRequired | null

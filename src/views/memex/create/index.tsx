@@ -21,7 +21,7 @@ export const CreateIdeaPage = () => {
   const createTweet = useCreateIdea()
   const { form, onSubmit } = createTweet
   const { ideaDetails } = useMemexStore()
-  const router = useRouter()
+  const { query, ...router } = useRouter()
 
   useMemexClear()
 
@@ -49,7 +49,12 @@ export const CreateIdeaPage = () => {
                   className="pb-0"
                   details={ideaDetails as unknown as MemexIdeaItem}
                   editable={true}
-                  onClick={() => router.push(Routes.MemexCreateDetails)}
+                  onClick={() =>
+                    router.push({
+                      pathname: Routes.MemexCreateDetails,
+                      query,
+                    })
+                  }
                 />
               )}
               <CreateIdeaMessages />

@@ -684,5 +684,6 @@
   "tx.confirming": "Waiting for block confirmation...",
   "claim-success": "Claim successful!",
   "refunded": "Refunded",
-  "commenting": "Commenting..."
+  "commenting": "Commenting...",
+  "update": "Update"
 }

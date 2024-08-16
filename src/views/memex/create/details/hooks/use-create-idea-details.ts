@@ -9,6 +9,7 @@ import { useMemexStore } from '@/stores/use-memex'
 import { marketingSchema } from '@/components/marketing-field'
 import { MemexCreateReq } from '@/api/memex/types'
 import { useUpdateIdea } from '../../hooks/use-update-idea'
+import { useEditIdeaAutofill } from '../../hooks/use-edit-idea-autofill'
 
 const withNonNull = (value: string) => value + t('memex.non-null')
 
@@ -18,16 +19,15 @@ export const createDetailSchema = z
     symbol: z.string().min(1, { message: withNonNull(t('ticker')) }),
     logo: z.string().min(1, { message: withNonNull(t('logo')) }),
     desc: z.string().min(1, { message: withNonNull(t('description')) }),
-    x: z.string().optional(),
-    tg: z.string().optional(),
-    website: z.string().optional(),
+    x: z.string().optional().nullable(),
+    tg: z.string().optional().nullable(),
+    website: z.string().optional().nullable(),
   })
   .merge(marketingSchema)
 
 export const useCreateIdeaDetails = () => {
   const { query, ...router } = useRouter()
-  const { ideaDetails: postDetails, setIdeaDetails: setPostDetails } =
-    useMemexStore()
+  const { ideaDetails, setIdeaDetails } = useMemexStore()
   const hash = query.hash as string | undefined
 
   const form = useForm<z.infer<typeof createDetailSchema>>({
@@ -37,13 +37,15 @@ export const useCreateIdeaDetails = () => {
       symbol: '',
       logo: '',
       desc: '',
+      marketing: [],
       x: '',
       tg: '',
       website: '',
-      marketing: [],
     },
   })
-  const { isUpdating, update } = useUpdateIdea(hash)
+  const { isUpdating, updateWithContract } = useUpdateIdea(hash, {
+    onContractSuccess: router.back,
+  })
 
   const onSubmit = async (values: z.infer<typeof createDetailSchema>) => {
     if (!(await form.trigger())) return
@@ -53,6 +55,7 @@ export const useCreateIdeaDetails = () => {
       symbol: values.symbol,
       logo_url: values.logo,
       description: values.desc,
+      airdrop_marketing: values.marketing,
     } as MemexCreateReq
 
     if (values.x) params.twitter_url = values.x
@@ -61,36 +64,28 @@ export const useCreateIdeaDetails = () => {
 
     // is update details
     if (hash) {
-      update({ hash, marketing: values.marketing, ...params })
+      updateWithContract({ hash, ...params })
       return
     }
 
-    setPostDetails(params)
+    setIdeaDetails(params)
     router.back()
   }
 
-  useEffect(() => {
-    if (!postDetails) return
+  useEditIdeaAutofill()
 
-    const {
-      name,
-      symbol,
-      logo_url,
-      description,
-      twitter_url,
-      telegram_url,
-      website_url,
-      marketing,
-    } = postDetails
-    if (name) form.setValue('name', name)
-    if (symbol) form.setValue('symbol', symbol)
-    if (logo_url) form.setValue('logo', logo_url)
-    if (description) form.setValue('desc', description)
-    form.setValue('x', twitter_url)
-    form.setValue('tg', telegram_url)
-    form.setValue('website', website_url)
-    form.setValue('marketing', marketing)
-  }, [postDetails])
+  useEffect(() => {
+    if (!ideaDetails) return
+
+    form.setValue('name', ideaDetails?.name || '')
+    form.setValue('symbol', ideaDetails?.symbol || '')
+    form.setValue('logo', ideaDetails?.logo_url || '')
+    form.setValue('desc', ideaDetails?.description || '')
+    form.setValue('marketing', ideaDetails?.airdrop_marketing || [])
+    form.setValue('x', ideaDetails?.twitter_url)
+    form.setValue('tg', ideaDetails?.telegram_url)
+    form.setValue('website', ideaDetails?.website_url)
+  }, [ideaDetails])
 
   return {
     form,

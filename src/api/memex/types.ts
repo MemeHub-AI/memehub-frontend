@@ -1,5 +1,6 @@
 import { DistributorVersion } from '@/contract/abi/distributor'
 import { TokenVersion } from '@/contract/abi/token'
+import { Marketing } from '../token/types'
 
 export interface MemexIdeaItem {
   user_logo: string
@@ -29,6 +30,7 @@ export interface MemexIdeaItem {
   coin_version: TokenVersion
   airdrop_version: DistributorVersion
   coin_factory_address: string
+  airdrop_marketing: Marketing[] | undefined
 }
 
 export interface MemexListReq {
@@ -54,6 +56,7 @@ export interface MemexCreateReq {
   chain: string
   content: string
   image_urls: string[]
+  airdrop_marketing: Marketing[] | undefined
 
   factory_address: string
   airdrop_address: string
@@ -70,6 +73,10 @@ export interface MemexCreateReq {
 
 export interface MemexIdeaHash {
   hash: string
+}
+
+export interface MemexIdeaCoinId {
+  coin_id: string | null
 }
 
 export interface MemexIdeaComment {

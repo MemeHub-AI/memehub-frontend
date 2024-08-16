@@ -9,6 +9,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from '@/components/ui/form'
 import { MarketType, Marketing } from '@/api/token/types'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -16,7 +17,6 @@ import { fmt } from '@/utils/fmt'
 import { Dialog, DialogFooter } from '@/components/ui/dialog'
 import { DialogContent, DialogTitle } from '@radix-ui/react-dialog'
 import { Button } from '@/components/ui/button'
-import { useCreateToken } from '../views/create/hooks/use-create-token'
 import { CheckedState } from '@radix-ui/react-checkbox'
 import { useTokenConfig } from '@/hooks/use-token-config'
 

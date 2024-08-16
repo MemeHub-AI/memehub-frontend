@@ -40,7 +40,7 @@ export const MemexIdeaCard = ({
 }: ComponentProps<'div'> & Props) => {
   const { content, image_urls, ...restIdea } = idea ?? {}
   const { t } = useTranslation()
-  const router = useRouter()
+  const { query, ...router } = useRouter()
   const ideaInfo = useIdeaInfo(idea?.ido_address)
   const { chain, chainId, chainName } = useChainInfo(idea?.chain)
   const { hasDetails, isFailed, isSuccess, isProcessing } = useMemo(
@@ -77,16 +77,12 @@ export const MemexIdeaCard = ({
       return (
         <div className="flex">
           {isProcessing && idea?.is_creator && (
-            <div className="flex items-center space-x-2 absolute right-4 top-0">
-              <Link
-                href="#"
-                className="text-purple-600 sm:hover:underline active:underline"
-              >
+            <div className="flex items-center space-x-2 absolute right-4 top-0 text-purple-600">
+              <Link href="#" className="sm:hover:underline active:underline">
                 Blink
               </Link>
               <Link
                 href={Routes.MemexCreate + qs.stringify({ hash: idea.hash })}
-                className="text-purple-600"
               >
                 <AiOutlineEdit size={20} />
               </Link>
