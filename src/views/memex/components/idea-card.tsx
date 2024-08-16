@@ -1,10 +1,11 @@
-import { memo, ReactNode, useMemo, type ComponentProps } from 'react'
+import { type ReactNode, type ComponentProps, useMemo } from 'react'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEdit } from 'react-icons/ai'
 import { BsLightningFill } from 'react-icons/bs'
 import { zeroAddress } from 'viem'
 import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import { Avatar } from '@/components/ui/avatar'
 import { Countdown } from '@/components/countdown'
@@ -23,6 +24,7 @@ import { IdeaProgress } from './idea-progress'
 import { getIdeaStatus } from '@/utils/memex/idea'
 import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { qs } from '@/hooks/use-fetch'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -74,6 +76,22 @@ export const MemexIdeaCard = ({
     if (isDetails) {
       return (
         <div className="flex">
+          {isProcessing && idea?.is_creator && (
+            <div className="flex items-center space-x-2 absolute right-4 top-0">
+              <Link
+                href="#"
+                className="text-purple-600 sm:hover:underline active:underline"
+              >
+                Blink
+              </Link>
+              <Link
+                href={Routes.MemexCreate + qs.stringify({ hash: idea.hash })}
+                className="text-purple-600"
+              >
+                <AiOutlineEdit size={20} />
+              </Link>
+            </div>
+          )}
           <Avatar
             src={idea?.user_logo}
             fallback={idea?.user_name?.[0]}
@@ -105,7 +123,12 @@ export const MemexIdeaCard = ({
       }}
     >
       {isSuccess && (
-        <Badge className="absolute top-4 right-2 px-0.5 bg-purple-600">
+        <Badge
+          className={cn(
+            'absolute top-4 right-2 px-0.5 bg-purple-600',
+            isDetails && 'top-0 right-3'
+          )}
+        >
           🚀 {t('memex.successed')}
         </Badge>
       )}
@@ -149,7 +172,7 @@ export const MemexIdeaCard = ({
               variant="yellow"
               shadow="none"
               size="xs"
-              className="py-3 mt-1"
+              className="py-3 mt-2"
               onClick={(e) => {
                 e.stopPropagation()
                 router.push({
@@ -190,7 +213,7 @@ export const MemexIdeaCard = ({
               variant="yellow"
               shadow="none"
               size="xs"
-              className="py-3 mt-1 rounded-md"
+              className="py-3 mt-2 rounded-md"
               disabled={isPending || !canClaim || isClaimed}
               onClick={(e) => {
                 e.stopPropagation()
@@ -210,7 +233,7 @@ export const MemexIdeaCard = ({
               variant="yellow"
               shadow="none"
               size="xs"
-              className="py-3 mt-1 rounded-md"
+              className="py-3 mt-2 rounded-md"
               disabled={isPending || !canRefund || isClaimed}
               onClick={(e) => {
                 e.stopPropagation()

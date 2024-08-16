@@ -3,7 +3,7 @@ import { Cross2Icon } from '@radix-ui/react-icons'
 
 import { Button } from '@/components/ui/button'
 import { ImagesPreviewDialog } from '@/components/images-preview-dialog'
-import { useCreateIdeaContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 import { cn } from '@/lib/utils'
 
 // TODO: refactor to public comp

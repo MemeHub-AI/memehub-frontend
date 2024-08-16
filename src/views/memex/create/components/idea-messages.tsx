@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { utilLang } from '@/utils/lang'
-import { useCreateIdeaContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 import { memexCreateIdeaCharMin } from '@/config/memex/idea'
 
 export const CreateIdeaMessages = () => {

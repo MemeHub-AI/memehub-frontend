@@ -6,7 +6,7 @@ import { useRouter } from 'next/router'
 import { Button } from '@/components/ui/button'
 import { Routes } from '@/routes'
 import { useMemexStore } from '@/stores/use-memex'
-import { useCreateIdeaContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 
 export const CreateIdeaDetailButton = () => {
   const { t } = useTranslation()

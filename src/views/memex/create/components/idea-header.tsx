@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash'
 import { BigNumber } from 'bignumber.js'
 
 import { Button } from '@/components/ui/button'
-import { useCreateIdeaContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const CreateIdeaHeader = () => {

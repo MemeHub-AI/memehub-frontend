@@ -7,7 +7,7 @@ import { Separator } from '@/components/ui/separator'
 import { FormField, FormItem } from '@/components/ui/form'
 import { PicturesPreview } from '../pictures-preview'
 import { useUserStore } from '@/stores/use-user-store'
-import { useCreateIdeaContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 
 export const CreateIdeaTextareaField = () => {
   const { t } = useTranslation()

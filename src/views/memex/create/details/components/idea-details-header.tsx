@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
 import { Button } from '@/components/ui/button'
-import { useCreateIdeaDetailsContext } from '@/contexts/memex/create-detail'
+import { useCreateIdeaDetailsContext } from '@/contexts/memex/create-idea-detail'
 
 export const CreateIdeaDetailsHeader = () => {
   const { t } = useTranslation()

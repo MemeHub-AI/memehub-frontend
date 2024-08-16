@@ -7,7 +7,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
-import { useCreateIdeaDetailsContext } from '@/contexts/memex/create-detail'
+import { useCreateIdeaDetailsContext } from '@/contexts/memex/create-idea-detail'
 import { FormField, FormLabel } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useMemexStore } from '@/stores/use-memex'

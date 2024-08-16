@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { useCreateIdea } from './hooks/use-create-idea'
-import { CreateIdeaProvider } from '@/contexts/memex/create-post'
+import { CreateIdeaProvider } from '@/contexts/memex/create-idea'
 import { Form } from '@/components/ui/form'
 import { CreateIdeaHeader } from './components/idea-header'
 import { CreateIdeaTextareaField } from './components/fields/textarea-field'

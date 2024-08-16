@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { ImageUpload } from '@/components/image-upload'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { Label } from '@/components/ui/label'
-import { useCreateIdeaContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 
 export const CreateIdeaPicturesField = () => {
   const { t } = useTranslation()

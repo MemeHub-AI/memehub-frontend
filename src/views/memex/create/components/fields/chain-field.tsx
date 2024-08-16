@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { FormField, FormControl } from '@/components/ui/form'
 import { ChainSelect } from '@/components/chain-select'
-import { useCreateIdeaContext } from '@/contexts/memex/create-post'
+import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 import { cn } from '@/lib/utils'
 
 export const CreateIdeaChainField = () => {
