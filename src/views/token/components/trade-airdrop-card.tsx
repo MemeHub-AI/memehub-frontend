@@ -23,11 +23,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
   const { tokenInfo, tokenMetadata, chainId } = useTokenContext()
-  const {
-    airdrop_index = 0,
-    airdrop_address,
-    airdrop_version,
-  } = tokenInfo ?? {}
+  const { airdrop, airdrop_address, airdrop_version } = tokenInfo ?? {}
 
   const {
     createAt,
@@ -47,12 +43,13 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     claimKol,
     claimCommunity,
   } = useAirdrop(
-    airdrop_index, // TODO: should be `distributor_id`
+    airdrop?.[0]?.distribution_id || 0,
     airdrop_address,
     airdrop_version,
     chainId,
     refetchAirdrop
   )
+
   const { isKol, hasCommunity, kolInfo, communityInfo } = useUserStore() // KOL is userself
   const [isKolCard, isCommunityCard] = useMemo(
     () => [type === 'kol', type === 'community'],

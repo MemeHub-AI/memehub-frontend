@@ -33,7 +33,7 @@ export const useAirdrop = (
   }
 
   const query = {
-    enabled: !!address && !!addr && !!chainId,
+    enabled: !!address && !!addr && !!chainId && !!id,
     refetchInterval: 5_000,
   }
 
@@ -41,7 +41,7 @@ export const useAirdrop = (
     useReadContract({
       ...airdropConfig,
       functionName: 'isClaimedKOL',
-      args: [BigInt(id), address!],
+      args: [BigInt(id || 0), address!],
       query,
     })
 
@@ -49,7 +49,7 @@ export const useAirdrop = (
     useReadContract({
       ...airdropConfig,
       functionName: 'isClaimedCommunity',
-      args: [BigInt(id), address!],
+      args: [BigInt(id || 0), address!],
       query,
     })
 

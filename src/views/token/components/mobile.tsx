@@ -21,6 +21,8 @@ import { useAirdrop } from '../hooks/evm/use-airdrop'
 import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 import { useTokenContext } from '@/contexts/token'
 import { useUserStore } from '@/stores/use-user-store'
+import { Routes } from '@/routes'
+import { fmt } from '@/utils/fmt'
 
 const enum TabName {
   Trade = '0',
@@ -33,21 +35,18 @@ export const TokenMobile = () => {
   const { query, replace } = useRouter()
   const tab = (query.tab || TabName.Trade) as string
   const { tokenInfo, chainId } = useTokenContext()
-  const {
-    airdrop_index = 0,
-    airdrop_address,
-    airdrop_version,
-  } = tokenInfo ?? {}
+  const { airdrop, airdrop_address, airdrop_version } = tokenInfo ?? {}
+  const airdropId = airdrop?.[0].distribution_id || 0
 
   const { createAt, durationSeconds } = useTradeAirdropContext()
   const { isKol, hasCommunity } = useUserStore()
   const { isKolClaimed, isCommunityClaimed } = useAirdrop(
-    airdrop_index, // TODO: should be `distirbutor_id`
+    airdropId,
     airdrop_address,
     airdrop_version,
     chainId
   )
-  const { isBurned } = useBurnAirdrop(airdrop_index)
+  const { isBurned } = useBurnAirdrop(airdropId)
   const [countdown] = useCountDown({
     targetDate: dayjs.unix(createAt).add(durationSeconds, 'second'),
   })
@@ -69,7 +68,11 @@ export const TokenMobile = () => {
       className="w-full min-h-max flex flex-col justify-between"
       onValueChange={(tab) => {
         replace({
-          pathname: `/${query.chain}/${query.address}`,
+          pathname: fmt.toHref(
+            Routes.Main,
+            query.chain as string,
+            query.address as string
+          ),
           query: { tab },
         })
       }}

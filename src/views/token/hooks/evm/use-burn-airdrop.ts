@@ -28,7 +28,8 @@ export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
   const { data: isBurned, refetch: refetchBurned } = useReadContract({
     ...airdropConfig,
     functionName: 'isBurn',
-    args: [BigInt(id)],
+    args: [BigInt(id || 0)],
+    query: { enabled: !!id },
   })
 
   const {
@@ -61,7 +62,7 @@ export const useBurnAirdrop = (id: number, onFinally?: () => void) => {
   const burn = async () => {
     if (!checkForConnect()) return
     if (!(await checkForChain(chainId))) return
-    if (!airdropAddr) return
+    if (!airdropAddr || !id) return
 
     // TODO: should simulate first.
     writeContract({
