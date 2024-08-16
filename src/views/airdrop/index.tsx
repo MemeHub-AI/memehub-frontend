@@ -91,17 +91,15 @@ export const AirdropPage = () => {
 const AirdropSkeleton = () => {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 max-w-max">
-      {airdropData.map((a) =>
-        a.airdrop.map((detail, i) => (
-          <AirdropCard
-            key={i}
-            className="blur-lg pointer-events-none select-none"
-            airdrop={a}
-            detail={detail}
-            isKolCard
-          />
-        ))
-      )}
+      {airdropData.map((airdrop, i) => (
+        <AirdropCard
+          key={i}
+          className="blur-lg pointer-events-none select-none"
+          airdrop={airdrop}
+          detail={airdrop.airdrop[0]}
+          isKolCard
+        />
+      ))}
     </div>
   )
 }

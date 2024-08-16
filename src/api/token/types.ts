@@ -1,11 +1,11 @@
 import { TokenType } from '@/enums/token'
 import type { UserInfoRes } from '../user/types'
-import type { TokenVersion } from '@/contract/abi/token'
-import type { DistributorVersion } from '@/contract/abi/distributor'
-import type { MemexFactoryVersion } from '@/contract/abi/memex'
+import { TokenVersion } from '@/contract/abi/token'
+import { DistributorVersion } from '@/contract/abi/distributor'
+import { AirdropDetail } from '../airdrop/types'
 
 export interface TokenListItem {
-  airdrop: AirdropItem[]
+  airdrop: AirdropDetail[]
   airdrop_address: string
   airdrop_index: number | null
   airdrop_supply: string

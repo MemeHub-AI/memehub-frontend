@@ -43,12 +43,13 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     claimKol,
     claimCommunity,
   } = useAirdrop(
-    airdrop?.[0]?.distribution_id,
+    airdrop?.[0]?.distribution_id || 0,
     airdrop_address,
     airdrop_version,
     chainId,
     refetchAirdrop
   )
+
   const { isKol, hasCommunity, kolInfo, communityInfo } = useUserStore() // KOL is userself
   const [isKolCard, isCommunityCard] = useMemo(
     () => [type === 'kol', type === 'community'],

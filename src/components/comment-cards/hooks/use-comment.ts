@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import type { TokenAddCommentReq, TokenCommentListRes } from '@/api/token/types'
 
 import { tokenApi } from '@/api/token'
-import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 
 interface Options {
   onCommentSuccess?: (data: TokenCommentListRes) => void
@@ -16,7 +16,7 @@ interface Options {
 export const useComment = (options?: Options) => {
   const { onCommentSuccess, onLikeSuccess, onUnlikeSuccess } = options ?? {}
   const { t } = useTranslation()
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
 
   // Add a new comment.
   const { isPending: isCommenting, mutateAsync: addComment } = useMutation({

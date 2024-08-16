@@ -6,7 +6,7 @@ import { useEvmTrade } from './evm/use-trade'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeToast } from '@/hooks/use-trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'
-import { useTradeSearchParams } from './use-search-params'
+import { useTokenQuery } from './use-token-query'
 import { TradeType } from '@/enums/trade'
 import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
@@ -23,7 +23,7 @@ const lastTrade = {
 
 export const useTrade = (onSuccess?: () => void) => {
   const { userInfo } = useUserInfo()
-  const { referralCode } = useTradeSearchParams()
+  const { referralCode } = useTokenQuery()
   const [inviteOpen, setInviteOpen] = useState(false)
   const { getCanBind } = useInvite()
   const { showToast } = useTradeToast()

@@ -46,7 +46,7 @@ export const useAirdropInfo = (
   } = useReadContract({
     ...distributorConfig,
     functionName: 'distributions',
-    args: [BigInt(id)],
+    args: [BigInt(id || 0)],
     query: { enabled: !!airdropAddr && !!id },
   })
   const [

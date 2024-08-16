@@ -23,13 +23,16 @@ import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'
 import { utilLang } from '@/utils/lang'
 import { TradeType } from '@/enums/trade'
+import { useTokenContext } from '@/contexts/token'
 
 export const TradeTable = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { getTableShowAge, setTableShowAge } = useStorage()
-
   const [showAge, setShowAge] = useState(strToBool(getTableShowAge()))
   const router = useRouter()
+
+  const { tradeRecords } = useTokenContext()
+
   const ths = [
     t('account'),
     t('type'),
@@ -39,10 +42,10 @@ export const TradeTable = () => {
     showAge ? t('age') : t('date'),
     t('tx.hash'),
   ]
-  const { tradeRecords, hasMore, fetchNextPage } = useTradeRecord()
+  // const { tradeRecords, hasMore, fetchNextPage } = useTradeRecord()
 
   const formatFromTz = (ts: number) => {
-    const date = dayjs.unix(ts)
+    const date = dayjs(ts)
     return utilLang.isEn()
       ? date.utc().format('YYYY-MM-DD HH:mm:ss')
       : date.format('YYYY-MM-DD HH:mm:ss')
@@ -80,6 +83,7 @@ export const TradeTable = () => {
         <TableBody>
           {tradeRecords.map((r, i) => {
             const isBuy = r.type === TradeType.Buy
+
             return (
               <TableRow
                 key={i}
@@ -88,17 +92,15 @@ export const TradeTable = () => {
                 <TableCell
                   className="font-bold inline-flex items-center cursor-pointer hover:underline my-2 px-3"
                   onClick={() => {
-                    router.push(`${Routes.Account}/${r.account.wallet_address}`)
+                    router.push(`${Routes.Account}/${r.executor}`)
                   }}
                 >
-                  <Avatar
+                  {/* <Avatar
                     src={r.account.logo}
                     size={24}
                     fallback={r.account.name.charAt(0)}
-                  />
-                  <span className="ml-1 max-w-20 truncate">
-                    {r.account.name}
-                  </span>
+                  /> */}
+                  <span className="ml-1 max-w-20">{fmt.addr(r.executor)}</span>
                 </TableCell>
                 <TableCell
                   className={cn(isBuy ? 'text-green-500' : 'text-red-500')}
@@ -117,12 +119,12 @@ export const TradeTable = () => {
                 </TableCell>
                 <TableCell className="max-sm:text-xs w-48">
                   {showAge
-                    ? dayjs.unix(+r.create_time).fromNow()
-                    : formatFromTz(+r.create_time)}
+                    ? dayjs(r.timestamp).fromNow()
+                    : formatFromTz(r.timestamp)}
                 </TableCell>
                 <TableCell className="max-sm:text-xs">
                   <Link
-                    href={r.hash_url}
+                    href={r.hash}
                     target="_blank"
                     className="hover:underline"
                   >
@@ -146,12 +148,13 @@ export const TradeTable = () => {
       </Table>
       <div
         className={cn(
-          'text-center mt-1 cursor-pointer',
-          hasMore ? 'text-blue-500 underline' : 'text-zinc-500'
+          'text-center mt-1 cursor-pointer'
+          // hasMore ? 'text-blue-500 underline' : 'text-zinc-500'
         )}
-        onClick={fetchNextPage}
+        // onClick={fetchNextPage}
       >
-        {hasMore ? t('loading.more') : t('nomore')}
+        {t('loading.more')}
+        {/* {hasMore ? t('loading.more') : t('nomore')} */}
       </div>
     </>
   )

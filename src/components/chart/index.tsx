@@ -7,7 +7,7 @@ import { useTokenContext } from '@/contexts/token'
 import { useStorage } from '@/hooks/use-storage'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
-import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { ChartDexScreener } from '../chart-dexscrenner'
 import { datafeedConfig } from '@/config/datafeed'
 import { Button } from '../ui/button'
@@ -17,7 +17,7 @@ import { formatInterval } from '@/utils/chart'
 export const Chart = memo(() => {
   const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
   const { tokenInfo, isNotFound, isIdoToken, isGraduated } = useTokenContext()
   const { isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
@@ -36,8 +36,6 @@ export const Chart = memo(() => {
       return
     }
 
-    // TODO: enable chart
-    return
     createChart(chartRef.current, {
       symbol: tokenInfo.symbol,
       interval: getInterval(chainName, tokenAddr) || '1m',
@@ -47,7 +45,6 @@ export const Chart = memo(() => {
     return removeChart
   }, [tokenInfo])
 
-  // TODO: ido temp
   if (isNotFound && !isIdoToken) {
     return (
       <div

@@ -18,7 +18,7 @@ import {
   heartbeat,
   isSuccessMessage,
   isDisconnectMessage,
-  wsApiURL,
+  wsApiUrl,
 } from '@/api/websocket'
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
@@ -50,7 +50,7 @@ export const useTradeLogs = () => {
 
   const { lastJsonMessage, sendJsonMessage } =
     useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(
-      wsApiURL.tradeLogs,
+      wsApiUrl.tradeLogs,
       {
         heartbeat,
         onOpen: () => sendJsonMessage({ type: 'message', data: null }),

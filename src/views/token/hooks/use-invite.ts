@@ -2,12 +2,12 @@ import { useMutation } from '@tanstack/react-query'
 import { Address, zeroAddress } from 'viem'
 
 import { inviteApi } from '@/api/invite'
-import { useTradeSearchParams } from './use-search-params'
+import { useTokenQuery } from './use-token-query'
 import { useUserStore } from '@/stores/use-user-store'
 
 export const useInvite = () => {
   const { userInfo } = useUserStore()
-  const { referralCode } = useTradeSearchParams()
+  const { referralCode } = useTokenQuery()
 
   const {
     isPending: isGetting,

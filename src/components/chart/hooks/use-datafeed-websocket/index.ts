@@ -3,13 +3,14 @@ import { isEmpty } from 'lodash'
 
 import type {
   DatafeedBar,
+  DatafeedBaseData,
   DatafeedEmitEvents,
   DatafeedEmitHistory,
   DatafeedEmitListen,
   DatafeedEventBase,
   DatafeedOnEvents,
 } from './types'
-import { wsApiURL } from '@/api/websocket'
+import { wsApiUrl } from '@/api/websocket'
 import { useEmitter } from '@/hooks/use-emitter'
 import { useChartStore } from '@/stores/use-chart-store'
 import { reportException } from '@/errors'
@@ -25,6 +26,7 @@ interface Options {
   reconnectDelay?: number
 }
 
+// TODO: should refactor it
 export const useDatafeedWebsocket = ({
   onReconnect,
   reconnectDelay = 500,
@@ -32,15 +34,13 @@ export const useDatafeedWebsocket = ({
   const emitter = useEmitter<DatafeedOnEvents, DatafeedEmitEvents>()
   const wsRef = useRef<WebSocket>()
   const timerRef = useRef<number>()
-  // Do not speculate or interpret further here,
-  // as it cannot obtain the latest status!!!
-  // const { chart } = useChartStore()
 
   // Keep heartbeat.
   const onOpen = () => {
+    sendMessage(heartbetaMessage)
     timerRef.current = window.setInterval(() => {
       sendMessage(heartbetaMessage)
-    }, 10_000) // Each 10s.
+    }, 30_000) // 30s
   }
 
   // Emit listened events.
@@ -62,7 +62,7 @@ export const useDatafeedWebsocket = ({
   // Connect websocket.
   const connect = () => {
     return new Promise<Event>((resolve, reject) => {
-      wsRef.current = new WebSocket(wsApiURL.chart)
+      wsRef.current = new WebSocket(wsApiUrl.candlestick)
       wsRef.current.addEventListener('open', (e) => {
         onOpen()
         resolve(e)
@@ -98,7 +98,7 @@ export const useDatafeedWebsocket = ({
   const listenAsync = (data: DatafeedEmitListen) => {
     return withPromise<DatafeedEventBase<'listen', DatafeedBar[]>>(
       async (resolve, reject) => {
-        emitter.on('listen', (v) => v.data && resolve(v))
+        emitter.on('candles', (v) => v.data && resolve(v))
         sendMessage({ type: 'listen', data: data })
       }
     )
@@ -106,9 +106,9 @@ export const useDatafeedWebsocket = ({
 
   // Get history data.
   const historyAsync = (data: DatafeedEmitHistory) => {
-    return withPromise<DatafeedEventBase<'history', DatafeedBar[]>>(
+    return withPromise<DatafeedEventBase<'listen', DatafeedBar[]>>(
       async (resolve, reject) => {
-        emitter.on('history', (v) => v.data && resolve(v))
+        emitter.on('candles', (v) => v.data && resolve(v))
         sendMessage({ type: 'history', data })
       }
     )
@@ -116,11 +116,13 @@ export const useDatafeedWebsocket = ({
 
   // Listen update data
   const onUpdate = (
-    fn: (data: DatafeedEventBase<'update', DatafeedBar[]>) => void
+    fn: (
+      data: DatafeedEventBase<'candles', DatafeedBaseData<DatafeedBar[]>>
+    ) => void
   ) => {
     emitter.on('update', (value) => {
-      if (!value.data || isEmpty(value.data)) return
-      fn(value)
+      if (!value.data) return
+      fn(value.data)
     })
   }
 
