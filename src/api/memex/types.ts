@@ -1,3 +1,6 @@
+import { DistributorVersion } from '@/contract/abi/distributor'
+import { TokenVersion } from '@/contract/abi/token'
+
 export interface MemexIdeaItem {
   user_logo: string
   user_name: string
@@ -23,8 +26,8 @@ export interface MemexIdeaItem {
   is_liked: boolean
   factory_address: string
   airdrop_address: string
-  coin_version: string
-  airdrop_version: string
+  coin_version: TokenVersion
+  airdrop_version: DistributorVersion
   coin_factory_address: string
 }
 

@@ -4,6 +4,7 @@ import { type Address } from 'viem'
 import { tokenApi } from '@/api/token'
 import { BcVersion } from '@/contract/abi/bonding-curve'
 import { DistributorVersion } from '@/contract/abi/distributor'
+import { MemexFactoryVersion } from '@/contract/abi/memex'
 
 export const useTokenConfig = () => {
   const {
@@ -31,7 +32,7 @@ export const useTokenConfig = () => {
   const airdropVersion = airdrop?.version as DistributorVersion | undefined
 
   const memexFactoryAddr = memex?.address as Address | undefined
-  const memexFactoryVersion = memex?.version
+  const memexFactoryVersion = memex?.version as MemexFactoryVersion | undefined
 
   return {
     configName,

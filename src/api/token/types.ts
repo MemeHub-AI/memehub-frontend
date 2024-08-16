@@ -2,7 +2,7 @@ import { TokenType } from '@/enums/token'
 import type { UserInfoRes } from '../user/types'
 import type { TokenVersion } from '@/contract/abi/token'
 import type { DistributorVersion } from '@/contract/abi/distributor'
-import { Address } from 'viem'
+import type { MemexFactoryVersion } from '@/contract/abi/memex'
 
 export interface TokenListItem {
   airdrop: AirdropItem[]
@@ -184,9 +184,9 @@ export interface TokenConfigRes {
   name: string
   value: TokenCreateConfigValue
   contracts: {
-    coin: TokenCreateConfigContract[]
-    airdrop: TokenCreateConfigContract[]
-    memex: TokenCreateConfigContract[]
+    coin: TokenCreateConfigContract<TokenVersion>[]
+    airdrop: TokenCreateConfigContract<DistributorVersion>[]
+    memex: TokenCreateConfigContract<MemexFactoryVersion>[]
   }
 }
 
@@ -199,10 +199,10 @@ export interface TokenCreateConfigValue {
   CommunityFlag: number
 }
 
-export interface TokenCreateConfigContract {
+export interface TokenCreateConfigContract<V extends string> {
   chain: string
   creator: string
   address: string
   category: number
-  version: string
+  version: V
 }
