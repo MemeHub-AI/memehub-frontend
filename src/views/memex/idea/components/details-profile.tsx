@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
 import { Avatar } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import { Countdown } from '@/components/countdown'
 import { useIdeaDetailsContext } from '@/contexts/memex/idea-details'
-import { Button } from '@/components/ui/button'
 
 export const IdeaDetailsProfile = () => {
   const { t } = useTranslation()
@@ -24,10 +24,8 @@ export const IdeaDetailsProfile = () => {
         />
         <div className="flex flex-col justify-between w-full">
           <div className="flex items-center justify-between w-full">
-            <p className="">
-              <span className="font-bold leading-none">
-                {details?.user_name}
-              </span>
+            <p className="leading-none">
+              <span className="font-bold">{details?.user_name}</span>
               <span className="mx-1 text-zinc-400">·</span>
               <span className="text-zinc-400 text-sm">
                 {dayjs(details?.created_at).fromNow()}

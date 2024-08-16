@@ -22,7 +22,10 @@ export const IdeaCommentForm = () => {
   const { userInfo } = useUserStore()
   const { onChangeUpload } = useUploadImage()
   const { refetchComments } = useIdeaDetailsContext()
-  const { form, onSubmit } = useCommentForm(query.id as string, refetchComments)
+  const { form, onSubmit, isPending } = useCommentForm(
+    query.id as string,
+    refetchComments
+  )
 
   return (
     <Form {...form}>
@@ -42,6 +45,7 @@ export const IdeaCommentForm = () => {
                 disableFocusBorder
                 disableFocusShadow
                 {...field}
+                disabled={field.disabled || isPending}
               />
             )}
           />
@@ -52,20 +56,24 @@ export const IdeaCommentForm = () => {
               shadow="none"
               size="sm"
               className="rounded-full !min-w-14"
+              disabled={isPending}
             >
-              {t('comment')}
+              {isPending ? t('commenting') : t('comment')}
             </Button>
 
             <FormField
               control={form.control}
               name="images"
               render={({ field }) => (
-                <Label htmlFor="post-details-image">
+                <Label
+                  htmlFor="post-details-image"
+                  disabled={field.disabled || isPending}
+                >
                   <AiOutlinePicture size={28} className="text-purple-700" />
                   <ImageUpload
                     id="post-details-image"
                     className="hidden"
-                    disabled={field.disabled}
+                    disabled={field.disabled || isPending}
                     onChange={async (e) => {
                       if (field.value.length >= memexIdeaCommentImgMax) {
                         form.setError('images', {

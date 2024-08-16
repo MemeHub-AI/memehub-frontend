@@ -13,6 +13,7 @@ import { useMemexStore } from '@/stores/use-memex'
 import { memexCreateIdeaCharMin } from '@/config/memex/idea'
 import { useDeployIdea } from './use-deploy-idea'
 import { useTokenConfig } from '@/hooks/use-token-config'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 const schema = z.object({
   content: z.string().min(memexCreateIdeaCharMin),
@@ -66,16 +67,16 @@ export const useCreateIdea = () => {
       !airdropAddress ||
       !bcAddress
     ) {
+      CONTRACT_ERR.configNotFound()
       return
     }
 
     try {
       const { data } = await mutateAsync({
-        image_urls: pictures,
         factory_address: memexFactoryAddr,
-        airdrop_address: airdropAddress!,
-        coin_factory_address: bcAddress!,
-
+        airdrop_address: airdropAddress,
+        coin_factory_address: bcAddress,
+        image_urls: pictures,
         ...values,
         ...postDetails,
       })

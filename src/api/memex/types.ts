@@ -1,26 +1,31 @@
 export interface MemexIdeaItem {
-  chain: null | string
-  comment_count: number
-  content: string
-  contract_address: null | string
-  created_at: string
-  description: null
-  hash: null | string
-  ido_address: null | string
-  image_urls: string[]
-  logo_url: null | string
-  name: null | string
-  status: IdeaStatus | null
-  symbol: null | string
-  telegram_url: null | string
-  twitter_url: null | string
-  user_address: string
   user_logo: string
   user_name: string
-  website_url: null
+  created_at: string
+  image_urls: string[]
+  user_address: string
+  ido_address: string
+  contract_address: null | string
+  content: string
+  chain: string
+  name: string | null
+  symbol: string | null
+  description: string | null
+  logo_url: string | null
+  twitter_url: string | null
+  telegram_url: string | null
+  website_url: string | null
+  hash: string
+  status: number
+  comment_count: number
+  like_amount: number
   is_creator: boolean
   is_liked: boolean
-  like_amount: number
+  factory_address: string
+  airdrop_address: string
+  coin_version: string
+  airdrop_version: string
+  coin_factory_address: string
 }
 
 export interface MemexListReq {
@@ -46,6 +51,7 @@ export interface MemexCreateReq {
   chain: string
   content: string
   image_urls: string[]
+
   factory_address: string
   airdrop_address: string
   coin_factory_address: string

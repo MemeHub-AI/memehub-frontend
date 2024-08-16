@@ -1,4 +1,4 @@
-import { useMemo, type ComponentProps } from 'react'
+import { memo, ReactNode, useMemo, type ComponentProps } from 'react'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEdit } from 'react-icons/ai'
@@ -25,13 +25,15 @@ import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props {
-  idea?: MemexIdeaItem
+  idea: MemexIdeaItem | undefined
+  mode?: 'list' | 'details'
   onCommentSuccess?: () => void
 }
 
 export const MemexIdeaCard = ({
   className,
   idea,
+  mode = 'list',
   onCommentSuccess,
 }: ComponentProps<'div'> & Props) => {
   const { content, image_urls, ...restIdea } = idea ?? {}
@@ -42,6 +44,10 @@ export const MemexIdeaCard = ({
   const { hasDetails, isFailed, isSuccess, isProcessing } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
+  )
+  const [isList, isDetails] = useMemo(
+    () => [mode === 'list', mode === 'details'],
+    [mode]
   )
   const {
     likeValue,
@@ -64,12 +70,39 @@ export const MemexIdeaCard = ({
   } = useIdeaClaimRefund(idea?.ido_address, chainId, refetchInfo)
   const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
 
+  const withDetailsLayout = (children: ReactNode) => {
+    if (isDetails) {
+      return (
+        <div className="flex">
+          <Avatar
+            src={idea?.user_logo}
+            fallback={idea?.user_name?.[0]}
+            className="rounded-md mr-2"
+          />
+          <div>
+            {children}
+            {isProcessing && (
+              <Countdown
+                createdAt={startAt}
+                duration={durationSeconds}
+                className="text-sm text-green-700"
+              />
+            )}
+          </div>
+        </div>
+      )
+    }
+
+    return children
+  }
+
   return (
     <div
       className={cn('flex px-3 py-3 border-b-2 relative', className)}
-      onClick={() =>
-        router.push(fmt.toHref(Routes.MemexIdea, idea?.hash ?? ''))
-      }
+      onClick={() => {
+        if (!idea?.hash) return
+        router.push(fmt.toHref(Routes.MemexIdea, idea?.hash))
+      }}
     >
       {isSuccess && (
         <Badge className="absolute top-4 right-2 px-0.5 bg-purple-600">
@@ -83,27 +116,31 @@ export const MemexIdeaCard = ({
         </p>
       )}
 
-      <Avatar
-        src={idea?.user_logo}
-        fallback={idea?.user_name?.[0]}
-        className="rounded-md mr-2"
-      />
+      {isList && (
+        <Avatar
+          src={idea?.user_logo}
+          fallback={idea?.user_name?.[0]}
+          className="rounded-md mr-2"
+        />
+      )}
 
       <div className="flex-1">
-        <div className="space-x-1 text-zinc-500 text-sm">
-          <span className="font-bold text-base text-black">
-            {idea?.user_name}
-          </span>
-          <span>·</span>
-          <span className="">{dayjs(idea?.created_at).fromNow()}</span>
-        </div>
+        {withDetailsLayout(
+          <div className="space-x-1 text-zinc-500 text-sm leading-none">
+            <span className="font-bold text-base text-black">
+              {idea?.user_name}
+            </span>
+            <span>·</span>
+            <span>{dayjs(idea?.created_at).fromNow()}</span>
+          </div>
+        )}
 
         <div className="flex flex-col items-start">
-          {isProcessing && (
+          {isProcessing && isList && (
             <Countdown
               createdAt={startAt}
               duration={durationSeconds}
-              className="text-xs text-green-700"
+              className="text-sm text-green-700"
             />
           )}
 

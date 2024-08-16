@@ -8,7 +8,7 @@ export const IdeaDetailsHeader = () => {
   const router = useRouter()
 
   return (
-    <div className="flex items-center h-fit px-2 my-1">
+    <div className="flex items-center h-fit px-2.5 my-1">
       <Button
         shadow="none"
         size="icon-sm"

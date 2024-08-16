@@ -14,6 +14,7 @@ import { useTokenProgress } from '@/views/token/hooks/evm/use-token-progress'
 import { fmt } from '@/utils/fmt'
 import { CopyIcon } from '@/components/copy-icon'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { TokenVersion } from '@/contract/abi/token'
 
 interface Props {
   details?: MemexIdeaItem
@@ -44,7 +45,7 @@ export const TokenDetailsCard = ({
   const { progress } = useTokenProgress(
     tokenAddr,
     chainId,
-    '0.1.6' // TODO: dynamic version
+    details?.coin_version as TokenVersion
   )
 
   const isFailed = tokenAddr === zeroAddress
@@ -83,7 +84,7 @@ export const TokenDetailsCard = ({
         </div>
       </div>
 
-      {hasLinks && !isFailed && (
+      {!isFailed && (
         <div className="flex justify-between items-center my-1">
           <TokenSocialLinks
             className="mt-0 space-x-0"

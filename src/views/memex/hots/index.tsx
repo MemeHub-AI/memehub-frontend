@@ -20,8 +20,8 @@ export const Hots = () => {
         fallback={<IdeaCardSkeleton />}
         nullback={<IdeaEmpty />}
       >
-        {list.map((t) => (
-          <MemexIdeaCard key={t?.hash} idea={t} />
+        {list.map((idea) => (
+          <MemexIdeaCard key={idea?.hash} idea={idea} />
         ))}
       </CustomSuspense>
     </MemexLayout>

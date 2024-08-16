@@ -683,5 +683,6 @@
   "coin-detail": "Coin detail",
   "tx.confirming": "Waiting for block confirmation...",
   "claim-success": "Claim successful!",
-  "refunded": "Refunded"
+  "refunded": "Refunded",
+  "commenting": "Commenting..."
 }
