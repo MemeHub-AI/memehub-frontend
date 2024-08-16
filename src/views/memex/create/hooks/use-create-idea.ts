@@ -68,8 +68,7 @@ export const useCreateIdea = () => {
       !(await form.trigger()) ||
       !memexFactoryAddr ||
       !airdropAddress ||
-      !bcAddress ||
-      !ideaDetails?.airdrop_marketing
+      !bcAddress
     ) {
       CONTRACT_ERR.configNotFound()
       return
@@ -91,6 +90,7 @@ export const useCreateIdea = () => {
         airdrop_address: airdropAddress,
         coin_factory_address: bcAddress,
         image_urls: pictures,
+        airdrop_marketing: ideaDetails?.airdrop_marketing || [],
         ...ideaDetails,
         ...values,
       })
