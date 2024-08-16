@@ -671,5 +671,6 @@
   "refund-success": "退款成功！",
   "go-to.trade": "前往交易",
   "coin-detail": "代币详情",
-  "tx.confirming": "等待区块确认中..."
+  "tx.confirming": "等待区块确认中...",
+  "claim-success": "领取成功！"
 }

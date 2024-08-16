@@ -1,4 +1,3 @@
-import { useMemo, useState } from 'react'
 import { type Address } from 'viem'
 import { useAccount, useReadContracts, useWriteContract } from 'wagmi'
 import { toast } from 'sonner'
@@ -7,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { useTypedFn } from '@/hooks/use-typed-fn'
 
 export const useIdeaClaimRefund = (
   addr: string | undefined | null,
@@ -15,20 +15,16 @@ export const useIdeaClaimRefund = (
 ) => {
   const { t } = useTranslation()
   const { address } = useAccount()
-  const toasts = useMemo(
-    () => ({
-      claim: {
-        loading: () => toast.loading(t('claiming')),
-        success: () => toast.success(t('claim-success')),
-      },
-      refund: {
-        loading: () => toast.loading(t('refunding')),
-        success: () => toast.success(t('refund-success')),
-      },
-    }),
-    []
-  )
-  const [type, setType] = useState<keyof typeof toasts>('claim')
+  const [toasts, setToastType] = useTypedFn({
+    claim: {
+      loading: () => toast.loading(t('claiming')),
+      success: () => toast.success(t('claim-success')),
+    },
+    refund: {
+      loading: () => toast.loading(t('refunding')),
+      success: () => toast.success(t('refund-success')),
+    },
+  })
 
   const idoConfig = {
     abi: memexIdoAbi,
@@ -66,7 +62,7 @@ export const useIdeaClaimRefund = (
     reset,
   } = useWriteContract({
     mutation: {
-      onMutate: toasts[type].loading,
+      onMutate: toasts.loading,
       onSettled: (_, __, ___, id) => toast.dismiss(id),
       onError: ({ message }) => {
         CONTRACT_ERR.message(message)
@@ -76,9 +72,9 @@ export const useIdeaClaimRefund = (
   })
   const { isLoading: isWaiting } = useWaitForTx({
     hash,
-    onLoading: toasts[type].loading,
+    onLoading: toasts.loading,
     onError: ({ message }) => CONTRACT_ERR.message(message),
-    onSuccess: toasts[type].success,
+    onSuccess: toasts.success,
     onFillay: () => {
       reset()
       refetch()
@@ -96,7 +92,7 @@ export const useIdeaClaimRefund = (
     if (!canClaim) return
     if (!checkForWrite()) return
 
-    setType('claim')
+    setToastType('claim')
     writeContract({
       ...idoConfig,
       functionName: 'claimToken',
@@ -107,7 +103,7 @@ export const useIdeaClaimRefund = (
     if (!canRefund) return
     if (!checkForWrite()) return
 
-    setType('refund')
+    setToastType('refund')
     writeContract({
       ...idoConfig,
       functionName: 'withdrawETH',
