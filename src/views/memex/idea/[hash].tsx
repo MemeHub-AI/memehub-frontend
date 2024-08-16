@@ -25,10 +25,11 @@ export const IdeaDetailsPage = () => {
     <IdeaDetailsProvider
       value={{ ...ideaDetails, ...ideaComments, ...ideaInfo }}
     >
-      <PrimaryLayout padding={false}>
+      <PrimaryLayout mainClass="flex" padding={false}>
         <CustomSuspense
           isPending={isLoadingDetails || isLoadingComments}
           fallback={<IdeaDetailsSkeleton />}
+          className="w-full sm:max-w-sm"
         >
           <IdeaDetailsHeader />
           <MemexIdeaCard
