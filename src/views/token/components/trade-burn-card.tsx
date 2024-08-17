@@ -15,12 +15,12 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
   const { airdrop = [] } = tokenInfo ?? {}
   const {
     isOnlyOne,
-    totalAirdrop,
+    airdropTotal,
     kolClaimedAmount,
     communityClaimedAmount,
     refetchAirdrop,
   } = useTradeAirdropContext()
-  const remaining = BigNumber(totalAirdrop)
+  const remaining = BigNumber(airdropTotal)
     .minus(kolClaimedAmount)
     .minus(communityClaimedAmount)
     .toFormat()

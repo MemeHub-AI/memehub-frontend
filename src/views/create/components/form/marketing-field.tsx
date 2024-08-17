@@ -34,8 +34,6 @@ export const MarketingField = () => {
   const { configValue } = useCreateToken()
   const { distributionRatioKol = 0 } = configValue ?? {}
 
-  console.log('configValue', configValue)
-
   const markets = [
     {
       title: t('marketing.kol').replace(

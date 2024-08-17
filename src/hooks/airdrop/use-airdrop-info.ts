@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { useReadContract } from 'wagmi'
 import { formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
@@ -8,6 +9,7 @@ import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { distributorAbiMap } from '@/contract/abi/distributor'
 import { useTokenDetails } from '../use-token-details'
 import { TokenVersion } from '@/contract/abi/token'
+import { AirdropFlag } from '@/enums/airdrop'
 
 export const useAirdropInfo = (
   id: number,
@@ -62,8 +64,8 @@ export const useAirdropInfo = (
   const perKolAmount = formatEther(kolAmount)
   const perCommunityAmount = formatEther(communityAmount)
   const createAt = Number(startTime)
-  const hasKolAirdrop = kolCount !== 0
-  const hasCommunityAirdrop = communityCount !== 0
+  const hasKolAirdrop = kolFlag !== AirdropFlag.None
+  const hasCommunityAirdrop = communityFlag !== AirdropFlag.None
 
   const { data: ratio = BI_ZERO } = useReadContract({
     abi: bcAbiMap[bcVersion!],
@@ -72,22 +74,36 @@ export const useAirdropInfo = (
     functionName: 'airdropRate_',
     query: { enabled: !!bcAddr },
   })
-  const airdropRatio = BigNumber(ratio.toString()).div(100).div(100).toFixed()
-  const totalAirdrop = BigNumber(airdropRatio)
-    .multipliedBy(totalSupply)
-    .toFixed()
-  const kolTotalAmount = BigNumber(totalAirdrop)
-    .minus(BigNumber(kolCount).multipliedBy(perKolAmount))
-    .toFixed()
-  const communityTotalAmount = BigNumber(totalAirdrop)
-    .minus(BigNumber(communityCount).multipliedBy(perCommunityAmount))
-    .toFixed()
-  const kolClaimedAmount = BigNumber(kolClaimedCount)
-    .multipliedBy(perKolAmount)
-    .toFixed()
-  const communityClaimedAmount = BigNumber(communityClaimedCount)
-    .multipliedBy(perCommunityAmount)
-    .toFixed()
+  const { airdropRatio, airdropTotal } = useMemo(() => {
+    const airdropRatio = BigNumber(ratio.toString()).div(100).div(100).toFixed()
+    const airdropTotal = BigNumber(airdropRatio)
+      .multipliedBy(totalSupply)
+      .toFixed()
+    return { airdropTotal, airdropRatio }
+  }, [ratio, totalSupply])
+
+  const [
+    kolTotalAmount,
+    communityTotalAmount,
+    kolClaimedAmount,
+    communityClaimedAmount,
+  ] = useMemo(
+    () => [
+      BigNumber(kolCount).multipliedBy(perKolAmount).toFixed(),
+      BigNumber(communityCount).multipliedBy(perCommunityAmount).toFixed(),
+      BigNumber(kolClaimedCount).multipliedBy(perKolAmount).toFixed(),
+      BigNumber(communityClaimedCount)
+        .multipliedBy(perCommunityAmount)
+        .toFixed(),
+    ],
+    [
+      kolCount,
+      perKolAmount,
+      communityCount,
+      perCommunityAmount,
+      communityClaimedCount,
+    ]
+  )
 
   // TODO: may need to `refetchDetails`, but it will refresh the page
   useInterval(refetchAirdrop, 5_000)
@@ -105,7 +121,7 @@ export const useAirdropInfo = (
     kolAmount,
     communityAmount,
     airdropRatio,
-    totalAirdrop,
+    airdropTotal,
     createAt,
     durationSeconds,
     kolTotalAmount,
