@@ -43,7 +43,7 @@ export const parseBars = (bars: BarLike[]) => {
  *
  * `0.0001` => `10000`
  **/
-export const parsePricescale = (price?: number) => {
+export const parsePricescale = (price?: number | string) => {
   if (!price) return 100
 
   const decimal = price.toString().split('.')[1]
