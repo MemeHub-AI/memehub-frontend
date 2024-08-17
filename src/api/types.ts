@@ -1,5 +1,3 @@
-import { ObjectLike } from '@/utils/types'
-
 export interface ApiResponse<T = null> {
   code: number
   message: string
@@ -32,11 +30,12 @@ export interface SearchReq {
 }
 
 export interface WsReceived<
-  T extends ObjectLike<any>,
-  E extends ObjectLike<any> = ObjectLike<any>
+  D = unknown,
+  T extends string = string,
+  E = unknown
 > {
-  type: keyof T
-  data: T[keyof T]
+  type: T
+  data: D
   error?: string
   extra?: E
 }

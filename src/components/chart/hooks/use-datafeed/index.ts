@@ -36,7 +36,7 @@ export const useDatafeed = () => {
       },
       searchSymbols: (_, __, ___, ____) => {},
       resolveSymbol: async (symbolName, onResolve, onError, extension) => {
-        ws.on('candles', (data) => {
+        ws.on('candles', ({ data }) => {
           const bars = data[datafeedUnit]
           const lastBar = last(bars)
           const symbolInfo: LibrarySymbolInfo = {
@@ -66,7 +66,7 @@ export const useDatafeed = () => {
             return
           }
 
-          ws.on('candles', (data) => {
+          ws.on('candles', ({ data }) => {
             const bars = data[datafeedUnit]
 
             if (!isEmpty(bars)) cache.set('lastBar', last(bars))
@@ -81,7 +81,7 @@ export const useDatafeed = () => {
           return
         }
 
-        ws.on('candles', (data) => {
+        ws.on('candles', ({ data }) => {
           const bars = data[datafeedUnit]
 
           if (!isEmpty(bars)) cache.set('lastBar', last(bars))
@@ -91,7 +91,7 @@ export const useDatafeed = () => {
       },
       subscribeBars: (_, resolution, onTick, uid, onRest) => {
         ws.on('update', ({ data }) => {
-          for (const bar of data[datafeedUnit]) {
+          for (const bar of data.data[datafeedUnit]) {
             const lastTime = cache.get('lastBar')?.time || 0
             if (bar.time < lastTime) return // We can't update old bar
 
