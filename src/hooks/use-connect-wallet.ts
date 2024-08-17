@@ -1,5 +1,5 @@
 import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
-import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
+import { useAccount, useAccountEffect, useConnect, useDisconnect } from 'wagmi'
 import { useStorage } from './use-storage'
 import { reportException } from '@/errors'
 import { useWalletDisconnectButton } from '@solana/wallet-adapter-base-ui'
@@ -8,6 +8,7 @@ export const useConnectWallet = () => {
   const tonAddress = useTonAddress()
   const { isConnected } = useAccount()
   const { connected, wallets: solanaWallets } = useWallet()
+  const { connectors, connect: wagmiConnect } = useConnect()
   // console.log('p' + publicKey)
 
   const [tonConnectUI] = useTonConnectUI()
@@ -39,6 +40,14 @@ export const useConnectWallet = () => {
         .filter((wallet) => wallet.adapter.name === name)[0]
         .adapter.connect()
     }
+
+    const wagmiConnector = connectors.filter((connector) => {
+      if (connector.name === name && connector.icon) return connector
+    })[0]
+
+    // console.log('wagmiConnector:', wagmiConnector)
+
+    wagmiConnect({ connector: wagmiConnector })
   }
 
   // check if wallet is connected

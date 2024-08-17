@@ -53,7 +53,7 @@ export const AppProviders = ({ children }: ComponentProps<'div'>) => {
               <ConnectionProvider endpoint={endpoint}>
                 <WalletProvider
                   wallets={solanaWalletsConfig}
-                  // autoConnect
+                  autoConnect
                   localStorageKey="solana-wallet-key"
                 >
                   <WalletModalProvider>{children}</WalletModalProvider>

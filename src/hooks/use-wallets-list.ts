@@ -1,10 +1,14 @@
-import { WalletInfo } from '@/config/wallets'
+import { supportWallets, WalletInfo } from '@/config/wallets'
 import { getDefaultWallets } from '@rainbow-me/rainbowkit'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { TonConnectUI } from '@tonconnect/ui-react'
+import { useConnect } from 'wagmi'
 
 export const useWalletsList = () => {
   const { wallets: solWallets } = useWallet()
+  const { connectors } = useConnect()
+
+  console.log('wagmi connectors: ', connectors)
 
   const multicChainWellts = [
     'Phantom',
@@ -64,12 +68,7 @@ export const useWalletsList = () => {
     return tonWallets.map<WalletInfo>((wallet) => {
       const { name, imageUrl } = wallet
 
-      if (
-        'injected' in wallet &&
-        wallet.name !== 'OKX Wallet' &&
-        wallet.name !== 'OKX TR Wallet' &&
-        wallet.name !== 'Bitget Wallet'
-      ) {
+      if ('injected' in wallet) {
         return {
           name,
           icon: imageUrl,
@@ -101,7 +100,7 @@ export const useWalletsList = () => {
     // fliter
     const filterWallets = allWallets.filter((item) => {
       // reject uninstalled wallets
-      if (!item.hidden) {
+      if (!item.hidden && supportWallets.includes(item.name)) {
         // add multichain wallets
         if (multicChainWellts.includes(item.name)) item.chain = ['evm', 'svm']
 

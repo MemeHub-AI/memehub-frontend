@@ -10,12 +10,14 @@ import {
 import { WalletInfo } from '@/config/wallets'
 import { useWalletsList } from '@/hooks/use-wallets-list'
 import { cn } from '@/lib/utils'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { FaArrowUp, FaLongArrowAltUp } from 'react-icons/fa'
 import { FaArrowDown } from 'react-icons/fa6'
 
-export const WalletsCard = () => {
+export const WalletsCard: React.FC<{
+  howToConnect: (wallet: WalletInfo) => void
+}> = ({ howToConnect }) => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
   const { walletLists } = useWalletsList()
@@ -35,7 +37,7 @@ export const WalletsCard = () => {
     <Card shadow={'none'} border={'none'} className="cursor-default">
       <CardHeader>
         <CardTitle>
-          <p className="">{t('welcome')}</p>
+          <p>{t('welcome')}</p>
         </CardTitle>
         <CardDescription>
           <p>{t('select.wellets')}</p>
@@ -49,6 +51,7 @@ export const WalletsCard = () => {
               <Button
                 key={index}
                 className="flex justify-between h-12 w-full font-semibold"
+                onClick={() => howToConnect(wallet)}
               >
                 <span>{wallet.name}</span>
                 <img src={wallet.icon} className="h-8 w-8" />
@@ -57,7 +60,7 @@ export const WalletsCard = () => {
           })}
         </div>
         {/* divide */}
-        <div className="flex w-full space-x-2 mt-8 mb-6 justify-around items-center text-center">
+        <div className="flex w-full space-x-2 my-6 justify-around items-center text-center">
           <p className="h-[2px] bg-black grow rounded-md " />
           <span>{t('or')}</span>
           <p className="bg-black h-[2px] grow rounded-md" />
@@ -75,6 +78,7 @@ export const WalletsCard = () => {
               <Button
                 key={index}
                 className="flex justify-between h-12 w-full font-semibold"
+                onClick={() => howToConnect(wallet)}
               >
                 <span>{wallet.name}</span>
                 <img src={wallet.icon} className="h-8 w-8" />

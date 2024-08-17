@@ -114,33 +114,6 @@ const ChangeChainWallets = ({ className }: { className?: string }) => {
     setTabsValue('chains')
   }
 
-  const WalletsListDialog = () => {
-    return (
-      <div className="flex flex-col space-y-2">
-        {wallets.map((wallet, index) => {
-          if (wallet.chain[0] === 'evm' && wallet.chain.length < 2) {
-            return <EvmConnectButton wallet={wallet} key={index} />
-          }
-
-          return (
-            <Button
-              key={index}
-              shadow={null}
-              className="w-full"
-              onClick={() => howToConnect(wallet)}
-            >
-              <img src={wallet.icon} alt={'icons'} className="w-5 h-5 mr-2" />
-              {wallet.name}
-              <span className="text-green-700 ml-2">
-                {wallet.installed ? 'installed' : null}
-              </span>
-            </Button>
-          )
-        })}
-      </div>
-    )
-  }
-
   return (
     <>
       <Button
@@ -156,8 +129,8 @@ const ChangeChainWallets = ({ className }: { className?: string }) => {
       <Dialog open={isOpening} onOpenChange={dialogClose}>
         <DialogHeader>
           <DialogTitle className="flex space-x-2 items-center">
-            <img src="images/logo.png" className="w-10 h-10" />
-            <img src="images/logo.svg" className="w-20 h-10" />
+            <img src="/images/logo.png" className="w-10 h-10" />
+            <img src="/images/logo.svg" className="w-20 h-10" />
           </DialogTitle>
           <DialogDescription>
             <Tabs
@@ -167,7 +140,9 @@ const ChangeChainWallets = ({ className }: { className?: string }) => {
             >
               <TabsContent value="wallets">
                 {/* wallets list */}
-                <WalletsCard />
+                <WalletsCard
+                  howToConnect={(wallet: WalletInfo) => howToConnect(wallet)}
+                />
               </TabsContent>
               <TabsContent value="chains">
                 {/* chains list */}

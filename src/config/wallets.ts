@@ -35,6 +35,20 @@ export const chainList = [
   },
 ]
 
+export const supportWallets = [
+  'MetaMask',
+  'WalletConnect',
+  'Phantom',
+  'Trust',
+  'Bitget',
+  'Magic Eden',
+  'MyTonWallet',
+  'Tonkeeper',
+  'Coinbase Wallet',
+  'OKX Wallet',
+  'Rainbow',
+]
+
 // solana
 export const solanaDevNet = WalletAdapterNetwork.Devnet
 export const solanaMainNet = WalletAdapterNetwork.Mainnet
@@ -43,5 +57,5 @@ export const solanaMainNet = WalletAdapterNetwork.Mainnet
 export const solanaWallets: Adapter[] = [
   new PhantomWalletAdapter(),
   new TrustWalletAdapter(),
-  // new BitgetWalletAdapter(),
+  new BitgetWalletAdapter(),
 ]
