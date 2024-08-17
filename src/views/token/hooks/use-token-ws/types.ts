@@ -23,7 +23,7 @@ export interface TokenOnEvents {
 }
 
 interface Extract {
-  has_more: boolean
+  hasmore: boolean
 }
 
 export interface TokenTrade {

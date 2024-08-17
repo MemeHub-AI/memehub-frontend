@@ -18,11 +18,9 @@ const pageSize = 10
 
 export const useTokenWs = (disabled = false) => {
   const { chainName, tokenAddr } = useTokenQuery()
-  const ws = useWebsocket<
-    TokenOnEvents,
-    TokenEmitEvents,
-    { has_more: boolean }
-  >(disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`)
+  const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
+    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`
+  )
   const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
   const [holders, setHolders] = useState<TokenHolder[]>([])
   const [tradePrice, setTradePrice] = useState<TokenPrice>()
@@ -37,7 +35,7 @@ export const useTokenWs = (disabled = false) => {
   }
 
   const onUpdate = ({ type, data, extra }: TokenOnEvents['update']) => {
-    if (extra?.has_more) setHasMoreTrades(extra.has_more)
+    if (extra?.hasmore) setHasMoreTrades(extra.hasmore)
     if (type === 'trades') return pushTrades(data as TokenTrade[])
     if (type === 'holders') return setHolders(data as TokenHolder[])
     if (type === 'price') return setTradePrice(data as TokenPrice)
