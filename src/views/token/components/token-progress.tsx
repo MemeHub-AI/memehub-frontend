@@ -33,7 +33,7 @@ export const TokenProgress = ({
   )
   const { progress: idoProgress } = useIdoProgress(
     chainId,
-    tokenInfo?.airdrop_index ?? 0
+    tokenInfo?.airdrop?.[0]?.distribution_id || 0
   )
 
   const threshold = BigNumber(total).lte(0)

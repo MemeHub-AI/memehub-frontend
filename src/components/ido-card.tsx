@@ -8,7 +8,10 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const IdoCard = ({ token }: { token: TokenListItem }) => {
   const { chainId } = useChainInfo(token.chain)
-  const { startAt, progress } = useIdoInfo(chainId, token.airdrop_index)
+  const { startAt, progress } = useIdoInfo(
+    chainId,
+    token.airdrop[0]?.distribution_id || 0
+  )
 
   return (
     <TokenCard
