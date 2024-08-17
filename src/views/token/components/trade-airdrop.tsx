@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 import { useCountDown } from 'ahooks'
@@ -17,9 +17,13 @@ export const TradeAirdrop = () => {
     durationSeconds,
   } = useTradeAirdropContext()
 
-  const [countdown] = useCountDown({
-    targetDate: dayjs.unix(createAt).add(durationSeconds, 'second'),
-  })
+  // Must within `useMemo`, otherwise the performance will be poor
+  const targetDate = useMemo(
+    () => dayjs.unix(createAt).add(durationSeconds, 'second'),
+    [createAt, durationSeconds]
+  )
+  const [countdown] = useCountDown({ targetDate })
+
   const isAirdropExpired = countdown <= 0
 
   if (!hasKolAirdrop && !hasCommunityAirdrop) return

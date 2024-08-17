@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ComponentProps } from 'react'
+import { useMemo, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { BigNumber } from 'bignumber.js'
@@ -111,8 +111,6 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
 
     return t('airdrop.claim')
   }
-
-  useEffect(() => {}, [isClaiming])
 
   return (
     <Card
