@@ -17,7 +17,6 @@ import {
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { Avatar } from '@/components/ui/avatar'
-import { useTradeRecord } from '../hooks/use-trade-record'
 import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'
@@ -30,8 +29,7 @@ export const TradeTable = () => {
   const { getTableShowAge, setTableShowAge } = useStorage()
   const [showAge, setShowAge] = useState(strToBool(getTableShowAge()))
   const router = useRouter()
-
-  const { tradeRecords } = useTokenContext()
+  const { tradeRecords, hasMoreTrades, fetchNextTrades } = useTokenContext()
 
   const ths = [
     t('account'),
@@ -42,7 +40,6 @@ export const TradeTable = () => {
     showAge ? t('age') : t('date'),
     t('tx.hash'),
   ]
-  // const { tradeRecords, hasMore, fetchNextPage } = useTradeRecord()
 
   const formatFromTz = (ts: number) => {
     const date = dayjs(ts)
@@ -148,13 +145,12 @@ export const TradeTable = () => {
       </Table>
       <div
         className={cn(
-          'text-center mt-1 cursor-pointer'
-          // hasMore ? 'text-blue-500 underline' : 'text-zinc-500'
+          'text-center mt-1 cursor-pointer select-none',
+          hasMoreTrades ? 'text-blue-500 hover:underline' : 'text-zinc-500'
         )}
-        // onClick={fetchNextPage}
+        onClick={fetchNextTrades}
       >
-        {t('loading.more')}
-        {/* {hasMore ? t('loading.more') : t('nomore')} */}
+        {hasMoreTrades ? t('loading.more') : t('nomore')}
       </div>
     </>
   )
