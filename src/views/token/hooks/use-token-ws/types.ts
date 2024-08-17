@@ -15,10 +15,15 @@ interface WsSendListen {
 }
 
 export interface TokenOnEvents {
-  trades: WsReceived<TokenTrade[], string, { hasmore: boolean }>
+  trades: WsReceived<TokenTrade[], string, TradesExtra>
   holders: WsReceived<TokenHolder[]>
   price: WsReceived<TokenPrice>
   update: WsReceived<TokenOnEvents[keyof Omit<TokenOnEvents, 'update'>]>
+}
+
+interface TradesExtra {
+  hasmore: boolean
+  rewarded: string
 }
 
 export interface TokenTrade {
