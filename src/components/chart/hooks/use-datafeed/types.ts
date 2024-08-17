@@ -15,7 +15,7 @@ export interface DatafeedEmitEvents {
 
 export interface DatafeedOnEvents {
   candles: DatafeedCandles
-  update: WsReceived<{ candles: DatafeedCandles }>
+  update: WsReceived<Omit<DatafeedOnEvents, 'update'>>
 }
 
 export interface DatafeedCandles {

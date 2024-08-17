@@ -19,23 +19,22 @@ import { useTokenWs } from './hooks/use-token-ws'
 
 export const TokenPage = () => {
   const { t } = useTranslation()
-  const { chainName, tokenAddr, isReady } = useTokenQuery()
   const { isMobile } = useResponsive()
-  const { tokenInfo, isLoadingTokenInfo, isNotFound, ...tokenInfos } =
-    useTokenInfo()
-  const { chain: tokenChain } = useChainInfo(chainName)
-  const tradeWs = useTokenWs(isNotFound)
+  const { chainName, tokenAddr, isReady } = useTokenQuery()
 
-  const chainId = +(tokenChain?.id ?? 0)
-  const reserveSymbol = tokenChain?.native.symbol
-
+  const { tokenInfo, isLoadingTokenInfo, ...otherInfo } = useTokenInfo()
+  const { chain: tokenChain, chainId } = useChainInfo(chainName)
+  const tradeWs = useTokenWs(otherInfo.isNotFound)
   const airdropInfo = useAirdropInfo(
-    tokenInfo?.airdrop_index ?? 0,
+    tokenInfo?.airdrop?.[0].distribution_id || 0,
     tokenAddr,
     chainId,
     tokenInfo?.coin_version
   )
   const { hasKolAirdrop, hasCommunityAirdrop } = airdropInfo
+  const reserveSymbol = tokenChain?.native.symbol
+  const isIdoToken = tokenInfo?.coin_type === TokenType.Ido
+  const network = Network.Evm // TODO: should dynamic
 
   const isOnlyOne = useMemo(() => {
     let count = 0
@@ -58,17 +57,16 @@ export const TokenPage = () => {
   return (
     <TokenProvider
       value={{
-        ...tokenInfos,
-        isNotFound,
+        ...otherInfo,
         tokenInfo,
         isLoadingTokenInfo,
         reserveSymbol,
-        isIdoToken: tokenInfo?.coin_type === TokenType.Ido,
+        isIdoToken,
         tokenAddr,
         chainId,
         chainName,
         tokenChain,
-        network: Network.Evm,
+        network,
         ...tradeWs,
       }}
     >
