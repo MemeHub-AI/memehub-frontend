@@ -3,6 +3,7 @@ import useWebSocket, { Options, ReadyState } from 'react-use-websocket'
 
 import { useEmitter, type OnEvents, type EmitEvents } from './use-emitter'
 import { WsReceived } from '@/api/types'
+import { ObjectLike } from '@/utils/types'
 
 const filterHeartbeta = (message: MessageEvent<any>) => {
   try {
@@ -14,10 +15,11 @@ const filterHeartbeta = (message: MessageEvent<any>) => {
   }
 }
 
-// Based on react-use-websocket
+// Based on `react-use-websocket`, bind `WsReceived`.
 export const useWebsocket = <
   OEvents extends OnEvents,
-  EEvents extends EmitEvents
+  EEvents extends EmitEvents,
+  Extra extends ObjectLike<any> = ObjectLike<any>
 >(
   url: string,
   options?: Options
@@ -26,7 +28,7 @@ export const useWebsocket = <
 
   const emitter = useEmitter<OEvents, AllEvents>() // `EmitEvents` must contain all events
   const { lastJsonMessage, sendJsonMessage, ...ws } = useWebSocket<
-    WsReceived<OEvents> // Ws only can received events
+    WsReceived<OEvents, Extra> // Ws only can received events
   >(
     url,
     {

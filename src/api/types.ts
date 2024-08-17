@@ -31,9 +31,12 @@ export interface SearchReq {
   search?: string
 }
 
-export interface WsReceived<T extends ObjectLike<any>> {
+export interface WsReceived<
+  T extends ObjectLike<any>,
+  E extends ObjectLike<any> = ObjectLike<any>
+> {
   type: keyof T
   data: T[keyof T]
   error?: string
-  extra?: ObjectLike<any>
+  extra?: E
 }
