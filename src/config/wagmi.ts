@@ -1,4 +1,4 @@
-import { http, fallback, unstable_connector } from 'wagmi'
+import { http, fallback, unstable_connector, createConfig } from 'wagmi'
 import { injected } from 'wagmi/connectors'
 import {
   mainnet,
@@ -21,7 +21,17 @@ import {
   zkSyncSepoliaTestnet,
 } from 'wagmi/chains'
 import { dotenv } from '@/utils/env'
-import { getDefaultConfig, getDefaultWallets } from '@rainbow-me/rainbowkit'
+import { connectorsForWallets } from '@rainbow-me/rainbowkit'
+import {
+  rainbowWallet,
+  walletConnectWallet,
+  phantomWallet,
+  metaMaskWallet,
+  magicEdenWallet,
+  okxWallet,
+  injectedWallet,
+  trustWallet,
+} from '@rainbow-me/rainbowkit/wallets'
 
 const dev = {
   chains: [
@@ -52,13 +62,31 @@ const dev = {
   },
 }
 
-const { wallets } = getDefaultWallets()
+const connectors = connectorsForWallets(
+  [
+    {
+      groupName: 'Recommended',
+      wallets: [
+        metaMaskWallet,
+        phantomWallet,
+        okxWallet,
+        magicEdenWallet,
+        walletConnectWallet,
+        rainbowWallet,
+        injectedWallet,
+        trustWallet,
+      ],
+    },
+  ],
+  {
+    appName: 'Memehub',
+    projectId: '72584dc758deda964e371db486be5a0c',
+  }
+)
 
-export const wagmiConfig = getDefaultConfig({
-  appName: 'Memehub',
-  projectId: '72584dc758deda964e371db486be5a0c',
+export const wagmiConfig = createConfig({
+  connectors,
   ssr: true,
-  wallets,
   chains: [
     mainnet,
     bsc,

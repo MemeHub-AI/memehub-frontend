@@ -7,7 +7,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 export const useConnectWallet = () => {
   const tonAddress = useTonAddress()
   const { isConnected } = useAccount()
-  const { publicKey } = useWallet()
+  const { connected, wallets: solanaWallets } = useWallet()
   // console.log('p' + publicKey)
 
   const [tonConnectUI] = useTonConnectUI()
@@ -27,9 +27,23 @@ export const useConnectWallet = () => {
     },
   })
 
+  // console.log('solanaWallets: ', solanaWallets)
+
+  const connectWallet = (chain: string, name: string, bridge_key?: string) => {
+    if (chain === 'tvm') {
+      tonConnectUI.openSingleWalletModal(bridge_key!)
+    }
+
+    if (chain === 'svm') {
+      solanaWallets
+        .filter((wallet) => wallet.adapter.name === name)[0]
+        .adapter.connect()
+    }
+  }
+
   // check if wallet is connected
   const walletIsConnected = () => {
-    if (isConnected || publicKey || tonAddress !== '') {
+    if (isConnected || connected || tonAddress !== '') {
       return true
     }
     return false
@@ -49,5 +63,5 @@ export const useConnectWallet = () => {
     // more...
   }
 
-  return { walletIsConnected, walletDisconnect }
+  return { connectWallet, walletIsConnected, walletDisconnect }
 }

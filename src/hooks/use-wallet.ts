@@ -1,12 +1,13 @@
-import { useTonAddress } from '@tonconnect/ui-react'
+import { useTonAddress, useTonConnectUI } from '@tonconnect/ui-react'
 import { useAccount } from 'wagmi'
 // import { Wallet } from '@solana/wallet-adapter-react'
 import { useWallet as useSolWallet } from '@solana/wallet-adapter-react'
-
+import { BaseWalletAdapter } from '@solana/wallet-adapter-base'
 export const useWallet = () => {
   const tonAddress = useTonAddress()
   const { address } = useAccount()
-  const { publicKey } = useSolWallet()
+  const { publicKey, wallets: solWallets } = useSolWallet()
+  const [tonConnectUI] = useTonConnectUI()
 
   const walletAddress = () => {
     if (tonAddress !== '') {
@@ -24,5 +25,19 @@ export const useWallet = () => {
     return 'no wallet'
   }
 
-  return { walletAddress }
+  const getTonWallets = async () => {
+    const wallets = await tonConnectUI.getWallets()
+
+    return wallets
+  }
+
+  const getSolanaWallets = () => {
+    return solWallets
+  }
+
+  return {
+    walletAddress,
+    getTonWallets,
+    getSolanaWallets,
+  }
 }

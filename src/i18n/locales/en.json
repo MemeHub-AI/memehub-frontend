@@ -279,7 +279,7 @@
   "go.bold.man": "Future millionaire, MemeHub AI has come up with the following creative ideas for you: Go Bold man.",
   "create.now": "Create Now",
   "no.idea": "There is currently no creative idea yet, and the AI is actively working on it. Please stay tuned～",
-  "show": "Show MOre",
+  "show": "Show more",
   "more": "More",
   "hidden": "Hidden",
   "virtual-liquidity": "Virtual liquidity",
@@ -582,8 +582,10 @@
   "airdrop.burned": "Already burned",
   "create-token.err.failed": "Creation failed, please try again",
   "create-token.err.network-not-found": "Cannot find network",
-  "decide.chains": "Please select your blockchain",
   "airdrop.no-id": "You do not have an airdrop for this token",
   "airdrop.not-nft2": "No {} NFT",
-  "marketing.burn-desc": "If you choose not to airdrop, these <bold>{{percent}}%</bold> of the tokens will be sent to a black hole for burning"
+  "marketing.burn-desc": "If you choose not to airdrop, these <bold>{{percent}}%</bold> of the tokens will be sent to a black hole for burning",
+  "welcome": "Welcome to MemeHub",
+  "select.wellets": "Please select Login Wallet",
+  "show.less": "Show less"
 }

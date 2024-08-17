@@ -5,12 +5,12 @@ import { useTonClient } from './use-ton-client'
 import { useConnection } from './use-connection'
 
 import { useTonMainAddress } from '../use-ton-address'
-import { Factory } from '@/contract/factory/factory'
-import { Bondingcurve } from '@/contract/factory/bonding-curve'
+import { Factory } from '@/contract/ton/factory/factory'
+import { Bondingcurve } from '@/contract/ton/factory/bonding-curve'
 import {
   buildOnchainMetadata,
   SendCoinsContent,
-} from '@/contract/factory/build-on-chain'
+} from '@/contract/ton/factory/build-on-chain'
 
 export const useContactsWrapper = () => {
   const client = useTonClient()

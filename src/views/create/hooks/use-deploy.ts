@@ -7,7 +7,7 @@ import { Network } from '@/enums/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { deployErr } from '@/errors/deploy'
 import { useTvmDeploy } from './use-tvm-deploy'
-import { useSolDeploy } from './use-sol-deploy'
+// import { useSolDeploy } from './use-sol-deploy'
 
 export type DeployFormParams = Omit<
   TokenCreateReq,
@@ -22,7 +22,7 @@ export const useDeploy = () => {
   const evmDeploy = useEvmDeploy()
   // const svmDeploy = useSvmDeploy()
   const tvmDeploy = useTvmDeploy()
-  const solDeploy = useSolDeploy()
+  // const solDeploy = useSolDeploy()
   // const tvmDeploy = useTvmDeploy()
 
   const {

@@ -573,8 +573,11 @@
   "airdrop.burned": "已销毁",
   "create-token.err.failed": "创建失败，请重试",
   "create-token.err.network-not-found": "找不到目标网络",
-  "decide.chains": "请选择您的区块链",
   "airdrop.no-id": "你没有这个代币的空投",
   "airdrop.not-nft2": "没有 {} NFT",
-  "marketing.burn-desc": "如果选择不空投，这 <bold>{{percent}}%</bold> 的代币将会被打入黑洞销毁"
+  "marketing.burn-desc": "如果选择不空投，这 <bold>{{percent}}%</bold> 的代币将会被打入黑洞销毁",
+  "welcome": "欢迎来到MemeHub",
+  "select.wellets": "请选择登录用的钱包",
+  "show": "展开",
+  "show.less": "收起"
 }

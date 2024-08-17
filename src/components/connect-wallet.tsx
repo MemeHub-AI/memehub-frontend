@@ -1,8 +1,8 @@
 import React, { type ComponentProps } from 'react'
 
 import { Button } from './ui/button'
-import { ChangeChainWallets } from './header/change-chain-wallets'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
+import ChangeChainWallets from './header/wallets-connect/change-chain-wallets'
 
 export const ConnectWallet = ({
   children,

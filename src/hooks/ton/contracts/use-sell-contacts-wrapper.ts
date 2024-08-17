@@ -4,8 +4,8 @@ import { useInit } from './use-init'
 import { useTonClient } from './use-ton-client'
 import { useTonAddress } from '@tonconnect/ui-react'
 import { useTonMainAddress } from '../use-ton-address'
-import { JettonMinter } from '@/contract/factory/jetton-minter'
-import { JettonWallet } from '@/contract/factory/jetton-wallet'
+import { JettonMinter } from '@/contract/ton/factory/jetton-minter'
+import { JettonWallet } from '@/contract/ton/factory/jetton-wallet'
 
 export const useSellContactsWrapper = () => {
   const client = useTonClient()
