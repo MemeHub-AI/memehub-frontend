@@ -14,7 +14,9 @@ import { useChainsStore } from '@/stores/use-chains-store'
 enum Flag {
   Bc = 'Bonding Curve',
   Airdrop = 'Airdrop',
-  Black = 'Black Hole',
+  BlackHole = 'Black Hole',
+  Creator = 'Creator',
+  Dex = 'Dex',
 }
 
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
@@ -24,30 +26,13 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { total_supply } = tokenInfo ?? {}
 
   const getLabel = ({ flag, holder = '' }: (typeof holders)[number]) => {
-    const f = flag || ''
-
-    // Zero addr.
-    if (holder === zeroAddress) {
+    if (flag === Flag.BlackHole || holder === zeroAddress) {
       return `🔥${t('holder.burning')}`
     }
-
-    // Bonding curve.
-    if (f === Flag.Bc) return `(💰${t('pool')})`
-
-    // Creator or dev.
-    if (f.includes('dev') || f.includes('creator')) {
-      return `(🧑‍💻${t('creator')})`
-    }
-
-    // Dex.
-    if (f.includes('dex')) {
-      return `(👑${t('dex')})`
-    }
-
-    // Airdrop.
-    if (f === Flag.Airdrop) {
-      return `(${t('airdrop')})`
-    }
+    if (flag === Flag.Bc) return `(💰${t('pool')})`
+    if (flag === Flag.Creator) return `(🧑‍💻${t('creator')})`
+    if (flag === Flag.Dex) return `(👑${t('dex')})`
+    if (flag === Flag.Airdrop) return `(${t('airdrop')})`
   }
 
   const getPercent = (amount: string) => {
