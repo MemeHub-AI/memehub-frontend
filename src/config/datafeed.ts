@@ -7,6 +7,7 @@ import { DatafeedCandles } from '@/components/chart/hooks/use-datafeed/types'
 
 export const datafeedConfig: DatafeedConfiguration = {
   supported_resolutions: [
+    '1s',
     '1',
     '5',
     '15',
@@ -14,6 +15,8 @@ export const datafeedConfig: DatafeedConfiguration = {
     '1h',
     '4h',
     '1d',
+    '1w',
+    '1m',
   ] as ResolutionString[],
   supports_marks: true,
   supports_timescale_marks: true,
