@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import useWebSocket from 'react-use-websocket'
 
-import { wsApiUrl } from '@/api/websocket'
 import { useTokenQuery } from './use-token-query'
 import { TradeType } from '@/enums/trade'
 import { ObjectLike } from '@/utils/types'
+import { apiUrl } from '@/config/url'
 
 enum ReceiveEvents {
   Trades = 'trades',
@@ -64,7 +64,7 @@ export const useTokenWs = (disabled = false) => {
   const { lastJsonMessage, sendJsonMessage } = useWebSocket<
     WsReceiveBase<ObjectLike<any>>
   >(
-    wsApiUrl.trades,
+    `${apiUrl.ws}/ws/v2/coin/trades`,
     {
       onOpen: () => {
         sendJsonMessage({

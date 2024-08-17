@@ -25,7 +25,6 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
     tradePrice,
     tradeRecords,
   } = useTokenContext()
-  // const { marketCap } = useHoldersStore() // TODO: should remove
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
 

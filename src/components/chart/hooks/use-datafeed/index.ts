@@ -14,14 +14,14 @@ import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { formatInterval, parsePricescale } from '@/utils/chart'
 import { withPair } from '@/utils/datafeed'
 import { useWebsocket } from '@/hooks/use-websocket'
-import { wsApiUrl } from '@/api/websocket'
 import { DatafeedEmitEvents, DatafeedOnEvents, DatafeedCache } from './types'
 import { useLruMap } from '@/hooks/use-lru-map'
+import { apiUrl } from '@/config/url'
 
 export const useDatafeed = () => {
   const { chainName, tokenAddr } = useTokenQuery()
   const ws = useWebsocket<DatafeedOnEvents, DatafeedEmitEvents>(
-    wsApiUrl.candlestick
+    `${apiUrl.ws}/ws/v2/coin/candles`
   )
   const cache = useLruMap<DatafeedCache>()
 
