@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { uniqBy } from 'lodash'
+import { orderBy, uniqBy } from 'lodash'
 
 import { apiUrl } from '@/config/url'
 import { useWebsocket } from '@/hooks/use-websocket'
@@ -14,48 +14,57 @@ import type {
 
 const uniqKey: keyof TokenTrade = 'hash'
 
+const sortKey: keyof TokenTrade = 'timestamp'
+
 const pageSize = 10
 
 export const useTokenWs = (disabled = false) => {
   const { chainName, tokenAddr } = useTokenQuery()
-  const ws = useWebsocket<
-    TokenOnEvents,
-    TokenEmitEvents,
-    { has_more: boolean }
-  >(disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`)
+  const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
+    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`
+  )
   const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
   const [holders, setHolders] = useState<TokenHolder[]>([])
   const [tradePrice, setTradePrice] = useState<TokenPrice>()
-  const [hasMoreTrades, setHasMoreTrades] = useState(true)
+  const [hasMoreTrades, setHasMoreTrades] = useState(false)
 
-  const unshiftTrades = (trades: TokenTrade[]) => {
-    setTradeRecords((prev) => uniqBy([...trades, ...prev], uniqKey))
+  const onTrades = ({ data, extra }: TokenOnEvents['trades']) => {
+    setHasMoreTrades(!!extra?.hasmore)
+    setTradeRecords((prev) =>
+      orderBy(uniqBy([...prev, ...data], uniqKey), [sortKey], 'desc')
+    )
   }
 
-  const pushTrades = (trades: TokenTrade[]) => {
-    setTradeRecords((prev) => uniqBy([...prev, ...trades], uniqKey))
+  const onHolders = ({ data }: TokenOnEvents['holders']) => {
+    setHolders(data)
   }
 
-  const onUpdate = ({ type, data, extra }: TokenOnEvents['update']) => {
-    if (extra?.has_more) setHasMoreTrades(extra.has_more)
-    if (type === 'trades') return pushTrades(data as TokenTrade[])
-    if (type === 'holders') return setHolders(data as TokenHolder[])
-    if (type === 'price') return setTradePrice(data as TokenPrice)
+  const onPrice = ({ data }: TokenOnEvents['price']) => {
+    setTradePrice(data)
+  }
+
+  const onUpdate = ({ data }: TokenOnEvents['update']) => {
+    // TODO: fix type
+    if (data.type === 'trades') return onTrades(data)
+    if (data.type === 'holders') return onHolders(data)
+    if (data.type === 'price') return onPrice(data)
   }
 
   const fetchNextTrades = () => {
     if (!hasMoreTrades || !ws.isOpen) return
 
     ws.emit('history', {
+      chain: chainName,
+      token: tokenAddr,
       offset: tradeRecords.length,
       limit: pageSize * 2,
     })
   }
 
   useEffect(() => {
-    ws.on('trades', unshiftTrades)
-    ws.on('holders', setHolders)
-    ws.on('price', setTradePrice)
+    ws.on('trades', onTrades)
+    ws.on('holders', onHolders)
+    ws.on('price', onPrice)
     ws.on('update', onUpdate)
 
     if (!ws.isOpen) return

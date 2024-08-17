@@ -47,9 +47,12 @@ export const TokenMobile = () => {
     chainId
   )
   const { isBurned } = useBurnAirdrop(airdropId)
-  const [countdown] = useCountDown({
-    targetDate: dayjs.unix(createAt).add(durationSeconds, 'second'),
-  })
+
+  const targetDate = useMemo(
+    () => dayjs.unix(createAt).add(durationSeconds, 'second'),
+    [createAt, durationSeconds]
+  )
+  const [countdown] = useCountDown({ targetDate })
   const isAirdropExpired = countdown <= 0
 
   const tipsCount = useMemo(() => {

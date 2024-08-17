@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ComponentProps } from 'react'
+import { useMemo, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { BigNumber } from 'bignumber.js'
