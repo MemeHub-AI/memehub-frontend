@@ -81,11 +81,11 @@ export const useDatafeed = () => {
           return
         }
 
-        ws.on('candles', ({ data }) => {
+        ws.on('candles', ({ data, extra }) => {
           const bars = data[datafeedUnit]
 
           if (!isEmpty(bars)) cache.set('lastBar', last(bars))
-          onResult(bars, { noData: isEmpty(bars) })
+          onResult(bars, { noData: !extra?.hasmore })
         })
         ws.emit('history', { start: period.from, end: period.to })
       },

@@ -14,7 +14,7 @@ export interface DatafeedEmitEvents {
 }
 
 export interface DatafeedOnEvents {
-  candles: WsReceived<DatafeedCandles>
+  candles: WsReceived<DatafeedCandles, string, { hasmore: boolean }>
   update: WsReceived<DatafeedOnEvents[keyof Omit<DatafeedOnEvents, 'update'>]>
 }
 

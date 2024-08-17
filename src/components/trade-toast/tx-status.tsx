@@ -13,7 +13,7 @@ export interface TxStatusProps {
   hash: Hash
   txUrl: string
   isBuy: boolean
-  rewardAmount: number
+  getRewardAmount: () => number
   tokenLabel: string
   reserveLabel: string
   getToastId: () => string | number

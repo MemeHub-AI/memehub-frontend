@@ -1,12 +1,11 @@
-import { createElement, useRef } from 'react'
-import { useMutation } from '@tanstack/react-query'
+import { createElement } from 'react'
 import { toast } from 'sonner'
 import { type Hash } from 'viem'
+import { BigNumber } from 'bignumber.js'
 
-import { otherApi } from '@/api/other'
-import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { TradeType } from '@/enums/trade'
 import { TxStatus } from '@/components/trade-toast/tx-status'
+import { useTokenContext } from '@/contexts/token'
 
 interface Options {
   hash: Hash
@@ -17,25 +16,11 @@ interface Options {
 }
 
 export const useTradeToast = () => {
-  const { chainName, tokenAddr } = useTokenQuery()
+  const { tardeRewards } = useTokenContext()
 
-  const { mutateAsync, reset } = useMutation({
-    mutationKey: [otherApi.getDiamondAmount.name],
-    mutationFn: otherApi.getDiamondAmount,
-  })
-
-  const getRewardAmount = async (
-    type: TradeType | '',
-    reserveAmount: string
-  ) => {
-    const { data } = await mutateAsync({
-      token_address: tokenAddr,
-      chain: chainName,
-      operation: type,
-      quote_amount: parseFloat(reserveAmount).toString(),
-    }).catch(() => ({ data: { reward_amount: 0 } }))
-
-    const amount = data?.reward_amount
+  // TODO: adapt multi times trade
+  const getRewardAmount = () => {
+    const amount = BigNumber(tardeRewards).toNumber()
     const rewardAmount = Number(
       amount < 100 ? amount.toFixed(4) : amount.toFixed(2)
     )
@@ -45,7 +30,6 @@ export const useTradeToast = () => {
 
   const showToast = async (options: Options) => {
     const { type, tokenLabel, reserveLabel, hash, txUrl } = options
-    reset()
     const toastId = toast(
       createElement(TxStatus, {
         hash,
@@ -53,8 +37,8 @@ export const useTradeToast = () => {
         isBuy: type === TradeType.Buy,
         tokenLabel,
         reserveLabel,
-        rewardAmount: await getRewardAmount(type, reserveLabel),
         getToastId: () => toastId,
+        getRewardAmount,
       }),
       {
         position: 'bottom-left',

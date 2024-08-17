@@ -18,6 +18,8 @@ const sortKey: keyof TokenTrade = 'timestamp'
 
 const pageSize = 10
 
+let tardeRewards = '0'
+
 export const useTokenWs = (disabled = false) => {
   const { chainName, tokenAddr } = useTokenQuery()
   const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
@@ -27,8 +29,8 @@ export const useTokenWs = (disabled = false) => {
   const [holders, setHolders] = useState<TokenHolder[]>([])
   const [tradePrice, setTradePrice] = useState<TokenPrice>()
   const [hasMoreTrades, setHasMoreTrades] = useState(false)
-
   const onTrades = ({ data, extra }: TokenOnEvents['trades']) => {
+    if (extra?.rewarded) tardeRewards = extra.rewarded
     setHasMoreTrades(!!extra?.hasmore)
     setTradeRecords((prev) =>
       orderBy(uniqBy([...prev, ...data], uniqKey), [sortKey], 'desc')
@@ -82,6 +84,7 @@ export const useTokenWs = (disabled = false) => {
     holders,
     tradePrice,
     hasMoreTrades,
+    tardeRewards,
     fetchNextTrades,
   }
 }
