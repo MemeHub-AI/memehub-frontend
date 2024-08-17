@@ -10,7 +10,6 @@ import { useTokenProgress } from '../hooks/evm/use-token-progress'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
 import { TokenVersion } from '@/contract/abi/token'
-import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TokenProgress = ({
   showDesc = true,
@@ -19,9 +18,14 @@ export const TokenProgress = ({
   showDesc?: boolean
 }) => {
   const { t } = useTranslation()
-  const { tokenInfo, isIdoToken, tokenAddr, tokenVersion, chainId } =
-    useTokenContext()
-  const { chainsMap } = useChainsStore()
+  const {
+    tokenInfo,
+    isIdoToken,
+    tokenAddr,
+    tokenVersion,
+    chainId,
+    tokenChain,
+  } = useTokenContext()
   const { total, progress, isGrauated } = useTokenProgress(
     tokenAddr,
     chainId,
@@ -31,12 +35,12 @@ export const TokenProgress = ({
     chainId,
     tokenInfo?.airdrop_index ?? 0
   )
-  const chain = chainsMap[tokenInfo?.chain ?? '']
 
-  const nativeSymbol = chain?.native.symbol ?? ''
   const threshold = BigNumber(total).lte(0)
     ? t('threshold')
-    : ` ${fmt.decimals(total, { fixed: 3 })} ${nativeSymbol} `
+    : ` ${fmt.decimals(total, { fixed: 3 })} ${
+        tokenChain?.native.symbol ?? ''
+      } `
 
   return (
     <div className={cn('flex-1 relative', className)}>

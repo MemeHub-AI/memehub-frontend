@@ -5,9 +5,11 @@ import { useTokenInfo } from './../views/token/hooks/use-token-info'
 import { CONTEXT_ERR } from '@/errors/context'
 import { Network } from '@/enums/contract'
 import { ChainData } from '@/api/chain/type'
+import { useTokenWs } from '@/views/token/hooks/use-token-ws'
 
 interface Context
-  extends Omit<ReturnType<typeof useTokenInfo>, 'isRefetchingTokenInfo'> {
+  extends Omit<ReturnType<typeof useTokenInfo>, 'isRefetchingTokenInfo'>,
+    ReturnType<typeof useTokenWs> {
   isIdoToken: boolean
   isGraduated: boolean
   reserveSymbol: string | undefined

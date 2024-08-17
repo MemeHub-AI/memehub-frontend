@@ -4,14 +4,11 @@ import dayjs from 'dayjs'
 import { useIdoInfo } from '@/views/ido/hooks/use-ido-info'
 import { TokenCard } from './token-cards/card'
 import { TokenListItem } from '@/api/token/types'
-import { useChainsStore } from '@/stores/use-chains-store'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const IdoCard = ({ token }: { token: TokenListItem }) => {
-  const { chainsMap } = useChainsStore()
-  const { startAt, progress } = useIdoInfo(
-    Number(chainsMap[token.chain]?.id ?? 0),
-    token.airdrop_index
-  )
+  const { chainId } = useChainInfo(token.chain)
+  const { startAt, progress } = useIdoInfo(chainId, token.airdrop_index)
 
   return (
     <TokenCard

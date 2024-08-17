@@ -9,7 +9,6 @@ import { airdropData } from './data'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { AirdropProvider } from '@/contexts/airdrop'
-import { IdoAirdropCard } from './components/ido-card'
 import { useAirdropList } from './hooks/use-airdrop-list'
 import { AirdropDetailType } from '@/api/airdrop/types'
 
@@ -106,6 +105,8 @@ const AirdropSkeleton = () => {
           key={i}
           className="blur-lg pointer-events-none select-none"
           airdrop={airdrop}
+          detail={airdrop.airdrop[0]}
+          isKolCard
         />
       ))}
     </div>

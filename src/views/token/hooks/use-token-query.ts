@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import { Address } from 'viem'
 
-export const useTradeSearchParams = () => {
+export const useTokenQuery = () => {
   const { query, isReady } = useRouter()
 
   const chainName = (query.chain ?? '') as string

@@ -1,7 +1,7 @@
 import React, { ComponentProps, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { qs } from '@/hooks/use-fetch'
 
 export const ChartDexScreener = ({
@@ -9,7 +9,7 @@ export const ChartDexScreener = ({
   ...props
 }: ComponentProps<'iframe'>) => {
   const { i18n } = useTranslation()
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
 
   // See: https://dexscreener.com
   const src = useMemo(() => {

@@ -10,16 +10,14 @@ import {
   tradeDefaultItems,
   tradeSellItems,
 } from '@/config/trade'
-import { useChainInfo } from '@/hooks/use-chain-info'
 
 interface Props extends ComponentProps<'button'> {
   onItemClick?: (value: string) => void
 }
 
 export const TradeItems = ({ disabled, onItemClick }: Props) => {
-  const { isLoadingTokenInfo, reserveSymbol } = useTokenContext()
+  const { isLoadingTokenInfo, reserveSymbol, chainId } = useTokenContext()
   const { isBuy, tokenBalance } = useTradeTabsContext()
-  const { chainId } = useChainInfo()
   const buyItems =
     tradeBuyItems[chainId as keyof typeof tradeBuyItems] ?? tradeDefaultItems
 

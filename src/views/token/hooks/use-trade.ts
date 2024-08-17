@@ -6,13 +6,12 @@ import { useEvmTrade } from './evm/use-trade'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeToast } from '@/hooks/use-trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'
-import { useTradeSearchParams } from './use-search-params'
+import { useTokenQuery } from './use-token-query'
 import { TradeType } from '@/enums/trade'
 import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
 import { useDexTrade } from './use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { Network } from '@/enums/contract'
 
 // Used for trade success tips.
@@ -24,7 +23,7 @@ const lastTrade = {
 
 export const useTrade = (onSuccess?: () => void) => {
   const { userInfo } = useUserInfo()
-  const { referralCode } = useTradeSearchParams()
+  const { referralCode } = useTokenQuery()
   const [inviteOpen, setInviteOpen] = useState(false)
   const { getCanBind } = useInvite()
   const { showToast } = useTradeToast()
@@ -40,7 +39,6 @@ export const useTrade = (onSuccess?: () => void) => {
     network,
     tokenChain,
   } = useTokenContext()
-  const { chainsMap } = useChainsStore()
 
   const {
     dexHash,
@@ -72,7 +70,7 @@ export const useTrade = (onSuccess?: () => void) => {
   // TODO: add Sol, TON chains
   const updateLastTrade = async (type: TradeType, amount: string) => {
     const tokenSymbol = tokenInfo?.symbol || tokenMetadata?.symbol
-    const reserveSymbol = chainsMap[chainName]?.native.symbol
+    const reserveSymbol = tokenChain?.native.symbol
     lastTrade.type = type
 
     const getNonFixedLabel = (value: bigint, symbol?: string) =>

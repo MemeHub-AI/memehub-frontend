@@ -8,7 +8,6 @@ import { CreateTokenForm } from './form/form'
 import { MobileQpportunityMoonshot } from '@/components/opportunity-moonshot'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
-import { useCreateTokenContext } from '@/contexts/create-token'
 
 interface Props {
   className?: string
@@ -29,6 +28,7 @@ export const CreateTokenMain = (props: Props) => {
     onCancel,
     onConfirm,
   } = useGenAIIdea()
+
   return (
     <div
       className={cn(

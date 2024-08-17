@@ -6,7 +6,7 @@ import {
   heartbeat,
   isSuccessMessage,
   isDisconnectMessage,
-  wsApiURL,
+  wsApiUrl,
   isUpdateMessage,
 } from '@/api/websocket'
 import {
@@ -14,7 +14,7 @@ import {
   WSMessageType,
   WSTradeRecordMessage,
 } from '@/api/websocket/types'
-import { useTradeSearchParams } from './use-search-params'
+import { useTokenQuery } from './use-token-query'
 import { useTokenContext } from '@/contexts/token'
 
 const pageSize = 10
@@ -23,13 +23,13 @@ export const useTradeRecord = () => {
   const [tradeRecords, setTradeRecords] = useState<WSTradeRecordMessage[]>([])
   const [page, setPage] = useState(2)
   const [hasMore, setHasMore] = useState(true)
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
   const { isNotFound } = useTokenContext()
 
   const { lastJsonMessage, sendJsonMessage, getWebSocket } = useWebSocket<
     WSMessageBase<WSTradeRecordMessage[] | null>
   >(
-    isNotFound ? '' : wsApiURL.tradeRecord,
+    isNotFound ? '' : wsApiUrl.tradeRecord,
     {
       heartbeat,
       onOpen: () => {

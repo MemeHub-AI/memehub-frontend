@@ -1,7 +1,7 @@
-import React, { ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
-import { ColumnDef, flexRender } from '@tanstack/react-table'
+import { flexRender } from '@tanstack/react-table'
 
 import {
   Table,
@@ -13,51 +13,12 @@ import {
   TableFooter,
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { RewardItem } from '@/api/invite/types'
-import { useChainsStore } from '@/stores/use-chains-store'
-import { Img } from '@/components/img'
-import { DiamondIcon } from '@/components/diamond-icon'
 import { useRewardTable } from '../hooks/use-reward-table'
-import { fmt } from '@/utils/fmt'
-
-enum RewardType {
-  Token = 1,
-  Diamond,
-}
+import { inviteColumns } from './invite-columns'
 
 export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
-  const { evmChainsMap } = useChainsStore()
-
-  const columns: ColumnDef<RewardItem>[] = [
-    {
-      header: t('earned'),
-      accessorKey: 'earned',
-      cell: ({ row }) => {
-        const { chain, earned, category } = row.original
-        return (
-          <div className="flex items-center space-x-1">
-            <span>{fmt.decimals(earned)}</span>
-            {category === RewardType.Diamond ? (
-              <DiamondIcon size={20} />
-            ) : (
-              <Img src={evmChainsMap[chain]?.logo} alt="logo" className="w-5" />
-            )}
-          </div>
-        )
-      },
-    },
-    {
-      header: t('time'),
-      accessorKey: 'time',
-    },
-    {
-      header: t('username'),
-      accessorKey: 'username',
-    },
-  ]
-
-  const { ths, rows, total, fetchNextPage } = useRewardTable(columns)
+  const { ths, rows, total, fetchNextPage } = useRewardTable(inviteColumns)
 
   return (
     <>

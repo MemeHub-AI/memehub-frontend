@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { type Hash } from 'viem'
 
 import { otherApi } from '@/api/other'
-import { useTradeSearchParams } from '@/views/token/hooks/use-search-params'
+import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { TradeType } from '@/enums/trade'
 import { TxStatus } from '@/components/trade-toast/tx-status'
 
@@ -17,8 +17,7 @@ interface Options {
 }
 
 export const useTradeToast = () => {
-  const toastId = useRef<string | number>('')
-  const { chainName, tokenAddr } = useTradeSearchParams()
+  const { chainName, tokenAddr } = useTokenQuery()
 
   const { mutateAsync, reset } = useMutation({
     mutationKey: [otherApi.getDiamondAmount.name],
@@ -47,7 +46,7 @@ export const useTradeToast = () => {
   const showToast = async (options: Options) => {
     const { type, tokenLabel, reserveLabel, hash, txUrl } = options
     reset()
-    toastId.current = toast(
+    const toastId = toast(
       createElement(TxStatus, {
         hash,
         txUrl,
@@ -55,7 +54,7 @@ export const useTradeToast = () => {
         tokenLabel,
         reserveLabel,
         rewardAmount: await getRewardAmount(type, reserveLabel),
-        getToastId: () => toastId.current,
+        getToastId: () => toastId,
       }),
       {
         position: 'bottom-left',
@@ -67,15 +66,10 @@ export const useTradeToast = () => {
         },
       }
     )
-    return toastId.current
-  }
-
-  const dismissToast = () => {
-    toast.dismiss(toastId.current)
+    return toastId
   }
 
   return {
     showToast,
-    dismissToast,
   }
 }
