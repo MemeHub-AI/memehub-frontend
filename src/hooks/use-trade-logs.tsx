@@ -7,19 +7,6 @@ import { useRouter } from 'next/router'
 import { IoCloseOutline } from 'react-icons/io5'
 import { IoMdInformationCircleOutline } from 'react-icons/io'
 
-import {
-  type CreateInfoLog,
-  type TradeInfoLog,
-  type WSMessageBase,
-  type WSTradeLogMessage,
-} from '@/api/websocket/types'
-
-import {
-  heartbeat,
-  isSuccessMessage,
-  isDisconnectMessage,
-  wsApiUrl,
-} from '@/api/websocket'
 import { Routes } from '@/routes'
 import { fmt } from '@/utils/fmt'
 import { Avatar } from '@/components/ui/avatar'
@@ -47,17 +34,6 @@ export const useTradeLogs = () => {
   const [isLatest, setIsLatest] = useState(false)
   const [lastTrade, setLastTrade] = useState<TradeInfoLog>()
   const [lastCreate, setLastCreate] = useState<CreateInfoLog>()
-
-  const { lastJsonMessage, sendJsonMessage } =
-    useWebSocket<WSMessageBase<WSTradeLogMessage> | null>(
-      wsApiUrl.tradeLogs,
-      {
-        heartbeat,
-        onOpen: () => sendJsonMessage({ type: 'message', data: null }),
-        shouldReconnect: () => true,
-      },
-      false // TODO: remove
-    )
 
   const shwoLatestTrade = (lastTrade: TradeInfoLog) => {
     toastBase(

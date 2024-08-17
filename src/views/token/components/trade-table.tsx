@@ -17,7 +17,6 @@ import {
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { Avatar } from '@/components/ui/avatar'
-import { useTradeRecord } from '../hooks/use-trade-record'
 import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils/convert'

@@ -6,7 +6,6 @@ import { BigNumber } from 'bignumber.js'
 
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
-import { useHoldersStore } from '@/stores/use-holders-store'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TokenProgress } from './token-progress'
