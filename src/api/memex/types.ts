@@ -35,7 +35,6 @@ export interface MemexIdeaItem {
 
 export interface MemexListReq {
   type: MemexListType
-  factory_address: string
 }
 
 export enum MemexListType {

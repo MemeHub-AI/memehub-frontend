@@ -2,11 +2,8 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { memexApi } from '@/api/memex'
 import { MemexListType } from '@/api/memex/types'
-import { useTokenConfig } from '@/hooks/use-token-config'
 
 export const useIdeaList = (type: MemexListType) => {
-  const { memexFactoryAddr } = useTokenConfig()
-
   const {
     data: { total = 0, list = [] } = {},
     isError,
@@ -15,12 +12,11 @@ export const useIdeaList = (type: MemexListType) => {
     refetch,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: [memexApi.getIdeaList.name, type, memexFactoryAddr],
+    queryKey: [memexApi.getIdeaList.name, type],
     queryFn: ({ pageParam }) =>
       memexApi.getIdeaList({
         page: pageParam,
         type,
-        factory_address: memexFactoryAddr!,
       }),
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
@@ -28,7 +24,6 @@ export const useIdeaList = (type: MemexListType) => {
       total: pages[0].data.count,
       list: pages.flatMap((p) => p.data.results),
     }),
-    enabled: !!memexFactoryAddr,
     refetchInterval: 5_000,
   })
 

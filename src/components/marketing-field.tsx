@@ -9,7 +9,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from '@/components/ui/form'
 import { MarketType, Marketing } from '@/api/token/types'
 import { Checkbox } from '@/components/ui/checkbox'
@@ -36,12 +35,13 @@ export const marketingSchema = z.object({
 
 interface Props {
   form: UseFormReturn<z.infer<typeof marketingSchema>>
+  chainName: string
   disabled?: boolean
 }
 
-export const MarketingField = ({ form, disabled }: Props) => {
+export const MarketingField = ({ form, disabled, chainName }: Props) => {
   const { t } = useTranslation()
-  const { configValue } = useTokenConfig()
+  const { configValue } = useTokenConfig(chainName)
   const { distributionRatioKol = 0 } = configValue ?? {}
 
   const markets = [
@@ -106,7 +106,7 @@ export const MarketingField = ({ form, disabled }: Props) => {
                   </FormControl>
                   <FormLabel className="flex items-center !mt-0 gap-1">
                     {m.title}
-                    <DialogMarketing type={m.value}></DialogMarketing>
+                    <DialogMarketing type={m.value} chainName={chainName} />
                   </FormLabel>
                 </FormItem>
                 {!checked && (
@@ -129,14 +129,16 @@ export const MarketingField = ({ form, disabled }: Props) => {
 
 export default MarketingField
 
-interface DialogProps {
+export const DialogMarketing = ({
+  type,
+  chainName,
+}: {
   type: MarketType
-}
-
-export const DialogMarketing = ({ type }: DialogProps) => {
+  chainName: string
+}) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
-  const { configValue } = useTokenConfig()
+  const { configValue } = useTokenConfig(chainName)
   const [isKol, isCommunity] = useMemo(
     () => [type === MarketType.Kol, type === MarketType.Community],
     [type]

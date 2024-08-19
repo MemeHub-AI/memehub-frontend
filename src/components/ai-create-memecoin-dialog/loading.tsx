@@ -1,21 +1,18 @@
 import React, { useEffect } from 'react'
+import { toast } from 'sonner'
+import { useTranslation } from 'react-i18next'
+
 import { Dialog } from '../ui/dialog'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { useTranslation } from 'react-i18next'
 import { aiApi } from '@/api/ai'
-import { useCreateTokenForm } from '@/views/create/hooks/use-form'
 import { AIMemeInfo } from '@/api/ai/type'
-import { toast } from 'sonner'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useCheckAccount } from '@/hooks/use-check-chain'
-
-interface Props {
-  formHook: ReturnType<typeof useCreateTokenForm>
-}
+import { useCreateTokenContext } from '@/contexts/create-token'
 
 let memeInfoSign = new AbortController()
 
-export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
+export const AICreateMemecoinDialogLoading = () => {
   const { t } = useTranslation()
   const {
     info,
@@ -28,6 +25,9 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
   } = useAimemeInfoStore()
   const userStore = useUserInfo()
   const { checkForConnect } = useCheckAccount()
+  const {
+    formData: { form, formFields },
+  } = useCreateTokenContext()
 
   const fetchMemeInfo = async () => {
     if (!loadingInfo) {
@@ -37,9 +37,9 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     setLoadingInfo(true)
     memeInfoSign = new AbortController()
     try {
-      formHook.form.setValue(formHook.formFields.fullname, '')
-      formHook.form.setValue(formHook.formFields.symbol, '')
-      formHook.form.setValue(formHook.formFields.description, '')
+      form.setValue(formFields.fullname, '')
+      form.setValue(formFields.symbol, '')
+      form.setValue(formFields.description, '')
 
       const { data } = await aiApi.getMemeInfo(
         {
@@ -63,16 +63,16 @@ export const AICreateMemecoinDialogLoading = ({ formHook }: Props) => {
     info = info
 
     if (info?.name) {
-      formHook.form.setValue(formHook.formFields.fullname, info?.name)
-      formHook.form.setValue(formHook.formFields.symbol, info?.symbol!)
+      form.setValue(formFields.fullname, info?.name)
+      form.setValue(formFields.symbol, info?.symbol!)
     }
 
     if (info?.description) {
-      formHook.form.setValue(formHook.formFields.description, info?.description)
+      form.setValue(formFields.description, info?.description)
     }
 
     if (info?.chainName) {
-      formHook.form.setValue(formHook.formFields.chainName, info?.chainName)
+      form.setValue(formFields.chainName, info?.chainName)
     }
     setLoadingPoster(true)
     setLoadingLogo(true)

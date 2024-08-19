@@ -3,6 +3,7 @@ import type { UserInfoRes } from '../user/types'
 import { TokenVersion } from '@/contract/abi/token'
 import { DistributorVersion } from '@/contract/abi/distributor'
 import { AirdropDetail } from '../airdrop/types'
+import { MemexFactoryVersion } from '@/contract/abi/memex'
 
 export interface TokenListItem {
   airdrop: AirdropDetail[]
@@ -183,11 +184,13 @@ export interface OnchainTokensItem {
 export interface TokenConfigRes {
   name: string
   value: TokenCreateConfigValue
-  contracts: {
-    coin: TokenCreateConfigContract<TokenVersion>[]
-    airdrop: TokenCreateConfigContract<DistributorVersion>[]
-    memex: TokenCreateConfigContract<MemexFactoryVersion>[]
-  }
+  contracts: TokenConfigContracts
+}
+
+export interface TokenConfigContracts {
+  coin: TokenConfigContract<TokenVersion>[]
+  airdrop: TokenConfigContract<DistributorVersion>[]
+  memex: TokenConfigContract<MemexFactoryVersion>[]
 }
 
 export interface TokenCreateConfigValue {
@@ -199,10 +202,13 @@ export interface TokenCreateConfigValue {
   CommunityFlag: number
 }
 
-export interface TokenCreateConfigContract<V extends string> {
+export interface TokenConfigContract<
+  T extends string = string,
+  V extends string = string
+> {
   chain: string
   creator: string
-  address: string
   category: number
+  address: T
   version: V
 }

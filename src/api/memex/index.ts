@@ -14,7 +14,12 @@ import {
 export const memexApi = {
   getIdeaList: (req: PaginationReq & MemexListReq) => {
     return api.GET<ApiResponse<PaginationRes<MemexIdeaItem>>>(
-      '/api/v1/memex/tweets' + qs.stringify(req)
+      '/api/v1/memex/tweets/list' + qs.stringify(req)
+    )
+  },
+  getMyIdeaList: (req: PaginationReq & MemexListReq) => {
+    return api.GET<ApiResponse<PaginationRes<MemexIdeaItem>>>(
+      '/api/v1/memex/tweets/user/list' + qs.stringify(req)
     )
   },
   getIdeaDetail: (hash: string) => {
@@ -22,21 +27,24 @@ export const memexApi = {
   },
   createIdea: (req: MemexCreateReq) => {
     return api.POST<ApiResponse<MemexIdeaHash & MemexIdeaCoinId>>(
-      '/api/v1/memex/tweets',
+      '/api/v1/memex/tweets/create',
       { body: req }
     )
   },
   updateIdea: (req: Partial<MemexCreateReq> & MemexIdeaHash) => {
-    return api.PUT<ApiResponse<MemexIdeaCoinId>>('/api/v1/memex/tweets', {
-      body: req,
-    })
+    return api.PUT<ApiResponse<MemexIdeaCoinId>>(
+      '/api/v1/memex/tweets/update',
+      {
+        body: req,
+      }
+    )
   },
   getIdeaComments: (req: PaginationReq & MemexIdeaHash) => {
     return api.GET<ApiResponse<PaginationRes<MemexIdeaComment>>>(
-      '/api/v1/memex/tweets/comments' + qs.stringify(req)
+      '/api/v1/memex/tweets/comments/list' + qs.stringify(req)
     )
   },
   addIdeaComment: (req: MemexIdeaHash & MemexIdeaCommentReq) => {
-    return api.POST('/api/v1/memex/tweets/comments', { body: req })
+    return api.POST('/api/v1/memex/tweets/comments/create', { body: req })
   },
 }

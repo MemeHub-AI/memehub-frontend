@@ -5,8 +5,8 @@ import { DeployFormParams } from './use-deploy'
 import { reportException } from '@/errors'
 import { useTokenConfig } from '@/hooks/use-token-config'
 
-export const useCreateToken = () => {
-  const { bcAddress, airdropAddress } = useTokenConfig()
+export const useCreateToken = (chainName: string) => {
+  const { bcAddress, airdropAddress } = useTokenConfig(chainName)
 
   const {
     data: createData,

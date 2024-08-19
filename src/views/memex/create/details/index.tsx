@@ -8,10 +8,12 @@ import { RequiredFields } from './components/required-fields'
 import { OptionalFields } from './components/optional-fields'
 import { MarketingField } from '@/components/marketing-field'
 import { useMemexClear } from '../hooks/use-memex-clear'
+import { useMemexStore } from '@/stores/use-memex'
 
 export const CreateDetail = () => {
   const craeteDetail = useCreateIdeaDetails()
   const { form, onSubmit, isUpdating } = craeteDetail
+  const { idea } = useMemexStore()
 
   useMemexClear()
 
@@ -22,7 +24,11 @@ export const CreateDetail = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="pt-2 pb-3">
             <CreateIdeaDetailsHeader />
             <RequiredFields />
-            <MarketingField form={form} disabled={isUpdating} />
+            <MarketingField
+              form={form}
+              chainName={idea?.chain || ''}
+              disabled={isUpdating}
+            />
             <OptionalFields />
             <CreateIdeaIntro />
           </form>

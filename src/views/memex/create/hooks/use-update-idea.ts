@@ -12,6 +12,7 @@ import { useIdeaDetails } from '../../idea/hooks/use-idea-details'
 import { getEvmAirdropParams } from '@/utils/contract'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useTokenConfig } from '@/hooks/use-token-config'
+import { useMemexStore } from '@/stores/use-memex'
 
 interface Options {
   showSuccessTips?: boolean
@@ -25,8 +26,9 @@ export const useUpdateIdea = (
 ) => {
   const { t } = useTranslation()
   const chainId = useChainId()
+  const { idea } = useMemexStore()
   const { details } = useIdeaDetails(hashId)
-  const { configValue } = useTokenConfig()
+  const { configValue } = useTokenConfig(idea?.chain)
 
   const {
     data: hash,

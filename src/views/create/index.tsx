@@ -7,12 +7,10 @@ import { useNewsList } from '@/hooks/use-news-list'
 import { AICreateMemecoinDialogLoading } from '@/components/ai-create-memecoin-dialog/loading'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { CreateTokenProvider } from '@/contexts/create-token'
-import { useDeploy } from './hooks/use-deploy'
 
 export const CreatePage = () => {
-  const deployResult = useDeploy()
   const [tab, setTab] = useState(0)
-  const formData = useCreateTokenForm(deployResult)
+  const { deployResult, ...formData } = useCreateTokenForm()
   const newsListData = useNewsList({ isOpportunity: tab === 1 })
 
   return (
@@ -31,9 +29,7 @@ export const CreatePage = () => {
         />
         <CreateTokenStatusDialog />
       </PrimaryLayout>
-      <AICreateMemecoinDialogLoading
-        formHook={formData}
-      ></AICreateMemecoinDialogLoading>
+      <AICreateMemecoinDialogLoading></AICreateMemecoinDialogLoading>
     </CreateTokenProvider>
   )
 }

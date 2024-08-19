@@ -14,12 +14,13 @@ export type DeployFormParams = Omit<
   'factory_address' | 'airdrop_address'
 >
 
-export const useDeploy = () => {
+export const useDeploy = (chainName: string) => {
   const [network, setNetwork] = useState(Network.Evm)
-  const { createTokenData, isCreatingToken, createToken } = useCreateToken()
+  const { createTokenData, isCreatingToken, createToken } =
+    useCreateToken(chainName)
   const { chainsMap } = useChainsStore()
 
-  const evmDeploy = useEvmDeploy()
+  const evmDeploy = useEvmDeploy(chainName)
   // const svmDeploy = useSvmDeploy()
   const tvmDeploy = useTvmDeploy()
   const solDeploy = useSolDeploy()
