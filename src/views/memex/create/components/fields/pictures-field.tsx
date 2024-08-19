@@ -13,7 +13,9 @@ export const CreateIdeaPicturesField = () => {
   const { t } = useTranslation()
   const { form, isCreating } = useCreateIdeaContext()
   const inputRef = useRef<HTMLInputElement>(null)
-  const { onChangeUpload } = useUploadImage({ inputEl: inputRef.current })
+  const { onChangeUpload, clearFile } = useUploadImage({
+    inputEl: inputRef.current,
+  })
 
   return (
     <FormField
@@ -30,6 +32,7 @@ export const CreateIdeaPicturesField = () => {
             htmlFor="memex-upload"
             className="flex items-center"
             disabled={field.disabled}
+            onClick={clearFile}
           >
             <AiOutlinePicture size={22} className="mr-1" />
             {t('memex.create.add-pictures')}

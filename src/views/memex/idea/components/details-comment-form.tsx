@@ -22,7 +22,7 @@ export const IdeaCommentForm = () => {
   const { query } = useRouter()
   const { userInfo } = useUserStore()
   const inputRef = useRef<HTMLInputElement>(null)
-  const { onChangeUpload } = useUploadImage({
+  const { onChangeUpload, clearFile } = useUploadImage({
     inputEl: inputRef.current,
   })
   const { refetchComments } = useIdeaDetailsContext()
@@ -72,12 +72,14 @@ export const IdeaCommentForm = () => {
                 <Label
                   htmlFor="post-details-image"
                   disabled={field.disabled || isPending}
+                  onClick={clearFile}
                 >
                   <AiOutlinePicture size={28} className="text-purple-700" />
                   <ImageUpload
                     id="post-details-image"
                     className="hidden"
                     disabled={field.disabled || isPending}
+                    ref={inputRef}
                     onChange={async (e) => {
                       if (field.value.length >= memexIdeaCommentImgMax) {
                         form.setError('images', {

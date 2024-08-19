@@ -15,7 +15,9 @@ export const RequiredFields = () => {
   const { t } = useTranslation()
   const { form, isUpdating } = useCreateIdeaDetailsContext()
   const inputRef = useRef<HTMLInputElement>(null)
-  const { onChangeUpload } = useUploadImage({ inputEl: inputRef.current })
+  const { onChangeUpload, clearFile } = useUploadImage({
+    inputEl: inputRef.current,
+  })
 
   return (
     <div className="space-y-2 mt-2">
@@ -68,6 +70,7 @@ export const RequiredFields = () => {
                 className="border-2 border-black p-1.5 rounded-md w-fit"
                 htmlFor="create-detail-logo"
                 disabled={isUpdating || field.disabled}
+                onClick={clearFile}
               >
                 <AiOutlinePicture size={28} />
                 <ImageUpload

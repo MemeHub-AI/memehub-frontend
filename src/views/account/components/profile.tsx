@@ -49,7 +49,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
   const { copy } = useClipboard()
 
   const inputRef = useRef<HTMLInputElement>(null)
-  const { onChangeUpload } = useUploadImage({
+  const { onChangeUpload, clearFile } = useUploadImage({
     inputEl: inputRef.current,
     onSuccess: (url) => update({ logo: url }).then(() => refetchUserInfo()),
   })
@@ -82,6 +82,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
               'after:rounded-full hover:after:bg-black/50 after:transition-all'
           )}
           onClick={() => {
+            clearFile()
             if (isOtherUser && !isEmpty(userInfo?.logo)) {
               setOpen(true)
             }
