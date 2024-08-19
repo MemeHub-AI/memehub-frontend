@@ -49,6 +49,7 @@ export const useTradeAmount = () => {
     return readContract(wagmiConfig, {
       abi: bcAbiMap[bcVersion],
       address: bcAddr,
+      chainId: chainId as ConfigChainId,
       functionName: 'calcAmountOutFromTokenCutOff',
       args: [tokenAddr, parseEther(tokenLeft)],
     }).catch(() => BI_ZERO)
