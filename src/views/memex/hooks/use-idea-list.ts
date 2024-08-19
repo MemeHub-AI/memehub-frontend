@@ -1,9 +1,16 @@
+import { useMemo } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 import { memexApi } from '@/api/memex'
 import { MemexListType } from '@/api/memex/types'
+import { ApiCode } from '@/api/types'
 
 export const useIdeaList = (type: MemexListType) => {
+  const getIdeaList = useMemo(() => {
+    const isUserList = type === MemexListType.My || type === MemexListType.Join
+    return isUserList ? memexApi.getUserIdeaList : memexApi.getIdeaList
+  }, [type])
+
   const {
     data: { total = 0, list = [] } = {},
     isError,
@@ -12,9 +19,9 @@ export const useIdeaList = (type: MemexListType) => {
     refetch,
     fetchNextPage,
   } = useInfiniteQuery({
-    queryKey: [memexApi.getIdeaList.name, type],
+    queryKey: [getIdeaList.name, type],
     queryFn: ({ pageParam }) =>
-      memexApi.getIdeaList({
+      getIdeaList({
         page: pageParam,
         type,
       }),
@@ -25,6 +32,10 @@ export const useIdeaList = (type: MemexListType) => {
       list: pages.flatMap((p) => p.data.results),
     }),
     refetchInterval: 5_000,
+    retry: (count, error: Response) => {
+      if (error.status === ApiCode.AuthError) return false
+      return count < 3
+    },
   })
 
   return {

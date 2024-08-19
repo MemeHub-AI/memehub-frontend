@@ -17,7 +17,7 @@ export const memexApi = {
       '/api/v1/memex/tweets/list' + qs.stringify(req)
     )
   },
-  getMyIdeaList: (req: PaginationReq & MemexListReq) => {
+  getUserIdeaList: (req: PaginationReq & MemexListReq) => {
     return api.GET<ApiResponse<PaginationRes<MemexIdeaItem>>>(
       '/api/v1/memex/tweets/user/list' + qs.stringify(req)
     )
