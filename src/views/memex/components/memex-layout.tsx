@@ -51,8 +51,7 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
             'border-t-0 border-l-0 border-r-0 md:border-r !border-b border-zinc-200',
             'justify-start rounded-none h-10 max-sm:w-full',
             'md:flex md:justify-between md:h-14 md:px-4',
-            'md:text-md data-[state=active]:bg-zinc-200',
-            'data-[state=active]:hover:bg-zinc-200 data-[state=active]:text-black'
+            'md:text-md'
           )}
         >
           {tabs.map(({ id, route, title }) => (
