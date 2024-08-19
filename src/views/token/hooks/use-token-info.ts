@@ -70,8 +70,6 @@ export const useTokenInfo = () => {
   // TODO: this is an error
   const isGraduated = headmaster !== zeroAddress
 
-  console.log('headmaster', headmaster)
-
   const refetchTokenInfo = () => {
     refetchInfo()
     refetchPools()

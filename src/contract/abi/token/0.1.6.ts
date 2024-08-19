@@ -1,4 +1,4 @@
-export const tokenAbiV0_1_6 = [
+export const tokenAbi0_1_6 = [
   {
     inputs: [
       {
