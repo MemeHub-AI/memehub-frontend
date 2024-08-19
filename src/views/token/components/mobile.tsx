@@ -36,7 +36,7 @@ export const TokenMobile = () => {
   const tab = (query.tab || TabName.Trade) as string
   const { tokenInfo, chainId } = useTokenContext()
   const { airdrop, airdrop_address, airdrop_version } = tokenInfo ?? {}
-  const airdropId = airdrop?.[0].distribution_id || 0
+  const airdropId = airdrop?.[0]?.distribution_id || 0
 
   const { createAt, durationSeconds } = useTradeAirdropContext()
   const { isKol, hasCommunity } = useUserStore()

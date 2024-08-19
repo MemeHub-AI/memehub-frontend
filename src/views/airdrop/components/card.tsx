@@ -40,7 +40,7 @@ export const AirdropCard = ({
     airdrop_address,
     airdrop_version,
   } = airdrop ?? {}
-  const airdropId = detail.distribution_id || 0
+  const airdropId = detail?.distribution_id || 0
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
   const { hideClaimed } = useAirdropContext()
