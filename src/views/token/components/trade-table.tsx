@@ -145,8 +145,10 @@ export const TradeTable = () => {
       </Table>
       <div
         className={cn(
-          'text-center mt-1 cursor-pointer select-none',
-          hasMoreTrades ? 'text-blue-500 hover:underline' : 'text-zinc-500'
+          'text-center mt-1 select-none',
+          hasMoreTrades
+            ? 'text-blue-500 hover:underline cursor-pointer'
+            : 'text-zinc-500'
         )}
         onClick={fetchNextTrades}
       >

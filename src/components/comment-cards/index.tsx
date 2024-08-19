@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 
 import type { UserListRes, UserListType } from '@/api/user/types'
 import type { TokenCommentListRes } from '@/api/token/types'
-
 import { CommentCard } from './components/card'
 import { CommentForm } from './components/form'
 import { Dialog } from '@/components/ui/dialog'
