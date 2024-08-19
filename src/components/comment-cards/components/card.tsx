@@ -18,7 +18,7 @@ import { UserListRes, UserListType } from '@/api/user/types'
 import { Img } from '@/components/img'
 
 interface Props extends ComponentProps<'div'> {
-  c: UserListRes[UserListType.Replies]
+  c: UserListRes[UserListType.Comments]
   readonly?: boolean
   isActive?: boolean
   isLiking?: boolean

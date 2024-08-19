@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 
 import { userApi } from '@/api/user'
 import { UserListRes, UserListType } from '@/api/user/types'
+import { tokenApi } from '@/api/token'
 
 type ListMap = {
   [K in UserListType]: {
@@ -20,8 +21,8 @@ export const useUserList = (type: UserListType) => {
   const [listMap, setListMap] = useState<ListMap>({
     [UserListType.CoinsHeld]: { total: 0, list: [] },
     [UserListType.CoinsCreated]: { total: 0, list: [] },
-    [UserListType.Replies]: { total: 0, list: [] },
-    [UserListType.Notifications]: { total: 0, list: [] },
+    [UserListType.Comments]: { total: 0, list: [] },
+    [UserListType.Mentions]: { total: 0, list: [] },
     [UserListType.Followers]: { total: 0, list: [] },
     [UserListType.Following]: { total: 0, list: [] },
   })
@@ -66,17 +67,50 @@ export const useUserList = (type: UserListType) => {
     }))
   }, [data])
 
+  const [isHeld, isCreated, isComments, isMentions] = useMemo(
+    () => [
+      type === UserListType.CoinsHeld,
+      type === UserListType.CoinsCreated,
+      type === UserListType.Comments,
+      type === UserListType.Mentions,
+    ],
+    [type]
+  )
+
+  const {
+    data: { myTokenTotal = 0, myTokens = [] } = {},
+    isLoading: isLoadingMyTokens,
+    isPending: isFetchingMyTokens,
+    fetchNextPage: fetchNextMyTokens,
+  } = useInfiniteQuery({
+    enabled: isCreated,
+    queryKey: [tokenApi.getListByUser.name],
+    queryFn: ({ pageParam }) => tokenApi.getListByUser({ page: pageParam }),
+    initialPageParam: 1,
+    getNextPageParam: (_, __, page) => page + 1,
+    select: ({ pages }) => ({
+      myTokenTotal: pages[0].data.count,
+      myTokens: pages.flatMap((p) => p.data.results || []).filter(Boolean),
+    }),
+  })
+
   return {
     listMap,
     tokenHeld: listMap[UserListType.CoinsHeld],
     tokenCreated: listMap[UserListType.CoinsCreated],
-    comments: listMap[UserListType.Replies],
-    mentions: listMap[UserListType.Notifications],
+    comments: listMap[UserListType.Comments],
+    mentions: listMap[UserListType.Mentions],
     followers: listMap[UserListType.Followers],
     following: listMap[UserListType.Following],
     isLoading,
     isFetching,
     fetchNextPage,
     refetch,
+
+    myTokenTotal,
+    myTokens,
+    isLoadingMyTokens,
+    isFetchingMyTokens,
+    fetchNextMyTokens,
   }
 }

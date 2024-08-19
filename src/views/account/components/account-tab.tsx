@@ -19,11 +19,11 @@ export const AccountTab = () => {
   const myAccountTabs = [
     {
       label: t('comments'),
-      value: UserListType.Replies,
+      value: UserListType.Comments,
     },
     {
       label: t('mentions'),
-      value: UserListType.Notifications,
+      value: UserListType.Mentions,
     },
   ]
   const tabs = [
@@ -46,6 +46,12 @@ export const AccountTab = () => {
     isLoading,
     isFetching,
     fetchNextPage,
+
+    myTokens,
+    myTokenTotal,
+    isLoadingMyTokens,
+    isFetchingMyTokens,
+    fetchNextMyTokens,
   } = useUserList(Number(tab))
 
   return (
@@ -86,18 +92,18 @@ export const AccountTab = () => {
       <TabsContent value={UserListType.CoinsCreated.toString()}>
         <TokenCards
           className="md:grid-cols-2 xl:grid-cols-3"
-          cards={tokenCreated.list}
-          total={tokenCreated.total}
-          isLoading={isLoading}
-          isPending={isFetching}
-          onFetchNext={fetchNextPage}
+          cards={myTokens}
+          total={myTokenTotal}
+          isLoading={isLoadingMyTokens}
+          isPending={isFetchingMyTokens}
+          onFetchNext={fetchNextMyTokens}
         />
       </TabsContent>
 
       {/* Only self can see. */}
       {!isOtherUser && (
         <>
-          <TabsContent value={UserListType.Replies.toString()}>
+          <TabsContent value={UserListType.Comments.toString()}>
             <CommentCards
               readonly
               cards={comments.list}
@@ -107,7 +113,7 @@ export const AccountTab = () => {
               onFetchNext={fetchNextPage}
             />
           </TabsContent>
-          <TabsContent value={UserListType.Notifications.toString()}>
+          <TabsContent value={UserListType.Mentions.toString()}>
             <MentionCards
               cards={mentions.list}
               total={mentions.total}

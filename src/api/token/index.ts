@@ -35,6 +35,11 @@ export const tokenApi = {
       '/api/v2/coin/list' + qs.stringify(req)
     )
   },
+  getListByUser: (req: PaginationReq & { token?: string }) => {
+    return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
+      '/api/v2/coin/list-by-user' + qs.stringify(req)
+    )
+  },
   getIdoList: (req?: PaginationReq) => {
     return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
       '/api/v2/coin/ido-list' + qs.stringify(req)

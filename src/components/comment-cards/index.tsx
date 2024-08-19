@@ -14,7 +14,7 @@ import { useTokenInfo } from '@/views/token/hooks/use-token-info'
 import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 
 interface Props extends ComponentProps<'div'> {
-  cards: UserListRes[UserListType.Replies][]
+  cards: UserListRes[UserListType.Comments][]
   total: number
   isLoading: boolean
   isPending?: boolean

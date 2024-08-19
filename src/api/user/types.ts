@@ -74,8 +74,8 @@ export interface UserMyInfoNotify {
 
 export enum UserListType {
   CoinsCreated = 1,
-  Replies,
-  Notifications,
+  Comments,
+  Mentions,
   Followers,
   Following,
   CoinsHeld,
@@ -88,8 +88,8 @@ export interface UserListReq extends PaginationReq {
 export interface UserListRes {
   [UserListType.CoinsHeld]: UserCoinsHeld
   [UserListType.CoinsCreated]: UserCoinsCreated
-  [UserListType.Replies]: UserReplies
-  [UserListType.Notifications]: UserNotification
+  [UserListType.Comments]: UserReplies
+  [UserListType.Mentions]: UserNotification
   [UserListType.Followers]: UserFollow
   [UserListType.Following]: UserFollow
 }
