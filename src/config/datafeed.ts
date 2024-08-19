@@ -3,10 +3,11 @@ import {
   LibrarySymbolInfo,
   ResolutionString,
 } from '../../public/js/charting_library/charting_library'
-import { DatafeedBaseData } from '@/components/chart/hooks/use-datafeed-websocket/types'
+import { DatafeedCandles } from '@/components/chart/hooks/use-datafeed/types'
 
 export const datafeedConfig: DatafeedConfiguration = {
   supported_resolutions: [
+    '1s',
     '1',
     '5',
     '15',
@@ -14,6 +15,8 @@ export const datafeedConfig: DatafeedConfiguration = {
     '1h',
     '4h',
     '1d',
+    '1w',
+    '1m',
   ] as ResolutionString[],
   supports_marks: true,
   supports_timescale_marks: true,
@@ -42,4 +45,4 @@ export const symbolInfoConfig: LibrarySymbolInfo = {
   currency_code: 'Memehub',
 }
 
-export const datafeedUnit: keyof DatafeedBaseData = 'master'
+export const datafeedUnit: keyof DatafeedCandles = 'master'

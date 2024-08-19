@@ -8,12 +8,13 @@ import { useTradeToastContext } from '@/contexts/trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'
 
 export const TxSuccess = () => {
-  const { isBuy, rewardAmount, reserveLabel, tokenLabel, txUrl } =
+  const { isBuy, getRewardAmount, reserveLabel, tokenLabel, txUrl } =
     useTradeToastContext()
   const { t } = useTranslation()
   const { refetchUserInfo } = useUserInfo()
 
-  const isZero = BigNumber(rewardAmount).lte(0)
+  const reward = BigNumber(getRewardAmount())
+  const isZero = reward.lte(0)
 
   return (
     <Container>
@@ -26,9 +27,7 @@ export const TxSuccess = () => {
       {!isZero && (
         <div className="flex items-center gap-1 mb-1">
           {t('acquired')}
-          <span className="text-blue-600 text-xl">
-            {BigNumber(rewardAmount).toFormat()}
-          </span>
+          <span className="text-blue-600 text-xl">{reward.toFormat()}</span>
           <div className="relative">
             <img
               src="/images/reward/diamond-star.png"

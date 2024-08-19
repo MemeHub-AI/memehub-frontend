@@ -19,7 +19,7 @@ export const Chart = memo(() => {
   const chartRef = useRef<HTMLDivElement>(null)
   const { chainName, tokenAddr } = useTokenQuery()
   const { tokenInfo, isNotFound, isIdoToken, isGraduated } = useTokenContext()
-  const { isCreating, createChart, removeChart } = useChart()
+  const { isConnected, isCreating, createChart, removeChart } = useChart()
   const { getInterval } = useStorage()
   const { chart } = useChartStore()
   const [, update] = useState(false)
@@ -31,7 +31,8 @@ export const Chart = memo(() => {
       isEmpty(tokenAddr) ||
       !tokenInfo ||
       isNotFound ||
-      isIdoToken
+      isIdoToken ||
+      !isConnected
     ) {
       return
     }
@@ -43,7 +44,7 @@ export const Chart = memo(() => {
     })
 
     return removeChart
-  }, [tokenInfo])
+  }, [tokenInfo, isConnected])
 
   if (isNotFound && !isIdoToken) {
     return (

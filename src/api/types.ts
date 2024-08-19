@@ -30,3 +30,14 @@ export interface Locale {
 export interface SearchReq {
   search?: string
 }
+
+export interface WsReceived<
+  D = unknown,
+  T extends string = string,
+  E = unknown
+> {
+  type: T
+  data: D
+  error?: string
+  extra?: E
+}

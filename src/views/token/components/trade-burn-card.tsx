@@ -12,21 +12,21 @@ import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
   const { t } = useTranslation()
   const { tokenInfo, tokenMetadata } = useTokenContext()
-  const { airdrop_index = 0 } = tokenInfo ?? {}
+  const { airdrop = [] } = tokenInfo ?? {}
   const {
     isOnlyOne,
-    totalAirdrop,
+    airdropTotal,
     kolClaimedAmount,
     communityClaimedAmount,
     refetchAirdrop,
   } = useTradeAirdropContext()
-  const remaining = BigNumber(totalAirdrop)
+  const remaining = BigNumber(airdropTotal)
     .minus(kolClaimedAmount)
     .minus(communityClaimedAmount)
     .toFormat()
 
   const { isBurned, isBurning, burn } = useBurnAirdrop(
-    airdrop_index,
+    airdrop[0]?.distribution_id || 0,
     refetchAirdrop
   )
 
