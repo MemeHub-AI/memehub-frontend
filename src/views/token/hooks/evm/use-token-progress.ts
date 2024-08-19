@@ -25,7 +25,7 @@ export const useTokenProgress = (
   }
 
   const {
-    data: totalSupply,
+    data: totalSupply = BI_ZERO,
     isLoading: isLoadingProgress,
     isFetching: isFetchingProgress,
     refetch: refetchTotal,
@@ -45,8 +45,8 @@ export const useTokenProgress = (
   const [, , tokenReserve = BI_ZERO, , , , , , headmaster = zeroAddress] = pools
   const isGraduated = headmaster !== zeroAddress
 
-  const total = formatEther(totalSupply || BI_ZERO)
-  const current = formatEther(tokenReserve || BI_ZERO)
+  const total = formatEther(totalSupply)
+  const current = formatEther(tokenReserve)
 
   const progress = useMemo(() => {
     if (BigNumber(total).isZero()) return '0.00'

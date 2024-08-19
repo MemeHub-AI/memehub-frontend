@@ -73,8 +73,8 @@ export const useUploadImage = (options?: Options) => {
   }
 
   const clearFile = () => {
-    setFile(null)
     reset()
+    if (file) setFile(null)
     if (inputEl) inputEl.value = ''
   }
 

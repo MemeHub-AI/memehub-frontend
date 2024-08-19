@@ -45,9 +45,7 @@ export const CommentForm = (props: Props) => {
     comment: createField({}),
   })
   const inputRef = useRef<HTMLInputElement>(null)
-  const { url, file, isUploading, onChangeUpload, clearFile } = useUploadImage({
-    inputEl: inputRef.current,
-  })
+  const { url, file, isUploading, onChangeUpload, clearFile } = useUploadImage()
   // Generate unique id.
   const inputId = useMemo(nanoid, [])
   const textareaId = useMemo(nanoid, [])
@@ -119,7 +117,6 @@ export const CommentForm = (props: Props) => {
         </Label>
         <ImageUpload
           id={inputId}
-          ref={inputRef}
           disabled={disabled}
           onChange={onChangeUpload}
           className="hidden ml-2"

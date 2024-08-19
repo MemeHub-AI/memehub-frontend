@@ -23,7 +23,6 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
     comments,
     total,
     isLoading,
-    isFetching,
     fetchNextPage,
     addComment,
     updateComment,
@@ -48,7 +47,7 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
           cards={comments}
           total={total}
           isLoading={isLoading}
-          isPending={isFetching}
+          isPending={isLoading}
           onFetchNext={fetchNextPage}
           onCommentSuccess={addComment}
           onLikeSuccess={updateComment}

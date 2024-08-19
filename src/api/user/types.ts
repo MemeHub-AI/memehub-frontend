@@ -138,7 +138,7 @@ export interface UserReplies {
   content: string
   user: User
   coin: number
-  img: string
+  images: string[]
   related_comments: number[]
   created_at: string
   likes_count: number
