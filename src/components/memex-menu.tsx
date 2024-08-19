@@ -47,7 +47,7 @@ export const MemexMenu = () => {
 
   return (
     <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-42">
-      <div
+      {/* <div
         className="flex space-x-2 items-center cursor-pointer pl-2 max-xl:justify-end"
         onClick={() => push({ pathname: Routes.Main })}
       >
@@ -57,9 +57,9 @@ export const MemexMenu = () => {
           alt="MemeHub"
           className="w-20 h-8 max-xl:hidden"
         />
-      </div>
+      </div> */}
 
-      {navs.map((nav) => (
+      {/* {navs.map((nav) => (
         <div
           key={nav.path}
           className={cn(
@@ -71,7 +71,7 @@ export const MemexMenu = () => {
           <span>{nav.icon}</span>
           <span className="max-xl:hidden">{nav.title}</span>
         </div>
-      ))}
+      ))} */}
       <div className="fixed bottom-2"></div>
     </div>
   )

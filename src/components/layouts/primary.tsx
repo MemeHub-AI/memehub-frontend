@@ -34,7 +34,7 @@ export const PrimaryLayout = (props: Props) => {
         'min-h-main max-sm:pt-0',
         padding && 'px-6 flex max-sm:px-3 gap-6',
         mainClass,
-        isMemex && 'justify-center flex-row-reverse space-x-4'
+        isMemex && 'justify-center space-x-4'
       )}
     >
       <OpportunityMoonshot
