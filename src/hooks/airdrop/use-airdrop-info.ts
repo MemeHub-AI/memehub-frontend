@@ -56,8 +56,8 @@ export const useAirdropInfo = (
     kolClaimedCount = 0,
     communityClaimedCount = 0,
     startTime = BI_ZERO,
-    kolFlag, // AirdropType
-    communityFlag, // AirdropType
+    kolFlag = AirdropFlag.None,
+    communityFlag = AirdropFlag.None,
     kolAmount = BI_ZERO,
     communityAmount = BI_ZERO,
   ] = airdropInfo
