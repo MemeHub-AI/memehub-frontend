@@ -1,3 +1,4 @@
+import { useReadContract } from 'wagmi'
 import { useQuery } from '@tanstack/react-query'
 import { formatEther, zeroAddress } from 'viem'
 
@@ -5,7 +6,6 @@ import { tokenApi } from '@/api/token'
 import { useTokenQuery } from './use-token-query'
 import { ApiCode, ApiResponse } from '@/api/types'
 import { useTokenDetails } from '@/hooks/use-token-details'
-import { useReadContract } from 'wagmi'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { BI_ZERO } from '@/constants/number'
 import { TokenVersion } from '@/contract/abi/token'
@@ -57,6 +57,7 @@ export const useTokenInfo = () => {
     },
   })
   const [
+    ,
     ,
     tokenLeft = BI_ZERO,
     ,
