@@ -7,14 +7,17 @@ export const useClipboard = (delay = 1000) => {
   const [isCopied, setIsCopied] = useState(false)
   const timerRef = useRef<NodeJS.Timeout>()
 
-  const copy = (text: string) => {
+  const copy = (
+    text: string,
+    { successTip = t('copy-success'), errorTip = t('copy-failed') } = {}
+  ) => {
     const isCopySuccess = copyToClipboard(text)
 
     if (isCopySuccess) {
       setIsCopied(true)
-      toast.success(t('copy-success'))
+      toast.success(successTip)
     } else {
-      toast.error(t('copy-failed'))
+      toast.error(errorTip)
     }
   }
 

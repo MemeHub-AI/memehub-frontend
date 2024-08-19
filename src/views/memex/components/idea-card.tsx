@@ -112,7 +112,11 @@ export const MemexIdeaCard = ({
 
   return (
     <div
-      className={cn('flex px-3 py-3 border-b-2 relative', className)}
+      className={cn(
+        'flex px-3 py-3 border-b-2 relative',
+        isList && 'cursor-pointer',
+        className
+      )}
       onClick={() => {
         if (!idea?.hash) return
         router.push(fmt.toHref(Routes.MemexIdea, idea?.hash))
@@ -121,7 +125,7 @@ export const MemexIdeaCard = ({
       {isSuccess && (
         <Badge
           className={cn(
-            'absolute top-4 right-2 px-0.5 bg-purple-600',
+            'absolute top-4 right-2 px-0.5 bg-purple-600 hover:bg-purple-600',
             isDetails && 'top-0 right-3'
           )}
         >

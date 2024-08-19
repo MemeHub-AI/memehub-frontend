@@ -693,5 +693,6 @@
   "Coin": "Coin",
   "profile": "Profile",
   "Notification": "Notification",
-  "Post.idea": "Post Idea"
+  "Post.idea": "Post Idea",
+  "link-copy-success": "Copy share link successful!"
 }

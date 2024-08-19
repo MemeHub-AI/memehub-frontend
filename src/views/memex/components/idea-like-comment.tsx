@@ -3,6 +3,7 @@ import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { PiShareFat } from 'react-icons/pi'
 
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
@@ -16,6 +17,7 @@ import { useIdeaInfo } from '../hooks/use-idea-info'
 import { getIdeaStatus } from '@/utils/memex/idea'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { memexIdeaLikeFeeUsdt } from '@/config/memex/idea'
+import { useClipboard } from '@/hooks/use-clipboard'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -44,6 +46,7 @@ export const IdeaLikeComment = ({
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
   )
+  const { copy } = useClipboard()
 
   const {
     isLiked,
@@ -186,6 +189,15 @@ export const IdeaLikeComment = ({
             <GoComment className="w-5 h-5" />
             <span>{idea?.comment_count ?? 0}</span>
           </div>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              copy(location.href, { successTip: t('link-copy-success') })
+            }}
+          >
+            <PiShareFat size={20} />
+          </button>
         </div>
 
         <div className="flex items-center space-x-1 text-sm">
