@@ -7,12 +7,15 @@ import { useResponsive } from '@/hooks/use-responsive'
 import { HeaderMobile } from './mobile'
 import { HeaderDesktop } from './desktop'
 import { Routes } from '@/routes'
+import { useIsMemex } from '@/hooks/use-is-memex'
 
 export interface Nav {
   title: string
   path: string
   // only show on mobile
   mobileOnly?: boolean
+  // only show on memex
+  memexOnly?: boolean
 }
 
 export const Header = () => {
@@ -28,6 +31,7 @@ export const Header = () => {
     { title: t('airdrop'), path: Routes.Airdrop },
     { title: t('alliance'), path: Routes.Alliance },
     { title: 'Memex', path: Routes.Memex },
+
     // { title: t('KOL'), path: Routes.KOL },
     // { title: t('community'), path: Routes.Community },
   ]

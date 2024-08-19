@@ -678,5 +678,10 @@
   "update": "更新",
   "already-liked": "已经点过赞了",
   "alread-ended": "已经结束",
-  "airdrop.no.icon": "空投"
+  "airdrop.no.icon": "空投",
+  "Idea": "想法",
+  "Coin": "代币",
+  "profile": "个人资料",
+  "Notification": "消息",
+  "Post.idea": "发布Idea"
 }

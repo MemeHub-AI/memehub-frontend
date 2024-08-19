@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import { AccountDropdown } from '../account-dropdown'
 import { Button } from '../ui/button'
 import { Routes } from '@/routes'
+import { useIsMemex } from '@/hooks/use-is-memex'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -20,6 +21,23 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
   const { pathname, ...router } = useRouter()
   const { t } = useTranslation()
+  const { isMemex } = useIsMemex()
+
+  if (isMemex) {
+    return (
+      <>
+        <div className="flex items-center gap-3 mr-3 select-none">
+          <Logo showMeme className="shrink-0" />
+        </div>
+        <div className="flex items-center gap-3">
+          <RewardButton />
+          <ConnectWallet>
+            <AccountDropdown />
+          </ConnectWallet>
+        </div>
+      </>
+    )
+  }
 
   return (
     <>

@@ -688,5 +688,10 @@
   "update": "Update",
   "already-liked": "Already liked",
   "alread-ended": "Already over",
-  "airdrop.no.icon": "Airdrop"
+  "airdrop.no.icon": "Airdrop",
+  "Idea": "Idea",
+  "Coin": "Coin",
+  "profile": "Profile",
+  "Notification": "Notification",
+  "Post.idea": "Post Idea"
 }

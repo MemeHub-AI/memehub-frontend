@@ -8,11 +8,13 @@ import { Routes } from '@/routes'
 import { IdeaFloatButton } from './idea-float-button'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { useUserStore } from '@/stores/use-user-store'
+import { useResponsive } from '@/hooks/use-responsive'
 
 export const MemexLayout = ({ children }: { children?: ReactNode }) => {
   const { t } = useTranslation()
   const { pathname, ...router } = useRouter()
   const { userInfo } = useUserStore()
+  const { isPad } = useResponsive()
 
   const userTabs = [
     {
@@ -50,14 +52,13 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
     <PrimaryLayout mainClass="flex" padding={false}>
       <Tabs
         onValueChange={(v) => router.push(v)}
-        className="flex-1 md:max-w-38"
+        className="flex-1 md:max-w-4xl"
       >
         <TabsList
           className={cn(
             'border-t-0 border-l-0 border-r-0 md:border-[1px] !border-b border-zinc-200',
             'justify-start rounded-none h-10 max-sm:w-full',
-            'md:flex md:justify-between md:h-14 md:px-4',
-            'md:text-md'
+            'md:flex md:justify-between md:h-14 md:px-4'
           )}
         >
           {tabs.map(({ id, route, title }) => (
@@ -66,7 +67,8 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
               value={route}
               className={cn(
                 '!text-black font-normal px-0 first:ml-3 mx-2 duration-0 !bg-transparent',
-                pathname === route && 'border-b-2 border-purple-600 font-bold'
+                pathname === route && 'border-b-2 border-purple-600 font-bold',
+                'md:text-lg'
               )}
             >
               {title}
@@ -74,12 +76,12 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
           ))}
         </TabsList>
 
-        <div className="h-[calc(100vh-64px-1.5rem)] md:h-[calc(100vh-3.5rem)] overflow-auto max-sm:max-w-sm md:border-x-[1px]">
+        <div className="h-[calc(100vh-64px-1.5rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm md:border-x-[1px]">
           {children}
         </div>
       </Tabs>
 
-      <IdeaFloatButton />
+      {isPad && <IdeaFloatButton />}
     </PrimaryLayout>
   )
 }
