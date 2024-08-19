@@ -1,9 +1,10 @@
 import { TokenType } from '@/enums/token'
 import type { UserInfoRes } from '../user/types'
-import { TokenVersion } from '@/contract/abi/token'
-import { DistributorVersion } from '@/contract/abi/distributor'
-import { AirdropDetail } from '../airdrop/types'
-import { MemexFactoryVersion } from '@/contract/abi/memex'
+import type { TokenVersion } from '@/contract/abi/token'
+import type { DistributorVersion } from '@/contract/abi/distributor'
+import type { AirdropDetail } from '../airdrop/types'
+import type { MemexFactoryVersion } from '@/contract/abi/memex'
+import type { RecommendVersion } from '@/contract/abi/recommend'
 
 export interface TokenListItem {
   airdrop: AirdropDetail[]
@@ -190,6 +191,7 @@ export interface TokenConfigRes {
 export interface TokenConfigContracts {
   coin: TokenConfigContract<TokenVersion>[]
   airdrop: TokenConfigContract<DistributorVersion>[]
+  recommend: TokenConfigContract<RecommendVersion>[]
   memex: TokenConfigContract<MemexFactoryVersion>[]
 }
 

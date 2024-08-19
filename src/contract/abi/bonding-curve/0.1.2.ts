@@ -1,4 +1,4 @@
-export const bcAbiV0_1_2 = [
+export const bcAbi0_1_2 = [
   {
     inputs: [],
     stateMutability: 'nonpayable',

@@ -1,4 +1,4 @@
-export const bcAbi0_1_0 = [
+export const bcAbi0_1_7 = [
   {
     inputs: [],
     stateMutability: 'nonpayable',
@@ -17,6 +17,11 @@ export const bcAbi0_1_0 = [
   {
     inputs: [],
     name: 'MEMEHUB_InvalidSell',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_InvalidToken',
     type: 'error',
   },
   {
@@ -70,10 +75,16 @@ export const bcAbi0_1_0 = [
         type: 'address',
       },
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'reserveETH',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'reserveToken',
+        type: 'uint256',
       },
       {
         indexed: false,
@@ -85,6 +96,12 @@ export const bcAbi0_1_0 = [
         indexed: false,
         internalType: 'uint256',
         name: 'amountOut',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'time',
         type: 'uint256',
       },
     ],
@@ -107,10 +124,16 @@ export const bcAbi0_1_0 = [
         type: 'address',
       },
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'reserveETH',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'reserveToken',
+        type: 'uint256',
       },
       {
         indexed: false,
@@ -129,6 +152,12 @@ export const bcAbi0_1_0 = [
         internalType: 'address',
         name: 'referrer',
         type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'time',
+        type: 'uint256',
       },
     ],
     name: 'MemeHubContinuousMint',
@@ -169,22 +198,40 @@ export const bcAbi0_1_0 = [
         type: 'address',
       },
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'creator',
-        type: 'address',
+        indexed: false,
+        internalType: 'uint256',
+        name: 'airdropAmount',
+        type: 'uint256',
       },
       {
         indexed: false,
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
+        internalType: 'uint256',
+        name: 'maxSupply',
+        type: 'uint256',
       },
       {
         indexed: false,
-        internalType: 'string',
-        name: 'symbol',
-        type: 'string',
+        internalType: 'uint256',
+        name: 'totalSupply',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'initPrice',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'kol',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'community',
+        type: 'uint256',
       },
     ],
     name: 'MemeHubDeployToken',
@@ -217,9 +264,28 @@ export const bcAbi0_1_0 = [
         name: 'amountETH',
         type: 'uint256',
       },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'time',
+        type: 'uint256',
+      },
     ],
     name: 'MemeHubTokenGraduated',
     type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'DEAD',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
   },
   {
     inputs: [],
@@ -609,6 +675,11 @@ export const bcAbi0_1_0 = [
       {
         components: [
           {
+            internalType: 'uint256',
+            name: 'k',
+            type: 'uint256',
+          },
+          {
             internalType: 'address',
             name: 'token',
             type: 'address',
@@ -736,6 +807,19 @@ export const bcAbi0_1_0 = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'memeXFactory_',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -802,6 +886,11 @@ export const bcAbi0_1_0 = [
     ],
     name: 'pools_',
     outputs: [
+      {
+        internalType: 'uint256',
+        name: 'k',
+        type: 'uint256',
+      },
       {
         internalType: 'address',
         name: 'token',
@@ -880,6 +969,29 @@ export const bcAbi0_1_0 = [
   },
   {
     inputs: [
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: 'rescueETHMemeHub',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
       {
         internalType: 'uint256',
         name: 'addPoolETHAmount',
@@ -1009,6 +1121,19 @@ export const bcAbi0_1_0 = [
       },
     ],
     name: 'setMaxSupply',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_memeXFactory',
+        type: 'address',
+      },
+    ],
+    name: 'setMemeXFactory',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

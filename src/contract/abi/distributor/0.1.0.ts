@@ -1,4 +1,4 @@
-export const distributorAbiV0_1_0 = [
+export const distributorAbi0_1_0 = [
   {
     inputs: [
       {
