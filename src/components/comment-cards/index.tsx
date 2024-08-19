@@ -1,5 +1,4 @@
 import React, { type ComponentProps, useState, useEffect } from 'react'
-import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 import type { UserListRes, UserListType } from '@/api/user/types'
@@ -12,6 +11,7 @@ import { Skeleton } from '../ui/skeleton'
 import { useComment } from './hooks/use-comment'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { useTokenInfo } from '@/views/token/hooks/use-token-info'
+import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 
 interface Props extends ComponentProps<'div'> {
   cards: UserListRes[UserListType.Replies][]
@@ -38,7 +38,7 @@ export const CommentCards = (props: Props) => {
     onUnlikeSuccess,
   } = props
   const { t } = useTranslation()
-  const [replyId, setReplyId] = useState('')
+  const [replyId, setReplyId] = useState<number | null>(null)
   const [lastAnchor, setLastAnchor] = useState(-1)
   const {
     isCommenting,
@@ -57,13 +57,16 @@ export const CommentCards = (props: Props) => {
     hasMore: cards.length < total,
   })
   const { isNotFound } = useTokenInfo()
+  const { chainName, tokenAddr } = useTokenQuery()
 
   const onComment = (content: string, mentions: string[], img?: string) => {
-    const related_comments = [...mentions]
-
-    // Reply another comment.
-    if (replyId) related_comments.push(replyId)
-    addComment({ content, related_comments, img }).then(() => setReplyId('')) // Close when success.
+    addComment({
+      chain: chainName,
+      address: tokenAddr,
+      content,
+      related_comment: replyId,
+      images: img ? [img] : [],
+    }).then(() => setReplyId(null)) // Close when success.
   }
 
   useEffect(() => {
@@ -76,9 +79,9 @@ export const CommentCards = (props: Props) => {
     <>
       {/* Reply dialog. */}
       <Dialog
-        open={!isEmpty(replyId)}
+        open={replyId !== null}
         // Close the dialog if `false`.
-        onOpenChange={(value) => !value && setReplyId('')}
+        onOpenChange={(value) => !value && setReplyId(null)}
       >
         <CommentForm isCommenting={isCommenting} onComment={onComment} />
       </Dialog>
@@ -105,7 +108,7 @@ export const CommentCards = (props: Props) => {
                   isUnliking={isUnliking}
                   onLike={likeComment}
                   onUnlike={unlikeComment}
-                  onReply={(id) => setReplyId(id)}
+                  onReply={(id) => setReplyId(+id)}
                   onAnchorClick={setLastAnchor}
                 />
                 {i !== cards.length - 1 && (

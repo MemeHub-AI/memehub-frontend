@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { nanoid } from 'nanoid'
-import { isAddress } from 'viem'
 
 import { tokenApi } from '@/api/token'
 import { TokenCommentListRes } from '@/api/token/types'
@@ -17,20 +16,19 @@ export const useComments = (enableFetchComments = true) => {
   const {
     data: commentData,
     isLoading,
-    isFetching,
     refetch: refetchComments,
     fetchNextPage,
   } = useInfiniteQuery({
-    enabled: enableFetchComments,
+    enabled: enableFetchComments && !!chainName && !!tokenAddr,
     queryKey: [tokenApi.getComments.name + uniqueId, chainName, tokenAddr],
     refetchOnWindowFocus: false,
     initialPageParam: 1,
     queryFn: ({ pageParam }) => {
-      return Promise.reject()
-
       // Claer when query.
       setComments([])
-      return tokenApi.getComments(chainName, tokenAddr, {
+      return tokenApi.getComments({
+        chain: chainName,
+        address: tokenAddr,
         page: pageParam,
         page_size: 25,
       })
@@ -69,7 +67,6 @@ export const useComments = (enableFetchComments = true) => {
     total: commentData?.pages[0].data?.count || 0,
     comments,
     isLoading,
-    isFetching,
     refetchComments,
     fetchNextPage,
     addComment,

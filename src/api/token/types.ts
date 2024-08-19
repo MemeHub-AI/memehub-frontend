@@ -139,22 +139,28 @@ export enum TokenUpdateStatus {
 
 export interface TokenCommentListRes {
   id: number
-  content: string
-  user: UserInfoRes
-  coin: number
-  img: string
-  related_comments: number[]
-  created_at: string
+  replies_count: number
   likes_count: number
-  is_liked: boolean
+  liked: boolean
+  comment_type: string
+  created_at: string
+  updated_at: string
+  content: string
+  images: string[]
+  videos: string | null
+  user: number
+  coin: string
+  related_head: string | null
+  related_comment: string | null
 }
 
 export interface TokenAddCommentReq {
-  coin: string
-  content: string
-  img?: string
-  related_comments: string[]
+  id?: string
   chain: string
+  address: string
+  content: string
+  images: string[]
+  related_comment: number | null
 }
 
 export interface CreateTokenResult {
@@ -213,4 +219,19 @@ export interface TokenConfigContract<
   category: number
   address: T
   version: V
+}
+
+export interface TokenCommentsReq {
+  id?: string
+  chain?: string
+  address?: string
+  comment_id?: number
+}
+
+export interface TokenLikereq {
+  id?: string
+  chain: string
+  address: string
+  comment_id: number
+  like: boolean
 }

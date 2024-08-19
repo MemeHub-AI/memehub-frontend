@@ -145,7 +145,7 @@ export const CommentCard = (props: Props) => {
         <div className="">{c.content}</div>
 
         {/* Comment iamge */}
-        {!isEmpty(c.img) && (
+        {!isEmpty(c.images) && (
           <>
             <Dialog
               open={open}
@@ -156,7 +156,7 @@ export const CommentCard = (props: Props) => {
               }}
             >
               <Img
-                src={c.img}
+                src={c.images?.[0]}
                 alt="image"
                 className="w-full"
                 onClick={() => setOpen(true)}
@@ -164,7 +164,7 @@ export const CommentCard = (props: Props) => {
             </Dialog>
 
             <Img
-              src={c.img}
+              src={c.images?.[0]}
               alt="img"
               className="rounded mt-1 max-w-64 max-h-96 cursor-pointer"
               onClick={() => setOpen(true)}

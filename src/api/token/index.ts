@@ -11,6 +11,8 @@ import type {
   TokenConfigRes,
   TokenCreateRes,
   TokenDetailReq,
+  TokenCommentsReq,
+  TokenLikereq,
 } from './types'
 import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 
@@ -43,25 +45,20 @@ export const tokenApi = {
       '/api/v2/coin/detail' + qs.stringify(req)
     )
   },
-  getComments: (chain: string, addr: string, req: PaginationReq) => {
+  getComments: (req: TokenCommentsReq & PaginationReq) => {
     return api.GET<ApiResponse<PaginationRes<TokenCommentListRes>>>(
-      `/api/v1/coin/comments/${chain}/${addr}/` + qs.stringify(req)
+      `/api/v2/coin/comments` + qs.stringify(req)
     )
   },
   addComment: (req: TokenAddCommentReq) => {
     return api.POST<ApiResponse<TokenCommentListRes>>(
-      '/api/v1/coin/comments/',
+      '/api/v2/coin/comment/create',
       { body: req }
     )
   },
-  addLike: (addr: string) => {
+  like: (req: TokenLikereq) => {
     return api.POST<ApiResponse<TokenCommentListRes>>(
-      `/api/v1/coin/like/${addr}/`
-    )
-  },
-  removeLike: (addr: string) => {
-    return api.DELETE<ApiResponse<TokenCommentListRes>>(
-      `/api/v1/coin/like/${addr}/`
+      '/api/v2/coin/comment/like' + qs.stringify(req)
     )
   },
   searchTokens: (keyword: string) => {

@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-import type { TokenAddCommentReq, TokenCommentListRes } from '@/api/token/types'
-
+import type { TokenCommentListRes } from '@/api/token/types'
 import { tokenApi } from '@/api/token'
 import { useTokenQuery } from '@/views/token/hooks/use-token-query'
+import { useTypedFn } from '@/hooks/use-typed-fn'
 
 interface Options {
   onCommentSuccess?: (data: TokenCommentListRes) => void
@@ -21,9 +21,7 @@ export const useComment = (options?: Options) => {
   // Add a new comment.
   const { isPending: isCommenting, mutateAsync: addComment } = useMutation({
     mutationKey: [tokenApi.addComment.name],
-    mutationFn: (req: Omit<TokenAddCommentReq, 'coin' | 'chain'>) => {
-      return tokenApi.addComment({ chain: chainName, coin: tokenAddr, ...req })
-    },
+    mutationFn: tokenApi.addComment,
     onMutate: () => toast.loading(t('comment.loading')),
     onError: () => toast.error(t('comment.failed')),
     onSuccess: ({ data }) => {
@@ -33,36 +31,56 @@ export const useComment = (options?: Options) => {
     onSettled: (_, __, ___, id) => toast.dismiss(id),
   })
 
+  const [toasts, setType] = useTypedFn({
+    like: {
+      loading: () => toast.loading(t('comment.like.loading')),
+      error: () => toast.error(t('comment.like.failed')),
+      success: () => toast.success(t('comment.like.success')),
+    },
+    unlike: {
+      loading: () => toast.loading(t('comment.unlike.loading')),
+      error: () => toast.error(t('comment.unlike.failed')),
+      success: () => toast.success(t('comment.unlike.success')),
+    },
+  })
+
   // Liked a comment.
-  const { isPending: isLiking, mutateAsync: likeComment } = useMutation({
-    mutationKey: [tokenApi.addLike.name],
-    mutationFn: tokenApi.addLike,
-    onMutate: () => toast.loading(t('comment.like.loading')),
-    onError: () => toast.error(t('comment.like.failed')),
+  const { isPending: isLiking, mutateAsync } = useMutation({
+    mutationKey: [tokenApi.like.name],
+    mutationFn: tokenApi.like,
+    onMutate: toasts.loading,
+    onError: toasts.error,
     onSuccess: ({ data }) => {
-      toast.success(t('comment.like.success'))
+      toasts.success()
       onLikeSuccess?.(data)
     },
     onSettled: (_, __, ___, id) => toast.dismiss(id),
   })
 
-  // Unliked a comment.
-  const { isPending: isUnliking, mutateAsync: unlikeComment } = useMutation({
-    mutationKey: [tokenApi.removeLike.name],
-    mutationFn: tokenApi.removeLike,
-    onMutate: () => toast.loading(t('comment.unlike.loading')),
-    onError: () => toast.error(t('comment.unlike.failed')),
-    onSuccess: ({ data }) => {
-      toast.success(t('comment.unlike.success'))
-      onUnlikeSuccess?.(data)
-    },
-    onSettled: (_, __, ___, id) => toast.dismiss(id),
-  })
+  const likeComment = (id: string) => {
+    setType('like')
+    mutateAsync({
+      chain: chainName,
+      address: tokenAddr,
+      comment_id: +id,
+      like: true,
+    })
+  }
+
+  const unlikeComment = (id: string) => {
+    setType('unlike')
+    mutateAsync({
+      chain: chainName,
+      address: tokenAddr,
+      comment_id: +id,
+      like: false,
+    })
+  }
 
   return {
     isCommenting,
     isLiking,
-    isUnliking,
+    isUnliking: isLiking,
     addComment,
     likeComment,
     unlikeComment,

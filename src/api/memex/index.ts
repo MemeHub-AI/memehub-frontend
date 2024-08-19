@@ -23,9 +23,7 @@ export const memexApi = {
     )
   },
   getIdeaDetail: (hash: string) => {
-    return api.GET<ApiResponse<MemexIdeaItem>>(
-      `/api/v1/memex/tweet/list/${hash}`
-    )
+    return api.GET<ApiResponse<MemexIdeaItem>>(`/api/v1/memex/tweet/${hash}`)
   },
   createIdea: (req: MemexCreateReq) => {
     return api.POST<ApiResponse<MemexIdeaHash & MemexIdeaCoinId>>(
