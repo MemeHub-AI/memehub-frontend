@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
 import type { UserCoinsHeld } from '@/api/user/types'
-
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
 import { CustomSuspense } from '@/components/custom-suspense'
@@ -62,19 +61,19 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
       padding="md"
       hover="bg"
       onClick={() => {
-        const href = fmt.toHref(Routes.Main, c.chain.name, c.coin.address)
+        const href = fmt.toHref(Routes.Main, c.chain, c.contract_address)
         router.push(href)
       }}
       className="max-sm:mb-2"
     >
       <div className="flex items-center">
-        <Avatar src={c.coin.image} fallback={c.coin.ticker.charAt(0)} />
+        <Avatar src={c.image_url} fallback={c.symbol[0]} />
         <div className="flex flex-col justify-between ml-2">
           <p className="font-bold break-all line-clamp-1">
-            {c.coin.name}({c.coin.ticker})
+            {c.name}({c.symbol})
           </p>
           <p className="text-zinc-500 text-sm">
-            {fmt.decimals(c.amount)} {c.coin.ticker}
+            {fmt.decimals(c.hold_amount)} {c.symbol}
           </p>
         </div>
       </div>

@@ -22,7 +22,7 @@ export const useUserList = (type: UserListType) => {
     [UserListType.CoinsHeld]: { total: 0, list: [] },
     [UserListType.CoinsCreated]: { total: 0, list: [] },
     [UserListType.Comments]: { total: 0, list: [] },
-    [UserListType.Mentions]: { total: 0, list: [] },
+    [UserListType.Notifications]: { total: 0, list: [] },
     [UserListType.Followers]: { total: 0, list: [] },
     [UserListType.Following]: { total: 0, list: [] },
   })
@@ -34,7 +34,7 @@ export const useUserList = (type: UserListType) => {
       type === UserListType.CoinsHeld,
       type === UserListType.CoinsCreated,
       type === UserListType.Comments,
-      type === UserListType.Mentions,
+      type === UserListType.Notifications,
     ],
     [type]
   )
@@ -100,7 +100,7 @@ export const useUserList = (type: UserListType) => {
     tokenHeld: listMap[UserListType.CoinsHeld],
     tokenCreated: listMap[UserListType.CoinsCreated],
     comments: listMap[UserListType.Comments],
-    mentions: listMap[UserListType.Mentions],
+    mentions: listMap[UserListType.Notifications],
     followers: listMap[UserListType.Followers],
     following: listMap[UserListType.Following],
     isLoading,

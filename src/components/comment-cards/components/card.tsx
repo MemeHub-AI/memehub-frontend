@@ -99,7 +99,7 @@ export const CommentCard = (props: Props) => {
             </Tooltip>
           )}
 
-          {c.is_liked ? (
+          {c.liked ? (
             <div
               className="ml-2 flex items-center cursor-pointer group"
               onClick={() => {
@@ -125,15 +125,15 @@ export const CommentCard = (props: Props) => {
         </div>
 
         {/* Mentions */}
-        {!isEmpty(c.related_comments) && (
+        {!!c.related_comment && (
           <div className="flex items-center text-xs text-zinc-400">
             {t('mentions')}:
-            {c.related_comments.map((m, i) => (
+            {[c.related_comment].map((m, i) => (
               <Link
                 href={fmt.toAnchor(m)}
                 key={i}
                 className="ml-1.5 hover:underline"
-                onClick={() => onAnchorClick?.(m)}
+                onClick={() => onAnchorClick?.(+m)}
               >
                 {fmt.toAnchor(m)}
               </Link>

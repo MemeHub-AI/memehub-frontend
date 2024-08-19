@@ -23,7 +23,7 @@ export const AccountTab = () => {
     },
     {
       label: t('mentions'),
-      value: UserListType.Mentions,
+      value: UserListType.Notifications,
     },
   ]
   const tabs = [
@@ -114,7 +114,7 @@ export const AccountTab = () => {
               onFetchNext={fetchNextPage}
             />
           </TabsContent>
-          <TabsContent value={UserListType.Mentions.toString()}>
+          <TabsContent value={UserListType.Notifications.toString()}>
             <MentionCards
               cards={mentions.list}
               total={mentions.total}

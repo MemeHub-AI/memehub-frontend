@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 
 interface Props {
-  cards: UserListRes[UserListType.Mentions][]
+  cards: UserListRes[UserListType.Notifications][]
   total: number
   isLoading: boolean
   isPending?: boolean
@@ -44,7 +44,7 @@ export const MentionCards = (props: Props) => {
   )
 }
 
-const MentionCard = ({ c }: { c: UserListRes[UserListType.Mentions] }) => {
+const MentionCard = ({ c }: { c: UserListRes[UserListType.Notifications] }) => {
   const { t } = useTranslation()
 
   return (

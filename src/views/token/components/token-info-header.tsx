@@ -76,8 +76,10 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
           <span className="font-bold">{t('market-cap')}: </span>$
           {fmt.decimals(
             BigNumber(tokenInfo?.total_supply || 0)
-              .multipliedBy(tradeRecords[0]?.price || 0)
               .multipliedBy(tradePrice?.price || 0)
+              .multipliedBy(
+                tradeRecords[0]?.price || tokenInfo?.start_price || 0
+              )
               .toFixed()
           )}
         </span>

@@ -1,6 +1,6 @@
 import type { Address } from 'viem'
 import type { PaginationReq } from '../types'
-import type { TokenListItem } from '../token/types'
+import type { TokenCommentListRes, TokenListItem } from '../token/types'
 
 export interface UserLoginReq {
   name?: string
@@ -75,7 +75,7 @@ export interface UserMyInfoNotify {
 export enum UserListType {
   CoinsCreated = 1,
   Comments,
-  Mentions,
+  Notifications,
   Followers,
   Following,
   CoinsHeld,
@@ -88,8 +88,8 @@ export interface UserListReq extends PaginationReq {
 export interface UserListRes {
   [UserListType.CoinsHeld]: UserCoinsHeld
   [UserListType.CoinsCreated]: UserCoinsCreated
-  [UserListType.Comments]: UserReplies
-  [UserListType.Mentions]: UserNotification
+  [UserListType.Comments]: TokenCommentListRes
+  [UserListType.Notifications]: UserNotification
   [UserListType.Followers]: UserFollow
   [UserListType.Following]: UserFollow
 }
@@ -168,7 +168,38 @@ export interface UserFollow {
 
 export interface UserCoinsHeld {
   id: number
-  amount: number
-  coin: UserCoinsCreated
-  chain: Chain
+  coin_version: string
+  airdrop_version: string
+  hold_amount: number
+  created_at: string
+  updated_at: string
+  chain: string
+  network: string
+  hash: string
+  name: string
+  symbol: string
+  description: string
+  image_url: string
+  poster_urls: string[]
+  twitter_url: string
+  telegram_url: string
+  website_url: string
+  creator_address: string
+  factory_address: string
+  contract_address: string
+  airdrop_address: string
+  airdrop_index: number
+  airdrop_supply: string
+  max_supply: string
+  total_supply: string
+  start_price: string
+  start_usd_price: string
+  coin_type: number
+  airdrop_type: number
+  is_active: boolean
+  is_graduated: boolean
+  graduated_at: null | string
+  graduated_pool: null | string
+  graduated_token: null | string
+  graduated_master: null | string
 }

@@ -114,10 +114,12 @@ export const CommentForm = (props: Props) => {
           variant="icon"
           className={cn(shadowVariants(), 'shadow ml-2 flex-shrink-0')}
           disabled={disabled}
+          onClick={clearFile}
         >
           <ImageIcon className="cursor-pointer" />
         </Label>
         <ImageUpload
+          ref={inputRef}
           id={inputId}
           disabled={disabled}
           onChange={onChangeUpload}

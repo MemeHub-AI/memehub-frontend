@@ -148,7 +148,13 @@ export interface TokenCommentListRes {
   content: string
   images: string[]
   videos: string | null
-  user: number
+  user: {
+    id: number
+    name: string
+    logo: string
+    description: string
+    wallet_address: string
+  }
   coin: string
   related_head: string | null
   related_comment: string | null
@@ -226,12 +232,11 @@ export interface TokenCommentsReq {
   chain?: string
   address?: string
   comment_id?: number
+  reverse_time?: boolean
+  by_hot?: boolean
 }
 
 export interface TokenLikereq {
-  id?: string
-  chain: string
-  address: string
   comment_id: number
   like: boolean
 }

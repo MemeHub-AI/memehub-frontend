@@ -4,7 +4,6 @@ import { toast } from 'sonner'
 
 import type { TokenCommentListRes } from '@/api/token/types'
 import { tokenApi } from '@/api/token'
-import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { useTypedFn } from '@/hooks/use-typed-fn'
 
 interface Options {
@@ -16,7 +15,6 @@ interface Options {
 export const useComment = (options?: Options) => {
   const { onCommentSuccess, onLikeSuccess, onUnlikeSuccess } = options ?? {}
   const { t } = useTranslation()
-  const { chainName, tokenAddr } = useTokenQuery()
 
   // Add a new comment.
   const { isPending: isCommenting, mutateAsync: addComment } = useMutation({
@@ -53,6 +51,7 @@ export const useComment = (options?: Options) => {
     onSuccess: ({ data }) => {
       toasts.success()
       onLikeSuccess?.(data)
+      onUnlikeSuccess?.(data)
     },
     onSettled: (_, __, ___, id) => toast.dismiss(id),
   })
@@ -60,8 +59,6 @@ export const useComment = (options?: Options) => {
   const likeComment = (id: string) => {
     setType('like')
     mutateAsync({
-      chain: chainName,
-      address: tokenAddr,
       comment_id: +id,
       like: true,
     })
@@ -70,8 +67,6 @@ export const useComment = (options?: Options) => {
   const unlikeComment = (id: string) => {
     setType('unlike')
     mutateAsync({
-      chain: chainName,
-      address: tokenAddr,
       comment_id: +id,
       like: false,
     })

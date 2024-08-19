@@ -55,26 +55,25 @@ export const useUploadImage = (options?: Options) => {
       return
     }
 
-    const file = first(e.target.files)!
-    if (!file.size) return
+    const firstFile = first(e.target.files)!
+    if (!firstFile.size) return
 
     const formData = new FormData()
 
-    formData.append('avatar', file)
-    setFile(file)
+    formData.append('avatar', firstFile)
+    setFile(firstFile)
 
     try {
       const { data } = await mutateAsync(formData)
       return data.image_url
     } catch (error) {
       reportException(error)
-    } finally {
-      clearFile()
     }
   }
 
   const clearFile = () => {
     reset()
+    console.log('clear', file, inputEl)
     if (file) setFile(null)
     if (inputEl) inputEl.value = ''
   }

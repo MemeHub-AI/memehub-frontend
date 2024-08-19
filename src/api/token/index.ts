@@ -63,7 +63,8 @@ export const tokenApi = {
   },
   like: (req: TokenLikereq) => {
     return api.POST<ApiResponse<TokenCommentListRes>>(
-      '/api/v2/coin/comment/like' + qs.stringify(req)
+      '/api/v2/coin/comment/like',
+      { body: req }
     )
   },
   searchTokens: (keyword: string) => {

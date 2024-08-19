@@ -20,9 +20,9 @@ interface Props extends ComponentProps<'div'> {
   isPending?: boolean
   readonly?: boolean
   onFetchNext?: () => void
-  onCommentSuccess?: (data: TokenCommentListRes) => void
-  onLikeSuccess?: (data: TokenCommentListRes) => void
-  onUnlikeSuccess?: (data: TokenCommentListRes) => void
+  onCommentSuccess?: () => void
+  onLikeSuccess?: () => void
+  onUnlikeSuccess?: () => void
 }
 
 export const CommentCards = (props: Props) => {

@@ -19,14 +19,8 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
   const { getCommentTradeTab, setCommentTradeTab } = useStorage()
   const { isNotFound } = useTokenContext()
 
-  const {
-    comments,
-    total,
-    isLoading,
-    fetchNextPage,
-    addComment,
-    updateComment,
-  } = useComments()
+  const { comments, total, isLoading, fetchNextPage, refetchComments } =
+    useComments()
 
   return (
     <Tabs
@@ -49,9 +43,9 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
           isLoading={isLoading}
           isPending={isLoading}
           onFetchNext={fetchNextPage}
-          onCommentSuccess={addComment}
-          onLikeSuccess={updateComment}
-          onUnlikeSuccess={updateComment}
+          onCommentSuccess={refetchComments}
+          onLikeSuccess={refetchComments}
+          onUnlikeSuccess={refetchComments}
         />
       </TabsContent>
       <TabsContent value={Tab.Trades} className="max-sm:mt-2">

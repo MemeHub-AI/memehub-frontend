@@ -103,7 +103,7 @@ export const useTrade = (onSuccess?: () => void) => {
       return false
     }
     // Backend check.
-    if (!(await getCanBind(referralCode))) {
+    if (await getCanBind(referralCode)) {
       setInviteOpen(true)
       return false
     }
