@@ -17,8 +17,6 @@ export const useAirdropInfo = (
   chainId: number,
   tokenVersion: TokenVersion | undefined
 ) => {
-  id = id || 0
-
   const {
     airdropAddr,
     airdropVersion,
@@ -33,11 +31,12 @@ export const useAirdropInfo = (
     address: airdropAddr,
     chainId,
   }
+  const isCorrectId = typeof id === 'number'
 
   const { data: duration = BI_ZERO } = useReadContract({
     ...distributorConfig,
     functionName: 'duration',
-    query: { enabled: !!airdropAddr && !!id },
+    query: { enabled: !!airdropAddr && isCorrectId },
   })
   const durationSeconds = Number(duration)
 
@@ -49,7 +48,7 @@ export const useAirdropInfo = (
     ...distributorConfig,
     functionName: 'distributions',
     args: [BigInt(id || 0)],
-    query: { enabled: !!airdropAddr && !!id },
+    query: { enabled: !!airdropAddr && isCorrectId },
   })
   const [
     tokenAddr,
@@ -74,7 +73,7 @@ export const useAirdropInfo = (
     address: bcAddr,
     chainId,
     functionName: 'airdropRate_',
-    query: { enabled: !!bcAddr && !!id },
+    query: { enabled: !!bcAddr && isCorrectId },
   })
   const { airdropRatio, airdropTotal } = useMemo(() => {
     const airdropRatio = BigNumber(ratio.toString()).div(100).div(100).toFixed()
