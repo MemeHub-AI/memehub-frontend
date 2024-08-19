@@ -10,10 +10,16 @@ import { utilLang } from '@/utils/lang'
 import { useMutation } from '@tanstack/react-query'
 import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
-import { memexIdeaCommentImgMax } from '@/config/memex/idea'
+import {
+  memexIdeaCommentImgMax,
+  memexIdeaCommentMax,
+} from '@/config/memex/idea'
 
 const schema = z.object({
-  comment: z.string().min(1, { message: t('comment.empty') }),
+  comment: z
+    .string()
+    .min(1, { message: t('comment.empty') })
+    .max(memexIdeaCommentMax),
   images: z.array(z.string()).max(memexIdeaCommentImgMax, {
     message: utilLang.replace(t('iamges.max'), [memexIdeaCommentImgMax]),
   }),

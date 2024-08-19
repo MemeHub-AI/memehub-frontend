@@ -10,7 +10,10 @@ import { useRouter } from 'next/router'
 import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
 import { useMemexStore } from '@/stores/use-memex'
-import { memexCreateIdeaCharMin } from '@/config/memex/idea'
+import {
+  memexCreateIdeaCharMax,
+  memexCreateIdeaCharMin,
+} from '@/config/memex/idea'
 import { useDeployIdea } from './use-deploy-idea'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -19,7 +22,7 @@ import { useEditIdeaAutofill } from './use-edit-idea-autofill'
 import { useUpdateIdea } from './use-update-idea'
 
 const schema = z.object({
-  content: z.string().min(memexCreateIdeaCharMin),
+  content: z.string().min(memexCreateIdeaCharMin).max(memexCreateIdeaCharMax),
   chain: z.string().min(1),
   pictures: z.array(z.string()).min(1).max(4),
 })
