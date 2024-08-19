@@ -11,10 +11,13 @@ import { getEvmAirdropParams } from '@/utils/contract'
 import { Marketing } from '@/api/token/types'
 import { useTokenConfig } from '@/hooks/use-token-config'
 
-export const useDeployIdea = (onFinally?: () => void) => {
+export const useDeployIdea = (
+  chainName: string | undefined,
+  onFinally?: () => void
+) => {
   const { t } = useTranslation()
   const { chainId = 0 } = useAccount() // TODO/memex: multi chain
-  const { configValue, memexFactoryAddr } = useTokenConfig()
+  const { configValue, memexFactoryAddr } = useTokenConfig(chainName)
 
   const deployConfig = {
     abi: memexFactoryAbi,

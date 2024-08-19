@@ -1,22 +1,42 @@
+import { useMemo } from 'react'
+import { groupBy, mapValues, orderBy } from 'lodash'
 import { useQuery } from '@tanstack/react-query'
 import { type Address } from 'viem'
 
 import { tokenApi } from '@/api/token'
-import { BcVersion } from '@/contract/abi/bonding-curve'
-import { DistributorVersion } from '@/contract/abi/distributor'
-import { MemexFactoryVersion } from '@/contract/abi/memex'
+import type { TokenConfigContract } from '@/api/token/types'
+import type { BcVersion } from '@/contract/abi/bonding-curve'
+import type { DistributorVersion } from '@/contract/abi/distributor'
+import type { MemexFactoryVersion } from '@/contract/abi/memex'
+import type { RecommendVersion } from '@/contract/abi/recommend'
 
-export const useTokenConfig = () => {
+const groupOrderContracts = (contracts: TokenConfigContract[] = []) => {
+  if (contracts.length === 0) return {}
+  if (contracts.length === 1) {
+    return { [contracts[0]?.chain || '']: contracts }
+  }
+  return mapValues(groupBy(contracts, 'chain'), (e) =>
+    orderBy(e, ['version'], 'desc')
+  )
+}
+
+export const useTokenConfig = (chain: string | undefined) => {
+  chain = chain || ''
+
+  const getFirstContract = <
+    V extends string = string,
+    T extends string = Address
+  >(
+    contracts: TokenConfigContract[] = []
+  ) => {
+    const grouped = groupOrderContracts(contracts) || {}
+    const contract = (grouped[chain] || [])[0] || {}
+
+    return contract as Partial<TokenConfigContract<T, V>>
+  }
+
   const {
-    data: {
-      name: configName,
-      value: configValue,
-      contracts: {
-        coin: [coin] = [],
-        airdrop: [airdrop] = [],
-        memex: [memex] = [],
-      } = {},
-    } = {},
+    data: { name: configName, value: configValue, contracts } = {},
     isLoading: isLoadingConfig,
     refetch: refetchConfig,
   } = useQuery({
@@ -25,22 +45,31 @@ export const useTokenConfig = () => {
     select: ({ data }) => data,
     refetchInterval: 30_000,
   })
-  const bcAddress = coin?.address as Address | undefined
-  const bcVersion = coin?.version as BcVersion | undefined
-
-  const airdropAddress = airdrop?.address as Address | undefined
-  const airdropVersion = airdrop?.version as DistributorVersion | undefined
-
-  const memexFactoryAddr = memex?.address as Address | undefined
-  const memexFactoryVersion = memex?.version as MemexFactoryVersion | undefined
+  const [
+    { address: bcAddress, version: bcVersion },
+    { address: airdropAddress, version: airdropVersion },
+    { address: recommendAddress, version: recommendVersion },
+    { address: memexFactoryAddr, version: memexFactoryVersion },
+  ] = useMemo(
+    () => [
+      getFirstContract<BcVersion>(contracts?.coin),
+      getFirstContract<DistributorVersion>(contracts?.airdrop),
+      getFirstContract<RecommendVersion>(contracts?.recommend),
+      getFirstContract<MemexFactoryVersion>(contracts?.memex),
+    ],
+    [chain]
+  )
 
   return {
     configName,
     configValue,
+
     bcAddress,
     bcVersion,
     airdropAddress,
     airdropVersion,
+    recommendAddress,
+    recommendVersion,
     memexFactoryAddr,
     memexFactoryVersion,
 

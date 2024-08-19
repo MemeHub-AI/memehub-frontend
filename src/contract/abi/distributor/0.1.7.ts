@@ -1,8 +1,51 @@
-export const bcAbi0_1_0 = [
+export const distributorAbi0_1_7 = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'bond_',
+        type: 'address',
+      },
+    ],
     stateMutability: 'nonpayable',
     type: 'constructor',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'target',
+        type: 'address',
+      },
+    ],
+    name: 'AddressEmptyCode',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'AddressInsufficientBalance',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'FailedInnerCall',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_AlreadyBurn',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_AlreadyClaimed',
+    type: 'error',
   },
   {
     inputs: [],
@@ -11,47 +54,96 @@ export const bcAbi0_1_0 = [
   },
   {
     inputs: [],
-    name: 'MEMEHUB_InvalidParamsReferrers',
+    name: 'MEMEHUB_Finished',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'param',
+        type: 'string',
+      },
+    ],
+    name: 'MEMEHUB_InvalidParams',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'MEMEHUB_InvalidSell',
+    name: 'MEMEHUB_NFTAddrNotExist',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'MemeHub_AlreadyGraduated',
+    name: 'MEMEHUB_NFTOfExIsZeroAddress',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'MemeHub_DeadlineExceeded',
+    name: 'MEMEHUB_NFTOfKolIsZeroAddress',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'MemeHub_FeeTooHigh',
+    name: 'MEMEHUB_NotStarted',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'MemeHub_Forbidden',
+    name: 'MEMEHUB_NothingToBurn',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'MemeHub_InsufficientOutput',
+    name: 'MEMEHUB_PermissionDenied',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'MemeHub_InvalidAmountIn',
+    name: 'MEMEHUB_TokenAddrNotExist',
     type: 'error',
   },
   {
     inputs: [],
-    name: 'MemeHub_TooMuchMcap',
+    name: 'MEMEHUB_Unfinished',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_Unqualified',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'owner',
+        type: 'address',
+      },
+    ],
+    name: 'OwnableInvalidOwner',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'OwnableUnauthorizedAccount',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+    ],
+    name: 'SafeERC20FailedOperation',
     type: 'error',
   },
   {
@@ -59,36 +151,18 @@ export const bcAbi0_1_0 = [
     inputs: [
       {
         indexed: true,
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        indexed: false,
         internalType: 'uint256',
-        name: 'amountIn',
+        name: 'distributionId',
         type: 'uint256',
       },
       {
         indexed: false,
         internalType: 'uint256',
-        name: 'amountOut',
+        name: 'amount',
         type: 'uint256',
       },
     ],
-    name: 'MemeHubContinuousBurn',
+    name: 'MemeHubBurned',
     type: 'event',
   },
   {
@@ -96,9 +170,9 @@ export const bcAbi0_1_0 = [
     inputs: [
       {
         indexed: true,
-        internalType: 'address',
-        name: 'sender',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'distributionId',
+        type: 'uint256',
       },
       {
         indexed: true,
@@ -108,30 +182,18 @@ export const bcAbi0_1_0 = [
       },
       {
         indexed: true,
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        indexed: false,
         internalType: 'uint256',
-        name: 'amountIn',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amountOut',
+        name: 'amount',
         type: 'uint256',
       },
       {
         indexed: false,
         internalType: 'address',
-        name: 'referrer',
+        name: 'account',
         type: 'address',
       },
     ],
-    name: 'MemeHubContinuousMint',
+    name: 'MemeHubClaimed',
     type: 'event',
   },
   {
@@ -159,7 +221,7 @@ export const bcAbi0_1_0 = [
       {
         indexed: true,
         internalType: 'uint256',
-        name: 'id',
+        name: 'distributionId',
         type: 'uint256',
       },
       {
@@ -169,25 +231,13 @@ export const bcAbi0_1_0 = [
         type: 'address',
       },
       {
-        indexed: true,
-        internalType: 'address',
-        name: 'creator',
-        type: 'address',
-      },
-      {
         indexed: false,
-        internalType: 'string',
-        name: 'name',
-        type: 'string',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'symbol',
-        type: 'string',
+        internalType: 'uint64',
+        name: 'startTime',
+        type: 'uint64',
       },
     ],
-    name: 'MemeHubDeployToken',
+    name: 'MemeHubCreated',
     type: 'event',
   },
   {
@@ -196,39 +246,33 @@ export const bcAbi0_1_0 = [
       {
         indexed: true,
         internalType: 'address',
-        name: 'token',
+        name: 'previousOwner',
         type: 'address',
       },
       {
         indexed: true,
         internalType: 'address',
-        name: 'headmaster',
+        name: 'newOwner',
         type: 'address',
       },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amountToken',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'amountETH',
-        type: 'uint256',
-      },
     ],
-    name: 'MemeHubTokenGraduated',
+    name: 'OwnershipTransferred',
     type: 'event',
   },
   {
-    inputs: [],
-    name: 'FEE_DENOMINATOR',
-    outputs: [
+    inputs: [
       {
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    name: 'NFTAddrs',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -236,12 +280,12 @@ export const bcAbi0_1_0 = [
   },
   {
     inputs: [],
-    name: 'K_',
+    name: 'NFTOfExchangeCommunity',
     outputs: [
       {
-        internalType: 'uint256',
+        internalType: 'address',
         name: '',
-        type: 'uint256',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -249,51 +293,12 @@ export const bcAbi0_1_0 = [
   },
   {
     inputs: [],
-    name: 'MAX_FEE',
+    name: 'NFTOfKol',
     outputs: [
       {
-        internalType: 'uint256',
+        internalType: 'address',
         name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'TOTAL_SUPPLY',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'addPoolETHAmount_',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'airdropRate_',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -303,40 +308,113 @@ export const bcAbi0_1_0 = [
     inputs: [
       {
         internalType: 'address',
-        name: 'token',
+        name: '_NFTOfExchangeCommunity',
         type: 'address',
       },
+    ],
+    name: 'addNFTAddressOfExchange',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_NFTOfKol',
+        type: 'address',
+      },
+    ],
+    name: 'addNFTAddressOfKol',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: 'addrs',
+        type: 'address[]',
+      },
+    ],
+    name: 'addNFTAddrs',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: 'addrs',
+        type: 'address[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'amounts',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'addTokenAddrs',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'bond',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
       {
         internalType: 'uint256',
-        name: 'amountIn',
+        name: 'distributionId',
+        type: 'uint256',
+      },
+    ],
+    name: 'burnToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'distributionId',
         type: 'uint256',
       },
       {
         internalType: 'uint256',
-        name: 'amountOutMin',
+        name: 'specifiedExId',
         type: 'uint256',
       },
       {
         internalType: 'address',
-        name: 'to',
+        name: 'specifiedNFT',
         type: 'address',
       },
       {
-        internalType: 'uint256',
-        name: 'deadline',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address[]',
-        name: 'referrers',
-        type: 'address[]',
+        internalType: 'address',
+        name: 'specifiedToken',
+        type: 'address',
       },
     ],
-    name: 'burn',
+    name: 'claimCommunity',
     outputs: [
       {
         internalType: 'uint256',
-        name: 'amountOut',
+        name: '',
         type: 'uint256',
       },
     ],
@@ -346,21 +424,34 @@ export const bcAbi0_1_0 = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
+        internalType: 'uint256',
+        name: 'distributionId',
+        type: 'uint256',
       },
       {
         internalType: 'uint256',
-        name: 'amountIn',
+        name: 'specifiedKolId',
         type: 'uint256',
       },
     ],
-    name: 'calcAmountOutFromEth',
+    name: 'claimKol',
     outputs: [
       {
         internalType: 'uint256',
-        name: 'amountOut',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'communityCheckMax',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
         type: 'uint256',
       },
     ],
@@ -368,23 +459,12 @@ export const bcAbi0_1_0 = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amountIn',
-        type: 'uint256',
-      },
-    ],
-    name: 'calcAmountOutFromToken',
+    inputs: [],
+    name: 'communityCount',
     outputs: [
       {
         internalType: 'uint256',
-        name: 'amountOut',
+        name: '',
         type: 'uint256',
       },
     ],
@@ -392,38 +472,8 @@ export const bcAbi0_1_0 = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amountIn',
-        type: 'uint256',
-      },
-    ],
-    name: 'calcAmountOutFromTokenCutOff',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'amountOut',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-    ],
-    name: 'calcPrice',
+    inputs: [],
+    name: 'communityRatio',
     outputs: [
       {
         internalType: 'uint256',
@@ -436,16 +486,6 @@ export const bcAbi0_1_0 = [
   },
   {
     inputs: [
-      {
-        internalType: 'string[]',
-        name: '_infos',
-        type: 'string[]',
-      },
-      {
-        internalType: 'uint256[]',
-        name: '_params',
-        type: 'uint256[]',
-      },
       {
         components: [
           {
@@ -493,119 +533,6 @@ export const bcAbi0_1_0 = [
         name: 'dp',
         type: 'tuple',
       },
-    ],
-    name: 'createToken',
-    outputs: [
-      {
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'creationFee_',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'distributor_',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'factory_',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'feeRate_',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'feeTo_',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getDistributor',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getMaxSupply',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-    ],
-    name: 'getPool',
-    outputs: [
       {
         components: [
           {
@@ -614,193 +541,35 @@ export const bcAbi0_1_0 = [
             type: 'address',
           },
           {
-            internalType: 'uint256',
-            name: 'tokenReserve',
-            type: 'uint256',
+            internalType: 'uint176',
+            name: 'supply',
+            type: 'uint176',
           },
           {
-            internalType: 'uint256',
-            name: 'virtualTokenReserve',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'ethReserve',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'virtualEthReserve',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'addPoolETHAmount',
-            type: 'uint256',
-          },
-          {
-            internalType: 'address',
-            name: 'creator',
-            type: 'address',
-          },
-          {
-            internalType: 'address',
-            name: 'headmaster',
-            type: 'address',
+            internalType: 'uint64',
+            name: 'startTime',
+            type: 'uint64',
           },
         ],
-        internalType: 'struct MEMEHUB_BondingCurve.Pool',
-        name: '',
+        internalType: 'struct IMEMEHUB_Distributor.TokenParam',
+        name: 'tp',
         type: 'tuple',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getRecommend',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'graduationThreshold_',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'headmaster_',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'initVirtualEthReserve_',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'initVirtualTokenReserve_',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'maxSupply_',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
+    name: 'createDistribution',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
     inputs: [
       {
-        internalType: 'address',
-        name: 'token',
-        type: 'address',
-      },
-      {
         internalType: 'uint256',
-        name: 'amountIn',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: 'amountOutMin',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: 'deadline',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address[]',
-        name: 'referrers',
-        type: 'address[]',
-      },
-    ],
-    name: 'mint',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: 'amountOut',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'payable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'owner_',
-    outputs: [
-      {
-        internalType: 'address',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'pools_',
+    name: 'distributions',
     outputs: [
       {
         internalType: 'address',
@@ -808,58 +577,49 @@ export const bcAbi0_1_0 = [
         type: 'address',
       },
       {
-        internalType: 'uint256',
-        name: 'tokenReserve',
-        type: 'uint256',
+        internalType: 'uint40',
+        name: 'walletCountKOL',
+        type: 'uint40',
       },
       {
-        internalType: 'uint256',
-        name: 'virtualTokenReserve',
-        type: 'uint256',
+        internalType: 'uint40',
+        name: 'walletCountCommunity',
+        type: 'uint40',
       },
       {
-        internalType: 'uint256',
-        name: 'ethReserve',
-        type: 'uint256',
+        internalType: 'uint40',
+        name: 'claimedCountKOL',
+        type: 'uint40',
       },
       {
-        internalType: 'uint256',
-        name: 'virtualEthReserve',
-        type: 'uint256',
+        internalType: 'uint40',
+        name: 'claimedCountCommunity',
+        type: 'uint40',
       },
       {
-        internalType: 'uint256',
-        name: 'addPoolETHAmount',
-        type: 'uint256',
+        internalType: 'uint64',
+        name: 'startTime',
+        type: 'uint64',
       },
       {
-        internalType: 'address',
-        name: 'creator',
-        type: 'address',
+        internalType: 'uint16',
+        name: 'kolFlag',
+        type: 'uint16',
       },
       {
-        internalType: 'address',
-        name: 'headmaster',
-        type: 'address',
+        internalType: 'uint16',
+        name: 'CommunityFlag',
+        type: 'uint16',
       },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
       {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
+        internalType: 'uint176',
+        name: 'amountPerClaimKOL',
+        type: 'uint176',
       },
-    ],
-    name: 'recommendFee_',
-    outputs: [
       {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
+        internalType: 'uint176',
+        name: 'amountPerClaimCommunity',
+        type: 'uint176',
       },
     ],
     stateMutability: 'view',
@@ -867,12 +627,12 @@ export const bcAbi0_1_0 = [
   },
   {
     inputs: [],
-    name: 'recommend_',
+    name: 'duration',
     outputs: [
       {
-        internalType: 'address',
+        internalType: 'uint256',
         name: '',
-        type: 'address',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -882,172 +642,457 @@ export const bcAbi0_1_0 = [
     inputs: [
       {
         internalType: 'uint256',
-        name: 'addPoolETHAmount',
+        name: 'distributionId',
         type: 'uint256',
       },
     ],
-    name: 'setAddPoolETHAmount',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
+    name: 'getAmountClaimed',
+    outputs: [
       {
         internalType: 'uint256',
-        name: 'airdropRate',
+        name: '',
         type: 'uint256',
       },
     ],
-    name: 'setAirdropRate',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'fee',
-        type: 'uint256',
-      },
-    ],
-    name: 'setCreationFee',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'address',
-        name: '_distributor',
+        name: '',
         type: 'address',
       },
     ],
-    name: 'setDistributor',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'hasNFTAddr',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'address',
-        name: '_factory',
+        name: '',
         type: 'address',
       },
     ],
-    name: 'setFactory',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    name: 'hasTokenAddr',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'holderAmounts',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'uint256',
-        name: 'feeRate',
+        name: '',
         type: 'uint256',
       },
     ],
-    name: 'setFeeRate',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
+    name: 'isBurn',
+    outputs: [
       {
-        internalType: 'address',
-        name: 'feeTo',
-        type: 'address',
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
-    name: 'setFeeTo',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'headmaster',
-        type: 'address',
-      },
-    ],
-    name: 'setHeadmaster',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'uint256',
-        name: 'initVirtualEthReserve',
+        name: 'distributionId',
         type: 'uint256',
       },
-      {
-        internalType: 'uint256',
-        name: 'initVirtualTokenReserve',
-        type: 'uint256',
-      },
-    ],
-    name: 'setInitVirtualEthReserve',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: 'maxSupply',
-        type: 'uint256',
-      },
-    ],
-    name: 'setMaxSupply',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
       {
         internalType: 'address',
-        name: 'owner',
+        name: 'wallet',
         type: 'address',
       },
     ],
-    name: 'setOwner',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
+    name: 'isClaimedCommunity',
+    outputs: [
       {
-        internalType: 'address',
-        name: '_recommend',
-        type: 'address',
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
       },
     ],
-    name: 'setRecommend',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
   {
     inputs: [
       {
         internalType: 'uint256[]',
-        name: '_recommendFee',
+        name: 'specifiedExCommunity',
         type: 'uint256[]',
       },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
     ],
-    name: 'updateRecommedFee',
+    name: 'isClaimedEx',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'distributionId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'wallet',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedKOL',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: 'specifiedKolId',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedKol',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: '_nftAddrs',
+        type: 'address[]',
+      },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedNFT',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'NFTAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedNFTAll',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'NFTAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: '_tokenAddrs',
+        type: 'address[]',
+      },
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedToken',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'tokenAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimedTokenAll',
+    outputs: [
+      {
+        internalType: 'address',
+        name: 'tokenAddress',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'kolCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'kolRatio',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'owner',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_bond',
+        type: 'address',
+      },
+    ],
+    name: 'setBond',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_communityCheckMax',
+        type: 'uint256',
+      },
+    ],
+    name: 'setCommunityCheckMax',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_communityCount',
+        type: 'uint256',
+      },
+    ],
+    name: 'setCommunityCount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_communityRatio',
+        type: 'uint256',
+      },
+    ],
+    name: 'setCommunityRatio',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_kolCount',
+        type: 'uint256',
+      },
+    ],
+    name: 'setKolCount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_kolRatio',
+        type: 'uint256',
+      },
+    ],
+    name: 'setKolRatio',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: '_version',
+        type: 'string',
+      },
+    ],
+    name: 'setVersion',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'tokenAddrs',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'transferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: 'timeOfDuration',
+        type: 'uint256',
+      },
+    ],
+    name: 'updateEndTime',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

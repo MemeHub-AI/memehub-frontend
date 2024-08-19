@@ -29,16 +29,13 @@ export const formFields = {
   marketing: 'marketing',
 } as const
 
-export const useCreateTokenForm = (
-  useDeployResult: ReturnType<typeof useDeploy>
-) => {
+export const useCreateTokenForm = () => {
   const { t } = useTranslation()
   const { formInfo } = useAimemeInfoStore()
   const { checkForConnect, checkForChain } = useCheckAccount()
   const { walletIsConnected } = useConnectWallet()
   const { evmChainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
-  const { deploy, isDeploying } = useDeployResult
   const { getMainChain } = useStorage()
 
   const require = {
@@ -99,6 +96,8 @@ export const useCreateTokenForm = (
     },
   })
 
+  const deployResult = useDeploy(form.getValues('chainName'))
+
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!(await form.trigger())) return
 
@@ -112,9 +111,9 @@ export const useCreateTokenForm = (
 
     if (!walletIsConnected()) return
 
-    if (isDeploying) return
+    if (deployResult.isDeploying) return
 
-    deploy({
+    deployResult.deploy({
       name: values.fullname! as string,
       symbol: values.symbol! as string,
       description: values.description! as string,
@@ -138,5 +137,6 @@ export const useCreateTokenForm = (
     loadingChains: loadingChains,
     onSubmit,
     onChangeUpload,
+    deployResult,
   }
 }

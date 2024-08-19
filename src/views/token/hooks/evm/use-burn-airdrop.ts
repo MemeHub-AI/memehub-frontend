@@ -17,7 +17,6 @@ export const useBurnAirdrop = (
   id: number | undefined,
   onFinally?: () => void
 ) => {
-  id = id || 0
   const { t } = useTranslation()
   const { chainId, airdropVersion, airdropAddr } = useTokenContext()
   const { checkForConnect, checkForChain } = useCheckAccount()
@@ -33,7 +32,7 @@ export const useBurnAirdrop = (
     ...airdropConfig,
     functionName: 'isBurn',
     args: [BigInt(id || 0)],
-    query: { enabled: !!id },
+    query: { enabled: typeof id === 'number' },
   })
 
   const {
@@ -66,7 +65,10 @@ export const useBurnAirdrop = (
   const burn = async () => {
     if (!checkForConnect()) return
     if (!(await checkForChain(chainId))) return
-    if (!airdropAddr || !id) return
+    if (!airdropAddr || typeof id !== 'number') {
+      CONTRACT_ERR.configNotFound()
+      return
+    }
 
     // TODO: should simulate first.
     writeContract({

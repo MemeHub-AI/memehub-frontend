@@ -7,10 +7,25 @@ import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { IdeaFloatButton } from './idea-float-button'
 import { PrimaryLayout } from '@/components/layouts/primary'
+import { useUserStore } from '@/stores/use-user-store'
 
 export const MemexLayout = ({ children }: { children?: ReactNode }) => {
   const { t } = useTranslation()
   const { pathname, ...router } = useRouter()
+  const { userInfo } = useUserStore()
+
+  const userTabs = [
+    {
+      id: 3,
+      title: t('memex.my-involved'),
+      route: Routes.MemexMyInvolved,
+    },
+    {
+      id: 4,
+      title: t('memex.my-idea'),
+      route: Routes.MemexMyIdea,
+    },
+  ]
 
   const tabs = [
     {
@@ -23,16 +38,7 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
       title: t('hots'),
       route: Routes.MemexHots,
     },
-    {
-      id: 3,
-      title: t('memex.my-involved'),
-      route: Routes.MemexMyInvolved,
-    },
-    {
-      id: 4,
-      title: t('memex.my-idea'),
-      route: Routes.MemexMyIdea,
-    },
+    ...(userInfo ? userTabs : []),
     {
       id: 5,
       title: t('successed'),

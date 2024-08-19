@@ -16,7 +16,7 @@ export const useCommunityMembers = (id?: string) => {
       args: [id],
     })),
     query: {
-      enabled: !!id,
+      enabled: typeof id === 'string',
       select: (data) => data.map((d) => Number(d.result || 0)),
     },
   })

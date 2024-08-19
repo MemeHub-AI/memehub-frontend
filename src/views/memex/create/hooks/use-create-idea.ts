@@ -56,8 +56,10 @@ export const useCreateIdea = () => {
     onSuccess: router.back,
   })
 
-  const { memexFactoryAddr, airdropAddress, bcAddress } = useTokenConfig()
-  const { deployFee, isDeploying, deploy } = useDeployIdea(() => {
+  const { memexFactoryAddr, airdropAddress, bcAddress } = useTokenConfig(
+    idea?.chain
+  )
+  const { deployFee, isDeploying, deploy } = useDeployIdea(idea?.chain, () => {
     setIdea(null)
     setIdeaDetails(null)
     router.back()

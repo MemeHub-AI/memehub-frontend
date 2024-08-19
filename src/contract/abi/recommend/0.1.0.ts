@@ -1,4 +1,4 @@
-export const recommendAbi = [
+export const recommendAbi0_1_0 = [
   {
     inputs: [],
     stateMutability: 'nonpayable',

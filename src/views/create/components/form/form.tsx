@@ -114,7 +114,7 @@ export const CreateTokenForm = () => {
           </div>
 
           {/* Marketing */}
-          <MarketingField form={form} />
+          <MarketingField form={form} chainName={form.getValues('chainName')} />
 
           {/* Description */}
           <Description formData={formData} />

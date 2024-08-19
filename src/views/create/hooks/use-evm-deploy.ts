@@ -16,10 +16,10 @@ import { getDeployLogsAddr, getEvmAirdropParams } from '@/utils/contract'
 import { DeployFormParams } from './use-deploy'
 import { useTokenConfig } from '@/hooks/use-token-config'
 
-export const useEvmDeploy = () => {
+export const useEvmDeploy = (chainName: string) => {
   const { address, chainId = 0 } = useAccount()
   const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
-  const { configValue, bcAddress, bcVersion } = useTokenConfig()
+  const { configValue, bcAddress, bcVersion } = useTokenConfig(chainName)
   const bcConfig = {
     abi: bcAbiMap[bcVersion!],
     address: bcAddress!,

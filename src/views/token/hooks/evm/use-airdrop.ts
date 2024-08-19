@@ -21,7 +21,6 @@ export const useAirdrop = (
   chainId: number | undefined,
   onFinally?: () => void
 ) => {
-  id = id || 0 // adapt id is null
   const { t } = useTranslation()
   const { playFire } = useAudioPlayer()
   const { address, checkForChain, checkForConnect } = useCheckAccount()
@@ -34,7 +33,7 @@ export const useAirdrop = (
   }
 
   const query = {
-    enabled: !!address && !!addr && !!chainId && !!id,
+    enabled: !!address && !!addr && !!chainId && typeof id === 'number',
     refetchInterval: 5_000,
   }
 
@@ -92,7 +91,7 @@ export const useAirdrop = (
   const checkForClaim = async () => {
     if (!checkForConnect()) return false
     if (!(await checkForChain(chainId))) return false
-    if (!addr) {
+    if (!addr || typeof id !== 'number') {
       CONTRACT_ERR.configNotFound()
       return false
     }
@@ -106,7 +105,7 @@ export const useAirdrop = (
     writeContract({
       ...airdropConfig,
       functionName: 'claimKol',
-      args: [BigInt(id), BigInt(kolId)],
+      args: [BigInt(id!), BigInt(kolId)],
     })
   }
 
@@ -120,7 +119,7 @@ export const useAirdrop = (
     writeContract({
       ...airdropConfig,
       functionName: 'claimCommunity',
-      args: [BigInt(id), BigInt(exchangeId), nftId, tokenId],
+      args: [BigInt(id!), BigInt(exchangeId), nftId, tokenId],
     })
   }
 
