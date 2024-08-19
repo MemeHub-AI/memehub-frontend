@@ -4,10 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { type Address } from 'viem'
 
 import { tokenApi } from '@/api/token'
-import { BcVersion } from '@/contract/abi/bonding-curve'
-import { DistributorVersion } from '@/contract/abi/distributor'
-import { MemexFactoryVersion } from '@/contract/abi/memex'
-import { TokenConfigContract } from '@/api/token/types'
+import type { TokenConfigContract } from '@/api/token/types'
+import type { BcVersion } from '@/contract/abi/bonding-curve'
+import type { DistributorVersion } from '@/contract/abi/distributor'
+import type { MemexFactoryVersion } from '@/contract/abi/memex'
+import type { RecommendVersion } from '@/contract/abi/recommend'
 
 const groupOrderContracts = (contracts: TokenConfigContract[] = []) => {
   if (contracts.length === 0) return {}
@@ -21,6 +22,19 @@ const groupOrderContracts = (contracts: TokenConfigContract[] = []) => {
 
 export const useTokenConfig = (chain: string | undefined) => {
   chain = chain || ''
+
+  const getFirstContract = <
+    V extends string = string,
+    T extends string = Address
+  >(
+    contracts: TokenConfigContract[] = []
+  ) => {
+    const grouped = groupOrderContracts(contracts) || {}
+    const contract = (grouped[chain] || [])[0] || {}
+
+    return contract as Partial<TokenConfigContract<T, V>>
+  }
+
   const {
     data: { name: configName, value: configValue, contracts } = {},
     isLoading: isLoadingConfig,
@@ -31,36 +45,17 @@ export const useTokenConfig = (chain: string | undefined) => {
     select: ({ data }) => data,
     refetchInterval: 30_000,
   })
-  const [coinContracts, airdropContracts, memexContracts] = useMemo(
-    () => [
-      groupOrderContracts(contracts?.coin),
-      groupOrderContracts(contracts?.airdrop),
-      groupOrderContracts(contracts?.memex),
-    ],
-    [contracts]
-  )
-
-  const getFirst = <
-    V extends string = string,
-    T extends string = Address
-  >(contractsMap: {
-    [x: string]: TokenConfigContract<string, string>[]
-  }) => {
-    const contracts = (contractsMap || {})[chain] || []
-    const contract = contracts[0] || {}
-
-    return contract as Partial<TokenConfigContract<T, V>>
-  }
-
   const [
     { address: bcAddress, version: bcVersion },
     { address: airdropAddress, version: airdropVersion },
+    { address: recommendAddress, version: recommendVersion },
     { address: memexFactoryAddr, version: memexFactoryVersion },
   ] = useMemo(
     () => [
-      getFirst<BcVersion>(coinContracts),
-      getFirst<DistributorVersion>(airdropContracts),
-      getFirst<MemexFactoryVersion>(memexContracts),
+      getFirstContract<BcVersion>(contracts?.coin),
+      getFirstContract<DistributorVersion>(contracts?.airdrop),
+      getFirstContract<RecommendVersion>(contracts?.recommend),
+      getFirstContract<MemexFactoryVersion>(contracts?.memex),
     ],
     [chain]
   )
@@ -73,6 +68,8 @@ export const useTokenConfig = (chain: string | undefined) => {
     bcVersion,
     airdropAddress,
     airdropVersion,
+    recommendAddress,
+    recommendVersion,
     memexFactoryAddr,
     memexFactoryVersion,
 

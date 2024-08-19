@@ -41,7 +41,7 @@ export const InviteReward = ({ className }: ComponentProps<'h2'>) => {
 const InviteCard = ({ c }: { c: ChainData }) => {
   const { t } = useTranslation()
   const { totalAmount, unclaimedAmount, isClaiming, isClaimed, claimReward } =
-    useReward(Number(c.id))
+    useReward(c.name, +c.id)
   const { chain } = useChainInfo(c.name)
 
   const disabeld = isClaiming || isClaimed
