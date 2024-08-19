@@ -173,7 +173,7 @@ export const MemexIdeaCard = ({
                 e.stopPropagation()
                 router.push({
                   pathname: Routes.MemexCreateDetails,
-                  query: { hash: idea.hash },
+                  query: { hash: idea.hash, chian: idea.chain },
                 })
               }}
             >

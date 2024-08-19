@@ -1,3 +1,5 @@
+import { useRouter } from 'next/router'
+
 import { Form } from '@/components/ui/form'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { useCreateIdeaDetails } from './hooks/use-create-idea-details'
@@ -14,6 +16,8 @@ export const CreateDetail = () => {
   const craeteDetail = useCreateIdeaDetails()
   const { form, onSubmit, isUpdating } = craeteDetail
   const { idea } = useMemexStore()
+  const { query } = useRouter()
+  const chainName = (idea?.chain || query.chain || '') as string
 
   useMemexClear()
 
@@ -26,7 +30,7 @@ export const CreateDetail = () => {
             <RequiredFields />
             <MarketingField
               form={form}
-              chainName={idea?.chain || ''}
+              chainName={chainName}
               disabled={isUpdating}
             />
             <OptionalFields />

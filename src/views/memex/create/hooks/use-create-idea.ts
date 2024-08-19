@@ -39,6 +39,7 @@ export const useCreateIdea = () => {
       pictures: [],
     },
   })
+  const chainName = form.getValues('chain')
 
   const { isPending, mutateAsync, reset } = useMutation({
     mutationKey: [memexApi.createIdea.name],
@@ -48,7 +49,7 @@ export const useCreateIdea = () => {
     onError: ({ message }) => {
       reset()
       REQUEST_ERR.message(message)
-      toast.success(t('memex.create-failed'))
+      toast.error(t('memex.create-failed'))
     },
   })
   const { isUpdating, update } = useUpdateIdea(hash, {
@@ -56,10 +57,10 @@ export const useCreateIdea = () => {
     onSuccess: router.back,
   })
 
-  const { memexFactoryAddr, airdropAddress, bcAddress } = useTokenConfig(
-    idea?.chain
-  )
-  const { deployFee, isDeploying, deploy } = useDeployIdea(idea?.chain, () => {
+  const { memexFactoryAddr, airdropAddress, bcAddress } =
+    useTokenConfig(chainName)
+
+  const { deployFee, isDeploying, deploy } = useDeployIdea(chainName, () => {
     setIdea(null)
     setIdeaDetails(null)
     router.back()
