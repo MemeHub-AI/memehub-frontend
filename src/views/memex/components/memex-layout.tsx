@@ -48,7 +48,7 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
       >
         <TabsList
           className={cn(
-            'border-t-0 border-l-0 border-r-0 md:border-r !border-b border-zinc-200',
+            'border-t-0 border-l-0 border-r-0 md:border-[1px] !border-b border-zinc-200',
             'justify-start rounded-none h-10 max-sm:w-full',
             'md:flex md:justify-between md:h-14 md:px-4',
             'md:text-md'
@@ -68,7 +68,7 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
           ))}
         </TabsList>
 
-        <div className="h-[calc(100vh-64px-2.5rem)] overflow-auto max-sm:max-w-sm md:">
+        <div className="h-[calc(100vh-64px-1.5rem)] md:h-[calc(100vh-3.5rem)] overflow-auto max-sm:max-w-sm md:border-x-[1px]">
           {children}
         </div>
       </Tabs>

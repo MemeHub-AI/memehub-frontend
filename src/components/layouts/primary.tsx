@@ -2,6 +2,8 @@ import React, { type ComponentProps, type ReactDOM, createElement } from 'react'
 
 import { OpportunityMoonshot } from '../opportunity-moonshot'
 import { cn } from '@/lib/utils'
+import { useIsMemex } from '@/hooks/use-is-memex'
+import { MemexMenu } from '../memex-menu'
 
 interface Props extends ComponentProps<'div'> {
   mainClass?: string
@@ -24,13 +26,15 @@ export const PrimaryLayout = (props: Props) => {
     containerClass: aContainerClass,
     ...restAsideProps
   } = asideProps
+  const { isMemex } = useIsMemex()
 
   return (
     <main
       className={cn(
-        'min-h-main max-sm:pt-0 ',
+        'min-h-main max-sm:pt-0',
         padding && 'px-6 flex max-sm:px-3 gap-6',
-        mainClass
+        mainClass,
+        isMemex && 'justify-center flex-row-reverse space-x-4'
       )}
     >
       <OpportunityMoonshot
@@ -42,6 +46,8 @@ export const PrimaryLayout = (props: Props) => {
       {container === 'fragment'
         ? children
         : createElement(container, restProps, children)}
+
+      {isMemex && <MemexMenu />}
     </main>
   )
 }
