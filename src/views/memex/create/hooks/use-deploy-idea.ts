@@ -77,7 +77,7 @@ export const useDeployIdea = (
     marketing: Marketing[] | undefined
   ) => {
     if (!memexFactoryAddr || !configValue) {
-      CONTRACT_ERR.configNotFound()
+      CONTRACT_ERR.contractAddrNotFound()
       return
     }
     const hasInfo = !!name && !!symbol

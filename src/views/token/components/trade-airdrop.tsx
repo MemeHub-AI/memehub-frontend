@@ -6,7 +6,6 @@ import { useCountDown } from 'ahooks'
 import { TradeAirdropCard } from './trade-airdrop-card'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { TradeBurnCard } from './trade-burn-card'
-import { useNftCheck } from '@/hooks/use-nft-check'
 
 export const TradeAirdrop = () => {
   const { t } = useTranslation()
@@ -24,8 +23,6 @@ export const TradeAirdrop = () => {
     [createAt, durationSeconds]
   )
   const [countdown] = useCountDown({ targetDate })
-
-  const { isKol, hasCommunity } = useNftCheck(97)
 
   const isAirdropExpired = countdown <= 0
 

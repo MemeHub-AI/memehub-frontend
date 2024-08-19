@@ -27,15 +27,15 @@ export const AccountTab = () => {
     },
   ]
   const tabs = [
-    // {
-    //   label: t('token.held'),
-    //   value: UserListType.CoinsHeld,
-    // },
+    {
+      label: t('token.held'),
+      value: UserListType.CoinsHeld,
+    },
     {
       label: t('token.created'),
       value: UserListType.CoinsCreated,
     },
-    // ...(isOtherUser ? [] : myAccountTabs),
+    ...(isOtherUser ? [] : myAccountTabs),
   ]
   const tab = String(query.tab || UserListType.CoinsCreated)
   const {
@@ -101,7 +101,7 @@ export const AccountTab = () => {
       </TabsContent>
 
       {/* Only self can see. */}
-      {/* {!isOtherUser && (
+      {!isOtherUser && (
         <>
           <TabsContent value={UserListType.Comments.toString()}>
             <CommentCards
@@ -123,7 +123,7 @@ export const AccountTab = () => {
             />
           </TabsContent>
         </>
-      )} */}
+      )}
     </Tabs>
   )
 }

@@ -39,7 +39,7 @@ export const useCreateIdea = () => {
       pictures: [],
     },
   })
-  const chainName = form.getValues('chain')
+  const chainName = idea?.chain || form.getValues('chain')
 
   const { isPending, mutateAsync, reset } = useMutation({
     mutationKey: [memexApi.createIdea.name],
