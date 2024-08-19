@@ -41,7 +41,7 @@ export const CreateTokenStatusDialog = () => {
   if (isCreatingToken) {
     return (
       <AlertDialog
-        open={true}
+        open={!!isCreatingToken}
         title={t('deploy.backend.submitting')}
         description={t('deploy.backend.submitting.desc')}
         showFooter={false}
@@ -52,7 +52,10 @@ export const CreateTokenStatusDialog = () => {
   // Contract submiting
   if (isSubmitting) {
     return (
-      <Dialog open={true} contentProps={{ onCloseClick: resetDeploy }}>
+      <Dialog
+        open={!!isSubmitting}
+        contentProps={{ onCloseClick: resetDeploy }}
+      >
         <DialogTitle>{t('deploy.submit.title')}</DialogTitle>
         <DialogDescription>{t('deploy.submit.description')}</DialogDescription>
       </Dialog>
@@ -65,7 +68,7 @@ export const CreateTokenStatusDialog = () => {
 
     return (
       <AlertDialog
-        open={true}
+        open={!!submitError}
         title={withWarningIcon(t('deploy.submit.error') + ':')}
         description={
           <span className="break-all line-clamp-3">{submitError?.message}</span>
@@ -79,7 +82,10 @@ export const CreateTokenStatusDialog = () => {
   // Confirming, Submit success.
   if (isConfirming) {
     return (
-      <Dialog open={true} contentProps={{ onCloseClick: resetDeploy }}>
+      <Dialog
+        open={!!isConfirming}
+        contentProps={{ onCloseClick: resetDeploy }}
+      >
         <DialogTitle>{t('deploy.submit.success')}</DialogTitle>
         <DialogDescription>
           <span>{t('deploy.submit.success.desc')}</span>
@@ -92,7 +98,7 @@ export const CreateTokenStatusDialog = () => {
   if (confirmError) {
     return (
       <AlertDialog
-        open={true}
+        open={!!confirmError}
         title={withWarningIcon(t('deploy.confirm.error') + ':')}
         description={
           <span className="break-all line-clamp-3">
@@ -109,7 +115,7 @@ export const CreateTokenStatusDialog = () => {
   if (isDeploySuccess) {
     return (
       <AlertDialog
-        open={true}
+        open={!!isDeploySuccess}
         showClose={true}
         onCancel={resetDeploy}
         onConfirm={() => {

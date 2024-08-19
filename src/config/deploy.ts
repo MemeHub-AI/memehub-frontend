@@ -12,6 +12,6 @@ export const deployEvmAirdropParams = {
 }
 
 export const deployLogAddr =
-  '0xa3a7acabc8ad665bcfcfedc2636ee2f51875f87b190f17f23583a26c17ae1e88'
+  '0x33665efef2048723cc078145d6c0f64ae6bd5cb4ae7ea41dd0c42dfc34de5af1'
 
 export const deployLogAddrIdx = 1
