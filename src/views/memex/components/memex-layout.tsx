@@ -42,11 +42,17 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
 
   return (
     <PrimaryLayout mainClass="flex" padding={false}>
-      <Tabs onValueChange={(v) => router.push(v)} className="flex-1 sticky">
+      <Tabs
+        onValueChange={(v) => router.push(v)}
+        className="flex-1 md:max-w-38"
+      >
         <TabsList
           className={cn(
-            'border-t-0 border-l-0 border-r-0 !border-b border-zinc-200',
-            'justify-start rounded-none h-10 max-sm:w-full sm:w-full sm:max-w-sm'
+            'border-t-0 border-l-0 border-r-0 md:border-r !border-b border-zinc-200',
+            'justify-start rounded-none h-10 max-sm:w-full',
+            'md:flex md:justify-between md:h-14 md:px-4',
+            'md:text-md data-[state=active]:bg-zinc-200',
+            'data-[state=active]:hover:bg-zinc-200 data-[state=active]:text-black'
           )}
         >
           {tabs.map(({ id, route, title }) => (
@@ -63,7 +69,7 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
           ))}
         </TabsList>
 
-        <div className="h-[calc(100vh-64px-2.5rem)] overflow-auto sm:max-w-sm">
+        <div className="h-[calc(100vh-64px-2.5rem)] overflow-auto max-sm:max-w-sm md:">
           {children}
         </div>
       </Tabs>
