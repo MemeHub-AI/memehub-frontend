@@ -42,13 +42,13 @@ export const MemexMenu = () => {
     },
     {
       title: t('Coin'),
-      path: Routes.Airdrop,
+      path: Routes.Main,
       icon: <IoDiamondOutline />,
       icon_active: <IoDiamond />,
     },
     {
       title: t('profile'),
-      path: Routes.Alliance,
+      path: Routes.Account,
       icon: <LuUser2 />,
       icon_active: <IoPeopleSharp />,
     },
@@ -60,13 +60,13 @@ export const MemexMenu = () => {
     },
     {
       title: t('airdrop.no.icon'),
-      path: Routes.MemexMyInvolved,
+      path: Routes.Airdrop,
       icon: <IoGiftOutline />,
       icon_active: <IoGift />,
     },
     {
       title: t('alliance'),
-      path: Routes.MemexSuccessed,
+      path: Routes.Alliance,
       icon: <FaRegHandshake />,
       icon_active: <FaHandshake />,
     },
