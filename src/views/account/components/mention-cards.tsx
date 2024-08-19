@@ -34,7 +34,7 @@ export const MentionCards = (props: Props) => {
       nullback={<p className="text-zinc-500">{t('mentions.empty')}</p>}
     >
       {cards.map((c, i) => (
-        <div className={i === 0 ? '' : 'max-sm:mt-2'}>
+        <div key={c.id} className={i === 0 ? '' : 'max-sm:mt-2'}>
           <MentionCard key={i} c={c} />
         </div>
       ))}

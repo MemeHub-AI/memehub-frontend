@@ -40,7 +40,6 @@ export const AccountTab = () => {
   const tab = String(query.tab || UserListType.CoinsCreated)
   const {
     tokenHeld,
-    tokenCreated,
     comments,
     mentions,
     isLoading,
@@ -53,6 +52,8 @@ export const AccountTab = () => {
     isFetchingMyTokens,
     fetchNextMyTokens,
   } = useUserList(Number(tab))
+
+  console.log('token held', tokenHeld)
 
   return (
     <Tabs

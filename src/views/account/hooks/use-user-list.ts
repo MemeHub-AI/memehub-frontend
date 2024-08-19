@@ -29,6 +29,16 @@ export const useUserList = (type: UserListType) => {
   const { query } = useRouter()
   const tokenAddr = (query.address || '') as string
 
+  const [isHeld, isCreated, isComments, isMentions] = useMemo(
+    () => [
+      type === UserListType.CoinsHeld,
+      type === UserListType.CoinsCreated,
+      type === UserListType.Comments,
+      type === UserListType.Mentions,
+    ],
+    [type]
+  )
+
   const {
     data = { list: [], total: 0 },
     isLoading,
@@ -37,6 +47,7 @@ export const useUserList = (type: UserListType) => {
     fetchNextPage,
     refetch,
   } = useInfiniteQuery({
+    enabled: !isCreated,
     queryKey: [userApi.list.name, tokenAddr, type],
     queryFn: ({ pageParam }) => {
       if (isEmpty(tokenAddr)) return Promise.reject()
@@ -54,29 +65,6 @@ export const useUserList = (type: UserListType) => {
     }),
   })
 
-  // Set list mapping.
-  useEffect(() => {
-    // if (isEmpty(data?.list)) return
-    if (!isFetched) return
-    setListMap((prev) => ({
-      ...prev,
-      [type]: {
-        total: data.total,
-        list: data.list,
-      },
-    }))
-  }, [data])
-
-  const [isHeld, isCreated, isComments, isMentions] = useMemo(
-    () => [
-      type === UserListType.CoinsHeld,
-      type === UserListType.CoinsCreated,
-      type === UserListType.Comments,
-      type === UserListType.Mentions,
-    ],
-    [type]
-  )
-
   const {
     data: { myTokenTotal = 0, myTokens = [] } = {},
     isLoading: isLoadingMyTokens,
@@ -93,6 +81,19 @@ export const useUserList = (type: UserListType) => {
       myTokens: pages.flatMap((p) => p.data.results || []).filter(Boolean),
     }),
   })
+
+  // Set list mapping.
+  useEffect(() => {
+    // if (isEmpty(data?.list)) return
+    if (!isFetched) return
+    setListMap((prev) => ({
+      ...prev,
+      [type]: {
+        total: data.total,
+        list: data.list,
+      },
+    }))
+  }, [data])
 
   return {
     listMap,

@@ -73,7 +73,9 @@ export const useCreateIdea = () => {
       !airdropAddress ||
       !bcAddress
     ) {
-      CONTRACT_ERR.configNotFound()
+      CONTRACT_ERR.configNotFound(
+        `${chainName} ${memexFactoryAddr} ${airdropAddress} ${bcAddress}`
+      )
       return
     }
 

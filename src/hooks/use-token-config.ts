@@ -57,7 +57,7 @@ export const useTokenConfig = (chain: string | undefined) => {
       getFirstContract<RecommendVersion>(contracts?.recommend),
       getFirstContract<MemexFactoryVersion>(contracts?.memex),
     ],
-    [chain]
+    [contracts, chain]
   )
 
   return {
