@@ -32,7 +32,7 @@ export const formFields = {
 export const useCreateTokenForm = () => {
   const { t } = useTranslation()
   const { formInfo } = useAimemeInfoStore()
-  const { checkForConnect, checkForChain } = useCheckAccount()
+  const { checkForChain } = useCheckAccount()
   const { walletIsConnected } = useConnectWallet()
   const { evmChainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()

@@ -1,4 +1,4 @@
-import React from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlinePicture } from 'react-icons/ai'
 
@@ -12,7 +12,8 @@ import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 export const CreateIdeaPicturesField = () => {
   const { t } = useTranslation()
   const { form, isCreating } = useCreateIdeaContext()
-  const { onChangeUpload } = useUploadImage()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { onChangeUpload } = useUploadImage({ inputEl: inputRef.current })
 
   return (
     <FormField
@@ -36,6 +37,7 @@ export const CreateIdeaPicturesField = () => {
           <ImageUpload
             className="invisible absolute"
             id="memex-upload"
+            ref={inputRef}
             onChange={async (e) => {
               const src = await onChangeUpload(e)
               if (src) field.onChange([...field.value, src])

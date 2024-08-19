@@ -47,11 +47,10 @@ export const useUploadImage = (options?: Options) => {
   })
 
   const onChangeUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    clearFile()
-
     // Cannot to upload image if not logged in.
     if (!getToken()) {
       e.preventDefault()
+      clearFile()
       toast.error(t('login-before'))
       return
     }
@@ -69,6 +68,8 @@ export const useUploadImage = (options?: Options) => {
       return data.image_url
     } catch (error) {
       reportException(error)
+    } finally {
+      clearFile()
     }
   }
 

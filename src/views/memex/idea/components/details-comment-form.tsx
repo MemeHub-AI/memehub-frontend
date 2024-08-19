@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { useRouter } from 'next/router'
@@ -20,7 +21,10 @@ export const IdeaCommentForm = () => {
   const { t } = useTranslation()
   const { query } = useRouter()
   const { userInfo } = useUserStore()
-  const { onChangeUpload } = useUploadImage()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { onChangeUpload } = useUploadImage({
+    inputEl: inputRef.current,
+  })
   const { refetchComments } = useIdeaDetailsContext()
   const { form, onSubmit, isPending } = useCommentForm(
     query.hash as string,

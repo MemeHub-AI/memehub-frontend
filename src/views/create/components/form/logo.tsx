@@ -1,5 +1,5 @@
 import { t } from 'i18next'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { toast } from 'sonner'
 import { LuRefreshCcw } from 'react-icons/lu'
 
@@ -33,6 +33,7 @@ export const FormLogo = ({ formData }: Props) => {
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
   const userStore = useUserStore()
   const { playGuaGua } = useAudioPlayer()
+  const inputRef = useRef<HTMLInputElement>(null)
 
   // TODO: check for connect
   // const { checkForConnect } = useCheckAccount()
@@ -146,11 +147,18 @@ export const FormLogo = ({ formData }: Props) => {
                 <Input
                   placeholder={t('logo.placeholder')}
                   type="file"
-                  {...field}
-                  value={''}
                   className="h-full opacity-0"
                   inputClassName="h-full w-full absolute top-0 left-0 cursor-pointer z-10"
-                  onChange={formData.onChangeUpload}
+                  ref={inputRef}
+                  onChange={async (e) => {
+                    try {
+                      const url = await formData.onChangeUpload(e)
+                      if (url) form.setValue('logo', url)
+                    } catch (error) {
+                    } finally {
+                      if (inputRef.current) inputRef.current.value = ''
+                    }
+                  }}
                 />
               </div>
             </FormControl>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlinePicture } from 'react-icons/ai'
 
@@ -14,7 +14,8 @@ import { fmt } from '@/utils/fmt'
 export const RequiredFields = () => {
   const { t } = useTranslation()
   const { form, isUpdating } = useCreateIdeaDetailsContext()
-  const { file, onChangeUpload } = useUploadImage()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { onChangeUpload } = useUploadImage({ inputEl: inputRef.current })
 
   return (
     <div className="space-y-2 mt-2">
@@ -73,6 +74,7 @@ export const RequiredFields = () => {
                   id="create-detail-logo"
                   placeholder={t('name')}
                   className="hidden"
+                  ref={inputRef}
                   onChange={async (e) => {
                     const src = await onChangeUpload(e)
                     if (src) field.onChange(src)

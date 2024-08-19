@@ -1,4 +1,4 @@
-import React, { useState, type ComponentProps } from 'react'
+import React, { useRef, useState, type ComponentProps } from 'react'
 import {
   HeartFilledIcon,
   EnvelopeClosedIcon,
@@ -26,20 +26,13 @@ import { Label } from '@/components/ui/label'
 import { ProfileForm } from './profile-form'
 import { useAccountContext } from '@/contexts/account'
 import { useUser } from '@/hooks/use-user'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog } from '@/components/ui/dialog'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
 import { RewardButton } from '@/components/reward-button'
 import { Routes } from '@/routes'
 import { Tooltip } from '@/components/ui/tooltip'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { DialogTrigger } from '@radix-ui/react-dialog'
-import FollowingCards from './following-cards'
 import { FollowTab } from './follow-tab'
 
 export const Profile = (props: ComponentProps<'div'>) => {
@@ -55,7 +48,9 @@ export const Profile = (props: ComponentProps<'div'>) => {
   const tokenAddr = (query.address || '') as string
   const { copy } = useClipboard()
 
+  const inputRef = useRef<HTMLInputElement>(null)
   const { onChangeUpload } = useUploadImage({
+    inputEl: inputRef.current,
     onSuccess: (url) => update({ logo: url }).then(() => refetchUserInfo()),
   })
 
@@ -110,6 +105,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
               <ImageUpload
                 id="avatar-edit"
                 className="absolute invisible"
+                ref={inputRef}
                 onChange={onChangeUpload}
               />
             </>
