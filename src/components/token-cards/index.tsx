@@ -50,6 +50,7 @@ export const TokenCards = (props: Props) => {
       setIsPlayHomeAudio(false)
     }
   }, [])
+
   const onChange = (chain: string) => {
     setChainTag(chain)
 
@@ -86,9 +87,13 @@ export const TokenCards = (props: Props) => {
         <TokenSearchInput
           chianTag={chianTag}
           onSearched={(tokens) => setFilteredCards(tokens)}
-          onCleared={() =>
-            setFilteredCards(cards.filter((c) => c.chain === chianTag))
-          }
+          onCleared={() => {
+            if (chianTag !== 'all') {
+              setFilteredCards(cards.filter((c) => c.chain === chianTag))
+            } else {
+              setFilteredCards(cards)
+            }
+          }}
           className="ml-4"
         />
       </CustomSuspense>
