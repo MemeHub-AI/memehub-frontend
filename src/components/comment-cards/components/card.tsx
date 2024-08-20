@@ -99,29 +99,30 @@ export const CommentCard = (props: Props) => {
             </Tooltip>
           )}
 
-          {c.liked ? (
-            <div
-              className="ml-2 flex items-center cursor-pointer group"
-              onClick={() => {
-                if (isUnliking) return
-                onUnlike?.(c.id.toString())
-              }}
-            >
-              <HeartFilledIcon className="text-red-600 group-hover:stroke-black" />
-              <span className="ml-1 text-sm mb-[0.5px]">{c.likes_count}</span>
-            </div>
-          ) : (
-            <div
-              className="ml-2 flex items-center cursor-pointer group"
-              onClick={() => {
-                if (isLiking) return
-                onLike?.(c.id.toString())
-              }}
-            >
-              <HeartIcon className="text-zinc-400 group-hover:stroke-black" />
-              <span className="ml-1 text-sm mb-[0.5px]">{c.likes_count}</span>
-            </div>
-          )}
+          {!readonly &&
+            (c.liked ? (
+              <div
+                className="ml-2 flex items-center cursor-pointer group"
+                onClick={() => {
+                  if (isUnliking) return
+                  onUnlike?.(c.id.toString())
+                }}
+              >
+                <HeartFilledIcon className="text-red-600 group-hover:stroke-black" />
+                <span className="ml-1 text-sm mb-[0.5px]">{c.likes_count}</span>
+              </div>
+            ) : (
+              <div
+                className="ml-2 flex items-center cursor-pointer group"
+                onClick={() => {
+                  if (isLiking) return
+                  onLike?.(c.id.toString())
+                }}
+              >
+                <HeartIcon className="text-zinc-400 group-hover:stroke-black" />
+                <span className="ml-1 text-sm mb-[0.5px]">{c.likes_count}</span>
+              </div>
+            ))}
         </div>
 
         {/* Mentions */}
