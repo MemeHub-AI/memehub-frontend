@@ -26,7 +26,7 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
   if (isMemex) {
     return (
       <>
-        <div className="flex items-center gap-3 mr-3 select-none">
+        <div className="select-none 2xl:ml-3">
           <Logo showMeme className="shrink-0" />
         </div>
         <div className="flex items-center gap-3">

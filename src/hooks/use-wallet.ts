@@ -4,14 +4,15 @@ import { useAccount } from 'wagmi'
 import { useWallet as useSolWallet } from '@solana/wallet-adapter-react'
 
 export const useWallet = () => {
-  const tonAddress = useTonAddress()
+  // const tonAddress = useTonAddress()
   const { address } = useAccount()
   const { publicKey } = useSolWallet()
 
   const walletAddress = () => {
-    if (tonAddress !== '') {
-      return tonAddress
-    }
+    // TODO: TON wallet support
+    // if (tonAddress !== '') {
+    //   return tonAddress
+    // }
 
     if (address) {
       return address

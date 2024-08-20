@@ -45,13 +45,16 @@ export const Header = () => {
       className={cn(
         'min-h-header flex justify-between items-center px-6 relative',
         'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3',
-        'border-b-2 border-black'
+        'border-b-2 border-black',
+        'xl:justify-center'
       )}
     >
       {isPad ? (
         <HeaderMobile navs={navs} onNavClick={onNavClick} />
       ) : (
-        <HeaderDesktop navs={navs} onNavClick={onNavClick} />
+        <div className="flex justify-between items-center w-full max-w-[1470px]">
+          <HeaderDesktop navs={navs} onNavClick={onNavClick} />
+        </div>
       )}
     </header>
   )
