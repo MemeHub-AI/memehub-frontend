@@ -70,7 +70,6 @@ export const useUpdateIdea = (
       if (showSuccessTips) toast.success(t('update-success'))
       onSuccess?.()
     },
-
     onError: ({ message }) => {
       REQUEST_ERR.message(message)
       resetUpdate()
