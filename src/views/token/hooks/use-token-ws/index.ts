@@ -80,7 +80,7 @@ export const useTokenWs = (disabled = false) => {
     ws.emit('listen', {
       chain: chainName,
       token: tokenAddr,
-      offset: 1,
+      offset: 0,
       limit: pageSize,
     })
   }, [ws.isOpen])
