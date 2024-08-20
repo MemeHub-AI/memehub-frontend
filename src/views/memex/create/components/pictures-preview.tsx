@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { ImagesPreviewDialog } from '@/components/images-preview-dialog'
 import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 import { cn } from '@/lib/utils'
+import { PhotoProvider, PhotoView } from 'react-photo-view'
 
 // TODO: refactor to public comp
 export const PicturesPreview = ({ disabled }: { disabled?: boolean }) => {
@@ -22,14 +23,14 @@ export const PicturesPreview = ({ disabled }: { disabled?: boolean }) => {
         )}, minmax(0, 1fr))`,
       }}
     >
-      <ImagesPreviewDialog
+      {/* <ImagesPreviewDialog
         images={pictures}
         value={srcIdx}
         onChange={setSrcIdx}
         disabled={disabled}
       />
       {pictures.map((src, i) => (
-        <div key={i} className="w-full h-full max-h-64 relative md:max-w-100">
+        <div key={i} className="w-full h-full max-h-64 relative md:max-w-80">
           <img
             src={src}
             alt="picture"
@@ -54,7 +55,19 @@ export const PicturesPreview = ({ disabled }: { disabled?: boolean }) => {
             <Cross2Icon className="w-5 h-5" />
           </Button>
         </div>
-      ))}
+      ))} */}
+      <PhotoProvider>
+        {pictures.map((src, i) => (
+          <PhotoView key={i} src={src}>
+            <img
+              src={src}
+              alt="picture"
+              className="rounded-lg border md:max-w-80"
+              // onClick={() => setSrcIdx(i)}
+            />
+          </PhotoView>
+        ))}
+      </PhotoProvider>
     </div>
   )
 }
