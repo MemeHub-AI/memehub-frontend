@@ -75,6 +75,7 @@ export const MemexIdeaCard = ({
     isPending,
     claim,
     refund,
+    refetch,
   } = useIdeaClaimRefund(idea?.ido_address, chainId, refetchInfo)
   const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
 
@@ -123,6 +124,8 @@ export const MemexIdeaCard = ({
 
     return children
   }
+
+  console.log('idea', idea)
 
   return (
     <div
@@ -212,7 +215,10 @@ export const MemexIdeaCard = ({
                     className="text-green-600 self-end"
                     createdAt={Number(overTime)}
                     duration={Number(waitingSeconds)}
-                    onExpired={() => setIsFailedWaiting(true)}
+                    onExpired={() => {
+                      setIsFailedWaiting(true)
+                      refetch()
+                    }}
                   />
                 </div>
                 {idea?.is_creator ? (
