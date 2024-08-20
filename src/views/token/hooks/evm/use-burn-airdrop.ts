@@ -31,7 +31,7 @@ export const useBurnAirdrop = (
   const { data: isBurned, refetch: refetchBurned } = useReadContract({
     ...airdropConfig,
     functionName: 'isBurn',
-    args: [BigInt(id || 0)],
+    args: [BigInt(id || -1)],
     query: { enabled: typeof id === 'number' },
   })
 

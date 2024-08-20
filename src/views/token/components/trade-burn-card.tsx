@@ -27,7 +27,7 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
     .toFormat()
 
   const { isBurned, isBurning, burn } = useBurnAirdrop(
-    airdrop[0]?.distribution_id || 0,
+    airdrop[0]?.distribution_id,
     refetchAirdrop
   )
 

@@ -41,7 +41,6 @@ export const AirdropCard = ({
     airdrop_address,
     airdrop_version,
   } = airdrop ?? {}
-  const airdropId = detail?.distribution_id || 0
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
   const { hideClaimed } = useAirdropContext()
@@ -57,14 +56,19 @@ export const AirdropCard = ({
     kolCount,
     communityCount,
     communityClaimedCount,
-  } = useAirdropInfo(airdropId, contract_address, chainId, coin_version)
+  } = useAirdropInfo(
+    detail?.distribution_id,
+    contract_address,
+    chainId,
+    coin_version
+  )
 
   const totalAmount = isKolCard ? kolTotalAmount : communityTotalAmount
   const current = isKolCard ? kolClaimedCount : communityClaimedCount
   const total = isKolCard ? kolCount : communityCount
 
   const { isKolClaimed, isCommunityClaimed, isBurned } = useAirdrop(
-    airdropId,
+    detail?.distribution_id,
     airdrop_address,
     airdrop_version,
     chainId

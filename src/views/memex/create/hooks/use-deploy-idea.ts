@@ -93,7 +93,7 @@ export const useDeployIdea = (
       args: [
         BigInt(projectId),
         hasInfo ? [name, symbol] : [],
-        [BigInt(tokenId || 0)],
+        [BigInt(tokenId!)],
         getEvmAirdropParams(configValue, marketing),
       ],
       value: parseEther(deployFee),

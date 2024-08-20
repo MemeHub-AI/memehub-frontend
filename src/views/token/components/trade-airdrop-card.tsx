@@ -43,7 +43,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     claimKol,
     claimCommunity,
   } = useAirdrop(
-    airdrop?.[0]?.distribution_id || 0,
+    airdrop?.[0]?.distribution_id,
     airdrop_address,
     airdrop_version,
     chainId,

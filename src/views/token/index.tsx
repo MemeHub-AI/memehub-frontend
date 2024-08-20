@@ -29,7 +29,7 @@ export const TokenPage = () => {
   const { chain: tokenChain, chainId } = useChainInfo(chainName)
   const tradeWs = useTokenWs(otherInfo.isNotFound)
   const airdropInfo = useAirdropInfo(
-    tokenInfo?.airdrop?.[0]?.distribution_id || 0,
+    tokenInfo?.airdrop?.[0]?.distribution_id,
     tokenAddr,
     chainId,
     tokenInfo?.coin_version
