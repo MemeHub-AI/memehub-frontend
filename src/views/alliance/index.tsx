@@ -8,6 +8,8 @@ import { Kol } from './kol'
 import { Communities } from './communities'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
+import { useIsMemex } from '@/hooks/use-is-memex'
+import { cn } from '@/lib/utils'
 
 enum Tab {
   Kol = 'kol',
@@ -26,6 +28,7 @@ export const AlliancePage = () => {
   }
   const { isPlayAllianceAudio, setIsPlayAllianceAudio } = useIsPlayAudio()
   const { playAlliance } = useAudioPlayer()
+  const { isMemex } = useIsMemex()
 
   const handleTabChange = (value: string) => {
     router.replace(`${router.pathname}?tab=${value}`)
@@ -40,7 +43,10 @@ export const AlliancePage = () => {
 
   return (
     <div>
-      <PrimaryLayout container="div" className="py-5">
+      <PrimaryLayout
+        container="div"
+        className={cn('py-5', isMemex && 'flex-1')}
+      >
         <Tabs value={defaultValue} onValueChange={handleTabChange}>
           <TabsList className="border-none space-x-2 h-10">
             <TabsTrigger

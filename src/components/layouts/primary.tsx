@@ -34,12 +34,17 @@ export const PrimaryLayout = (props: Props) => {
         'min-h-main max-sm:pt-0',
         padding && 'px-6 flex max-sm:px-3 gap-6',
         mainClass,
-        isMemex && 'space-x-4 flex-row-reverse justify-center'
+        isMemex &&
+          '!px-0 space-x-4 flex-row-reverse justify-between overflow-hidden'
       )}
     >
       <OpportunityMoonshot
-        className={cn('max-sm:!hidden', aClass, isMemex && '!border-r-0 pl-1')}
-        containerClass={cn('!ml-0', aContainerClass)}
+        className={cn(
+          'max-sm:!hidden',
+          aClass,
+          isMemex && 'pl-2 !border-r-0 border-l border-zinc-200'
+        )}
+        containerClass={cn('!ml-0', aContainerClass, isMemex && '!h-[90vh]')}
         {...restAsideProps}
       />
 

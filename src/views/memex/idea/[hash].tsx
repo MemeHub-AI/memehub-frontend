@@ -31,7 +31,7 @@ export const IdeaDetailsPage = () => {
         <CustomSuspense
           isPending={isLoadingDetails || isLoadingComments}
           fallback={<IdeaDetailsSkeleton />}
-          className="w-full sm:max-w-sm md:max-w-4xl"
+          className="w-full sm:max-w-sm md:max-w-xl"
         >
           <IdeaDetailsHeader />
           <MemexIdeaCard

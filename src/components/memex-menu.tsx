@@ -22,10 +22,11 @@ import { IoLanguageOutline } from 'react-icons/io5'
 import { IoLanguage } from 'react-icons/io5'
 import { Button } from './ui/button'
 import IdeaFloatButton from '@/views/memex/components/idea-float-button'
+import { useUserStore } from '@/stores/use-user-store'
 
 interface MemexNavs {
   title: string
-  path: string
+  path?: string
   icon: React.ReactNode
   icon_active: React.ReactNode
 }
@@ -33,46 +34,46 @@ interface MemexNavs {
 export const MemexMenu = () => {
   const { t } = useTranslation()
   const { push } = useRouter()
+  const { userInfo } = useUserStore()
   const navs: MemexNavs[] = [
     {
       title: t('Idea'),
-      path: Routes.Main,
+      path: Routes.Memex,
       icon: <FaRegLightbulb />,
       icon_active: <FaLightbulb />,
     },
     {
       title: t('Coin'),
-      path: Routes.Main,
+      path: Routes.MemexDetailsCoin,
       icon: <IoDiamondOutline />,
       icon_active: <IoDiamond />,
     },
     {
       title: t('profile'),
-      path: Routes.Account,
+      path: Routes.MemexDetailsProfile,
       icon: <LuUser2 />,
       icon_active: <IoPeopleSharp />,
     },
     {
       title: t('Notification'),
-      path: Routes.MemexMyIdea,
+      path: Routes.MemexDetailsNotification,
       icon: <RiNotification3Line />,
       icon_active: <RiNotification3Fill />,
     },
     {
       title: t('airdrop.no.icon'),
-      path: Routes.Airdrop,
+      path: Routes.MemexDetailsAirdrop,
       icon: <IoGiftOutline />,
       icon_active: <IoGift />,
     },
     {
       title: t('alliance'),
-      path: Routes.Alliance,
+      path: Routes.MemexDetailsAlliance,
       icon: <FaRegHandshake />,
       icon_active: <FaHandshake />,
     },
     {
       title: t('Languages'),
-      path: Routes.MemexIdea,
       icon: <IoLanguageOutline />,
       icon_active: <IoLanguage />,
     },
@@ -83,20 +84,30 @@ export const MemexMenu = () => {
   }
 
   return (
-    <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-52">
-      {navs.map((nav) => (
-        <div
-          key={nav.path}
-          className={cn(
-            'flex items-center text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
-            'max-xl:text-2xl max-xl:justify-center'
-          )}
-          onClick={() => onNavClick(nav)}
-        >
-          <span>{nav.icon}</span>
-          <span className="max-xl:hidden">{nav.title}</span>
-        </div>
-      ))}
+    <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-60 box-border-custom pr-6 fixed left-0">
+      {navs.map((nav) => {
+        if (nav.path === Routes.MemexDetailsProfile && !userInfo) return
+        return (
+          <div
+            key={nav.path}
+            className={cn(
+              'flex items-center text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
+              'max-xl:text-2xl max-xl:justify-center'
+            )}
+            onClick={() => {
+              if (nav.path === Routes.MemexDetailsProfile) {
+                return router.push(
+                  `${Routes.MemexDetailsProfile}/${userInfo?.wallet_address}`
+                )
+              }
+              onNavClick(nav)
+            }}
+          >
+            <span>{nav.icon}</span>
+            <span className="max-xl:hidden">{nav.title}</span>
+          </div>
+        )
+      })}
       <Button
         shadow={'none'}
         onClick={() => router.push(Routes.MemexCreate)}
