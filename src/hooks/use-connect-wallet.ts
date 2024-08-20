@@ -34,6 +34,7 @@ export const useConnectWallet = () => {
 
   // logout wallet
   const walletDisconnect = () => {
+    disconnect()
     if (getMainChain() === 'evm') {
       disconnect()
     } else if (getMainChain() === 'solana') {
