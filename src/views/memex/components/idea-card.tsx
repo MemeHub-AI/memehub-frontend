@@ -149,8 +149,8 @@ export const MemexIdeaCard = ({
 
       <div className="flex-1">
         {withDetailsLayout(
-          <div className="space-x-1 text-zinc-500 text-sm leading-none">
-            <span className="font-bold text-base text-black">
+          <div className="space-x-1 text-zinc-500 text-sm leading-none inline-flex items-center">
+            <span className="font-bold text-base text-black truncate max-w-[40%]">
               {idea?.user_name}
             </span>
             <span>·</span>
