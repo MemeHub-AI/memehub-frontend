@@ -118,7 +118,7 @@ export const MemexIdeaCard = ({
         className
       )}
       onClick={() => {
-        if (!idea?.hash) return
+        if (!idea?.hash || isDetails) return
         router.push(fmt.toHref(Routes.MemexIdea, idea?.hash))
       }}
     >
