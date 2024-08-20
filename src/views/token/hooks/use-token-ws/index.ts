@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { orderBy, uniqBy } from 'lodash'
+import { useRouter } from 'next/router'
 
 import { apiUrl } from '@/config/url'
 import { useWebsocket } from '@/hooks/use-websocket'
@@ -11,6 +12,7 @@ import type {
   TokenPrice,
   TokenTrade,
 } from './types'
+import { Routes } from '@/routes'
 
 const uniqKey: keyof TokenTrade = 'hash'
 
@@ -22,8 +24,10 @@ let tardeRewards = '0'
 
 export const useTokenWs = (disabled = false) => {
   const { chainName, tokenAddr } = useTokenQuery()
+  const router = useRouter()
   const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
-    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`
+    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`,
+    { shouldReconnect: () => router.pathname === Routes.TokenPage }
   )
   const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
   const [holders, setHolders] = useState<TokenHolder[]>([])

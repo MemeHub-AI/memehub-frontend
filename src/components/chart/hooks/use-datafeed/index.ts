@@ -1,4 +1,5 @@
 import { isEmpty, last } from 'lodash'
+import { useRouter } from 'next/router'
 
 import type {
   IBasicDataFeed,
@@ -17,11 +18,14 @@ import { useWebsocket } from '@/hooks/use-websocket'
 import { DatafeedEmitEvents, DatafeedOnEvents, DatafeedCache } from './types'
 import { useLruMap } from '@/hooks/use-lru-map'
 import { apiUrl } from '@/config/url'
+import { Routes } from '@/routes'
 
 export const useDatafeed = () => {
   const { chainName, tokenAddr } = useTokenQuery()
+  const router = useRouter()
   const ws = useWebsocket<DatafeedOnEvents, DatafeedEmitEvents>(
-    `${apiUrl.ws}/ws/v2/coin/candles`
+    `${apiUrl.ws}/ws/v2/coin/candles`,
+    { shouldReconnect: () => router.pathname === Routes.TokenPage }
   )
   const cache = useLruMap<DatafeedCache>()
 

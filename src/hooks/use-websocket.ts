@@ -34,6 +34,9 @@ export const useWebsocket = <
   >(
     url,
     {
+      retryOnError: true,
+      reconnectAttempts: 5,
+      reconnectInterval: 3_000,
       onOpen: () => sendJsonMessage({ type: 'heartbeat' }),
       filter: filterHeartbeta,
       ...options,

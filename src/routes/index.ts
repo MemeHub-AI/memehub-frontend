@@ -19,6 +19,8 @@ export enum Routes {
 
   Ido = '/ido',
 
+  TokenPage = '/[chain]/[address]',
+
   Memex = '/memex',
 
   MemexLatest = '/memex/latest',
