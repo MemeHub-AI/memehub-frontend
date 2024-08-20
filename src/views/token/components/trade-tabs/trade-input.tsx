@@ -54,15 +54,15 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const checkForLastOrder = async () => {
     if (isGraduated || isIdoToken) return
 
-    const leftAmount = formatEther(await getLastOrderAmount(tokenLeft))
-    if (BigNumber(value as string).gt(leftAmount)) {
+    const remainingAmount = formatEther(await getLastOrderAmount(tokenLeft))
+    if (BigNumber(value as string).gt(remainingAmount)) {
       toast.warning(
         utilLang.replace(t('trade.limit'), [
-          `${leftAmount} ${reserveSymbol}`,
+          `${remainingAmount} ${reserveSymbol}`,
           t('trade.buy'),
         ])
       )
-      onChange?.(leftAmount)
+      onChange?.(remainingAmount)
       return false
     }
     return true
