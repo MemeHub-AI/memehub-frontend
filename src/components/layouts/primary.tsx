@@ -42,9 +42,13 @@ export const PrimaryLayout = (props: Props) => {
         className={cn(
           'max-sm:!hidden',
           aClass,
-          isMemex && 'pl-2 !border-r-0 border-l border-zinc-200'
+          isMemex && 'pl-2 !border-r-0 border-l border-zinc-200 mr-2'
         )}
-        containerClass={cn('!ml-0', aContainerClass, isMemex && '!h-[90vh]')}
+        containerClass={cn(
+          '!ml-0',
+          aContainerClass,
+          isMemex && '!h-[90vh] !top-0'
+        )}
         {...restAsideProps}
       />
 

@@ -137,7 +137,6 @@ embed {
   bottom: 0;
   right: 0;
   width: 1px;
-  z-index: 100;
   background-color: #e4e4e7;
 }
 
@@ -165,7 +164,7 @@ embed {
     position: absolute;
     top: -15px;
     bottom: -16px;
-    left: -54px;
+    right: 21.25rem;
     width: 1px;
     background-color: #e4e4e7;
   }

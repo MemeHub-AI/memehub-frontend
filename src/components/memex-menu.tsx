@@ -3,38 +3,47 @@ import { Routes } from '@/routes'
 import router, { useRouter } from 'next/router'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { IoHome } from 'react-icons/io5'
-import { IoHomeOutline } from 'react-icons/io5'
-import { IoGift } from 'react-icons/io5'
+import { IoGift, IoLanguageOutline } from 'react-icons/io5'
 import { IoGiftOutline } from 'react-icons/io5'
-import { IoPeopleOutline } from 'react-icons/io5'
-import { IoPeopleSharp } from 'react-icons/io5'
 import { FaRegLightbulb } from 'react-icons/fa'
 import { FaLightbulb } from 'react-icons/fa'
 import { IoDiamondOutline } from 'react-icons/io5'
 import { IoDiamond } from 'react-icons/io5'
-import { LuUser2 } from 'react-icons/lu'
 import { RiNotification3Line } from 'react-icons/ri'
 import { RiNotification3Fill } from 'react-icons/ri'
 import { FaRegHandshake } from 'react-icons/fa'
 import { FaHandshake } from 'react-icons/fa6'
-import { IoLanguageOutline } from 'react-icons/io5'
-import { IoLanguage } from 'react-icons/io5'
+import { FaRegUser } from 'react-icons/fa6'
+import { FaUser } from 'react-icons/fa6'
 import { Button } from './ui/button'
 import IdeaFloatButton from '@/views/memex/components/idea-float-button'
 import { useUserStore } from '@/stores/use-user-store'
+import {
+  Arrow,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@radix-ui/react-popover'
+import { useLang } from '@/hooks/use-lang'
+import { resources } from '@/i18n'
 
 interface MemexNavs {
   title: string
-  path?: string
+  path: string
   icon: React.ReactNode
   icon_active: React.ReactNode
 }
 
+const langs = Object.entries(resources as Record<string, { name: string }>)
+
 export const MemexMenu = () => {
-  const { t } = useTranslation()
-  const { push } = useRouter()
+  const { t, i18n } = useTranslation()
+  const { setLang } = useLang()
+  const { push, pathname } = useRouter()
   const { userInfo } = useUserStore()
+
+  // console.log('pathname: ', pathname)
+
   const navs: MemexNavs[] = [
     {
       title: t('Idea'),
@@ -51,8 +60,8 @@ export const MemexMenu = () => {
     {
       title: t('profile'),
       path: Routes.MemexDetailsProfile,
-      icon: <LuUser2 />,
-      icon_active: <IoPeopleSharp />,
+      icon: <FaRegUser />,
+      icon_active: <FaUser />,
     },
     {
       title: t('Notification'),
@@ -72,26 +81,38 @@ export const MemexMenu = () => {
       icon: <FaRegHandshake />,
       icon_active: <FaHandshake />,
     },
-    {
-      title: t('Languages'),
-      icon: <IoLanguageOutline />,
-      icon_active: <IoLanguage />,
-    },
   ]
 
   const onNavClick = (n: MemexNavs) => {
     push({ pathname: n.path })
   }
 
+  const isCurrentPath = (name: string) => {
+    if (name === Routes.Memex) {
+      if (
+        pathname === `${Routes.Memex}/latest` ||
+        pathname === `${Routes.Memex}/hots` ||
+        pathname === `${Routes.Memex}/my-idea` ||
+        pathname === `${Routes.Memex}/my-involved` ||
+        pathname === `${Routes.Memex}/successed`
+      ) {
+        return true
+      }
+      return false
+    }
+
+    return pathname.includes(name)
+  }
+
   return (
-    <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-60 box-border-custom pr-6 fixed left-0">
-      {navs.map((nav, i) => {
+    <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-60 box-border-custom pr-6 fixed left-2">
+      {navs.map((nav, index) => {
         if (nav.path === Routes.MemexDetailsProfile && !userInfo) return
         return (
           <div
-            key={i}
+            key={index}
             className={cn(
-              'flex items-center text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
+              'flex items-start text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
               'max-xl:text-2xl max-xl:justify-center'
             )}
             onClick={() => {
@@ -103,11 +124,58 @@ export const MemexMenu = () => {
               onNavClick(nav)
             }}
           >
-            <span>{nav.icon}</span>
-            <span className="max-xl:hidden">{nav.title}</span>
+            <span className="xl:text-2xl xl:mr-2">
+              {!isCurrentPath(nav.path) ? nav.icon : nav.icon_active}
+            </span>
+            <span
+              className={cn(
+                'max-xl:hidden',
+                isCurrentPath(nav.path) && 'font-bold'
+              )}
+            >
+              {nav.title}
+            </span>
           </div>
         )
       })}
+      <Popover>
+        <PopoverTrigger>
+          <div
+            className={cn(
+              'flex items-center text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
+              'max-xl:text-2xl max-xl:justify-center'
+            )}
+          >
+            <span className="xl:text-2xl xl:mr-2">
+              <IoLanguageOutline />
+            </span>
+            <span className="max-xl:hidden">{t('Languages')}</span>
+          </div>
+        </PopoverTrigger>
+
+        <PopoverContent side="right">
+          <div className="bg-slate-50 p-4 flex space-y-2 flex-col">
+            {langs.map(([code, { name }], i) => (
+              <Button
+                key={i}
+                onClick={() => setLang(code)}
+                variant="ghost"
+                shadow="none"
+                className={cn(
+                  'w-full justify-start hover:bg-zinc-200 rounded-lg p-4 bg-slate-50',
+                  i18n.language === code && 'font-bold'
+                )}
+              >
+                {name}
+                {/* {i18n.language === code && <FaCheck className="ml-5" />} */}
+              </Button>
+            ))}
+          </div>
+
+          <Arrow className="fill-slate-50" width={20} height={30} />
+        </PopoverContent>
+      </Popover>
+
       <Button
         shadow={'none'}
         onClick={() => router.push(Routes.MemexCreate)}
