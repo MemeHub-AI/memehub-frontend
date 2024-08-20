@@ -7,6 +7,7 @@ import type {
 } from '../../../../../public/js/charting_library/charting_library'
 import {
   datafeedConfig,
+  datafeedDefaultInterval,
   datafeedUnit,
   symbolInfoConfig,
 } from '@/config/datafeed'
@@ -29,9 +30,8 @@ export const useDatafeed = () => {
   )
   const cache = useLruMap<DatafeedCache>()
 
-  // TODO: save `localStorage`, don't use `chainName` + `tokenAddr`
-  const { getInterval, setInterval } = useStorage()
-  const interval = getInterval(chainName, tokenAddr) || '1m'
+  const { getChartInterval, setChartInterval } = useStorage()
+  const interval = getChartInterval() || datafeedDefaultInterval
 
   const createDatafeed = () => {
     return {
@@ -62,7 +62,7 @@ export const useDatafeed = () => {
 
         if (period.firstDataRequest) {
           const cachedBars = cache.get('bars') || []
-          const cachedInterval = getInterval(chainName, tokenAddr)
+          const cachedInterval = getChartInterval()
 
           // Have cached bars & interval no change, use cache
           if (!isEmpty(cachedBars) && cachedInterval === interval) {
@@ -74,9 +74,10 @@ export const useDatafeed = () => {
             const bars = data[datafeedUnit]
 
             if (!isEmpty(bars)) cache.set('lastBar', last(bars))
-            setInterval(chainName, tokenAddr, interval)
+            setChartInterval(interval)
             onResult(bars, { noData: isEmpty(data) })
           })
+          ws.emit('unlisten', null)
           ws.emit('listen', {
             interval,
             token: tokenAddr,

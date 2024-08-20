@@ -10,14 +10,15 @@ import { Skeleton } from '../ui/skeleton'
 import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { ChartDexScreener } from '../chart-dexscrenner'
 import { ChartIntervals } from './components/chart-intervals'
+import { datafeedDefaultInterval } from '@/config/datafeed'
 
 export const Chart = memo(() => {
   const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
-  const { chainName, tokenAddr } = useTokenQuery()
+  const { tokenAddr } = useTokenQuery()
   const { tokenInfo, isNotFound, isIdoToken, isGraduated } = useTokenContext()
   const { isConnected, isCreating, createChart, removeChart } = useChart()
-  const { getInterval } = useStorage()
+  const { getChartInterval } = useStorage()
 
   useEffect(() => {
     if (
@@ -33,7 +34,7 @@ export const Chart = memo(() => {
 
     createChart(chartRef.current, {
       symbol: tokenInfo.symbol,
-      interval: getInterval(chainName, tokenAddr) || '1m',
+      interval: getChartInterval() || datafeedDefaultInterval,
       tokenAddr,
     })
 

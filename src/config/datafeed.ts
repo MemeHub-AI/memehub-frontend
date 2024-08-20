@@ -13,8 +13,8 @@ export const datafeedResolutionsMap = {
   '5': `5${t('m')}`,
   '15': `15${t('m')}`,
   '30': `30${t('m')}`,
-  '1h': `1${t('h')}`,
-  '4h': `1${t('h')}`,
+  '60': `1${t('h')}`,
+  '240': `1${t('h')}`,
   '1d': `1${t('d')}`,
   '1w': `1${t('w')}`,
   '1m': `1${t('M')}`,
@@ -26,12 +26,14 @@ export const datafeedResolutions = [
   '5',
   '15',
   '30',
-  '1h',
-  '4h',
+  '60',
+  '240',
   '1d',
   '1w',
-  '1M',
+  '1m',
 ] as ResolutionString[]
+
+export const datafeedDefaultInterval = '1m'
 
 export const datafeedConfig: DatafeedConfiguration = {
   supported_resolutions: [...datafeedResolutions],

@@ -18,7 +18,9 @@ export const ChartIntervals = () => {
           size="sm"
           shadow="none"
           variant="ghost"
-          className={cn(activeChart?.resolution() === r && 'text-blue-600')}
+          className={cn(
+            activeChart?.resolution().toLowerCase() === r && 'text-blue-600'
+          )}
           onClick={() => {
             activeChart?.setResolution(r)
             update((v) => !v)
