@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 import { MemexIdeaItem } from '@/api/memex/types'
-import { useTokenProgress } from '@/views/token/hooks/evm/use-token-progress'
 import { fmt } from '@/utils/fmt'
 import { CopyIcon } from '@/components/copy-icon'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { useTokenDetails } from '@/hooks/use-token-details'
 
 interface Props {
   details?: MemexIdeaItem
@@ -41,7 +41,7 @@ export const TokenDetailsCard = ({
   } = details ?? {}
   const { t } = useTranslation()
   const { chainId } = useChainInfo(chain)
-  const { progress } = useTokenProgress(
+  const { progress } = useTokenDetails(
     tokenAddr,
     chainId,
     details?.coin_version!

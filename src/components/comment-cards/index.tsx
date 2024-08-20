@@ -56,8 +56,8 @@ export const CommentCards = (props: Props) => {
     onFetchNext,
     hasMore: cards.length < total,
   })
-  const { isNotFound } = useTokenInfo()
   const { chainName, tokenAddr } = useTokenQuery()
+  const { isNotFound } = useTokenInfo(tokenAddr, chainName)
 
   const onComment = (content: string, mentions: string[], img?: string) => {
     addComment({

@@ -22,7 +22,10 @@ export const TokenPage = () => {
   const { isMobile } = useResponsive()
   const { chainName, tokenAddr, isReady } = useTokenQuery()
 
-  const { tokenInfo, isLoadingTokenInfo, ...otherInfo } = useTokenInfo()
+  const { tokenInfo, isLoadingTokenInfo, ...otherInfo } = useTokenInfo(
+    tokenAddr,
+    chainName
+  )
   const { chain: tokenChain, chainId } = useChainInfo(chainName)
   const tradeWs = useTokenWs(otherInfo.isNotFound)
   const airdropInfo = useAirdropInfo(

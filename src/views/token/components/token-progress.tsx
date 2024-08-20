@@ -6,10 +6,10 @@ import { Progress } from '@/components/ui/progress'
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
-import { useTokenProgress } from '../hooks/evm/use-token-progress'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
 import { TokenVersion } from '@/contract/abi/token'
+import { useTokenDetails } from '@/hooks/use-token-details'
 
 export const TokenProgress = ({
   showDesc = true,
@@ -26,7 +26,7 @@ export const TokenProgress = ({
     chainId,
     tokenChain,
   } = useTokenContext()
-  const { total, progress, isGrauated } = useTokenProgress(
+  const { totalSupply, progress, isGraduated } = useTokenDetails(
     tokenAddr,
     chainId,
     tokenVersion as TokenVersion
@@ -36,9 +36,9 @@ export const TokenProgress = ({
     tokenInfo?.airdrop?.[0]?.distribution_id || 0
   )
 
-  const threshold = BigNumber(total).lte(0)
+  const threshold = BigNumber(totalSupply).lte(0)
     ? t('threshold')
-    : ` ${fmt.decimals(total, { fixed: 3 })} ${
+    : ` ${fmt.decimals(totalSupply, { fixed: 3 })} ${
         tokenChain?.native.symbol ?? ''
       } `
 
@@ -50,9 +50,9 @@ export const TokenProgress = ({
           isIdoToken && 'text-white'
         )}
         indicatorClass={isIdoToken ? 'bg-red-500' : 'bg-lime-green'}
-        value={isIdoToken ? idoProgress : isGrauated ? 100 : progress}
+        value={isIdoToken ? idoProgress : isGraduated ? 100 : progress}
       />
-      {isGrauated && (
+      {isGraduated && (
         <Badge
           variant="success"
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-3 whitespace-nowrap"

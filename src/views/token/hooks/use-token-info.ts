@@ -1,19 +1,14 @@
-import { useReadContract } from 'wagmi'
 import { useQuery } from '@tanstack/react-query'
-import { formatEther, zeroAddress } from 'viem'
+import { Address } from 'viem'
 
 import { tokenApi } from '@/api/token'
-import { useTokenQuery } from './use-token-query'
 import { ApiCode, ApiResponse } from '@/api/types'
 import { useTokenDetails } from '@/hooks/use-token-details'
-import { bcAbiMap } from '@/contract/abi/bonding-curve'
-import { BI_ZERO } from '@/constants/number'
 import { TokenVersion } from '@/contract/abi/token'
 import { TokenType } from '@/enums/token'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
-export const useTokenInfo = () => {
-  const { chainName, tokenAddr } = useTokenQuery()
+export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
   const { chainId } = useChainInfo(chainName)
 
   const {
@@ -38,41 +33,17 @@ export const useTokenInfo = () => {
   const isNotFound = tokenInfoErr?.code === ApiCode.NotFound
   const isIdoToken = tokenInfo?.coin_type === TokenType.Ido
 
-  const { isLoadingDetails, ...tokenDetails } = useTokenDetails(
+  const { isLoadingDetails, refetchDetails, ...tokenDetails } = useTokenDetails(
     isIdoToken || isNotFound ? undefined : tokenAddr,
     chainId,
     tokenInfo?.coin_version as TokenVersion
   )
-  const { bcVersion, bcAddr } = tokenDetails
-
-  const { data: pools = [], refetch: refetchPools } = useReadContract({
-    abi: bcAbiMap[bcVersion!],
-    address: bcAddr!,
-    chainId,
-    functionName: 'pools_',
-    args: [tokenAddr],
-    query: {
-      enabled: !!bcAddr && !!tokenAddr,
-      refetchInterval: 10_000, // refresh each 10s.
-    },
-  })
-  const [
-    ,
-    ,
-    tokenLeft = BI_ZERO,
-    ,
-    reserveTotal = BI_ZERO,
-    ,
-    ,
-    ,
-    ,
-    headmaster = zeroAddress,
-  ] = pools
-  const isGraduated = headmaster !== zeroAddress
+  const { progress, isGraduated, tokenLeftAmount, reserveTotalAmount } =
+    tokenDetails
 
   const refetchTokenInfo = () => {
     refetchInfo()
-    refetchPools()
+    refetchDetails()
   }
 
   return {
@@ -82,10 +53,12 @@ export const useTokenInfo = () => {
     isRefetchingTokenInfo,
     isNotFound,
     isLoadingDetails,
-    ...tokenDetails,
-    isGraduated,
     refetchTokenInfo,
-    tokenLeft: formatEther(tokenLeft),
-    reserveTotal: formatEther(reserveTotal),
+
+    ...tokenDetails,
+    progress,
+    isGraduated,
+    tokenLeft: tokenLeftAmount,
+    reserveTotal: reserveTotalAmount,
   }
 }

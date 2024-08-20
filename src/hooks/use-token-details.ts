@@ -1,9 +1,11 @@
-import { Address, formatEther } from 'viem'
+import { useMemo } from 'react'
+import { BigNumber } from 'bignumber.js'
+import { Address, formatEther, zeroAddress } from 'viem'
 import { useReadContract, useReadContracts } from 'wagmi'
 
 import { tokenAbiMap, TokenVersion } from '@/contract/abi/token'
 import { BI_ZERO } from '@/constants/number'
-import { BcVersion } from '@/contract/abi/bonding-curve'
+import { bcAbiMap, BcVersion } from '@/contract/abi/bonding-curve'
 import { DistributorVersion } from '@/contract/abi/distributor'
 
 export const useTokenDetails = (
@@ -36,6 +38,12 @@ export const useTokenDetails = (
     },
   })
 
+  const bcConfig = {
+    abi: bcAbiMap[bcVersion as BcVersion],
+    address: bcAddr as Address,
+    chainId,
+  }
+
   const {
     data: tokenMetadata,
     isLoading: isLoadingMetadata,
@@ -46,15 +54,66 @@ export const useTokenDetails = (
     query: { enabled },
   })
 
-  const { data: totalSupply = BI_ZERO } = useReadContract({
+  const { data: totalSupply_ = BI_ZERO } = useReadContract({
     ...tokenConfig,
     functionName: 'totalSupply',
     query: { enabled },
   })
 
+  const {
+    data: bcTotalSupply = BI_ZERO,
+    isLoading: isLoadingProgress,
+    isFetching: isFetchingProgress,
+    refetch: refetchTotal,
+  } = useReadContract({
+    ...bcConfig,
+    functionName: 'maxSupply_',
+    query: { enabled: !!bcAddr },
+  })
+  const { data: pools = [], refetch: refetchPools } = useReadContract({
+    ...bcConfig,
+    functionName: 'pools_',
+    args: [tokenAddr as Address],
+    query: {
+      enabled: !!bcAddr && !!tokenAddr,
+      refetchInterval: 10_000, // refresh each 10s.
+    },
+  })
+  const [
+    ,
+    ,
+    tokenLeft = BI_ZERO,
+    ,
+    reserveTotal = BI_ZERO,
+    ,
+    ,
+    ,
+    ,
+    headmaster = zeroAddress,
+  ] = pools
+  const isGraduated = headmaster !== zeroAddress
+  const tokenLeftAmount = formatEther(tokenLeft)
+  const reserveTotalAmount = formatEther(reserveTotal)
+  const totalSupply = formatEther(bcTotalSupply)
+
+  console.log('p', totalSupply, tokenLeftAmount)
+
+  const progress = useMemo(() => {
+    if (BigNumber(totalSupply).isZero()) return '0.00'
+    if (isGraduated) return '100.00'
+    if (!isGraduated && BigNumber(tokenLeftAmount).isZero()) return '0.00'
+
+    return BigNumber(totalSupply)
+      .minus(tokenLeftAmount)
+      .div(totalSupply)
+      .multipliedBy(100)
+      .toFixed(2)
+  }, [totalSupply, tokenLeftAmount, isGraduated])
+
   const refetchDetails = () => {
     refetch()
     refetchMetadata()
+    refetchPools()
   }
 
   return {
@@ -65,7 +124,12 @@ export const useTokenDetails = (
     airdropAddr: airdropAddr as Address | undefined,
     tokenMetadata,
     isLoadingDetails: isLoading || isLoadingMetadata,
-    totalSupply: formatEther(totalSupply),
+    totalSupply,
     refetchDetails,
+
+    progress,
+    isGraduated,
+    tokenLeftAmount,
+    reserveTotalAmount,
   }
 }
