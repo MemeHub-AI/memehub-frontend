@@ -2,13 +2,12 @@ import { useTranslation } from 'react-i18next'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import { useResponsive } from '@/hooks/use-responsive'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAccountEffect } from 'wagmi'
 
 import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '../ui/button'
 import { DialogDescription } from '@radix-ui/react-dialog'
-import { useTonConnectModal, useTonConnectUI } from '@tonconnect/ui-react'
 import { useStorage } from '@/hooks/use-storage'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui'
@@ -18,8 +17,6 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
   const { isConnecting } = useAccount()
   const { openConnectModal } = useConnectModal()
   const { isMobile } = useResponsive()
-  const { open } = useTonConnectModal() // Ton connect wallet API
-  const [tonConnectUI] = useTonConnectUI()
   const [isOpening, setIsOpening] = useState(false)
   const { setMainChain } = useStorage()
 
@@ -31,23 +28,11 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
     setMainChain('solana')
   }
 
-  // clear monitor
-  useEffect(() => {
-    return () => {
-      unsubscribe()
-    }
-  }, [])
-
   // EVM monitor connection
   useAccountEffect({
     onConnect() {
       setMainChain('evm')
     },
-  })
-
-  // Ton monitor connection
-  const unsubscribe = tonConnectUI.onStatusChange(() => {
-    setMainChain('ton')
   })
 
   const chainList = [
@@ -62,11 +47,6 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
       connect_wallet: () => {
         setVisible(true)
       },
-    },
-    {
-      name: 'Ton',
-      image_url: 'https://storage.memehub.ai/chains/logo/ton.png',
-      connect_wallet: open,
     },
   ]
 

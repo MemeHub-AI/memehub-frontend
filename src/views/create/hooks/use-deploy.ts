@@ -6,7 +6,6 @@ import { useEvmDeploy } from './use-evm-deploy'
 import { Network } from '@/enums/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { deployErr } from '@/errors/deploy'
-import { useTvmDeploy } from './use-tvm-deploy'
 import { useSolDeploy } from './use-sol-deploy'
 
 export type DeployFormParams = Omit<
@@ -43,7 +42,7 @@ export const useDeploy = (chainName: string) => {
       [Network.Svm]: evmDeploy, // TODO: should be `svmDeploy`
       [Network.Tvm]: evmDeploy, // TODO: should be `tvmDeploy`
     }[network]
-  }, [network, evmDeploy, evmDeploy]) // TODO: add more deps...
+  }, [network, evmDeploy]) // TODO: add more deps...
 
   const deploy = async (params: DeployFormParams) => {
     const tokenId = await createToken(params)

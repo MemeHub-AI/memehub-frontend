@@ -19,11 +19,8 @@ import i18n from 'i18next'
 
 import i18nConfig from '@/i18n'
 import { wagmiConfig } from '@/config/wagmi'
-import { TonConnectUIProvider } from '@tonconnect/ui-react'
 
 export const queryClient = new QueryClient()
-
-const localUrl = typeof location !== 'undefined' ? location.origin : ''
 export const AppProviders = ({ children }: ComponentProps<'div'>) => {
   const network = WalletAdapterNetwork.Devnet
   const endpoint = useMemo(() => clusterApiUrl(network), [network])
@@ -32,10 +29,6 @@ export const AppProviders = ({ children }: ComponentProps<'div'>) => {
   return (
     <I18nextProvider i18n={i18nConfig}>
       <WagmiProvider config={wagmiConfig} reconnectOnMount>
-        {/* TODO:add tonconnect */}
-        {/* <TonConnectUIProvider
-          manifestUrl={`${localUrl}/tonconnect-manifest.json`}
-        > */}
         <QueryClientProvider client={queryClient}>
           <RainbowKitProvider
             modalSize="compact"
@@ -53,7 +46,6 @@ export const AppProviders = ({ children }: ComponentProps<'div'>) => {
             </ConnectionProvider>
           </RainbowKitProvider>
         </QueryClientProvider>
-        {/* </TonConnectUIProvider> */}
       </WagmiProvider>
     </I18nextProvider>
   )
