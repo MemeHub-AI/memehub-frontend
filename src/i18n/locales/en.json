@@ -696,5 +696,11 @@
   "Post.idea": "Post Idea",
   "link-copy-success": "Copy share link successful!",
   "airdrop.burned-desc": "Currently, {} tokens have been burned",
-  "no-more": "No more"
+  "no-more": "No more",
+  "m": "m",
+  "s": "s",
+  "h": "h",
+  "d": "d",
+  "w": "w",
+  "M": "M"
 }

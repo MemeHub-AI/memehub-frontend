@@ -28,12 +28,12 @@ export const AccountTab = () => {
   ]
   const tabs = [
     {
-      label: t('token.held'),
-      value: UserListType.CoinsHeld,
-    },
-    {
       label: t('token.created'),
       value: UserListType.CoinsCreated,
+    },
+    {
+      label: t('token.held'),
+      value: UserListType.CoinsHeld,
     },
     ...(isOtherUser ? [] : myAccountTabs),
   ]

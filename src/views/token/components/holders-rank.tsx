@@ -27,7 +27,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
 
   const getLabel = ({ flag, holder = '' }: (typeof holders)[number]) => {
     if (flag === Flag.BlackHole || holder === zeroAddress) {
-      return `🔥${t('holder.burning')}`
+      return `(🔥${t('holder.burning')})`
     }
     if (flag === Flag.Bc) return `(💰${t('pool')})`
     if (flag === Flag.Creator) return `(🧑‍💻${t('creator')})`
