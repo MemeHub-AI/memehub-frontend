@@ -6,7 +6,6 @@ import { useEvmDeploy } from './use-evm-deploy'
 import { Network } from '@/enums/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { deployErr } from '@/errors/deploy'
-import { useTvmDeploy } from './use-tvm-deploy'
 import { useSolDeploy } from './use-sol-deploy'
 
 export type DeployFormParams = Omit<
