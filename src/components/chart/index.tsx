@@ -84,7 +84,6 @@ export const Chart = memo(() => {
                   )}
                   onClick={() => {
                     activeChart?.setResolution(r)
-                    // Refresh component, because `setResolution` does not refresh
                     update((v) => !v)
                   }}
                 >
