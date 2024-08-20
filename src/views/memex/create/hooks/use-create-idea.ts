@@ -74,7 +74,6 @@ export const useCreateIdea = () => {
   const { checkForChain } = useCheckAccount()
 
   const onSubmit = async ({ pictures, ...values }: z.infer<typeof schema>) => {
-    console.log('dep', chainsMap[values.chain]?.id)
     if (!(await checkForChain(chainsMap[values.chain]?.id))) return
     if (
       !(await form.trigger()) ||

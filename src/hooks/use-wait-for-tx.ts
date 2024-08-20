@@ -28,7 +28,7 @@ export const useWaitForTx = (options: Options) => {
     if (isFetching) onFetching?.()
     if (isError) onError?.(error)
     if (isSuccess) onSuccess?.(data)
-    if (isError || isSuccess) onFillay?.()
+    if (isError || isSuccess) setTimeout(() => onFillay?.(), 500)
 
     if (hash) prevHash.current = hash
   }, [result])

@@ -64,6 +64,7 @@ export const CommentCard = (props: Props) => {
         <div
           className="flex items-center group transition-all w-fit"
           onClick={() => {
+            if (!c.user.wallet_address) return
             router.push(fmt.toHref(Routes.Account, c.user.wallet_address))
           }}
         >

@@ -5,6 +5,7 @@ import type { DistributorVersion } from '@/contract/abi/distributor'
 import type { AirdropDetail } from '../airdrop/types'
 import type { MemexFactoryVersion } from '@/contract/abi/memex'
 import type { RecommendVersion } from '@/contract/abi/recommend'
+import { BcVersion } from '@/contract/abi/bonding-curve'
 
 export interface TokenListItem {
   airdrop: AirdropDetail[]
@@ -201,6 +202,7 @@ export interface TokenConfigRes {
 }
 
 export interface TokenConfigContracts {
+  bond: TokenConfigContract<BcVersion>[]
   coin: TokenConfigContract<TokenVersion>[]
   airdrop: TokenConfigContract<DistributorVersion>[]
   recommend: TokenConfigContract<RecommendVersion>[]
