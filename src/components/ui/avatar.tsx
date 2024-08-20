@@ -1,10 +1,10 @@
 import * as React from 'react'
 import * as AvatarPrimitive from '@radix-ui/react-avatar'
+import { cva, VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 import { ShadowVariantsProps, shadowVariants } from '@/styles/variants'
 import { defaultImg } from '@/config/link'
-import { cva, VariantProps } from 'class-variance-authority'
 
 const avatarVariants = cva('', {
   variants: {
@@ -46,14 +46,13 @@ const Avatar = React.forwardRef<
   const classes = cn(
     'relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full',
     className,
-    shadowVariants({ shadow }),
-    avatarVariants({ variant })
+    shadowVariants({ shadow })
   )
 
   return (
     <AvatarPrimitive.Root
       ref={ref}
-      className={classes}
+      className={cn(classes, avatarVariants())}
       style={{ width: size, height: size }}
       {...restProps}
     >
@@ -63,7 +62,10 @@ const Avatar = React.forwardRef<
         title={title}
         className={cn('object-cover', imgClass)}
       />
-      <AvatarFallback className={classes} children={fallback} />
+      <AvatarFallback
+        className={cn(classes, 'w-full h-full border-none')}
+        children={fallback}
+      />
     </AvatarPrimitive.Root>
   )
 })
