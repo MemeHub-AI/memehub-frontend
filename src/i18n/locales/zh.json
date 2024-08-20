@@ -685,5 +685,6 @@
   "Notification": "消息",
   "Post.idea": "发布Idea",
   "link-copy-success": "复制分享链接成功！",
-  "airdrop.burned-desc": "当前有{}个代币被销毁了"
+  "airdrop.burned-desc": "当前有{}个代币被销毁了",
+  "no-more": "没有更多了"
 }

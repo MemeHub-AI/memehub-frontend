@@ -695,5 +695,6 @@
   "Notification": "Notification",
   "Post.idea": "Post Idea",
   "link-copy-success": "Copy share link successful!",
-  "airdrop.burned-desc": "Currently, {} tokens have been burned"
+  "airdrop.burned-desc": "Currently, {} tokens have been burned",
+  "no-more": "No more"
 }
