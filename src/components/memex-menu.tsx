@@ -84,9 +84,9 @@ export const MemexMenu = () => {
 
   return (
     <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-52">
-      {navs.map((nav) => (
+      {navs.map((nav, i) => (
         <div
-          key={nav.path}
+          key={i}
           className={cn(
             'flex items-center text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
             'max-xl:text-2xl max-xl:justify-center'

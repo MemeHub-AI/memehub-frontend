@@ -12,6 +12,7 @@ import { useIdeaDetails } from '../../idea/hooks/use-idea-details'
 import { getEvmAirdropParams } from '@/utils/contract'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useTokenConfig } from '@/hooks/use-token-config'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 interface Options {
   showSuccessTips?: boolean
@@ -27,6 +28,7 @@ export const useUpdateIdea = (
   const chainId = useChainId()
   const { details } = useIdeaDetails(hashId)
   const { configValue } = useTokenConfig(details?.chain)
+  const { checkForChain } = useCheckAccount()
 
   const {
     data: hash,
@@ -78,6 +80,7 @@ export const useUpdateIdea = (
   const updateWithContract = async (
     params: Parameters<typeof memexApi.updateIdea>[0]
   ) => {
+    if (!(await checkForChain(chainId))) return
     if (!configValue) {
       CONTRACT_ERR.configNotFound()
       return

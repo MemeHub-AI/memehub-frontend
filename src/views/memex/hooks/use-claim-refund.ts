@@ -7,6 +7,7 @@ import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useTypedFn } from '@/hooks/use-typed-fn'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 export const useIdeaClaimRefund = (
   addr: string | undefined | null,
@@ -25,6 +26,7 @@ export const useIdeaClaimRefund = (
       success: () => toast.success(t('refund-success')),
     },
   })
+  const { checkForChain } = useCheckAccount()
 
   const idoConfig = {
     abi: memexIdoAbi,
@@ -83,14 +85,15 @@ export const useIdeaClaimRefund = (
     },
   })
 
-  const checkForWrite = () => {
+  const checkForWrite = async () => {
     if (!addr || !address) return false
+    if (!(await checkForChain(chainId))) return false
     return true
   }
 
-  const claim = () => {
+  const claim = async () => {
     if (!canClaim) return
-    if (!checkForWrite()) return
+    if (!(await checkForWrite())) return
 
     setToastType('claim')
     writeContract({
@@ -99,9 +102,9 @@ export const useIdeaClaimRefund = (
     })
   }
 
-  const refund = () => {
+  const refund = async () => {
     if (!canRefund) return
-    if (!checkForWrite()) return
+    if (!(await checkForWrite())) return
 
     setToastType('refund')
     writeContract({
