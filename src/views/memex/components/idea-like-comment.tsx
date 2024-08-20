@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PiShareFat } from 'react-icons/pi'
 import { BigNumber } from 'bignumber.js'
+import { formatEther } from 'viem'
 
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
@@ -52,7 +53,11 @@ export const IdeaLikeComment = ({
   )
   const { copy } = useClipboard()
   const { address } = useAccount()
-  const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
+  const { data: { value = BI_ZERO } = {} } = useBalance({
+    address,
+    chainId,
+  })
+  const balance = formatEther(value)
 
   const {
     isLiked,
