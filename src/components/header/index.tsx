@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { use } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 
@@ -22,6 +22,7 @@ export const Header = () => {
   const { isPad } = useResponsive()
   const { t } = useTranslation()
   const { push } = useRouter()
+  const { isMemex } = useIsMemex()
 
   const navs: Nav[] = [
     { title: t('home'), path: Routes.Main },
@@ -46,13 +47,18 @@ export const Header = () => {
         'min-h-header flex justify-between items-center px-6 relative',
         'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3',
         'border-b-2 border-black',
-        'xl:justify-center'
+        isMemex && 'xl:justify-center'
       )}
     >
       {isPad ? (
         <HeaderMobile navs={navs} onNavClick={onNavClick} />
       ) : (
-        <div className="flex justify-between items-center w-full max-w-[1470px]">
+        <div
+          className={cn(
+            'flex justify-between items-center w-full',
+            isMemex && ' max-w-[1470px]'
+          )}
+        >
           <HeaderDesktop navs={navs} onNavClick={onNavClick} />
         </div>
       )}
