@@ -433,7 +433,7 @@
   "chart.dex": "DEX 图表",
   "token.graduated": "已毕业",
   "burn": "燃烧代币",
-  "airdrop.burn-desc": "当前有$1到期未领取，  你可以选择将他们销毁",
+  "airdrop.burn-desc": "当前有{}到期未领取，  你可以选择将他们销毁",
   "burn.button": "燃烧",
   "pool": "池子",
   "holder.burning": "黑洞",
@@ -684,5 +684,6 @@
   "profile": "个人资料",
   "Notification": "消息",
   "Post.idea": "发布Idea",
-  "link-copy-success": "复制分享链接成功！"
+  "link-copy-success": "复制分享链接成功！",
+  "airdrop.burned-desc": "当前有{}个代币被销毁了"
 }

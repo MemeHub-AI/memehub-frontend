@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useTokenContext } from '@/contexts/token'
 import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
+import { utilLang } from '@/utils/lang'
 
 export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
   const { t } = useTranslation()
@@ -47,9 +48,12 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
       {!isOnlyOne && (
         <h2 className="font-bold text-lg w-fit">🔥 {t('burn')}</h2>
       )}
-      <div className="flex items-center">
+      <div className="flex items-center justify-between">
         <div className="ml-1 mr-3 max-sm:pb-2">
-          {t('airdrop.burn-desc').replace('$1', burnText)}
+          {utilLang.replace(
+            isBurned ? t('airdrop.burned-desc') : t('airdrop.burn-desc'),
+            [burnText]
+          )}
         </div>
         <img src="/images/burn.png" alt="burn" className="w-28 h-28 -mt-6" />
       </div>
