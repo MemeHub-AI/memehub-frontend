@@ -65,6 +65,7 @@ export const useTokenInfo = () => {
     ,
     ,
     ,
+    ,
     headmaster = zeroAddress,
   ] = pools
   const isGraduated = headmaster !== zeroAddress
