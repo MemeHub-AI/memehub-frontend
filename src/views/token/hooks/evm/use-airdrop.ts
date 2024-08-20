@@ -53,6 +53,13 @@ export const useAirdrop = (
       query,
     })
 
+  const { data: isBurned, refetch: refetchBurned } = useReadContract({
+    ...airdropConfig,
+    functionName: 'isBurn',
+    args: [BigInt(id || 0)],
+    query: { enabled: typeof id === 'number' },
+  })
+
   const refetch = () => {
     refetchKolClaimed()
     refetchCommunityCalimed()
@@ -129,6 +136,8 @@ export const useAirdrop = (
     isClaiming,
     isKolClaimed,
     isCommunityClaimed,
+    isBurned,
+    refetchBurned,
     claimKol,
     claimCommunity,
     resetClaim: reset,
