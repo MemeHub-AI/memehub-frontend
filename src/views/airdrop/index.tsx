@@ -12,6 +12,8 @@ import { AirdropProvider } from '@/contexts/airdrop'
 import { useAirdropList } from './hooks/use-airdrop-list'
 import { AirdropDetailType } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
+import { useIsMemex } from '@/hooks/use-is-memex'
+import { cn } from '@/lib/utils'
 
 export const AirdropPage = () => {
   const { t } = useTranslation()
@@ -19,6 +21,7 @@ export const AirdropPage = () => {
   const { airdrops, totalAirdrops, isLoading, isFetching, fetchNextPage } =
     useAirdropList()
   const { isKol, hasCommunity } = useUserStore()
+  const { isMemex } = useIsMemex()
 
   const renderLoadingStatus = () => {
     if (isFetching && totalAirdrops) {
@@ -46,7 +49,10 @@ export const AirdropPage = () => {
 
   return (
     <AirdropProvider value={{ hideClaimed: checked }}>
-      <PrimaryLayout container="div" className="py-5 flex-col gap-0 w-full">
+      <PrimaryLayout
+        container="div"
+        className={cn('py-5 flex-col gap-0 w-full', isMemex && 'flex-1')}
+      >
         <Ids />
         <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
 

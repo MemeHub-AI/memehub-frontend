@@ -52,7 +52,7 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
     <PrimaryLayout mainClass="flex" padding={false}>
       <Tabs
         onValueChange={(v) => router.push(v)}
-        className="flex-1 md:max-w-4xl"
+        className="flex-1 md:max-w-xl"
       >
         <TabsList
           className={cn(
@@ -75,7 +75,8 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
             </TabsTrigger>
           ))}
         </TabsList>
-        <div className="h-[calc(100vh-64px-1.5rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm md:border-x-[1px]">
+
+        <div className="h-[calc(100vh-64px-1.5rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm md:border">
           {children}
         </div>
       </Tabs>

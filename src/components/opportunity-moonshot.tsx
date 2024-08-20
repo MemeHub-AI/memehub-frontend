@@ -81,17 +81,15 @@ export const OpportunityMoonshot = (props: Props) => {
 
   const onChangeTab = (idx: number) => {
     setTab(idx)
-    
-    if(isPad) {
-      if(idx === 0) 
-        push(Routes.Moonshot)
-      else if(idx === 1)
-        push(Routes.ClassicMeme)
+
+    if (isPad) {
+      if (idx === 0) push(Routes.Moonshot)
+      else if (idx === 1) push(Routes.ClassicMeme)
     }
   }
 
   useEffect(() => {
-    if(!defalutTab) return
+    if (!defalutTab) return
     if (defalutTab === '1') {
       setTab(Tab.Moonshot)
     } else if (defalutTab === '2') {

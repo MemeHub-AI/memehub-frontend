@@ -38,4 +38,14 @@ export enum Routes {
   MemexCreateDetails = '/memex/create/details',
 
   MemexIdea = '/memex/idea',
+
+  MemexDetailsCoin = '/memex/details/coin',
+
+  MemexDetailsProfile = '/memex/details/profile',
+
+  MemexDetailsNotification = '/memex/details/notification',
+
+  MemexDetailsAirdrop = '/memex/details/airdrop',
+
+  MemexDetailsAlliance = '/memex/details/alliance',
 }
