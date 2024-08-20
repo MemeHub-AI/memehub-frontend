@@ -20,10 +20,8 @@ export const useDeploy = (chainName: string) => {
     useCreateToken(chainName)
   const { chainsMap } = useChainsStore()
 
-  // TODO: add more networks
   const evmDeploy = useEvmDeploy(chainName)
-  // const svmDeploy = useSvmDeploy()
-  const solDeploy = useSolDeploy()
+  // const solDeploy = useSolDeploy()
   // const tvmDeploy = useTvmDeploy()
 
   const {
@@ -40,14 +38,14 @@ export const useDeploy = (chainName: string) => {
   } = useMemo(() => {
     return {
       [Network.Evm]: evmDeploy,
-      [Network.Svm]: evmDeploy, // TODO: should be `svmDeploy`
-      [Network.Tvm]: evmDeploy, // TODO: should be `tvmDeploy`
+      [Network.Svm]: evmDeploy,
+      [Network.Tvm]: evmDeploy,
     }[network]
-  }, [network, evmDeploy, evmDeploy]) // TODO: add more deps...
+  }, [network, evmDeploy]) // TODO: add more deps...
 
   const deploy = async (params: DeployFormParams) => {
     const tokenId = await createToken(params)
-    // if (!tokenId) return deployErr.createFailed()
+    if (!tokenId) return deployErr.createFailed()
 
     const { network } = chainsMap[params.chain] ?? {}
     if (!network) return deployErr.networkNotFound()
