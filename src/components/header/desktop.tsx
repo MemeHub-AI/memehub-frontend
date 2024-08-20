@@ -26,11 +26,11 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
   if (isMemex) {
     return (
       <>
-        <div className="flex items-center gap-3 mr-3 select-none box-border--15-right w-60">
+        <div className="flex items-center gap-3 mr-3 select-none box-border--15-right w-60 ml-2">
           <Logo showMeme className="shrink-0 w-32" />
         </div>
-        <div className="flex items-center gap-3 ">
-          <RewardButton className="box-border--15-left" />
+        <div className="flex items-center gap-3 box-border--15-left">
+          <RewardButton />
           <ConnectWallet>
             <AccountDropdown />
           </ConnectWallet>

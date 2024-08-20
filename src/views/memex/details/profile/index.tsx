@@ -31,16 +31,16 @@ export const MemexDetailsProfile = () => {
       }}
     >
       <PrimaryLayout>
-        <div className="flex-1 min-h-main px-6 max-sm:px-3 flex gap-4 max-sm:flex-col max-sm:gap-0">
+        <div className="min-h-main max-2xl:px-3 flex gap-4 max-2xl:flex-col max-2xl:gap-0">
           {/* Left aside */}
           <aside
             className={cn(
-              'h-fit flex flex-col gap-4 max-sm:gap-0 sticky top-20 mt-4 max-sm:mb-2',
-              'max-sm:static max-sm:gap-2'
+              'flex flex-col gap-4 max-2xl:gap-0 sticky top-20 mt-4 max-2xl:mb-2',
+              'max-2xl:static max-2xl:gap-2'
             )}
           >
             <Profile />
-            <div className="max-sm:hidden max-sm:mt-4">
+            <div className="max-2xl:hidden max-2xl:mt-4">
               <FollowTab />
             </div>
           </aside>

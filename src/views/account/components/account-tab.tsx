@@ -11,6 +11,7 @@ import { useUserList } from '../hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
 import { Routes } from '@/routes'
 import { useAccountContext } from '@/contexts/account'
+import { useIsMemex } from '@/hooks/use-is-memex'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
@@ -52,6 +53,7 @@ export const AccountTab = () => {
     isFetchingMyTokens,
     fetchNextMyTokens,
   } = useUserList(Number(tab))
+  const { isMemex } = useIsMemex()
 
   console.log('token held', tokenHeld)
 
@@ -61,7 +63,9 @@ export const AccountTab = () => {
       value={tab}
       onValueChange={(value) => {
         router.push({
-          pathname: `${Routes.Account}/${query.address}`,
+          pathname: `${isMemex ? Routes.MemexDetailsProfile : Routes.Account}/${
+            query.address
+          }`,
           query: { tab: value },
         })
       }}
