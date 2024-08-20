@@ -64,6 +64,7 @@ export const MemexIdeaCard = ({
     ownerPercent,
     userPercent,
     tokenAddr,
+    overTime,
     refetchInfo,
   } = ideaInfo
   const {
@@ -83,7 +84,7 @@ export const MemexIdeaCard = ({
     chainId,
     functionName: 'waitingTime',
   })
-  const [isWaitingFailed, setIsWaitingFailed] = useState(false)
+  const [isFailedWaiting, setIsFailedWaiting] = useState(false)
 
   const withDetailsLayout = (children: ReactNode) => {
     if (isDetails) {
@@ -106,7 +107,7 @@ export const MemexIdeaCard = ({
             fallback={idea?.user_name?.[0]}
             className="rounded-md mr-2"
           />
-          <div>
+          <div className="w-full">
             {children}
             {isProcessing && (
               <Countdown
@@ -135,7 +136,7 @@ export const MemexIdeaCard = ({
         router.push(fmt.toHref(Routes.MemexIdea, idea?.hash))
       }}
     >
-      {isSuccess && !isWaitingFailed && (
+      {isSuccess && !isFailedWaiting && (
         <Badge
           className={cn(
             'absolute top-4 right-2 px-0.5 bg-purple-600 hover:bg-purple-600',
@@ -146,7 +147,7 @@ export const MemexIdeaCard = ({
         </Badge>
       )}
 
-      {(isFailed || isWaitingFailed) && (
+      {(isFailed || isFailedWaiting) && (
         <p className="absolute top-2 right-3 font-bold text-zinc-400">
           {t('fail').toUpperCase()}
         </p>
@@ -162,8 +163,8 @@ export const MemexIdeaCard = ({
 
       <div className="flex-1">
         {withDetailsLayout(
-          <div className="space-x-1 text-zinc-500 text-sm leading-none inline-flex items-center">
-            <span className="font-bold text-base text-black truncate max-w-[40%]">
+          <div className="space-x-1 text-zinc-500 text-sm leading-none max-w-[70%] inline-flex items-center">
+            <span className="font-bold text-base text-black truncate ">
               {idea?.user_name}
             </span>
             <span>·</span>
@@ -180,26 +181,28 @@ export const MemexIdeaCard = ({
             />
           )}
 
-          {!hasDetails && idea?.is_creator && isProcessing && (
-            <Button
-              variant="yellow"
-              shadow="none"
-              size="xs"
-              className="py-3 mt-2"
-              onClick={(e) => {
-                e.stopPropagation()
-                router.push({
-                  pathname: Routes.MemexCreateDetails,
-                  query: { hash: idea.hash, chian: idea.chain },
-                })
-              }}
-            >
-              <AiOutlineEdit size={16} className="mr-0.5" />
-              {t('coin-detail')}
-            </Button>
-          )}
+          {!hasDetails &&
+            idea?.is_creator &&
+            (isProcessing || !isFailedWaiting) && (
+              <Button
+                variant="yellow"
+                shadow="none"
+                size="xs"
+                className="py-3 mt-2"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  router.push({
+                    pathname: Routes.MemexCreateDetails,
+                    query: { hash: idea.hash, chian: idea.chain },
+                  })
+                }}
+              >
+                <AiOutlineEdit size={16} className="mr-0.5" />
+                {t('coin-detail')}
+              </Button>
+            )}
 
-          {isSuccess && !hasDetails && !isWaitingFailed && (
+          {isSuccess && !hasDetails && !isFailedWaiting && (
             <div className="flex space-x-2 border-2 border-yellow-600 rounded mt-2 p-2 text-yellow-600 w-full">
               <BsLightningFill className="shrink-0" size={22} />
               <div className="text-sm font-bold w-full">
@@ -207,9 +210,9 @@ export const MemexIdeaCard = ({
                   <span>{t('memex.done-desc1')}</span>
                   <Countdown
                     className="text-green-600 self-end"
-                    createdAt={dayjs(idea?.created_at).unix()}
+                    createdAt={Number(overTime)}
                     duration={Number(waitingSeconds)}
-                    onExpired={() => setIsWaitingFailed(true)}
+                    onExpired={() => setIsFailedWaiting(true)}
                   />
                 </div>
                 {idea?.is_creator ? (
@@ -242,7 +245,7 @@ export const MemexIdeaCard = ({
             </Button>
           )}
 
-          {(isFailed || isWaitingFailed) && (canRefund || isClaimed) && (
+          {(isFailed || isFailedWaiting) && (canRefund || isClaimed) && (
             <Button
               variant="yellow"
               shadow="none"

@@ -475,6 +475,11 @@ export const memexIdoAbi = [
             type: 'uint256',
           },
           {
+            internalType: 'uint256',
+            name: 'overTime',
+            type: 'uint256',
+          },
+          {
             internalType: 'bool',
             name: 'isOver',
             type: 'bool',
