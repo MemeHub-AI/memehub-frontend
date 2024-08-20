@@ -1,4 +1,4 @@
-import { type ReactNode, type ComponentProps, useMemo } from 'react'
+import { type ReactNode, type ComponentProps, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
 import { useTranslation } from 'react-i18next'
 import { AiOutlineEdit } from 'react-icons/ai'
@@ -6,6 +6,8 @@ import { BsLightningFill } from 'react-icons/bs'
 import { zeroAddress } from 'viem'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
+import { Address } from 'viem'
+import { useReadContract } from 'wagmi'
 
 import { Avatar } from '@/components/ui/avatar'
 import { Countdown } from '@/components/countdown'
@@ -25,6 +27,8 @@ import { getIdeaStatus } from '@/utils/memex/idea'
 import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { qs } from '@/hooks/use-fetch'
+import { memexFactoryAbi } from '@/contract/abi/memex/factory'
+import { BI_ZERO } from '@/constants/number'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -32,6 +36,7 @@ interface Props {
   onCommentSuccess?: () => void
 }
 
+// TODO/memex: refactor
 export const MemexIdeaCard = ({
   className,
   idea,
@@ -43,7 +48,7 @@ export const MemexIdeaCard = ({
   const { query, ...router } = useRouter()
   const { chain, chainId, chainName } = useChainInfo(idea?.chain)
   const ideaInfo = useIdeaInfo(idea?.ido_address, chainId)
-  const { hasDetails, isFailed, isSuccess, isProcessing } = useMemo(
+  const { hasDetails, isFailed, isSuccess, isProcessing, isEnded } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
   )
@@ -71,6 +76,14 @@ export const MemexIdeaCard = ({
     refund,
   } = useIdeaClaimRefund(idea?.ido_address, chainId, refetchInfo)
   const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
+
+  const { data: waitingSeconds = BI_ZERO } = useReadContract({
+    abi: memexFactoryAbi,
+    address: idea?.ido_address as Address,
+    chainId,
+    functionName: 'waitingTime',
+  })
+  const [isWaitingFailed, setIsWaitingFailed] = useState(false)
 
   const withDetailsLayout = (children: ReactNode) => {
     if (isDetails) {
@@ -122,7 +135,7 @@ export const MemexIdeaCard = ({
         router.push(fmt.toHref(Routes.MemexIdea, idea?.hash))
       }}
     >
-      {isSuccess && (
+      {isSuccess && !isWaitingFailed && (
         <Badge
           className={cn(
             'absolute top-4 right-2 px-0.5 bg-purple-600 hover:bg-purple-600',
@@ -133,7 +146,7 @@ export const MemexIdeaCard = ({
         </Badge>
       )}
 
-      {isFailed && (
+      {(isFailed || isWaitingFailed) && (
         <p className="absolute top-2 right-3 font-bold text-zinc-400">
           {t('fail').toUpperCase()}
         </p>
@@ -167,7 +180,7 @@ export const MemexIdeaCard = ({
             />
           )}
 
-          {!hasDetails && idea?.is_creator && (
+          {!hasDetails && idea?.is_creator && isProcessing && (
             <Button
               variant="yellow"
               shadow="none"
@@ -186,16 +199,17 @@ export const MemexIdeaCard = ({
             </Button>
           )}
 
-          {isSuccess && !hasDetails && (
+          {isSuccess && !hasDetails && !isWaitingFailed && (
             <div className="flex space-x-2 border-2 border-yellow-600 rounded mt-2 p-2 text-yellow-600 w-full">
               <BsLightningFill className="shrink-0" size={22} />
               <div className="text-sm font-bold w-full">
                 <div className="leading-none flex flex-1 justify-between">
                   <span>{t('memex.done-desc1')}</span>
                   <Countdown
-                    createdAt={dayjs().unix()}
-                    duration={dayjs().add(1, 'hour').unix() - dayjs().unix()}
                     className="text-green-600 self-end"
+                    createdAt={dayjs(idea?.created_at).unix()}
+                    duration={Number(waitingSeconds)}
+                    onExpired={() => setIsWaitingFailed(true)}
                   />
                 </div>
                 {idea?.is_creator ? (
@@ -228,7 +242,7 @@ export const MemexIdeaCard = ({
             </Button>
           )}
 
-          {isFailed && (canRefund || isClaimed) && (
+          {(isFailed || isWaitingFailed) && (canRefund || isClaimed) && (
             <Button
               variant="yellow"
               shadow="none"
