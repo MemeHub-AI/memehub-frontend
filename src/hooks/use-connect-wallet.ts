@@ -5,12 +5,13 @@ import { reportException } from '@/errors'
 import { useWalletDisconnectButton } from '@solana/wallet-adapter-base-ui'
 import { useWallet } from '@solana/wallet-adapter-react'
 export const useConnectWallet = () => {
-  const tonAddress = useTonAddress()
+  // const tonAddress = useTonAddress()
   const { isConnected } = useAccount()
   const { publicKey } = useWallet()
   // console.log('p' + publicKey)
 
-  const [tonConnectUI] = useTonConnectUI()
+  // TODO: Add more networks
+  // const [tonConnectUI] = useTonConnectUI()
   const { getMainChain, removeMainChain } = useStorage()
   const { onButtonClick } = useWalletDisconnectButton()
 
@@ -39,10 +40,10 @@ export const useConnectWallet = () => {
   const walletDisconnect = () => {
     if (getMainChain() === 'evm') {
       disconnect()
-    } else if (getMainChain() === 'ton') {
-      tonConnectUI.disconnect().then(() => {
-        removeMainChain()
-      })
+      // } else if (getMainChain() === 'ton') {
+      //   tonConnectUI.disconnect().then(() => {
+      //     removeMainChain()
+      //   })
     } else if (getMainChain() === 'solana') {
       onButtonClick!()
     }

@@ -20,9 +20,9 @@ export const useDeploy = (chainName: string) => {
     useCreateToken(chainName)
   const { chainsMap } = useChainsStore()
 
+  // TODO: add more networks
   const evmDeploy = useEvmDeploy(chainName)
   // const svmDeploy = useSvmDeploy()
-  const tvmDeploy = useTvmDeploy()
   const solDeploy = useSolDeploy()
   // const tvmDeploy = useTvmDeploy()
 
@@ -41,9 +41,9 @@ export const useDeploy = (chainName: string) => {
     return {
       [Network.Evm]: evmDeploy,
       [Network.Svm]: evmDeploy, // TODO: should be `svmDeploy`
-      [Network.Tvm]: tvmDeploy,
+      [Network.Tvm]: evmDeploy, // TODO: should be `tvmDeploy`
     }[network]
-  }, [network, evmDeploy, tvmDeploy]) // TODO: add more deps...
+  }, [network, evmDeploy, evmDeploy]) // TODO: add more deps...
 
   const deploy = async (params: DeployFormParams) => {
     const tokenId = await createToken(params)
@@ -61,7 +61,7 @@ export const useDeploy = (chainName: string) => {
     }
     if (network === Network.Tvm) {
       // TON
-      return tvmDeploy.deploy(params)
+      // return tvmDeploy.deploy(params)
     }
   }
 

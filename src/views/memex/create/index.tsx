@@ -30,7 +30,7 @@ export const CreateIdeaPage = () => {
       <CreateIdeaProvider value={createTweet}>
         <Form {...form}>
           <form
-            className="flex-1 pt-1 pb-3"
+            className="flex-1 pt-1 pb-3 xl:max-w-4xl"
             onSubmit={form.handleSubmit(onSubmit)}
           >
             <CreateIdeaHeader />

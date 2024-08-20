@@ -84,18 +84,6 @@ export const MemexMenu = () => {
 
   return (
     <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-52">
-      {/* <div
-        className="flex space-x-2 items-center cursor-pointer pl-2 max-xl:justify-end"
-        onClick={() => push({ pathname: Routes.Main })}
-      >
-        <img src="/images/logo.png" alt="icon" className="w-10 h-10" />
-        <img
-          src="/images/logo.svg"
-          alt="MemeHub"
-          className="w-24 h-10 max-xl:hidden"
-        />
-      </div> */}
-
       {navs.map((nav) => (
         <div
           key={nav.path}
