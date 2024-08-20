@@ -75,7 +75,6 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
             </TabsTrigger>
           ))}
         </TabsList>
-        w
         <div className="h-[calc(100vh-64px-1.5rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm md:border-x-[1px]">
           {children}
         </div>

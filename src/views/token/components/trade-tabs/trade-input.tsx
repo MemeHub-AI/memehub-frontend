@@ -34,6 +34,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     tokenLeft,
     chainId,
     tokenChain,
+    totalSupply,
   } = useTokenContext()
   const { isBuy, isTraded, nativeBalance, tokenBalance } = useTradeTabsContext()
   const { getTokenAmount, getReserveAmount, getLastOrderAmount } =
@@ -47,6 +48,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const [targetAmount, setTargetAmount] = useState('0')
 
   const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    if (BigNumber(target.value).gt(totalSupply)) return
     if (BigNumber(target.value).lt(0)) return
     onChange?.(target.value)
   }
