@@ -28,6 +28,7 @@ export const useComments = (enableFetchComments = true) => {
         page: pageParam,
         page_size: 25,
         reverse_time: true,
+        flatten: true,
       })
     },
     getNextPageParam: (_, __, page) => page + 1,

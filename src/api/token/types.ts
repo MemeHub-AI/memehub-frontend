@@ -234,6 +234,7 @@ export interface TokenCommentsReq {
   comment_id?: number
   reverse_time?: boolean
   by_hot?: boolean
+  flatten?: boolean
 }
 
 export interface TokenLikereq {
