@@ -42,7 +42,8 @@ export const useTokenProgress = (
       enabled: !!bcAddr && !!tokenAddr,
     },
   })
-  const [, , tokenReserve = BI_ZERO, , , , , , headmaster = zeroAddress] = pools
+  const [, , tokenReserve = BI_ZERO, , , , , , , headmaster = zeroAddress] =
+    pools
   const isGraduated = headmaster !== zeroAddress
 
   const total = formatEther(totalSupply)
