@@ -13,14 +13,13 @@ import type {
   TokenTrade,
 } from './types'
 import { Routes } from '@/routes'
+import { useLruMap } from '@/hooks/use-lru-map'
 
 const uniqKey: keyof TokenTrade = 'hash'
 
 const sortKey: keyof TokenTrade = 'timestamp'
 
 const pageSize = 10
-
-let tardeRewards = '0'
 
 export const useTokenWs = (disabled = false) => {
   const { chainName, tokenAddr } = useTokenQuery()
@@ -33,8 +32,12 @@ export const useTokenWs = (disabled = false) => {
   const [holders, setHolders] = useState<TokenHolder[]>([])
   const [tradePrice, setTradePrice] = useState<TokenPrice>()
   const [hasMoreTrades, setHasMoreTrades] = useState(false)
+  const { set, get: getReward } = useLruMap<Record<string, string>>()
+
   const onTrades = ({ data, extra }: TokenOnEvents['trades']) => {
-    if (extra?.rewarded) tardeRewards = extra.rewarded
+    if (extra?.rewarded) {
+      set(data[0]?.hash, extra.rewarded)
+    }
     setHasMoreTrades(!!extra?.hasmore)
     setTradeRecords((prev) =>
       orderBy(uniqBy([...prev, ...data], uniqKey), [sortKey], 'desc')
@@ -88,7 +91,7 @@ export const useTokenWs = (disabled = false) => {
     holders,
     tradePrice,
     hasMoreTrades,
-    tardeRewards,
+    getReward,
     fetchNextTrades,
   }
 }

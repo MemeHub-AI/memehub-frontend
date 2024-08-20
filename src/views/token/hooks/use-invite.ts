@@ -27,17 +27,18 @@ export const useInvite = () => {
   })
 
   const {
-    isPending: isCanBinding,
-    mutateAsync: getCanBind,
+    isPending,
+    mutateAsync: getIsBound,
     reset: resetCanBind,
   } = useMutation({
-    mutationKey: [inviteApi.getCanBind.name],
-    mutationFn: async (code?: string) => {
-      // don't check if no any code.
-      if (!code && !referralCode) return true
+    mutationKey: [inviteApi.getIsBound.name],
+    mutationFn: async () => {
+      if (!referralCode) return false
+      if (userInfo?.code === referralCode) return true
+
       const { data } = await inviteApi
-        .getCanBind({ invitationCode: code ?? referralCode })
-        .catch(() => ({ data: false }))
+        .getIsBound({ invitationCode: referralCode })
+        .catch(() => ({ data: true }))
       return data
     },
   })
@@ -53,10 +54,10 @@ export const useInvite = () => {
 
   return {
     isGetting,
-    isCanBinding,
+    isPending,
     getInviterInfo,
     resetInviterInfo,
-    getCanBind,
+    getIsBound,
     resetCanBind,
     getReferrals,
   }

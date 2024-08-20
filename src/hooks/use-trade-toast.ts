@@ -16,11 +16,10 @@ interface Options {
 }
 
 export const useTradeToast = () => {
-  const { tardeRewards } = useTokenContext()
+  const { getReward } = useTokenContext()
 
-  // TODO: adapt multi times trade
-  const getRewardAmount = () => {
-    const amount = BigNumber(tardeRewards).toNumber()
+  const getRewardAmount = (hash: string) => {
+    const amount = BigNumber(getReward(hash) || 0).toNumber()
     const rewardAmount = Number(
       amount < 100 ? amount.toFixed(4) : amount.toFixed(2)
     )
@@ -38,7 +37,7 @@ export const useTradeToast = () => {
         tokenLabel,
         reserveLabel,
         getToastId: () => toastId,
-        getRewardAmount,
+        getRewardAmount: () => getRewardAmount(hash),
       }),
       {
         position: 'bottom-left',
