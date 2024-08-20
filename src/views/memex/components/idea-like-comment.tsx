@@ -141,7 +141,12 @@ export const IdeaLikeComment = ({
               control={form.control}
               name="comment"
               render={({ field }) => (
-                <Textarea rows={5} placeholder={t('post-comment')} {...field} />
+                <Textarea
+                  autoFocus
+                  rows={5}
+                  placeholder={t('post-comment')}
+                  {...field}
+                />
               )}
             />
 
