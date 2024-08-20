@@ -5,7 +5,6 @@ import { isEmpty } from 'lodash'
 
 import { userApi } from '@/api/user'
 import { UserListRes, UserListType } from '@/api/user/types'
-import { tokenApi } from '@/api/token'
 
 type ListMap = {
   [K in UserListType]: {
@@ -47,7 +46,6 @@ export const useUserList = (type: UserListType) => {
     fetchNextPage,
     refetch,
   } = useInfiniteQuery({
-    enabled: !isCreated,
     queryKey: [userApi.list.name, tokenAddr, type],
     queryFn: ({ pageParam }) => {
       if (isEmpty(tokenAddr)) return Promise.reject()
@@ -62,23 +60,6 @@ export const useUserList = (type: UserListType) => {
     select: (data) => ({
       list: data.pages.flatMap((p) => p.data.results),
       total: data.pages[0].data.count,
-    }),
-  })
-
-  const {
-    data: { myTokenTotal = 0, myTokens = [] } = {},
-    isLoading: isLoadingMyTokens,
-    isPending: isFetchingMyTokens,
-    fetchNextPage: fetchNextMyTokens,
-  } = useInfiniteQuery({
-    enabled: isCreated,
-    queryKey: [tokenApi.getListByUser.name],
-    queryFn: ({ pageParam }) => tokenApi.getListByUser({ page: pageParam }),
-    initialPageParam: 1,
-    getNextPageParam: (_, __, page) => page + 1,
-    select: ({ pages }) => ({
-      myTokenTotal: pages[0].data.count,
-      myTokens: pages.flatMap((p) => p.data.results || []).filter(Boolean),
     }),
   })
 
@@ -107,11 +88,5 @@ export const useUserList = (type: UserListType) => {
     isFetching,
     fetchNextPage,
     refetch,
-
-    myTokenTotal,
-    myTokens,
-    isLoadingMyTokens,
-    isFetchingMyTokens,
-    fetchNextMyTokens,
   }
 }

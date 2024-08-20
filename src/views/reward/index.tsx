@@ -16,6 +16,7 @@ import { PrimaryLayout } from '@/components/layouts/primary'
 import { inviteReward } from '@/config/invite'
 import { cn } from '@/lib/utils'
 import { ConnectWallet } from '@/components/connect-wallet'
+import { fmt } from '@/utils/fmt'
 
 export const RewardPage = () => {
   const { t } = useTranslation()
@@ -45,7 +46,7 @@ export const RewardPage = () => {
           <div className="flex items-center space-x-2">
             <DiamondIcon size={36} />
             <p className="text-blue-600 text-2xl font-bold">
-              {BigNumber(userInfo?.reward_amount || 0).toFormat()}
+              {BigNumber(fmt.decimals(userInfo?.reward_amount)).toFormat()}
             </p>
           </div>
         </div>

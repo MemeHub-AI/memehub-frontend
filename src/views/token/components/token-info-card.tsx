@@ -87,7 +87,11 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
       </div>
 
       {/* Links */}
-      <TokenSocialLinks />
+      <TokenSocialLinks
+        x={tokenInfo?.twitter_url}
+        tg={tokenInfo?.telegram_url}
+        website={tokenInfo?.website_url}
+      />
 
       {/* Poster */}
       <PosterImages poster={tokenInfo?.poster_urls} className="mt-2" />

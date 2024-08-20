@@ -29,12 +29,12 @@ export const AccountTab = () => {
   ]
   const tabs = [
     {
-      label: t('token.held'),
-      value: UserListType.CoinsHeld,
-    },
-    {
       label: t('token.created'),
       value: UserListType.CoinsCreated,
+    },
+    {
+      label: t('token.held'),
+      value: UserListType.CoinsHeld,
     },
     ...(isOtherUser ? [] : myAccountTabs),
   ]
@@ -46,12 +46,13 @@ export const AccountTab = () => {
     isLoading,
     isFetching,
     fetchNextPage,
+    tokenCreated,
 
-    myTokens,
-    myTokenTotal,
-    isLoadingMyTokens,
-    isFetchingMyTokens,
-    fetchNextMyTokens,
+    // myTokens,
+    // myTokenTotal,
+    // isLoadingMyTokens,
+    // isFetchingMyTokens,
+    // fetchNextMyTokens,
   } = useUserList(Number(tab))
   const { isMemex } = useIsMemex()
 
@@ -97,11 +98,11 @@ export const AccountTab = () => {
       <TabsContent value={UserListType.CoinsCreated.toString()}>
         <TokenCards
           className="md:grid-cols-2 xl:grid-cols-3"
-          cards={myTokens}
-          total={myTokenTotal}
-          isLoading={isLoadingMyTokens}
-          isPending={isFetchingMyTokens}
-          onFetchNext={fetchNextMyTokens}
+          cards={tokenCreated.list}
+          total={tokenCreated.total}
+          isLoading={isLoading}
+          isPending={isFetching}
+          onFetchNext={fetchNextPage}
         />
       </TabsContent>
 

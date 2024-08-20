@@ -14,6 +14,8 @@ export const parseInterval = (interval?: string) => {
 // TODO: There's a problem here
 export const formatInterval = (tvInterval?: string, lower = true) => {
   if (!tvInterval || !tvInterval.trim()) return '1m'
+  if (tvInterval.toLowerCase().endsWith('s')) return tvInterval.toLowerCase()
+  if (tvInterval.toLowerCase().endsWith('m')) return tvInterval.toUpperCase()
 
   const num = Number(tvInterval)
   if (num < 60) return `${tvInterval}m`

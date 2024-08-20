@@ -9,6 +9,7 @@ import type { BcVersion } from '@/contract/abi/bonding-curve'
 import type { DistributorVersion } from '@/contract/abi/distributor'
 import type { MemexFactoryVersion } from '@/contract/abi/memex'
 import type { RecommendVersion } from '@/contract/abi/recommend'
+import type { TokenVersion } from '@/contract/abi/token'
 
 const groupOrderContracts = (contracts: TokenConfigContract[] = []) => {
   if (contracts.length === 0) return {}
@@ -47,12 +48,14 @@ export const useTokenConfig = (chain: string | undefined) => {
   })
   const [
     { address: bcAddress, version: bcVersion },
+    { address: tokenAddress, version: tokenVersion },
     { address: airdropAddress, version: airdropVersion },
     { address: recommendAddress, version: recommendVersion },
     { address: memexFactoryAddr, version: memexFactoryVersion },
   ] = useMemo(
     () => [
-      getFirstContract<BcVersion>(contracts?.coin),
+      getFirstContract<BcVersion>(contracts?.bond),
+      getFirstContract<TokenVersion>(contracts?.coin),
       getFirstContract<DistributorVersion>(contracts?.airdrop),
       getFirstContract<RecommendVersion>(contracts?.recommend),
       getFirstContract<MemexFactoryVersion>(contracts?.memex),
@@ -66,6 +69,8 @@ export const useTokenConfig = (chain: string | undefined) => {
 
     bcAddress,
     bcVersion,
+    tokenAddress,
+    tokenVersion,
     airdropAddress,
     airdropVersion,
     recommendAddress,

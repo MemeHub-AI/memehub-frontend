@@ -2,7 +2,7 @@ import React, { ReactNode, useState } from 'react'
 import { useRouter } from 'next/router'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { LuTwitter, LuUser } from 'react-icons/lu'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import { MdLogout } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { LiaTelegramPlane } from 'react-icons/lia'
@@ -30,8 +30,10 @@ export const AccountDropdown = () => {
   const [disconnectOpen, setDisconnectOpen] = useState(false)
   const { userInfo } = useUserStore()
   const { isMobile } = useResponsive()
-  const { walletAddress } = useWallet()
-  const { walletDisconnect } = useConnectWallet()
+  // const { walletAddress } = useWallet()
+  // const { walletDisconnect } = useConnectWallet()
+  const { address } = useAccount()
+  const { disconnect } = useDisconnect()
 
   return (
     <Container
@@ -52,7 +54,7 @@ export const AccountDropdown = () => {
           <span>
             {userInfo?.name
               ? userInfo?.name.slice(0, 4)
-              : fmt.addr(userInfo?.name || walletAddress(), {
+              : fmt.addr(userInfo?.name || address, {
                   preLen: 2,
                   sufLen: 4,
                 })}
@@ -110,7 +112,7 @@ export const AccountDropdown = () => {
         onOpenChange={setDisconnectOpen}
         title={t('wallet.disconnect')}
         description={t('wallet.disconnect.confirm')}
-        onConfirm={() => walletDisconnect()}
+        onConfirm={() => disconnect()}
       />
     </Container>
   )

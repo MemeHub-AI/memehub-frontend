@@ -1,7 +1,7 @@
 import React, { type ComponentProps, useMemo, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
-import { BigNumber } from 'bignumber.js'
+import Countup from 'react-countup'
 
 import { Button } from './ui/button'
 import { Routes } from '@/routes'
@@ -11,7 +11,6 @@ import { useUserStore } from '@/stores/use-user-store'
 import { UserIcon } from './user-icon'
 import { useHeaderStore } from '@/stores/use-header-store'
 import { useResponsive } from '@/hooks/use-responsive'
-import Countup from 'react-countup'
 
 interface RewardButtonProps extends ComponentProps<typeof Button> {
   showReferral?: boolean
@@ -76,7 +75,7 @@ export const RewardButton = React.forwardRef<
         <DiamondIcon size={20} ref={diamondRef} className="mr-1" />
         {userInfo?.reward_amount ? (
           <Countup
-            decimals={userInfo?.reward_amount < 100 ? 2 : 0}
+            decimals={0}
             start={oldUserInfo?.reward_amount}
             end={userInfo?.reward_amount}
           ></Countup>

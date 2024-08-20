@@ -37,6 +37,7 @@ export const useIdeaInfo = (
       endTime = BI_ZERO,
       isOver = false,
       isDeploy = false,
+      overTime = BI_ZERO,
     } = {},
     isLoading: isLoadingInfo,
     refetch,
@@ -87,6 +88,7 @@ export const useIdeaInfo = (
     startAt,
     endAt,
     durationSeconds,
+    overTime,
 
     isOver,
     isDeploy,

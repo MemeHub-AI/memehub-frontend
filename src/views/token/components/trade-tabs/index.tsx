@@ -16,32 +16,39 @@ import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TradeButton } from './trade-button'
 import { TradeTabs } from './trade-tabs'
 import { useAirdropStore } from '@/stores/use-airdrop'
+import { useInvite } from '../../hooks/use-invite'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const [tab, setTab] = useState(TradeType.Buy.toString())
   const isBuy = tab === TradeType.Buy
   const [value, setValue] = useState('')
+  const [inviteOpen, setInviteOpen] = useState(false)
 
   const { playSuccess } = useAudioPlayer()
   const { isClaimingAirdrop } = useAirdropStore()
   const { slippage, setSlippage } = useSlippage()
   const { isNotFound, isIdoToken, tokenMetadata } = useTokenContext()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
-  const {
-    isTrading,
-    isTraded,
-    inviteOpen,
-    setInviteOpen,
-    handleBuy,
-    handleSell,
-  } = useTrade(() => {
+  const { getIsBound } = useInvite()
+
+  const { isTrading, isTraded, handleBuy, handleSell } = useTrade(() => {
     setValue('')
     refetchBalance()
   })
+
   const disabled =
     isTrading ||
     isClaimingAirdrop ||
     (isNotFound && !isIdoToken && !tokenMetadata)
+
+  const onTrade = async () => {
+    if (await getIsBound()) {
+      setInviteOpen(true)
+      return
+    }
+    isBuy ? handleBuy(value, slippage) : handleSell(value, slippage)
+    playSuccess()
+  }
 
   return (
     <TradeTabsProvider
@@ -81,10 +88,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
           <TradeButton
             disabled={disabled}
             isTrading={isTrading}
-            onTrade={() => {
-              isBuy ? handleBuy(value, slippage) : handleSell(value, slippage)
-              playSuccess()
-            }}
+            onTrade={onTrade}
           />
         </TradeTabs>
       </Card>

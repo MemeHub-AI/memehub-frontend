@@ -441,7 +441,7 @@
   "chart.dex": "DEX chart",
   "token.graduated": "Graduated",
   "burn": "Burn",
-  "airdrop.burn-desc": "There are $1 expired and unclaimed. You can choose to destroy them.",
+  "airdrop.burn-desc": "There are {} expired and unclaimed. You can choose to destroy them.",
   "burn.button": "Burn ",
   "pool": "Pool",
   "holder.burning": "Burning",
@@ -694,5 +694,13 @@
   "profile": "Profile",
   "Notification": "Notification",
   "Post.idea": "Post Idea",
-  "link-copy-success": "Copy share link successful!"
+  "link-copy-success": "Copy share link successful!",
+  "airdrop.burned-desc": "Currently, {} tokens have been burned",
+  "no-more": "No more",
+  "m": "m",
+  "s": "s",
+  "h": "h",
+  "d": "d",
+  "w": "w",
+  "M": "M"
 }

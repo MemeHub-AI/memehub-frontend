@@ -40,9 +40,8 @@ export const useStorage = (useSession = false) => {
     getTableShowAge: () => get('show_age'),
     setTableShowAge: (v: string) => set('show_age', v),
 
-    // c === chain, a === address
-    getInterval: (c: string, a: string) => get(`${c}.${a}`),
-    setInterval: (c: string, a: string, i: string) => set(`${c}.${a}`, i),
+    getChartInterval: () => get('chart_interval'),
+    setChartInterval: (v: string) => set('chart_interval', v),
 
     getSlippage: () => get('slippage'),
     setSlippage: (v: string) => set('slippage', v),

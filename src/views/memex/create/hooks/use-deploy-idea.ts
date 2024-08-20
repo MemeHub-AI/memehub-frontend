@@ -10,6 +10,8 @@ import { CONTRACT_ERR } from '@/errors/contract'
 import { getEvmAirdropParams } from '@/utils/contract'
 import { Marketing } from '@/api/token/types'
 import { useTokenConfig } from '@/hooks/use-token-config'
+import { useChainsStore } from '@/stores/use-chains-store'
+import { useCheckAccount } from '@/hooks/use-check-chain'
 
 export const useDeployIdea = (
   chainName: string | undefined,
@@ -18,6 +20,8 @@ export const useDeployIdea = (
   const { t } = useTranslation()
   const { chainId = 0 } = useAccount() // TODO/memex: multi chain
   const { configValue, memexFactoryAddr } = useTokenConfig(chainName)
+  const { chainsMap } = useChainsStore()
+  const { checkForChain } = useCheckAccount()
 
   const deployConfig = {
     abi: memexFactoryAbi,
@@ -76,6 +80,7 @@ export const useDeployIdea = (
     symbol: string | undefined,
     marketing: Marketing[] | undefined
   ) => {
+    if (!(await checkForChain(chainsMap[chainName || '']?.id))) return
     if (!memexFactoryAddr || !configValue) {
       CONTRACT_ERR.contractAddrNotFound()
       return
@@ -88,7 +93,7 @@ export const useDeployIdea = (
       args: [
         BigInt(projectId),
         hasInfo ? [name, symbol] : [],
-        [BigInt(tokenId || 0)],
+        [BigInt(tokenId || 0)], // 0 is not an error!!!!
         getEvmAirdropParams(configValue, marketing),
       ],
       value: parseEther(deployFee),

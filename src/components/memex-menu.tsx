@@ -105,12 +105,12 @@ export const MemexMenu = () => {
   }
 
   return (
-    <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-60 box-border-custom pr-6 fixed left-2">
-      {navs.map((nav, index) => {
+    <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-60 box-border-custom pr-6 fixed left-0">
+      {navs.map((nav, i) => {
         if (nav.path === Routes.MemexDetailsProfile && !userInfo) return
         return (
           <div
-            key={index}
+            key={i}
             className={cn(
               'flex items-start text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
               'max-xl:text-2xl max-xl:justify-center'

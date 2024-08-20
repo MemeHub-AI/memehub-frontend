@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, memo, useState } from 'react'
+import { useEffect, useRef, memo } from 'react'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
@@ -9,21 +9,16 @@ import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
 import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { ChartDexScreener } from '../chart-dexscrenner'
-import { datafeedConfig } from '@/config/datafeed'
-import { Button } from '../ui/button'
-import { useChartStore } from '@/stores/use-chart-store'
-import { formatInterval } from '@/utils/chart'
+import { ChartIntervals } from './components/chart-intervals'
+import { datafeedDefaultInterval } from '@/config/datafeed'
 
 export const Chart = memo(() => {
   const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
-  const { chainName, tokenAddr } = useTokenQuery()
+  const { tokenAddr } = useTokenQuery()
   const { tokenInfo, isNotFound, isIdoToken, isGraduated } = useTokenContext()
   const { isConnected, isCreating, createChart, removeChart } = useChart()
-  const { getInterval } = useStorage()
-  const { chart } = useChartStore()
-  const [, update] = useState(false)
-  const activeChart = chart?.activeChart()
+  const { getChartInterval } = useStorage()
 
   useEffect(() => {
     if (
@@ -39,7 +34,7 @@ export const Chart = memo(() => {
 
     createChart(chartRef.current, {
       symbol: tokenInfo.symbol,
-      interval: getInterval(chainName, tokenAddr) || '1m',
+      interval: getChartInterval() || datafeedDefaultInterval,
       tokenAddr,
     })
 
@@ -72,26 +67,7 @@ export const Chart = memo(() => {
           <ChartDexScreener className="w-full h-full" />
         ) : (
           <div className="flex flex-col h-full">
-            <div className="flex items-center">
-              {datafeedConfig.supported_resolutions?.map((r) => (
-                <Button
-                  key={r}
-                  size="sm"
-                  shadow="none"
-                  variant="ghost"
-                  className={cn(
-                    activeChart?.resolution() === r && 'text-blue-600'
-                  )}
-                  onClick={() => {
-                    activeChart?.setResolution(r)
-                    // Refresh component, because `setResolution` does not refresh
-                    update((v) => !v)
-                  }}
-                >
-                  {formatInterval(r, false)}
-                </Button>
-              ))}
-            </div>
+            <ChartIntervals />
             <hr />
             <div ref={chartRef} className="w-full h-full flex-1"></div>
           </div>

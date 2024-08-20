@@ -79,6 +79,7 @@ export const ProfileForm = ({ children }: Props) => {
           }}
         >
           <FormInputField
+            autoFocus
             label={t('name')}
             placeholder={t('username.placeholder')}
             id={fieldsKeys.name}

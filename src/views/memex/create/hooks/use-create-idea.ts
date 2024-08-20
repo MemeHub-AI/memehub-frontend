@@ -20,6 +20,8 @@ import { CONTRACT_ERR } from '@/errors/contract'
 import { REQUEST_ERR } from '@/errors/request'
 import { useEditIdeaAutofill } from './use-edit-idea-autofill'
 import { useUpdateIdea } from './use-update-idea'
+import { useCheckAccount } from '@/hooks/use-check-chain'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 const schema = z.object({
   content: z.string().min(memexCreateIdeaCharMin).max(memexCreateIdeaCharMax),
@@ -32,6 +34,7 @@ export const useCreateIdea = () => {
   const { query, ...router } = useRouter()
   const { idea, ideaDetails, setIdea, setIdeaDetails } = useMemexStore()
   const hash = query.hash as string
+  const { chainsMap } = useChainsStore()
 
   const form = useForm<z.infer<typeof schema>>({
     mode: 'onChange',
@@ -68,8 +71,10 @@ export const useCreateIdea = () => {
     setIdeaDetails(null)
     router.back()
   })
+  const { checkForChain } = useCheckAccount()
 
   const onSubmit = async ({ pictures, ...values }: z.infer<typeof schema>) => {
+    if (!(await checkForChain(chainsMap[values.chain]?.id))) return
     if (
       !(await form.trigger()) ||
       !memexFactoryAddr ||

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { orderBy, uniqBy } from 'lodash'
+import { useRouter } from 'next/router'
 
 import { apiUrl } from '@/config/url'
 import { useWebsocket } from '@/hooks/use-websocket'
@@ -11,6 +12,8 @@ import type {
   TokenPrice,
   TokenTrade,
 } from './types'
+import { Routes } from '@/routes'
+import { useLruMap } from '@/hooks/use-lru-map'
 
 const uniqKey: keyof TokenTrade = 'hash'
 
@@ -18,19 +21,23 @@ const sortKey: keyof TokenTrade = 'timestamp'
 
 const pageSize = 10
 
-let tardeRewards = '0'
-
 export const useTokenWs = (disabled = false) => {
   const { chainName, tokenAddr } = useTokenQuery()
+  const router = useRouter()
   const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
-    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`
+    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`,
+    { shouldReconnect: () => router.pathname === Routes.TokenPage }
   )
   const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
   const [holders, setHolders] = useState<TokenHolder[]>([])
   const [tradePrice, setTradePrice] = useState<TokenPrice>()
   const [hasMoreTrades, setHasMoreTrades] = useState(false)
+  const { set, get: getReward } = useLruMap<Record<string, string>>()
+
   const onTrades = ({ data, extra }: TokenOnEvents['trades']) => {
-    if (extra?.rewarded) tardeRewards = extra.rewarded
+    if (extra?.rewarded) {
+      set(data[0]?.hash, extra.rewarded)
+    }
     setHasMoreTrades(!!extra?.hasmore)
     setTradeRecords((prev) =>
       orderBy(uniqBy([...prev, ...data], uniqKey), [sortKey], 'desc')
@@ -73,7 +80,7 @@ export const useTokenWs = (disabled = false) => {
     ws.emit('listen', {
       chain: chainName,
       token: tokenAddr,
-      offset: 1,
+      offset: 0,
       limit: pageSize,
     })
   }, [ws.isOpen])
@@ -84,7 +91,7 @@ export const useTokenWs = (disabled = false) => {
     holders,
     tradePrice,
     hasMoreTrades,
-    tardeRewards,
+    getReward,
     fetchNextTrades,
   }
 }

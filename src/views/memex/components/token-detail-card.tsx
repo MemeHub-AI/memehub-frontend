@@ -10,10 +10,10 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 import { MemexIdeaItem } from '@/api/memex/types'
-import { useTokenProgress } from '@/views/token/hooks/evm/use-token-progress'
 import { fmt } from '@/utils/fmt'
 import { CopyIcon } from '@/components/copy-icon'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { useTokenDetails } from '@/hooks/use-token-details'
 
 interface Props {
   details?: MemexIdeaItem
@@ -41,13 +41,12 @@ export const TokenDetailsCard = ({
   } = details ?? {}
   const { t } = useTranslation()
   const { chainId } = useChainInfo(chain)
-  const { progress } = useTokenProgress(
+  const { progress } = useTokenDetails(
     tokenAddr,
     chainId,
     details?.coin_version!
   )
-
-  const isFailed = tokenAddr === zeroAddress
+  const isZero = tokenAddr === zeroAddress
   const hasLinks = !!twitter_url || !!telegram_url || !!website_url
 
   return (
@@ -83,8 +82,8 @@ export const TokenDetailsCard = ({
         </div>
       </div>
 
-      {!isFailed && (
-        <div className="flex justify-between items-center my-1">
+      {hasLinks && (
+        <div className="flex justify-between items-center mt-1">
           <TokenSocialLinks
             className="mt-0 space-x-0"
             buttonProps={{
@@ -96,7 +95,7 @@ export const TokenDetailsCard = ({
             website={website_url!}
             onClick={(e) => e.stopPropagation()}
           />
-          {!editable && (
+          {!editable && !isZero && (
             <Button
               shadow="none"
               size="sm"
@@ -109,7 +108,7 @@ export const TokenDetailsCard = ({
         </div>
       )}
 
-      {!editable && !isFailed && (
+      {!editable && !isZero && (
         <Progress
           value={progress}
           className="h-5 border-2 border-black rounded mt-2 text-white"
@@ -117,7 +116,7 @@ export const TokenDetailsCard = ({
         />
       )}
 
-      {tokenAddr && !isFailed && (
+      {tokenAddr && !isZero && (
         <div className="flex items-center space-x-1 mt-1">
           <span>CA: {fmt.addr(tokenAddr)}</span>
           <CopyIcon content={tokenAddr} onClick={(e) => e.stopPropagation()} />

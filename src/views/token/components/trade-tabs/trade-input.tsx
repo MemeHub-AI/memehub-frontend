@@ -34,6 +34,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     tokenLeft,
     chainId,
     tokenChain,
+    totalSupply,
   } = useTokenContext()
   const { isBuy, isTraded, nativeBalance, tokenBalance } = useTradeTabsContext()
   const { getTokenAmount, getReserveAmount, getLastOrderAmount } =
@@ -47,6 +48,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const [targetAmount, setTargetAmount] = useState('0')
 
   const onValueChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
+    if (BigNumber(target.value).gt(totalSupply)) return
     if (BigNumber(target.value).lt(0)) return
     onChange?.(target.value)
   }
@@ -54,15 +56,15 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
   const checkForLastOrder = async () => {
     if (isGraduated || isIdoToken) return
 
-    const leftAmount = formatEther(await getLastOrderAmount(tokenLeft))
-    if (BigNumber(value as string).gt(leftAmount)) {
+    const remainingAmount = formatEther(await getLastOrderAmount(tokenLeft))
+    if (BigNumber(value as string).gt(remainingAmount)) {
       toast.warning(
         utilLang.replace(t('trade.limit'), [
-          `${leftAmount} ${reserveSymbol}`,
+          `${remainingAmount} ${reserveSymbol}`,
           t('trade.buy'),
         ])
       )
-      onChange?.(leftAmount)
+      onChange?.(remainingAmount)
       return false
     }
     return true

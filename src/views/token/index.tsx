@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { isAddress } from 'viem'
 import { useTranslation } from 'react-i18next'
 
@@ -22,11 +22,14 @@ export const TokenPage = () => {
   const { isMobile } = useResponsive()
   const { chainName, tokenAddr, isReady } = useTokenQuery()
 
-  const { tokenInfo, isLoadingTokenInfo, ...otherInfo } = useTokenInfo()
+  const { tokenInfo, isLoadingTokenInfo, ...otherInfo } = useTokenInfo(
+    tokenAddr,
+    chainName
+  )
   const { chain: tokenChain, chainId } = useChainInfo(chainName)
   const tradeWs = useTokenWs(otherInfo.isNotFound)
   const airdropInfo = useAirdropInfo(
-    tokenInfo?.airdrop?.[0]?.distribution_id || 0,
+    tokenInfo?.airdrop?.[0]?.distribution_id,
     tokenAddr,
     chainId,
     tokenInfo?.coin_version

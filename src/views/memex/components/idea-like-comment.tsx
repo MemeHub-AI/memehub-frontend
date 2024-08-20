@@ -4,6 +4,8 @@ import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PiShareFat } from 'react-icons/pi'
+import { BigNumber } from 'bignumber.js'
+import { formatEther } from 'viem'
 
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
@@ -18,6 +20,9 @@ import { getIdeaStatus } from '@/utils/memex/idea'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { memexIdeaLikeFeeUsdt } from '@/config/memex/idea'
 import { useClipboard } from '@/hooks/use-clipboard'
+import { useAccount, useBalance } from 'wagmi'
+import { BI_ZERO } from '@/constants/number'
+import { CONTRACT_ERR } from '@/errors/contract'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -47,6 +52,12 @@ export const IdeaLikeComment = ({
     [idea, ideaInfo]
   )
   const { copy } = useClipboard()
+  const { address } = useAccount()
+  const { data: { value = BI_ZERO } = {} } = useBalance({
+    address,
+    chainId,
+  })
+  const balance = formatEther(value)
 
   const {
     isLiked,
@@ -57,10 +68,18 @@ export const IdeaLikeComment = ({
     userPercent,
   } = ideaInfo
 
-  const onLikeClick = () => {
+  const onOpenLike = () => {
     if (isEnded) return toast.error(t('alread-ended'))
 
     setLikeOpen(true)
+  }
+
+  const onLike = () => {
+    if (BigNumber(balance.toString()).lt(likeValue)) {
+      CONTRACT_ERR.balanceInsufficient()
+      return
+    }
+    like(likeValue)
   }
 
   return (
@@ -105,7 +124,7 @@ export const IdeaLikeComment = ({
             shadow="none"
             size="sm"
             disabled={isLiking}
-            onClick={() => like(likeValue)}
+            onClick={onLike}
           >
             {isLiking ? t('confirming') : t('confirm')}
           </Button>
@@ -141,7 +160,12 @@ export const IdeaLikeComment = ({
               control={form.control}
               name="comment"
               render={({ field }) => (
-                <Textarea rows={5} placeholder={t('post-comment')} {...field} />
+                <Textarea
+                  autoFocus
+                  rows={5}
+                  placeholder={t('post-comment')}
+                  {...field}
+                />
               )}
             />
 
@@ -181,7 +205,7 @@ export const IdeaLikeComment = ({
                 onClick={() => isLiked && toast.info(t('already-liked'))}
               />
             ) : (
-              <HeartIcon className="w-5 h-5" onClick={onLikeClick} />
+              <HeartIcon className="w-5 h-5" onClick={onOpenLike} />
             )}
             <span>{likedCount}</span>
           </div>

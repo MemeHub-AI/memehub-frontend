@@ -17,6 +17,7 @@ import { IdTag } from '@/components/id-tag'
 import { useAirdrop } from '@/views/token/hooks/evm/use-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { useBurnAirdrop } from '@/views/token/hooks/evm/use-burn-airdrop'
 
 interface Props {
   className?: string
@@ -40,7 +41,6 @@ export const AirdropCard = ({
     airdrop_address,
     airdrop_version,
   } = airdrop ?? {}
-  const airdropId = detail?.distribution_id || 0
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
   const { hideClaimed } = useAirdropContext()
@@ -56,19 +56,25 @@ export const AirdropCard = ({
     kolCount,
     communityCount,
     communityClaimedCount,
-  } = useAirdropInfo(airdropId, contract_address, chainId, coin_version)
+  } = useAirdropInfo(
+    detail?.distribution_id,
+    contract_address,
+    chainId,
+    coin_version
+  )
 
   const totalAmount = isKolCard ? kolTotalAmount : communityTotalAmount
   const current = isKolCard ? kolClaimedCount : communityClaimedCount
   const total = isKolCard ? kolCount : communityCount
 
-  const { isKolClaimed, isCommunityClaimed } = useAirdrop(
-    airdropId,
+  const { isKolClaimed, isCommunityClaimed, isBurned } = useAirdrop(
+    detail?.distribution_id,
     airdrop_address,
     airdrop_version,
     chainId
   )
   const isClaimed = isKolCard ? isKolClaimed : isCommunityClaimed
+  const disabled = isClaimed || isBurned
 
   const onClaim = () => {
     router.push({
@@ -124,10 +130,14 @@ export const AirdropCard = ({
           </div>
           <Button
             className="mt-3 font-bold w-full"
-            disabled={isClaimed}
+            disabled={disabled}
             onClick={onClaim}
           >
-            {isClaimed ? t('airdrop.claimed') : t('claim.airdrop')}
+            {isClaimed
+              ? t('airdrop.claimed')
+              : isBurned
+              ? t('airdrop.burned')
+              : t('claim.airdrop')}
           </Button>
         </div>
         <Img src={image_url} className="w-40 h-40 max-sm:!w-[38%] " />

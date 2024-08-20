@@ -9,13 +9,13 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
-import { useTokenProgress } from '@/views/token/hooks/evm/use-token-progress'
 import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
 import { IdoTag } from '../ido-tag'
 import { Countdown } from '@/components/countdown'
 import { TokenListItem } from '@/api/token/types'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { useTokenDetails } from '@/hooks/use-token-details'
 
 interface Props extends ComponentProps<typeof Card> {
   card: TokenListItem
@@ -42,7 +42,7 @@ export const TokenCard = (props: Props) => {
   const [isExpired, setIsExpired] = useState(false)
   const { chain, chainId, chainName } = useChainInfo(card.chain)
 
-  const { progress, isGrauated } = useTokenProgress(
+  const { progress, isGraduated } = useTokenDetails(
     card.contract_address,
     chainId,
     card.coin_version
@@ -71,7 +71,7 @@ export const TokenCard = (props: Props) => {
       onClick={handleClick}
       {...restProps}
     >
-      {isGrauated && (
+      {isGraduated && (
         <Badge
           variant="success"
           className="absolute left-0 top-0 rounded-l-none rounded-tr-none mr-2"
@@ -105,7 +105,7 @@ export const TokenCard = (props: Props) => {
           <p
             className={cn(
               'text-zinc-500 text-sm break-all line-clamp-2 xl:line-clamp-3',
-              isGrauated && 'line-clamp-4 xl:line-clamp-5',
+              isGraduated && 'line-clamp-4 xl:line-clamp-5',
               isIdo && 'line-clamp-2 xl:line-clamp-3',
               descClass
             )}
@@ -128,7 +128,7 @@ export const TokenCard = (props: Props) => {
           <Progress
             className={cn('h-5 self-end w-full', isIdo && 'text-white')}
             indicatorClass={isIdo ? 'bg-red-500' : 'bg-green-500'}
-            value={idoProgress || (isGrauated ? 100 : progress)}
+            value={idoProgress || (isGraduated ? 100 : progress)}
           />
         )}
       </div>

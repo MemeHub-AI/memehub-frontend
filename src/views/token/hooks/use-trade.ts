@@ -1,14 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { formatEther, isAddress } from 'viem'
 import { isEmpty } from 'lodash'
 
 import { useEvmTrade } from './evm/use-trade'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeToast } from '@/hooks/use-trade-toast'
-import { useUserInfo } from '@/hooks/use-user-info'
-import { useTokenQuery } from './use-token-query'
 import { TradeType } from '@/enums/trade'
-import { useInvite } from './use-invite'
 import { fmt } from '@/utils/fmt'
 import { useDexTrade } from './use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -22,12 +19,7 @@ const lastTrade = {
 }
 
 export const useTrade = (onSuccess?: () => void) => {
-  const { userInfo } = useUserInfo()
-  const { referralCode } = useTokenQuery()
-  const [inviteOpen, setInviteOpen] = useState(false)
-  const { getCanBind } = useInvite()
   const { showToast } = useTradeToast()
-
   const {
     tokenInfo,
     isIdoToken,
@@ -35,7 +27,6 @@ export const useTrade = (onSuccess?: () => void) => {
     tokenAddr,
     tokenMetadata,
     chainId,
-    chainName,
     network,
     tokenChain,
   } = useTokenContext()
@@ -97,16 +88,6 @@ export const useTrade = (onSuccess?: () => void) => {
   }
 
   const checkForTrade = async (amount: string) => {
-    // Cannot use self code to trade.
-    if (userInfo?.code === referralCode) {
-      setInviteOpen(true)
-      return false
-    }
-    // Backend check.
-    if (await getCanBind(referralCode)) {
-      setInviteOpen(true)
-      return false
-    }
     if (isEmpty(amount)) {
       CONTRACT_ERR.amountInvlid()
       return false
@@ -172,7 +153,5 @@ export const useTrade = (onSuccess?: () => void) => {
     isTraded: isTraded || isDexTraded,
     handleBuy,
     handleSell,
-    inviteOpen,
-    setInviteOpen,
   }
 }

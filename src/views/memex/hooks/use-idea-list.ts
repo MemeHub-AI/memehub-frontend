@@ -29,7 +29,7 @@ export const useIdeaList = (type: MemexListType) => {
     getNextPageParam: (_, __, page) => page + 1,
     select: ({ pages }) => ({
       total: pages[0].data.count,
-      list: pages.flatMap((p) => p.data.results),
+      list: pages.flatMap((p) => p.data.results || []).filter(Boolean),
     }),
     refetchInterval: 5_000,
     retry: (count, error: Response) => {

@@ -41,7 +41,7 @@ export const useAirdrop = (
     useReadContract({
       ...airdropConfig,
       functionName: 'isClaimedKOL',
-      args: [BigInt(id || 0), address!],
+      args: [BigInt(id || -1), address!],
       query,
     })
 
@@ -49,9 +49,16 @@ export const useAirdrop = (
     useReadContract({
       ...airdropConfig,
       functionName: 'isClaimedCommunity',
-      args: [BigInt(id || 0), address!],
+      args: [BigInt(id || -1), address!],
       query,
     })
+
+  const { data: isBurned, refetch: refetchBurned } = useReadContract({
+    ...airdropConfig,
+    functionName: 'isBurn',
+    args: [BigInt(id || -1)],
+    query: { enabled: typeof id === 'number' },
+  })
 
   const refetch = () => {
     refetchKolClaimed()
@@ -129,6 +136,8 @@ export const useAirdrop = (
     isClaiming,
     isKolClaimed,
     isCommunityClaimed,
+    isBurned,
+    refetchBurned,
     claimKol,
     claimCommunity,
     resetClaim: reset,

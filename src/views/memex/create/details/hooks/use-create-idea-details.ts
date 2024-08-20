@@ -10,6 +10,8 @@ import { marketingSchema } from '@/components/marketing-field'
 import { MemexCreateReq } from '@/api/memex/types'
 import { useUpdateIdea } from '../../hooks/use-update-idea'
 import { useEditIdeaAutofill } from '../../hooks/use-edit-idea-autofill'
+import { isEqual } from 'lodash'
+import { Marketing } from '@/api/token/types'
 
 const withNonNull = (value: string) => value + t('memex.non-null')
 
@@ -43,9 +45,24 @@ export const useCreateIdeaDetails = () => {
       website: '',
     },
   })
-  const { isUpdating, updateWithContract } = useUpdateIdea(hash, {
+  const { isUpdating, update, updateWithContract } = useUpdateIdea(hash, {
     onContractSuccess: router.back,
   })
+
+  const isContractUpdate = ({
+    name,
+    symbol,
+    airdrop_marketing,
+  }: MemexCreateReq) => {
+    return !isEqual(
+      { name, symbol, airdrop_marketing },
+      {
+        name: ideaDetails?.name,
+        symbol: ideaDetails?.symbol,
+        airdrop_marketing: ideaDetails?.airdrop_marketing,
+      }
+    )
+  }
 
   const onSubmit = async (values: z.infer<typeof createDetailSchema>) => {
     if (!(await form.trigger())) return
@@ -62,9 +79,10 @@ export const useCreateIdeaDetails = () => {
     if (values.tg) params.telegram_url = values.tg
     if (values.website) params.website_url = values.website
 
-    // is update details
     if (hash) {
-      updateWithContract({ hash, ...params })
+      isContractUpdate(params)
+        ? updateWithContract({ hash, ...params })
+        : update({ hash, ...params }).then(router.back)
       return
     }
 

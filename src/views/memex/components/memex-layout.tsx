@@ -10,6 +10,8 @@ import { PrimaryLayout } from '@/components/layouts/primary'
 import { useUserStore } from '@/stores/use-user-store'
 import { useResponsive } from '@/hooks/use-responsive'
 
+export const memexBodyId = 'memex-body'
+
 export const MemexLayout = ({ children }: { children?: ReactNode }) => {
   const { t } = useTranslation()
   const { pathname, ...router } = useRouter()
@@ -76,7 +78,10 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
           ))}
         </TabsList>
 
-        <div className="h-[calc(100vh-64px-1.5rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm md:border">
+        <div
+          className="h-[calc(100vh-64px-2.5rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm md:border"
+          id={memexBodyId}
+        >
           {children}
         </div>
       </Tabs>

@@ -1,4 +1,5 @@
 import { isEmpty, last } from 'lodash'
+import { useRouter } from 'next/router'
 
 import type {
   IBasicDataFeed,
@@ -6,6 +7,7 @@ import type {
 } from '../../../../../public/js/charting_library/charting_library'
 import {
   datafeedConfig,
+  datafeedDefaultInterval,
   datafeedUnit,
   symbolInfoConfig,
 } from '@/config/datafeed'
@@ -17,17 +19,19 @@ import { useWebsocket } from '@/hooks/use-websocket'
 import { DatafeedEmitEvents, DatafeedOnEvents, DatafeedCache } from './types'
 import { useLruMap } from '@/hooks/use-lru-map'
 import { apiUrl } from '@/config/url'
+import { Routes } from '@/routes'
 
 export const useDatafeed = () => {
   const { chainName, tokenAddr } = useTokenQuery()
+  const router = useRouter()
   const ws = useWebsocket<DatafeedOnEvents, DatafeedEmitEvents>(
-    `${apiUrl.ws}/ws/v2/coin/candles`
+    `${apiUrl.ws}/ws/v2/coin/candles`,
+    { shouldReconnect: () => router.pathname === Routes.TokenPage }
   )
   const cache = useLruMap<DatafeedCache>()
 
-  // TODO: save `localStorage`, don't use `chainName` + `tokenAddr`
-  const { getInterval, setInterval } = useStorage()
-  const interval = getInterval(chainName, tokenAddr) || '1m'
+  const { getChartInterval, setChartInterval } = useStorage()
+  const interval = getChartInterval() || datafeedDefaultInterval
 
   const createDatafeed = () => {
     return {
@@ -58,7 +62,7 @@ export const useDatafeed = () => {
 
         if (period.firstDataRequest) {
           const cachedBars = cache.get('bars') || []
-          const cachedInterval = getInterval(chainName, tokenAddr)
+          const cachedInterval = getChartInterval()
 
           // Have cached bars & interval no change, use cache
           if (!isEmpty(cachedBars) && cachedInterval === interval) {
@@ -70,9 +74,10 @@ export const useDatafeed = () => {
             const bars = data[datafeedUnit]
 
             if (!isEmpty(bars)) cache.set('lastBar', last(bars))
-            setInterval(chainName, tokenAddr, interval)
+            setChartInterval(interval)
             onResult(bars, { noData: isEmpty(data) })
           })
+          ws.emit('unlisten', null)
           ws.emit('listen', {
             interval,
             token: tokenAddr,
