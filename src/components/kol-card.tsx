@@ -11,11 +11,7 @@ import { IdTag } from './id-tag'
 import { randomBy } from '@/utils/math'
 import { useCommunityMembers } from '@/hooks/use-community-members'
 
-interface Props {
-  data?: KolListItem
-}
-
-export const KolCard = ({ data }: Props) => {
+export const KolCard = ({ data }: { data?: KolListItem }) => {
   const { t } = useTranslation()
   const community = useMemo(() => randomBy(data?.communities), [])
   // const { members } = useCommunityMembers(community?.id)
@@ -33,14 +29,16 @@ export const KolCard = ({ data }: Props) => {
       }}
     >
       <div className="flex space-x-4 relative">
-        <img
-          src="/images/x.png"
-          alt="x"
-          className="absolute top-0 right-0"
-          onClick={() =>
-            open(utilsUrl.mediaUrl(data?.twitter_url, URL_TYPE.TWITTER))
-          }
-        />
+        {data?.twitter_url && (
+          <img
+            src="/images/x.png"
+            alt="x"
+            className="absolute top-0 right-0"
+            onClick={() =>
+              open(utilsUrl.mediaUrl(data?.twitter_url, URL_TYPE.TWITTER))
+            }
+          />
+        )}
         <Img
           src={data?.logo || defaultImg}
           alt="Avatar"
