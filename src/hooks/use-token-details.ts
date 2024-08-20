@@ -96,8 +96,6 @@ export const useTokenDetails = (
   const reserveTotalAmount = formatEther(reserveTotal)
   const totalSupply = formatEther(bcTotalSupply)
 
-  console.log('p', totalSupply, tokenLeftAmount)
-
   const progress = useMemo(() => {
     if (BigNumber(totalSupply).isZero()) return '0.00'
     if (isGraduated) return '100.00'
