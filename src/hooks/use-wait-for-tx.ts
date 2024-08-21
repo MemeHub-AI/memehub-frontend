@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useWaitForTransactionReceipt } from 'wagmi'
-import type { Address, WaitForTransactionReceiptErrorType } from 'viem'
+import type { Hash, Address, WaitForTransactionReceiptErrorType } from 'viem'
 
 interface Options {
   hash: Address | undefined
@@ -15,8 +15,8 @@ interface Options {
 
 export const useWaitForTx = (options: Options) => {
   const { hash, onLoading, onFetching, onSuccess, onError, onFinally } = options
+  const prevHash = useRef<Hash>()
   const result = useWaitForTransactionReceipt({ hash })
-  const prevHash = useRef<string>()
 
   useEffect(() => {
     const { data, error, isLoading, isFetching, isError, isSuccess } = result

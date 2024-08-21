@@ -81,7 +81,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             disabled={disabled}
           />
 
-          <div className="flex flex-col my-3">
+          <div className="flex flex-col mt-3 mb-1">
             <TradeInput value={value} onChange={setValue} disabled={disabled} />
             <TradeItems disabled={disabled} onItemClick={setValue} />
           </div>

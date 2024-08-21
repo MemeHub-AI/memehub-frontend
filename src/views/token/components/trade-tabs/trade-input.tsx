@@ -70,6 +70,7 @@ export const TradeInput = ({ value, disabled, onChange }: Props) => {
     return true
   }
 
+  // TODO: simulate on calc
   const calcAmountForBuy = async () => {
     value = value as string
 

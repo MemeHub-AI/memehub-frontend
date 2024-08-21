@@ -26,13 +26,6 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
     .minus(communityClaimedAmount)
     .toFormat()
 
-  console.log(
-    'remaining',
-    airdropTotal,
-    kolClaimedAmount,
-    communityClaimedAmount
-  )
-
   const { isBurned, isBurning, burn } = useBurnAirdrop(
     airdrop[0]?.distribution_id,
     refetchAirdrop
