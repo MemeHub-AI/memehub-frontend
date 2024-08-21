@@ -131,8 +131,6 @@ export const MemexIdeaCard = ({
     return children
   }
 
-  console.log('idea', idea?.memex_version)
-
   return (
     <div
       className={cn(
