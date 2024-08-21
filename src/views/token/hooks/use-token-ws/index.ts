@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { orderBy, uniqBy } from 'lodash'
 import { useRouter } from 'next/router'
+import { BigNumber } from 'bignumber.js'
 
 import { apiUrl } from '@/config/url'
 import { useWebsocket } from '@/hooks/use-websocket'
@@ -14,6 +15,7 @@ import type {
 } from './types'
 import { Routes } from '@/routes'
 import { useLruMap } from '@/hooks/use-lru-map'
+import { TokenListItem } from '@/api/token/types'
 
 const uniqKey: keyof TokenTrade = 'hash'
 
@@ -21,27 +23,40 @@ const sortKey: keyof TokenTrade = 'timestamp'
 
 const pageSize = 10
 
-export const useTokenWs = (disabled = false) => {
+export const useTokenWs = (
+  tokenInfo: TokenListItem | undefined,
+  disabled = false
+) => {
   const { chainName, tokenAddr } = useTokenQuery()
   const router = useRouter()
   const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
     disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`,
     { shouldReconnect: () => router.pathname === Routes.TokenPage }
   )
+  const { set, get: getReward } = useLruMap<Record<string, string>>()
   const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
   const [holders, setHolders] = useState<TokenHolder[]>([])
   const [tradePrice, setTradePrice] = useState<TokenPrice>()
   const [hasMoreTrades, setHasMoreTrades] = useState(false)
-  const { set, get: getReward } = useLruMap<Record<string, string>>()
+  const [marketCap, setMarketCap] = useState('')
+
+  const calcForMarketCap = (tradePrice = '0') => {
+    const marketCap = BigNumber(tokenInfo?.total_supply || 0)
+      .multipliedBy(tradePrice)
+      .multipliedBy(tradeRecords[0]?.price || tokenInfo?.start_price || 0)
+      .toFixed()
+    setMarketCap(marketCap)
+  }
 
   const onTrades = ({ data, extra }: TokenOnEvents['trades']) => {
     if (extra?.rewarded) {
-      set(data[0]?.hash, extra.rewarded)
+      data.map(({ hash }) => set(hash, extra.rewarded))
     }
     setHasMoreTrades(!!extra?.hasmore)
     setTradeRecords((prev) =>
       orderBy(uniqBy([...prev, ...data], uniqKey), [sortKey], 'desc')
     )
+    calcForMarketCap(data[0]?.price)
   }
 
   const onHolders = ({ data }: TokenOnEvents['holders']) => {
@@ -50,6 +65,7 @@ export const useTokenWs = (disabled = false) => {
 
   const onPrice = ({ data }: TokenOnEvents['price']) => {
     setTradePrice(data)
+    calcForMarketCap(data.price)
   }
 
   const onUpdate = ({ data }: TokenOnEvents['update']) => {
@@ -91,6 +107,7 @@ export const useTokenWs = (disabled = false) => {
     holders,
     tradePrice,
     hasMoreTrades,
+    marketCap,
     getReward,
     fetchNextTrades,
   }

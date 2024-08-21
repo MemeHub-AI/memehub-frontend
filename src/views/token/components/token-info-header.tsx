@@ -2,7 +2,6 @@ import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoCheckmark } from 'react-icons/io5'
 import { MdContentCopy } from 'react-icons/md'
-import { BigNumber } from 'bignumber.js'
 
 import { useTokenContext } from '@/contexts/token'
 import { fmt } from '@/utils/fmt'
@@ -22,8 +21,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
     isIdoToken,
     tokenMetadata,
     tokenChain,
-    tradePrice,
-    tradeRecords,
+    marketCap,
   } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
@@ -74,14 +72,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         </div>
         <span>
           <span className="font-bold">{t('market-cap')}: </span>$
-          {fmt.decimals(
-            BigNumber(tokenInfo?.total_supply || 0)
-              .multipliedBy(tradePrice?.price || 0)
-              .multipliedBy(
-                tradeRecords[0]?.price || tokenInfo?.start_price || 0
-              )
-              .toFixed()
-          )}
+          {fmt.decimals(marketCap)}
         </span>
 
         {isMobile && (
