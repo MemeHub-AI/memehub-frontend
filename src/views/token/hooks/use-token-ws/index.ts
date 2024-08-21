@@ -23,6 +23,8 @@ const sortKey: keyof TokenTrade = 'timestamp'
 
 const pageSize = 10
 
+let lastTradePrice = ''
+
 export const useTokenWs = (
   tokenInfo: TokenListItem | undefined,
   disabled = false
@@ -40,10 +42,10 @@ export const useTokenWs = (
   const [hasMoreTrades, setHasMoreTrades] = useState(false)
   const [marketCap, setMarketCap] = useState('')
 
-  const calcForMarketCap = (tradePrice = '0') => {
+  const calcForMarketCap = (usdtPrice = '0') => {
     const marketCap = BigNumber(tokenInfo?.total_supply || 0)
-      .multipliedBy(tradePrice)
-      .multipliedBy(tradeRecords[0]?.price || tokenInfo?.start_price || 0)
+      .multipliedBy(usdtPrice)
+      .multipliedBy(lastTradePrice || tokenInfo?.start_price || 0)
       .toFixed()
     setMarketCap(marketCap)
   }
@@ -52,11 +54,23 @@ export const useTokenWs = (
     if (extra?.rewarded) {
       data.map(({ hash }) => set(hash, extra.rewarded))
     }
+
     setHasMoreTrades(!!extra?.hasmore)
-    setTradeRecords((prev) =>
-      orderBy(uniqBy([...prev, ...data], uniqKey), [sortKey], 'desc')
-    )
-    calcForMarketCap(data[0]?.price)
+    setTradeRecords((prev) => {
+      const trades = orderBy(
+        uniqBy([...prev, ...data], uniqKey),
+        [sortKey],
+        'desc'
+      )
+      const firstTrade = trades[0]
+      const usdtPrice = BigNumber(firstTrade?.usd_price ?? 0)
+        .div(firstTrade.price ?? 1)
+        .toFixed()
+      lastTradePrice = firstTrade.price
+
+      calcForMarketCap(usdtPrice)
+      return trades
+    })
   }
 
   const onHolders = ({ data }: TokenOnEvents['holders']) => {
@@ -87,12 +101,13 @@ export const useTokenWs = (
   }
 
   useEffect(() => {
+    if (!ws.isOpen) return
+
     ws.on('trades', onTrades)
     ws.on('holders', onHolders)
     ws.on('price', onPrice)
     ws.on('update', onUpdate)
 
-    if (!ws.isOpen) return
     ws.emit('listen', {
       chain: chainName,
       token: tokenAddr,

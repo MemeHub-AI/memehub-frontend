@@ -22,7 +22,7 @@ enum Flag {
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
   const { chainsMap } = useChainsStore()
-  const { isIdoToken, holders, tokenInfo } = useTokenContext()
+  const { isIdoToken, holders, tokenInfo, chainName } = useTokenContext()
   const { total_supply } = tokenInfo ?? {}
 
   const getLabel = ({ flag, holder = '' }: (typeof holders)[number]) => {
@@ -66,9 +66,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
                   <p>
                     {i + 1}.{' '}
                     <Link
-                      href={`${chainsMap[r.chain]?.explorer}/address/${
-                        r.holder
-                      }`}
+                      href={`${chainsMap[chainName]?.explorer}/address/${r.holder}`}
                       target="_blank"
                       className="hover:text-black hover:underline transition-all cursor-pointer"
                     >
