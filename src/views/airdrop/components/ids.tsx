@@ -95,7 +95,7 @@ export const Ids = () => {
           <Link
             href={formLink.kol}
             target="_blank"
-            className="text-blue-700 cursor-pointer"
+            className="text-blue-700 cursor-pointer hover:underline"
           >
             {t('apply.kol')}
           </Link>
@@ -107,7 +107,7 @@ export const Ids = () => {
           <Link
             href={formLink.community}
             target="_blank"
-            className="text-blue-700 cursor-pointer"
+            className="text-blue-700 cursor-pointer hover:underline"
           >
             {t('apply.community')}
           </Link>
