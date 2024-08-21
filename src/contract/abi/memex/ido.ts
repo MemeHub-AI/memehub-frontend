@@ -153,6 +153,11 @@ export const memexIdoAbi = [
     type: 'error',
   },
   {
+    inputs: [],
+    name: 'NoTrueAddress',
+    type: 'error',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -188,6 +193,12 @@ export const memexIdoAbi = [
         internalType: 'address',
         name: 'user',
         type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'claimAmount',
+        type: 'uint256',
       },
     ],
     name: 'MemeHubClaimToken',
@@ -228,15 +239,21 @@ export const memexIdoAbi = [
         type: 'address',
       },
       {
-        indexed: false,
+        indexed: true,
         internalType: 'address',
-        name: 'user',
+        name: 'receiveRemainToken',
         type: 'address',
       },
       {
         indexed: false,
         internalType: 'uint256',
         name: 'time',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'claimAmount',
         type: 'uint256',
       },
     ],
@@ -797,6 +814,19 @@ export const memexIdoAbi = [
   {
     inputs: [],
     name: 'renounceOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'to',
+        type: 'address',
+      },
+    ],
+    name: 'rescueETHMemeHub',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
