@@ -20,7 +20,7 @@ export const getIdeaStatus = (
     isEnded,
     isProcessing: isStarted && !isEnded && !isSuccess,
     isSuccess,
-    isFailed: isEnded && !isSuccess,
+    isFailed: isEnded && !isSuccess && !isDeployed,
     isDeployed,
   }
 }
