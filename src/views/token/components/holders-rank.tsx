@@ -56,7 +56,10 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
           nullback={<p>{t('no.holders')}</p>}
         >
           {holders
-            .filter((r) => !r.flag?.includes('Air'))
+            .filter(
+              // Not airdrop & greater than 0
+              (r) => !r.flag?.includes('Air') && BigNumber(r.amount).gt(0)
+            )
             .map((r, i) => {
               return (
                 <li key={i} className="flex items-center justify-between">
