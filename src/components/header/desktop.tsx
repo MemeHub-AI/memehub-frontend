@@ -27,7 +27,7 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
     return (
       <>
         <div className="flex items-center gap-3 mr-3 select-none box-border--15-right w-60 ml-2">
-          <Logo showMeme className="shrink-0 w-32" />
+          <Logo showMeme className="shrink-0 xl:w-32" />
         </div>
         <div className="flex items-center gap-3 box-border--15-left">
           <RewardButton />
