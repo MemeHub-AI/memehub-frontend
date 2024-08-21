@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { orderBy, uniqBy } from 'lodash'
+import { first, orderBy, uniqBy } from 'lodash'
 import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
 
@@ -62,11 +62,11 @@ export const useTokenWs = (
         [sortKey],
         'desc'
       )
-      const firstTrade = trades[0]
+      const firstTrade = first(trades)
       const usdtPrice = BigNumber(firstTrade?.usd_price ?? 0)
-        .div(firstTrade.price ?? 1)
+        .div(firstTrade?.price ?? 1)
         .toFixed()
-      lastTradePrice = firstTrade.price
+      lastTradePrice = firstTrade?.price || ''
 
       calcForMarketCap(usdtPrice)
       return trades

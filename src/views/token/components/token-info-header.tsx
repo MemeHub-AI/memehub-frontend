@@ -26,6 +26,10 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
 
+  const tokenLabelName = `${tokenInfo?.name ?? tokenMetadata?.name}(${
+    tokenInfo?.symbol ?? tokenMetadata?.symbol
+  })`
+
   if (isLoadingTokenInfo) {
     return (
       <div className="flex items-center justify-between gap-4 px-1 text-sm mb-1">
@@ -51,12 +55,13 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
               className="border-2 border-black"
             />
 
-            <span className="ml-1 font-bold text-blue-600">
+            <span
+              className="ml-1 font-bold text-blue-600 max-w-64 truncate"
+              title={tokenLabelName}
+            >
               {isNotFound && !isIdoToken && !tokenMetadata
                 ? t('token.not-found')
-                : `${tokenInfo?.name ?? tokenMetadata?.name}(${
-                    tokenInfo?.symbol ?? tokenMetadata?.symbol
-                  })`}
+                : tokenLabelName}
             </span>
           </div>
           <div className="sm:hidden flex items-center">
