@@ -6,8 +6,7 @@ import { BsLightningFill } from 'react-icons/bs'
 import { zeroAddress } from 'viem'
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import { Address } from 'viem'
-import { useReadContract } from 'wagmi'
+import { BigNumber } from 'bignumber.js'
 
 import { Avatar } from '@/components/ui/avatar'
 import { Countdown } from '@/components/countdown'
@@ -27,8 +26,6 @@ import { getIdeaStatus } from '@/utils/memex/idea'
 import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { qs } from '@/hooks/use-fetch'
-import { BI_ZERO } from '@/constants/number'
-import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -65,6 +62,8 @@ export const MemexIdeaCard = ({
     userPercent,
     tokenAddr,
     overTime,
+    waitingSeconds,
+
     refetchInfo,
   } = ideaInfo
   const {
@@ -82,16 +81,14 @@ export const MemexIdeaCard = ({
     idea?.memex_version,
     refetchInfo
   )
-  const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
-
-  const { data: waitingSeconds = BI_ZERO } = useReadContract({
-    abi: memexFactoryAbiMap[idea?.memex_version!],
-    address: idea?.ido_address as Address,
-    chainId,
-    functionName: 'waitingTime',
-    query: { enabled: !!idea?.memex_version },
-  })
   const [isFailedWaiting, setIsFailedWaiting] = useState(false)
+  const rewardPercent = useMemo(() => {
+    if (idea?.is_creator && ideaInfo.isLiked) {
+      return BigNumber(ownerPercent).plus(userPercent).toFixed(2)
+    }
+
+    return BigNumber(idea?.is_creator ? ownerPercent : userPercent).toFixed(2)
+  }, [idea, ideaInfo])
 
   const withDetailsLayout = (children: ReactNode) => {
     if (isDetails) {
@@ -121,6 +118,7 @@ export const MemexIdeaCard = ({
                 createdAt={startAt}
                 duration={durationSeconds}
                 className="text-sm text-green-700"
+                onExpired={refetchInfo}
               />
             )}
           </div>
@@ -182,9 +180,10 @@ export const MemexIdeaCard = ({
         <div className="flex flex-col items-start">
           {isProcessing && isList && (
             <Countdown
+              className="text-sm text-green-700"
               createdAt={startAt}
               duration={durationSeconds}
-              className="text-sm text-green-700"
+              onExpired={refetchInfo}
             />
           )}
 

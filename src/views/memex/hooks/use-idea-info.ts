@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 
 import { BI_ZERO } from '@/constants/number'
 import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
+import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 
 export const useIdeaInfo = (
   addr: string | null | undefined,
@@ -17,6 +18,15 @@ export const useIdeaInfo = (
     address: addr as Address,
     chainId,
   }
+
+  const { data: waitingSeconds = BI_ZERO, refetch: refetchWaitingSeconds } =
+    useReadContract({
+      abi: memexFactoryAbiMap[version!],
+      address: addr as Address,
+      chainId,
+      functionName: 'waitingTime',
+      query: { enabled: !!version && !!addr },
+    })
 
   const { data: isLiked = false, refetch: refetchIsLiked } = useReadContract({
     ...idoConfig,
@@ -67,8 +77,9 @@ export const useIdeaInfo = (
   const durationSeconds = dayjs.unix(endAt).diff(dayjs.unix(startAt), 'seconds')
 
   const refetchInfo = () => {
-    refetchIsLiked()
     refetch()
+    refetchIsLiked()
+    refetchWaitingSeconds()
   }
 
   return {
@@ -91,6 +102,7 @@ export const useIdeaInfo = (
     endAt,
     durationSeconds,
     overTime,
+    waitingSeconds,
 
     isOver,
     isDeploy,

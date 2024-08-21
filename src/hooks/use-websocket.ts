@@ -18,7 +18,7 @@ interface WsBase<T extends OnEvents> {
   data: T[keyof T]
 }
 
-// Based on `react-use-websocket`, bind `WsReceived`.
+/** Based on `react-use-websocket`, binding {@link WsBase} data format. */
 export const useWebsocket = <
   OEvents extends OnEvents,
   EEvents extends EmitEvents
@@ -37,6 +37,10 @@ export const useWebsocket = <
       retryOnError: true,
       reconnectAttempts: 5,
       reconnectInterval: 3_000,
+      heartbeat: {
+        message: () => JSON.stringify({ type: 'heartbeat' }),
+        interval: 30_000, // 30s
+      },
       onOpen: () => sendJsonMessage({ type: 'heartbeat' }),
       filter: filterHeartbeta,
       ...options,
