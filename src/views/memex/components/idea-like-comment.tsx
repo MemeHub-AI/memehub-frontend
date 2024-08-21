@@ -63,7 +63,6 @@ export const IdeaLikeComment = ({
     chainId,
   })
   const balance = formatEther(value)
-
   const {
     isLiked,
     likeValue,
@@ -119,7 +118,7 @@ export const IdeaLikeComment = ({
           </p>
           <p>
             {utilLang.replace(t('memex.like.desc2'), [
-              durationSeconds / 60 / 60 + t('hours'),
+              Number(durationSeconds / 60 / 60).toFixed(2) + t('hours'),
             ])}
           </p>
         </div>

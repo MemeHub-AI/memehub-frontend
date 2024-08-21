@@ -23,8 +23,10 @@ export const MemexInfiniteScroll = <T,>({
       next={fetchNext}
       hasMore={list.length < total}
       scrollableTarget={memexBodyId}
-      loader={<p className="text-center text-zinc-500">{t('loading')}</p>}
-      endMessage={<p className="text-center text-zinc-500">{t('no-more')}</p>}
+      loader={<p className="text-center text-zinc-500 mt-2">{t('loading')}</p>}
+      endMessage={
+        <p className="text-center text-zinc-500 mt-2">{t('no-more')}</p>
+      }
     >
       {children}
     </InfiniteScroll>
