@@ -87,11 +87,8 @@ export const TokenDetailsCard = ({
       <div className="flex justify-between items-center mt-2">
         {hasLinks ? (
           <TokenSocialLinks
-            className="mt-0 space-x-0"
-            buttonProps={{
-              size: 'icon-sm',
-              className: 'border-none hover:bg-transparent',
-            }}
+            className="mt-0"
+            buttonProps={{ size: 'icon-sm' }}
             x={twitter_url!}
             tg={telegram_url!}
             website={website_url!}
