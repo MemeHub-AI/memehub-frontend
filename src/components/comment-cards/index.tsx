@@ -84,7 +84,11 @@ export const CommentCards = (props: Props) => {
         // Close the dialog if `false`.
         onOpenChange={(value) => !value && setReplyId(null)}
       >
-        <CommentForm isCommenting={isCommenting} onComment={onComment} />
+        <CommentForm
+          autoFocus
+          isCommenting={isCommenting}
+          onComment={onComment}
+        />
       </Dialog>
 
       {!readonly && <CommentForm className="mb-4" onComment={onComment} />}
