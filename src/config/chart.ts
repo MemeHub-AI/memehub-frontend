@@ -10,7 +10,7 @@ type TVChartOptions = Omit<
   'container' | 'datafeed' | 'interval' | 'localets' | 'locale'
 >
 
-const format = (price?: number) => fmt.decimals(price, { fixed: 4 })
+const format = (price?: number) => fmt.decimals(price, { fixed: 6 })
 
 export const chartOptions: TVChartOptions = {
   library_path: 'js/charting_library/',
