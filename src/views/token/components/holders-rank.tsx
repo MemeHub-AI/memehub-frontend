@@ -41,7 +41,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
       return `(🔥${t('holder.burning')})`
     }
     if (flagIncludes(Flag.Bc)) return `(💰${t('pool')})`
-    if (flagIncludes(Flag.Creator)) return `(🧑‍💻${t('creator')})`
+    if (flagIncludes(Flag.Creator)) return `(🧑‍🚀${t('holder.inventor')})`
     if (flagIncludes(Flag.Dex)) return `(👑${t('dex')})`
     if (flagIncludes(Flag.Airdrop)) return `(${t('airdrop')})`
     if (flagIncludes(Flag.Memex)) return `(❤️${t('holder.memex')})`

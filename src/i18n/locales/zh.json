@@ -693,5 +693,6 @@
   "d": "天",
   "w": "周",
   "M": "月",
-  "holder.memex": "点赞者"
+  "holder.memex": "点赞池子",
+  "holder.inventor": "发明者"
 }
