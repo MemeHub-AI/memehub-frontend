@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'react-i18next'
 import { zeroAddress } from 'viem'
@@ -55,26 +55,28 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
           fallback={<HolderRankSkeleton />}
           nullback={<p>{t('no.holders')}</p>}
         >
-          {holders?.map((r, i) => {
-            // Exclude airdrop.
-            if (r.flag?.includes('Air')) return null
-            return (
-              <li key={i} className="flex items-center justify-between">
-                <p>
-                  {i + 1}.{' '}
-                  <Link
-                    href={`${chainsMap[r.chain]?.explorer}/address/${r.holder}`}
-                    target="_blank"
-                    className="hover:text-black hover:underline transition-all cursor-pointer"
-                  >
-                    {fmt.addr(r.holder)}
-                  </Link>
-                  {getLabel(r)}
-                </p>
-                <span>{fmt.percent(getPercent(r.amount))}</span>
-              </li>
-            )
-          })}
+          {holders
+            .filter((r) => !r.flag?.includes('Air'))
+            .map((r, i) => {
+              return (
+                <li key={i} className="flex items-center justify-between">
+                  <p>
+                    {i + 1}.{' '}
+                    <Link
+                      href={`${chainsMap[r.chain]?.explorer}/address/${
+                        r.holder
+                      }`}
+                      target="_blank"
+                      className="hover:text-black hover:underline transition-all cursor-pointer"
+                    >
+                      {fmt.addr(r.holder)}
+                    </Link>
+                    {getLabel(r)}
+                  </p>
+                  <span>{fmt.percent(getPercent(r.amount))}</span>
+                </li>
+              )
+            })}
         </CustomSuspense>
       </div>
     </>

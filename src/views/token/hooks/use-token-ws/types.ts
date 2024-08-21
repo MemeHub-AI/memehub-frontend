@@ -49,7 +49,7 @@ export interface TokenHolder {
   token: string
   holder: string
   amount: string
-  flag: string
+  flag: string | null
 }
 
 export interface TokenPrice {
