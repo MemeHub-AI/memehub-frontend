@@ -18,8 +18,8 @@ import { useMemexClear } from './hooks/use-memex-clear'
 import { MemexIdeaItem } from '@/api/memex/types'
 
 export const CreateIdeaPage = () => {
-  const createTweet = useCreateIdea()
-  const { form, onSubmit } = createTweet
+  const createIdea = useCreateIdea()
+  const { form, onSubmit } = createIdea
   const { ideaDetails } = useMemexStore()
   const { query, ...router } = useRouter()
 
@@ -27,7 +27,7 @@ export const CreateIdeaPage = () => {
 
   return (
     <PrimaryLayout padding={false} mainClass="flex">
-      <CreateIdeaProvider value={createTweet}>
+      <CreateIdeaProvider value={createIdea}>
         <Form {...form}>
           <form
             className="flex-1 pt-1 pb-3 xl:max-w-4xl"

@@ -21,9 +21,18 @@ export const CreateIdeaHeader = () => {
 
   const isUpdate = typeof query.hash === 'string'
   const hasError = !isEmpty(Object.keys(formState.errors))
-  const publishFee = BigNumber(deployFee).gt(0)
-    ? `(${deployFee} ${chain?.native.symbol})`
-    : ''
+  const isValidFee = BigNumber(deployFee).gt(0)
+  const publishFee = isValidFee ? `(${deployFee} ${chain?.native.symbol})` : ''
+
+  const disabled = hasError || isCreating || !isValidFee
+
+  const renderButtonText = () => {
+    if (!isValidFee) return t('deploy.unsupport.chain')
+    if (isCreating) return t('memex.creating')
+    if (isUpdate) return t('update')
+
+    return `${t('memex.create')} ${publishFee}`
+  }
 
   return (
     <div className="flex items-center justify-between space-x-2 mx-1">
@@ -47,13 +56,9 @@ export const CreateIdeaHeader = () => {
         size="sm"
         className="rounded-full bg-yellow-600 border-none text-white h-7 !mr-1.5"
         type="submit"
-        disabled={hasError || isCreating}
+        disabled={disabled}
       >
-        {isCreating
-          ? t('memex.creating')
-          : isUpdate
-          ? t('update')
-          : `${t('memex.create')} ${publishFee}`}
+        {renderButtonText()}
       </Button>
     </div>
   )
