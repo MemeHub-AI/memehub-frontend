@@ -27,7 +27,7 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
     mutateAsync({
       page: 1,
       page_size: 25,
-      token: value,
+      search: value,
     })
   }
 
