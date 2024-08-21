@@ -125,7 +125,7 @@ export const MemexIdeaCard = ({
     return children
   }
 
-  console.log('idea', idea)
+  // console.log('idea', idea)
 
   return (
     <div

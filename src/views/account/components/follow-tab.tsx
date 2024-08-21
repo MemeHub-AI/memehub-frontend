@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { useUserList } from '../hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
 import { FollowTabProvider } from '@/contexts/follow-tab'
+import { useIsMemex } from '@/hooks/use-is-memex'
 
 export const FollowTab = () => {
   const { t } = useTranslation()
@@ -33,6 +34,7 @@ export const FollowTab = () => {
     isFetching: isFetchingFollowing,
     refetch: refetchFollowing,
   } = useUserList(UserListType.Following)
+  const { isMemex } = useIsMemex()
 
   const refetchFollows = () => {
     refetchFollowers()
@@ -40,12 +42,14 @@ export const FollowTab = () => {
   }
 
   const renderTabs = () => {
-    if (isMobile) {
+    if (isMobile || isMemex) {
       const isFollowers = tab === UserListType.Followers
       return (
         <Dialog>
-          <div className="flex items-center justify-between"
-            style={{ margin: "0 10px 10px 10px" }}>
+          <div
+            className="flex items-center justify-between"
+            style={{ margin: '0 10px 10px 10px' }}
+          >
             <DialogTrigger asChild>
               <Button
                 variant="outline"
