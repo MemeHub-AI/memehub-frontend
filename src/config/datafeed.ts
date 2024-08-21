@@ -8,7 +8,6 @@ import { DatafeedCandles } from '@/components/chart/hooks/use-datafeed/types'
 import { ObjectLike } from '@/utils/types'
 
 export const datafeedResolutionsMap = {
-  '1s': `1${t('s')}`,
   '1': `1${t('m')}`,
   '5': `5${t('m')}`,
   '15': `15${t('m')}`,
@@ -21,7 +20,6 @@ export const datafeedResolutionsMap = {
 } as ObjectLike<string>
 
 export const datafeedResolutions = [
-  '1s',
   '1',
   '5',
   '15',
