@@ -77,7 +77,7 @@ export const useIdeaClaimRefund = (
     onLoading: toasts.loading,
     onError: ({ message }) => CONTRACT_ERR.message(message),
     onSuccess: toasts.success,
-    onFillay: () => {
+    onFinally: () => {
       reset()
       refetch()
       onFinally?.()

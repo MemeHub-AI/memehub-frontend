@@ -10,11 +10,11 @@ interface Options {
     data: ReturnType<typeof useWaitForTransactionReceipt>['data']
   ) => void
   onError?: (error: WaitForTransactionReceiptErrorType) => void
-  onFillay?: () => void
+  onFinally?: () => void
 }
 
 export const useWaitForTx = (options: Options) => {
-  const { hash, onLoading, onFetching, onSuccess, onError, onFillay } = options
+  const { hash, onLoading, onFetching, onSuccess, onError, onFinally } = options
   const result = useWaitForTransactionReceipt({ hash })
   const prevHash = useRef<string>()
 
@@ -28,7 +28,7 @@ export const useWaitForTx = (options: Options) => {
     if (isFetching) onFetching?.()
     if (isError) onError?.(error)
     if (isSuccess) onSuccess?.(data)
-    if (isError || isSuccess) setTimeout(() => onFillay?.(), 500)
+    if (isError || isSuccess) setTimeout(() => onFinally?.(), 500)
 
     if (hash) prevHash.current = hash
   }, [result])

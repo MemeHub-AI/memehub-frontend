@@ -66,7 +66,7 @@ export const useDeployIdea = (
       CONTRACT_ERR.message(message)
       reportException(message)
     },
-    onFillay: () => {
+    onFinally: () => {
       toast.dismiss()
       reset()
       onFinally?.()

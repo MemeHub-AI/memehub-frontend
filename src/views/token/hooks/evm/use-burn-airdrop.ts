@@ -54,7 +54,7 @@ export const useBurnAirdrop = (
     hash,
     onLoading: () => toast.loading(t('tx.confirming')),
     onSuccess: () => toast.success(t('airdrop.burn.success')),
-    onFillay: () => {
+    onFinally: () => {
       refetchBurned()
       onFinally?.()
       reset()

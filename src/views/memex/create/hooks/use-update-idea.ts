@@ -50,7 +50,7 @@ export const useUpdateIdea = (
     onLoading: () => toast.loading(t('tx.confirming')),
     onError: ({ message }) => CONTRACT_ERR.message(message),
     onSuccess: () => toast.success(t('update-success')),
-    onFillay: () => {
+    onFinally: () => {
       reset()
       onContractSuccess?.()
       toast.dismiss()

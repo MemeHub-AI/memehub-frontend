@@ -38,11 +38,11 @@ export const useTrade = (onSuccess?: () => void) => {
     dexBuy,
     dexSell,
     dexResetTrade,
-  } = useDexTrade(tokenAddr, tokenInfo?.graduated_pool, chainId)
+  } = useDexTrade(tokenAddr, tokenInfo?.graduated_pool, chainId, { onSuccess })
   const evmTrade = useEvmTrade(onSuccess)
 
   const {
-    hash,
+    hash: tradeHash,
     isTraded,
     isSubmitting,
     buy,
@@ -57,6 +57,7 @@ export const useTrade = (onSuccess?: () => void) => {
       [Network.Tvm]: evmTrade,
     }[network]
   }, [network, isGraduated, isIdoToken, evmTrade])
+  const hash = dexHash || tradeHash
 
   // TODO: add Sol, TON chains
   const updateLastTrade = async (type: TradeType, amount: string) => {
@@ -148,7 +149,7 @@ export const useTrade = (onSuccess?: () => void) => {
   }, [hash])
 
   return {
-    hash: hash || dexHash,
+    hash,
     isTrading: isSubmitting || isDexSubmitting,
     isTraded: isTraded || isDexTraded,
     handleBuy,

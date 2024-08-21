@@ -86,7 +86,7 @@ export const useAirdrop = (
     onLoading: () => toast.loading(t('tx.waiting')),
     onError: () => toast.error(t('airdrop.claim.failed')),
     onSuccess: () => toast.success(t('airdrop.claim.success')),
-    onFillay: () => {
+    onFinally: () => {
       reset()
       refetch()
       onFinally?.()

@@ -37,7 +37,7 @@ export const useIdeaLike = (
     onLoading: () => toast.loading(t('tx.confirming')),
     onError: ({ message }) => CONTRACT_ERR.message(message),
     onSuccess: () => toast.success(t('tx.success')),
-    onFillay: () => {
+    onFinally: () => {
       toast.dismiss()
       onFillay?.()
       reset()

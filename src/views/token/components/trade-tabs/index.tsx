@@ -27,12 +27,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { playSuccess } = useAudioPlayer()
   const { isClaimingAirdrop } = useAirdropStore()
   const { slippage, setSlippage } = useSlippage()
-  const { isNotFound, isIdoToken, tokenMetadata } = useTokenContext()
+  const { isNotFound, isIdoToken, tokenMetadata, refetchDetails } =
+    useTokenContext()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
   const { getIsBound } = useInvite()
-
   const { isTrading, isTraded, handleBuy, handleSell } = useTrade(() => {
     setValue('')
+    refetchDetails()
     refetchBalance()
   })
 
