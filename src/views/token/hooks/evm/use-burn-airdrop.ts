@@ -55,9 +55,10 @@ export const useBurnAirdrop = (
     onLoading: () => toast.loading(t('tx.confirming')),
     onSuccess: () => toast.success(t('airdrop.burn.success')),
     onFinally: () => {
-      refetchBurned()
-      onFinally?.()
       reset()
+      onFinally?.()
+      refetchBurned()
+      toast.dismiss()
     },
   })
   const isBurning = isPending || isLoading
