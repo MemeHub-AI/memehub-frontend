@@ -6,13 +6,13 @@ import { useChainId, useWriteContract } from 'wagmi'
 
 import { memexApi } from '@/api/memex'
 import { REQUEST_ERR } from '@/errors/request'
-import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useIdeaDetails } from '../../idea/hooks/use-idea-details'
 import { getEvmAirdropParams } from '@/utils/contract'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { memexIdoAbiMap } from '@/contract/abi/memex/ido'
 
 interface Options {
   showSuccessTips?: boolean
@@ -79,8 +79,14 @@ export const useUpdateIdea = (
   const updateWithContract = async (
     params: Parameters<typeof memexApi.updateIdea>[0]
   ) => {
+    const config = {
+      abi: memexIdoAbiMap[details?.memex_version!],
+      address: details?.ido_address as Address,
+      chainId,
+    }
+
     if (!(await checkForChain(chainId))) return
-    if (!configValue) {
+    if (!configValue || !config.abi || !config.address) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -93,9 +99,7 @@ export const useUpdateIdea = (
       }
 
       writeContract({
-        abi: memexIdoAbi,
-        address: details.ido_address as Address,
-        chainId,
+        ...config,
         functionName: 'setTokenInfo',
         args: [
           [params.name!, params.symbol!],

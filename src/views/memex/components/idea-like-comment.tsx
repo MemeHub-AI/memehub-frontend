@@ -41,12 +41,17 @@ export const IdeaLikeComment = ({
     setCommentOpen(false)
     onCommentSuccess?.()
   })
-  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId)
-  const { isLiking, like } = useIdeaLike(idea?.ido_address, chainId, () => {
-    setLikeOpen(false)
-    setCommentOpen(true)
-    ideaInfo.refetchInfo()
-  })
+  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId, idea?.memex_version)
+  const { isLiking, like } = useIdeaLike(
+    idea?.ido_address,
+    chainId,
+    idea?.memex_version,
+    () => {
+      setLikeOpen(false)
+      setCommentOpen(true)
+      ideaInfo.refetchInfo()
+    }
+  )
   const { isEnded } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]

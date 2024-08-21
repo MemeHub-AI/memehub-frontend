@@ -3,16 +3,17 @@ import { useAccount, useReadContract } from 'wagmi'
 import { BigNumber } from 'bignumber.js'
 import dayjs from 'dayjs'
 
-import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { BI_ZERO } from '@/constants/number'
+import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
 
 export const useIdeaInfo = (
   addr: string | null | undefined,
-  chainId: number
+  chainId: number,
+  version: MemexIdoVersion | undefined
 ) => {
   const { address } = useAccount()
   const idoConfig = {
-    abi: memexIdoAbi,
+    abi: memexIdoAbiMap[version!],
     address: addr as Address,
     chainId,
   }
@@ -21,6 +22,7 @@ export const useIdeaInfo = (
     ...idoConfig,
     functionName: 'isLike',
     args: [address!],
+    query: { enabled: !!idoConfig.abi && !!idoConfig.address },
   })
 
   const {

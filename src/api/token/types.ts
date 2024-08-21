@@ -1,11 +1,10 @@
 import { TokenType } from '@/enums/token'
-import type { UserInfoRes } from '../user/types'
 import type { TokenVersion } from '@/contract/abi/token'
 import type { DistributorVersion } from '@/contract/abi/distributor'
 import type { AirdropDetail } from '../airdrop/types'
-import type { MemexFactoryVersion } from '@/contract/abi/memex'
+import type { MemexFactoryVersion } from '@/contract/abi/memex/factory'
 import type { RecommendVersion } from '@/contract/abi/recommend'
-import { BcVersion } from '@/contract/abi/bonding-curve'
+import type { BcVersion } from '@/contract/abi/bonding-curve'
 
 export interface TokenListItem {
   airdrop: AirdropDetail[]

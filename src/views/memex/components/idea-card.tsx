@@ -27,8 +27,8 @@ import { getIdeaStatus } from '@/utils/memex/idea'
 import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { qs } from '@/hooks/use-fetch'
-import { memexFactoryAbi } from '@/contract/abi/memex/factory'
 import { BI_ZERO } from '@/constants/number'
+import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -47,7 +47,7 @@ export const MemexIdeaCard = ({
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { chain, chainId, chainName } = useChainInfo(idea?.chain)
-  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId)
+  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId, idea?.memex_version)
   const { hasDetails, isFailed, isSuccess, isProcessing, isEnded } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
@@ -76,14 +76,20 @@ export const MemexIdeaCard = ({
     claim,
     refund,
     refetch,
-  } = useIdeaClaimRefund(idea?.ido_address, chainId, refetchInfo)
+  } = useIdeaClaimRefund(
+    idea?.ido_address,
+    chainId,
+    idea?.memex_version,
+    refetchInfo
+  )
   const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
 
   const { data: waitingSeconds = BI_ZERO } = useReadContract({
-    abi: memexFactoryAbi,
+    abi: memexFactoryAbiMap[idea?.memex_version!],
     address: idea?.ido_address as Address,
     chainId,
     functionName: 'waitingTime',
+    query: { enabled: !!idea?.memex_version },
   })
   const [isFailedWaiting, setIsFailedWaiting] = useState(false)
 
@@ -125,7 +131,7 @@ export const MemexIdeaCard = ({
     return children
   }
 
-  // console.log('idea', idea)
+  console.log('idea', idea?.memex_version)
 
   return (
     <div

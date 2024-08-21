@@ -21,7 +21,11 @@ export const IdeaDetailsPage = () => {
   const { details, isLoadingDetails } = ideaDetails
   const { comments, isLoadingComments, refetchComments } = ideaComments
   const { chainId } = useChainInfo(details?.chain)
-  const ideaInfo = useIdeaInfo(details?.ido_address, chainId)
+  const ideaInfo = useIdeaInfo(
+    details?.ido_address,
+    chainId,
+    details?.memex_version
+  )
 
   return (
     <IdeaDetailsProvider

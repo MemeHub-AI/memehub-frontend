@@ -3,15 +3,16 @@ import { useAccount, useReadContracts, useWriteContract } from 'wagmi'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
-import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useTypedFn } from '@/hooks/use-typed-fn'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
 
 export const useIdeaClaimRefund = (
   addr: string | undefined | null,
   chainId: number,
+  version: MemexIdoVersion | undefined,
   onFinally?: () => void
 ) => {
   const { t } = useTranslation()
@@ -29,7 +30,7 @@ export const useIdeaClaimRefund = (
   const { checkForChain } = useCheckAccount()
 
   const idoConfig = {
-    abi: memexIdoAbi,
+    abi: memexIdoAbiMap[version!],
     address: addr as Address,
     chainId,
   }
@@ -52,7 +53,7 @@ export const useIdeaClaimRefund = (
       { ...idoConfig, functionName: 'isWithdrawETH', args },
     ],
     query: {
-      enabled: !!address && !!addr,
+      enabled: !!address && !!addr && !!idoConfig.abi,
       select: (data) => data.map((d) => d.result),
     },
   })
@@ -86,7 +87,7 @@ export const useIdeaClaimRefund = (
   })
 
   const checkForWrite = async () => {
-    if (!addr || !address) return false
+    if (!addr || !address || !idoConfig.abi) return false
     if (!(await checkForChain(chainId))) return false
     return true
   }

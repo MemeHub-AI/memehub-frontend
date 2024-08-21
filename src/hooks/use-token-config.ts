@@ -7,7 +7,7 @@ import { tokenApi } from '@/api/token'
 import type { TokenConfigContract } from '@/api/token/types'
 import type { BcVersion } from '@/contract/abi/bonding-curve'
 import type { DistributorVersion } from '@/contract/abi/distributor'
-import type { MemexFactoryVersion } from '@/contract/abi/memex'
+import type { MemexFactoryVersion } from '@/contract/abi/memex/factory'
 import type { RecommendVersion } from '@/contract/abi/recommend'
 import type { TokenVersion } from '@/contract/abi/token'
 

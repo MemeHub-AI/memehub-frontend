@@ -6,12 +6,13 @@ import { BigNumber } from 'bignumber.js'
 
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { useCheckAccount } from '@/hooks/use-check-chain'
+import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
 
 export const useIdeaLike = (
   addr: string | null | undefined,
   chainId: number,
+  version: MemexIdoVersion | undefined,
   onFillay?: () => void
 ) => {
   const { t } = useTranslation()
@@ -46,7 +47,7 @@ export const useIdeaLike = (
 
   const like = async (value: string) => {
     if (!(await checkForChain(chainId))) return
-    if (!addr) {
+    if (!addr || !memexIdoAbiMap[version!]) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -56,7 +57,7 @@ export const useIdeaLike = (
     }
 
     writeContract({
-      abi: memexIdoAbi,
+      abi: memexIdoAbiMap[version!],
       address: addr as Address,
       chainId,
       functionName: 'like',
