@@ -12,6 +12,7 @@ import { UserListType } from '@/api/user/types'
 import { Routes } from '@/routes'
 import { useAccountContext } from '@/contexts/account'
 import { useIsMemex } from '@/hooks/use-is-memex'
+import { cn } from '@/lib/utils'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
@@ -71,7 +72,12 @@ export const AccountTab = () => {
         })
       }}
     >
-      <TabsList className="h-12 mb-2 max-sm:w-full max-sm:h-10 max-sm:mb-0">
+      <TabsList
+        className={cn(
+          'h-12 mb-2 max-sm:w-full max-sm:h-10 max-sm:mb-0',
+          isMemex && 'w-full'
+        )}
+      >
         {tabs.map((t) => (
           <TabsTrigger
             className="h-full w-full max-sm:px-2 max-sm:text-xs"

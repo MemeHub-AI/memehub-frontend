@@ -34,6 +34,7 @@ import { Routes } from '@/routes'
 import { Tooltip } from '@/components/ui/tooltip'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { FollowTab } from './follow-tab'
+import { useIsMemex } from '@/hooks/use-is-memex'
 
 export const Profile = (props: ComponentProps<'div'>) => {
   const { className } = props
@@ -53,6 +54,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
     inputEl: inputRef.current,
     onSuccess: (url) => update({ logo: url }).then(() => refetchUserInfo()),
   })
+  const { isMemex } = useIsMemex()
 
   return (
     <Card
@@ -180,7 +182,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
           </span>
         </div>
       </CardFooter>
-      <div className="md:hidden">
+      <div className={isMemex ? '' : 'sm:hidden'}>
         <FollowTab />
       </div>
     </Card>

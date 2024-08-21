@@ -153,8 +153,8 @@ export const MemexMenu = () => {
           </div>
         </PopoverTrigger>
 
-        <PopoverContent side="right">
-          <div className="bg-slate-50 p-4 flex space-y-2 flex-col">
+        <PopoverContent side="right" align="end">
+          <div className="bg-slate-50 py-4 px-6 flex space-y-2 flex-col rounded-md">
             {langs.map(([code, { name }], i) => (
               <Button
                 key={i}
@@ -167,7 +167,6 @@ export const MemexMenu = () => {
                 )}
               >
                 {name}
-                {/* {i18n.language === code && <FaCheck className="ml-5" />} */}
               </Button>
             ))}
           </div>
