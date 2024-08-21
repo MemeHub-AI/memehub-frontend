@@ -15,7 +15,7 @@ import { FaRegHandshake } from 'react-icons/fa'
 import { FaHandshake } from 'react-icons/fa6'
 import { FaRegUser } from 'react-icons/fa6'
 import { FaUser } from 'react-icons/fa6'
-import { Button } from './ui/button'
+import { Button } from '../../../components/ui/button'
 import IdeaFloatButton from '@/views/memex/components/idea-float-button'
 import { useUserStore } from '@/stores/use-user-store'
 import {
@@ -26,6 +26,9 @@ import {
 } from '@radix-ui/react-popover'
 import { useLang } from '@/hooks/use-lang'
 import { resources } from '@/i18n'
+import { FaSquareTwitter } from 'react-icons/fa6'
+import { FaTelegramPlane } from 'react-icons/fa'
+import { socialLink } from '@/config/link'
 
 interface MemexNavs {
   title: string
@@ -105,7 +108,12 @@ export const MemexMenu = () => {
   }
 
   return (
-    <div className="flex flex-col space-y-4 mt-4 justify-start xl:w-60 box-border-custom pr-6 fixed left-2">
+    <div
+      className={cn(
+        'flex flex-col space-y-4 mt-4 justify-start xl:w-60 pr-6 fixed left-2',
+        'relative after:absolute after:-top-20 after:bottom-0 after:right-0 after:bg-zinc-200 after:w-px'
+      )}
+    >
       {navs.map((nav, index) => {
         if (nav.path === Routes.MemexDetailsProfile && !userInfo) return
         return (
@@ -178,10 +186,23 @@ export const MemexMenu = () => {
       <Button
         shadow={'none'}
         onClick={() => router.push(Routes.MemexCreate)}
-        className="bg-purple-700 text-white rounded-full border-none py-6 text-lg max-xl:hidden"
+        className="bg-purple-700 text-white rounded-full border-none py-6 text-lg max-xl:hidden mt-2"
       >
         {t('Post.idea')}
       </Button>
+
+      <div className="flex justify-center xl:space-x-8 max-xl:flex-col max-xl:items-center max-xl:space-y-4">
+        <FaSquareTwitter
+          size={30}
+          className="cursor-pointer"
+          onClick={() => window.open(socialLink.x)}
+        />
+        <FaTelegramPlane
+          size={28}
+          className="cursor-pointer"
+          onClick={() => window.open(socialLink.tg)}
+        />
+      </div>
 
       <div className="xl:hidden">
         <IdeaFloatButton />

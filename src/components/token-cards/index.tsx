@@ -14,6 +14,7 @@ import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TokenListItem } from '@/api/token/types'
 import { IdoCard } from '../ido-card'
+import { useIsMemex } from '@/hooks/use-is-memex'
 
 interface Props extends ComponentProps<'div'> {
   cards?: TokenListItem[]
@@ -43,6 +44,7 @@ export const TokenCards = (props: Props) => {
     onFetchNext,
     hasMore: cards.length < total,
   })
+  const { isMemex } = useIsMemex()
 
   useEffect(() => {
     if (isPlayHomeAudio) {
@@ -94,7 +96,7 @@ export const TokenCards = (props: Props) => {
               setFilteredCards(cards)
             }
           }}
-          className="ml-4"
+          className={cn('ml-4', isMemex && 'hidden')}
         />
       </CustomSuspense>
 

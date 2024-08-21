@@ -15,11 +15,7 @@ export const IdeaCommentCard = ({
 }) => {
   return (
     <div className={cn('flex space-x-2 border-b p-3', className)}>
-      <Avatar
-        src={comment?.user_logo}
-        fallback={comment?.user_name[0]}
-        className=""
-      />
+      <Avatar src={comment?.user_logo} fallback={comment?.user_name[0]} />
       <div className="flex-1">
         <div className="flex items-center text-sm space-x-1">
           <span className="font-semibold">{comment?.user_name}</span>
@@ -28,7 +24,7 @@ export const IdeaCommentCard = ({
             {dayjs(comment?.created_at).fromNow()}
           </span>
         </div>
-        <div>{comment?.content}</div>
+        <div className="break-all">{comment?.content}</div>
         {!isEmpty(comment?.image_urls) && (
           <GridImages
             urls={comment?.image_urls ?? []}

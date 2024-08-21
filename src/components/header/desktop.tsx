@@ -12,6 +12,7 @@ import { AccountDropdown } from '../account-dropdown'
 import { Button } from '../ui/button'
 import { Routes } from '@/routes'
 import { useIsMemex } from '@/hooks/use-is-memex'
+import MemexHeaderMiddle from './memex/header-middle'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -26,9 +27,18 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
   if (isMemex) {
     return (
       <>
-        <div className="flex items-center gap-3 mr-3 select-none box-border--15-right w-60 ml-2">
-          <Logo showMeme className="shrink-0 xl:w-32" />
+        <div
+          className={cn(
+            'flex items-center gap-3 mr-3 select-none w-60 ml-2',
+            'xl:relative xl:after:absolute xl:after:-top-4 xl:after:-bottom-4 xl:after:right-2 xl:after:w-px xl:after:bg-zinc-200',
+            'max-xl:max-w-40'
+          )}
+        >
+          <Logo showMeme className="shrink-0 xl:max-w-32" />
         </div>
+
+        <MemexHeaderMiddle />
+
         <div className="flex items-center justify-center gap-3">
           <RewardButton />
           <ConnectWallet>

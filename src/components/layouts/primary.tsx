@@ -3,7 +3,7 @@ import React, { type ComponentProps, type ReactDOM, createElement } from 'react'
 import { OpportunityMoonshot } from '../opportunity-moonshot'
 import { cn } from '@/lib/utils'
 import { useIsMemex } from '@/hooks/use-is-memex'
-import { MemexMenu } from '../memex-menu'
+import { MemexMenu } from '../../views/memex/components/memex-menu'
 
 interface Props extends ComponentProps<'div'> {
   mainClass?: string
