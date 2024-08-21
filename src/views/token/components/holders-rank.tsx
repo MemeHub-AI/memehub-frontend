@@ -17,6 +17,15 @@ enum Flag {
   BlackHole = 'Black Hole',
   Creator = 'Creator',
   Dex = 'Dex',
+  Memex = 'MemeX',
+}
+
+const lowerIncludes = (a: string) => {
+  const lowerA = a.toLowerCase()
+  return (b: string) => {
+    const lowerB = b.toLowerCase()
+    return lowerA.includes(lowerB)
+  }
 }
 
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
@@ -26,13 +35,16 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
   const { total_supply } = tokenInfo ?? {}
 
   const getLabel = ({ flag, holder = '' }: (typeof holders)[number]) => {
-    if (flag === Flag.BlackHole || holder === zeroAddress) {
+    const flagIncludes = lowerIncludes(flag || '')
+
+    if (flagIncludes(Flag.BlackHole) || holder === zeroAddress) {
       return `(🔥${t('holder.burning')})`
     }
-    if (flag === Flag.Bc) return `(💰${t('pool')})`
-    if (flag === Flag.Creator) return `(🧑‍💻${t('creator')})`
-    if (flag === Flag.Dex) return `(👑${t('dex')})`
-    if (flag === Flag.Airdrop) return `(${t('airdrop')})`
+    if (flagIncludes(Flag.Bc)) return `(💰${t('pool')})`
+    if (flagIncludes(Flag.Creator)) return `(🧑‍💻${t('creator')})`
+    if (flagIncludes(Flag.Dex)) return `(👑${t('dex')})`
+    if (flagIncludes(Flag.Airdrop)) return `(${t('airdrop')})`
+    if (flagIncludes(Flag.Memex)) return `(❤️${t('holder.memex')})`
   }
 
   const getPercent = (amount: string) => {
@@ -58,7 +70,10 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
           {holders
             .filter(
               // Not airdrop & greater than 0
-              (r) => !r.flag?.includes('Air') && BigNumber(r.amount).gt(0)
+              (r) =>
+                // TODO: should uncomment
+                // !r.flag?.includes('Air') &&
+                BigNumber(r.amount).gt(0)
             )
             .map((r, i) => {
               return (
