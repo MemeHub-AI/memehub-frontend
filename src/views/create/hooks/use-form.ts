@@ -96,7 +96,7 @@ export const useCreateTokenForm = () => {
     },
   })
 
-  const deployResult = useDeploy(form.getValues('chainName'))
+  const deployResults = useDeploy(form.getValues('chainName'))
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!(await form.trigger())) return
@@ -111,9 +111,9 @@ export const useCreateTokenForm = () => {
 
     if (!walletIsConnected()) return
 
-    if (deployResult.isDeploying) return
+    if (deployResults.isDeploying) return
 
-    deployResult.deploy({
+    deployResults.deploy({
       name: values.fullname! as string,
       symbol: values.symbol! as string,
       description: values.description! as string,
@@ -137,6 +137,6 @@ export const useCreateTokenForm = () => {
     loadingChains: loadingChains,
     onSubmit,
     onChangeUpload,
-    deployResult,
+    ...deployResults,
   }
 }

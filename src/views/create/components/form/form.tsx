@@ -14,27 +14,25 @@ import {
 } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { FormLogo } from './logo'
-import { PosterForm } from './poster'
+import { LogoField } from './logo'
+import { PosterField } from './poster'
 import { fmt } from '@/utils/fmt'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { MarketingField } from '@/components/marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { Description } from './desc'
+import { DescriptionField } from './desc'
 import { ChainField } from './chain-field'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
-// TODO: refactor & remove `formData` props
 export const CreateTokenForm = () => {
   const { t } = useTranslation()
-  const { deployResult, formData } = useCreateTokenContext()
+  const { url, form, formFields, onSubmit, isDeploying, deployFee } =
+    useCreateTokenContext()
   const { chain: { nativeCurrency } = {} } = useAccount()
 
-  const { url, form, formFields, onSubmit } = formData
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
   const { chain } = useChainInfo(form.getValues(formFields.chainName))
 
-  const { isDeploying, deployFee } = deployResult || {}
   const symbol = chain?.native.symbol || nativeCurrency?.symbol
   const isZeroFee = BigNumber(deployFee).isZero()
   const disabled = isDeploying || isZeroFee
@@ -65,7 +63,7 @@ export const CreateTokenForm = () => {
           <div className="flex md:gap-5 max-sm:flex-col max-sm:space-y-2">
             <div className="flex">
               {/* Logo */}
-              <FormLogo formData={formData}></FormLogo>
+              <LogoField />
 
               {/* name/symbol */}
               <div className="h-[150px] flex flex-col ml-5 items-center justify-between flex-1">
@@ -121,10 +119,10 @@ export const CreateTokenForm = () => {
           <MarketingField form={form} chainName={form.getValues('chainName')} />
 
           {/* Description */}
-          <Description formData={formData} />
+          <DescriptionField />
 
           {/* Poster */}
-          <PosterForm formData={formData}></PosterForm>
+          <PosterField />
 
           {/* Twitter & telegram */}
           <div className="flex justify-between max-w-[500px]">
@@ -178,7 +176,7 @@ export const CreateTokenForm = () => {
           </div>
 
           {/* Submit button */}
-          <div className="flex flex-col items-start space-y-3 max-w-[500px]">
+          <div className="flex flex-col items-start space-y-3 max-w-[500px] max-sm:items-center">
             <Button
               variant="default"
               className="px-10 mt-3"

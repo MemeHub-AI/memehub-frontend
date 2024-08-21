@@ -18,8 +18,7 @@ import { TokenType } from '@/enums/token'
 
 export const CoinTypeField = () => {
   const { t } = useTranslation()
-  const { formData } = useCreateTokenContext()
-  const { formFields } = formData
+  const { form } = useCreateTokenContext()
 
   const types = [
     {
@@ -55,8 +54,8 @@ export const CoinTypeField = () => {
 
   return (
     <FormField
-      control={formData.form.control}
-      name={formFields.coinType}
+      control={form.control}
+      name="coinType"
       render={({ field }) => (
         <FormItem>
           <FormLabel className="font-bold">{t('deploy.coin-type')}</FormLabel>

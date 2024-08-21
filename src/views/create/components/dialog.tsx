@@ -23,17 +23,15 @@ const withWarningIcon = (children: ReactNode) => {
 export const CreateTokenStatusDialog = () => {
   const { t } = useTranslation()
   const {
-    deployResult: {
-      deployedAddr,
-      createTokenData,
-      isSubmitting,
-      isConfirming,
-      isDeploySuccess,
-      isCreatingToken,
-      submitError,
-      confirmError,
-      resetDeploy,
-    },
+    deployedAddr,
+    createTokenData,
+    isSubmitting,
+    isConfirming,
+    isDeploySuccess,
+    isCreatingToken,
+    submitError,
+    confirmError,
+    resetDeploy,
   } = useCreateTokenContext()
   const router = useRouter()
 

@@ -10,28 +10,22 @@ import {
   FormField,
 } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
-import { useCreateTokenForm } from '../../hooks/use-form'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import Input from '@/components/input'
+import { Input } from '@/components/input'
 import { aiApi } from '@/api/ai'
 import { Button } from '@/components/ui/button'
-import { useUserStore } from '@/stores/use-user-store'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useStorage } from '@/hooks/use-storage'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
-import ConnectWallet from '@/components/connect-wallet'
-
-interface Props {
-  formData: ReturnType<typeof useCreateTokenForm>
-}
+import { ConnectWallet } from '@/components/connect-wallet'
+import { useCreateTokenContext } from '@/contexts/create-token'
 
 let memeLogoSign = new AbortController()
 
-export const FormLogo = ({ formData }: Props) => {
-  const { form, formFields } = formData
+export const LogoField = () => {
+  const { form, formFields, onChangeUpload } = useCreateTokenContext()
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
-  const userStore = useUserStore()
   const { playGuaGua } = useAudioPlayer()
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -152,7 +146,7 @@ export const FormLogo = ({ formData }: Props) => {
                   ref={inputRef}
                   onChange={async (e) => {
                     try {
-                      const url = await formData.onChangeUpload(e)
+                      const url = await onChangeUpload(e)
                       if (url) form.setValue('logo', url)
                     } catch (error) {
                     } finally {

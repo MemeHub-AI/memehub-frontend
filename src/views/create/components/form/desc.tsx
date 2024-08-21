@@ -13,24 +13,19 @@ import {
 import { useCreateTokenForm } from '../../hooks/use-form'
 import { Textarea } from '@/components/ui/textarea'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
-import { useUserStore } from '@/stores/use-user-store'
 import { aiApi } from '@/api/ai'
 import { cn } from '@/lib/utils'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
-
-interface Props {
-  formData: ReturnType<typeof useCreateTokenForm>
-}
+import { useCreateTokenContext } from '@/contexts/create-token'
 
 let memeDescAbort = new AbortController()
 
-export const Description = ({ formData }: Props) => {
-  const { form, formFields } = formData
+export const DescriptionField = () => {
+  const { form, formFields } = useCreateTokenContext()
   const { t } = useTranslation()
   const { loadingDesc, setLoadingDesc } = useAimemeInfoStore()
-  const userStore = useUserStore()
   const { playGuaGua } = useAudioPlayer()
   const { checkForConnect } = useCheckAccount()
   const { walletIsConnected } = useConnectWallet()

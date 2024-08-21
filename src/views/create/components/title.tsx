@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/router'
 
@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useResponsive } from '@/hooks/use-responsive'
 
-export const Title = ({
+export const CreateTokenTitle = ({
   className,
   children,
   withBack = false,
@@ -36,4 +36,4 @@ export const Title = ({
   )
 }
 
-export default Title
+export default CreateTokenTitle
