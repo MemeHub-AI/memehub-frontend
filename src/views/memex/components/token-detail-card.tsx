@@ -49,6 +49,8 @@ export const TokenDetailsCard = ({
   const isZero = tokenAddr === zeroAddress
   const hasLinks = !!twitter_url || !!telegram_url || !!website_url
 
+  console.log('tokenAddr', tokenAddr)
+
   return (
     <Card
       shadow="none"
@@ -82,8 +84,8 @@ export const TokenDetailsCard = ({
         </div>
       </div>
 
-      {hasLinks && (
-        <div className="flex justify-between items-center mt-1">
+      <div className="flex justify-between items-center mt-2">
+        {hasLinks ? (
           <TokenSocialLinks
             className="mt-0 space-x-0"
             buttonProps={{
@@ -95,18 +97,20 @@ export const TokenDetailsCard = ({
             website={website_url!}
             onClick={(e) => e.stopPropagation()}
           />
-          {!editable && !isZero && (
-            <Button
-              shadow="none"
-              size="sm"
-              className="bg-transparent bg-yellow-600 border-none text-white h-7"
-              onClick={onBuyClick}
-            >
-              {t('go-to.trade')}
-            </Button>
-          )}
-        </div>
-      )}
+        ) : (
+          <div></div>
+        )}
+        {!editable && !isZero && (
+          <Button
+            shadow="none"
+            size="sm"
+            className="bg-transparent bg-yellow-600 border-none text-white h-7"
+            onClick={onBuyClick}
+          >
+            {t('go-to.trade')}
+          </Button>
+        )}
+      </div>
 
       {!editable && !isZero && (
         <Progress
