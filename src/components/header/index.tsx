@@ -18,13 +18,13 @@ export interface Nav {
 }
 
 export const Header = () => {
-  const { isPad } = useResponsive()
+  const { isPad, isMobile } = useResponsive()
   const { t } = useTranslation()
   const { push } = useRouter()
   const { isMemex } = useIsMemex()
 
   const navs: Nav[] = [
-    { title: t('home'), path: Routes.Main },
+    { title: (isMobile ? '🏠 ' : '') + t('home'), path: Routes.Main },
     { title: t('next.moonshot'), path: Routes.Moonshot, mobileOnly: true },
     { title: t('classic.meme'), path: Routes.ClassicMeme, mobileOnly: true },
     // { title: t('create'), path: Routes.Create },
