@@ -25,9 +25,7 @@ export const AICreateMemecoinDialogLoading = () => {
   } = useAimemeInfoStore()
   const userStore = useUserInfo()
   const { checkForConnect } = useCheckAccount()
-  const {
-    formData: { form, formFields },
-  } = useCreateTokenContext()
+  const { form, formFields } = useCreateTokenContext()
 
   const fetchMemeInfo = async () => {
     if (!loadingInfo) {

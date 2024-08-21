@@ -76,15 +76,12 @@ export const useEvmDeploy = (chainName: string) => {
     marketing,
   }: DeployFormParams & { tokenId: string }) => {
     if (!checkForDeploy()) return
+    const airdropParams = getEvmAirdropParams(configValue!, marketing)
 
     writeContract({
       ...bcConfig,
       functionName: 'createToken',
-      args: [
-        [name, symbol],
-        [BigInt(tokenId)],
-        getEvmAirdropParams(configValue!, marketing),
-      ],
+      args: [[name, symbol], [BigInt(tokenId)], airdropParams],
       value: deployFee,
     })
   }

@@ -75,7 +75,7 @@ export interface UserMyInfoNotify {
 export enum UserListType {
   CoinsCreated = 1,
   Comments,
-  Notifications,
+  Mentions,
   Followers,
   Following,
   CoinsHeld,
@@ -89,7 +89,7 @@ export interface UserListRes {
   [UserListType.CoinsHeld]: UserCoinsHeld
   [UserListType.CoinsCreated]: UserCoinsCreated
   [UserListType.Comments]: TokenCommentListRes
-  [UserListType.Notifications]: UserNotification
+  [UserListType.Mentions]: UserNotification
   [UserListType.Followers]: UserFollow
   [UserListType.Following]: UserFollow
 }

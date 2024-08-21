@@ -54,6 +54,7 @@ export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
     isNotFound,
     isLoadingDetails,
     refetchTokenInfo,
+    refetchDetails,
 
     ...tokenDetails,
     progress,

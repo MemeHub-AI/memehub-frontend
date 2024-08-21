@@ -24,6 +24,7 @@ interface Props
   size?: number
   fallback?: React.ReactNode
   imgClass?: string
+  disableDefaultAvatar?: boolean
 }
 
 const Avatar = React.forwardRef<
@@ -40,6 +41,7 @@ const Avatar = React.forwardRef<
     shadow = 'none',
     variant,
     title,
+    disableDefaultAvatar = false,
     ...restProps
   } = props
 
@@ -57,7 +59,7 @@ const Avatar = React.forwardRef<
       {...restProps}
     >
       <AvatarImage
-        src={src || defaultImg}
+        src={src ?? (disableDefaultAvatar ? undefined : defaultImg)}
         alt={alt}
         title={title}
         className={cn('object-cover', imgClass)}

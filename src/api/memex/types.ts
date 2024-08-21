@@ -1,6 +1,7 @@
 import { DistributorVersion } from '@/contract/abi/distributor'
 import { TokenVersion } from '@/contract/abi/token'
 import { Marketing } from '../token/types'
+import { MemexFactoryVersion } from '@/contract/abi/memex/factory'
 
 export interface MemexIdeaItem {
   user_logo: string
@@ -29,8 +30,10 @@ export interface MemexIdeaItem {
   airdrop_address: string
   coin_version: TokenVersion
   airdrop_version: DistributorVersion
+  memex_version: MemexFactoryVersion
   coin_factory_address: string
   airdrop_marketing: Marketing[] | undefined
+  published_at: null | string
 }
 
 export interface MemexListReq {

@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useScroll } from 'ahooks'
 
-import type { VoidFn } from '@/utils/types'
-
 interface Options {
-  onFetchNext?: VoidFn
+  onFetchNext?: VoidFunction
   hasMore?: boolean
 }
 

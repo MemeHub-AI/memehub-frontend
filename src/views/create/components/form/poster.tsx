@@ -14,30 +14,26 @@ import {
   FormField,
 } from '@/components/ui/form'
 import { cn } from '@/lib/utils'
-import { useCreateTokenForm } from '../../hooks/use-form'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Dialog } from '@/components/ui/dialog'
 import { aiApi } from '@/api/ai'
-import { useUserStore } from '@/stores/use-user-store'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { useCheckAccount } from '@/hooks/use-check-chain'
-
-interface Props {
-  formData: ReturnType<typeof useCreateTokenForm>
-}
+import { useCreateTokenContext } from '@/contexts/create-token'
 
 let memePosterSign = new AbortController()
-export const PosterForm = ({ formData }: Props) => {
-  const { form, formFields } = formData
+
+export const PosterField = () => {
+  const { form, formFields } = useCreateTokenContext()
   const [showPoster, setShowPoster] = useState(false)
   const [index, setIndex] = useState(0)
-  const userStore = useUserStore()
   const { checkForConnect } = useCheckAccount()
 
   const { t } = useTranslation()
   const { loadingPoster, setLoadingPoster } = useAimemeInfoStore()
   const { playGuaGua } = useAudioPlayer()
-  const createPoster = (e: any) => {
+
+  const onCreatePoster = (e: React.MouseEvent<SVGElement, MouseEvent>) => {
     e.stopPropagation()
     e.preventDefault()
 
@@ -92,10 +88,7 @@ export const PosterForm = ({ formData }: Props) => {
       )
       .then(({ data }) => {
         if (data) {
-          formData.form.setValue(formData.formFields.poster, [
-            ...data.poster1,
-            ...data.poster2,
-          ])
+          form.setValue(formFields.poster, [...data.poster1, ...data.poster2])
         }
       })
       .finally(() => {
@@ -141,7 +134,7 @@ export const PosterForm = ({ formData }: Props) => {
                           loadingPoster ? 'animate-spin' : 'cursor-pointer'
                         )}
                         title="Regenerate"
-                        onClick={createPoster}
+                        onClick={onCreatePoster}
                       >
                         {t('create.ai.poster')}
                       </LuRefreshCcw>

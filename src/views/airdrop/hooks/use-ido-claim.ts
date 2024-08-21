@@ -36,7 +36,7 @@ export const useIdoAirdropClaim = (chainId: number, onSuccess?: () => void) => {
       onSuccess?.()
       toast.success(t('ido.airdrop.claim-success'))
     },
-    onFillay: () => {
+    onFinally: () => {
       reset()
       toast.dismiss()
     },

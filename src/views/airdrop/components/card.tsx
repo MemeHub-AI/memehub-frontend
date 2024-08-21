@@ -17,7 +17,6 @@ import { IdTag } from '@/components/id-tag'
 import { useAirdrop } from '@/views/token/hooks/evm/use-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { useBurnAirdrop } from '@/views/token/hooks/evm/use-burn-airdrop'
 
 interface Props {
   className?: string
@@ -54,6 +53,7 @@ export const AirdropCard = ({
     communityTotalAmount,
     kolClaimedCount,
     kolCount,
+    kolFlag,
     communityCount,
     communityClaimedCount,
   } = useAirdropInfo(
@@ -102,7 +102,8 @@ export const AirdropCard = ({
           {(isKolCard && !isKol) || (!isKolCard && !hasCommunity) ? (
             <p className="text-zinc-500 font-semibold leading-10">
               {utilLang.replace(t('airdrop.not-nft2'), [
-                isKol ? 'KOL' : t('pure.community'),
+                // isKol ? 'KOL' : t('pure.community'),
+                'KOL', // TODO: temp fixed
               ])}
             </p>
           ) : (

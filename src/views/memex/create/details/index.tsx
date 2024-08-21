@@ -9,7 +9,7 @@ import { CreateIdeaDetailsHeader } from './components/idea-details-header'
 import { RequiredFields } from './components/required-fields'
 import { OptionalFields } from './components/optional-fields'
 import { MarketingField } from '@/components/marketing-field'
-import { useMemexClear } from '../hooks/use-memex-clear'
+import { useCreateIdeaCleanup } from '../hooks/use-create-idea-cleanup'
 import { useMemexStore } from '@/stores/use-memex'
 
 export const CreateDetail = () => {
@@ -19,7 +19,7 @@ export const CreateDetail = () => {
   const { query } = useRouter()
   const chainName = (idea?.chain || query.chain || '') as string
 
-  useMemexClear()
+  useCreateIdeaCleanup()
 
   return (
     <PrimaryLayout className="w-full">

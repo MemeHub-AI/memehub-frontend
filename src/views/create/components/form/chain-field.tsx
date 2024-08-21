@@ -16,8 +16,7 @@ import { useCreateTokenContext } from '@/contexts/create-token'
 
 export const ChainField = () => {
   const { chainId, chain } = useAccount()
-  const { formData } = useCreateTokenContext()
-  const { form, formFields } = formData
+  const { form, formFields } = useCreateTokenContext()
   // TODO: may need to compatible the all chains
   const { chains, evmChainsMap } = useChainsStore()
 

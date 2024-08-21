@@ -18,7 +18,7 @@ import { MemexIdeaItem } from '@/api/memex/types'
 import { useIdeaInfo } from '../hooks/use-idea-info'
 import { getIdeaStatus } from '@/utils/memex/idea'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { memexIdeaLikeFeeUsdt } from '@/config/memex/idea'
+import { memexIdeaConfig } from '@/config/memex/idea'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useAccount, useBalance } from 'wagmi'
 import { BI_ZERO } from '@/constants/number'
@@ -41,12 +41,17 @@ export const IdeaLikeComment = ({
     setCommentOpen(false)
     onCommentSuccess?.()
   })
-  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId)
-  const { isLiking, like } = useIdeaLike(idea?.ido_address, chainId, () => {
-    setLikeOpen(false)
-    setCommentOpen(true)
-    ideaInfo.refetchInfo()
-  })
+  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId, idea?.memex_version)
+  const { isLiking, like } = useIdeaLike(
+    idea?.ido_address,
+    chainId,
+    idea?.memex_version,
+    () => {
+      setLikeOpen(false)
+      setCommentOpen(true)
+      ideaInfo.refetchInfo()
+    }
+  )
   const { isEnded } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
@@ -58,7 +63,6 @@ export const IdeaLikeComment = ({
     chainId,
   })
   const balance = formatEther(value)
-
   const {
     isLiked,
     likeValue,
@@ -103,7 +107,8 @@ export const IdeaLikeComment = ({
           <span>1</span>
           <HeartFilledIcon className="w-6 h-6 text-red-500" />
           <span>
-            = {likeValue} {chain?.native.symbol}({memexIdeaLikeFeeUsdt} USDT)
+            = {likeValue} {chain?.native.symbol}({memexIdeaConfig.likeUsdtFee}{' '}
+            USDT)
           </span>
         </div>
         <div className="text-zinc-500 text-sm">
@@ -114,7 +119,7 @@ export const IdeaLikeComment = ({
           </p>
           <p>
             {utilLang.replace(t('memex.like.desc2'), [
-              durationSeconds / 60 / 60 + t('hours'),
+              Number(durationSeconds / 60 / 60).toFixed(2) + t('hours'),
             ])}
           </p>
         </div>

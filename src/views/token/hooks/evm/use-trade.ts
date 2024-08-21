@@ -39,7 +39,7 @@ export const useEvmTrade = (onSuccess?: () => void) => {
   const { isFetched: isTraded } = useWaitForTx({
     hash,
     onSuccess,
-    onFillay: () => resetTrade(),
+    onFinally: () => resetTrade(),
   })
 
   const buy = async (amount: string, slippage: string) => {

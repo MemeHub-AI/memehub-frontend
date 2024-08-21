@@ -47,7 +47,7 @@ export const useAirdropInfo = (
   } = useReadContract({
     ...distributorConfig,
     functionName: 'distributions',
-    args: [BigInt(id || -1)],
+    args: [BigInt(id ?? -1)],
     query: { enabled: !!airdropAddr && isCorrectId },
   })
   const [
@@ -90,8 +90,12 @@ export const useAirdropInfo = (
     communityClaimedAmount,
   ] = useMemo(
     () => [
-      BigNumber(kolCount).multipliedBy(perKolAmount).toFixed(),
-      BigNumber(communityCount).multipliedBy(perCommunityAmount).toFixed(),
+      BigNumber(kolCount)
+        .multipliedBy(perKolAmount)
+        .toFixed(2, BigNumber.ROUND_UP),
+      BigNumber(communityCount)
+        .multipliedBy(perCommunityAmount)
+        .toFixed(2, BigNumber.ROUND_UP),
       BigNumber(kolClaimedCount).multipliedBy(perKolAmount).toFixed(),
       BigNumber(communityClaimedCount)
         .multipliedBy(perCommunityAmount)

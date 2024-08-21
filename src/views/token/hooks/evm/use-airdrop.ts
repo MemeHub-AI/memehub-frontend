@@ -41,7 +41,7 @@ export const useAirdrop = (
     useReadContract({
       ...airdropConfig,
       functionName: 'isClaimedKOL',
-      args: [BigInt(id || -1), address!],
+      args: [BigInt(id ?? -1), address!],
       query,
     })
 
@@ -49,14 +49,14 @@ export const useAirdrop = (
     useReadContract({
       ...airdropConfig,
       functionName: 'isClaimedCommunity',
-      args: [BigInt(id || -1), address!],
+      args: [BigInt(id ?? -1), address!],
       query,
     })
 
   const { data: isBurned, refetch: refetchBurned } = useReadContract({
     ...airdropConfig,
     functionName: 'isBurn',
-    args: [BigInt(id || -1)],
+    args: [BigInt(id ?? -1)],
     query: { enabled: typeof id === 'number' },
   })
 
@@ -86,7 +86,7 @@ export const useAirdrop = (
     onLoading: () => toast.loading(t('tx.waiting')),
     onError: () => toast.error(t('airdrop.claim.failed')),
     onSuccess: () => toast.success(t('airdrop.claim.success')),
-    onFillay: () => {
+    onFinally: () => {
       reset()
       refetch()
       onFinally?.()

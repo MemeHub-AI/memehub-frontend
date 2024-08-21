@@ -1,4 +1,4 @@
-import React, { ComponentProps, useState } from 'react'
+import { type ComponentProps, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
@@ -23,6 +23,7 @@ interface Props extends ComponentProps<'div'> {
   isActive?: boolean
   isLiking?: boolean
   isUnliking?: boolean
+  disableToProfile?: boolean
   onLike?: (id: string) => void
   onUnlike?: (id: string) => void
   onReply?: (id: string) => void
@@ -37,6 +38,7 @@ export const CommentCard = (props: Props) => {
     isLiking,
     isUnliking,
     className,
+    disableToProfile,
     onLike,
     onUnlike,
     onReply,
@@ -64,7 +66,7 @@ export const CommentCard = (props: Props) => {
         <div
           className="flex items-center group transition-all w-fit"
           onClick={() => {
-            if (!c.user.wallet_address) return
+            if (!c.user.wallet_address || disableToProfile) return
             router.push(fmt.toHref(Routes.Account, c.user.wallet_address))
           }}
         >

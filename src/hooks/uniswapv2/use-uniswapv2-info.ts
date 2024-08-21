@@ -27,7 +27,10 @@ export const useUniswapV2Amount = (
       address: poolAddr as Address,
       chainId: config.chainId,
       functionName: 'getReserves',
-    }).catch(() => BI_ZERO_TUPLE)
+    }).catch((e) => {
+      reportException(e)
+      return BI_ZERO_TUPLE
+    })
   }
 
   const getAmountForBuy = async (amountIn: string) => {

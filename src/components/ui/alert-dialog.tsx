@@ -18,8 +18,8 @@ interface Props extends AlertDialogPrimitive.AlertDialogProps {
   confirmText?: string
   align?: 'left' | 'center' | 'right'
   showClose?: boolean
-  onCancel?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
-  onConfirm?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+  onCancel?: () => void
+  onConfirm?: () => void
 }
 
 const AlertDialog = React.forwardRef<
@@ -68,7 +68,10 @@ const AlertDialog = React.forwardRef<
         {showClose && (
           <div
             className="absolute top-2 right-2 cursor-pointer"
-            onClick={() => closeRef.current?.click()}
+            onClick={(e) => {
+              closeRef.current?.click()
+              onCancel?.()
+            }}
           >
             <AlertDialogCancel ref={closeRef} className="hidden" />
             <Cross2Icon className="h-6 w-6" />

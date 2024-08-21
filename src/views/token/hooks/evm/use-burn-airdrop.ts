@@ -31,7 +31,7 @@ export const useBurnAirdrop = (
   const { data: isBurned, refetch: refetchBurned } = useReadContract({
     ...airdropConfig,
     functionName: 'isBurn',
-    args: [BigInt(id || -1)],
+    args: [BigInt(id ?? -1)],
     query: { enabled: typeof id === 'number' },
   })
 
@@ -54,10 +54,11 @@ export const useBurnAirdrop = (
     hash,
     onLoading: () => toast.loading(t('tx.confirming')),
     onSuccess: () => toast.success(t('airdrop.burn.success')),
-    onFillay: () => {
-      refetchBurned()
-      onFinally?.()
+    onFinally: () => {
       reset()
+      onFinally?.()
+      refetchBurned()
+      toast.dismiss()
     },
   })
   const isBurning = isPending || isLoading

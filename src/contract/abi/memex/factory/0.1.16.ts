@@ -1,4 +1,4 @@
-export const memexFactoryAbi = [
+export const memexFactoryAbi0_1_16 = [
   {
     inputs: [
       {

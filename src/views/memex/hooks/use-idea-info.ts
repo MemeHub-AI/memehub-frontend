@@ -3,24 +3,36 @@ import { useAccount, useReadContract } from 'wagmi'
 import { BigNumber } from 'bignumber.js'
 import dayjs from 'dayjs'
 
-import { memexIdoAbi } from '@/contract/abi/memex/ido'
 import { BI_ZERO } from '@/constants/number'
+import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
+import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 
 export const useIdeaInfo = (
   addr: string | null | undefined,
-  chainId: number
+  chainId: number,
+  version: MemexIdoVersion | undefined
 ) => {
   const { address } = useAccount()
   const idoConfig = {
-    abi: memexIdoAbi,
+    abi: memexIdoAbiMap[version!],
     address: addr as Address,
     chainId,
   }
+
+  const { data: waitingSeconds = BI_ZERO, refetch: refetchWaitingSeconds } =
+    useReadContract({
+      abi: memexFactoryAbiMap[version!],
+      address: addr as Address,
+      chainId,
+      functionName: 'waitingTime',
+      query: { enabled: !!version && !!addr },
+    })
 
   const { data: isLiked = false, refetch: refetchIsLiked } = useReadContract({
     ...idoConfig,
     functionName: 'isLike',
     args: [address!],
+    query: { enabled: !!idoConfig.abi && !!idoConfig.address },
   })
 
   const {
@@ -65,8 +77,9 @@ export const useIdeaInfo = (
   const durationSeconds = dayjs.unix(endAt).diff(dayjs.unix(startAt), 'seconds')
 
   const refetchInfo = () => {
-    refetchIsLiked()
     refetch()
+    refetchIsLiked()
+    refetchWaitingSeconds()
   }
 
   return {
@@ -89,6 +102,7 @@ export const useIdeaInfo = (
     endAt,
     durationSeconds,
     overTime,
+    waitingSeconds,
 
     isOver,
     isDeploy,

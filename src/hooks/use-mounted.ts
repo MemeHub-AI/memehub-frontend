@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
 
-import { VoidFn } from '@/utils/types'
-
-export const useMounted = (onMounted?: VoidFn, onUnmounted?: VoidFn) => {
+export const useMounted = (
+  onMounted?: VoidFunction,
+  onUnmounted?: VoidFunction
+) => {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {

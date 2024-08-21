@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 import dayjs from 'dayjs'
@@ -23,6 +23,7 @@ import { strToBool } from '@/utils/convert'
 import { utilLang } from '@/utils/lang'
 import { TradeType } from '@/enums/trade'
 import { useTokenContext } from '@/contexts/token'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TradeTable = () => {
   const { t } = useTranslation()
@@ -30,6 +31,7 @@ export const TradeTable = () => {
   const [showAge, setShowAge] = useState(strToBool(getTableShowAge()))
   const router = useRouter()
   const { tradeRecords, hasMoreTrades, fetchNextTrades } = useTokenContext()
+  const { chainsMap } = useChainsStore()
 
   const ths = [
     t('account'),
@@ -121,7 +123,7 @@ export const TradeTable = () => {
                 </TableCell>
                 <TableCell className="max-sm:text-xs">
                   <Link
-                    href={r.hash}
+                    href={`${chainsMap[r.chain]?.explorer}/tx/${r.hash}`}
                     target="_blank"
                     className="hover:underline"
                   >

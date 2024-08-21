@@ -14,7 +14,7 @@ import { useUploadImage } from '@/hooks/use-upload-image'
 import { Label } from '@/components/ui/label'
 import { GridImages } from '@/components/grid-images'
 import { utilLang } from '@/utils/lang'
-import { memexIdeaCommentImgMax } from '@/config/memex/idea'
+import { memexIdeaConfig } from '@/config/memex/idea'
 import { useIdeaDetailsContext } from '@/contexts/memex/idea-details'
 
 export const IdeaCommentForm = () => {
@@ -81,10 +81,11 @@ export const IdeaCommentForm = () => {
                     disabled={field.disabled || isPending}
                     ref={inputRef}
                     onChange={async (e) => {
-                      if (field.value.length >= memexIdeaCommentImgMax) {
+                      const { commentMaxImg } = memexIdeaConfig
+                      if (field.value.length >= commentMaxImg) {
                         form.setError('images', {
                           message: utilLang.replace(t('iamges.max'), [
-                            memexIdeaCommentImgMax,
+                            commentMaxImg,
                           ]),
                         })
                         return

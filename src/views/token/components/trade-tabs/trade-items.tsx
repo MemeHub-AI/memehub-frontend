@@ -40,7 +40,7 @@ export const TradeItems = ({ disabled, onItemClick }: Props) => {
   }
 
   return (
-    <div className="flex mt-3 flex-nowrap space-x-2 overflow-x-auto">
+    <div className="flex mt-3 flex-wrap">
       {(isBuy ? buyItems : tradeSellItems).map((v, i) => (
         <Button
           size="xs"
@@ -49,6 +49,7 @@ export const TradeItems = ({ disabled, onItemClick }: Props) => {
           onClick={() => (isBuy ? onItemClick?.(v) : onSellClick(v))}
           disabled={disabled}
           type="button"
+          className="mr-2 mb-2"
         >
           {v} {isBuy ? reserveSymbol : '%'}
         </Button>

@@ -56,7 +56,7 @@ export const useReward = (chainName: string, chainId: number) => {
     onLoading: () => toast.loading(t('claiming')),
     onSuccess: () => toast.success(t('claim.success')),
     onError: () => CONTRACT_ERR.claimFailed(),
-    onFillay: () => {
+    onFinally: () => {
       toast.dismiss()
       reset()
       refetchAmount()

@@ -27,12 +27,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const { playSuccess } = useAudioPlayer()
   const { isClaimingAirdrop } = useAirdropStore()
   const { slippage, setSlippage } = useSlippage()
-  const { isNotFound, isIdoToken, tokenMetadata } = useTokenContext()
+  const { isNotFound, isIdoToken, tokenMetadata, refetchDetails } =
+    useTokenContext()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
   const { getIsBound } = useInvite()
-
   const { isTrading, isTraded, handleBuy, handleSell } = useTrade(() => {
     setValue('')
+    refetchDetails()
     refetchBalance()
   })
 
@@ -80,7 +81,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
             disabled={disabled}
           />
 
-          <div className="flex flex-col my-3">
+          <div className="flex flex-col mt-3 mb-1">
             <TradeInput value={value} onChange={setValue} disabled={disabled} />
             <TradeItems disabled={disabled} onItemClick={setValue} />
           </div>
