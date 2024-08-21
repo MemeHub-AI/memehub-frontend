@@ -90,8 +90,12 @@ export const useAirdropInfo = (
     communityClaimedAmount,
   ] = useMemo(
     () => [
-      BigNumber(kolCount).multipliedBy(perKolAmount).toFixed(),
-      BigNumber(communityCount).multipliedBy(perCommunityAmount).toFixed(),
+      BigNumber(kolCount)
+        .multipliedBy(perKolAmount)
+        .toFixed(2, BigNumber.ROUND_UP),
+      BigNumber(communityCount)
+        .multipliedBy(perCommunityAmount)
+        .toFixed(2, BigNumber.ROUND_UP),
       BigNumber(kolClaimedCount).multipliedBy(perKolAmount).toFixed(),
       BigNumber(communityClaimedCount)
         .multipliedBy(perCommunityAmount)
