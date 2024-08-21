@@ -1,4 +1,4 @@
-import React, { type ComponentProps } from 'react'
+import React, { useMemo, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 
@@ -21,10 +21,16 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
     communityClaimedAmount,
     refetchAirdrop,
   } = useTradeAirdropContext()
-  const remaining = BigNumber(airdropTotal)
-    .minus(kolClaimedAmount)
-    .minus(communityClaimedAmount)
-    .toFormat()
+  const remaining = useMemo(
+    () =>
+      BigNumber(
+        BigNumber(airdropTotal)
+          .minus(kolClaimedAmount)
+          .minus(communityClaimedAmount)
+          .toFixed(0, BigNumber.ROUND_UP)
+      ).toFormat(),
+    [airdropTotal, kolClaimedAmount, communityClaimedAmount]
+  )
 
   const { isBurned, isBurning, burn } = useBurnAirdrop(
     airdrop[0]?.distribution_id,
