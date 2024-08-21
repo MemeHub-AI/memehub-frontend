@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -41,13 +41,13 @@ export const AccountTab = () => {
   ]
   const tab = String(query.tab || UserListType.CoinsCreated)
   const {
+    tokenCreated,
     tokenHeld,
     comments,
     mentions,
     isLoading,
     isFetching,
     fetchNextPage,
-    tokenCreated,
 
     // myTokens,
     // myTokenTotal,
@@ -57,7 +57,15 @@ export const AccountTab = () => {
   } = useUserList(Number(tab))
   const { isMemex } = useIsMemex()
 
-  console.log('token held', tokenHeld)
+  const createdList = useMemo(
+    () =>
+      isOtherUser
+        ? tokenCreated.list.filter((t) => t.is_active)
+        : tokenCreated.list,
+    [tokenCreated.list]
+  )
+
+  console.log('other created', isOtherUser, tokenCreated.list)
 
   return (
     <Tabs
@@ -89,23 +97,23 @@ export const AccountTab = () => {
         ))}
       </TabsList>
 
-      {/* Token held */}
-      <TabsContent value={UserListType.CoinsHeld.toString()}>
-        <TokenHeldCards
-          cards={tokenHeld.list}
-          total={tokenHeld.total}
+      {/* Token created */}
+      <TabsContent value={UserListType.CoinsCreated.toString()}>
+        <TokenCards
+          className="md:grid-cols-2 xl:grid-cols-3"
+          cards={createdList}
+          total={tokenCreated.total}
           isLoading={isLoading}
           isPending={isFetching}
           onFetchNext={fetchNextPage}
         />
       </TabsContent>
 
-      {/* Token created */}
-      <TabsContent value={UserListType.CoinsCreated.toString()}>
-        <TokenCards
-          className="md:grid-cols-2 xl:grid-cols-3"
-          cards={tokenCreated.list}
-          total={tokenCreated.total}
+      {/* Token held */}
+      <TabsContent value={UserListType.CoinsHeld.toString()}>
+        <TokenHeldCards
+          cards={tokenHeld.list}
+          total={tokenHeld.total}
           isLoading={isLoading}
           isPending={isFetching}
           onFetchNext={fetchNextPage}
