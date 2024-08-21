@@ -26,6 +26,7 @@ import { getIdeaStatus } from '@/utils/memex/idea'
 import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { qs } from '@/hooks/use-fetch'
+import { memexIdeaConfig } from '@/config/memex/idea'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -290,13 +291,18 @@ export const MemexIdeaCard = ({
           )}
         </div>
 
-        <EllipsisText
-          className="mt-1"
-          showMoreClass="text-purple-600"
-          maxLine={8}
-        >
-          {idea?.content}
-        </EllipsisText>
+        {isDetails ? (
+          <p className="mt-1">{idea?.content}</p>
+        ) : (
+          <EllipsisText
+            className="mt-1"
+            showMoreClass="text-purple-600"
+            maxLine={memexIdeaConfig.contentMaxLine}
+            disableClick
+          >
+            {idea?.content}
+          </EllipsisText>
+        )}
 
         {hasDetails && (
           <TokenDetailsCard
