@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { useAccount } from 'wagmi'
+import { BigNumber } from 'bignumber.js'
 
 import {
   Form,
@@ -23,6 +24,7 @@ import { Description } from './desc'
 import { ChainField } from './chain-field'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
+// TODO: refactor & remove `formData` props
 export const CreateTokenForm = () => {
   const { t } = useTranslation()
   const { deployResult, formData } = useCreateTokenContext()
@@ -34,6 +36,8 @@ export const CreateTokenForm = () => {
 
   const { isDeploying, deployFee } = deployResult || {}
   const symbol = chain?.native.symbol || nativeCurrency?.symbol
+  const isZeroFee = BigNumber(deployFee).isZero()
+  const disabled = isDeploying || isZeroFee
 
   const beforeSubmit = (values: any) => {
     if (loadingInfo || loadingLogo) {
@@ -178,15 +182,16 @@ export const CreateTokenForm = () => {
             <Button
               variant="default"
               className="px-10 mt-3"
-              disabled={isDeploying}
+              disabled={disabled}
             >
               {isDeploying ? t('creating') : t('create')}
             </Button>
-            {symbol && (
-              <p className="text-zinc-400 text-xs">
-                {t('deploy.fee')} ≈ {fmt.decimals(deployFee)} {symbol}
-              </p>
-            )}
+
+            <p className="text-zinc-400 text-xs">
+              {isZeroFee
+                ? t('deploy.unsupport.chain')
+                : `${t('deploy.fee')} ≈ ${fmt.decimals(deployFee)} ${symbol}`}
+            </p>
           </div>
         </form>
       </Form>
