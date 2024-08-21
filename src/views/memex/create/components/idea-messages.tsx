@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { utilLang } from '@/utils/lang'
 import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
-import { memexCreateIdeaCharMin } from '@/config/memex/idea'
+import { memexCreateConfig } from '@/config/memex/idea'
 
 export const CreateIdeaMessages = () => {
   const { t } = useTranslation()
@@ -24,7 +24,7 @@ export const CreateIdeaMessages = () => {
       {errors.content && (
         <p>
           {utilLang.replace(t('memex.create-message2'), [
-            memexCreateIdeaCharMin,
+            memexCreateConfig.minChar,
           ])}
         </p>
       )}

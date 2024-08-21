@@ -10,10 +10,7 @@ import { useRouter } from 'next/router'
 import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
 import { useMemexStore } from '@/stores/use-memex'
-import {
-  memexCreateIdeaCharMax,
-  memexCreateIdeaCharMin,
-} from '@/config/memex/idea'
+import { memexCreateConfig } from '@/config/memex/idea'
 import { useDeployIdea } from './use-deploy-idea'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -24,7 +21,10 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useChainsStore } from '@/stores/use-chains-store'
 
 const schema = z.object({
-  content: z.string().min(memexCreateIdeaCharMin).max(memexCreateIdeaCharMax),
+  content: z
+    .string()
+    .min(memexCreateConfig.minChar)
+    .max(memexCreateConfig.maxChar),
   chain: z.string().min(1),
   pictures: z.array(z.string()).min(1).max(4),
 })

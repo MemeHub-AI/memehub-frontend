@@ -1,9 +1,11 @@
-export const memexCreateIdeaCharMin = 10
+export const memexCreateConfig = {
+  minChar: 10,
+  maxChar: 500,
+}
 
-export const memexCreateIdeaCharMax = 500
-
-export const memexIdeaCommentImgMax = 2
-
-export const memexIdeaCommentMax = 200
-
-export const memexIdeaLikeFeeUsdt = 5
+export const memexIdeaConfig = {
+  contentMaxLine: 5,
+  commentMaxChar: 200,
+  commentMaxImg: 2,
+  likeUsdtFee: 5,
+}
