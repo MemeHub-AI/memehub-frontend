@@ -129,6 +129,11 @@ export const MemexIdeaCard = ({
     return children
   }
 
+  const onPushToAccount = () => {
+    if (!idea?.user_address) return
+    router.push(fmt.toHref(Routes.Account, idea?.user_address))
+  }
+
   return (
     <div
       className={cn(
@@ -163,13 +168,23 @@ export const MemexIdeaCard = ({
           src={idea?.user_logo}
           fallback={idea?.user_name?.[0]}
           className="rounded-md mr-2"
+          onClick={(e) => {
+            e.stopPropagation()
+            onPushToAccount()
+          }}
         />
       )}
 
       <div className="flex-1">
         {withDetailsLayout(
           <div className="space-x-1 text-zinc-500 text-sm leading-none max-w-[70%] inline-flex items-center">
-            <span className="font-bold text-base text-black truncate ">
+            <span
+              className="font-bold text-base text-black truncate hover:underline"
+              onClick={(e) => {
+                e.stopPropagation()
+                onPushToAccount()
+              }}
+            >
               {idea?.user_name}
             </span>
             <span>·</span>
