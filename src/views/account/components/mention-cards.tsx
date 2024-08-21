@@ -11,7 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 
 interface Props {
-  cards: UserListRes[UserListType.Notifications][]
+  cards: UserListRes[UserListType.Mentions][]
   total: number
   isLoading: boolean
   isPending?: boolean
@@ -28,7 +28,7 @@ export const MentionCards = (props: Props) => {
 
   return (
     <CustomSuspense
-      className="flex flex-col gap-3 max-sm:gap-0"
+      className="flex flex-col gap-3 max-sm:gap-0 pb-3"
       isPending={isLoading}
       fallback={<CardSkeleton />}
       nullback={<p className="text-zinc-500">{t('mentions.empty')}</p>}
@@ -44,7 +44,7 @@ export const MentionCards = (props: Props) => {
   )
 }
 
-const MentionCard = ({ c }: { c: UserListRes[UserListType.Notifications] }) => {
+const MentionCard = ({ c }: { c: UserListRes[UserListType.Mentions] }) => {
   const { t } = useTranslation()
 
   return (

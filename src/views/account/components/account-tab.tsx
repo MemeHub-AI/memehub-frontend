@@ -25,7 +25,7 @@ export const AccountTab = () => {
     },
     {
       label: t('mentions'),
-      value: UserListType.Notifications,
+      value: UserListType.Mentions,
     },
   ]
   const tabs = [
@@ -117,6 +117,7 @@ export const AccountTab = () => {
         <>
           <TabsContent value={UserListType.Comments.toString()}>
             <CommentCards
+              disableToProfile
               readonly
               cards={comments.list}
               total={comments.total}
@@ -125,7 +126,7 @@ export const AccountTab = () => {
               onFetchNext={fetchNextPage}
             />
           </TabsContent>
-          <TabsContent value={UserListType.Notifications.toString()}>
+          <TabsContent value={UserListType.Mentions.toString()}>
             <MentionCards
               cards={mentions.list}
               total={mentions.total}

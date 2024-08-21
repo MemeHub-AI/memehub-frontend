@@ -2,7 +2,6 @@ import React, { type ComponentProps, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { UserListRes, UserListType } from '@/api/user/types'
-import type { TokenCommentListRes } from '@/api/token/types'
 import { CommentCard } from './components/card'
 import { CommentForm } from './components/form'
 import { Dialog } from '@/components/ui/dialog'
@@ -19,6 +18,7 @@ interface Props extends ComponentProps<'div'> {
   isLoading: boolean
   isPending?: boolean
   readonly?: boolean
+  disableToProfile?: boolean
   onFetchNext?: () => void
   onCommentSuccess?: () => void
   onLikeSuccess?: () => void
@@ -32,6 +32,7 @@ export const CommentCards = (props: Props) => {
     isLoading,
     isPending = false,
     readonly = false,
+    disableToProfile,
     onFetchNext,
     onCommentSuccess,
     onLikeSuccess,
@@ -106,6 +107,7 @@ export const CommentCards = (props: Props) => {
                   isActive={c.id === lastAnchor}
                   isLiking={isLiking}
                   isUnliking={isUnliking}
+                  disableToProfile={disableToProfile}
                   onLike={likeComment}
                   onUnlike={unlikeComment}
                   onReply={(id) => setReplyId(+id)}
