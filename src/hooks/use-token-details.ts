@@ -61,7 +61,7 @@ export const useTokenDetails = (
   })
 
   const {
-    data: bcTotalSupply = BI_ZERO,
+    data: bcTotalSupply_ = BI_ZERO,
     isLoading: isLoadingProgress,
     isFetching: isFetchingProgress,
     refetch: refetchTotal,
@@ -94,19 +94,20 @@ export const useTokenDetails = (
   const isGraduated = headmaster !== zeroAddress
   const tokenLeftAmount = formatEther(tokenLeft)
   const reserveTotalAmount = formatEther(reserveTotal)
-  const totalSupply = formatEther(bcTotalSupply)
+  const bcTotalSupply = formatEther(bcTotalSupply_)
+  const totalSupply = formatEther(totalSupply_)
 
   const progress = useMemo(() => {
-    if (BigNumber(totalSupply).isZero()) return '0.00'
+    if (BigNumber(bcTotalSupply).isZero()) return '0.00'
     if (isGraduated) return '100.00'
     if (!isGraduated && BigNumber(tokenLeftAmount).isZero()) return '0.00'
 
-    return BigNumber(totalSupply)
+    return BigNumber(bcTotalSupply)
       .minus(tokenLeftAmount)
-      .div(totalSupply)
+      .div(bcTotalSupply)
       .multipliedBy(100)
       .toFixed(2)
-  }, [totalSupply, tokenLeftAmount, isGraduated])
+  }, [bcTotalSupply, tokenLeftAmount, isGraduated])
 
   const refetchDetails = () => {
     refetch()
