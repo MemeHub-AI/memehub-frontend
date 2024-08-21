@@ -5,21 +5,24 @@ import { Routes } from '@/routes'
 import { useMemexStore } from '@/stores/use-memex'
 
 interface Options {
-  type?: 'tweet' | 'details' | 'all'
+  type?: 'idea' | 'details' | 'all'
   onClear?: (pathname: string) => void
 }
 
 // Clear memex store
-export const useMemexClear = ({ type = 'all', onClear }: Options = {}) => {
+export const useCreateIdeaCleanup = ({
+  type = 'all',
+  onClear,
+}: Options = {}) => {
   const router = useRouter()
-  const { setIdea: setTweet, setIdeaDetails: setTweetDetails } = useMemexStore()
+  const { setIdea, setIdeaDetails } = useMemexStore()
 
   const clear = () => {
-    if (type === 'tweet') return setTweet(null)
-    if (type === 'details') return setTweetDetails(null)
+    if (type === 'idea') return setIdea(null)
+    if (type === 'details') return setIdeaDetails(null)
 
-    setTweet(null)
-    setTweetDetails(null)
+    setIdea(null)
+    setIdeaDetails(null)
   }
 
   const onRouteChangeStart = (pathname: string) => {
