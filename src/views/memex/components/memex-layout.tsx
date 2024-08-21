@@ -54,7 +54,7 @@ export const MemexLayout = ({ children }: { children?: ReactNode }) => {
     <PrimaryLayout mainClass="flex" padding={false}>
       <Tabs
         onValueChange={(v) => router.push(v)}
-        className="flex-1 md:max-w-xl md:mt-4"
+        className="flex-1 md:max-w-xl"
       >
         <TabsList
           className={cn(
