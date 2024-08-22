@@ -23,14 +23,17 @@ export const Header = () => {
   const { push } = useRouter()
   const { isMemex } = useIsMemex()
 
+  const withMobileIcon = (icon: string, text: string) =>
+    isMobile ? `${icon} ${text}` : text
+
   const navs: Nav[] = [
-    { title: (isMobile ? '🏠 ' : '') + t('home'), path: Routes.Main },
+    { title: withMobileIcon('🏠', t('home')), path: Routes.Main },
     { title: t('next.moonshot'), path: Routes.Moonshot, mobileOnly: true },
     { title: t('classic.meme'), path: Routes.ClassicMeme, mobileOnly: true },
     // { title: t('create'), path: Routes.Create },
     { title: t('airdrop'), path: Routes.Airdrop },
-    { title: t('alliance'), path: Routes.Alliance },
-    { title: 'Memex', path: Routes.Memex },
+    { title: withMobileIcon('🤝', t('alliance')), path: Routes.Alliance },
+    { title: withMobileIcon('🌟', 'Memex'), path: Routes.Memex },
 
     // { title: t('KOL'), path: Routes.KOL },
     // { title: t('community'), path: Routes.Community },
