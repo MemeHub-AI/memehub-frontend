@@ -11,8 +11,8 @@ export const getIdeaStatus = (
 
   const isStarted = post?.status === IdeaStatus.Activated
   const isEnded = dayjs().isAfter(dayjs.unix(info.endAt))
-  const isSuccess = info.isOver
   const isDeployed = info.isDeploy
+  const isSuccess = info.isOver // TODO: should `&& isDeployed`
 
   return {
     hasDetails: !!name && !!symbol && !!logo_url && !!description,

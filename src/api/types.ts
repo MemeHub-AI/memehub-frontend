@@ -1,3 +1,5 @@
+import { ObjectLike } from '@/utils/types'
+
 export interface ApiResponse<T = null> {
   code: number
   message: string
@@ -31,13 +33,13 @@ export interface SearchReq {
   search?: string
 }
 
-export interface WsReceived<
-  D = unknown,
-  T extends string = string,
-  E = unknown
-> {
+interface WsReceivedBase<T extends string = string, D = unknown, E = unknown> {
   type: T
   data: D
   error?: string
   extra?: E
+}
+
+export type WsReceived<T extends ObjectLike<[any, any?]>> = {
+  [K in keyof T & string]: WsReceivedBase<K, T[K][0], T[K][1]>
 }

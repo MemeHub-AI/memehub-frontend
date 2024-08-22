@@ -23,8 +23,6 @@ const sortKey: keyof TokenTrade = 'timestamp'
 
 const pageSize = 10
 
-let lastTradePrice = ''
-
 export const useTokenWs = (
   tokenInfo: TokenListItem | undefined,
   disabled = false
@@ -32,8 +30,11 @@ export const useTokenWs = (
   const { chainName, tokenAddr } = useTokenQuery()
   const router = useRouter()
   const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
-    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`,
-    { shouldReconnect: () => router.pathname === Routes.TokenPage }
+    `${apiUrl.ws}/ws/v2/coin/trades`,
+    {
+      disabled,
+      shouldReconnect: () => router.pathname === Routes.TokenPage,
+    }
   )
   const { set, get: getReward } = useLruMap<Record<string, string>>()
   const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
@@ -42,35 +43,15 @@ export const useTokenWs = (
   const [hasMoreTrades, setHasMoreTrades] = useState(false)
   const [marketCap, setMarketCap] = useState('')
 
-  const calcForMarketCap = (usdtPrice = '0') => {
-    const marketCap = BigNumber(tokenInfo?.total_supply || 0)
-      .multipliedBy(usdtPrice)
-      .multipliedBy(lastTradePrice || tokenInfo?.start_price || 0)
-      .toFixed()
-    setMarketCap(marketCap)
-  }
-
   const onTrades = ({ data, extra }: TokenOnEvents['trades']) => {
     if (extra?.rewarded) {
       data.map(({ hash }) => set(hash, extra.rewarded))
     }
 
     setHasMoreTrades(!!extra?.hasmore)
-    setTradeRecords((prev) => {
-      const trades = orderBy(
-        uniqBy([...prev, ...data], uniqKey),
-        [sortKey],
-        'desc'
-      )
-      const firstTrade = first(trades)
-      const usdtPrice = BigNumber(firstTrade?.usd_price ?? 0)
-        .div(firstTrade?.price ?? 1)
-        .toFixed()
-      lastTradePrice = firstTrade?.price || ''
-
-      calcForMarketCap(usdtPrice)
-      return trades
-    })
+    setTradeRecords((prev) =>
+      orderBy(uniqBy([...prev, ...data], uniqKey), [sortKey], 'desc')
+    )
   }
 
   const onHolders = ({ data }: TokenOnEvents['holders']) => {
@@ -79,11 +60,9 @@ export const useTokenWs = (
 
   const onPrice = ({ data }: TokenOnEvents['price']) => {
     setTradePrice(data)
-    calcForMarketCap(data.price)
   }
 
   const onUpdate = ({ data }: TokenOnEvents['update']) => {
-    // TODO: fix type
     if (data.type === 'trades') return onTrades(data)
     if (data.type === 'holders') return onHolders(data)
     if (data.type === 'price') return onPrice(data)
@@ -99,6 +78,16 @@ export const useTokenWs = (
       limit: pageSize * 2,
     })
   }
+
+  // Calculate for market cap
+  useEffect(() => {
+    const firstTrade = first(tradeRecords)
+    const marketCap = BigNumber(tokenInfo?.total_supply || 0)
+      .multipliedBy(tradePrice?.price || 0)
+      .multipliedBy(firstTrade?.price || tokenInfo?.start_price || 0)
+      .toFixed()
+    setMarketCap(marketCap)
+  }, [tokenInfo, tradePrice, tradeRecords])
 
   useEffect(() => {
     if (!ws.isOpen) return
