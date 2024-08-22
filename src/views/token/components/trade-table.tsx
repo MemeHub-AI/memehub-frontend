@@ -58,7 +58,10 @@ export const TradeTable = () => {
             {ths.map((t, i) => (
               <TableHead
                 key={i}
-                className={cn('px-2 text-nowrap whitespace-nowrap')}
+                className={cn(
+                  'px-2 text-nowrap whitespace-nowrap',
+                  i === 0 && 'pl-4'
+                )}
               >
                 {/* Date field */}
                 {i === ths.length - 2 ? (
