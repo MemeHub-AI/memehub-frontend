@@ -1,4 +1,5 @@
 import {
+  TokenCreate,
   TokenEmitEvents,
   TokenOnEvents,
   TokenTrade,
@@ -11,8 +12,9 @@ import { useEffect, useState } from 'react'
 
 export const useAllTrades = (disabled = false) => {
   const [allTrades, setAllTrades] = useState<TokenTrade[]>([])
+  const [coinCreate, setCoinCreate] = useState<TokenCreate>()
   const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
-    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`,
+    disabled ? '' : `${apiUrl.ws}/ws/v2/global/feeds`,
     { shouldReconnect: () => router.pathname === Routes.Memex }
   )
 
@@ -22,21 +24,19 @@ export const useAllTrades = (disabled = false) => {
     console.log('trades data: ', data)
 
     // TODO: fix type
-    if (data.type === 'trades') setAllTrades(data.data)
+    if (data.type === 'all-trades') setAllTrades(data.data)
+    if (data.type === 'all- coin-created') setCoinCreate(data)
   }
 
   useEffect(() => {
     if (!ws.isOpen) return
 
     ws.on('update', onUpdate)
-
-    ws.emit('listen', {
-      chain: 'bsc',
-      token: '0x93240936e5ca2594cb0e12558a663e5c0a047857',
-      offset: 1,
-      limit: 1,
-    })
   }, [ws.isOpen])
 
-  return { ...ws, allTrades }
+  return {
+    ...ws,
+    allTrades,
+    coinCreate,
+  }
 }

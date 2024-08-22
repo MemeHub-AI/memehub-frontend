@@ -57,3 +57,13 @@ export interface TokenPrice {
   symbol: string
   price: string
 }
+
+export interface TokenCreate {
+  chain: string
+  coin_type: number
+  contract_address: string
+  id: string
+  image_url: string
+  name: string
+  symbol: string
+}
