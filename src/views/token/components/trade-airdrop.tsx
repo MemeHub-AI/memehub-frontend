@@ -34,7 +34,7 @@ export const TradeAirdrop = () => {
         <div className="flex-1 flex items-center font-bold text-lg">
           <h2 className="flex-1 ml-4 max-sm:ml-3">{t('airdrop')}</h2>
           {isOnlyOne && isAirdropExpired && (
-            <h2 className="flex-1">🔥 {t('airdrop.burn')}</h2>
+            <h2 className="flex-1 max-sm:hidden">🔥 {t('airdrop.burn')}</h2>
           )}
         </div>
         <div className="flex items-center flex-wrap max-sm:flex-col max-sm:space-y-3">
