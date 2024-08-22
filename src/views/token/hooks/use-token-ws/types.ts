@@ -18,6 +18,8 @@ export type TokenOnEvents = WsReceived<{
   trades: [TokenTrade[], TradesExtra]
   holders: [TokenHolder[]]
   price: [TokenPrice]
+  'all-trades': [TokenTrade[]]
+  'all-coin-created': [TokenCreate]
   update: [TokenOnEvents[keyof Omit<TokenOnEvents, 'update'>]]
 }>
 

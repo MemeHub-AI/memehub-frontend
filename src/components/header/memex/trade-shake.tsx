@@ -28,7 +28,7 @@ const TradeShake = (props: ShakeCardProps<TokenTrade>) => {
         <div
           style={{ backgroundColor: color }}
           className={cn(
-            'p-2 flex gap-2 items-center rounded-sm text-white font-medium animate-hori-shake',
+            'p-2 flex gap-1 items-center rounded-sm text-white font-medium animate-hori-shake',
             className
           )}
         >
@@ -47,7 +47,10 @@ const TradeShake = (props: ShakeCardProps<TokenTrade>) => {
             {fmt.decimals(trade.quote_amount, { round: true })}
             {/* trade symbol */} {trade.quote_symbol}
           </span>
-          <img src={trade.image_url} className={cn('w-5 h-5', imageClass)} />
+          <img
+            src={trade.image_url}
+            className={cn('w-5 h-5 rounded-full', imageClass)}
+          />
           <span
             className={cn(
               'text-nowrap text-sm hover:underline hover:underline-offset-1 hover:cursor-pointer',

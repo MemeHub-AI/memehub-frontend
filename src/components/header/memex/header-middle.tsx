@@ -13,7 +13,7 @@ const MemexHeaderMiddle = () => {
   const [create, setCreate] = useState<TokenCreate>()
 
   useEffect(() => {
-    console.log('all trades: ', allTrades)
+    console.log('coinCreate: ', coinCreate)
 
     if (allTrades.length !== 0) {
       return setTrade(allTrades[0])

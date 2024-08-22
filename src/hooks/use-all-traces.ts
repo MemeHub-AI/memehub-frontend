@@ -18,14 +18,12 @@ export const useAllTrades = (disabled = false) => {
     { shouldReconnect: () => router.pathname === Routes.Memex }
   )
 
-  const onAllTrades = () => ws.on('trades', onAllTrades)
-
   const onUpdate = ({ data }: TokenOnEvents['update']) => {
     console.log('trades data: ', data)
 
     // TODO: fix type
     if (data.type === 'all-trades') setAllTrades(data.data)
-    if (data.type === 'all- coin-created') setCoinCreate(data)
+    if (data.type === 'all-coin-created') setCoinCreate(data.data)
   }
 
   useEffect(() => {
