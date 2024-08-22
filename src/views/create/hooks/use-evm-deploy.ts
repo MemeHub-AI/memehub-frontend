@@ -40,7 +40,9 @@ export const useEvmDeploy = (chainName: string) => {
     reset: resetDeploy,
   } = useWriteContract({
     mutation: {
-      onError: ({ message }) => CONTRACT_ERR.message(message, false),
+      onError: ({ message }) => {
+        CONTRACT_ERR.message(message, false)
+      },
     },
   })
   const {
