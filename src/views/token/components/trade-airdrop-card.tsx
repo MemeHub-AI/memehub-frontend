@@ -131,13 +131,13 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
       <div className="mt-3 flex items-center justify-between">
         <div className="flex items-center">
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
-          <span className="ml-2">
+          <span className="ml-2 truncate">
             {BigNumber(totalAmount).toFormat()}{' '}
             {tokenInfo?.symbol ?? tokenMetadata?.symbol}
           </span>
         </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center shrink-0">
           <TbUsers size={20} />
           <span className="ml-2">
             {BigNumber(current).toFormat()} / {BigNumber(total).toFormat()}

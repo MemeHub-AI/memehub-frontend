@@ -9,6 +9,7 @@ import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useTokenContext } from '@/contexts/token'
 import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 import { utilLang } from '@/utils/lang'
+import { fmt } from '@/utils/fmt'
 
 export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
   const { t } = useTranslation()
@@ -37,7 +38,9 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
     refetchAirdrop
   )
 
-  const burnText = `${remaining} ${tokenInfo?.symbol ?? tokenMetadata?.symbol}`
+  const burnText = `${remaining} ${fmt.ellipsis(
+    tokenInfo?.symbol ?? tokenMetadata?.symbol
+  )}`
 
   return (
     <Card

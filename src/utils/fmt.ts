@@ -125,4 +125,13 @@ export const fmt = {
       return name
     }
   },
+  ellipsis: (str: string | undefined, max = 7) => {
+    if (!str) return ''
+
+    if (str.length > max) {
+      return str.slice(0, max) + '...'
+    } else {
+      return str
+    }
+  },
 }
