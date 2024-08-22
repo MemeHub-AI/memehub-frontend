@@ -15,9 +15,9 @@ interface WsSendListen {
 }
 
 export interface TokenOnEvents {
-  trades: WsReceived<TokenTrade[], string, TradesExtra>
-  holders: WsReceived<TokenHolder[]>
-  price: WsReceived<TokenPrice>
+  trades: WsReceived<TokenTrade[], 'trades', TradesExtra>
+  holders: WsReceived<TokenHolder[], 'holders'>
+  price: WsReceived<TokenPrice, 'price'>
   update: WsReceived<TokenOnEvents[keyof Omit<TokenOnEvents, 'update'>]>
 }
 
