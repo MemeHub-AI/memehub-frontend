@@ -7,8 +7,11 @@ import { SlippageError } from '@/components/trade-toast/slippage-error'
 import { bottomLeft } from '@/config/toast'
 import { DeviceWidth } from '@/hooks/use-responsive'
 import { reportException } from '.'
+import { lowerIncludes } from '@/utils'
 
-const memehubErr = {
+const errors = {
+  txExecErr: 'TransactionExecutionError',
+  gasTip: 'Gas Tip',
   invalidSell: 'MEMEHUB_InvalidSell',
   isBurned: 'MEMEHUB_AlreadyBurn',
 }
@@ -18,31 +21,29 @@ export const CONTRACT_ERR = {
   message: (msg: string, showToast = true) => {
     if (isUserReject(msg)) return
 
+    const errIncludes = lowerIncludes(msg)
+
     reportException(msg)
 
-    if (msg.includes('Gas Tip')) {
+    if (errIncludes(errors.gasTip)) {
       toast.error(t('contract.err.gas-estimate'))
       return
     }
-
-    if (msg.includes('TransactionExecutionError')) {
+    if (errIncludes(errors.txExecErr)) {
       toast.message(
         createElement(SlippageError),
         window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined
       )
       return
     }
-
-    if (msg.includes(memehubErr.invalidSell)) {
+    if (errIncludes(errors.invalidSell)) {
       toast.error(t('contract.err.sell'))
       return
     }
-
-    if (msg.includes(memehubErr.isBurned)) {
+    if (errIncludes(errors.isBurned)) {
       toast.error(t('contract.err.burn'))
       return
     }
-
     if (showToast) toast.error(t('contract.err.exec'))
   },
 
