@@ -42,9 +42,13 @@ export const Profile = (props: ComponentProps<'div'>) => {
   const { query, ...router } = useRouter()
   const [open, setOpen] = useState(false)
 
-  const { userInfo, isOtherUser, refetchUserInfo } = useAccountContext()
+  const { userInfo, isOtherUser, refetchUserInfo, refetchFollow } =
+    useAccountContext()
   const { isFollowing, isUnfollowing, follow, unfollow, update } = useUser({
-    onFollowFinlly: refetchUserInfo,
+    onFollowFinlly: () => {
+      refetchUserInfo()
+      refetchFollow()
+    },
   })
   const tokenAddr = (query.address || '') as string
   const { copy } = useClipboard()
@@ -133,7 +137,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
             size="icon"
             variant="outline"
             shadow="none"
-            className="absolute right-4 top-2 hover:bg-zinc-200 ml-4"
+            className="absolute right-4 top-2 sm:hover:bg-zinc-200 ml-4"
             disabled={isFollowing || isUnfollowing}
             onClick={() =>
               userInfo?.is_follower ? unfollow(tokenAddr) : follow(tokenAddr)

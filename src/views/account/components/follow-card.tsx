@@ -12,7 +12,6 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
 import { Routes } from '@/routes'
-import { useFollowTabContext } from '@/contexts/follow-tab'
 
 interface Props extends ComponentProps<'div'> {
   card: UserFollow
@@ -21,11 +20,10 @@ interface Props extends ComponentProps<'div'> {
 export const FollowCard = ({ card }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
-  const { userInfo, refetchUserInfo } = useAccountContext()
-  const { refetchFollows } = useFollowTabContext()
+  const { userInfo, refetchFollow } = useAccountContext()
 
   const { follow, unfollow } = useUser({
-    onFollowSuccess: refetchFollows,
+    onFollowSuccess: refetchFollow,
   })
 
   return (
