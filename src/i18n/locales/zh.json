@@ -697,5 +697,7 @@
   "holder.inventor": "发明者",
   "token.inactive": "未激活",
   "token.active-first": "代币未激活，请先激活",
-  "token.activate": "激活"
+  "token.activate": "激活",
+  "create.buy-title": "立即买入",
+  "create.buy-desc": "如果需要创建后立即买入，请填入数量，如果不想，请直接点击确定"
 }

@@ -11,7 +11,9 @@ import { useSolDeploy } from './use-sol-deploy'
 export type DeployFormParams = Omit<
   TokenCreateReq,
   'factory_address' | 'airdrop_address'
->
+> & {
+  buyAmount: string
+}
 
 export const useDeploy = (chainName: string) => {
   const [network, setNetwork] = useState(Network.Evm)
@@ -24,6 +26,7 @@ export const useDeploy = (chainName: string) => {
   // const tvmDeploy = useTvmDeploy()
 
   const {
+    buyAmoutMax,
     deployFee,
     deployHash,
     deployedAddr,
@@ -63,6 +66,7 @@ export const useDeploy = (chainName: string) => {
   }
 
   return {
+    buyAmoutMax,
     deployFee,
     deployHash,
     deployedAddr,

@@ -32,6 +32,9 @@ export const useEvmDeploy = (chainName: string) => {
     query: { enabled: !!bcAddress },
   })
 
+  // TODO: should dynamic
+  const buyAmoutMax = 1.2
+
   const {
     data: hash,
     isPending: isSubmitting,
@@ -76,19 +79,24 @@ export const useEvmDeploy = (chainName: string) => {
     symbol,
     tokenId,
     marketing,
+    buyAmount,
   }: DeployFormParams & { tokenId: string }) => {
     if (!checkForDeploy()) return
     const airdropParams = getEvmAirdropParams(configValue!, marketing)
+    const totalDeployFee = BigNumber(deployFee.toString())
+      .plus(buyAmount)
+      .toFixed()
 
     writeContract({
       ...bcConfig,
       functionName: 'createToken',
       args: [[name, symbol], [BigInt(tokenId)], airdropParams],
-      value: deployFee,
+      value: BigInt(totalDeployFee),
     })
   }
 
   return {
+    buyAmoutMax,
     deployFee: formatEther(deployFee),
     deployHash: hash,
     deployedAddr,

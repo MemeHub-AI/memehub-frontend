@@ -707,5 +707,7 @@
   "holder.inventor": "Inventor",
   "token.inactive": "Unactivated",
   "token.active-first": "Unactivated token, please activate first",
-  "token.activate": "Activate"
+  "token.activate": "Activate",
+  "create.buy-title": "Buy immediately",
+  "create.buy-desc": "If you want to buy immediately after creating, please enter the quantity. If not, click OK directly"
 }

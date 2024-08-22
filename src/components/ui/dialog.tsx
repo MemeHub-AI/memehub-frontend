@@ -47,7 +47,6 @@ const DialogOverlay = React.forwardRef<
       )}
       {...props}
     />
-    //{' '}
   </div>
 ))
 DialogOverlay.displayName = DialogPrimitive.Overlay.displayName
