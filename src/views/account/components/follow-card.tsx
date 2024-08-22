@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
 import type { UserFollow } from '@/api/user/types'
-
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
 import { fmt } from '@/utils/fmt'
@@ -13,15 +12,14 @@ import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
 import { Routes } from '@/routes'
 
-interface Props extends ComponentProps<'div'> {
+interface Props extends ComponentProps<typeof Card> {
   card: UserFollow
 }
 
-export const FollowCard = ({ card }: Props) => {
+export const FollowCard = ({ card, onClick }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { userInfo, refetchFollow } = useAccountContext()
-
   const { follow, unfollow } = useUser({
     onFollowSuccess: refetchFollow,
   })
@@ -31,9 +29,10 @@ export const FollowCard = ({ card }: Props) => {
       className="py-2 px-3 flex items-center justify-between"
       hover="bg"
       shadow="none"
-      onClick={() => {
+      onClick={(e) => {
         const href = fmt.toHref(Routes.Account, card.user.wallet_address)
         router.push(href)
+        onClick?.(e)
       }}
     >
       <div className="flex items-center gap-2">

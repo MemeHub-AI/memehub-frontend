@@ -5,17 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { FollowersCards } from './followers-cards'
 import { FollowingCards } from './following-cards'
 import { useResponsive } from '@/hooks/use-responsive'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
 import { UserListType } from '@/api/user/types'
 import { useIsMemex } from '@/hooks/use-is-memex'
 import { useAccountContext } from '@/contexts/account'
+import { FollowDialog } from './follow-dialog'
 
 export const FollowTab = () => {
   const { t } = useTranslation()
@@ -34,60 +27,8 @@ export const FollowTab = () => {
     isLoading: isLoadingFollowing,
     isFetching: isFetchingFollowing,
   } = followingResults
-  const isFollowers = tab === UserListType.Followers
 
-  if (isMobile || isMemex) {
-    return (
-      <Dialog>
-        <div
-          className="flex items-center justify-between"
-          style={{ margin: '0 10px 10px 10px' }}
-        >
-          <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setTab(UserListType.Followers)}
-            >
-              {t('followers')}({followers.total})
-            </Button>
-          </DialogTrigger>
-          <DialogTrigger asChild>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setTab(UserListType.Following)}
-            >
-              {t('following')}({following.total})
-            </Button>
-          </DialogTrigger>
-        </div>
-
-        <DialogContent className="p-4">
-          <DialogHeader>
-            <DialogTitle>
-              {isFollowers ? t('followers.my') : t('following.my')}
-            </DialogTitle>
-          </DialogHeader>
-          {isFollowers ? (
-            <FollowersCards
-              cards={followers.list}
-              total={following.total}
-              isLoading={isLoadingFollowers}
-              isPending={isFetchingFollowers}
-            />
-          ) : (
-            <FollowingCards
-              cards={following.list}
-              total={followers.total}
-              isLoading={isLoadingFollowing}
-              isPending={isFetchingFollowing}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
-    )
-  }
+  if (isMobile || isMemex) return <FollowDialog tab={tab} setTab={setTab} />
 
   return (
     <Tabs
