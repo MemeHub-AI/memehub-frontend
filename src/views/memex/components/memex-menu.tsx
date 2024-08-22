@@ -29,6 +29,7 @@ import { resources } from '@/i18n'
 import { FaSquareTwitter } from 'react-icons/fa6'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { socialLink } from '@/config/link'
+import { FaXTwitter } from 'react-icons/fa6'
 
 interface MemexNavs {
   title: string
@@ -192,8 +193,8 @@ export const MemexMenu = () => {
       </Button>
 
       <div className="flex justify-center xl:space-x-8 max-xl:flex-col max-xl:items-center max-xl:space-y-4">
-        <FaSquareTwitter
-          size={30}
+        <FaXTwitter
+          size={28}
           className="cursor-pointer"
           onClick={() => window.open(socialLink.x)}
         />
