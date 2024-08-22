@@ -42,6 +42,7 @@ export interface TokenTrade {
   price: string
   usd_price: string
   marketcap: string
+  image_url: string
 }
 
 export interface TokenHolder {
