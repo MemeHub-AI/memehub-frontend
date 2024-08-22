@@ -115,6 +115,7 @@ export const useTrade = (onSuccess?: () => void) => {
       return dexBuy(amount, slippage, isIdoToken)
     }
 
+    // TODO: should update before `dexBuy`
     await updateLastTrade(TradeType.Buy, amount)
     return buy(amount, slippage)
   }
@@ -127,6 +128,7 @@ export const useTrade = (onSuccess?: () => void) => {
       return dexSell(amount, slippage, isIdoToken)
     }
 
+    // TODO: should update before `dexSell`
     await updateLastTrade(TradeType.Sell, amount)
     return sell(amount, slippage)
   }

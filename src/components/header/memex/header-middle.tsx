@@ -28,7 +28,13 @@ const MemexHeaderMiddle = () => {
     <div className="flex justify-between flex-1 mr-4">
       <div className="flex items-center space-x-2">
         {trade && <TradeShake color={colors[1]} trade={trade} />}
-        {create && <CreateCoinShake color="#93c5fd" trade={create} />}
+        {create && (
+          <CreateCoinShake
+            color="#93c5fd"
+            trade={create}
+            className="max-xl:hidden"
+          />
+        )}
       </div>
 
       <SearchInput />

@@ -322,7 +322,7 @@
   "community": "COMMUNITIES",
   "ideas": "💡Ideas",
   "meme.story": "👏Meme story",
-  "classic.meme": "💡Classic meme",
+  "classic.meme": "💡 Classic meme",
   "trending.idea": "Trending idea: ",
   "loading.more": "Load more",
   "referral": "Referral",
@@ -705,5 +705,8 @@
   "M": "M",
   "holder.memex": "Love Pool",
   "holder.inventor": "Inventor",
-  "was.created": "was created"
+  "was.created": "was created",
+  "token.inactive": "Unactivated",
+  "token.active-first": "Unactivated token, please activate first",
+  "token.activate": "Activate"
 }

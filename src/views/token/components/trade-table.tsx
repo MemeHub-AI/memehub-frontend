@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils'
 import { Avatar } from '@/components/ui/avatar'
 import { Routes } from '@/routes'
 import { useStorage } from '@/hooks/use-storage'
-import { strToBool } from '@/utils/convert'
+import { strToBool } from '@/utils'
 import { utilLang } from '@/utils/lang'
 import { TradeType } from '@/enums/trade'
 import { useTokenContext } from '@/contexts/token'
@@ -58,7 +58,10 @@ export const TradeTable = () => {
             {ths.map((t, i) => (
               <TableHead
                 key={i}
-                className={cn('px-2 text-nowrap whitespace-nowrap')}
+                className={cn(
+                  'px-2 text-nowrap whitespace-nowrap',
+                  i === 0 && 'pl-4'
+                )}
               >
                 {/* Date field */}
                 {i === ths.length - 2 ? (

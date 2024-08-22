@@ -315,7 +315,7 @@
   "community": "COMMUNITIES",
   "ideas": "💡创意",
   "meme.story": "👏Meme故事",
-  "classic.meme": "💡经典Meme",
+  "classic.meme": "💡 经典Meme",
   "trending.idea": "热门创意: ",
   "loading.more": "加载更多",
   "referral": "推荐",
@@ -695,5 +695,8 @@
   "M": "月",
   "holder.memex": "点赞池子",
   "holder.inventor": "发明者",
-  "was.created": "被创建"
+  "was.created": "被创建",
+  "token.inactive": "未激活",
+  "token.active-first": "代币未激活，请先激活",
+  "token.activate": "激活"
 }

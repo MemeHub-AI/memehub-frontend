@@ -89,7 +89,7 @@ export const RewardPage = () => {
                 {link}
               </Link>
               <div
-                className="border-2 border-black rounded py-0.5 px-3 cursor-pointer hover:bg-zinc-100"
+                className="border-2 border-black rounded py-0.5 px-3 cursor-pointer hover:bg-zinc-100 whitespace-nowrap"
                 onClick={() => copy(link)}
               >
                 {isCopied ? (

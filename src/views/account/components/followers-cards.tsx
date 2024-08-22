@@ -10,10 +10,16 @@ interface Props {
   total: number
   isLoading: boolean
   isPending?: boolean
+  onCardClick?: () => void
 }
 
-export const FollowersCards = (props: Props) => {
-  const { cards, total, isLoading, isPending } = props
+export const FollowersCards = ({
+  cards,
+  total,
+  isLoading,
+  isPending,
+  onCardClick,
+}: Props) => {
   const { t } = useTranslation()
 
   return (
@@ -24,7 +30,7 @@ export const FollowersCards = (props: Props) => {
       nullback={<p className="text-zinc-500">{t('follow.no-followers')}</p>}
     >
       {cards.map((f, i) => (
-        <FollowCard card={f} key={i} />
+        <FollowCard card={f} key={i} onClick={onCardClick} />
       ))}
     </CustomSuspense>
   )

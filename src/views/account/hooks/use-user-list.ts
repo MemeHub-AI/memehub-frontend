@@ -26,7 +26,7 @@ export const useUserList = (type: UserListType) => {
     [UserListType.Following]: { total: 0, list: [] },
   })
   const { query } = useRouter()
-  const tokenAddr = (query.address || '') as string
+  const userAddr = (query.address || '') as string
 
   const [isHeld, isCreated, isComments, isMentions] = useMemo(
     () => [
@@ -46,10 +46,10 @@ export const useUserList = (type: UserListType) => {
     fetchNextPage,
     refetch,
   } = useInfiniteQuery({
-    queryKey: [userApi.list.name, tokenAddr, type],
+    queryKey: [userApi.list.name, userAddr, type],
     queryFn: ({ pageParam }) => {
-      if (isEmpty(tokenAddr)) return Promise.reject()
-      return userApi.list(tokenAddr, {
+      if (isEmpty(userAddr)) return Promise.reject()
+      return userApi.list(userAddr, {
         type,
         page: pageParam,
         page_size: 25,

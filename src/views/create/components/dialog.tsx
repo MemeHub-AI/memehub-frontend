@@ -6,10 +6,8 @@ import { PiWarningCircle } from 'react-icons/pi'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
-import { isUserReject } from '@/utils/contract'
 import { fmt } from '@/utils/fmt'
 import { useCreateTokenContext } from '@/contexts/create-token'
-import { CONTRACT_ERR } from '@/errors/contract'
 
 const withWarningIcon = (children: ReactNode) => {
   return (
@@ -62,8 +60,6 @@ export const CreateTokenStatusDialog = () => {
 
   // Submit error
   if (submitError) {
-    if (isUserReject(submitError)) return CONTRACT_ERR.userReject()
-
     return (
       <AlertDialog
         open={!!submitError}

@@ -10,6 +10,7 @@ import { CustomSuspense } from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useTokenContext } from '@/contexts/token'
 import { useChainsStore } from '@/stores/use-chains-store'
+import { lowerIncludes } from '@/utils'
 
 enum Flag {
   Bc = 'Bonding Curve',
@@ -18,14 +19,6 @@ enum Flag {
   Creator = 'Creator',
   Dex = 'Dex',
   Memex = 'MemeX',
-}
-
-const lowerIncludes = (a: string) => {
-  const lowerA = a.toLowerCase()
-  return (b: string) => {
-    const lowerB = b.toLowerCase()
-    return lowerA.includes(lowerB)
-  }
 }
 
 export const HoldersRank = ({ className }: ComponentProps<'div'>) => {

@@ -71,7 +71,7 @@ export const HeaderMobile = (props: Props) => {
               <li
                 key={i}
                 className={cn(
-                  'w-full justify-start',
+                  'w-full justify-start text-lg',
                   pathname === n.path && 'text-blue-600'
                 )}
                 onClick={() => {
@@ -86,7 +86,7 @@ export const HeaderMobile = (props: Props) => {
           <LangSelect
             className={cn(
               isConnected && 'mb-9',
-              'size-fit w-full justify-start'
+              'size-fit w-full justify-start text-lg'
             )}
           />
           <div className="flex space-x-6 text-2xl mt-20">

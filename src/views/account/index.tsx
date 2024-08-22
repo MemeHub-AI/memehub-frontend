@@ -7,10 +7,12 @@ import { AccountTab } from './components/account-tab'
 import { cn } from '@/lib/utils'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { AccountProvider } from '@/contexts/account'
+import { useUserList } from './hooks/use-user-list'
+import { UserListType } from '@/api/user/types'
 
 export const AccountPage = () => {
   const { query } = useRouter()
-  const tokenAddr = (query.address || '') as string
+  const queryAddr = (query.address || '') as string
   const {
     userInfo,
     otherUserInfo,
@@ -18,9 +20,17 @@ export const AccountPage = () => {
     isFetchingUserInfo,
     refetchUserInfo,
     refetchOtherUserInfo,
-  } = useUserInfo(tokenAddr)
+  } = useUserInfo(queryAddr)
   const currenUserAddr = String(userInfo?.wallet_address || '')
-  const isOtherUser = tokenAddr !== currenUserAddr
+  const isOtherUser = queryAddr !== currenUserAddr
+
+  const followersResults = useUserList(UserListType.Followers)
+  const followingResults = useUserList(UserListType.Following)
+
+  const refetchFollow = () => {
+    followersResults.refetch()
+    followingResults.refetch()
+  }
 
   return (
     <AccountProvider
@@ -29,6 +39,9 @@ export const AccountPage = () => {
         isPending: isFetchingUserInfo || isFetchingOtherUserInfo,
         isOtherUser: isOtherUser,
         refetchUserInfo: isOtherUser ? refetchOtherUserInfo : refetchUserInfo,
+        followersResults,
+        followingResults,
+        refetchFollow,
       }}
     >
       <main className="min-h-main px-6 max-sm:px-3 flex gap-4 max-sm:flex-col max-sm:gap-0">

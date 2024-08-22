@@ -13,9 +13,8 @@ import { Tooltip, TooltipProvider, TooltipTrigger } from './ui/tooltip'
 import { newsApi } from '@/api/news'
 import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
-import { paginationSelect } from '@/utils/query'
 import { useCheckAccount } from '@/hooks/use-check-chain'
-import ConnectWallet from './connect-wallet'
+import { ConnectWallet } from './connect-wallet'
 
 interface Props {
   className?: string
@@ -35,7 +34,10 @@ export const AIIdeaBar = (props: Props) => {
     queryFn: () => {
       return newsApi.getOpportunity({ page: 1, page_size: 4 })
     },
-    select: ({ data }) => paginationSelect(data),
+    select: ({ data }) => ({
+      total: data.count || 0,
+      list: data.results || [],
+    }),
   })
 
   const onRandom = () => {

@@ -49,13 +49,18 @@ export const LangSelect = ({ className }: ComponentProps<'div'>) => {
           </HoverCardContent>
         </HoverCard>
       </div>
+
       <div className={cn('lg:hidden', className)}>
         <Accordion defaultValue={['item-1']} type="multiple">
           <AccordionItem value="item-1">
-            <AccordionTrigger>{t('Languages')}</AccordionTrigger>
+            <AccordionTrigger>🌍 {t('Languages')}</AccordionTrigger>
             {langs.map(([code, { name }], i) => (
               <AccordionContent key={i} onClick={() => setLang(code)}>
-                <span className={i18n.language === code ? 'text-blue-500' : ''}>
+                <span
+                  className={cn(
+                    i18n.language === code && 'text-blue-500 font-bold'
+                  )}
+                >
                   {name}
                 </span>
               </AccordionContent>

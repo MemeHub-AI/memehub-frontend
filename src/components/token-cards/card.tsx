@@ -2,6 +2,7 @@ import React, { useState, type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { isNumber } from 'lodash'
+import { toast } from 'sonner'
 
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
@@ -9,13 +10,14 @@ import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
 import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
-import { Badge } from '../ui/badge'
 import { Avatar } from '../ui/avatar'
 import { IdoTag } from '../ido-tag'
 import { Countdown } from '@/components/countdown'
 import { TokenListItem } from '@/api/token/types'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTokenDetails } from '@/hooks/use-token-details'
+import { TokenCardBadge } from './card-badge'
+import { Button } from '../ui/button'
 
 interface Props extends ComponentProps<typeof Card> {
   card: TokenListItem
@@ -50,6 +52,10 @@ export const TokenCard = (props: Props) => {
   const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
 
   const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (!card.is_active) {
+      toast.error(t('token.active-first'))
+      return
+    }
     if (isIdo && card.contract_address) {
       return router.push(
         fmt.toHref(Routes.Main, chainName, card.contract_address)
@@ -58,6 +64,7 @@ export const TokenCard = (props: Props) => {
     if (isIdo) {
       return router.push(fmt.toHref(Routes.Ido, chainName, card.id))
     }
+
     router.push(fmt.toHref(Routes.Main, chainName, card.contract_address))
     onClick?.(e)
   }
@@ -69,16 +76,11 @@ export const TokenCard = (props: Props) => {
         className
       )}
       onClick={handleClick}
+      shadow={card.is_active ? 'default' : 'none'}
       {...restProps}
     >
-      {isGraduated && (
-        <Badge
-          variant="success"
-          className="absolute left-0 top-0 rounded-l-none rounded-tr-none mr-2"
-        >
-          {t('token.graduated')}
-        </Badge>
-      )}
+      <TokenCardBadge token={card} isGraduated={isGraduated} />
+
       <Img
         src={card.image_url}
         alt="logo"
@@ -124,12 +126,22 @@ export const TokenCard = (props: Props) => {
               onInitExpired={setIsExpired}
             />
           </div>
-        ) : (
+        ) : card.is_active ? (
           <Progress
             className={cn('h-5 self-end w-full', isIdo && 'text-white')}
             indicatorClass={isIdo ? 'bg-red-500' : 'bg-green-500'}
             value={idoProgress || (isGraduated ? 100 : progress)}
           />
+        ) : (
+          <Button
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation()
+              toast.info('Coming Soon')
+            }}
+          >
+            {t('token.activate')}
+          </Button>
         )}
       </div>
     </Card>
