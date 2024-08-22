@@ -24,7 +24,7 @@ export const useWebsocket = <
   EEvents extends EmitEvents
 >(
   url: string,
-  options?: Options
+  options?: Options & Partial<{ disabled: boolean }>
 ) => {
   type AllEvents = OEvents & EEvents
 
@@ -45,7 +45,7 @@ export const useWebsocket = <
       filter: filterHeartbeta,
       ...options,
     },
-    !!url
+    !options?.disabled
   )
   const [isConnecting, isOpen, isClosing, isClosed] = useMemo(
     () => [

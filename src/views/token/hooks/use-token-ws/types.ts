@@ -2,24 +2,24 @@ import { WsReceived } from '@/api/types'
 import { TradeType } from '@/enums/trade'
 
 export interface TokenEmitEvents {
-  listen: WsSendListen
+  listen: TokenSendListen
   unlisten: null
-  history: WsSendListen
+  history: TokenSendListen
 }
 
-interface WsSendListen {
+interface TokenSendListen {
   chain: string
   token: string
   offset?: number
   limit?: number
 }
 
-export interface TokenOnEvents {
-  trades: WsReceived<TokenTrade[], 'trades', TradesExtra>
-  holders: WsReceived<TokenHolder[], 'holders'>
-  price: WsReceived<TokenPrice, 'price'>
-  update: WsReceived<TokenOnEvents[keyof Omit<TokenOnEvents, 'update'>]>
-}
+export type TokenOnEvents = WsReceived<{
+  trades: [TokenTrade[], TradesExtra]
+  holders: [TokenHolder[]]
+  price: [TokenPrice]
+  update: [TokenOnEvents[keyof Omit<TokenOnEvents, 'update'>]]
+}>
 
 interface TradesExtra {
   hasmore: boolean

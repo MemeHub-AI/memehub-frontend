@@ -30,8 +30,11 @@ export const useTokenWs = (
   const { chainName, tokenAddr } = useTokenQuery()
   const router = useRouter()
   const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
-    disabled ? '' : `${apiUrl.ws}/ws/v2/coin/trades`,
-    { shouldReconnect: () => router.pathname === Routes.TokenPage }
+    `${apiUrl.ws}/ws/v2/coin/trades`,
+    {
+      disabled,
+      shouldReconnect: () => router.pathname === Routes.TokenPage,
+    }
   )
   const { set, get: getReward } = useLruMap<Record<string, string>>()
   const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
