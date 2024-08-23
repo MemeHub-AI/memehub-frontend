@@ -16,7 +16,6 @@ import { FaHandshake } from 'react-icons/fa6'
 import { FaRegUser } from 'react-icons/fa6'
 import { FaUser } from 'react-icons/fa6'
 import { Button } from '../../../components/ui/button'
-import IdeaFloatButton from '@/views/memex/components/idea-float-button'
 import { useUserStore } from '@/stores/use-user-store'
 import {
   Arrow,
@@ -26,7 +25,6 @@ import {
 } from '@radix-ui/react-popover'
 import { useLang } from '@/hooks/use-lang'
 import { resources } from '@/i18n'
-import { FaSquareTwitter } from 'react-icons/fa6'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { socialLink } from '@/config/link'
 import { FaXTwitter } from 'react-icons/fa6'
@@ -35,7 +33,7 @@ interface MemexNavs {
   title: string
   path: string
   icon: React.ReactNode
-  icon_active: React.ReactNode
+  iconActive: React.ReactNode
 }
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
@@ -53,37 +51,37 @@ export const MemexMenu = () => {
       title: t('Idea'),
       path: Routes.Memex,
       icon: <FaRegLightbulb />,
-      icon_active: <FaLightbulb />,
+      iconActive: <FaLightbulb />,
     },
     {
       title: t('Coin'),
       path: Routes.MemexDetailsCoin,
       icon: <IoDiamondOutline />,
-      icon_active: <IoDiamond />,
+      iconActive: <IoDiamond />,
     },
     {
       title: t('profile'),
       path: Routes.MemexDetailsProfile,
       icon: <FaRegUser />,
-      icon_active: <FaUser />,
+      iconActive: <FaUser />,
     },
     {
       title: t('Notification'),
       path: Routes.MemexDetailsNotification,
       icon: <RiNotification3Line />,
-      icon_active: <RiNotification3Fill />,
+      iconActive: <RiNotification3Fill />,
     },
     {
       title: t('airdrop.no.icon'),
       path: Routes.MemexDetailsAirdrop,
       icon: <IoGiftOutline />,
-      icon_active: <IoGift />,
+      iconActive: <IoGift />,
     },
     {
       title: t('alliance'),
       path: Routes.MemexDetailsAlliance,
       icon: <FaRegHandshake />,
-      icon_active: <FaHandshake />,
+      iconActive: <FaHandshake />,
     },
   ]
 
@@ -94,11 +92,11 @@ export const MemexMenu = () => {
   const isCurrentPath = (name: string) => {
     if (name === Routes.Memex) {
       if (
-        pathname === `${Routes.Memex}/latest` ||
-        pathname === `${Routes.Memex}/hots` ||
-        pathname === `${Routes.Memex}/my-idea` ||
-        pathname === `${Routes.Memex}/my-involved` ||
-        pathname === `${Routes.Memex}/successed`
+        pathname === Routes.MemexLatest ||
+        pathname === Routes.MemexHots ||
+        pathname === Routes.MemexMyIdea ||
+        pathname === Routes.MemexMyInvolved ||
+        pathname === Routes.MemexSuccessed
       ) {
         return true
       }
@@ -134,7 +132,7 @@ export const MemexMenu = () => {
             }}
           >
             <span className="xl:text-2xl xl:mr-2">
-              {!isCurrentPath(nav.path) ? nav.icon : nav.icon_active}
+              {!isCurrentPath(nav.path) ? nav.icon : nav.iconActive}
             </span>
             <span className={cn('', isCurrentPath(nav.path) && 'font-bold')}>
               {nav.title}
@@ -158,7 +156,7 @@ export const MemexMenu = () => {
         </PopoverTrigger>
 
         <PopoverContent side="right" align="end">
-          <div className="bg-slate-50 py-4 px-6 flex space-y-2 flex-col rounded-md">
+          <div className="bg-slate-50 py-4 px-3 w-32 flex space-y-2 flex-col rounded-md shadow-md shadow-zinc-400">
             {langs.map(([code, { name }], i) => (
               <Button
                 key={i}
@@ -175,14 +173,14 @@ export const MemexMenu = () => {
             ))}
           </div>
 
-          <Arrow className="fill-slate-50" width={20} height={30} />
+          <Arrow className="fill-slate-50" width={15} height={30} />
         </PopoverContent>
       </Popover>
 
       <Button
         shadow={'none'}
         onClick={() => router.push(Routes.MemexCreate)}
-        className="bg-purple-700 text-white rounded-full border-none max-xl:text-md py-6 text-lg mt-2"
+        className="bg-purple-700 text-white rounded-full border-none max-xl:text-md py-6 text-lg mt-2 max-xl:text-base"
       >
         {t('Post.idea')}
       </Button>
@@ -199,10 +197,6 @@ export const MemexMenu = () => {
           onClick={() => window.open(socialLink.tg)}
         />
       </div>
-
-      {/* <div className="xl:hidden">
-        <IdeaFloatButton />
-      </div> */}
     </div>
   )
 }

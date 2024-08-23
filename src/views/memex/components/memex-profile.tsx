@@ -118,6 +118,7 @@ const MemexProfile = () => {
             {isOtherUser ? (
               <Button
                 variant={'purple'}
+                shadow={'none'}
                 className="flex items-center space-x-2"
                 disabled={isFollowing || isUnfollowing}
                 onClick={() =>
@@ -135,6 +136,7 @@ const MemexProfile = () => {
               <ProfileForm>
                 <Button
                   variant={'purple'}
+                  shadow={'none'}
                   className="flex items-center space-x-2"
                 >
                   <IoSettingsOutline size={18} />
@@ -145,13 +147,13 @@ const MemexProfile = () => {
 
             <Popover>
               <PopoverTrigger>
-                <IoMdMore size={25} className="mt-2 cursor-pointer" />
+                <IoMdMore size={25} className="cursor-pointer" />
               </PopoverTrigger>
               <PopoverContent
                 side="left"
                 sideOffset={10}
                 align="start"
-                className="flex items-center gap-2 mt-10 w-52 rounded-md shadow-md bg-gray-50 text-black p-2 cursor-pointer hover:bg-zinc-100 text-sm"
+                className="flex items-center gap-2 mt-10 w-52 rounded-md shadow-md shadow-zinc-300 bg-gray-50 text-black p-2 cursor-pointer hover:bg-zinc-100 text-sm border border-zinc-400"
                 onClick={() => copy(userInfo?.wallet_address ?? '')}
               >
                 <IoCopyOutline size={17} />

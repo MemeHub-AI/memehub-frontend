@@ -19,9 +19,6 @@ export const useAllTrades = (disabled = false) => {
   )
 
   const onUpdate = ({ data }: TokenOnEvents['update']) => {
-    // console.log('trades data: ', data)
-
-    // TODO: fix type
     if (data.type === 'all-trades') setAllTrades(data.data)
     if (data.type === 'all-coin-created') setCoinCreate(data.data)
   }
