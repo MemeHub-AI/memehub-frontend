@@ -14,7 +14,7 @@ const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
 
   const ShakeCard = useMemo(
     () => () => {
-      console.log('create:', create)
+      // console.log('create:', create)
 
       return (
         <div
