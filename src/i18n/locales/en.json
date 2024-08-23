@@ -719,5 +719,6 @@
   "reward.desc3": "Reward received",
   "there.noting": "There's nothing here.",
   "goto.burn": "Go to burn",
-  "like": "Love"
+  "like": "Love",
+  "alread-failed": "Already failed"
 }

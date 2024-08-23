@@ -1,13 +1,15 @@
-import { useWriteContract } from 'wagmi'
+import { useAccount, useBalance, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { parseEther, type Address } from 'viem'
 import { BigNumber } from 'bignumber.js'
+import { formatEther } from 'viem'
 
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
+import { BI_ZERO } from '@/constants/number'
 
 export const useIdeaLike = (
   addr: string | null | undefined,
@@ -16,7 +18,13 @@ export const useIdeaLike = (
   onFillay?: () => void
 ) => {
   const { t } = useTranslation()
-  const { checkForChain } = useCheckAccount()
+  const { address } = useAccount()
+  const { data: { value = BI_ZERO } = {} } = useBalance({
+    address,
+    chainId,
+  })
+  const balance = formatEther(value)
+  const { checkForChain, checkForConnect } = useCheckAccount()
 
   const {
     data: hash,
@@ -46,7 +54,12 @@ export const useIdeaLike = (
   })
 
   const like = async (value: string) => {
+    if (!checkForConnect()) return
     if (!(await checkForChain(chainId))) return
+    if (BigNumber(balance.toString()).lt(value)) {
+      CONTRACT_ERR.balanceInsufficient()
+      return
+    }
     if (!addr || !memexIdoAbiMap[version!]) {
       CONTRACT_ERR.configNotFound()
       return

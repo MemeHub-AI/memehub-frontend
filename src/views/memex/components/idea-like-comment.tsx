@@ -4,9 +4,6 @@ import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PiShareFat } from 'react-icons/pi'
-import { BigNumber } from 'bignumber.js'
-import { formatEther } from 'viem'
-import { useAccount, useBalance } from 'wagmi'
 
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
@@ -21,8 +18,6 @@ import { getIdeaStatus } from '@/utils/memex/idea'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { memexIdeaConfig } from '@/config/memex/idea'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { BI_ZERO } from '@/constants/number'
-import { CONTRACT_ERR } from '@/errors/contract'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
 import { IdeaHeartButton } from './idea-heart-button'
@@ -55,17 +50,12 @@ export const IdeaLikeComment = ({
       ideaInfo.refetchInfo()
     }
   )
-  const { isEnded } = useMemo(
+  const { isFailed } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
   )
   const { copy } = useClipboard()
-  const { address } = useAccount()
-  const { data: { value = BI_ZERO } = {} } = useBalance({
-    address,
-    chainId,
-  })
-  const balance = formatEther(value)
+
   const {
     isLiked,
     likeValue,
@@ -76,17 +66,8 @@ export const IdeaLikeComment = ({
   } = ideaInfo
 
   const onOpenLike = () => {
-    if (isEnded) return toast.error(t('alread-ended'))
-
+    if (isFailed) return toast.error(t('alread-failed'))
     setLikeOpen(true)
-  }
-
-  const onLike = () => {
-    if (BigNumber(balance.toString()).lt(likeValue)) {
-      CONTRACT_ERR.balanceInsufficient()
-      return
-    }
-    like(likeValue)
   }
 
   return (
@@ -133,7 +114,7 @@ export const IdeaLikeComment = ({
             shadow="none"
             size="sm"
             disabled={isLiking}
-            onClick={onLike}
+            onClick={() => like(likeValue)}
           >
             {isLiking ? t('confirming') : t('confirm')}
           </Button>
