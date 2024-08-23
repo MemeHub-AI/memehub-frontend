@@ -94,6 +94,7 @@ export const useCreateTokenForm = () => {
       [formFields.poster]: [],
       [formFields.coinType]: TokenType.Normal,
       [formFields.marketing]: [],
+      buyAmount: '',
     },
   })
   const { chain } = useChainInfo(form.getValues(formFields.chainName))
@@ -103,7 +104,6 @@ export const useCreateTokenForm = () => {
   const deployResults = useDeploy(form.getValues('chainName'))
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log('submit', values)
     if (!(await form.trigger())) return
 
     // TODO: Modified after having new library

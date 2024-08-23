@@ -2,23 +2,25 @@ import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 
-import {
-  Dialog,
-  DialogClose,
-  DialogDescription,
-  DialogTitle,
-} from '@/components/ui/dialog'
+import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { FormField } from '@/components/ui/form'
 
-export const BuyDialogField = ({ ...props }: ComponentProps<typeof Dialog>) => {
+export const BuyDialogField = ({
+  onOpenChange,
+  ...props
+}: ComponentProps<typeof Dialog>) => {
   const { t } = useTranslation()
   const { buyAmoutMax, reserveSymbol, form, onSubmit } = useCreateTokenContext()
 
   return (
     <Dialog
+      onOpenChange={(value) => {
+        onOpenChange?.(value)
+        if (!value) form.setValue('buyAmount', '')
+      }}
       {...props}
       contentProps={{
         className: 'flex flex-col justify-center items-center',
@@ -58,11 +60,15 @@ export const BuyDialogField = ({ ...props }: ComponentProps<typeof Dialog>) => {
         )}
       />
 
-      <DialogClose>
-        <Button className="w-48" onClick={() => form.handleSubmit(onSubmit)}>
-          {t('confirm')}
-        </Button>
-      </DialogClose>
+      <Button
+        className="w-48"
+        onClick={() => {
+          form.handleSubmit(onSubmit)()
+          onOpenChange?.(false)
+        }}
+      >
+        {t('confirm')}
+      </Button>
     </Dialog>
   )
 }

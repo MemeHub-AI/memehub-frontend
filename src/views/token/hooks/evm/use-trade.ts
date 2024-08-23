@@ -4,7 +4,7 @@ import { BigNumber } from 'bignumber.js'
 
 import { CONTRACT_ERR } from '@/errors/contract'
 import { getDeadline, subSlippage } from '@/utils/contract'
-import { useInvite } from '../use-invite'
+import { useInvite } from '@/hooks/use-invite'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeAmount } from './use-trade-amount'

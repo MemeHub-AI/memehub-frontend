@@ -151,7 +151,7 @@ export const PosterField = () => {
                       {(field.value as string[])?.map((item, i) => {
                         return (
                           <div
-                            key={item}
+                            key={i}
                             className={cn(
                               'flex-shrink-0 rounded-md overflow-hidden cursor-pointer',
                               i < 2
@@ -203,7 +203,7 @@ export const PosterField = () => {
               (item, i) => {
                 return (
                   <div
-                    key={item}
+                    key={i}
                     className={cn(
                       'w-[10px] h-[10px] mx-2 rounded-full cursor-pointer',
                       i === index ? 'bg-black' : 'bg-gray-300'

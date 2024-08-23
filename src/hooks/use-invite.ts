@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { Address, zeroAddress } from 'viem'
 
 import { inviteApi } from '@/api/invite'
-import { useTokenQuery } from './use-token-query'
+import { useTokenQuery } from '../views/token/hooks/use-token-query'
 import { useUserStore } from '@/stores/use-user-store'
 
 export const useInvite = () => {

@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { formatEther } from 'viem'
+import { formatEther, parseEther } from 'viem'
 import {
   useAccount,
   useBalance,
@@ -15,6 +15,11 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { getDeployLogsAddr, getEvmAirdropParams } from '@/utils/contract'
 import { DeployFormParams } from './use-deploy'
 import { useTokenConfig } from '@/hooks/use-token-config'
+import { useInvite } from '@/hooks/use-invite'
+
+interface EvmDeployParams {
+  tokenId: string
+}
 
 export const useEvmDeploy = (chainName: string) => {
   const { address, chainId = 0 } = useAccount()
@@ -25,15 +30,19 @@ export const useEvmDeploy = (chainName: string) => {
     address: bcAddress!,
     chainId,
   } as const
+  const { getReferrals } = useInvite()
 
   const { data: deployFee = BI_ZERO } = useReadContract({
     ...bcConfig,
     functionName: 'creationFee_',
     query: { enabled: !!bcAddress },
   })
-
-  // TODO: should dynamic
-  const buyAmoutMax = 1.2
+  const { data: maxBuy_ = BI_ZERO } = useReadContract({
+    ...bcConfig,
+    functionName: 'maxBuy_',
+    query: { enabled: !!bcAddress },
+  })
+  const buyAmoutMax = formatEther(maxBuy_)
 
   const {
     data: hash,
@@ -80,17 +89,23 @@ export const useEvmDeploy = (chainName: string) => {
     tokenId,
     marketing,
     buyAmount,
-  }: DeployFormParams & { tokenId: string }) => {
+  }: DeployFormParams & EvmDeployParams) => {
     if (!checkForDeploy()) return
     const airdropParams = getEvmAirdropParams(configValue!, marketing)
     const totalDeployFee = BigNumber(deployFee.toString())
-      .plus(buyAmount)
+      .plus(parseEther(buyAmount).toString())
       .toFixed()
 
     writeContract({
       ...bcConfig,
       functionName: 'createToken',
-      args: [[name, symbol], [BigInt(tokenId)], airdropParams],
+      args: [
+        parseEther(buyAmount),
+        await getReferrals(),
+        [name, symbol],
+        [BigInt(tokenId)],
+        airdropParams,
+      ],
       value: BigInt(totalDeployFee),
     })
   }

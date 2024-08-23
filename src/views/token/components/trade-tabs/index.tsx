@@ -16,7 +16,7 @@ import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TradeButton } from './trade-button'
 import { TradeTabs } from './trade-tabs'
 import { useAirdropStore } from '@/stores/use-airdrop'
-import { useInvite } from '../../hooks/use-invite'
+import { useInvite } from '@/hooks/use-invite'
 
 export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const [tab, setTab] = useState(TradeType.Buy.toString())

@@ -52,7 +52,7 @@ export const useDeploy = (chainName: string) => {
     const { network } = chainsMap[params.chain] ?? {}
     if (!network) return deployErr.networkNotFound()
 
-    setNetwork(network!)
+    setNetwork(network)
     if (network === Network.Evm) {
       return evmDeploy.deploy({ ...params, tokenId: tokenId! })
     }

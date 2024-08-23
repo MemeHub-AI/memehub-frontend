@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { BigNumber } from 'bignumber.js'
-import { z } from 'zod'
 
 import {
   Form,
@@ -26,16 +25,8 @@ import { BuyDialogField } from './buy-dialog'
 
 export const CreateTokenForm = () => {
   const { t } = useTranslation()
-  const {
-    url,
-    form,
-    formFields,
-    onSubmit,
-    isDeploying,
-    deployFee,
-    formSchema,
-    reserveSymbol,
-  } = useCreateTokenContext()
+  const { url, form, formFields, isDeploying, deployFee, reserveSymbol } =
+    useCreateTokenContext()
   const [open, setOpen] = useState(false)
 
   const { loadingInfo, loadingLogo } = useAimemeInfoStore()
@@ -43,7 +34,7 @@ export const CreateTokenForm = () => {
   const isZeroFee = BigNumber(deployFee).isZero()
   const disabled = isDeploying || isZeroFee
 
-  const onCreateClick = () => {
+  const onSubmitBefore = () => {
     if (loadingInfo || loadingLogo) {
       toast.warning(t('onsubmit.createing.warning'))
       return
@@ -60,7 +51,7 @@ export const CreateTokenForm = () => {
   return (
     <Form {...form}>
       <form
-        onSubmit={form?.handleSubmit(onSubmit)}
+        onSubmit={form?.handleSubmit(onSubmitBefore)}
         className="flex flex-col space-y-3 max-sm:w-full max-sm:space-y-2"
       >
         {/* Loog/name/chain/symbol */}
@@ -177,13 +168,7 @@ export const CreateTokenForm = () => {
         {/* Submit button */}
         <div className="flex flex-col items-start space-y-3 max-w-[500px] max-sm:items-center">
           <BuyDialogField open={open} onOpenChange={setOpen} />
-          <Button
-            type="button"
-            variant="default"
-            className="px-10 mt-3"
-            disabled={disabled}
-            onClick={onCreateClick}
-          >
+          <Button variant="default" className="px-10 mt-3" disabled={disabled}>
             {isDeploying ? t('creating') : t('create')}
           </Button>
 
