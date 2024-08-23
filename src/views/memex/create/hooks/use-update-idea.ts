@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { Address, parseEther } from 'viem'
 import { useChainId, useWriteContract } from 'wagmi'
 import { BigNumber } from 'bignumber.js'
+import { useRouter } from 'next/router'
 
 import { memexApi } from '@/api/memex'
 import { REQUEST_ERR } from '@/errors/request'
@@ -29,10 +30,11 @@ export const useUpdateIdea = (
   const { t } = useTranslation()
   const chainId = useChainId()
   const { details } = useIdeaDetails(hashId)
+  const { query } = useRouter()
   const { configValue } = useTokenConfig(details?.chain)
   const { checkForChain } = useCheckAccount()
   const { initialBuyAmount, initialBuyMax } = useIdeaInitialBuy(
-    details?.chain,
+    details?.chain || (query.chain as string),
     details?.ido_address,
     details?.memex_version
   )
