@@ -27,7 +27,7 @@ const schema = z.object({
     .min(memexCreateConfig.minChar)
     .max(memexCreateConfig.maxChar),
   chain: z.string().min(1),
-  pictures: z.array(z.string()).min(1).max(4),
+  pictures: z.array(z.string()).min(1).max(memexCreateConfig.maxImage),
 })
 
 export const useCreateIdea = () => {

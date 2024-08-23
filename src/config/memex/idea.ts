@@ -1,6 +1,7 @@
 export const memexCreateConfig = {
   minChar: 10,
   maxChar: 500,
+  maxImage: 4,
 }
 
 export const memexIdeaConfig = {

@@ -720,5 +720,6 @@
   "there.noting": "There's nothing here.",
   "goto.burn": "Go to burn",
   "like": "Love",
-  "alread-failed": "Already failed"
+  "alread-failed": "Already failed",
+  "memex.create.max-image": "You can upload a maximum of {} images"
 }

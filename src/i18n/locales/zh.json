@@ -710,5 +710,6 @@
   "there.noting": "这里空空如也~",
   "goto.burn": "前往销毁",
   "like": "喜欢",
-  "alread-failed": "已经失败"
+  "alread-failed": "已经失败",
+  "memex.create.max-image": "最多上传{}张图片"
 }

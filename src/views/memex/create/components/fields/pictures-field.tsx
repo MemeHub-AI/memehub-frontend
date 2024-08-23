@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlinePicture } from 'react-icons/ai'
+import { toast } from 'sonner'
 
 import { FormField } from '@/components/ui/form'
 import { Button } from '@/components/ui/button'
@@ -8,6 +9,8 @@ import { ImageUpload } from '@/components/image-upload'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { Label } from '@/components/ui/label'
 import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
+import { memexCreateConfig } from '@/config/memex/idea'
+import { utilLang } from '@/utils/lang'
 
 export const CreateIdeaPicturesField = () => {
   const { t } = useTranslation()
@@ -42,6 +45,14 @@ export const CreateIdeaPicturesField = () => {
             id="memex-upload"
             ref={inputRef}
             onChange={async (e) => {
+              if (field.value.length >= memexCreateConfig.maxImage) {
+                toast.error(
+                  utilLang.replace(t('memex.create.max-image'), [
+                    memexCreateConfig.maxImage,
+                  ])
+                )
+                return
+              }
               const src = await onChangeUpload(e)
               if (src) field.onChange([...field.value, src])
             }}
