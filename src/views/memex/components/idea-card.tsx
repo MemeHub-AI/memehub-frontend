@@ -189,7 +189,9 @@ export const MemexIdeaCard = ({
               {idea?.user_name}
             </span>
             <span>·</span>
-            <span>{dayjs(idea?.created_at).fromNow()}</span>
+            <span className="shrink-0">
+              {dayjs(idea?.created_at).fromNow()}
+            </span>
           </div>
         )}
 
