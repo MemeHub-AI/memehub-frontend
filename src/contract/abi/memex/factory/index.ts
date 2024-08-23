@@ -3,6 +3,7 @@ import { memexFactoryAbi0_1_16 } from './0.1.16'
 import { memexFactoryAbi0_1_17 } from './0.1.17'
 import { memexFactoryAbi0_1_18 } from './0.1.18'
 import { memexFactoryAbi0_1_19 } from './0.1.19'
+import { memexFactoryAbi0_1_20 } from './0.1.20'
 
 export const memexFactoryAbiMap = {
   '0.1.15': memexFactoryAbi0_1_15,
@@ -10,6 +11,7 @@ export const memexFactoryAbiMap = {
   '0.1.17': memexFactoryAbi0_1_17,
   '0.1.18': memexFactoryAbi0_1_18,
   '0.1.19': memexFactoryAbi0_1_19,
+  '0.1.20': memexFactoryAbi0_1_20,
 } as const
 
 export type MemexFactoryVersion = keyof typeof memexFactoryAbiMap

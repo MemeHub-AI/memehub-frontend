@@ -7,6 +7,7 @@ import { tokenAbi0_1_11 } from './0.1.11'
 import { tokenAbi0_1_12 } from './0.1.12'
 import { tokenAbi0_1_14 } from './0.1.14'
 import { tokenAbi0_1_15 } from './0.1.15'
+import { tokenAbi0_1_16 } from './0.1.16'
 
 export const tokenAbiMap = {
   '0.1.2': tokenAbi0_1_2,
@@ -18,6 +19,7 @@ export const tokenAbiMap = {
   '0.1.12': tokenAbi0_1_12,
   '0.1.14': tokenAbi0_1_14,
   '0.1.15': tokenAbi0_1_15,
+  '0.1.16': tokenAbi0_1_16,
 }
 
 export type TokenVersion = keyof typeof tokenAbiMap
