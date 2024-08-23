@@ -7,6 +7,7 @@ import { memexIdoAbi0_1_20 } from './0.1.20'
 import { memexIdoAbi0_1_21 } from './0.1.21'
 import { memexIdoAbi0_1_22 } from './0.1.22'
 import { memexIdoAbi0_1_23 } from './0.1.23'
+import { memexIdoAbi0_1_24 } from './0.1.24'
 
 export const memexIdoAbiMap = {
   '0.1.15': memexIdoAbi0_1_15,
@@ -18,6 +19,7 @@ export const memexIdoAbiMap = {
   '0.1.21': memexIdoAbi0_1_21,
   '0.1.22': memexIdoAbi0_1_22,
   '0.1.23': memexIdoAbi0_1_23,
+  '0.1.24': memexIdoAbi0_1_24,
 }
 
 export type MemexIdoVersion = keyof typeof memexIdoAbiMap
