@@ -345,7 +345,7 @@ export const MemexIdeaCard = ({
             className="mt-1"
             showMoreClass="text-purple-600"
             maxLine={memexIdeaConfig.contentMaxLine}
-            disableClick
+            disableClickShowMore
           >
             {idea?.content}
           </EllipsisText>

@@ -82,7 +82,12 @@ export const TokenDetailsCard = ({
         </div>
       </div>
 
-      <div className="flex justify-between items-center mt-2">
+      <div
+        className={cn(
+          'flex justify-between items-center',
+          hasLinks && !editable && !isZero && 'mt-2'
+        )}
+      >
         {hasLinks ? (
           <TokenSocialLinks
             className="mt-0"

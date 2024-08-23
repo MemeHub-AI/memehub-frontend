@@ -20,8 +20,6 @@ export const GridImages = ({
   previewable = true,
   ...props
 }: Props) => {
-  const [index, setIndex] = useState(-1)
-
   if (isEmpty(urls)) return
 
   return (
@@ -41,7 +39,7 @@ export const GridImages = ({
       {/* <ImagesPreviewDialog images={urls} value={index} onChange={setIndex} /> */}
 
       <PhotoProvider>
-        <div className="foo">
+        <div className="foo" onClick={props.onClick}>
           {urls.map((src, i) => (
             <PhotoView key={i} src={src}>
               <img

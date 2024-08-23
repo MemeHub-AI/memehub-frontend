@@ -8,7 +8,7 @@ import { useSize } from 'ahooks'
 interface Props {
   maxLine?: number
   showMoreClass?: string
-  disableClick?: boolean
+  disableClickShowMore?: boolean
 }
 
 const lineClampBase = 'line-clamp-5'
@@ -18,7 +18,7 @@ export const EllipsisText = ({
   maxLine = 5,
   showMoreClass,
   children,
-  disableClick,
+  disableClickShowMore,
   ...props
 }: ComponentProps<'div'> & Props) => {
   const { t } = useTranslation()
@@ -52,7 +52,7 @@ export const EllipsisText = ({
             showMoreClass
           )}
           onClick={() => {
-            if (disableClick) return
+            if (disableClickShowMore) return
             setLineClampClass((cls) => (isEmpty(cls) ? lineClampBase : ''))
           }}
         >

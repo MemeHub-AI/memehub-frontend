@@ -6,6 +6,7 @@ import { toast } from 'sonner'
 import { PiShareFat } from 'react-icons/pi'
 import { BigNumber } from 'bignumber.js'
 import { formatEther } from 'viem'
+import { useAccount, useBalance } from 'wagmi'
 
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
@@ -20,7 +21,6 @@ import { getIdeaStatus } from '@/utils/memex/idea'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { memexIdeaConfig } from '@/config/memex/idea'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { useAccount, useBalance } from 'wagmi'
 import { BI_ZERO } from '@/constants/number'
 import { CONTRACT_ERR } from '@/errors/contract'
 
@@ -95,6 +95,7 @@ export const IdeaLikeComment = ({
           className: 'flex flex-col items-center',
           showClose: false,
           onClick: (e) => e.stopPropagation(),
+          onInteractOutside: (e) => e.preventDefault(),
         }}
       >
         <DialogTitle>{t('memex.like.confirm-title')}</DialogTitle>
