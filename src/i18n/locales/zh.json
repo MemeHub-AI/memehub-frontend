@@ -707,5 +707,6 @@
   "refunded-initial-buy": "已退款初始购买",
   "copy.wallet.address": "复制钱包地址",
   "reward.desc3": "获得的奖励",
-  "there.noting": "这里空空如也"
+  "there.noting": "这里空空如也",
+  "goto.burn": "前往销毁"
 }

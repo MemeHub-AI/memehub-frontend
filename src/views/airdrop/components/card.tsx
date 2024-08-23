@@ -17,6 +17,7 @@ import { IdTag } from '@/components/id-tag'
 import { useAirdrop } from '@/views/token/hooks/evm/use-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { useState } from 'react'
 
 interface Props {
   className?: string
@@ -44,6 +45,7 @@ export const AirdropCard = ({
   const { query, pathname, ...router } = useRouter()
   const { hideClaimed } = useAirdropContext()
   const { chainId, chainName } = useChainInfo(chain)
+  const [isExpired, setIsExpired] = useState(false)
 
   const { isKol, hasCommunity, kolInfo, communityInfo } = useUserStore()
   const {
@@ -83,6 +85,14 @@ export const AirdropCard = ({
     })
   }
 
+  const renderButtonText = () => {
+    if (isClaimed) return t('airdrop.claimed')
+    if (isBurned) return t('airdrop.burned')
+    if (isExpired) return t('goto.burn')
+
+    return t('claim.airdrop')
+  }
+
   if (hideClaimed && isClaimed) return
 
   return (
@@ -95,7 +105,11 @@ export const AirdropCard = ({
         <span className="font-bold truncate">
           {airdrop?.symbol}({airdrop?.name})
         </span>
-        <Countdown createdAt={createAt} duration={durationSeconds} />
+        <Countdown
+          createdAt={createAt}
+          duration={durationSeconds}
+          onExpired={setIsExpired}
+        />
       </div>
       <div className="mt-3 flex justify-between space-x-4">
         <div>
@@ -134,11 +148,7 @@ export const AirdropCard = ({
             disabled={disabled}
             onClick={onClaim}
           >
-            {isClaimed
-              ? t('airdrop.claimed')
-              : isBurned
-              ? t('airdrop.burned')
-              : t('claim.airdrop')}
+            {renderButtonText()}
           </Button>
         </div>
         <Img src={image_url} className="w-40 h-40 max-sm:!w-[38%] " />

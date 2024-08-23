@@ -717,5 +717,6 @@
   "refunded-initial-buy": "Initial buy refunded",
   "copy.wallet.address": "Copy wallet address",
   "reward.desc3": "Reward received",
-  "there.noting": "There's nothing here."
+  "there.noting": "There's nothing here.",
+  "goto.burn": "Go to burn"
 }

@@ -58,7 +58,7 @@ export const LangSelect = ({ className }: ComponentProps<'div'>) => {
               <AccordionContent
                 key={i}
                 onClick={() => setLang(code)}
-                className="pl-2"
+                className="pl-2.5"
               >
                 <span
                   className={cn(
