@@ -41,7 +41,8 @@ const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
                 ? create.name.slice(0, 15)
                 : create.name.slice(0, 15) + '...'}
             </span>{' '}
-            {t('was.created')}
+            {/* {t('was.created')} */}
+            was created on {create.coin_type === 6 ? 'Memex' : ''}
           </span>
         </div>
       )

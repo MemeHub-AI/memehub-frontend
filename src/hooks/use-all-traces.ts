@@ -19,7 +19,7 @@ export const useAllTrades = (disabled = false) => {
   )
 
   const onUpdate = ({ data }: TokenOnEvents['update']) => {
-    console.log('trades data: ', data)
+    // console.log('trades data: ', data)
 
     // TODO: fix type
     if (data.type === 'all-trades') setAllTrades(data.data)
