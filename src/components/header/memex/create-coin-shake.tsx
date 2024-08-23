@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { TokenCreate } from '@/views/token/hooks/use-token-ws/types'
 import { useTranslation } from 'react-i18next'
 import { Routes } from '@/routes'
-import { fmt } from '@/utils/fmt'
+import { joinPaths } from '@/utils'
 
 const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
   const { trade: create, className, textClass, imageClass, color } = props
@@ -14,8 +14,6 @@ const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
 
   const ShakeCard = useMemo(
     () => () => {
-      // console.log('create:', create)
-
       return (
         <div
           style={{ backgroundColor: color }}
@@ -33,7 +31,7 @@ const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
               className="hover:underline hover:underline-offset-1 hover:cursor-pointer"
               onClick={() =>
                 push(
-                  fmt.toHref(Routes.Main, create.chain, create.contract_address)
+                  joinPaths(Routes.Main, create.chain, create.contract_address)
                 )
               }
             >

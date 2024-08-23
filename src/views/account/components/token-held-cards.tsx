@@ -10,6 +10,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Routes } from '@/routes'
 import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { fmt } from '@/utils/fmt'
+import { joinPaths } from '@/utils'
 
 interface Props {
   cards: UserCoinsHeld[]
@@ -60,10 +61,9 @@ const HeldCard = ({ c }: { c: UserCoinsHeld }) => {
     <Card
       padding="md"
       hover="bg"
-      onClick={() => {
-        const href = fmt.toHref(Routes.Main, c.chain, c.contract_address)
-        router.push(href)
-      }}
+      onClick={() =>
+        router.push(joinPaths(Routes.Main, c.chain, c.contract_address))
+      }
       className="max-sm:mb-2"
     >
       <div className="flex items-center">

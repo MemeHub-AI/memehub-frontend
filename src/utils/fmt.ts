@@ -29,7 +29,7 @@ export const fmt = {
 
     return `${prefix}${separator}${suffix}`
   },
-  toAnchor(value?: string | number) {
+  toAnchor: (value?: string | number) => {
     const val = (value?.toString() || '').trim()
 
     if (isEmpty(val)) return '#'
@@ -47,16 +47,16 @@ export const fmt = {
     const percent = BigNumber(value).multipliedBy(100).toFixed(fixed)
     return percent + label
   },
-  toHref(...args: (string | number)[]) {
-    // Adapt ends with '/' for the first arg.
-    const firstStr = String(first(args) || '')
-    if (firstStr.endsWith('/')) {
-      args.splice(0, 1, firstStr.slice(0, -1))
-    }
+  joinPaths: (...args: (string | number)[]) => {
+    const firstHasSlash = first(args)?.toString().startsWith('/')
+    const path = args.map((a) => String(a).replace(/^\/|\/$/g, '')).join('/')
 
-    return args.join('/')
+    return firstHasSlash ? `/${path}` : path
   },
-  decimals(value?: number | string | BigNumber, options?: DecimalsOptions) {
+  decimals: (
+    value?: number | string | BigNumber,
+    options?: DecimalsOptions
+  ) => {
     const { fixed = 2, round = false } = options ?? {}
     if (!value) return '0'
 
@@ -84,7 +84,7 @@ export const fmt = {
       return BigNumber(value).toFixed(roundMode)
     }
   },
-  replaceHTMLCode(content: string) {
+  replaceHTMLCode: (content: string) => {
     const reg = /&lt;|&gt;|&amp;|&quot;|&#39;|&nbsp;/g
     const map = {
       '&lt;': '<',
@@ -99,7 +99,7 @@ export const fmt = {
       return map[match] as string
     })
   },
-  withChain(value: string | undefined) {
+  withChain: (value: string | undefined) => {
     if (!value) return ''
 
     const chain = t('chain')
@@ -107,7 +107,7 @@ export const fmt = {
 
     return `${value} ${chain}`
   },
-  withCommunity(str: string | undefined) {
+  withCommunity: (str: string | undefined) => {
     if (!str) return ''
 
     const lower = str.toLowerCase()

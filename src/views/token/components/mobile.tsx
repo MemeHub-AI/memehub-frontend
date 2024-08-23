@@ -22,7 +22,7 @@ import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 import { useTokenContext } from '@/contexts/token'
 import { useUserStore } from '@/stores/use-user-store'
 import { Routes } from '@/routes'
-import { fmt } from '@/utils/fmt'
+import { joinPaths } from '@/utils'
 
 const enum TabName {
   Trade = '0',
@@ -71,7 +71,7 @@ export const TokenMobile = () => {
       className="w-full min-h-max flex flex-col justify-between"
       onValueChange={(tab) => {
         replace({
-          pathname: fmt.toHref(
+          pathname: joinPaths(
             Routes.Main,
             query.chain as string,
             query.address as string

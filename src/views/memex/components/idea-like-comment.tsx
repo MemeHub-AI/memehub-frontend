@@ -23,6 +23,8 @@ import { memexIdeaConfig } from '@/config/memex/idea'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { BI_ZERO } from '@/constants/number'
 import { CONTRACT_ERR } from '@/errors/contract'
+import { Routes } from '@/routes'
+import { joinPaths } from '@/utils'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -223,7 +225,13 @@ export const IdeaLikeComment = ({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              copy(location.href, { successTip: t('link-copy-success') })
+              if (!idea?.hash) {
+                toast.error(t('copy-failed'))
+                return
+              }
+              copy(joinPaths(location.origin, Routes.MemexIdea, idea.hash), {
+                successTip: t('link-copy-success'),
+              })
             }}
           >
             <PiShareFat size={20} />

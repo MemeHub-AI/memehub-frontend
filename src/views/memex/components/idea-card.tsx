@@ -16,7 +16,6 @@ import { TokenDetailsCard } from './token-detail-card'
 import { MemexIdeaItem } from '@/api/memex/types'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
-import { fmt } from '@/utils/fmt'
 import { EllipsisText } from '@/components/ellipsis-text'
 import { GridImages } from '@/components/grid-images'
 import { IdeaLikeComment } from './idea-like-comment'
@@ -29,6 +28,7 @@ import { qs } from '@/hooks/use-fetch'
 import { memexIdeaConfig } from '@/config/memex/idea'
 import { useIdeaInitialBuy } from '../create/details/hooks/use-idea-initial-buy'
 import { useResponsive } from '@/hooks/use-responsive'
+import { joinPaths } from '@/utils'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -147,10 +147,10 @@ export const MemexIdeaCard = ({
 
     if (!isLaptop) {
       return router.push(
-        fmt.toHref(Routes.MemexDetailsProfile, idea.user_address)
+        joinPaths(Routes.MemexDetailsProfile, idea.user_address)
       )
     }
-    router.push(fmt.toHref(Routes.Account, idea?.user_address))
+    router.push(joinPaths(Routes.Account, idea?.user_address))
   }
 
   return (
@@ -162,7 +162,7 @@ export const MemexIdeaCard = ({
       )}
       onClick={() => {
         if (!idea?.hash || isDetails) return
-        router.push(fmt.toHref(Routes.MemexIdea, idea?.hash))
+        router.push(joinPaths(Routes.MemexIdea, idea?.hash))
       }}
     >
       {isSuccess && !isFailedWaiting && (
@@ -358,7 +358,7 @@ export const MemexIdeaCard = ({
             tokenAddr={tokenAddr}
             onClick={() => {
               if (tokenAddr === zeroAddress) return
-              router.push(fmt.toHref(Routes.Main, chainName, tokenAddr))
+              router.push(joinPaths(Routes.Main, chainName, tokenAddr))
             }}
           />
         )}

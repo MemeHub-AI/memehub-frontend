@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
 import { Routes } from '@/routes'
+import { joinPaths } from '@/utils'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserFollow
@@ -30,8 +31,7 @@ export const FollowCard = ({ card, onClick }: Props) => {
       hover="bg"
       shadow="none"
       onClick={(e) => {
-        const href = fmt.toHref(Routes.Account, card.user.wallet_address)
-        router.push(href)
+        router.push(joinPaths(Routes.Account, card.user.wallet_address))
         onClick?.(e)
       }}
     >
