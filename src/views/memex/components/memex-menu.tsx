@@ -147,7 +147,7 @@ export const MemexMenu = () => {
           <div
             className={cn(
               'flex items-center text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
-              'max-xl:text-2xl max-xl:justify-center'
+              'max-xl:text-2xl'
             )}
           >
             <span className="xl:text-2xl xl:mr-2 max-xl:text-lg">
