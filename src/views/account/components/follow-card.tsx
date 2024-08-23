@@ -12,6 +12,7 @@ import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
+import { useIsMemex } from '@/hooks/use-is-memex'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserFollow
@@ -21,6 +22,7 @@ export const FollowCard = ({ card, onClick }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { userInfo, refetchFollow, isOtherUser } = useAccountContext()
+  const { isMemex } = useIsMemex()
   const { follow, unfollow } = useUser({
     onFollowSuccess: refetchFollow,
   })
@@ -31,7 +33,13 @@ export const FollowCard = ({ card, onClick }: Props) => {
       hover="bg"
       shadow="none"
       onClick={(e) => {
-        router.push(joinPaths(Routes.Account, card.user.wallet_address))
+        if (!isMemex) {
+          router.push(joinPaths(Routes.Account, card.user.wallet_address))
+        } else {
+          router.push(
+            joinPaths(Routes.MemexDetailsProfile, card.user.wallet_address)
+          )
+        }
         onClick?.(e)
       }}
     >

@@ -28,7 +28,7 @@ export const IdeaHeartButton = ({ likedCount, isLiked, onOpenLike }: Props) => {
     >
       {isLiked ? (
         <div className="flex items-center space-x-1 animate-flash-no-infinite">
-          <HeartFilledIcon className="w-5 h-5 text-red-500" />
+          <HeartFilledIcon className="w-5 h-5 text-red-500 max-sm:w-4 max-sm:h-4" />
           <span>{likedCount}</span>
         </div>
       ) : (
