@@ -27,8 +27,8 @@ export const useCreateIdeaCleanup = ({
 
   const onRouteChangeStart = (pathname: string) => {
     if (
-      pathname === Routes.MemexCreate ||
-      pathname === Routes.MemexCreateDetails
+      pathname.includes(Routes.MemexCreate) ||
+      pathname.includes(Routes.MemexCreateDetails)
     ) {
       return
     }
