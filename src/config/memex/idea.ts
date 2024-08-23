@@ -9,3 +9,12 @@ export const memexIdeaConfig = {
   commentMaxImg: 2,
   likeUsdtFee: 5,
 }
+
+export const memexIntroConfig = {
+  createFee: '10 USDT',
+  durationHours: '48h',
+  totalLike: 100,
+  likeFee: '5 USDT',
+  creatorReward: '1%',
+  likerReward: '0.5%',
+}
