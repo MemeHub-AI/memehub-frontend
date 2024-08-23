@@ -1,16 +1,27 @@
 import SearchInput from '@/components/search-input'
 import { useAllTrades } from '@/hooks/use-all-traces'
-import { utilColor } from '@/utils/color'
 import { TokenCreate, TokenTrade } from '@/views/token/hooks/use-token-ws/types'
 import { memo, useEffect, useState } from 'react'
 import TradeShake from './trade-shake'
 import CreateCoinShake from './create-coin-shake'
 
 const MemexHeaderMiddle = () => {
-  const colors = utilColor.randomCreate()
+  // const colors = utilColor.randomCreate()
   const { allTrades, coinCreate } = useAllTrades()
   const [trade, setTrade] = useState<TokenTrade>()
   const [create, setCreate] = useState<TokenCreate>()
+
+  const colors = [
+    '#9390b8',
+    '#a0968c',
+    '#b587d6',
+    '#8cc386',
+    '#b4351f',
+    '#b8a78c',
+    '#80ade5',
+  ]
+
+  const randomIdx = Math.floor(Math.random() * colors.length)
 
   useEffect(() => {
     // console.log('coinCreate: ', coinCreate)
@@ -27,7 +38,7 @@ const MemexHeaderMiddle = () => {
   return (
     <div className="flex justify-between flex-1 mr-4">
       <div className="flex items-center space-x-2">
-        {trade && <TradeShake color={colors[1]} trade={trade} />}
+        {trade && <TradeShake color={colors[randomIdx]} trade={trade} />}
         {create && (
           <CreateCoinShake
             color="#93c5fd"

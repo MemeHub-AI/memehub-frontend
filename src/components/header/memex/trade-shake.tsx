@@ -50,7 +50,7 @@ const TradeShake = (props: ShakeCardProps<TokenTrade>) => {
           </span>
           <img
             src={trade.image_url}
-            className={cn('w-5 h-5 rounded-full', imageClass)}
+            className={cn('w-5 h-5 rounded-full object-cover', imageClass)}
           />
           <span
             className={cn(

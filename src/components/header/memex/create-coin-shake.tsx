@@ -24,7 +24,7 @@ const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
         >
           <img
             src={create.image_url}
-            className={cn('w-5 h-5 rounded-full', imageClass)}
+            className={cn('w-5 h-5 rounded-full object-cover', imageClass)}
           />
           <span className={cn('text-nowrap text-sm', textClass)}>
             <span
@@ -39,7 +39,8 @@ const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
                 ? create.name.slice(0, 15)
                 : create.name.slice(0, 15) + '...'}
             </span>{' '}
-            {t('was.created')}
+            {/* {t('was.created')} */}
+            was created {create.coin_type === 6 ? 'on Memex' : ''}
           </span>
         </div>
       )

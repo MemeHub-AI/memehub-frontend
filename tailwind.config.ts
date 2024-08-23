@@ -143,6 +143,7 @@ const config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
         flash: 'flash 1s ease-out infinite',
+        'flash-no-infinite': 'flash 1s ease-out',
         'hori-shake': 'horizontal_shake 0.2s 3',
       },
     },

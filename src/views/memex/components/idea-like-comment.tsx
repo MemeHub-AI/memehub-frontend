@@ -1,5 +1,5 @@
 import { useMemo, useState, type ComponentProps } from 'react'
-import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
+import { HeartFilledIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -25,6 +25,7 @@ import { BI_ZERO } from '@/constants/number'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
+import { IdeaHeartButton } from './idea-heart-button'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -207,15 +208,11 @@ export const IdeaLikeComment = ({
             className="flex items-center space-x-1 text-sm cursor-pointer"
             onClick={(e) => e.stopPropagation()}
           >
-            {isLiked ? (
-              <HeartFilledIcon
-                className="w-5 h-5 text-red-500"
-                onClick={() => isLiked && toast.info(t('already-liked'))}
-              />
-            ) : (
-              <HeartIcon className="w-5 h-5" onClick={onOpenLike} />
-            )}
-            <span>{likedCount}</span>
+            <IdeaHeartButton
+              likedCount={likedCount}
+              isLiked={isLiked}
+              onOpenLike={onOpenLike}
+            />
           </div>
           <div className="flex items-center space-x-1 text-sm cursor-pointer">
             <GoComment className="w-5 h-5" />

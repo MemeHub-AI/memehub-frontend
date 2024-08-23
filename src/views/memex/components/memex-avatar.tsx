@@ -10,8 +10,6 @@ import { UseMutateAsyncFunction } from '@tanstack/react-query'
 import { isEmpty } from 'lodash'
 import { useRef, useState } from 'react'
 import { AiOutlineEdit } from 'react-icons/ai'
-import { PhotoProvider, PhotoView } from 'react-photo-view'
-
 const MemexAvatar: React.FC<{
   userInfo: UserInfoRes | undefined
   isOtherUser: boolean
