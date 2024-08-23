@@ -55,7 +55,11 @@ export const LangSelect = ({ className }: ComponentProps<'div'>) => {
           <AccordionItem value="item-1">
             <AccordionTrigger>🌍 {t('Languages')}</AccordionTrigger>
             {langs.map(([code, { name }], i) => (
-              <AccordionContent key={i} onClick={() => setLang(code)}>
+              <AccordionContent
+                key={i}
+                onClick={() => setLang(code)}
+                className="pl-2"
+              >
                 <span
                   className={cn(
                     i18n.language === code && 'text-blue-500 font-bold'

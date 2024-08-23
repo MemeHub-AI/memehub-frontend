@@ -22,9 +22,11 @@ export const useNftCheck = (chainId: number) => {
     chainId,
     functionName: 'userOfId',
     args: [address!],
-    query: { enabled: !!address && !!kolNft && !!chainId },
+    query: {
+      enabled: !!address && !!kolNft && !!chainId,
+    },
   })
-  const isKol = !BigNumber(kolId.toString()).isZero()
+  const isKol = kolId !== BI_ZERO
 
   const { data: communityId = BI_ZERO } = useReadContract({
     abi: exchangeNftAbi,
@@ -32,13 +34,17 @@ export const useNftCheck = (chainId: number) => {
     chainId,
     functionName: 'isClaimedOfId',
     args: [address!, BigInt(COMMUNITY_NFT_IDX)],
-    query: { enabled: !!address && !!exchangeNft && !!chainId },
+    // query: { enabled: !!address && !!exchangeNft && !!chainId },
+    query: { enabled: false }, // TODO: remove it if has community airdrop
   })
-  const cId = BigNumber(communityId.toString())
-  const hasCommunity = cId.gt(0)
+  const hasCommunity = communityId !== BI_ZERO
 
   const { data: community } = useQuery({
-    queryKey: [allianceApi.getCommunityDetail.name, cId.toString(), address],
+    queryKey: [
+      allianceApi.getCommunityDetail.name,
+      communityId.toString(),
+      address,
+    ],
     queryFn: () => {
       return allianceApi.getCommunityDetail({
         identity: parseHash(communityId),
@@ -46,7 +52,8 @@ export const useNftCheck = (chainId: number) => {
     },
     select: ({ data }) => data,
     retry: (count) => count < 3,
-    enabled: cId.gt(0) && !!address,
+    // enabled: hasCommunity && !!address,
+    enabled: false, // TODO: remove it if has community airdrop
   })
 
   return {

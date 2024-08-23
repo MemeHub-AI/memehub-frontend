@@ -20,7 +20,7 @@ import { MemexIdeaItem } from '@/api/memex/types'
 export const CreateIdeaPage = () => {
   const createIdea = useCreateIdea()
   const { form, onSubmit } = createIdea
-  const { ideaDetails } = useMemexStore()
+  const { ideaDetails, setIdea } = useMemexStore()
   const { query, ...router } = useRouter()
 
   useCreateIdeaCleanup()
@@ -49,12 +49,15 @@ export const CreateIdeaPage = () => {
                   className="pb-0"
                   details={ideaDetails as unknown as MemexIdeaItem}
                   editable={true}
-                  onClick={() =>
+                  onClick={() => {
+                    const values = form.getValues()
+
+                    setIdea({ ...values, image_urls: values.pictures })
                     router.push({
                       pathname: Routes.MemexCreateDetails,
-                      query,
+                      query: { chain: values.chain, ...query },
                     })
-                  }
+                  }}
                 />
               )}
               <CreateIdeaMessages />

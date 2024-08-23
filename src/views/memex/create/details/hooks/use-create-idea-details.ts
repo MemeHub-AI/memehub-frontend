@@ -4,14 +4,15 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { t } from 'i18next'
+import { isEqual } from 'lodash'
+import { BigNumber } from 'bignumber.js'
 
 import { useMemexStore } from '@/stores/use-memex'
 import { marketingSchema } from '@/components/marketing-field'
 import { MemexCreateReq } from '@/api/memex/types'
 import { useUpdateIdea } from '../../hooks/use-update-idea'
 import { useEditIdeaAutofill } from '../../hooks/use-edit-idea-autofill'
-import { isEqual } from 'lodash'
-import { Marketing } from '@/api/token/types'
+import { useIdeaInitialBuy } from './use-idea-initial-buy'
 
 const withNonNull = (value: string) => value + t('memex.non-null')
 
@@ -24,6 +25,7 @@ export const createDetailSchema = z
     x: z.string().optional().nullable(),
     tg: z.string().optional().nullable(),
     website: z.string().optional().nullable(),
+    initialBuyAmount: z.string().optional(),
   })
   .merge(marketingSchema)
 
@@ -43,9 +45,16 @@ export const useCreateIdeaDetails = () => {
       x: '',
       tg: '',
       website: '',
+      initialBuyAmount: '',
     },
   })
-  const { isUpdating, update, updateWithContract } = useUpdateIdea(hash, {
+  const {
+    initialBuyAmount,
+    initialBuyMax,
+    isUpdating,
+    update,
+    updateWithContract,
+  } = useUpdateIdea(hash, {
     onContractSuccess: router.back,
   })
 
@@ -55,7 +64,11 @@ export const useCreateIdeaDetails = () => {
     airdrop_marketing,
   }: MemexCreateReq) => {
     return !isEqual(
-      { name, symbol, airdrop_marketing },
+      {
+        name,
+        symbol,
+        airdrop_marketing,
+      },
       {
         name: ideaDetails?.name,
         symbol: ideaDetails?.symbol,
@@ -74,25 +87,36 @@ export const useCreateIdeaDetails = () => {
       description: values.desc,
       airdrop_marketing: values.marketing,
     } as MemexCreateReq
+    const inputBuy = values.initialBuyAmount || '0'
 
     if (values.x) params.twitter_url = values.x
     if (values.tg) params.telegram_url = values.tg
     if (values.website) params.website_url = values.website
 
+    // Update token info
     if (hash) {
-      isContractUpdate(params)
-        ? updateWithContract({ hash, ...params })
+      isContractUpdate(params) || !BigNumber(inputBuy).eq(initialBuyAmount)
+        ? updateWithContract({ hash, ...params, initialBuyAmount: inputBuy })
         : update({ hash, ...params }).then(router.back)
       return
     }
 
-    setIdeaDetails(params)
+    setIdeaDetails({
+      ...params,
+      initialBuyAmount: inputBuy,
+    })
     router.back()
   }
 
   useEditIdeaAutofill()
 
   useEffect(() => {
+    form.setValue('initialBuyAmount', ideaDetails?.initialBuyAmount || '')
+
+    if (BigNumber(initialBuyAmount).gt(0)) {
+      form.setValue('initialBuyAmount', initialBuyAmount)
+    }
+
     if (!ideaDetails) return
 
     form.setValue('name', ideaDetails?.name || '')
@@ -103,11 +127,12 @@ export const useCreateIdeaDetails = () => {
     form.setValue('x', ideaDetails?.twitter_url)
     form.setValue('tg', ideaDetails?.telegram_url)
     form.setValue('website', ideaDetails?.website_url)
-  }, [ideaDetails])
+  }, [ideaDetails, initialBuyAmount])
 
   return {
     form,
     onSubmit,
     isUpdating,
+    initialBuyMax,
   }
 }

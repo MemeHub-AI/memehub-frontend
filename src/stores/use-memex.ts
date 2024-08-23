@@ -12,7 +12,9 @@ type IdeaOptional = Omit<
   | 'factory_address'
   | 'airdrop_address'
   | 'coin_factory_address'
->
+> & {
+  initialBuyAmount: string
+}
 
 interface MemexStore {
   idea: IdeaRequired | null

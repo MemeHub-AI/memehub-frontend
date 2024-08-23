@@ -27,6 +27,7 @@ import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { qs } from '@/hooks/use-fetch'
 import { memexIdeaConfig } from '@/config/memex/idea'
+import { useIdeaInitialBuy } from '../create/details/hooks/use-idea-initial-buy'
 import { useResponsive } from '@/hooks/use-responsive'
 
 interface Props {
@@ -92,6 +93,15 @@ export const MemexIdeaCard = ({
     return BigNumber(idea?.is_creator ? ownerPercent : userPercent).toFixed(2)
   }, [idea, ideaInfo])
   const { isLaptop } = useResponsive()
+
+  const {
+    initialBuyAmount,
+    canRefundInitial,
+    isRefundedInitial,
+    isRefundingInitial,
+    refundInitialBuy,
+    refetchInitalBuy,
+  } = useIdeaInitialBuy(idea?.chain, idea?.ido_address, idea?.memex_version)
 
   const withDetailsLayout = (children: ReactNode) => {
     if (isDetails) {
@@ -197,7 +207,9 @@ export const MemexIdeaCard = ({
               {idea?.user_name}
             </span>
             <span>·</span>
-            <span>{dayjs(idea?.created_at).fromNow()}</span>
+            <span className="shrink-0">
+              {dayjs(idea?.created_at).fromNow()}
+            </span>
           </div>
         )}
 
@@ -245,6 +257,7 @@ export const MemexIdeaCard = ({
                     onExpired={() => {
                       setIsFailedWaiting(true)
                       refetch()
+                      refetchInitalBuy()
                     }}
                   />
                 </div>
@@ -297,6 +310,32 @@ export const MemexIdeaCard = ({
                 : `${t('refund')} ${likeValue} ${chain?.native.symbol}`}
             </Button>
           )}
+
+          {(isFailed || isFailedWaiting) &&
+            (canRefundInitial || isRefundedInitial) &&
+            idea?.is_creator && (
+              <Button
+                variant="yellow"
+                shadow="none"
+                size="xs"
+                className="py-3 mt-2 rounded-md"
+                disabled={
+                  isRefundingInitial || isRefundedInitial || !canRefundInitial
+                }
+                onClick={(e) => {
+                  e.stopPropagation()
+                  refundInitialBuy()
+                }}
+              >
+                {isRefundedInitial
+                  ? t('refunded-initial-buy')
+                  : isRefundingInitial
+                  ? t('refunding')
+                  : `${t('refund-initial-buy')} ${initialBuyAmount} ${
+                      chain?.native.symbol
+                    }`}
+              </Button>
+            )}
         </div>
 
         {isDetails ? (

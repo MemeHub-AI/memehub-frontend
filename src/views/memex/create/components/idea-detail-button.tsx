@@ -10,7 +10,7 @@ import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 
 export const CreateIdeaDetailButton = () => {
   const { t } = useTranslation()
-  const router = useRouter()
+  const { query, ...router } = useRouter()
   const { form, isCreating } = useCreateIdeaContext()
   const { setIdea } = useMemexStore()
 
@@ -24,7 +24,10 @@ export const CreateIdeaDetailButton = () => {
         const values = form.getValues()
 
         setIdea({ ...values, image_urls: values.pictures })
-        router.push(Routes.MemexCreateDetails)
+        router.push({
+          pathname: Routes.MemexCreateDetails,
+          query: { chain: values.chain },
+        })
       }}
     >
       <IoNewspaperOutline size={20} className="mr-1" />

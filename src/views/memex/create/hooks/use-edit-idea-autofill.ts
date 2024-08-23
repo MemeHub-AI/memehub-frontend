@@ -24,6 +24,7 @@ export const useEditIdeaAutofill = () => {
       telegram_url: details.telegram_url || '',
       website_url: details.website_url || '',
       airdrop_marketing: details.airdrop_marketing || [],
+      initialBuyAmount: '',
     })
   }, [details])
 

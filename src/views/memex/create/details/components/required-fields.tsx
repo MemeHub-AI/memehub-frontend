@@ -26,7 +26,7 @@ export const RequiredFields = () => {
         name="symbol"
         render={({ field }) => (
           <div>
-            <FormLabel className="font-bold">{t('ticker')}</FormLabel>
+            <FormLabel className="font-bold">{t('ticker')}*</FormLabel>
             <div>
               <Input
                 placeholder={t('ticker')}
@@ -45,7 +45,7 @@ export const RequiredFields = () => {
         name="name"
         render={({ field }) => (
           <div>
-            <FormLabel className="font-bold">{t('name')}</FormLabel>
+            <FormLabel className="font-bold">{t('name')}*</FormLabel>
             <div>
               <Input
                 placeholder={t('name')}
@@ -64,7 +64,7 @@ export const RequiredFields = () => {
         name="logo"
         render={({ field }) => (
           <div>
-            <FormLabel className="font-bold">{t('logo')}</FormLabel>
+            <FormLabel className="font-bold">{t('logo')}*</FormLabel>
             <div className="flex items-center space-x-2">
               <Label
                 className="border-2 border-black p-1.5 rounded-md w-fit"
@@ -97,7 +97,7 @@ export const RequiredFields = () => {
         name="desc"
         render={({ field }) => (
           <div>
-            <FormLabel className="font-bold">{t('description')}</FormLabel>
+            <FormLabel className="font-bold">{t('description')}*</FormLabel>
             <div>
               <Textarea
                 placeholder={t('description')}

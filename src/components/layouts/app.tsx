@@ -22,6 +22,7 @@ import { BackToTop } from '@/components/back-to-top'
 import { SignLoginDialog } from '../sign-login-dialog'
 import { useUserId } from '@/hooks/use-user-id'
 import { useIsMemex } from '@/hooks/use-is-memex'
+import { MaintainTips } from '../maintain-tips'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -80,6 +81,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Header />
+      <MaintainTips />
       {children}
       {/* <Footer /> */}
       <Toaster theme="light" richColors />
