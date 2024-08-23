@@ -98,6 +98,7 @@ export const MemexIdeaCard = ({
     isRefundedInitial,
     isRefundingInitial,
     refundInitialBuy,
+    refetchInitalBuy,
   } = useIdeaInitialBuy(idea?.chain, idea?.ido_address, idea?.memex_version)
 
   const withDetailsLayout = (children: ReactNode) => {
@@ -248,6 +249,7 @@ export const MemexIdeaCard = ({
                     onExpired={() => {
                       setIsFailedWaiting(true)
                       refetch()
+                      refetchInitalBuy()
                     }}
                   />
                 </div>
