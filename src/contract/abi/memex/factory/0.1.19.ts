@@ -1,4 +1,4 @@
-export const memexFactoryAbi0_1_18 = [
+export const memexFactoryAbi0_1_19 = [
   {
     inputs: [
       {
@@ -13,6 +13,11 @@ export const memexFactoryAbi0_1_18 = [
   {
     inputs: [],
     name: 'MEMEHUB_FeeInsufficient',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_IllegalAddress',
     type: 'error',
   },
   {
@@ -261,6 +266,37 @@ export const memexFactoryAbi0_1_18 = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'getIdoCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'idoCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'address',
@@ -300,6 +336,19 @@ export const memexFactoryAbi0_1_18 = [
   },
   {
     inputs: [],
+    name: 'isOpen',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'maxBuy',
     outputs: [
       {
@@ -314,6 +363,19 @@ export const memexFactoryAbi0_1_18 = [
   {
     inputs: [],
     name: 'maxCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'maxCountToRemain',
     outputs: [
       {
         internalType: 'uint256',
@@ -477,6 +539,26 @@ export const memexFactoryAbi0_1_18 = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'setIdoCount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'bool',
+        name: '_isOpen',
+        type: 'bool',
+      },
+    ],
+    name: 'setIsOpen',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [
       {
         internalType: 'uint256',
@@ -498,6 +580,19 @@ export const memexFactoryAbi0_1_18 = [
       },
     ],
     name: 'setMaxCount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '_maxCountToRemain',
+        type: 'uint256',
+      },
+    ],
+    name: 'setMaxCountToRemain',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -537,6 +632,19 @@ export const memexFactoryAbi0_1_18 = [
       },
     ],
     name: 'setStartTime',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '_trump',
+        type: 'address',
+      },
+    ],
+    name: 'setTrump',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',
@@ -617,6 +725,26 @@ export const memexFactoryAbi0_1_18 = [
         name: '_waitingTime',
         type: 'uint256',
       },
+      {
+        internalType: 'address',
+        name: '_receiveRemainToken',
+        type: 'address',
+      },
+      {
+        internalType: 'address',
+        name: '_trump',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: '_maxBuy',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: '_maxCountToRemain',
+        type: 'uint256',
+      },
     ],
     name: 'test',
     outputs: [],
@@ -634,6 +762,19 @@ export const memexFactoryAbi0_1_18 = [
     name: 'transferOwnership',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'trump',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {

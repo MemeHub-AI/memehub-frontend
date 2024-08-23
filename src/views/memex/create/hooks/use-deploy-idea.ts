@@ -2,6 +2,7 @@ import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { Address, formatEther, parseEther } from 'viem'
 import { toast } from 'sonner'
+import { BigNumber } from 'bignumber.js'
 
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { reportException } from '@/errors'
@@ -79,7 +80,8 @@ export const useDeployIdea = (
     tokenId: string | null,
     name: string | undefined,
     symbol: string | undefined,
-    marketing: Marketing[] | undefined
+    marketing: Marketing[] | undefined,
+    initialBuyAmount: string
   ) => {
     if (!(await checkForChain(chainsMap[chainName || '']?.id))) return
     if (!memexFactoryAddr || !configValue) {
@@ -87,17 +89,19 @@ export const useDeployIdea = (
       return
     }
     const hasInfo = !!name && !!symbol
+    const totalFee = BigNumber(deployFee).plus(initialBuyAmount).toFixed()
 
     return writeContractAsync({
       ...deployConfig,
       functionName: 'create',
       args: [
         BigInt(projectId),
+        parseEther(initialBuyAmount),
         hasInfo ? [name, symbol] : [],
         [BigInt(tokenId || 0)], // 0 is not an error!!!!
         getEvmAirdropParams(configValue, marketing),
       ],
-      value: parseEther(deployFee),
+      value: parseEther(totalFee),
     })
   }
 

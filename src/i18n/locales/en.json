@@ -710,5 +710,6 @@
   "token.active-first": "Unactivated token, please activate first",
   "token.activate": "Activate",
   "create.buy-title": "Buy immediately",
-  "create.buy-desc": "If you want to buy immediately after creating, please enter the quantity. If not, click OK directly"
+  "create.buy-desc": "If you want to buy immediately after creating, please enter the quantity. If not, click OK directly",
+  "create.buy-desc-short": "Buy immediately after token created"
 }

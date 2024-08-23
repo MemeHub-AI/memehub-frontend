@@ -5,21 +5,21 @@ import { Routes } from '@/routes'
 import { useMemexStore } from '@/stores/use-memex'
 
 interface Options {
-  type?: 'idea' | 'details' | 'all'
+  clearOption?: 'idea' | 'details' | 'all'
   onClear?: (pathname: string) => void
 }
 
 // Clear memex store
 export const useCreateIdeaCleanup = ({
-  type = 'all',
+  clearOption = 'all',
   onClear,
 }: Options = {}) => {
   const router = useRouter()
   const { setIdea, setIdeaDetails } = useMemexStore()
 
   const clear = () => {
-    if (type === 'idea') return setIdea(null)
-    if (type === 'details') return setIdeaDetails(null)
+    if (clearOption === 'idea') return setIdea(null)
+    if (clearOption === 'details') return setIdeaDetails(null)
 
     setIdea(null)
     setIdeaDetails(null)

@@ -11,6 +11,7 @@ import { OptionalFields } from './components/optional-fields'
 import { MarketingField } from '@/components/marketing-field'
 import { useCreateIdeaCleanup } from '../hooks/use-create-idea-cleanup'
 import { useMemexStore } from '@/stores/use-memex'
+import { InitialBuyField } from './components/initial-buy-field'
 
 export const CreateDetail = () => {
   const craeteDetail = useCreateIdeaDetails()
@@ -28,6 +29,7 @@ export const CreateDetail = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="pt-2 pb-3">
             <CreateIdeaDetailsHeader />
             <RequiredFields />
+            <InitialBuyField />
             <MarketingField
               form={form}
               chainName={chainName}

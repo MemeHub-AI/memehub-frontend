@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,6 +6,7 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
+import { BigNumber } from 'bignumber.js'
 
 import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
@@ -73,6 +74,14 @@ export const useCreateIdea = () => {
   })
   const { checkForChain } = useCheckAccount()
 
+  const totalDeployFee = useMemo(
+    () =>
+      BigNumber(deployFee)
+        .plus(ideaDetails?.initialBuyAmount || 0)
+        .toFixed(),
+    [deployFee, ideaDetails]
+  )
+
   const onSubmit = async ({ pictures, ...values }: z.infer<typeof schema>) => {
     if (!(await checkForChain(chainsMap[values.chain]?.id))) return
     if (
@@ -113,7 +122,8 @@ export const useCreateIdea = () => {
         data.coin_id,
         ideaDetails?.name,
         ideaDetails?.symbol,
-        ideaDetails?.airdrop_marketing
+        ideaDetails?.airdrop_marketing,
+        ideaDetails?.initialBuyAmount || '0'
       )
     } catch (e) {
       reportException(e)
@@ -135,6 +145,6 @@ export const useCreateIdea = () => {
     form,
     onSubmit,
     isCreating: isPending || isDeploying || isUpdating,
-    deployFee,
+    deployFee: totalDeployFee,
   }
 }
