@@ -112,7 +112,7 @@ export const MemexMenu = () => {
     <div
       className={cn(
         'flex flex-col space-y-4 mt-4 justify-start xl:w-60 pr-6 fixed left-2',
-        'relative after:absolute after:-top-20 after:bottom-0 after:right-0 after:bg-zinc-200 after:w-px'
+        'relative xl:after:absolute xl:after:-top-20 xl:after:bottom-0 xl:after:right-0 xl:after:bg-zinc-200 xl:after:w-px'
       )}
     >
       {navs.map((nav, index) => {
@@ -121,8 +121,8 @@ export const MemexMenu = () => {
           <div
             key={index}
             className={cn(
-              'flex items-start text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
-              'max-xl:text-2xl max-xl:justify-center'
+              'flex items-center text-xl font-medium space-x-2 cursor-pointer hover:bg-zinc-200 p-2 rounded-lg',
+              'max-xl:text-lg'
             )}
             onClick={() => {
               if (nav.path === Routes.MemexDetailsProfile) {
@@ -136,12 +136,7 @@ export const MemexMenu = () => {
             <span className="xl:text-2xl xl:mr-2">
               {!isCurrentPath(nav.path) ? nav.icon : nav.icon_active}
             </span>
-            <span
-              className={cn(
-                'max-xl:hidden',
-                isCurrentPath(nav.path) && 'font-bold'
-              )}
-            >
+            <span className={cn('', isCurrentPath(nav.path) && 'font-bold')}>
               {nav.title}
             </span>
           </div>
@@ -155,10 +150,10 @@ export const MemexMenu = () => {
               'max-xl:text-2xl max-xl:justify-center'
             )}
           >
-            <span className="xl:text-2xl xl:mr-2">
+            <span className="xl:text-2xl xl:mr-2 max-xl:text-lg">
               <IoLanguageOutline />
             </span>
-            <span className="max-xl:hidden">{t('Languages')}</span>
+            <span className="max-xl:text-lg">{t('Languages')}</span>
           </div>
         </PopoverTrigger>
 
@@ -187,12 +182,12 @@ export const MemexMenu = () => {
       <Button
         shadow={'none'}
         onClick={() => router.push(Routes.MemexCreate)}
-        className="bg-purple-700 text-white rounded-full border-none py-6 text-lg max-xl:hidden mt-2"
+        className="bg-purple-700 text-white rounded-full border-none max-xl:text-md py-6 text-lg mt-2"
       >
         {t('Post.idea')}
       </Button>
 
-      <div className="flex justify-center xl:space-x-8 max-xl:flex-col max-xl:items-center max-xl:space-y-4">
+      <div className="flex justify-center xl:space-x-8 max-xl:space-x-4">
         <FaXTwitter
           size={28}
           className="cursor-pointer"
@@ -205,9 +200,9 @@ export const MemexMenu = () => {
         />
       </div>
 
-      <div className="xl:hidden">
+      {/* <div className="xl:hidden">
         <IdeaFloatButton />
-      </div>
+      </div> */}
     </div>
   )
 }

@@ -49,7 +49,7 @@ export const Header = () => {
         'min-h-header flex justify-between items-center px-6 relative',
         'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3',
         'border-b-2 border-black',
-        isMemex && 'xl:border-none'
+        isMemex && 'border-none'
       )}
     >
       {isPad ? (

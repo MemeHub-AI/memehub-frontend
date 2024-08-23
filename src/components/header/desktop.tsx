@@ -31,7 +31,7 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
           className={cn(
             'flex items-center gap-3 mr-3 select-none w-60 ml-2',
             'xl:relative xl:after:absolute xl:after:-top-4 xl:after:-bottom-4 xl:after:right-2 xl:after:w-px xl:after:bg-zinc-200',
-            'max-xl:max-w-40'
+            'max-xl:max-w-52'
           )}
         >
           <Logo showMeme className="shrink-0 xl:max-w-32" />

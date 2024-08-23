@@ -15,6 +15,8 @@ import { useAccountContext } from '@/contexts/account'
 import { UserListType } from '@/api/user/types'
 import { FollowersCards } from './followers-cards'
 import { FollowingCards } from './following-cards'
+import { useIsMemex } from '@/hooks/use-is-memex'
+import { cn } from '@/lib/utils'
 
 export const FollowDialog = ({
   tab,
@@ -37,29 +39,49 @@ export const FollowDialog = ({
     isFetching: isFetchingFollowing,
   } = followingResults
   const isFollowers = tab === UserListType.Followers
+  const { isMemex } = useIsMemex()
 
   return (
     <Dialog>
       <div
-        className="flex items-center justify-between"
-        style={{ margin: '0 10px 10px 10px' }}
+        className={cn(
+          'flex items-center justify-between',
+          isMemex && 'justify-start'
+        )}
+        style={isMemex ? { margin: '0' } : { margin: '0 10px 10px 10px' }}
       >
         <DialogTrigger asChild>
           <Button
-            variant="outline"
+            variant={isMemex ? 'secondary' : 'outline'}
             size="sm"
+            shadow={isMemex ? 'none' : 'default'}
             onClick={() => setTab(UserListType.Followers)}
+            className={isMemex ? '!bg-white shadow-none pl-0' : ''}
           >
-            {t('followers')}({followers.total})
+            <span className={isMemex ? 'hidden' : ''}>
+              {t('followers')}({followers.total})
+            </span>
+            <span className={isMemex ? 'space-x-1 text-base' : 'hidden'}>
+              <span className="font-bold ">{followers.total}</span>
+              <span className="text-blue-deep ">{t('followers')}</span>
+            </span>
           </Button>
         </DialogTrigger>
         <DialogTrigger asChild>
           <Button
-            variant="outline"
+            variant={isMemex ? 'secondary' : 'outline'}
             size="sm"
             onClick={() => setTab(UserListType.Following)}
+            shadow={isMemex ? 'none' : 'default'}
+            className={isMemex ? '!bg-white shadow-none' : ''}
           >
-            {t('following')}({following.total})
+            <span className={isMemex ? 'hidden' : ''}>
+              {t('following')}({following.total})
+            </span>
+            <span className={isMemex ? 'space-x-1 text-base' : 'hidden'}>
+              <span className="font-bold ">{following.total}</span>
+              <span className="text-blue-deep ">{t('following')}</span>
+            </span>
           </Button>
         </DialogTrigger>
       </div>
