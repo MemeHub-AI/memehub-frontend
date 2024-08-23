@@ -1,20 +1,25 @@
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { defaultImg } from '@/config/link'
 import { Card } from './ui/card'
 import { Img } from './img'
-import { URL_TYPE, utilsUrl } from '@/utils/url'
 import { KolListItem } from '@/api/alliance/type'
 import { utilLang } from '@/utils/lang'
 import { IdTag } from './id-tag'
 import { randomBy } from '@/utils/math'
 import { useCommunityMembers } from '@/hooks/use-community-members'
+import { parseMediaUrl } from '@/utils'
 
 export const KolCard = ({ data }: { data?: KolListItem }) => {
-  const { t } = useTranslation()
   const community = useMemo(() => randomBy(data?.communities), [])
   // const { members } = useCommunityMembers(community?.id)
+  const [xUrl, tgUrl] = useMemo(
+    () => [
+      parseMediaUrl('x', data?.twitter_url),
+      parseMediaUrl('tg', data?.telegram_url),
+    ],
+    [data]
+  )
 
   return (
     <Card
@@ -22,10 +27,7 @@ export const KolCard = ({ data }: { data?: KolListItem }) => {
       shadow="none"
       onClick={() => {
         if (!data?.twitter_url && !data?.telegram_url) return
-        open(
-          utilsUrl.mediaUrl(data?.twitter_url, URL_TYPE.TWITTER) ||
-            utilsUrl.mediaUrl(data?.telegram_url, URL_TYPE.TELEGRAM)
-        )
+        open(xUrl || tgUrl)
       }}
     >
       <div className="flex space-x-4 relative">
@@ -34,9 +36,7 @@ export const KolCard = ({ data }: { data?: KolListItem }) => {
             src="/images/x.png"
             alt="x"
             className="absolute top-0 right-0"
-            onClick={() =>
-              open(utilsUrl.mediaUrl(data?.twitter_url, URL_TYPE.TWITTER))
-            }
+            onClick={() => open(xUrl)}
           />
         )}
         <Img

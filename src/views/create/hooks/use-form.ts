@@ -8,13 +8,13 @@ import { useDeploy } from './use-deploy'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Marketing } from '@/api/token/types'
-import { URL_TYPE, utilsUrl } from '@/utils/url'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { TokenType } from '@/enums/token'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { useStorage } from '@/hooks/use-storage'
 import { marketingSchema } from '@/components/marketing-field'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { parseMediaUrl } from '@/utils'
 
 export const formFields = {
   fullname: 'fullname',
@@ -120,9 +120,9 @@ export const useCreateTokenForm = () => {
       description: values.description! as string,
       image_url: (values.logo! as string).replace('mini', 'origin'),
       chain: values.chainName as string,
-      twitter_url: utilsUrl.mediaUrl(values.twitter, URL_TYPE.TWITTER),
-      telegram_url: utilsUrl.mediaUrl(values.telegram, URL_TYPE.TELEGRAM),
-      website_url: utilsUrl.mediaUrl(values.website, URL_TYPE.WEBSITE),
+      twitter_url: parseMediaUrl('x', values.twitter),
+      telegram_url: parseMediaUrl('tg', values.telegram),
+      website_url: parseMediaUrl('website', values.website),
       coin_type: values.coinType as number,
       poster_urls: values.poster,
       buyAmount: values.buyAmount || '0',

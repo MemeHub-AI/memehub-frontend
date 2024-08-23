@@ -5,6 +5,7 @@ import { FaGlobe } from 'react-icons/fa'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { fmt } from '@/utils/fmt'
 
 interface Props extends ComponentProps<'div'> {
   x?: string

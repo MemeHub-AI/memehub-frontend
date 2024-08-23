@@ -16,3 +16,9 @@ export const formLink = {
   kol: 'https://forms.gle/7Y2e6pZqWjoSX2Ra8',
   community: '',
 }
+
+export const mediaLinks = {
+  x: 'https://x.com/',
+  tg: 'https://t.me/',
+  website: 'https://',
+}
