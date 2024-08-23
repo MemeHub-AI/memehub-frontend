@@ -646,7 +646,7 @@
   "memex.intro-desc3": "The publisher receives a total of {} token reward, and the likers receive a total of {} token reward.",
   "memex.create-message1": "Please select the blockchain to issue",
   "memex.create-message2": "Please enter at least {} characters",
-  "memex.create-message3": "Please upload at least one image or video",
+  "memex.create-message3": "Please upload at least one image",
   "memex.creating": "Publishing...",
   "memex.create-susccess": "Publish successful!",
   "memex.create-failed": "Publish failed, please try again",
