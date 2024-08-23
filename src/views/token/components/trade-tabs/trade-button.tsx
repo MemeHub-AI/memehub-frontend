@@ -31,7 +31,12 @@ export const TradeButton = ({
   const { playError } = useAudioPlayer()
 
   const { isIdoToken, isNotFound, chainId, tokenMetadata } = useTokenContext()
-  const { isBuy, nativeBalance, tokenBalance, value } = useTradeTabsContext()
+  const {
+    isBuy,
+    reserveBalance: nativeBalance,
+    tokenBalance,
+    value,
+  } = useTradeTabsContext()
   const isBalanceInsufficient = BigNumber(value).gt(
     isBuy ? nativeBalance : tokenBalance
   )

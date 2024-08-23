@@ -1,15 +1,15 @@
 import { useEffect, useMemo } from 'react'
-import { formatEther, isAddress } from 'viem'
+import { isAddress } from 'viem'
 import { isEmpty } from 'lodash'
 
-import { useEvmTrade } from './evm/use-trade'
+import { useEvmTrade } from './evm/use-evm-trade'
 import { useTokenContext } from '@/contexts/token'
 import { useTradeToast } from '@/hooks/use-trade-toast'
 import { TradeType } from '@/enums/trade'
-import { fmt } from '@/utils/fmt'
 import { useDexTrade } from './use-dex-trade'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { Network } from '@/enums/contract'
+import { useTradeAmount } from './use-trade-amount'
 
 // Used for trade success tips.
 const lastTrade = {
@@ -31,6 +31,7 @@ export const useTrade = (onSuccess?: () => void) => {
     tokenChain,
   } = useTokenContext()
 
+  const { getTokenAmount, getReserveAmount } = useTradeAmount()
   const {
     dexHash,
     isDexSubmitting,
@@ -47,8 +48,6 @@ export const useTrade = (onSuccess?: () => void) => {
     isSubmitting,
     buy,
     sell,
-    getReserveAmount,
-    getTokenAmount,
     resetTrade,
   } = useMemo(() => {
     return {
@@ -60,31 +59,19 @@ export const useTrade = (onSuccess?: () => void) => {
   const hash = dexHash || tradeHash
 
   // TODO: add Sol, TON chains
-  const updateLastTrade = async (type: TradeType, amount: string) => {
+  const updateLastTrade = async (type: TradeType, inputAmount: string) => {
+    lastTrade.type = type
     const tokenSymbol = tokenInfo?.symbol || tokenMetadata?.symbol
     const reserveSymbol = tokenChain?.native.symbol
-    lastTrade.type = type
-
-    const getNonFixedLabel = (value: bigint, symbol?: string) =>
-      `${fmt.decimals(formatEther(value))} ${symbol ?? ''}`
-
-    const getFixedLabel = (value: string, symbol?: string) =>
-      `${fmt.decimals(value, {
-        fixed: 3,
-      })} ${symbol}`
 
     if (type === TradeType.Buy) {
-      lastTrade.tokenLabel = getNonFixedLabel(
-        await getTokenAmount(amount),
-        tokenSymbol
-      )
-      lastTrade.reserveLabel = getFixedLabel(amount, reserveSymbol)
+      const [, tokenAmount] = await getTokenAmount(inputAmount)
+      lastTrade.tokenLabel = `${tokenAmount} ${tokenSymbol}`
+      lastTrade.reserveLabel = `${inputAmount} ${reserveSymbol}`
     } else {
-      lastTrade.tokenLabel = getFixedLabel(amount, tokenSymbol)
-      lastTrade.reserveLabel = getNonFixedLabel(
-        await getReserveAmount(amount),
-        reserveSymbol
-      )
+      const [, reserveAmount] = await getReserveAmount(inputAmount)
+      lastTrade.tokenLabel = `${inputAmount} ${tokenSymbol}`
+      lastTrade.reserveLabel = `${reserveAmount} ${reserveSymbol}`
     }
   }
 

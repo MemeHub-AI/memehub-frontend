@@ -1,6 +1,6 @@
 import { Address } from 'viem'
 
-import { useUniswapV2 } from '@/hooks/uniswapv2/use-uniswapv2'
+import { useUniswapV2 } from '@/hooks/uniswapv2'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 
 export const useDexTrade = (

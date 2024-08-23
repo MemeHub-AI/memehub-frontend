@@ -9,7 +9,7 @@ import { useApprove } from '@/hooks/use-approve'
 import { UNISWAP_ERR } from '@/errors/uniswap'
 import { uniswapV2RouterAbi } from '@/contract/abi/uniswapv2/router'
 import { getDeadline, subSlippage } from '@/utils/contract'
-import { useUniswapV2Amount } from './use-uniswapv2-info'
+import { useUniswapV2Amount } from './use-uniswapv2-amount'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { addrMap } from '@/contract/address'
 
@@ -21,10 +21,10 @@ export const useUniswapV2 = (
   const { t } = useTranslation()
   const { address } = useAccount()
   const { isApproving, approvalForAll } = useApprove(chainId)
-  const { getAmountForBuy, getAmountForSell } = useUniswapV2Amount(
-    chainId,
-    poolAddr
-  )
+  const {
+    getTokenAmount: getAmountForBuy,
+    getReserveAmount: getAmountForSell,
+  } = useUniswapV2Amount(chainId, poolAddr)
 
   const { reserveToken, uniswapv2Router } = addrMap[chainId] ?? {}
   const uniswapV2Config = {

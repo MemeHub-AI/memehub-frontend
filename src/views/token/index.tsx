@@ -13,7 +13,6 @@ import { NotFound } from '@/components/not-found'
 import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
 import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
 import { Network } from '@/enums/contract'
-import { TokenType } from '@/enums/token'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTokenWs } from './hooks/use-token-ws'
 
@@ -36,7 +35,6 @@ export const TokenPage = () => {
   )
   const { hasKolAirdrop, hasCommunityAirdrop } = airdropInfo
   const reserveSymbol = tokenChain?.native.symbol
-  const isIdoToken = tokenInfo?.coin_type === TokenType.Ido
   const network = Network.Evm // TODO: should dynamic
 
   const isOnlyOne = useMemo(() => {
@@ -64,7 +62,6 @@ export const TokenPage = () => {
         tokenInfo,
         isLoadingTokenInfo,
         reserveSymbol,
-        isIdoToken,
         tokenAddr,
         chainId,
         chainName,
