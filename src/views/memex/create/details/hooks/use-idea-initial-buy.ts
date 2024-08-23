@@ -1,4 +1,4 @@
-import { useReadContract, useWriteContract } from 'wagmi'
+import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { Address, formatEther } from 'viem'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
@@ -13,15 +13,16 @@ import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useIdeaInitialBuy = (
   chain: string | undefined,
-  idoAddr?: Address,
+  idoAddr?: string,
   idoVersion?: MemexIdoVersion
 ) => {
   const { t } = useTranslation()
+  const { address } = useAccount()
   const { memexFactoryAddr, memexFactoryVersion } = useTokenConfig(chain)
   const { chainId } = useChainInfo(chain)
   const idoConfig = {
     abi: memexIdoAbiMap[idoVersion!],
-    address: idoAddr!,
+    address: idoAddr as Address,
     chainId,
   }
   const idoQuery = { enabled: !!idoAddr && !!idoVersion }
@@ -46,7 +47,8 @@ export const useIdeaInitialBuy = (
     useReadContract({
       ...idoConfig,
       functionName: 'isInitWithdrawETH',
-      query: idoQuery,
+      args: [address!],
+      query: { enabled: idoQuery.enabled && !!address },
     })
   const { data: initAmountIn = BI_ZERO, refetch: refetchInitialAmount } =
     useReadContract({
@@ -78,6 +80,7 @@ export const useIdeaInitialBuy = (
     onSuccess: () => toast.success(t('refund-success')),
     onFinally: () => {
       reset()
+      refetchInitalBuy()
       toast.dismiss()
     },
   })
@@ -106,7 +109,7 @@ export const useIdeaInitialBuy = (
     initialBuyAmount,
     canRefundInitial,
     isRefundedInitial,
-    isRefundingInital: isPending || isLoading,
+    isRefundingInitial: isPending || isLoading,
     refetchInitalBuy,
     refundInitialBuy,
   }

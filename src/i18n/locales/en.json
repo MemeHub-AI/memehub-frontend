@@ -712,5 +712,7 @@
   "create.buy-title": "Buy immediately",
   "create.buy-desc": "If you want to buy immediately after creating, please enter the quantity. If not, click OK directly",
   "create.buy-desc-short": "Buy immediately after token created",
-  "maintain-tips": "We are currently upgrading and maintaining our servers, and some functions are temporarily unavailable. Thank you for your understanding."
+  "maintain-tips": "We are currently upgrading and maintaining our servers, and some functions are temporarily unavailable. Thank you for your understanding.",
+  "refund-initial-buy": "Refund initial buy ",
+  "refunded-initial-buy": "Initial buy refunded"
 }

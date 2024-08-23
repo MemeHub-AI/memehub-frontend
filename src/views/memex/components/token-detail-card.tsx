@@ -49,8 +49,6 @@ export const TokenDetailsCard = ({
   const isZero = tokenAddr === zeroAddress
   const hasLinks = !!twitter_url || !!telegram_url || !!website_url
 
-  console.log('tokenAddr', tokenAddr)
-
   return (
     <Card
       shadow="none"
