@@ -1,15 +1,14 @@
 import { useAccount, useAccountEffect, useDisconnect } from 'wagmi'
 import { useStorage } from './use-storage'
 import { reportException } from '@/errors'
-import { useWalletDisconnectButton } from '@solana/wallet-adapter-base-ui'
-import { useWallet } from '@solana/wallet-adapter-react'
+
 export const useConnectWallet = () => {
   const { isConnected } = useAccount()
-  const { publicKey } = useWallet()
+  // const { publicKey } = useWallet()
 
   // TODO: Add more networks
   const { getMainChain, removeMainChain } = useStorage()
-  const { onButtonClick } = useWalletDisconnectButton()
+  // const { onButtonClick } = useWalletDisconnectButton()
 
   const { disconnect } = useDisconnect({
     mutation: {
@@ -25,12 +24,12 @@ export const useConnectWallet = () => {
   })
 
   // check if wallet is connected
-  const walletIsConnected = () => {
-    if (isConnected || publicKey) {
-      return true
-    }
-    return false
-  }
+  // const walletIsConnected = () => {
+  //   if (isConnected || publicKey) {
+  //     return true
+  //   }
+  //   return false
+  // }
 
   // logout wallet
   const walletDisconnect = () => {
@@ -38,10 +37,12 @@ export const useConnectWallet = () => {
     if (getMainChain() === 'evm') {
       disconnect()
     } else if (getMainChain() === 'solana') {
-      onButtonClick!()
+      // onButtonClick!()
     }
     // more...
   }
 
-  return { walletIsConnected, walletDisconnect }
+  return {
+    walletDisconnect,
+  }
 }

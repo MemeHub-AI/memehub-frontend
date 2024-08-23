@@ -31,14 +31,14 @@ export const LogoField = () => {
 
   // TODO: check for connect
   // const { checkForConnect } = useCheckAccount()
-  const { walletIsConnected } = useConnectWallet()
+  const {} = useConnectWallet()
   const { getMainChain } = useStorage()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
 
-    if (!walletIsConnected()) return
+    // if (!walletIsConnected()) return
     if (form.getValues(formFields?.fullname) === '') {
       toast.warning(t('need.base.info.warning'))
       return

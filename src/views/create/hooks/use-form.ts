@@ -75,7 +75,7 @@ const formSchema = z
 export const useCreateTokenForm = () => {
   const { formInfo } = useAimemeInfoStore()
   const { checkForChain } = useCheckAccount()
-  const { walletIsConnected } = useConnectWallet()
+  const {} = useConnectWallet()
   const { evmChainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
   const { getMainChain } = useStorage()
@@ -110,7 +110,7 @@ export const useCreateTokenForm = () => {
     // if (!checkForConnect()) return
     if (!(await checkForChain(evmChainsMap[values.chainName]?.id))) return
 
-    if (!walletIsConnected()) return
+    // if (!walletIsConnected()) return
 
     if (deployResults.isDeploying) return
 

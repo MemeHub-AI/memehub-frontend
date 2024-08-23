@@ -7,14 +7,6 @@ import {
   lightTheme,
   type Locale,
 } from '@rainbow-me/rainbowkit'
-import {
-  ConnectionProvider,
-  WalletProvider,
-} from '@solana/wallet-adapter-react'
-import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
-import { UnsafeBurnerWalletAdapter } from '@solana/wallet-adapter-wallets'
-import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
-import { clusterApiUrl } from '@solana/web3.js'
 import i18n from 'i18next'
 
 import i18nConfig from '@/i18n'
@@ -22,9 +14,9 @@ import { wagmiConfig } from '@/config/wagmi'
 
 export const queryClient = new QueryClient()
 export const AppProviders = ({ children }: ComponentProps<'div'>) => {
-  const network = WalletAdapterNetwork.Devnet
-  const endpoint = useMemo(() => clusterApiUrl(network), [network])
-  const wallets = useMemo(() => [new UnsafeBurnerWalletAdapter()], [network])
+  // const network = WalletAdapterNetwork.Devnet
+  // const endpoint = useMemo(() => clusterApiUrl(network), [network])
+  // const wallets = useMemo(() => [new UnsafeBurnerWalletAdapter()], [network])
 
   return (
     <I18nextProvider i18n={i18nConfig}>
@@ -39,11 +31,7 @@ export const AppProviders = ({ children }: ComponentProps<'div'>) => {
               borderRadius: 'medium',
             })}
           >
-            <ConnectionProvider endpoint={endpoint}>
-              <WalletProvider wallets={wallets} autoConnect>
-                <WalletModalProvider>{children}</WalletModalProvider>
-              </WalletProvider>
-            </ConnectionProvider>
+            {children}
           </RainbowKitProvider>
         </QueryClientProvider>
       </WagmiProvider>

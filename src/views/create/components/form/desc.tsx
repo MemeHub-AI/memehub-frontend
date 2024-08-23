@@ -28,14 +28,14 @@ export const DescriptionField = () => {
   const { loadingDesc, setLoadingDesc } = useAimemeInfoStore()
   const { playGuaGua } = useAudioPlayer()
   const { checkForConnect } = useCheckAccount()
-  const { walletIsConnected } = useConnectWallet()
+  const {} = useConnectWallet()
 
   const createDesc = (e: any) => {
     e.stopPropagation()
     e.preventDefault()
 
     // TODO: change it after find libraries
-    if (!walletIsConnected()) return
+    // if (!walletIsConnected()) return
     if (form.getValues(formFields?.fullname) === '') {
       toast.warning(t('need.base.info.warning'))
       return

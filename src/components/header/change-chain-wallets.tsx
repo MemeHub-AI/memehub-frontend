@@ -9,8 +9,6 @@ import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '../ui/button'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { useStorage } from '@/hooks/use-storage'
-import { useWalletModal } from '@solana/wallet-adapter-react-ui'
-import { useWalletMultiButton } from '@solana/wallet-adapter-base-ui'
 
 export const ChangeChainWallets = ({ className }: { className?: string }) => {
   const { t } = useTranslation()
@@ -20,35 +18,36 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
   const [isOpening, setIsOpening] = useState(false)
   const { setMainChain } = useStorage()
 
-  const { setVisible } = useWalletModal()
-  const { buttonState } = useWalletMultiButton({
-    onSelectWallet() {},
-  })
-  if (buttonState === 'connecting') {
-    setMainChain('solana')
-  }
+  // const { setVisible } = useWalletModal()
+  // const { buttonState } = useWalletMultiButton({
+  //   onSelectWallet() {},
+  // })
+
+  // if (buttonState === 'connecting') {
+  //   setMainChain('solana')
+  // }
 
   // EVM monitor connection
-  useAccountEffect({
-    onConnect() {
-      setMainChain('evm')
-    },
-  })
+  // useAccountEffect({
+  //   onConnect() {
+  //     setMainChain('evm')
+  //   },
+  // })
 
-  const chainList = [
-    {
-      name: 'Ethereum',
-      image_url: 'https://storage.memehub.ai/chains/logo/ethereum.png',
-      connect_wallet: openConnectModal,
-    },
-    {
-      name: 'Solana',
-      image_url: 'https://storage.memehub.ai/chains/logo/solana.png',
-      connect_wallet: () => {
-        setVisible(true)
-      },
-    },
-  ]
+  // const chainList = [
+  //   {
+  //     name: 'Ethereum',
+  //     image_url: 'https://storage.memehub.ai/chains/logo/ethereum.png',
+  //     connect_wallet: openConnectModal,
+  //   },
+  //   {
+  //     name: 'Solana',
+  //     image_url: 'https://storage.memehub.ai/chains/logo/solana.png',
+  //     connect_wallet: () => {
+  //       // setVisible(true)
+  //     },
+  //   },
+  // ]
 
   return (
     <>
@@ -61,7 +60,7 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
       >
         {isConnecting ? t('wallet.connecting') : t('wallet.connect')}
       </Button>
-      <Dialog open={isOpening} onOpenChange={setIsOpening}>
+      {/* <Dialog open={isOpening} onOpenChange={setIsOpening}>
         <DialogHeader>
           <DialogTitle>{t('decide.chains')}</DialogTitle>
           <DialogDescription className="flex flex-col space-y-2">
@@ -85,7 +84,7 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
             ))}
           </DialogDescription>
         </DialogHeader>
-      </Dialog>
+      </Dialog> */}
     </>
   )
 }

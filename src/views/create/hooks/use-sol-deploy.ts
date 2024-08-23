@@ -1,4 +1,3 @@
-import { useAnchorWallet, useConnection } from '@solana/wallet-adapter-react'
 import { Program, AnchorProvider, setProvider } from '@coral-xyz/anchor'
 import * as anchor from '@coral-xyz/anchor'
 import { v4 as uuidv4 } from 'uuid'
