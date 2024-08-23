@@ -1,4 +1,4 @@
-import { first, isEmpty } from 'lodash'
+import { first, includes, isEmpty } from 'lodash'
 
 import { mediaLinks } from '@/config/link'
 
@@ -25,12 +25,9 @@ export const joinPaths = (...args: (string | number)[]) => {
   return firstHasSlash ? `/${path}` : path
 }
 
-export const parseMediaUrl = (media: keyof typeof mediaLinks, value = '') => {
-  if (value) {
-    if (value.startsWith('@')) {
-      value = value.replace('@', '')
-    }
-    return /^(https|http):\/\//.test(value) ? value : `${media}${value}`
-  }
-  return value
+export const parseMediaUrl = (media: keyof typeof mediaLinks, url = '') => {
+  if (isEmpty(url)) return url
+  url = url.replace('@', '').replace('https://', '')
+
+  return /^https?:\/\//.test(url) ? url : `${mediaLinks[media]}${url}`
 }
