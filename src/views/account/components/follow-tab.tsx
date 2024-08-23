@@ -42,7 +42,6 @@ export const FollowTab = () => {
         <TabsTrigger
           value={UserListType.Following.toString()}
           className="w-full"
-          asChild
         >
           {t('following')}({following.total})
         </TabsTrigger>

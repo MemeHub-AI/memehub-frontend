@@ -19,7 +19,7 @@ interface Props extends ComponentProps<typeof Card> {
 export const FollowCard = ({ card, onClick }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
-  const { userInfo, refetchFollow } = useAccountContext()
+  const { userInfo, refetchFollow, isOtherUser } = useAccountContext()
   const { follow, unfollow } = useUser({
     onFollowSuccess: refetchFollow,
   })
@@ -42,26 +42,28 @@ export const FollowCard = ({ card, onClick }: Props) => {
           <p className="text-zinc-500 text-sm">{fmt.addr(card.name)}</p>
         </div>
       </div>
-      <Button
-        size="xs"
-        variant="outline"
-        onClick={(e) => {
-          e.stopPropagation()
-          const addr = (query.address || '') as string
-          if (card.is_follower || userInfo?.is_follower) {
-            return unfollow(
-              card.user.wallet_address != null
-                ? `${card.user.wallet_address}`
-                : addr
-            )
-          }
-          follow(card.user.wallet_address)
-        }}
-      >
-        {card.is_follower || userInfo?.is_follower
-          ? `${t('unfollow')}`
-          : `${t('follow')}`}
-      </Button>
+      {!isOtherUser && (
+        <Button
+          size="xs"
+          variant="outline"
+          onClick={(e) => {
+            e.stopPropagation()
+            const addr = (query.address || '') as string
+            if (card.is_follower || userInfo?.is_follower) {
+              return unfollow(
+                card.user.wallet_address != null
+                  ? `${card.user.wallet_address}`
+                  : addr
+              )
+            }
+            follow(card.user.wallet_address)
+          }}
+        >
+          {card.is_follower || userInfo?.is_follower
+            ? `${t('unfollow')}`
+            : `${t('follow')}`}
+        </Button>
+      )}
     </Card>
   )
 }

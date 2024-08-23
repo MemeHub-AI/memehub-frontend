@@ -27,7 +27,8 @@ export const FollowDialog = ({
 }) => {
   const { t } = useTranslation()
   const closeRef = useRef<HTMLButtonElement>(null)
-  const { followersResults, followingResults } = useAccountContext()
+  const { isOtherUser, followersResults, followingResults } =
+    useAccountContext()
   const {
     followers,
     isLoading: isLoadingFollowers,
@@ -92,7 +93,13 @@ export const FollowDialog = ({
         </VisuallyHidden>
         <DialogHeader>
           <DialogTitle>
-            {isFollowers ? t('followers.my') : t('following.my')}
+            {isFollowers
+              ? !isOtherUser
+                ? t('followers.my')
+                : t('followers')
+              : !isOtherUser
+              ? t('following.my')
+              : t('following')}
           </DialogTitle>
         </DialogHeader>
         {isFollowers ? (
