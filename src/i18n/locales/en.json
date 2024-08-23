@@ -714,5 +714,8 @@
   "create.buy-desc-short": "Buy immediately after token created",
   "maintain-tips": "We are currently upgrading and maintaining our servers, and some functions are temporarily unavailable. Thank you for your understanding.",
   "refund-initial-buy": "Refund initial buy ",
-  "refunded-initial-buy": "Initial buy refunded"
+  "refunded-initial-buy": "Initial buy refunded",
+  "copy.wallet.address": "Copy wallet address",
+  "reward.desc3": "Reward received",
+  "there.noting": "There's nothing here."
 }

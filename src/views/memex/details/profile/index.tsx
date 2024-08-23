@@ -44,7 +44,7 @@ export const MemexDetailsProfile = () => {
       }}
     >
       <PrimaryLayout>
-        <div className="flex-1 min-h-main flex gap-2 flex-col h-[calc(100vh-64px)] overflow-auto px-4">
+        <div className="flex-1 min-h-main flex gap-2 flex-col h-[calc(100vh-64px)] overflow-auto pl-2 pr-4 !ml-0">
           {/* Left aside */}
           <aside
             className={cn(

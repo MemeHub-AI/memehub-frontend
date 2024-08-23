@@ -28,6 +28,7 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { qs } from '@/hooks/use-fetch'
 import { memexIdeaConfig } from '@/config/memex/idea'
 import { useIdeaInitialBuy } from '../create/details/hooks/use-idea-initial-buy'
+import { useResponsive } from '@/hooks/use-responsive'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -91,6 +92,7 @@ export const MemexIdeaCard = ({
 
     return BigNumber(idea?.is_creator ? ownerPercent : userPercent).toFixed(2)
   }, [idea, ideaInfo])
+  const { isLaptop } = useResponsive()
 
   const {
     initialBuyAmount,
@@ -142,6 +144,12 @@ export const MemexIdeaCard = ({
 
   const onPushToAccount = () => {
     if (!idea?.user_address) return
+
+    if (!isLaptop) {
+      return router.push(
+        fmt.toHref(Routes.MemexDetailsProfile, idea.user_address)
+      )
+    }
     router.push(fmt.toHref(Routes.Account, idea?.user_address))
   }
 
