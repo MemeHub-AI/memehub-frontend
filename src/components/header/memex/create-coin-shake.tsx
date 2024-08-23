@@ -26,7 +26,7 @@ const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
         >
           <img
             src={create.image_url}
-            className={cn('w-5 h-5 rounded-full', imageClass)}
+            className={cn('w-5 h-5 rounded-full object-cover', imageClass)}
           />
           <span className={cn('text-nowrap text-sm', textClass)}>
             <span

@@ -23,6 +23,7 @@ import { memexIdeaConfig } from '@/config/memex/idea'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { BI_ZERO } from '@/constants/number'
 import { CONTRACT_ERR } from '@/errors/contract'
+import IdeaHeartButton from './idea-heart-button'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -205,15 +206,11 @@ export const IdeaLikeComment = ({
             className="flex items-center space-x-1 text-sm cursor-pointer"
             onClick={(e) => e.stopPropagation()}
           >
-            {isLiked ? (
-              <HeartFilledIcon
-                className="w-5 h-5 text-red-500"
-                onClick={() => isLiked && toast.info(t('already-liked'))}
-              />
-            ) : (
-              <HeartIcon className="w-5 h-5" onClick={onOpenLike} />
-            )}
-            <span>{likedCount}</span>
+            <IdeaHeartButton
+              likedCount={likedCount}
+              isLiked={isLiked}
+              onOpenLike={onOpenLike}
+            />
           </div>
           <div className="flex items-center space-x-1 text-sm cursor-pointer">
             <GoComment className="w-5 h-5" />
