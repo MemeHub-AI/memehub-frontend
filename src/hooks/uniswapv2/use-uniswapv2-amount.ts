@@ -33,7 +33,7 @@ export const useUniswapV2Amount = (
     })
   }
 
-  const getAmountForBuy = async (amountIn: string) => {
+  const getTokenAmount = async (amountIn: string) => {
     if (!uniswapv2Router) return BI_ZERO
     const [reserve0, reserve1] = await getReserves()
 
@@ -47,7 +47,7 @@ export const useUniswapV2Amount = (
     })
   }
 
-  const getAmountForSell = async (amountIn: string) => {
+  const getReserveAmount = async (amountIn: string) => {
     if (!uniswapv2Router) return BI_ZERO
     const [reserve0, reserve1] = await getReserves()
 
@@ -62,7 +62,7 @@ export const useUniswapV2Amount = (
   }
 
   return {
-    getAmountForBuy,
-    getAmountForSell,
+    getTokenAmount,
+    getReserveAmount,
   }
 }

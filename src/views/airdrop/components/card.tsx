@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TbUsers } from 'react-icons/tb'
 import { BigNumber } from 'bignumber.js'
@@ -17,7 +18,7 @@ import { IdTag } from '@/components/id-tag'
 import { useAirdrop } from '@/views/token/hooks/evm/use-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { useState } from 'react'
+import { joinPaths } from '@/utils'
 
 interface Props {
   className?: string
@@ -80,7 +81,7 @@ export const AirdropCard = ({
 
   const onClaim = () => {
     router.push({
-      pathname: fmt.toHref(chainName, contract_address),
+      pathname: joinPaths(chainName, contract_address),
       query,
     })
   }

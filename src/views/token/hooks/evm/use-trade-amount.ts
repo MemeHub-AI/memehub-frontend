@@ -1,5 +1,5 @@
 import { readContract } from 'wagmi/actions'
-import { parseEther } from 'viem'
+import { Address, parseEther } from 'viem'
 
 import { ConfigChainId, wagmiConfig } from '@/config/wagmi'
 import { BI_ZERO } from '@/constants/number'
@@ -7,17 +7,25 @@ import { reportException } from '@/errors'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
 
-export const useTradeAmount = () => {
-  const { tokenAddr, chainId, bcVersion, bcAddr } = useTokenContext()
+export const useEvmTradeAmount = (chainId: number, tokenAddr: Address) => {
+  const { bcVersion, bcAddr } = useTokenContext()
+  const config = {
+    abi: bcAbiMap[bcVersion!],
+    address: bcAddr!,
+    chainId: chainId as ConfigChainId,
+  }
+
+  const checkConfig = () => {
+    if (!config.abi || !config.address || !chainId) return false
+    return true
+  }
 
   /** 1 Token => 0.000000001 ETH */
   const getReserveAmount = async (tokenAmount: string) => {
-    if (!bcVersion || !bcAddr) return BI_ZERO
+    if (!checkConfig()) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      abi: bcAbiMap[bcVersion],
-      address: bcAddr,
-      chainId: chainId as ConfigChainId,
+      ...config,
       functionName: 'calcAmountOutFromToken',
       args: [tokenAddr, parseEther(tokenAmount)],
     }).catch((e) => {
@@ -28,12 +36,10 @@ export const useTradeAmount = () => {
 
   /** 1 ETH => 100,000,000 Token */
   const getTokenAmount = async (reserveAmount: string) => {
-    if (!bcVersion || !bcAddr) return BI_ZERO
+    if (!checkConfig()) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      abi: bcAbiMap[bcVersion],
-      address: bcAddr,
-      chainId: chainId as ConfigChainId,
+      ...config,
       functionName: 'calcAmountOutFromEth',
       args: [tokenAddr, parseEther(reserveAmount)],
     }).catch((e) => {
@@ -43,21 +49,19 @@ export const useTradeAmount = () => {
   }
 
   /** Get the last buy order reserve token amount */
-  const getLastOrderAmount = async (tokenLeft: string) => {
-    if (!bcVersion || !bcAddr) return BI_ZERO
+  const getLastAmount = async (tokenLeft: string) => {
+    if (!checkConfig()) return BI_ZERO
 
     return readContract(wagmiConfig, {
-      abi: bcAbiMap[bcVersion],
-      address: bcAddr,
-      chainId: chainId as ConfigChainId,
+      ...config,
       functionName: 'calcAmountOutFromTokenCutOff',
       args: [tokenAddr, parseEther(tokenLeft)],
     }).catch(() => BI_ZERO)
   }
 
   return {
-    getReserveAmount,
     getTokenAmount,
-    getLastOrderAmount,
+    getReserveAmount,
+    getLastAmount,
   }
 }

@@ -6,8 +6,8 @@ import { PiWarningCircle } from 'react-icons/pi'
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
-import { fmt } from '@/utils/fmt'
 import { useCreateTokenContext } from '@/contexts/create-token'
+import { joinPaths } from '@/utils'
 
 const withWarningIcon = (children: ReactNode) => {
   return (
@@ -115,7 +115,7 @@ export const CreateTokenStatusDialog = () => {
         onConfirm={() => {
           resetDeploy()
           router.push(
-            fmt.toHref(
+            joinPaths(
               Routes.Main,
               createTokenData?.chain ?? '',
               deployedAddr || 'invalid'

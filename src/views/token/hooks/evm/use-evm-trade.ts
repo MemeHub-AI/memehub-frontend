@@ -1,5 +1,5 @@
 import { useAccount, useWriteContract } from 'wagmi'
-import { formatEther, parseEther } from 'viem'
+import { parseEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -7,14 +7,14 @@ import { getDeadline, subSlippage } from '@/utils/contract'
 import { useInvite } from '@/hooks/use-invite'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
-import { useTradeAmount } from './use-trade-amount'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
+import { useTradeAmount } from '../use-trade-amount'
 
 export const useEvmTrade = (onSuccess?: () => void) => {
+  const { tokenAddr, chainId, bcVersion, bcAddr } = useTokenContext()
   const { address } = useAccount()
   const { getReferrals } = useInvite()
-  const { tokenAddr, chainId, bcVersion, bcAddr } = useTokenContext()
-  const { getReserveAmount, getTokenAmount } = useTradeAmount()
+  const { getTokenAmount, getReserveAmount } = useTradeAmount()
   const bcConfig = {
     abi: bcAbiMap[bcVersion!],
     address: bcAddr!,
@@ -42,32 +42,32 @@ export const useEvmTrade = (onSuccess?: () => void) => {
     onFinally: () => resetTrade(),
   })
 
-  const buy = async (amount: string, slippage: string) => {
-    const reserveAmount = parseEther(amount)
-    const tokenAmount = formatEther(await getTokenAmount(amount))
+  const buy = async (reserveAmount: string, slippage: string) => {
+    const [, tokenAmount] = await getTokenAmount(reserveAmount)
     if (BigNumber(tokenAmount).lte(0)) {
       CONTRACT_ERR.balanceInvalid()
       return
     }
+    const reserveValue = parseEther(reserveAmount)
 
     writeContract({
       ...bcConfig,
       functionName: 'mint',
       args: [
         tokenAddr,
-        reserveAmount,
+        reserveValue,
         subSlippage(tokenAmount, slippage),
         address!,
         await getDeadline(),
         await getReferrals(),
       ],
-      value: reserveAmount,
+      value: reserveValue,
     })
   }
 
-  const sell = async (amount: string, slippage: string) => {
-    const nativeAmount = formatEther(await getReserveAmount(amount))
-    if (BigNumber(nativeAmount).lte(0)) {
+  const sell = async (tokenAmount: string, slippage: string) => {
+    const [, reserveAmount] = await getReserveAmount(tokenAmount)
+    if (BigNumber(reserveAmount).lte(0)) {
       CONTRACT_ERR.balanceInvalid()
       return
     }
@@ -77,8 +77,8 @@ export const useEvmTrade = (onSuccess?: () => void) => {
       functionName: 'burn',
       args: [
         tokenAddr,
-        parseEther(amount),
-        subSlippage(nativeAmount, slippage),
+        parseEther(tokenAmount),
+        subSlippage(reserveAmount, slippage),
         address!,
         await getDeadline(),
         await getReferrals(),
@@ -93,7 +93,5 @@ export const useEvmTrade = (onSuccess?: () => void) => {
     buy,
     sell,
     resetTrade,
-    getReserveAmount,
-    getTokenAmount,
   }
 }

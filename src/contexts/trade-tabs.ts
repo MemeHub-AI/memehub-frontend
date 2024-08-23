@@ -5,7 +5,7 @@ import { CONTEXT_ERR } from '@/errors/context'
 interface Value {
   isBuy: boolean
   isTraded: boolean
-  nativeBalance: string
+  reserveBalance: string
   tokenBalance: string
   value: string
   disabled: boolean

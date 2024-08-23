@@ -1,14 +1,18 @@
-import { Button } from '@/components/ui/button'
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
-const IdeaHeartButton: React.FC<{
+import { Button } from '@/components/ui/button'
+
+interface Props {
   likedCount: string
   isLiked: boolean
   onOpenLike: () => string | number | undefined
-}> = ({ likedCount, isLiked, onOpenLike }) => {
+}
+
+export const IdeaHeartButton = ({ likedCount, isLiked, onOpenLike }: Props) => {
   const { t } = useTranslation()
+
   return (
     <Button
       variant="purple"

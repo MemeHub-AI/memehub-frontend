@@ -38,8 +38,9 @@ export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
     chainId,
     tokenInfo?.coin_version as TokenVersion
   )
-  const { progress, isGraduated, tokenLeftAmount, reserveTotalAmount } =
-    tokenDetails
+  const { progress, tokenLeftAmount, reserveTotalAmount } = tokenDetails
+
+  const isGraduated = tokenDetails.isGraduated || isIdoToken
 
   const refetchTokenInfo = () => {
     refetchInfo()
@@ -61,5 +62,6 @@ export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
     isGraduated,
     tokenLeft: tokenLeftAmount,
     reserveTotal: reserveTotalAmount,
+    isIdoToken,
   }
 }

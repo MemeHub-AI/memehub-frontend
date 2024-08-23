@@ -8,7 +8,6 @@ import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { Progress } from '../ui/progress'
-import { fmt } from '@/utils/fmt'
 import { Img } from '@/components/img'
 import { Avatar } from '../ui/avatar'
 import { IdoTag } from '../ido-tag'
@@ -18,6 +17,7 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTokenDetails } from '@/hooks/use-token-details'
 import { TokenCardBadge } from './card-badge'
 import { Button } from '../ui/button'
+import { joinPaths } from '@/utils'
 
 interface Props extends ComponentProps<typeof Card> {
   card: TokenListItem
@@ -58,14 +58,14 @@ export const TokenCard = (props: Props) => {
     }
     if (isIdo && card.contract_address) {
       return router.push(
-        fmt.toHref(Routes.Main, chainName, card.contract_address)
+        joinPaths(Routes.Main, chainName, card.contract_address)
       )
     }
     if (isIdo) {
-      return router.push(fmt.toHref(Routes.Ido, chainName, card.id))
+      return router.push(joinPaths(Routes.Ido, chainName, card.id))
     }
 
-    router.push(fmt.toHref(Routes.Main, chainName, card.contract_address))
+    router.push(joinPaths(Routes.Main, chainName, card.contract_address))
     onClick?.(e)
   }
 

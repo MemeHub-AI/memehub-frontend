@@ -1,5 +1,5 @@
 import { useMemo, useState, type ComponentProps } from 'react'
-import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
+import { HeartFilledIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
@@ -23,7 +23,9 @@ import { memexIdeaConfig } from '@/config/memex/idea'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { BI_ZERO } from '@/constants/number'
 import { CONTRACT_ERR } from '@/errors/contract'
-import IdeaHeartButton from './idea-heart-button'
+import { Routes } from '@/routes'
+import { joinPaths } from '@/utils'
+import { IdeaHeartButton } from './idea-heart-button'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -220,7 +222,13 @@ export const IdeaLikeComment = ({
           <button
             onClick={(e) => {
               e.stopPropagation()
-              copy(location.href, { successTip: t('link-copy-success') })
+              if (!idea?.hash) {
+                toast.error(t('copy-failed'))
+                return
+              }
+              copy(joinPaths(location.origin, Routes.MemexIdea, idea.hash), {
+                successTip: t('link-copy-success'),
+              })
             }}
           >
             <PiShareFat size={20} />

@@ -28,7 +28,7 @@ export const useInvite = () => {
 
   const {
     isPending,
-    mutateAsync: getIsBound,
+    mutateAsync: getIsBindInviter,
     reset: resetCanBind,
   } = useMutation({
     mutationKey: [inviteApi.getIsBound.name],
@@ -57,7 +57,7 @@ export const useInvite = () => {
     isPending,
     getInviterInfo,
     resetInviterInfo,
-    getIsBound,
+    getIsBindInviter,
     resetCanBind,
     getReferrals,
   }

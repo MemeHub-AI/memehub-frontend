@@ -24,13 +24,13 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   const [value, setValue] = useState('')
   const [inviteOpen, setInviteOpen] = useState(false)
 
+  const { isNotFound, tokenMetadata, refetchDetails } = useTokenContext()
   const { playSuccess } = useAudioPlayer()
   const { isClaimingAirdrop } = useAirdropStore()
   const { slippage, setSlippage } = useSlippage()
-  const { isNotFound, isIdoToken, tokenMetadata, refetchDetails } =
-    useTokenContext()
   const { nativeBalance, tokenBalance, refetchBalance } = useTradeBalance()
-  const { getIsBound } = useInvite()
+  const { getIsBindInviter } = useInvite()
+
   const { isTrading, isTraded, handleBuy, handleSell } = useTrade(() => {
     setValue('')
     refetchDetails()
@@ -38,12 +38,10 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
   })
 
   const disabled =
-    isTrading ||
-    isClaimingAirdrop ||
-    (isNotFound && !isIdoToken && !tokenMetadata)
+    isTrading || isClaimingAirdrop || isNotFound || !tokenMetadata
 
   const onTrade = async () => {
-    if (await getIsBound()) {
+    if (await getIsBindInviter()) {
       setInviteOpen(true)
       return
     }
@@ -56,7 +54,7 @@ export const TradeTab = ({ className }: ComponentProps<'div'>) => {
       value={{
         isBuy,
         isTraded,
-        nativeBalance,
+        reserveBalance: nativeBalance,
         tokenBalance,
         value,
         disabled,

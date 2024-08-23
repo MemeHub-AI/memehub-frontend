@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
 import { Routes } from '@/routes'
+import { joinPaths } from '@/utils'
 import { useIsMemex } from '@/hooks/use-is-memex'
 
 interface Props extends ComponentProps<typeof Card> {
@@ -32,12 +33,13 @@ export const FollowCard = ({ card, onClick }: Props) => {
       hover="bg"
       shadow="none"
       onClick={(e) => {
-        const href = fmt.toHref(Routes.Account, card.user.wallet_address)
-        const memexHref = fmt.toHref(
-          Routes.MemexDetailsProfile,
-          card.user.wallet_address
-        )
-        router.push(isMemex ? memexHref : href)
+        if (!isMemex) {
+          router.push(joinPaths(Routes.Account, card.user.wallet_address))
+        } else {
+          router.push(
+            joinPaths(Routes.MemexDetailsProfile, card.user.wallet_address)
+          )
+        }
         onClick?.(e)
       }}
     >

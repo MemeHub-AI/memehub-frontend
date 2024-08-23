@@ -16,6 +16,7 @@ import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { UserListRes, UserListType } from '@/api/user/types'
 import { Img } from '@/components/img'
+import { joinPaths } from '@/utils'
 
 interface Props extends ComponentProps<'div'> {
   c: UserListRes[UserListType.Comments]
@@ -67,7 +68,7 @@ export const CommentCard = (props: Props) => {
           className="flex items-center group transition-all w-fit"
           onClick={() => {
             if (!c.user.wallet_address || disableToProfile) return
-            router.push(fmt.toHref(Routes.Account, c.user.wallet_address))
+            router.push(joinPaths(Routes.Account, c.user.wallet_address))
           }}
         >
           <Avatar

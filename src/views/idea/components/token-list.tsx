@@ -5,9 +5,9 @@ import { isEmpty } from 'lodash'
 
 import { IdeaDataList, IdeaTokens } from '@/api/idea/type'
 import { Dialog, DialogTitle } from '@/components/ui/dialog'
-import { fmt } from '@/utils/fmt'
 import { Routes } from '@/routes'
 import { Img } from '@/components/img'
+import { joinPaths } from '@/utils'
 
 interface Props {
   ideaData: IdeaDataList | undefined
@@ -35,7 +35,7 @@ export const TokenList = ({ ideaData }: Props) => {
               className="text-sm text-blue-600 cursor-pointer select-none"
               onClick={() => {
                 if (isEmpty(token.chain.name) || isEmpty(token.address)) return
-                open(fmt.toHref(Routes.Main, token.chain.name, token.address))
+                open(joinPaths(Routes.Main, token.chain.name, token.address))
               }}
             >
               {t('live.in.up')}
