@@ -55,7 +55,7 @@ export const CreateIdeaPage = () => {
                     setIdea({ ...values, image_urls: values.pictures })
                     router.push({
                       pathname: Routes.MemexCreateDetails,
-                      query: { chain: values.chain },
+                      query: { chain: values.chain, ...query },
                     })
                   }}
                 />

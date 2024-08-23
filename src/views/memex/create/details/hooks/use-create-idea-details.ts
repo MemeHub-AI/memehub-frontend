@@ -48,12 +48,15 @@ export const useCreateIdeaDetails = () => {
       initialBuyAmount: '',
     },
   })
-  const { isUpdating, update, updateWithContract } = useUpdateIdea(hash, {
+  const {
+    initialBuyAmount,
+    initialBuyMax,
+    isUpdating,
+    update,
+    updateWithContract,
+  } = useUpdateIdea(hash, {
     onContractSuccess: router.back,
   })
-  const { initialBuyAmount, initialBuyMax } = useIdeaInitialBuy(
-    query.chain as string
-  )
 
   const isContractUpdate = ({
     name,
@@ -61,7 +64,11 @@ export const useCreateIdeaDetails = () => {
     airdrop_marketing,
   }: MemexCreateReq) => {
     return !isEqual(
-      { name, symbol, airdrop_marketing },
+      {
+        name,
+        symbol,
+        airdrop_marketing,
+      },
       {
         name: ideaDetails?.name,
         symbol: ideaDetails?.symbol,
@@ -80,6 +87,7 @@ export const useCreateIdeaDetails = () => {
       description: values.desc,
       airdrop_marketing: values.marketing,
     } as MemexCreateReq
+    const inputBuy = values.initialBuyAmount || '0'
 
     if (values.x) params.twitter_url = values.x
     if (values.tg) params.telegram_url = values.tg
@@ -87,22 +95,20 @@ export const useCreateIdeaDetails = () => {
 
     // Update token info
     if (hash) {
-      isContractUpdate(params)
-        ? updateWithContract({ hash, ...params })
+      isContractUpdate(params) || !BigNumber(inputBuy).eq(initialBuyAmount)
+        ? updateWithContract({ hash, ...params, initialBuyAmount: inputBuy })
         : update({ hash, ...params }).then(router.back)
       return
     }
 
     setIdeaDetails({
       ...params,
-      initialBuyAmount: values.initialBuyAmount || '0',
+      initialBuyAmount: inputBuy,
     })
     router.back()
   }
 
   useEditIdeaAutofill()
-
-  useEffect(() => {}, [])
 
   useEffect(() => {
     form.setValue('initialBuyAmount', ideaDetails?.initialBuyAmount || '')

@@ -1,16 +1,16 @@
 import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
+import { useRouter } from 'next/router'
 
 import { FormField, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useCreateIdeaDetailsContext } from '@/contexts/memex/create-idea-detail'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { useRouter } from 'next/router'
 
 export const InitialBuyField = () => {
   const { t } = useTranslation()
   const { query } = useRouter()
-  const { form, initialBuyMax } = useCreateIdeaDetailsContext()
+  const { form, isUpdating, initialBuyMax } = useCreateIdeaDetailsContext()
   const { chain } = useChainInfo(query.chain as string)
 
   return (
@@ -35,7 +35,7 @@ export const InitialBuyField = () => {
 
                 field.onChange(target.value)
               }}
-              disabled={field.disabled}
+              disabled={field.disabled || isUpdating}
               inputClass="pl-0"
               endIcon={
                 <p

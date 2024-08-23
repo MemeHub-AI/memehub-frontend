@@ -1,8 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
-import { Address } from 'viem'
+import { Address, parseEther } from 'viem'
 import { useChainId, useWriteContract } from 'wagmi'
+import { BigNumber } from 'bignumber.js'
 
 import { memexApi } from '@/api/memex'
 import { REQUEST_ERR } from '@/errors/request'
@@ -13,6 +14,7 @@ import { CONTRACT_ERR } from '@/errors/contract'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexIdoAbiMap } from '@/contract/abi/memex/ido'
+import { useIdeaInitialBuy } from '../details/hooks/use-idea-initial-buy'
 
 interface Options {
   showSuccessTips?: boolean
@@ -29,6 +31,11 @@ export const useUpdateIdea = (
   const { details } = useIdeaDetails(hashId)
   const { configValue } = useTokenConfig(details?.chain)
   const { checkForChain } = useCheckAccount()
+  const { initialBuyAmount, initialBuyMax } = useIdeaInitialBuy(
+    details?.chain,
+    details?.ido_address,
+    details?.memex_version
+  )
 
   const {
     data: hash,
@@ -77,7 +84,9 @@ export const useUpdateIdea = (
   })
 
   const updateWithContract = async (
-    params: Parameters<typeof memexApi.updateIdea>[0]
+    params: Parameters<typeof memexApi.updateIdea>[0] & {
+      initialBuyAmount: string
+    }
   ) => {
     const config = {
       abi: memexIdoAbiMap[details?.memex_version!],
@@ -91,12 +100,28 @@ export const useUpdateIdea = (
       return
     }
 
+    const inputBuyAmount = BigNumber(params.initialBuyAmount)
+
+    if (inputBuyAmount.lt(initialBuyAmount)) {
+      console.error('you can only plus')
+      return
+    }
+
     try {
       const { data } = await update(params)
       if (!data?.coin_id || !details?.ido_address) {
         CONTRACT_ERR.configNotFound('coin_id, ido_address')
         return
       }
+
+      const value = inputBuyAmount.minus(initialBuyAmount).toFixed()
+
+      console.log(
+        'setTokenInfo',
+        initialBuyAmount,
+        params.initialBuyAmount,
+        value
+      )
 
       writeContract({
         ...config,
@@ -106,13 +131,18 @@ export const useUpdateIdea = (
           [BigInt(data.coin_id)],
           getEvmAirdropParams(configValue, params.airdrop_marketing),
         ],
+        value: parseEther(value),
       })
-    } catch (error) {}
+    } catch (error) {
+      toast.dismiss()
+    }
   }
 
   return {
     isUpdating: isPending || isLoading || isPendingInfo,
     update,
     updateWithContract,
+    initialBuyAmount,
+    initialBuyMax,
   }
 }
