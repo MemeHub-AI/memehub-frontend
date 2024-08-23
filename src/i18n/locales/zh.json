@@ -701,5 +701,6 @@
   "token.activate": "激活",
   "create.buy-title": "立即买入",
   "create.buy-desc": "如果需要创建后立即买入，请填入数量，如果不想，请直接点击确定",
-  "create.buy-desc-short": "在代币创建后立即买入"
+  "create.buy-desc-short": "在代币创建后立即买入",
+  "maintain-tips": "目前我们正在对服务器进行升级维护，部分功能暂时无法使用。\n感谢您的理解。"
 }
