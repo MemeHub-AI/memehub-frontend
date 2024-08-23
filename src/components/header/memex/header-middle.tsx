@@ -24,16 +24,16 @@ const MemexHeaderMiddle = () => {
   const randomIdx = Math.floor(Math.random() * colors.length)
 
   useEffect(() => {
-    // console.log('coinCreate: ', coinCreate)
-
     if (allTrades.length !== 0) {
       return setTrade(allTrades[0])
     }
+  }, [allTrades])
 
+  useEffect(() => {
     if (coinCreate !== undefined) {
       return setCreate(coinCreate)
     }
-  }, [allTrades, coinCreate])
+  }, [coinCreate])
 
   return (
     <div className="flex justify-between flex-1 mr-4">

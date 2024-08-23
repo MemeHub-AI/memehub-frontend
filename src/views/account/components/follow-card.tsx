@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUser } from '@/hooks/use-user'
 import { useAccountContext } from '@/contexts/account'
 import { Routes } from '@/routes'
+import { useIsMemex } from '@/hooks/use-is-memex'
 
 interface Props extends ComponentProps<typeof Card> {
   card: UserFollow
@@ -20,6 +21,7 @@ export const FollowCard = ({ card, onClick }: Props) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { userInfo, refetchFollow, isOtherUser } = useAccountContext()
+  const { isMemex } = useIsMemex()
   const { follow, unfollow } = useUser({
     onFollowSuccess: refetchFollow,
   })
@@ -31,7 +33,11 @@ export const FollowCard = ({ card, onClick }: Props) => {
       shadow="none"
       onClick={(e) => {
         const href = fmt.toHref(Routes.Account, card.user.wallet_address)
-        router.push(href)
+        const memexHref = fmt.toHref(
+          Routes.MemexDetailsProfile,
+          card.user.wallet_address
+        )
+        router.push(isMemex ? memexHref : href)
         onClick?.(e)
       }}
     >
