@@ -52,13 +52,13 @@ export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {
             }
           />
         </PopoverAnchor>
-        <PopoverContent className="flex flex-col gap-3 w-[30rem]">
+        <PopoverContent className="flex flex-col gap-3 w-[30rem] max-h-[50rem] overflow-auto">
           {tokens.map((t) => (
             <TokenCard
               key={t.id}
               card={t}
               descClass="line-clamp-2"
-              className="w-24 h-24"
+              className="min-w-24 min-h-40"
               hover="bg"
               shadow="none"
               onClick={reset}
