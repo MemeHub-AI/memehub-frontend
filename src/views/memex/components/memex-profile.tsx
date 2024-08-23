@@ -45,11 +45,21 @@ const MemexProfile = () => {
     content: string
     variant?: 'start' | 'center' | 'end'
     position?: 'top' | 'bottom' | 'left' | 'right'
-  }> = ({ children, content, variant = 'center', position = 'bottom' }) => (
+    className?: string
+  }> = ({
+    children,
+    content,
+    variant = 'center',
+    position = 'bottom',
+    className,
+  }) => (
     <HoverCard>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent
-        className="p-1 w-32 border-none text-center font-medium text-base"
+        className={cn(
+          'p-1 w-32 border-none text-center font-medium text-base',
+          className
+        )}
         align={variant}
         side={position}
       >
@@ -93,7 +103,11 @@ const MemexProfile = () => {
                   </span>
                 </HoverCardPop>
 
-                <HoverCardPop content={t('reward.desc3')} variant="start">
+                <HoverCardPop
+                  content={t('reward.desc3')}
+                  variant="start"
+                  className="w-40"
+                >
                   <span
                     onClick={() => {
                       if (isOtherUser) return
