@@ -40,7 +40,11 @@ export const useNftCheck = (chainId: number) => {
   const hasCommunity = communityId !== BI_ZERO
 
   const { data: community } = useQuery({
-    queryKey: [allianceApi.getCommunityDetail.name, communityId, address],
+    queryKey: [
+      allianceApi.getCommunityDetail.name,
+      communityId.toString(),
+      address,
+    ],
     queryFn: () => {
       return allianceApi.getCommunityDetail({
         identity: parseHash(communityId),
