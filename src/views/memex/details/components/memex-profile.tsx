@@ -1,16 +1,22 @@
 import DiamondIcon from '@/components/diamond-icon'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import { Popover } from '@/components/ui/popover'
 import { useAccountContext } from '@/contexts/account'
 import FollowTab from '@/views/account/components/follow-tab'
 import { EnvelopeClosedIcon, HeartFilledIcon } from '@radix-ui/react-icons'
+import { PopoverContent, PopoverTrigger } from '@radix-ui/react-popover'
+import copy from 'copy-to-clipboard'
 import { useTranslation } from 'react-i18next'
 import { IoMdMore } from 'react-icons/io'
+import { IoCopyOutline } from 'react-icons/io5'
 
 const MemexProfile = () => {
   const { userInfo, isOtherUser, refetchUserInfo, refetchFollow } =
     useAccountContext()
   const { t } = useTranslation()
+
+  console.log('userInfo: ', userInfo)
 
   return (
     <div className="h-52 flex-1 w-full rounded-lg border-2 border-zinc-200 overflow-hidden">
@@ -53,10 +59,20 @@ const MemexProfile = () => {
             </div>
           </div>
           <div className="flex space-x-6 items-center">
-            <Button>
+            <Button variant={'purple'}>
               <span className="text-sm">{t('edit')}</span>
             </Button>
-            <IoMdMore size={25} className="cursor-pointer" />
+            <Popover>
+              <PopoverTrigger>
+                <IoMdMore size={25} className="mt-2 cursor-pointer" />
+              </PopoverTrigger>
+              <PopoverContent side="bottom">
+                <div className="bg-gray-50 shadow-md text-black p-2">
+                  <IoCopyOutline />
+                  <p onClick={() => copy(userInfo?.wallet_address ?? '')}></p>
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>
