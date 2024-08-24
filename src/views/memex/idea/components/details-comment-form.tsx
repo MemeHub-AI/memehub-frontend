@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { AiOutlinePicture } from 'react-icons/ai'
 import { useRouter } from 'next/router'
+import { useAccount } from 'wagmi'
 
 import { Avatar } from '@/components/ui/avatar'
 import { Textarea } from '@/components/ui/textarea'
@@ -16,6 +17,7 @@ import { GridImages } from '@/components/grid-images'
 import { utilLang } from '@/utils/lang'
 import { memexIdeaConfig } from '@/config/memex/idea'
 import { useIdeaDetailsContext } from '@/contexts/memex/idea-details'
+import ConnectWallet from '@/components/connect-wallet'
 
 export const IdeaCommentForm = () => {
   const { t } = useTranslation()
@@ -30,6 +32,7 @@ export const IdeaCommentForm = () => {
     query.hash as string,
     refetchComments
   )
+  const { isConnected } = useAccount()
 
   return (
     <Form {...form}>
@@ -55,48 +58,56 @@ export const IdeaCommentForm = () => {
           />
           <GridImages urls={form.getValues('images')} />
           <div className="flex space-x-2 items-center mt-2 mb-1">
-            <Button
-              variant="purple"
-              shadow="none"
+            <ConnectWallet
               size="sm"
-              className="rounded-full !min-w-14"
-              disabled={isPending}
+              shadow="none"
+              variant="purple"
+              className="rounded-full"
             >
-              {isPending ? t('commenting') : t('comment')}
-            </Button>
-
-            <FormField
-              control={form.control}
-              name="images"
-              render={({ field }) => (
-                <Label
-                  htmlFor="post-details-image"
-                  disabled={field.disabled || isPending}
-                  onClick={clearFile}
-                >
-                  <AiOutlinePicture size={28} className="text-purple-700" />
-                  <ImageUpload
-                    id="post-details-image"
-                    className="hidden"
+              <Button
+                variant="purple"
+                shadow="none"
+                size="sm"
+                className="rounded-full !min-w-14"
+                disabled={isPending}
+              >
+                {isPending ? t('commenting') : t('comment')}
+              </Button>
+            </ConnectWallet>
+            {isConnected && (
+              <FormField
+                control={form.control}
+                name="images"
+                render={({ field }) => (
+                  <Label
+                    htmlFor="post-details-image"
                     disabled={field.disabled || isPending}
-                    ref={inputRef}
-                    onChange={async (e) => {
-                      const { commentMaxImg } = memexIdeaConfig
-                      if (field.value.length >= commentMaxImg) {
-                        form.setError('images', {
-                          message: utilLang.replace(t('iamges.max'), [
-                            commentMaxImg,
-                          ]),
-                        })
-                        return
-                      }
-                      const url = await onChangeUpload(e)
-                      if (url) field.onChange([...field.value, url])
-                    }}
-                  />
-                </Label>
-              )}
-            />
+                    onClick={clearFile}
+                  >
+                    <AiOutlinePicture size={28} className="text-purple-700" />
+                    <ImageUpload
+                      id="post-details-image"
+                      className="hidden"
+                      disabled={field.disabled || isPending}
+                      ref={inputRef}
+                      onChange={async (e) => {
+                        const { commentMaxImg } = memexIdeaConfig
+                        if (field.value.length >= commentMaxImg) {
+                          form.setError('images', {
+                            message: utilLang.replace(t('iamges.max'), [
+                              commentMaxImg,
+                            ]),
+                          })
+                          return
+                        }
+                        const url = await onChangeUpload(e)
+                        if (url) field.onChange([...field.value, url])
+                      }}
+                    />
+                  </Label>
+                )}
+              />
+            )}
           </div>
           {Object.entries(form.formState.errors).map(([_, err]) => (
             <p className="text-xs leading-none text-red-500">{err.message}</p>
