@@ -8,6 +8,7 @@ import { AppProviders } from '@/components/app-providers'
 import { AppLayout } from '@/components/layouts/app'
 import { Buffer } from 'buffer'
 import 'react-photo-view/dist/react-photo-view.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 export default function App({ Component, pageProps }: AppProps) {
   // If you want to initialize some global states,

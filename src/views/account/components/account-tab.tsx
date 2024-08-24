@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -18,6 +18,7 @@ export const AccountTab = () => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { isOtherUser } = useAccountContext()
+  const [isShowBorder, setIsShowBorder] = useState(true)
   const myAccountTabs = [
     {
       label: t('comments'),
@@ -83,14 +84,27 @@ export const AccountTab = () => {
       <TabsList
         className={cn(
           'h-12 mb-2 max-sm:w-full max-sm:h-10 max-sm:mb-0',
-          isMemex && 'bg-white'
+          isMemex && 'border-none rounded-none text-base'
         )}
       >
         {tabs.map((t) => (
           <TabsTrigger
-            className="h-full w-full max-sm:px-2 max-sm:text-xs"
+            className={cn(
+              'h-full w-full max-sm:px-2 max-sm:text-xs',
+              isMemex &&
+                ' data-[state=active]:text-black data-[state=active]:bg-white',
+              isMemex &&
+                'data-[state=active]:hover:bg-white hover:bg-white relative',
+              isMemex &&
+                'hover:after:absolute after:w-full after:h-[2px] after:bg-purple-500 after:bottom-0 after:left-0 after:hover:animate-left-to-right',
+              isMemex &&
+                isShowBorder &&
+                'data-[state=active]:after:absolute after:animate-left-to-right'
+            )}
             key={t.value}
             value={t.value.toString()}
+            onMouseEnter={() => setIsShowBorder(false)}
+            onMouseLeave={() => setIsShowBorder(true)}
           >
             {t.label}
           </TabsTrigger>

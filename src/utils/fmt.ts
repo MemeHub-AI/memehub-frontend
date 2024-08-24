@@ -111,11 +111,11 @@ export const fmt = {
 
     return utilLang.isEn() ? `${str} ${cmnt}` : str + cmnt
   },
-  fileName: (name: string | undefined, len = 10) => {
+  fileName: (name: string | undefined, len = 10, endLen = 6) => {
     if (!name) return ''
 
     if (name.length > len) {
-      return name.slice(0, len) + '...' + name.slice(-6)
+      return name.slice(0, len) + '...' + name.slice(-endLen)
     } else {
       return name
     }
