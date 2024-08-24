@@ -2,7 +2,7 @@ import { cn } from '@/lib/utils'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { AccountProvider } from '@/contexts/account'
 import { useRouter } from 'next/router'
-import { FollowTab } from '@/views/account/components/follow-tab'
+import { FollowDesktop } from '@/views/account/components/follow-desktop'
 import { AccountTab } from '@/views/account/components/account-tab'
 import { useUserList } from '@/views/account/hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
@@ -43,7 +43,7 @@ export const MemexDetailsProfile = () => {
       }}
     >
       <MemexLayout>
-        <div className="flex-1 min-h-main flex gap-2 flex-col h-[calc(100vh-64px)] overflow-auto pl-2 pr-4 !ml-0">
+        <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto lg:pl-2 !ml-0">
           {/* Left aside */}
           <aside
             className={cn(
@@ -53,7 +53,7 @@ export const MemexDetailsProfile = () => {
           >
             <MemexProfile />
             <div className="hidden mt-4">
-              <FollowTab />
+              <FollowDesktop />
             </div>
           </aside>
 
