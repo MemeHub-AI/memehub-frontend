@@ -4,7 +4,7 @@ import { SlMenu } from 'react-icons/sl'
 import { MdArrowDropDown } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
-import { FaTelegramPlane, FaTwitter } from 'react-icons/fa'
+import { FaTelegramPlane } from 'react-icons/fa'
 
 import type { Nav } from '.'
 import { Button } from '../ui/button'
@@ -17,6 +17,7 @@ import { RewardButton } from '../reward-button'
 import { cn } from '@/lib/utils'
 import { socialLink } from '@/config/link'
 import { AccountDropdown } from '../account-dropdown'
+import { FaXTwitter } from 'react-icons/fa6'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -38,7 +39,7 @@ export const HeaderMobile = (props: Props) => {
     },
     {
       name: t('twitter-x'),
-      icon: <FaTwitter />,
+      icon: <FaXTwitter />,
       link: socialLink.x,
     },
   ]
@@ -120,7 +121,7 @@ export const HeaderMobile = (props: Props) => {
           size="sm"
           onClick={() => router.push(Routes.Create)}
         >
-          {t('create.token')}
+          {t('header.post.idea')}
         </Button>
         <ConnectWallet>
           <AccountDropdown />

@@ -29,7 +29,6 @@ import { memexIdeaConfig } from '@/config/memex/idea'
 import { useIdeaInitialBuy } from '../create/details/hooks/use-idea-initial-buy'
 import { useResponsive } from '@/hooks/use-responsive'
 import { joinPaths } from '@/utils'
-import ProgressBar from 'react-bootstrap/ProgressBar'
 
 interface Props {
   idea: MemexIdeaItem | undefined

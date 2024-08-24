@@ -713,5 +713,8 @@
   "alread-failed": "已经失败",
   "memex.create.max-image": "最多上传{}张图片",
   "initial-buy.lt": "你只能增加购买量",
-  "load-more": "加载更多"
+  "load-more": "加载更多",
+  "header.post.idea": "发布创意",
+  "header.idea": "创意",
+  "header.coin": "内盘"
 }

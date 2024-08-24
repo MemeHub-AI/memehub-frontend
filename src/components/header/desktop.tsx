@@ -81,7 +81,7 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
         <RewardButton />
         <LangSelect />
         <Button onClick={() => router.push(Routes.Create)}>
-          {t('create.token')}
+          {t('header.post.idea')}
         </Button>
         <ConnectWallet>
           <AccountDropdown />
