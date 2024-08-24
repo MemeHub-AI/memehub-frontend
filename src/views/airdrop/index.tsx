@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { type ReactNode, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Ids } from './components/ids'
@@ -16,6 +16,7 @@ import { useIsMemex } from '@/hooks/use-is-memex'
 import { cn } from '@/lib/utils'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils'
+import { MemexLayout } from '../memex/components/memex-layout'
 
 export const AirdropPage = () => {
   const { t } = useTranslation()
@@ -51,53 +52,66 @@ export const AirdropPage = () => {
     }
   }
 
+  const getLayout = (children: ReactNode) => {
+    if (isMemex) {
+      return (
+        <MemexLayout>
+          <div>{children}</div>
+        </MemexLayout>
+      )
+    }
+
+    return (
+      <PrimaryLayout>
+        <div className={cn('py-5 flex-col gap-0 w-full', isMemex && 'flex-1')}>
+          {children}
+        </div>
+      </PrimaryLayout>
+    )
+  }
+
   useEffect(() => {
     setAirdropChecked(String(checked))
   }, [checked])
 
-  return (
+  return getLayout(
     <AirdropProvider value={{ shouldHideClaimed: checked }}>
-      <PrimaryLayout
-        container="div"
-        className={cn('py-5 flex-col gap-0 w-full', isMemex && 'flex-1')}
-      >
-        <Ids />
-        <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
+      <Ids />
+      <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
 
-        {(airdrops.length ?? 0) > 5 && (
-          <div className="flex space-x-2 items-center mt-3">
-            <Switch
-              id="airdrop-switch"
-              checked={checked}
-              onCheckedChange={setChecked}
-            />
-            <Label htmlFor="airdrop-switch">{t('airdrop.claimed.hide')}</Label>
-          </div>
-        )}
+      {(airdrops.length ?? 0) > 5 && (
+        <div className="flex space-x-2 items-center mt-3">
+          <Switch
+            id="airdrop-switch"
+            checked={checked}
+            onCheckedChange={setChecked}
+          />
+          <Label htmlFor="airdrop-switch">{t('airdrop.claimed.hide')}</Label>
+        </div>
+      )}
 
-        {isKol || hasCommunity ? (
-          <CustomSuspense
-            isPending={isLoading}
-            fallback={<div>{t('loading')}</div>}
-            nullback={<div className="mt-3">{t('no.airdrop')}</div>}
-            className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 "
-          >
-            {airdrops.map((a, i) =>
-              a?.airdrop.map((detail) => (
-                <AirdropCard
-                  key={i}
-                  airdrop={a}
-                  detail={detail}
-                  isKolCard={detail.type === AirdropDetailType.Kol}
-                />
-              ))
-            )}
-            {renderLoadingStatus()}
-          </CustomSuspense>
-        ) : (
-          <AirdropSkeleton />
-        )}
-      </PrimaryLayout>
+      {isKol || hasCommunity ? (
+        <CustomSuspense
+          isPending={isLoading}
+          fallback={<div>{t('loading')}</div>}
+          nullback={<div className="mt-3">{t('no.airdrop')}</div>}
+          className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 mt-3 gap-4 "
+        >
+          {airdrops.map((a, i) =>
+            a?.airdrop.map((detail) => (
+              <AirdropCard
+                key={i}
+                airdrop={a}
+                detail={detail}
+                isKolCard={detail.type === AirdropDetailType.Kol}
+              />
+            ))
+          )}
+          {renderLoadingStatus()}
+        </CustomSuspense>
+      ) : (
+        <AirdropSkeleton />
+      )}
     </AirdropProvider>
   )
 }

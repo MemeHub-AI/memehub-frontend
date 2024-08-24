@@ -64,5 +64,6 @@ export const useUniswapV2Amount = (
   return {
     getTokenAmount,
     getReserveAmount,
+    getReserves,
   }
 }

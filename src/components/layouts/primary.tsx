@@ -1,64 +1,42 @@
-import React, { type ComponentProps, type ReactDOM, createElement } from 'react'
+import React, { type ComponentProps } from 'react'
 
-import { OpportunityMoonshot } from '../opportunity-moonshot'
+import { NewsAside } from '../news-aside'
 import { cn } from '@/lib/utils'
-import { useIsMemex } from '@/hooks/use-is-memex'
-import { MemexMenu } from '../../views/memex/components/memex-menu'
 
-interface Props extends ComponentProps<'div'> {
-  mainClass?: string
-  asideProps?: ComponentProps<typeof OpportunityMoonshot>
-  container?: keyof ReactDOM | 'fragment'
+interface Props extends ComponentProps<'main'> {
   padding?: boolean
+  asideProps?: ComponentProps<typeof NewsAside>
 }
 
-export const PrimaryLayout = (props: Props) => {
+export const PrimaryLayout = ({
+  className,
+  children,
+  padding = true,
+  asideProps = {},
+  ...props
+}: Props) => {
   const {
-    mainClass,
-    children,
-    asideProps = {},
-    container = 'fragment',
-    padding = true,
-    ...restProps
-  } = props
-  const {
-    className: aClass,
-    containerClass: aContainerClass,
+    className: asideClass,
+    containerClass: asideContainerClass,
     ...restAsideProps
   } = asideProps
-  const { isMemex, isHiddenMoonShot } = useIsMemex()
 
   return (
     <main
       className={cn(
         'min-h-main max-sm:pt-0',
         padding && 'px-6 flex max-sm:px-3 gap-6',
-        mainClass,
-        isMemex &&
-          '!px-0 space-x-4 flex-row-reverse justify-between overflow-hidden'
+        className
       )}
+      {...props}
     >
-      <OpportunityMoonshot
-        className={cn(
-          'max-sm:!hidden',
-          aClass,
-          isMemex && 'pl-2 !border-r-0  border-zinc-200 mr-2',
-          isHiddenMoonShot() && 'hidden'
-          // 'hidden'
-        )}
-        containerClass={cn(
-          '!ml-0',
-          aContainerClass,
-          isMemex && '!h-[90vh] !top-0'
-        )}
+      <NewsAside
+        className={cn('max-sm:!hidden', asideClass)}
+        containerClass={cn('!ml-0', asideContainerClass)}
         {...restAsideProps}
       />
 
-      {container === 'fragment'
-        ? children
-        : createElement(container, restProps, children)}
-
-      {isMemex && <MemexMenu />}
+      {children}
     </main>
   )
 }

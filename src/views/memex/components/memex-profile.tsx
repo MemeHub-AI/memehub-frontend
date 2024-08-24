@@ -26,7 +26,7 @@ import { IoCopyOutline, IoSettingsOutline } from 'react-icons/io5'
 import MemexAvatar from './memex-avatar'
 import { cn } from '@/lib/utils'
 
-const MemexProfile = () => {
+export const MemexProfile = () => {
   const { userInfo, isOtherUser, refetchUserInfo, refetchFollow } =
     useAccountContext()
   const { isFollowing, isUnfollowing, follow, unfollow, update } = useUser({

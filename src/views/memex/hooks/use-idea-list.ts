@@ -22,8 +22,9 @@ export const useIdeaList = (type: MemexListType) => {
     queryKey: [getIdeaList.name, type],
     queryFn: ({ pageParam }) =>
       getIdeaList({
-        page: pageParam,
         type,
+        page: pageParam,
+        page_size: pageParam == 1 ? 10 : 20,
       }),
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,

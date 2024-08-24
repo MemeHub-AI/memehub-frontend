@@ -5,7 +5,7 @@ import { memo, useEffect, useState } from 'react'
 import TradeShake from './trade-shake'
 import CreateCoinShake from './create-coin-shake'
 
-const MemexHeaderMiddle = () => {
+export const MemexHeaderMiddle = () => {
   // const colors = utilColor.randomCreate()
   const { allTrades, coinCreate } = useAllTrades()
   const [trade, setTrade] = useState<TokenTrade>()

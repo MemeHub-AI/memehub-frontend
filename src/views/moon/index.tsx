@@ -1,4 +1,4 @@
-import { OpportunityMoonshot } from '@/components/opportunity-moonshot'
+import { NewsAside } from '@/components/news-aside'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Routes } from '@/routes'
 import clsx from 'clsx'
@@ -12,16 +12,16 @@ const MoonMemePage = () => {
   const { isPad } = useResponsive()
 
   useEffect(() => {
-    if(!isPad) push(Routes.Main)
+    if (!isPad) push(Routes.Main)
   }, [isPad])
 
   return (
     <div>
-      <OpportunityMoonshot
-          className="relative"
-          listClassName={clsx('max-md:!overflow-y-auto')}
-          defalutTab={id}
-        />
+      <NewsAside
+        className="relative"
+        listClassName={clsx('max-md:!overflow-y-auto')}
+        defalutTab={id}
+      />
     </div>
   )
 }

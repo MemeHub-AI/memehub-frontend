@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 import { MemexLayout } from './components/memex-layout'
@@ -14,7 +14,9 @@ export const MemexPage = () => {
 
   return (
     <MemexLayout>
-      <IdeaCardSkeleton />
+      <div className="w-full">
+        <IdeaCardSkeleton />
+      </div>
     </MemexLayout>
   )
 }

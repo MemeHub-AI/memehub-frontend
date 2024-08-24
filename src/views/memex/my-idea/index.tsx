@@ -6,6 +6,7 @@ import { IdeaCardSkeleton } from '../components/idea-card-skeleton'
 import { useIdeaList } from '../hooks/use-idea-list'
 import { MemexListType } from '@/api/memex/types'
 import { MemexInfiniteScroll } from '../components/memex-infinite-scroll'
+import { MemexTabs } from '../components/memex-tabs'
 
 export const MyIdea = () => {
   const { list, total, isLoading, refetch, fetchNextPage } = useIdeaList(
@@ -14,21 +15,27 @@ export const MyIdea = () => {
 
   return (
     <MemexLayout>
-      <CustomSuspense
-        isPending={isLoading}
-        fallback={<IdeaCardSkeleton />}
-        nullback={<IdeaEmpty />}
-      >
-        <MemexInfiniteScroll
-          list={list}
-          total={total}
-          fetchNext={fetchNextPage}
+      <MemexTabs>
+        <CustomSuspense
+          isPending={isLoading}
+          fallback={<IdeaCardSkeleton />}
+          nullback={<IdeaEmpty />}
         >
-          {list.map((t) => (
-            <MemexIdeaCard key={t?.hash} idea={t} onCommentSuccess={refetch} />
-          ))}
-        </MemexInfiniteScroll>
-      </CustomSuspense>
+          <MemexInfiniteScroll
+            list={list}
+            total={total}
+            fetchNext={fetchNextPage}
+          >
+            {list.map((t) => (
+              <MemexIdeaCard
+                key={t?.hash}
+                idea={t}
+                onCommentSuccess={refetch}
+              />
+            ))}
+          </MemexInfiniteScroll>
+        </CustomSuspense>
+      </MemexTabs>
     </MemexLayout>
   )
 }

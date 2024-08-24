@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 
 import { Form } from '@/components/ui/form'
-import { PrimaryLayout } from '@/components/layouts/primary'
 import { useCreateIdeaDetails } from './hooks/use-create-idea-details'
 import { CreateIdeaIntro } from '../components/idea-intro'
 import { CreateIdeaDetailsProvider } from '@/contexts/memex/create-idea-detail'
@@ -12,6 +11,7 @@ import { MarketingField } from '@/components/marketing-field'
 import { useCreateIdeaCleanup } from '../hooks/use-create-idea-cleanup'
 import { useMemexStore } from '@/stores/use-memex'
 import { InitialBuyField } from './components/initial-buy-field'
+import { MemexLayout } from '../../components/memex-layout'
 
 export const CreateDetail = () => {
   const craeteDetail = useCreateIdeaDetails()
@@ -23,10 +23,13 @@ export const CreateDetail = () => {
   useCreateIdeaCleanup()
 
   return (
-    <PrimaryLayout className="w-full">
+    <MemexLayout>
       <CreateIdeaDetailsProvider value={craeteDetail}>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="pt-2 pb-3">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="pt-2 pb-3 px-3"
+          >
             <CreateIdeaDetailsHeader />
             <RequiredFields />
             <InitialBuyField />
@@ -40,7 +43,7 @@ export const CreateDetail = () => {
           </form>
         </Form>
       </CreateIdeaDetailsProvider>
-    </PrimaryLayout>
+    </MemexLayout>
   )
 }
 
