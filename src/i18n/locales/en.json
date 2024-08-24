@@ -722,5 +722,6 @@
   "like": "Love",
   "alread-failed": "Already failed",
   "memex.create.max-image": "You can upload a maximum of {} images",
-  "initial-buy.lt": "You can only increase the purchase quantity"
+  "initial-buy.lt": "You can only increase the purchase quantity",
+  "load-more": "Load more"
 }

@@ -6,7 +6,6 @@ import { cn } from '@/lib/utils'
 import { TokenCard } from './card'
 import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
-import { useScrollLoad } from '@/hooks/use-scroll-load'
 import { Routes } from '@/routes'
 import { TokenChainSelect } from './chain-select'
 import { TokenSearchInput } from './token-search-input'
@@ -15,6 +14,7 @@ import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TokenListItem } from '@/api/token/types'
 import { IdoCard } from '../ido-card'
 import { useIsMemex } from '@/hooks/use-is-memex'
+import { LoadMore } from '../load-more'
 
 interface Props extends ComponentProps<'div'> {
   cards?: TokenListItem[]
@@ -40,10 +40,6 @@ export const TokenCards = (props: Props) => {
   const [filteredCards, setFilteredCards] = useState(cards)
   const { isPlayHomeAudio, setIsPlayHomeAudio } = useIsPlayAudio()
   const { playHome } = useAudioPlayer()
-  const { noMore } = useScrollLoad({
-    onFetchNext,
-    hasMore: cards.length < total,
-  })
   const { isMemex } = useIsMemex()
 
   useEffect(() => {
@@ -120,18 +116,13 @@ export const TokenCards = (props: Props) => {
         {!!cards.length &&
           filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
       </CustomSuspense>
-      <div className="mt-2">
-        {isPending && (
-          <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
-            {t('loading')}
-          </div>
-        )}
-        {noMore && (
-          <div className="text-center text-zinc-500 col-span-2 2xl:col-span-3">
-            {t('nomore')}
-          </div>
-        )}
-      </div>
+
+      <LoadMore
+        className="mt-2"
+        hasMore={cards.length < total}
+        isLoading={isPending}
+        onFetchMore={onFetchNext}
+      />
     </div>
   )
 }

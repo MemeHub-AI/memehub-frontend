@@ -6,6 +6,7 @@ interface Options {
   hasMore?: boolean
 }
 
+/** @deprecated should remove */
 export const useScrollLoad = (options: Options) => {
   const { onFetchNext, hasMore } = options
   const [isCalled, setIsCalled] = useState(false)
