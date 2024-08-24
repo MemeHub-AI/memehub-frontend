@@ -50,7 +50,7 @@ export const IdeaLikeComment = ({
       ideaInfo.refetchInfo()
     }
   )
-  const { isFailed } = useMemo(
+  const { isFailed, isEnded } = useMemo(
     () => getIdeaStatus(idea, ideaInfo),
     [idea, ideaInfo]
   )
@@ -66,7 +66,9 @@ export const IdeaLikeComment = ({
   } = ideaInfo
 
   const onOpenLike = () => {
+    if (isLiked) return toast.error(t('already-liked'))
     if (isFailed) return toast.error(t('alread-failed'))
+    if (isEnded) return toast.error(t('alread-ended'))
     setLikeOpen(true)
   }
 
@@ -192,7 +194,7 @@ export const IdeaLikeComment = ({
             <IdeaHeartButton
               likedCount={likedCount}
               isLiked={isLiked}
-              onOpenLike={onOpenLike}
+              onClick={onOpenLike}
             />
           </div>
           <div className="flex items-center space-x-1 text-sm cursor-pointer">

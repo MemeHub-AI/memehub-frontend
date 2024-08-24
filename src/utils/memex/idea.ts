@@ -3,6 +3,7 @@ import dayjs from 'dayjs'
 import { MemexIdeaItem, IdeaStatus } from '@/api/memex/types'
 import { useIdeaInfo } from '@/views/memex/hooks/use-idea-info'
 
+// TODO: refactor to a hook.
 export const getIdeaStatus = (
   post: MemexIdeaItem | undefined,
   info: ReturnType<typeof useIdeaInfo>
