@@ -11,7 +11,6 @@ import { cn } from '@/lib/utils'
 import { AccountDropdown } from '../account-dropdown'
 import { Button } from '../ui/button'
 import { Routes } from '@/routes'
-import { useIsMemex } from '@/hooks/use-is-memex'
 import { MemexHeaderMiddle } from './memex/header-middle'
 
 interface Props extends ComponentProps<'div'> {
@@ -22,31 +21,21 @@ interface Props extends ComponentProps<'div'> {
 export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
   const { pathname, ...router } = useRouter()
   const { t } = useTranslation()
-  const { isMemex } = useIsMemex()
 
-  if (isMemex) {
-    return (
-      <>
-        <div
-          className={cn(
-            'flex items-center mr-3 ml-[1px] select-none w-60 max-xl:max-w-52',
-            'self-stretch xl:border-r'
-          )}
-        >
-          <Logo showMeme className="shrink-0 xl:max-w-32" />
-        </div>
-
-        <MemexHeaderMiddle />
-
-        <div className="flex items-center justify-center gap-3">
-          <RewardButton />
-          <ConnectWallet>
-            <AccountDropdown />
-          </ConnectWallet>
-        </div>
-      </>
-    )
-  }
+  return (
+    <>
+      <MemexHeaderMiddle />
+      <div className="flex items-center justify-center gap-3">
+        <RewardButton />
+        <Button onClick={() => router.push(Routes.Create)}>
+          {t('create.token')}
+        </Button>
+        <ConnectWallet>
+          <AccountDropdown />
+        </ConnectWallet>
+      </div>
+    </>
+  )
 
   return (
     <>

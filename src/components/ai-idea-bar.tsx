@@ -57,7 +57,7 @@ export const AIIdeaBar = (props: Props) => {
   return (
     <div
       className={clsx(
-        'mt-8  bg-slate-100 rounded-sm py-5 pb-4 my-5 max-md:w-full max-md:py-3  max-md:mt-2',
+        'bg-slate-100 rounded-sm py-5 pb-4 max-md:w-full max-md:py-3  max-md:mt-2',
         className
       )}
     >

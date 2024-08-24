@@ -15,7 +15,7 @@ import { TokenDetailsCard } from '../components/token-detail-card'
 import { Routes } from '@/routes'
 import { useCreateIdeaCleanup } from './hooks/use-create-idea-cleanup'
 import { MemexIdeaItem } from '@/api/memex/types'
-import { MemexLayout } from '../components/memex-layout'
+import { getMemexLayout } from '..'
 
 export const CreateIdeaPage = () => {
   const createIdea = useCreateIdea()
@@ -26,48 +26,48 @@ export const CreateIdeaPage = () => {
   useCreateIdeaCleanup()
 
   return (
-    <MemexLayout>
-      <CreateIdeaProvider value={createIdea}>
-        <Form {...form}>
-          <form
-            className="flex-1 pt-1 pb-3 xl:max-w-4xl"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
-            <CreateIdeaHeader />
-            <CreateIdeaTextareaField />
+    <CreateIdeaProvider value={createIdea}>
+      <Form {...form}>
+        <form
+          className="flex-1 pt-1 pb-3 xl:max-w-4xl"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <CreateIdeaHeader />
+          <CreateIdeaTextareaField />
 
-            <div className="px-3 mt-1 space-y-2">
-              <CreateIdeaChainField />
+          <div className="px-3 mt-1 space-y-2">
+            <CreateIdeaChainField />
 
-              <div className="flex space-x-2">
-                <CreateIdeaPicturesField />
-                {!ideaDetails && <CreateIdeaDetailButton />}
-              </div>
-
-              {!!ideaDetails && (
-                <TokenDetailsCard
-                  className="pb-0"
-                  details={ideaDetails as unknown as MemexIdeaItem}
-                  editable={true}
-                  onClick={() => {
-                    const values = form.getValues()
-
-                    setIdea({ ...values, image_urls: values.pictures })
-                    router.push({
-                      pathname: Routes.MemexCreateDetails,
-                      query: { chain: values.chain, ...query },
-                    })
-                  }}
-                />
-              )}
-              <CreateIdeaMessages />
-              <CreateIdeaIntro />
+            <div className="flex space-x-2">
+              <CreateIdeaPicturesField />
+              {!ideaDetails && <CreateIdeaDetailButton />}
             </div>
-          </form>
-        </Form>
-      </CreateIdeaProvider>
-    </MemexLayout>
+
+            {!!ideaDetails && (
+              <TokenDetailsCard
+                className="pb-0"
+                details={ideaDetails as unknown as MemexIdeaItem}
+                editable={true}
+                onClick={() => {
+                  const values = form.getValues()
+
+                  setIdea({ ...values, image_urls: values.pictures })
+                  router.push({
+                    pathname: Routes.MemexCreateDetails,
+                    query: { chain: values.chain, ...query },
+                  })
+                }}
+              />
+            )}
+            <CreateIdeaMessages />
+            <CreateIdeaIntro />
+          </div>
+        </form>
+      </Form>
+    </CreateIdeaProvider>
   )
 }
+
+CreateIdeaPage.getLayout = getMemexLayout
 
 export default CreateIdeaPage

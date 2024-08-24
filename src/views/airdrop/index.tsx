@@ -13,10 +13,8 @@ import { useAirdropList } from './hooks/use-airdrop-list'
 import { AirdropDetailType } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
 import { useIsMemex } from '@/hooks/use-is-memex'
-import { cn } from '@/lib/utils'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils'
-import { MemexLayout } from '../memex/components/memex-layout'
 
 export const AirdropPage = () => {
   const { t } = useTranslation()
@@ -52,29 +50,11 @@ export const AirdropPage = () => {
     }
   }
 
-  const getLayout = (children: ReactNode) => {
-    if (isMemex) {
-      return (
-        <MemexLayout>
-          <div>{children}</div>
-        </MemexLayout>
-      )
-    }
-
-    return (
-      <PrimaryLayout>
-        <div className={cn('py-5 flex-col gap-0 w-full', isMemex && 'flex-1')}>
-          {children}
-        </div>
-      </PrimaryLayout>
-    )
-  }
-
   useEffect(() => {
     setAirdropChecked(String(checked))
   }, [checked])
 
-  return getLayout(
+  return (
     <AirdropProvider value={{ shouldHideClaimed: checked }}>
       <Ids />
       <h1 className="mt-5 text-2xl font-bold">{t('airdrop.you')}</h1>
@@ -114,6 +94,10 @@ export const AirdropPage = () => {
       )}
     </AirdropProvider>
   )
+}
+
+AirdropPage.getLayout = (page: ReactNode) => {
+  return <PrimaryLayout>{page}</PrimaryLayout>
 }
 
 const AirdropSkeleton = () => {

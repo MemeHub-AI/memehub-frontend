@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ideaApi } from '@/api/idea'
 import { useRouter } from 'next/router'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
-import { memo, useState } from 'react'
+import { memo, ReactNode, useState } from 'react'
 import { defaultImg } from '@/config/link'
 import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
@@ -16,7 +16,7 @@ import { MemeStory } from './components/meme-story'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { fmt } from '@/utils/fmt'
 
-const IdeaPage = () => {
+export const IdeaPage = () => {
   const { t } = useTranslation()
   const router = useRouter()
   const type = window.location.search.match(/type=(\d+)/)?.[1] as string
@@ -66,7 +66,7 @@ const IdeaPage = () => {
   }
 
   return (
-    <PrimaryLayout>
+    <>
       <div className="max-w-[1185px] max-md:pr-0 pr-6 flex-1 mt-6 max-sm:mt-2 max-sm:ml-0">
         <div className="flex justify-between items-center max-md:flex-col max-md:items-start">
           <div className="flex flex-1">
@@ -125,9 +125,11 @@ const IdeaPage = () => {
         onConfirm={onConfirm}
         onCancel={onCancel}
       ></AICreateMemecoinDialog>
-    </PrimaryLayout>
+    </>
   )
 }
+
+IdeaPage.getLayout = (page: ReactNode) => <PrimaryLayout>{page}</PrimaryLayout>
 
 const Content = memo(({ content }: { content?: string }) => {
   const [show, setShow] = useState(false)

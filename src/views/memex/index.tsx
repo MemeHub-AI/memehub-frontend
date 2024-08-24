@@ -1,9 +1,20 @@
-import { useEffect } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { MemexLayout } from './components/memex-layout'
 import { Routes } from '@/routes'
 import { IdeaCardSkeleton } from './components/idea-card-skeleton'
+import { PrimaryLayout } from '@/components/layouts/primary'
+import { MemexTabs } from './components/memex-tabs'
+
+export const getMemexLayout = (page: ReactNode, withTabs = false) => (
+  <PrimaryLayout
+    newsVisible="always"
+    padding={false}
+    contentClass="flex justify-center"
+  >
+    {withTabs ? <MemexTabs>{page}</MemexTabs> : page}
+  </PrimaryLayout>
+)
 
 export const MemexPage = () => {
   const router = useRouter()
@@ -13,12 +24,12 @@ export const MemexPage = () => {
   }, [])
 
   return (
-    <MemexLayout>
-      <div className="w-full">
-        <IdeaCardSkeleton />
-      </div>
-    </MemexLayout>
+    <div className="w-full">
+      <IdeaCardSkeleton />
+    </div>
   )
 }
+
+MemexPage.getLayout = getMemexLayout
 
 export default MemexPage

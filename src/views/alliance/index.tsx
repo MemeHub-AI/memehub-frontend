@@ -8,9 +8,6 @@ import { Kol } from './kol'
 import { Communities } from './communities'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
-import { useIsMemex } from '@/hooks/use-is-memex'
-import { cn } from '@/lib/utils'
-import { MemexLayout } from '../memex/components/memex-layout'
 
 enum Tab {
   Kol = 'kol',
@@ -30,26 +27,9 @@ export const AlliancePage = () => {
   }
   const { isPlayAllianceAudio, setIsPlayAllianceAudio } = useIsPlayAudio()
   const { playAlliance } = useAudioPlayer()
-  const { isMemex } = useIsMemex()
 
   const handleTabChange = (value: string) => {
     router.replace(`${router.pathname}?tab=${value}`)
-  }
-
-  const getLayout = (children: ReactNode) => {
-    if (isMemex) {
-      return (
-        <MemexLayout>
-          <div>{children}</div>
-        </MemexLayout>
-      )
-    }
-
-    return (
-      <PrimaryLayout>
-        <div className={cn('py-5', isMemex && 'flex-1')}>{children}</div>
-      </PrimaryLayout>
-    )
   }
 
   useEffect(() => {
@@ -59,7 +39,7 @@ export const AlliancePage = () => {
     }
   }, [])
 
-  return getLayout(
+  return (
     <Tabs value={defaultValue} onValueChange={handleTabChange}>
       <TabsList className="border-none space-x-2 h-10">
         <TabsTrigger
@@ -84,5 +64,9 @@ export const AlliancePage = () => {
     </Tabs>
   )
 }
+
+AlliancePage.getLayout = (page: ReactNode) => (
+  <PrimaryLayout>{page}</PrimaryLayout>
+)
 
 export default AlliancePage

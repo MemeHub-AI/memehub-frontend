@@ -16,7 +16,6 @@ import { useLang } from '@/hooks/use-lang'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useQueryChains } from '@/hooks/use-query-chains'
 import { useMounted } from '@/hooks/use-mounted'
-import { Header } from '@/components/header'
 import { Toaster } from '@/components/ui/sonner'
 import { BackToTop } from '@/components/back-to-top'
 import { SignLoginDialog } from '../sign-login-dialog'
@@ -80,10 +79,8 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
 
   return (
     <>
-      <Header />
       <MaintainTips />
       {children}
-      {/* <Footer /> */}
       <Toaster theme="light" richColors />
       <BackToTop />
       <SignLoginDialog />

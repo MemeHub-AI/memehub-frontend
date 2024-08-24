@@ -1,19 +1,27 @@
 import Head from 'next/head'
 import Script from 'next/script'
-
+import { Buffer } from 'buffer'
+import { ReactElement, ReactNode } from 'react'
+import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
 import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
-import { AppProviders } from '@/components/app-providers'
-import { AppLayout } from '@/components/layouts/app'
-import { Buffer } from 'buffer'
 import 'react-photo-view/dist/react-photo-view.css'
 
-export default function App({ Component, pageProps }: AppProps) {
-  // If you want to initialize some global states,
-  // should write them in the `AppLayout`, not here.
+import { AppProviders } from '@/components/app-providers'
+import { AppLayout } from '@/components/layouts/app'
 
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
+}
+export default function App({ Component, pageProps }: AppPropsWithLayout) {
   ;(global as any).Buffer = Buffer
+
+  const getLayout = Component.getLayout ?? ((page) => page)
 
   return (
     <>
@@ -48,7 +56,7 @@ export default function App({ Component, pageProps }: AppProps) {
       ></Script>
 
       <AppProviders>
-        <AppLayout children={<Component {...pageProps} />} />
+        <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
       </AppProviders>
     </>
   )

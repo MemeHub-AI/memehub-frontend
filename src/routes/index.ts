@@ -21,6 +21,8 @@ export enum Routes {
 
   TokenPage = '/[chain]/[address]',
 
+  Notification = '/notification',
+
   Memex = '/memex',
 
   MemexLatest = '/memex/latest',

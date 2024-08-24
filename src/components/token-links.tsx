@@ -1,7 +1,7 @@
 import React, { type ComponentProps } from 'react'
 import { FaTelegramPlane } from 'react-icons/fa'
-import { FaTwitter } from 'react-icons/fa'
 import { FaGlobe } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -12,6 +12,7 @@ interface Props extends ComponentProps<'div'> {
   tg?: string
   website?: string
   buttonProps?: ComponentProps<typeof Button>
+  size?: number
 }
 
 export const TokenSocialLinks = ({
@@ -20,6 +21,7 @@ export const TokenSocialLinks = ({
   tg,
   website,
   buttonProps,
+  size = 20,
   ...props
 }: Props) => {
   const { className: buttonClass } = buttonProps ?? {}
@@ -27,17 +29,17 @@ export const TokenSocialLinks = ({
     {
       title: 'Twitter',
       link: parseMediaUrl('x', x),
-      icon: <FaTwitter size={20} />,
+      icon: <FaXTwitter size={size} />,
     },
     {
       title: 'Telegram',
       link: parseMediaUrl('tg', tg),
-      icon: <FaTelegramPlane size={22} />,
+      icon: <FaTelegramPlane size={size} />,
     },
     {
       title: 'Website',
       link: parseMediaUrl('website', website),
-      icon: <FaGlobe size={18} />,
+      icon: <FaGlobe size={size} />,
     },
   ]
 

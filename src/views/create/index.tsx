@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { CreateTokenStatusDialog } from './components/dialog'
@@ -37,43 +37,45 @@ export const CreatePage = () => {
         ...newsListData,
       }}
     >
-      <PrimaryLayout>
-        <div
-          className={cn(
-            'flex-1 pb-5 max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0',
-            'w-96 pr-6 max-md:w-[480px] max-sm:w-full max-sm:px-0'
-          )}
-        >
-          <CreateTokenTitle className="w-fit max-sm:mt-3">
-            {t('create.new')}
-          </CreateTokenTitle>
+      <div
+        className={cn(
+          'flex-1 pb-5 max-md:order-1 max-md:border-l-0 max-md:ml-0 max-md:pl-0',
+          'pr-6 max-sm:w-full max-sm:px-0'
+        )}
+      >
+        <CreateTokenTitle className="w-fit max-sm:mt-3">
+          {t('create.new')}
+        </CreateTokenTitle>
 
-          <div className="sm:hidden">
-            <MobileQpportunityMoonshot defalutTab={1} />
-          </div>
-
-          <AIIdeaBar
-            className="mt-5 w-fit"
-            onInputGen={onInputGen}
-            onRandomGen={onRandomGen}
-          />
-
-          <AICreateMemecoinDialog
-            show={show}
-            data={{ name: value }}
-            isRandom={isRandom}
-            onConfirm={onConfirm}
-            onCancel={onCancel}
-          />
-
-          <CreateTokenForm />
+        <div className="sm:hidden">
+          <MobileQpportunityMoonshot defalutTab={1} />
         </div>
 
-        <CreateTokenStatusDialog />
-      </PrimaryLayout>
+        <AIIdeaBar
+          className="my-5 w-fit "
+          onInputGen={onInputGen}
+          onRandomGen={onRandomGen}
+        />
+
+        <AICreateMemecoinDialog
+          show={show}
+          data={{ name: value }}
+          isRandom={isRandom}
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+        />
+
+        <CreateTokenForm />
+      </div>
+
+      <CreateTokenStatusDialog />
       <AICreateMemecoinDialogLoading />
     </CreateTokenProvider>
   )
 }
+
+CreatePage.getLayout = (page: ReactNode) => (
+  <PrimaryLayout>{page}</PrimaryLayout>
+)
 
 export default CreatePage

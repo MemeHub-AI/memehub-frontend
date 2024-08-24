@@ -11,7 +11,7 @@ import { IdeaDetailsSkeleton } from './components/details-skeleton'
 import { useIdeaInfo } from '../hooks/use-idea-info'
 import { MemexIdeaCard } from '../components/idea-card'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { MemexLayout } from '../components/memex-layout'
+import { getMemexLayout } from '..'
 
 export const IdeaDetailsPage = () => {
   const { query } = useRouter()
@@ -31,27 +31,27 @@ export const IdeaDetailsPage = () => {
     <IdeaDetailsProvider
       value={{ ...ideaDetails, ...ideaComments, ...ideaInfo }}
     >
-      <MemexLayout>
-        <CustomSuspense
-          isPending={isLoadingDetails || isLoadingComments}
-          fallback={<IdeaDetailsSkeleton />}
-          className="w-full sm:max-w-sm md:max-w-xl"
-        >
-          <IdeaDetailsHeader />
-          <MemexIdeaCard
-            idea={details}
-            onCommentSuccess={refetchComments}
-            className="py-0 border-none"
-            mode="details"
-          />
-          <IdeaCommentForm />
-          {comments.map((c) => (
-            <IdeaCommentCard key={c?.created_at} comment={c} />
-          ))}
-        </CustomSuspense>
-      </MemexLayout>
+      <CustomSuspense
+        isPending={isLoadingDetails || isLoadingComments}
+        fallback={<IdeaDetailsSkeleton />}
+        className="w-full sm:max-w-sm md:max-w-xl"
+      >
+        <IdeaDetailsHeader />
+        <MemexIdeaCard
+          idea={details}
+          onCommentSuccess={refetchComments}
+          className="py-0 border-none"
+          mode="details"
+        />
+        <IdeaCommentForm />
+        {comments.map((c) => (
+          <IdeaCommentCard key={c?.created_at} comment={c} />
+        ))}
+      </CustomSuspense>
     </IdeaDetailsProvider>
   )
 }
+
+IdeaDetailsPage.getLayout = getMemexLayout
 
 export default IdeaDetailsPage

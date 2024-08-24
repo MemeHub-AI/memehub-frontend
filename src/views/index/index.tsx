@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 
 import { TokenCards } from '@/components/token-cards'
 import { useTokens } from '@/hooks/use-tokens'
@@ -7,7 +7,7 @@ import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
 import { PrimaryLayout } from '@/components/layouts/primary'
 
-export const MainPage = () => {
+export const HomePage = () => {
   const {
     tokens,
     idoTokens,
@@ -28,32 +28,32 @@ export const MainPage = () => {
   } = useGenAIIdea()
 
   return (
-    <PrimaryLayout>
-      <div className="flex-1 max-sm:mt-2">
-        <AIIdeaBar
-          className="max-sm:mb-3"
-          onInputGen={onInputGen}
-          onRandomGen={onRandomGen}
-        />
-        <TokenCards
-          className="flex-1 max-sm:mt-2 flex flex-col pb-4"
-          idoTokens={idoTokens}
-          cards={tokens}
-          total={totalToken}
-          isLoading={isLoading}
-          isPending={isFetching}
-          onFetchNext={fetchNextPage}
-        />
-        <AICreateMemecoinDialog
-          show={show}
-          isRandom={isRandom}
-          data={{ name: value }}
-          onCancel={onCancel}
-          onConfirm={onConfirm}
-        />
-      </div>
-    </PrimaryLayout>
+    <div className="flex-1 max-sm:mt-2">
+      <AIIdeaBar
+        className="max-sm:mb-3"
+        onInputGen={onInputGen}
+        onRandomGen={onRandomGen}
+      />
+      <TokenCards
+        className="flex-1 max-sm:mt-2 flex flex-col pb-4"
+        idoTokens={idoTokens}
+        cards={tokens}
+        total={totalToken}
+        isLoading={isLoading}
+        isPending={isFetching}
+        onFetchNext={fetchNextPage}
+      />
+      <AICreateMemecoinDialog
+        show={show}
+        isRandom={isRandom}
+        data={{ name: value }}
+        onCancel={onCancel}
+        onConfirm={onConfirm}
+      />
+    </div>
   )
 }
 
-export default MainPage
+HomePage.getLayout = (page: ReactNode) => <PrimaryLayout>{page}</PrimaryLayout>
+
+export default HomePage

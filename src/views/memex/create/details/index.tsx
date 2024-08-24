@@ -11,9 +11,9 @@ import { MarketingField } from '@/components/marketing-field'
 import { useCreateIdeaCleanup } from '../hooks/use-create-idea-cleanup'
 import { useMemexStore } from '@/stores/use-memex'
 import { InitialBuyField } from './components/initial-buy-field'
-import { MemexLayout } from '../../components/memex-layout'
+import { getMemexLayout } from '../..'
 
-export const CreateDetail = () => {
+export const CreateDetailPage = () => {
   const craeteDetail = useCreateIdeaDetails()
   const { form, onSubmit, isUpdating } = craeteDetail
   const { idea } = useMemexStore()
@@ -23,28 +23,25 @@ export const CreateDetail = () => {
   useCreateIdeaCleanup()
 
   return (
-    <MemexLayout>
-      <CreateIdeaDetailsProvider value={craeteDetail}>
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="pt-2 pb-3 px-3"
-          >
-            <CreateIdeaDetailsHeader />
-            <RequiredFields />
-            <InitialBuyField />
-            <MarketingField
-              form={form}
-              chainName={chainName}
-              disabled={isUpdating}
-            />
-            <OptionalFields />
-            <CreateIdeaIntro />
-          </form>
-        </Form>
-      </CreateIdeaDetailsProvider>
-    </MemexLayout>
+    <CreateIdeaDetailsProvider value={craeteDetail}>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="pt-2 pb-3 px-3">
+          <CreateIdeaDetailsHeader />
+          <RequiredFields />
+          <InitialBuyField />
+          <MarketingField
+            form={form}
+            chainName={chainName}
+            disabled={isUpdating}
+          />
+          <OptionalFields />
+          <CreateIdeaIntro />
+        </form>
+      </Form>
+    </CreateIdeaDetailsProvider>
   )
 }
 
-export default CreateDetail
+CreateDetailPage.getLayout = getMemexLayout
+
+export default CreateDetailPage

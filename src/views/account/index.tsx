@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { useRouter } from 'next/router'
 
 import { Profile } from './components/profile'
@@ -9,6 +9,7 @@ import { useUserInfo } from '@/hooks/use-user-info'
 import { AccountProvider } from '@/contexts/account'
 import { useUserList } from './hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
+import { PrimaryLayout } from '@/components/layouts/primary'
 
 export const AccountPage = () => {
   const { query } = useRouter()
@@ -64,5 +65,9 @@ export const AccountPage = () => {
     </AccountProvider>
   )
 }
+
+AccountPage.getLayout = (page: ReactNode) => (
+  <PrimaryLayout>{page}</PrimaryLayout>
+)
 
 export default AccountPage
