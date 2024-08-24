@@ -254,7 +254,7 @@
   "addr.empty": "Cannot find contract address",
   "claimed": "Claimed",
   "tx.record": "Transaction record",
-  "create.token": "Start Coin",
+  "create.token": "Start coin",
   "random.meme": "Random Memecoin",
   "download.img": "Download Image",
   "no.opponent": "No Opponent  ",
@@ -723,5 +723,8 @@
   "alread-failed": "Already failed",
   "memex.create.max-image": "You can upload a maximum of {} images",
   "initial-buy.lt": "You can only increase the purchase quantity",
-  "load-more": "Load more"
+  "load-more": "Load more",
+  "header.post.idea": "Post idea",
+  "header.idea": "Idea",
+  "header.coin": "Coin"
 }

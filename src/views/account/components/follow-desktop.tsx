@@ -1,7 +1,11 @@
-import { useRef } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { FollowersCards } from './followers-cards'
+import { FollowingCards } from './following-cards'
+import { UserListType } from '@/api/user/types'
+import { useAccountContext } from '@/contexts/account'
+import { useRef } from 'react'
 import { Root as VisuallyHidden } from '@radix-ui/react-visually-hidden'
-
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -11,23 +15,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { useAccountContext } from '@/contexts/account'
-import { UserListType } from '@/api/user/types'
-import { FollowersCards } from './followers-cards'
-import { FollowingCards } from './following-cards'
-import { useIsMemex } from '@/hooks/use-is-memex'
-import { cn } from '@/lib/utils'
 
-export const FollowDialog = ({
-  tab,
-  setTab,
-}: {
-  tab: UserListType
-  setTab: (tab: UserListType) => void
-}) => {
+export const FollowDesktop = () => {
   const { t } = useTranslation()
-  const closeRef = useRef<HTMLButtonElement>(null)
-  const { isOtherUser, followersResults, followingResults } =
+  const [tab, setTab] = useState(UserListType.Following)
+  const { isOtherUser, followersResults, followingResults, refetchFollow } =
     useAccountContext()
   const {
     followers,
@@ -39,30 +31,27 @@ export const FollowDialog = ({
     isLoading: isLoadingFollowing,
     isFetching: isFetchingFollowing,
   } = followingResults
+  const closeRef = useRef<HTMLButtonElement>(null)
   const isFollowers = tab === UserListType.Followers
-  const { isMemex } = useIsMemex()
 
   return (
     <Dialog>
       <div
-        className={cn(
-          'flex items-center justify-between',
-          isMemex && 'justify-start'
-        )}
-        style={isMemex ? { margin: '0' } : { margin: '0 10px 10px 10px' }}
+        className="flex items-center justify-start"
+        style={{ margin: '0 10px 10px 10px' }}
       >
         <DialogTrigger asChild>
           <Button
-            variant={isMemex ? 'secondary' : 'outline'}
+            variant="secondary"
             size="sm"
-            shadow={isMemex ? 'none' : 'default'}
+            shadow="none"
             onClick={() => setTab(UserListType.Followers)}
-            className={isMemex ? '!bg-white shadow-none pl-0' : ''}
+            className="!bg-white shadow-none pl-0"
           >
-            <span className={isMemex ? 'hidden' : ''}>
+            {/* <span className={isMemex ? 'hidden' : ''}>
               {t('followers')}({followers.total})
-            </span>
-            <span className={isMemex ? 'space-x-1 text-base' : 'hidden'}>
+            </span> */}
+            <span className="space-x-1 text-base">
               <span className="font-bold ">{followers.total}</span>
               <span className="text-blue-deep ">{t('followers')}</span>
             </span>
@@ -70,18 +59,18 @@ export const FollowDialog = ({
         </DialogTrigger>
         <DialogTrigger asChild>
           <Button
-            variant={isMemex ? 'secondary' : 'outline'}
+            variant="secondary"
             size="sm"
             onClick={() => setTab(UserListType.Following)}
-            shadow={isMemex ? 'none' : 'default'}
-            className={isMemex ? '!bg-white shadow-none' : ''}
+            shadow="none"
+            className="!bg-white shadow-none"
           >
-            <span className={isMemex ? 'hidden' : ''}>
+            {/* <span className={isMemex ? 'hidden' : ''}>
               {t('following')}({following.total})
-            </span>
-            <span className={isMemex ? 'space-x-1 text-base' : 'hidden'}>
+            </span> */}
+            <span className="space-x-1 text-base">
               <span className="font-bold ">{following.total}</span>
-              <span className="text-blue-deep ">{t('following')}</span>
+              <span className="text-blue-deep">{t('following')}</span>
             </span>
           </Button>
         </DialogTrigger>
@@ -124,4 +113,4 @@ export const FollowDialog = ({
   )
 }
 
-export default FollowDialog
+export default FollowDesktop

@@ -137,7 +137,8 @@ const Container = ({
         </DropdownMenuTrigger>
         <DropdownMenuContent
           className="max-w-min -mr-1"
-          align={isMobile ? 'end' : 'center'}
+          align="end"
+          alignOffset={-1}
         >
           {children}
         </DropdownMenuContent>
@@ -150,10 +151,7 @@ const Container = ({
       <HoverCardTrigger asChild className={triggerClass}>
         {trigger}
       </HoverCardTrigger>
-      <HoverCardContent
-        className="max-w-min p-1"
-        align={isMobile ? 'end' : 'center'}
-      >
+      <HoverCardContent className="max-w-min p-1" align="end" alignOffset={-5}>
         {children}
       </HoverCardContent>
     </HoverCard>

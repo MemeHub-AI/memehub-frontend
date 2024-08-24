@@ -131,12 +131,16 @@ const config = {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
-        horizontal_shake: {
+        horizontalShake: {
           '0%': { transform: 'translateX(0)' },
           '25%': { transform: 'translateX(15px)' },
           '50%': { transform: 'translateX(-15px)' },
           '75%': { transform: 'translateX(15px)' },
           '100': { transform: 'translateX(0)' },
+        },
+        leftToRight: {
+          '0%': { width: '0' },
+          '100%': { width: '100%' },
         },
       },
       animation: {
@@ -144,7 +148,8 @@ const config = {
         'accordion-up': 'accordion-up 0.2s ease-out',
         flash: 'flash 1s ease-out infinite',
         'flash-no-infinite': 'flash 1s ease-out',
-        'hori-shake': 'horizontal_shake 0.2s 3',
+        'hori-shake': 'horizontalShake 0.2s 3',
+        'left-to-right': 'leftToRight 0.3s',
       },
     },
   },

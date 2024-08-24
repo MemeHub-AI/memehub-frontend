@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react'
 import { useRouter } from 'next/router'
 
 import { Profile } from './components/profile'
-import { FollowTab } from './components/follow-tab'
+import { FollowDesktop } from './components/follow-desktop'
 import { AccountTab } from './components/account-tab'
 import { cn } from '@/lib/utils'
 import { useUserInfo } from '@/hooks/use-user-info'
@@ -55,7 +55,7 @@ export const AccountPage = () => {
         >
           <Profile />
           <div className="max-sm:hidden max-sm:mt-4">
-            <FollowTab />
+            <FollowDesktop />
           </div>
         </aside>
 

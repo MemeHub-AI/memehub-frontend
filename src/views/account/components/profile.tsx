@@ -33,7 +33,7 @@ import { RewardButton } from '@/components/reward-button'
 import { Routes } from '@/routes'
 import { Tooltip } from '@/components/ui/tooltip'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { FollowTab } from './follow-tab'
+import { FollowDesktop } from './follow-desktop'
 import { useIsMemex } from '@/hooks/use-is-memex'
 
 export const Profile = (props: ComponentProps<'div'>) => {
@@ -187,7 +187,7 @@ export const Profile = (props: ComponentProps<'div'>) => {
         </div>
       </CardFooter>
       <div className={isMemex ? '' : 'sm:hidden'}>
-        <FollowTab />
+        <FollowDesktop />
       </div>
     </Card>
   )

@@ -1,7 +1,8 @@
 import { type ComponentProps } from 'react'
 
-import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
+// import ProgressBar from 'react-native-progress/Bar'
+import { Progress } from '@/components/ui/progress'
 
 export const IdeaProgress = ({
   value,
@@ -9,6 +10,16 @@ export const IdeaProgress = ({
   indicatorClass,
   ...props
 }: ComponentProps<typeof Progress>) => {
+  // const getProcessState = () => {
+  //   if (value === 100 && isSuccess) {
+  //     return undefined
+  //   }
+
+  //   if (isFailed) return 'warning'
+
+  //   return 'danger'
+  // }
+
   return (
     <Progress
       value={value}

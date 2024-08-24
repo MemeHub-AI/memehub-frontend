@@ -41,7 +41,7 @@ const TradeShake = (props: ShakeCardProps<TokenTrade>) => {
                 push(`${Routes.MemexDetailsProfile}/${trade.executor}`)
               }
             >
-              {trade.executor.slice(0, 3) + '...' + trade.executor.slice(-3)}
+              {fmt.fileName(trade.executor, 3, 3)}
             </span>{' '}
             {/* trade value */}
             {tradeType(trade.type)}{' '}
@@ -61,7 +61,7 @@ const TradeShake = (props: ShakeCardProps<TokenTrade>) => {
               push(joinPaths(Routes.Main, trade.chain, trade.base_address))
             }
           >
-            {trade.base_symbol}
+            {fmt.ellipsis(trade.base_symbol)}
           </span>
         </div>
       )

@@ -13,8 +13,6 @@ export interface Nav {
   path: string
   // only show on mobile
   mobileOnly?: boolean
-  // only show on memex
-  memexOnly?: boolean
 }
 
 export const Header = () => {
@@ -33,10 +31,19 @@ export const Header = () => {
     // { title: t('create'), path: Routes.Create },
     { title: t('airdrop'), path: Routes.Airdrop },
     { title: withMobileIcon('🤝', t('alliance')), path: Routes.Alliance },
-    { title: withMobileIcon('🌟', 'Memex'), path: Routes.Memex },
+    { title: withMobileIcon('🌟', t('header.idea')), path: Routes.Memex },
 
     // { title: t('KOL'), path: Routes.KOL },
     // { title: t('community'), path: Routes.Community },
+  ]
+
+  const mobileNav: Nav[] = [
+    { title: withMobileIcon('🌟', t('header.idea')), path: Routes.Memex },
+    { title: withMobileIcon('🏠', t('header.coin')), path: Routes.Main },
+    { title: t('next.moonshot'), path: Routes.Moonshot },
+    { title: t('classic.meme'), path: Routes.ClassicMeme },
+    { title: t('airdrop'), path: Routes.Airdrop },
+    { title: withMobileIcon('🤝', t('alliance')), path: Routes.Alliance },
   ]
 
   const onNavClick = (n: Nav) => {
@@ -52,7 +59,7 @@ export const Header = () => {
       )}
     >
       {isPad ? (
-        <HeaderMobile navs={navs} onNavClick={onNavClick} />
+        <HeaderMobile navs={mobileNav} onNavClick={onNavClick} />
       ) : (
         <HeaderDesktop navs={navs} onNavClick={onNavClick} />
       )}

@@ -212,7 +212,6 @@ export const MemexIdeaCard = ({
             </span>
           </div>
         )}
-
         <div className="flex flex-col items-start">
           {isProcessing && isList && (
             <Countdown
@@ -337,7 +336,6 @@ export const MemexIdeaCard = ({
               </Button>
             )}
         </div>
-
         {isDetails ? (
           <p className="mt-1">{idea?.content}</p>
         ) : (
@@ -350,7 +348,6 @@ export const MemexIdeaCard = ({
             {idea?.content}
           </EllipsisText>
         )}
-
         {hasDetails && (
           <TokenDetailsCard
             className="mt-1"
@@ -367,7 +364,7 @@ export const MemexIdeaCard = ({
 
         <IdeaLikeComment idea={idea} onCommentSuccess={onCommentSuccess} />
 
-        <IdeaProgress value={progress} />
+        <IdeaProgress value={Number(progress)} className="!h-5" />
       </div>
     </div>
   )

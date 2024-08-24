@@ -4,6 +4,7 @@ import ImageUpload from '@/components/image-upload'
 import { Avatar } from '@/components/ui/avatar'
 import { Dialog } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
+import { useResponsive } from '@/hooks/use-responsive'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { cn } from '@/lib/utils'
 import { UseMutateAsyncFunction } from '@tanstack/react-query'
@@ -27,6 +28,7 @@ const MemexAvatar: React.FC<{
     inputEl: inputRef.current,
     onSuccess: (url) => update({ logo: url }).then(() => refetchUserInfo()),
   })
+  const { isPad } = useResponsive()
 
   return (
     <div>
@@ -45,8 +47,10 @@ const MemexAvatar: React.FC<{
       <Label
         htmlFor="avatar-edit"
         className={cn(
-          "relative group after:content-[''] after:absolute after:inset-0 cursor-pointer",
+          !isPad &&
+            "relative group after:content-[''] after:absolute after:inset-0 cursor-pointer",
           !isOtherUser &&
+            !isPad &&
             'after:rounded-full hover:after:bg-black/50 after:transition-all after:bottom-10 after:-top-10'
         )}
         onClick={() => {
