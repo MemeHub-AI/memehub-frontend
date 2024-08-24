@@ -27,16 +27,6 @@ export const IdeaProgress = ({
       indicatorClass={cn('bg-red-500', indicatorClass)}
       {...props}
     />
-    // <ProgressBar progress={0.3} width={200} />
-    // <div className="progress progress-striped active">
-    //   <div
-    //     role="progressbar"
-    //     style={{ width: '40%' }}
-    //     className="progress-bar progress-bar-danger"
-    //   >
-    //     <span>Danger</span>
-    //   </div>
-    // </div>
   )
 }
 
