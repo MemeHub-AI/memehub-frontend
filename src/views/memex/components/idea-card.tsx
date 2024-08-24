@@ -364,12 +364,7 @@ export const MemexIdeaCard = ({
 
         <IdeaLikeComment idea={idea} onCommentSuccess={onCommentSuccess} />
 
-        <IdeaProgress
-          value={Number(progress)}
-          isSuccess={isSuccess}
-          isFailed={isFailed}
-          className="!h-5"
-        />
+        <IdeaProgress value={Number(progress)} className="!h-5" />
       </div>
     </div>
   )
