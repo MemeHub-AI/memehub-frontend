@@ -79,6 +79,7 @@ export const useTokenDetails = (
       refetchInterval: 10_000, // refresh each 10s.
     },
   })
+
   const [
     ,
     ,

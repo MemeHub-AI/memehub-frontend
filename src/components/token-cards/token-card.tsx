@@ -14,8 +14,7 @@ import { IdoTag } from '../ido-tag'
 import { Countdown } from '@/components/countdown'
 import { TokenListItem } from '@/api/token/types'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { useTokenDetails } from '@/hooks/use-token-details'
-import { TokenCardBadge } from './card-badge'
+import { TokenCardBadge } from './token-card-badge'
 import { Button } from '../ui/button'
 import { joinPaths } from '@/utils'
 
@@ -26,29 +25,28 @@ interface Props extends ComponentProps<typeof Card> {
   idoDuration?: number
   idoEndAt?: number
   idoProgress?: number | string
+
+  isGraduated?: boolean
+  progress?: number | string
 }
 
-export const TokenCard = (props: Props) => {
-  const {
-    card,
-    className,
-    descClass,
-    onClick,
-    idoCreateAt,
-    idoDuration,
-    idoProgress,
-    ...restProps
-  } = props
+export const TokenCard = ({
+  card,
+  className,
+  descClass,
+  onClick,
+  idoCreateAt,
+  idoDuration,
+  idoProgress,
+
+  progress = 0,
+  isGraduated = false,
+  ...props
+}: Props) => {
   const router = useRouter()
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
-  const { chain, chainId, chainName } = useChainInfo(card.chain)
-
-  const { progress, isGraduated } = useTokenDetails(
-    card.contract_address,
-    chainId,
-    card.coin_version
-  )
+  const { chain, chainName } = useChainInfo(card.chain)
   const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
 
   const handleClick = () => {
@@ -83,7 +81,7 @@ export const TokenCard = (props: Props) => {
         onClick?.(e)
       }}
       shadow={card.is_active ? 'default' : 'none'}
-      {...restProps}
+      {...props}
     >
       <TokenCardBadge token={card} isGraduated={isGraduated} />
 
@@ -136,7 +134,7 @@ export const TokenCard = (props: Props) => {
           <Progress
             className={cn('h-5 self-end w-full', isIdo && 'text-white')}
             indicatorClass={isIdo ? 'bg-red-500' : 'bg-green-500'}
-            value={idoProgress || (isGraduated ? 100 : progress)}
+            value={progress}
           />
         ) : (
           <Button
