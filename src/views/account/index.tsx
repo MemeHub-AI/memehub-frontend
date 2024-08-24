@@ -6,7 +6,7 @@ import { FollowDesktop } from '@/views/account/components/follow-desktop'
 import { AccountTab } from '@/views/account/components/account-tab'
 import { useUserList } from '@/views/account/hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
-import { MemexProfile } from '../memex/components/memex-profile'
+import { MemexProfile } from './components/profile'
 import { PrimaryLayout } from '@/components/layouts/primary'
 
 export const AccountPage = () => {

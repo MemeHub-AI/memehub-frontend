@@ -1,47 +1,49 @@
-import React, { useRef, useState, type ComponentProps } from 'react'
 import {
-  HeartFilledIcon,
-  EnvelopeClosedIcon,
-  PlusIcon,
-  MinusIcon,
-} from '@radix-ui/react-icons'
-import { useTranslation } from 'react-i18next'
-import { useRouter } from 'next/router'
-import { isEmpty } from 'lodash'
-import { AiOutlineEdit } from 'react-icons/ai'
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Avatar } from '@/components/ui/avatar'
-import { cn } from '@/lib/utils'
-import { fmt } from '@/utils/fmt'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { ProfileForm } from './profile-form'
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card'
 import { useAccountContext } from '@/contexts/account'
-import { useUser } from '@/hooks/use-user'
-import { Dialog } from '@/components/ui/dialog'
-import { useUploadImage } from '@/hooks/use-upload-image'
-import { ImageUpload } from '@/components/image-upload'
-import { RewardButton } from '@/components/reward-button'
-import { Routes } from '@/routes'
-import { Tooltip } from '@/components/ui/tooltip'
 import { useClipboard } from '@/hooks/use-clipboard'
-import { FollowDesktop } from './follow-desktop'
-import { useIsMemex } from '@/hooks/use-is-memex'
+import { useUser } from '@/hooks/use-user'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
+import { cn } from '@/lib/utils'
+import { UserInfoRes, UserUpdateReq } from '@/api/user/types'
+import { UseMutateAsyncFunction } from '@tanstack/react-query'
+import { ApiResponse } from '@/api/types'
+import AccountInfoDesktop from './account-info-desktop'
+import { useResponsive } from '@/hooks/use-responsive'
+import AccountInfoMoblie from './account-info-mobile'
 
-export const Profile = (props: ComponentProps<'div'>) => {
-  const { className } = props
-  const { t } = useTranslation()
-  const { query, ...router } = useRouter()
-  const [open, setOpen] = useState(false)
+export interface AccountInfoProps {
+  userInfo: UserInfoRes | undefined
+  isOtherUser: boolean
+  isFollowing: boolean
+  isUnfollowing: boolean
+  tokenAddr: string
+  update: UseMutateAsyncFunction<
+    ApiResponse<UserInfoRes>,
+    Error,
+    UserUpdateReq,
+    string | number
+  >
+  follow: UseMutateAsyncFunction<
+    ApiResponse<UserInfoRes>,
+    Error,
+    string,
+    string | number
+  >
+  unfollow: UseMutateAsyncFunction<
+    ApiResponse<UserInfoRes>,
+    Error,
+    string,
+    string | number
+  >
+  refetchUserInfo: VoidFunction
+}
 
+export const MemexProfile = () => {
   const { userInfo, isOtherUser, refetchUserInfo, refetchFollow } =
     useAccountContext()
   const { isFollowing, isUnfollowing, follow, unfollow, update } = useUser({
@@ -50,147 +52,80 @@ export const Profile = (props: ComponentProps<'div'>) => {
       refetchFollow()
     },
   })
+  const { t } = useTranslation()
+  const { query } = useRouter()
+  const { isPad } = useResponsive()
   const tokenAddr = (query.address || '') as string
-  const { copy } = useClipboard()
-
-  const inputRef = useRef<HTMLInputElement>(null)
-  const { onChangeUpload, clearFile } = useUploadImage({
-    inputEl: inputRef.current,
-    onSuccess: (url) => update({ logo: url }).then(() => refetchUserInfo()),
-  })
-  const { isMemex } = useIsMemex()
 
   return (
-    <Card
-      className={cn('w-aside max-sm:w-full', className)}
-      hover="none"
-      shadow="none"
-    >
-      {/* Zoom in avatar dialog if is other user. */}
-      <Dialog
-        open={open}
-        onOpenChange={setOpen}
-        contentProps={{ className: 'max-w-[40vw]' }}
-      >
-        <img
-          src={userInfo?.logo}
-          alt="avatar"
-          className="w-full h-full object-fill"
-        />
-      </Dialog>
-
-      <CardHeader className="flex-row relative p-4">
-        <Label
-          htmlFor="avatar-edit"
-          className={cn(
-            "relative group after:content-[''] after:absolute after:inset-0 cursor-pointer",
-            !isOtherUser &&
-              'after:rounded-full hover:after:bg-black/50 after:transition-all'
-          )}
-          onClick={() => {
-            clearFile()
-            if (isOtherUser && !isEmpty(userInfo?.logo)) {
-              setOpen(true)
-            }
-          }}
-        >
-          <Avatar
-            src={userInfo?.logo || ''}
-            fallback={userInfo?.wallet_address.slice(-4)}
-            size={64}
-            className="border-2 border-black"
+    <div className="flex-1 w-full rounded-lg border-2 border-zinc-200">
+      <div
+        className="bg-cover bg-center h-72"
+        style={{ backgroundImage: `url(/images/memex-profile-bg.jpg)` }}
+      />
+      <div className="bg-white px-2 pt-2 relative after:absolute after:w-full after:h-px after:bg-zinc-200 after:bottom-5 after:left-0">
+        {!isPad ? (
+          <AccountInfoDesktop
+            userInfo={userInfo}
+            isOtherUser={isOtherUser}
+            isFollowing={isFollowing}
+            isUnfollowing={isUnfollowing}
+            tokenAddr={tokenAddr}
+            update={update}
+            follow={follow}
+            unfollow={unfollow}
+            refetchUserInfo={refetchUserInfo}
           />
-          {!isOtherUser && (
-            <>
-              <AiOutlineEdit
-                size={26}
-                className={cn(
-                  'absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2',
-                  'z-50 opacity-0 group-hover:opacity-100 transition-all text-white'
-                )}
-              />
-              <ImageUpload
-                id="avatar-edit"
-                className="absolute invisible"
-                ref={inputRef}
-                onChange={onChangeUpload}
-              />
-            </>
-          )}
-        </Label>
-        <div className="ml-4">
-          <CardTitle>{userInfo?.name}</CardTitle>
-          <Tooltip tip={t('click-to-copy')}>
-            <CardDescription
-              className="hover:underline cursor-pointer"
-              onClick={() => copy(userInfo?.wallet_address ?? '')}
-            >
-              {fmt.addr(userInfo?.wallet_address, { len: 8 })}
-            </CardDescription>
-          </Tooltip>
-          <CardDescription className="break-all line-clamp-2">
-            {userInfo?.description}
-          </CardDescription>
-        </div>
-        {isOtherUser ? (
-          <Button
-            size="icon"
-            variant="outline"
-            shadow="none"
-            className="absolute right-4 top-2 sm:hover:bg-zinc-200 ml-4"
-            disabled={isFollowing || isUnfollowing}
-            onClick={() =>
-              userInfo?.is_follower ? unfollow(tokenAddr) : follow(tokenAddr)
-            }
-          >
-            {userInfo?.is_follower ? <MinusIcon /> : <PlusIcon />}
-          </Button>
         ) : (
-          <ProfileForm>
-            <Button
-              size="icon"
-              variant="outline"
-              shadow="none"
-              className="absolute right-4 top-2 hover:bg-zinc-200 ml-4"
-            >
-              <AiOutlineEdit size={20} />
-            </Button>
-          </ProfileForm>
+          <AccountInfoMoblie
+            userInfo={userInfo}
+            isOtherUser={isOtherUser}
+            isFollowing={isFollowing}
+            isUnfollowing={isUnfollowing}
+            tokenAddr={tokenAddr}
+            update={update}
+            follow={follow}
+            unfollow={unfollow}
+            refetchUserInfo={refetchUserInfo}
+          />
         )}
-      </CardHeader>
-
-      <CardContent className="px-4 flex flex-col items-start gap-2 pb-3">
-        <div className="flex items-center flex-wrap">
-          <RewardButton shadow="none" className="border-none text-lg px-3" />
-          <p
-            className="text-sm text-blue-600 cursor-pointer hover:underline ml-2"
-            onClick={() => router.push(Routes.Reward)}
-          >
-            {t('reward.rule')}
-          </p>
-        </div>
-      </CardContent>
-
-      <CardFooter className="p-4 pt-0 flex justify-between">
-        <div className="flex items-center text-zinc-500 text-sm">
-          <span className="cursor-default">{t('account.total-likes')}:</span>
-          <span className="inline-flex items-center ml-1 text-red-500">
-            {userInfo?.like_count || 0} <HeartFilledIcon className="ml-1" />
-          </span>
-        </div>
-        <div className="flex items-center text-sm text-zinc-500">
-          <span>{t('account.total-mentions')}:</span>
-          <span className="inline-flex items-center ml-1 text-black">
-            {userInfo?.mention_count || 0}{' '}
-            <EnvelopeClosedIcon className="ml-1" />
-          </span>
-        </div>
-      </CardFooter>
-      <div className={isMemex ? '' : 'sm:hidden'}>
-        <FollowDesktop />
       </div>
-    </Card>
+      <div className="align-top p-2 relative bottom-[0.65rem]">
+        <p className="text-zinc-600">
+          {t('bio')}:{' '}
+          {userInfo?.description ? userInfo?.description : t('there.noting')}
+        </p>
+      </div>
+    </div>
   )
 }
 
-export default Profile
+export default MemexProfile
+
+export const HoverCardPop = ({
+  children,
+  content,
+  variant = 'center',
+  position = 'bottom',
+  className,
+}: {
+  children: React.ReactNode
+  content: string
+  variant?: 'start' | 'center' | 'end'
+  position?: 'top' | 'bottom' | 'left' | 'right'
+  className?: string
+}) => (
+  <HoverCard>
+    <HoverCardTrigger asChild>{children}</HoverCardTrigger>
+    <HoverCardContent
+      className={cn(
+        'p-1 w-32 border-none text-center font-medium text-base',
+        className
+      )}
+      align={variant}
+      side={position}
+    >
+      {content}
+    </HoverCardContent>
+  </HoverCard>
+)

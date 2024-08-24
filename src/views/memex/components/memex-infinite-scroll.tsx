@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import InfiniteScroll from 'react-infinite-scroll-component'
 
-import { memexBodyId } from './memex-layout'
+import { memexBodyId } from './memex-tabs'
 
 export const MemexInfiniteScroll = <T,>({
   list,

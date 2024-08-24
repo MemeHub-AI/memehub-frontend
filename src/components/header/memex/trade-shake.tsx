@@ -37,9 +37,7 @@ const TradeShake = (props: ShakeCardProps<TokenTrade>) => {
             {/* executor */}
             <span
               className="hover:underline hover:underline-offset-1 hover:cursor-pointer"
-              onClick={() =>
-                push(`${Routes.MemexDetailsProfile}/${trade.executor}`)
-              }
+              onClick={() => push(joinPaths(Routes.Account, trade.executor))}
             >
               {fmt.fileName(trade.executor, 3, 3)}
             </span>{' '}

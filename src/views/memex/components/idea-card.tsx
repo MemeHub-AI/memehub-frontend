@@ -144,12 +144,6 @@ export const MemexIdeaCard = ({
 
   const onPushToAccount = () => {
     if (!idea?.user_address) return
-
-    if (!isLaptop) {
-      return router.push(
-        joinPaths(Routes.MemexDetailsProfile, idea.user_address)
-      )
-    }
     router.push(joinPaths(Routes.Account, idea?.user_address))
   }
 

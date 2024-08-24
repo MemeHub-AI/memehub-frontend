@@ -6,7 +6,6 @@ import { useResponsive } from '@/hooks/use-responsive'
 import { HeaderMobile } from './mobile'
 import { HeaderDesktop } from './desktop'
 import { Routes } from '@/routes'
-import { useIsMemex } from '@/hooks/use-is-memex'
 
 export interface Nav {
   title: string
@@ -19,7 +18,6 @@ export const Header = () => {
   const { isPad, isMobile } = useResponsive()
   const { t } = useTranslation()
   const { push } = useRouter()
-  const { isMemex } = useIsMemex()
 
   const withMobileIcon = (icon: string, text: string) =>
     isMobile ? `${icon} ${text}` : text
@@ -54,8 +52,7 @@ export const Header = () => {
     <header
       className={cn(
         'min-h-header flex justify-between items-center px-6 relative border-b-2',
-        'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3',
-        isMemex && 'border-none'
+        'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3'
       )}
     >
       {isPad ? (

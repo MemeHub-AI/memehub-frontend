@@ -11,8 +11,8 @@ import { useUserList } from '../hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
 import { Routes } from '@/routes'
 import { useAccountContext } from '@/contexts/account'
-import { useIsMemex } from '@/hooks/use-is-memex'
 import { cn } from '@/lib/utils'
+import { joinPaths } from '@/utils'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
@@ -56,7 +56,6 @@ export const AccountTab = () => {
     // isFetchingMyTokens,
     // fetchNextMyTokens,
   } = useUserList(Number(tab))
-  const { isMemex } = useIsMemex()
 
   const createdList = useMemo(
     () =>
@@ -73,10 +72,9 @@ export const AccountTab = () => {
       className="w-full mt-4 max-sm:mt-0"
       value={tab}
       onValueChange={(value) => {
+        if (!query.address) return
         router.push({
-          pathname: `${isMemex ? Routes.MemexDetailsProfile : Routes.Account}/${
-            query.address
-          }`,
+          pathname: joinPaths(Routes.Account, query.address as string),
           query: { tab: value },
         })
       }}
@@ -84,21 +82,17 @@ export const AccountTab = () => {
       <TabsList
         className={cn(
           'h-12 mb-2 max-sm:w-full max-sm:h-10 max-sm:mb-0',
-          isMemex && 'border-none rounded-none text-base'
+          'border-none rounded-none text-base '
         )}
       >
         {tabs.map((t) => (
           <TabsTrigger
             className={cn(
               'h-full w-full max-sm:px-2 max-sm:text-xs',
-              isMemex &&
-                ' data-[state=active]:text-black data-[state=active]:bg-white',
-              isMemex &&
-                'data-[state=active]:hover:bg-white hover:bg-white relative',
-              isMemex &&
-                'hover:after:absolute after:w-full after:h-[2px] after:bg-purple-500 after:bottom-0 after:left-0 after:hover:animate-left-to-right',
-              isMemex &&
-                isShowBorder &&
+              ' data-[state=active]:text-black data-[state=active]:bg-white',
+              'data-[state=active]:hover:bg-white hover:bg-white relative',
+              'hover:after:absolute after:w-full after:h-[2px] after:bg-purple-500 after:bottom-0 after:left-0 after:hover:animate-left-to-right',
+              isShowBorder &&
                 'data-[state=active]:after:absolute after:animate-left-to-right'
             )}
             key={t.value}

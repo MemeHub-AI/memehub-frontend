@@ -4,6 +4,7 @@ import { NewsAside } from '../news-aside'
 import { cn } from '@/lib/utils'
 import { NavAside } from '@/components/nav-aside'
 import { Header } from '../header'
+import CollapseAside from '@/components/collapse-aside'
 
 interface Props extends ComponentProps<'main'> {
   asideProps?: ComponentProps<typeof NewsAside>
@@ -33,9 +34,12 @@ export const PrimaryLayout = ({
           <div className={cn('flex-1 ', padding && 'p-3 sm:p-6', contentClass)}>
             {children}
           </div>
-          <NewsAside
-            className={cn(newsVisible === 'auto' && 'hidden xl:block')}
-          />
+
+          <CollapseAside className="sticky top-16 h-[calc(100vh-64px)]">
+            <NewsAside
+              className={cn(newsVisible === 'auto' && 'hidden xl:block')}
+            />
+          </CollapseAside>
         </div>
       </div>
     </main>

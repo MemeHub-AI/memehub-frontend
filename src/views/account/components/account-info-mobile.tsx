@@ -4,8 +4,8 @@ import {
   MinusIcon,
   PlusIcon,
 } from '@radix-ui/react-icons'
-import MemexAvatar from './memex-avatar'
-import { AccountInfoProps, HoverCardPop } from './memex-profile'
+import MemexAvatar from '../../memex/components/memex-avatar'
+import { AccountInfoProps, HoverCardPop } from './profile'
 import FollowMoblie from '@/views/account/components/follow-mobile'
 import DiamondIcon from '@/components/diamond-icon'
 import { Routes } from '@/routes'

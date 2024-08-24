@@ -12,7 +12,6 @@ import { AirdropProvider } from '@/contexts/airdrop'
 import { useAirdropList } from './hooks/use-airdrop-list'
 import { AirdropDetailType } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
-import { useIsMemex } from '@/hooks/use-is-memex'
 import { useStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils'
 
@@ -21,7 +20,6 @@ export const AirdropPage = () => {
   const { airdrops, total, isLoading, isFetching, fetchNextPage } =
     useAirdropList()
   const { isKol, hasCommunity } = useUserStore()
-  const { isMemex } = useIsMemex()
 
   const { getAirdropChecked, setAirdropChecked } = useStorage()
   const [checked, setChecked] = useState(strToBool(getAirdropChecked()))

@@ -1,9 +1,9 @@
 import { UserInfoRes, UserUpdateReq } from '@/api/user/types'
-import MemexAvatar from './memex-avatar'
+import MemexAvatar from '../../memex/components/memex-avatar'
 import { UseMutateAsyncFunction } from '@tanstack/react-query'
 import { ApiResponse } from '@/api/types'
 import FollowDesktop from '@/views/account/components/follow-desktop'
-import { AccountInfoProps, HoverCardPop } from './memex-profile'
+import { AccountInfoProps, HoverCardPop } from './profile'
 import { useTranslation } from 'react-i18next'
 import {
   EnvelopeClosedIcon,

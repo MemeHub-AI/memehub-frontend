@@ -20,7 +20,6 @@ import { Toaster } from '@/components/ui/sonner'
 import { BackToTop } from '@/components/back-to-top'
 import { SignLoginDialog } from '../sign-login-dialog'
 import { useUserId } from '@/hooks/use-user-id'
-import { useIsMemex } from '@/hooks/use-is-memex'
 import { MaintainTips } from '../maintain-tips'
 
 dayjs.extend(utc)
@@ -37,7 +36,6 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   const { getInviteCode, setInviteCode } = useStorage()
   const { query, ...router } = useRouter()
   const { isNotMounted } = useMounted()
-  const { isMemex } = useIsMemex()
 
   const handleRouteChange = (url: string) => {
     const code = getInviteCode()
