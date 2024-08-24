@@ -12,6 +12,7 @@ import { useUserStore } from '@/stores/use-user-store'
 import { KolCard } from '@/components/kol-card'
 import { Input } from '@/components/ui/input'
 import { formLink } from '@/config/link'
+import { utilLang } from '@/utils/lang'
 
 export const Kol = () => {
   const { t } = useTranslation()
@@ -77,7 +78,7 @@ export const Kol = () => {
           </Button>
         </MobileQpportunityMoonshot>
         <div className="my-3">
-          {t('kol.desc').replace('$1', `${total}` || '-')}
+          {utilLang.replace(t('kol.desc'), [total || '-'])}
         </div>
 
         {userInfo?.role?.kol ? null : (
