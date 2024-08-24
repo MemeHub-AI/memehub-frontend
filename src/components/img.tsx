@@ -1,4 +1,4 @@
-import React, { ComponentProps, useState } from 'react'
+import React, { type ComponentProps, useState } from 'react'
 
 import { defaultImg } from '@/config/link'
 import { cn } from '@/lib/utils'

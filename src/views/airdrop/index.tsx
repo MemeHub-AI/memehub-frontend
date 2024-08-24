@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Ids } from './components/ids'
@@ -14,17 +14,21 @@ import { AirdropDetailType } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
 import { useIsMemex } from '@/hooks/use-is-memex'
 import { cn } from '@/lib/utils'
+import { useStorage } from '@/hooks/use-storage'
+import { strToBool } from '@/utils'
 
 export const AirdropPage = () => {
   const { t } = useTranslation()
-  const [checked, setChecked] = useState(true)
-  const { airdrops, totalAirdrops, isLoading, isFetching, fetchNextPage } =
+  const { airdrops, total, isLoading, isFetching, fetchNextPage } =
     useAirdropList()
   const { isKol, hasCommunity } = useUserStore()
   const { isMemex } = useIsMemex()
 
+  const { getAirdropChecked, setAirdropChecked } = useStorage()
+  const [checked, setChecked] = useState(strToBool(getAirdropChecked()))
+
   const renderLoadingStatus = () => {
-    if (isFetching && totalAirdrops) {
+    if (isFetching && total) {
       return (
         <p
           className="mt-2 text-center lg:col-span-2 2xl:col-span-3"
@@ -35,7 +39,7 @@ export const AirdropPage = () => {
       )
     }
 
-    if (totalAirdrops > airdrops.length) {
+    if (total > airdrops.length) {
       return (
         <p
           className="mt-2 text-center text-blue-600 cursor-pointer hover:underline lg:col-span-2 2xl:col-span-3"
@@ -47,8 +51,12 @@ export const AirdropPage = () => {
     }
   }
 
+  useEffect(() => {
+    setAirdropChecked(String(checked))
+  }, [checked])
+
   return (
-    <AirdropProvider value={{ hideClaimed: checked }}>
+    <AirdropProvider value={{ shouldHideClaimed: checked }}>
       <PrimaryLayout
         container="div"
         className={cn('py-5 flex-col gap-0 w-full', isMemex && 'flex-1')}

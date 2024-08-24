@@ -19,6 +19,7 @@ import { useAirdrop } from '@/views/token/hooks/evm/use-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { joinPaths } from '@/utils'
+import { Routes } from '@/routes'
 
 interface Props {
   className?: string
@@ -44,7 +45,7 @@ export const AirdropCard = ({
   } = airdrop ?? {}
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
-  const { hideClaimed } = useAirdropContext()
+  const { shouldHideClaimed } = useAirdropContext()
   const { chainId, chainName } = useChainInfo(chain)
   const [isExpired, setIsExpired] = useState(false)
 
@@ -56,7 +57,6 @@ export const AirdropCard = ({
     communityTotalAmount,
     kolClaimedCount,
     kolCount,
-    kolFlag,
     communityCount,
     communityClaimedCount,
   } = useAirdropInfo(
@@ -79,13 +79,6 @@ export const AirdropCard = ({
   const isClaimed = isKolCard ? isKolClaimed : isCommunityClaimed
   const disabled = isClaimed || isBurned
 
-  const onClaim = () => {
-    router.push({
-      pathname: joinPaths(chainName, contract_address),
-      query,
-    })
-  }
-
   const renderButtonText = () => {
     if (isClaimed) return t('airdrop.claimed')
     if (isBurned) return t('airdrop.burned')
@@ -94,13 +87,18 @@ export const AirdropCard = ({
     return t('claim.airdrop')
   }
 
-  if (hideClaimed && isClaimed) return
+  if (shouldHideClaimed && isClaimed) return
 
   return (
     <Card
       className={cn('p-3 max-sm:w-[96vw] max-w-[450px]', className)}
       shadow="none"
-      onClick={onClaim}
+      onClick={() =>
+        router.push({
+          pathname: joinPaths(chainName, contract_address),
+          query,
+        })
+      }
     >
       <div className="flex justify-between">
         <span className="font-bold truncate">
@@ -130,6 +128,11 @@ export const AirdropCard = ({
                   : fmt.withCommunity(utilLang.locale(communityInfo?.name))
               }
               containerClass="w-[150px]"
+              onClick={(e) => {
+                if (!isKolCard || !kolInfo?.wallet_address) return
+                e.stopPropagation()
+                router.push(joinPaths(Routes.Account, kolInfo.wallet_address))
+              }}
             />
           )}
           <div className="mt-3 flex items-center">
@@ -144,11 +147,7 @@ export const AirdropCard = ({
               {BigNumber(current).toFormat()} / {BigNumber(total).toFormat()}
             </span>
           </div>
-          <Button
-            className="mt-3 font-bold w-full"
-            disabled={disabled}
-            onClick={onClaim}
-          >
+          <Button className="mt-3 font-bold w-full" disabled={disabled}>
             {renderButtonText()}
           </Button>
         </div>
