@@ -39,7 +39,7 @@ enum Tab {
 
 const containerClassName = `flex flex-col gap-3 max-md:gap-4 max-md:overflow-y-clip  overflow-y-auto`
 
-export const OpportunityMoonshot = (props: Props) => {
+export const NewsAside = (props: Props) => {
   const { defalutTab = 1, className, listClassName, containerClass } = props
   const storage = useStorage()
   const { t } = useTranslation()
@@ -101,6 +101,7 @@ export const OpportunityMoonshot = (props: Props) => {
     <div
       className={clsx(
         'pr-2 border-r-2 border-black min-h-body max-sm:mr-0 max-sm:pr-0  max-sm:h-min max-sm:border-0',
+        'max-sm:!hidden',
         className
       )}
     >
@@ -221,7 +222,7 @@ export const MobileQpportunityMoonshot = (props: Props) => {
     <Drawer>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent className="h-[95vh]">
-        <OpportunityMoonshot
+        <NewsAside
           className="relative"
           listClassName={clsx('max-md:!overflow-y-auto')}
           defalutTab={defalutTab}

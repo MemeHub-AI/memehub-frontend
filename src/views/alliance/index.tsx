@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { ReactNode, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -10,6 +10,7 @@ import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { useIsMemex } from '@/hooks/use-is-memex'
 import { cn } from '@/lib/utils'
+import { MemexLayout } from '../memex/components/memex-layout'
 
 enum Tab {
   Kol = 'kol',
@@ -35,6 +36,22 @@ export const AlliancePage = () => {
     router.replace(`${router.pathname}?tab=${value}`)
   }
 
+  const getLayout = (children: ReactNode) => {
+    if (isMemex) {
+      return (
+        <MemexLayout>
+          <div>{children}</div>
+        </MemexLayout>
+      )
+    }
+
+    return (
+      <PrimaryLayout>
+        <div className={cn('py-5', isMemex && 'flex-1')}>{children}</div>
+      </PrimaryLayout>
+    )
+  }
+
   useEffect(() => {
     if (isPlayAllianceAudio) {
       playAlliance()
@@ -42,36 +59,29 @@ export const AlliancePage = () => {
     }
   }, [])
 
-  return (
-    <div>
-      <PrimaryLayout
-        container="div"
-        className={cn('py-5', isMemex && 'flex-1')}
-      >
-        <Tabs value={defaultValue} onValueChange={handleTabChange}>
-          <TabsList className="border-none space-x-2 h-10">
-            <TabsTrigger
-              value={Tab.Kol}
-              className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black bg-white"
-            >
-              {tabMap[Tab.Kol]}
-            </TabsTrigger>
-            <TabsTrigger
-              value={Tab.Communities}
-              className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black bg-white"
-            >
-              {tabMap[Tab.Communities]}
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value={Tab.Kol}>
-            <Kol />
-          </TabsContent>
-          <TabsContent value={Tab.Communities}>
-            <Communities />
-          </TabsContent>
-        </Tabs>
-      </PrimaryLayout>
-    </div>
+  return getLayout(
+    <Tabs value={defaultValue} onValueChange={handleTabChange}>
+      <TabsList className="border-none space-x-2 h-10">
+        <TabsTrigger
+          value={Tab.Kol}
+          className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black bg-white"
+        >
+          {tabMap[Tab.Kol]}
+        </TabsTrigger>
+        <TabsTrigger
+          value={Tab.Communities}
+          className="text-lg rounded-lg border-2 border-transparent hover:bg-transparent hover:border-2 hover:border-black bg-white"
+        >
+          {tabMap[Tab.Communities]}
+        </TabsTrigger>
+      </TabsList>
+      <TabsContent value={Tab.Kol}>
+        <Kol />
+      </TabsContent>
+      <TabsContent value={Tab.Communities}>
+        <Communities />
+      </TabsContent>
+    </Tabs>
   )
 }
 

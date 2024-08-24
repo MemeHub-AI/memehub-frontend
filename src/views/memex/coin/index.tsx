@@ -1,5 +1,5 @@
-import PrimaryLayout from '@/components/layouts/primary'
-import TokenCards from '@/components/token-cards'
+import { MemexLayout } from '../components/memex-layout'
+import { TokenCards } from '@/components/token-cards'
 import { useTokens } from '@/hooks/use-tokens'
 
 export const MemexDetailsCoin = () => {
@@ -13,7 +13,7 @@ export const MemexDetailsCoin = () => {
   } = useTokens()
 
   return (
-    <PrimaryLayout>
+    <MemexLayout>
       <TokenCards
         className="flex-1 max-sm:mt-2 flex flex-col pb-4 !h-[calc(100vh-64px-1rem)] overflow-auto px-6 mt-4"
         idoTokens={idoTokens}
@@ -23,7 +23,7 @@ export const MemexDetailsCoin = () => {
         isPending={isFetching}
         onFetchNext={fetchNextPage}
       />
-    </PrimaryLayout>
+    </MemexLayout>
   )
 }
 

@@ -1,14 +1,13 @@
-import PrimaryLayout from '@/components/layouts/primary'
 import { cn } from '@/lib/utils'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { AccountProvider } from '@/contexts/account'
 import { useRouter } from 'next/router'
-import Profile from '@/views/account/components/profile'
-import FollowTab from '@/views/account/components/follow-tab'
-import AccountTab from '@/views/account/components/account-tab'
+import { FollowTab } from '@/views/account/components/follow-tab'
+import { AccountTab } from '@/views/account/components/account-tab'
 import { useUserList } from '@/views/account/hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
-import MemexProfile from '../components/memex-profile'
+import { MemexProfile } from '../components/memex-profile'
+import { MemexLayout } from '../components/memex-layout'
 
 export const MemexDetailsProfile = () => {
   const { query } = useRouter()
@@ -43,7 +42,7 @@ export const MemexDetailsProfile = () => {
         refetchFollow,
       }}
     >
-      <PrimaryLayout>
+      <MemexLayout>
         <div className="flex-1 min-h-main flex gap-2 flex-col h-[calc(100vh-64px)] overflow-auto pl-2 pr-4 !ml-0">
           {/* Left aside */}
           <aside
@@ -61,7 +60,7 @@ export const MemexDetailsProfile = () => {
           {/* Right tabs */}
           <AccountTab />
         </div>
-      </PrimaryLayout>
+      </MemexLayout>
     </AccountProvider>
   )
 }

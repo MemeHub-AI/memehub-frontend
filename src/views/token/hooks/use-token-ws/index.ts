@@ -23,6 +23,7 @@ const sortKey: keyof TokenTrade = 'timestamp'
 
 const pageSize = 10
 
+// TODO/top: calc market cap via `useUniswapV2Amount`
 export const useTokenWs = (
   tokenInfo: TokenListItem | undefined,
   disabled = false
@@ -81,12 +82,14 @@ export const useTokenWs = (
 
   // Calculate for market cap
   useEffect(() => {
-    const firstTrade = first(tradeRecords)
-    const marketCap = BigNumber(tokenInfo?.total_supply || 0)
-      .multipliedBy(tradePrice?.price || 0)
-      .multipliedBy(firstTrade?.price || tokenInfo?.start_price || 0)
-      .toFixed()
-    setMarketCap(marketCap)
+    const { start_price = 0, total_supply = 0 } = tokenInfo ?? {}
+    const { price = 0 } = tradePrice ?? {}
+    const { marketcap } = first(tradeRecords) ?? {}
+
+    const tokenPrice = BigNumber(start_price).multipliedBy(total_supply)
+    const marketCap = BigNumber(price).multipliedBy(marketcap || tokenPrice)
+
+    setMarketCap(marketCap.toFixed())
   }, [tokenInfo, tradePrice, tradeRecords])
 
   useEffect(() => {

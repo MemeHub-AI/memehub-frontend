@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 
-import { PrimaryLayout } from '@/components/layouts/primary'
 import { useCreateIdea } from './hooks/use-create-idea'
 import { CreateIdeaProvider } from '@/contexts/memex/create-idea'
 import { Form } from '@/components/ui/form'
@@ -16,6 +15,7 @@ import { TokenDetailsCard } from '../components/token-detail-card'
 import { Routes } from '@/routes'
 import { useCreateIdeaCleanup } from './hooks/use-create-idea-cleanup'
 import { MemexIdeaItem } from '@/api/memex/types'
+import { MemexLayout } from '../components/memex-layout'
 
 export const CreateIdeaPage = () => {
   const createIdea = useCreateIdea()
@@ -26,7 +26,7 @@ export const CreateIdeaPage = () => {
   useCreateIdeaCleanup()
 
   return (
-    <PrimaryLayout padding={false} mainClass="flex">
+    <MemexLayout>
       <CreateIdeaProvider value={createIdea}>
         <Form {...form}>
           <form
@@ -66,7 +66,7 @@ export const CreateIdeaPage = () => {
           </form>
         </Form>
       </CreateIdeaProvider>
-    </PrimaryLayout>
+    </MemexLayout>
   )
 }
 

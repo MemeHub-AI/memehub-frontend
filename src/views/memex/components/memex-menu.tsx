@@ -1,7 +1,5 @@
-import { cn } from '@/lib/utils'
-import { Routes } from '@/routes'
 import router, { useRouter } from 'next/router'
-import React from 'react'
+import React, { ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { IoGift, IoLanguageOutline } from 'react-icons/io5'
 import { IoGiftOutline } from 'react-icons/io5'
@@ -15,7 +13,10 @@ import { FaRegHandshake } from 'react-icons/fa'
 import { FaHandshake } from 'react-icons/fa6'
 import { FaRegUser } from 'react-icons/fa6'
 import { FaUser } from 'react-icons/fa6'
-import { Button } from '../../../components/ui/button'
+import { FaTelegramPlane } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
+
+import { Button } from '@/components/ui/button'
 import { useUserStore } from '@/stores/use-user-store'
 import {
   Arrow,
@@ -25,9 +26,9 @@ import {
 } from '@radix-ui/react-popover'
 import { useLang } from '@/hooks/use-lang'
 import { resources } from '@/i18n'
-import { FaTelegramPlane } from 'react-icons/fa'
+import { cn } from '@/lib/utils'
+import { Routes } from '@/routes'
 import { socialLink } from '@/config/link'
-import { FaXTwitter } from 'react-icons/fa6'
 
 interface MemexNavs {
   title: string
@@ -38,13 +39,11 @@ interface MemexNavs {
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
-export const MemexMenu = () => {
+export const MemexMenu = ({ className, ...props }: ComponentProps<'div'>) => {
   const { t, i18n } = useTranslation()
   const { setLang } = useLang()
   const { push, pathname } = useRouter()
   const { userInfo } = useUserStore()
-
-  // console.log('pathname: ', pathname)
 
   const navs: MemexNavs[] = [
     {
@@ -109,9 +108,10 @@ export const MemexMenu = () => {
   return (
     <div
       className={cn(
-        'flex flex-col space-y-4 mt-4 justify-start xl:w-60 pr-6 fixed left-2',
-        'relative xl:after:absolute xl:after:-top-20 xl:after:bottom-0 xl:after:right-0 xl:after:bg-zinc-200 xl:after:w-px'
+        'flex flex-col space-y-4 mt-4 justify-start xl:w-60 pr-6',
+        className
       )}
+      {...props}
     >
       {navs.map((nav, index) => {
         if (nav.path === Routes.MemexDetailsProfile && !userInfo) return

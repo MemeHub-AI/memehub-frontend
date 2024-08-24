@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 
-import { PrimaryLayout } from '@/components/layouts/primary'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { IdeaDetailsProvider } from '@/contexts/memex/idea-details'
 import { useIdeaDetails } from './hooks/use-idea-details'
@@ -12,6 +11,7 @@ import { IdeaDetailsSkeleton } from './components/details-skeleton'
 import { useIdeaInfo } from '../hooks/use-idea-info'
 import { MemexIdeaCard } from '../components/idea-card'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { MemexLayout } from '../components/memex-layout'
 
 export const IdeaDetailsPage = () => {
   const { query } = useRouter()
@@ -31,7 +31,7 @@ export const IdeaDetailsPage = () => {
     <IdeaDetailsProvider
       value={{ ...ideaDetails, ...ideaComments, ...ideaInfo }}
     >
-      <PrimaryLayout mainClass="flex" padding={false}>
+      <MemexLayout>
         <CustomSuspense
           isPending={isLoadingDetails || isLoadingComments}
           fallback={<IdeaDetailsSkeleton />}
@@ -49,7 +49,7 @@ export const IdeaDetailsPage = () => {
             <IdeaCommentCard key={c?.created_at} comment={c} />
           ))}
         </CustomSuspense>
-      </PrimaryLayout>
+      </MemexLayout>
     </IdeaDetailsProvider>
   )
 }
