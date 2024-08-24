@@ -102,7 +102,8 @@ export const Ids = () => {
           <span className="ml-2">{t('platform.airdrop')}</span>
         </div>
       )}
-      {!hasCommunity && (
+      {/* TODO: tmep hide */}
+      {/* {!hasCommunity && (
         <div className={cn(isKol ? 'mt-4' : 'mt-1')}>
           <Link
             href={formLink.community}
@@ -113,7 +114,7 @@ export const Ids = () => {
           </Link>
           <span className="ml-2">{t('community.airdrops')}</span>
         </div>
-      )}
+      )} */}
     </>
   )
 }
