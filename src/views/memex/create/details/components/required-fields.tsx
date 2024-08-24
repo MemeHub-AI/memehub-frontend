@@ -10,6 +10,7 @@ import { useCreateIdeaDetailsContext } from '@/contexts/memex/create-idea-detail
 import { ImageUpload } from '@/components/image-upload'
 import { Label } from '@/components/ui/label'
 import { fmt } from '@/utils/fmt'
+import { cn } from '@/lib/utils'
 
 export const RequiredFields = () => {
   const { t } = useTranslation()
@@ -67,12 +68,20 @@ export const RequiredFields = () => {
             <FormLabel className="font-bold">{t('logo')}*</FormLabel>
             <div className="flex items-center space-x-2">
               <Label
-                className="border-2 border-black p-1.5 rounded-md w-fit"
+                className={cn(
+                  'border-2 border-black rounded-md w-fit',
+                  field.value ? 'overflow-hidden' : 'p-1.5'
+                )}
                 htmlFor="create-detail-logo"
                 disabled={isUpdating || field.disabled}
                 onClick={clearFile}
               >
-                <AiOutlinePicture size={28} />
+                {field.value ? (
+                  <img src={field.value} alt="logo" className="w-11 h-11" />
+                ) : (
+                  <AiOutlinePicture size={28} />
+                )}
+
                 <ImageUpload
                   id="create-detail-logo"
                   placeholder={t('name')}

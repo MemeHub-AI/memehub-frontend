@@ -1,4 +1,6 @@
-import { first, isEmpty } from 'lodash'
+import { first, includes, isEmpty } from 'lodash'
+
+import { mediaLinks } from '@/config/link'
 
 export const strToBool = (str: string | undefined | null) => {
   if (!str) return false
@@ -21,4 +23,11 @@ export const joinPaths = (...args: (string | number)[]) => {
   const path = args.map((a) => String(a).replace(/^\/|\/$/g, '')).join('/')
 
   return firstHasSlash ? `/${path}` : path
+}
+
+export const parseMediaUrl = (media: keyof typeof mediaLinks, url = '') => {
+  if (isEmpty(url)) return url
+  url = url.replace('@', '').replace('https://', '')
+
+  return /^https?:\/\//.test(url) ? url : `${mediaLinks[media]}${url}`
 }

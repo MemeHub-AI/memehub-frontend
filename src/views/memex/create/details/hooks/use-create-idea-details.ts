@@ -12,7 +12,6 @@ import { marketingSchema } from '@/components/marketing-field'
 import { MemexCreateReq } from '@/api/memex/types'
 import { useUpdateIdea } from '../../hooks/use-update-idea'
 import { useEditIdeaAutofill } from '../../hooks/use-edit-idea-autofill'
-import { useIdeaInitialBuy } from './use-idea-initial-buy'
 
 const withNonNull = (value: string) => value + t('memex.non-null')
 

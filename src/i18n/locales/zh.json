@@ -498,7 +498,7 @@
   "Claim": "领取",
   "choose": "请选择要发行的区块链",
   "least.string": "请填写至少10个字符",
-  "least.img": "请上传至少一张图片或视频",
+  "least.img": "请上传至少一张图片",
   "build.consensus": "只需集齐50个赞凝聚共识，内盘交易将被创建，",
   "get.token": "你作为项目发起人将获得0.3%代币",
   "like.consensus": "点赞的共识者，每人可获得0.1%代币",
@@ -709,5 +709,7 @@
   "reward.desc3": "获得的奖励",
   "there.noting": "这里空空如也~",
   "goto.burn": "前往销毁",
-  "like": "喜欢"
+  "like": "喜欢",
+  "alread-failed": "已经失败",
+  "memex.create.max-image": "最多上传{}张图片"
 }

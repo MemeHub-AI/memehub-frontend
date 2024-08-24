@@ -29,7 +29,7 @@ export const PicturesPreview = ({ disabled }: { disabled?: boolean }) => {
         disabled={disabled}
       />
       {pictures.map((src, i) => (
-        <div key={i} className="w-full h-full max-h-64 relative md:max-w-80">
+        <div key={i} className="w-full h-full max-h-48 relative md:max-w-80">
           <img
             src={src}
             alt="picture"

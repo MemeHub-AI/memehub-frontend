@@ -1,6 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import { t } from 'i18next'
-import { first, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
+
 import { utilLang } from './lang'
 
 interface FmtAddrOptions {
@@ -46,12 +47,6 @@ export const fmt = {
 
     const percent = BigNumber(value).multipliedBy(100).toFixed(fixed)
     return percent + label
-  },
-  joinPaths: (...args: (string | number)[]) => {
-    const firstHasSlash = first(args)?.toString().startsWith('/')
-    const path = args.map((a) => String(a).replace(/^\/|\/$/g, '')).join('/')
-
-    return firstHasSlash ? `/${path}` : path
   },
   decimals: (
     value?: number | string | BigNumber,

@@ -1,10 +1,11 @@
-import React, { ComponentProps } from 'react'
+import React, { type ComponentProps } from 'react'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { FaTwitter } from 'react-icons/fa'
 import { FaGlobe } from 'react-icons/fa'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { parseMediaUrl } from '@/utils'
 
 interface Props extends ComponentProps<'div'> {
   x?: string
@@ -25,17 +26,17 @@ export const TokenSocialLinks = ({
   const links = [
     {
       title: 'Twitter',
-      link: x,
+      link: parseMediaUrl('x', x),
       icon: <FaTwitter size={20} />,
     },
     {
       title: 'Telegram',
-      link: tg,
+      link: parseMediaUrl('tg', tg),
       icon: <FaTelegramPlane size={22} />,
     },
     {
       title: 'Website',
-      link: website,
+      link: parseMediaUrl('website', website),
       icon: <FaGlobe size={18} />,
     },
   ]
