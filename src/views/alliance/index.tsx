@@ -16,6 +16,7 @@ enum Tab {
   Communities = 'communities',
 }
 
+// TODO/low: router params
 export const AlliancePage = () => {
   const { t } = useTranslation()
   const router = useRouter()

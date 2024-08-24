@@ -16,6 +16,7 @@ export const IdTag = ({
   containerClass,
   iconClass,
   imgClass,
+  onClick,
 }: Props) => {
   return (
     <div
@@ -23,6 +24,7 @@ export const IdTag = ({
         'flex items-center justify-between rounded bg-lime-green',
         className
       )}
+      onClick={onClick}
     >
       <div className={cn('flex items-center', containerClass)}>
         <Img
@@ -30,7 +32,7 @@ export const IdTag = ({
           alt="avatar"
           className={cn('w-10 h-10 shrink-0 rounded-r-none', imgClass)}
         />
-        <span className="mx-2 truncate w-[80%]">{title}</span>
+        <span className="mx-2 truncate w-[80%] hover:underline">{title}</span>
       </div>
       <img
         src="/images/check.png"

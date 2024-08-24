@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useAccount } from 'wagmi'
 import { useResponsive } from '@/hooks/use-responsive'
-import { useState } from 'react'
+import { ComponentProps, useState } from 'react'
 import { useAccountEffect } from 'wagmi'
 
 import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -10,7 +10,9 @@ import { Button } from '../ui/button'
 import { DialogDescription } from '@radix-ui/react-dialog'
 import { useStorage } from '@/hooks/use-storage'
 
-export const ChangeChainWallets = ({ className }: { className?: string }) => {
+export const ChangeChainWallets = ({
+  ...props
+}: ComponentProps<typeof Button>) => {
   const { t } = useTranslation()
   const { isConnecting } = useAccount()
   const { openConnectModal } = useConnectModal()
@@ -52,11 +54,11 @@ export const ChangeChainWallets = ({ className }: { className?: string }) => {
   return (
     <>
       <Button
-        className={className}
         size={isMobile ? 'sm' : 'default'}
         disabled={isConnecting}
         type="button"
         onClick={() => openConnectModal?.()}
+        {...props}
       >
         {isConnecting ? t('wallet.connecting') : t('wallet.connect')}
       </Button>

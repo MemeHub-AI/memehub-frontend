@@ -6,7 +6,6 @@ import Link from 'next/link'
 import { CheckIcon } from '@/components/check-icon'
 import { Img } from '@/components/img'
 import { CommunityCategory } from '@/api/airdrop/types'
-import { cn } from '@/lib/utils'
 import { useUserStore } from '@/stores/use-user-store'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { utilLang } from '@/utils/lang'
@@ -102,7 +101,8 @@ export const Ids = () => {
           <span className="ml-2">{t('platform.airdrop')}</span>
         </div>
       )}
-      {!hasCommunity && (
+      {/* TODO: tmep hide */}
+      {/* {!hasCommunity && (
         <div className={cn(isKol ? 'mt-4' : 'mt-1')}>
           <Link
             href={formLink.community}
@@ -113,7 +113,7 @@ export const Ids = () => {
           </Link>
           <span className="ml-2">{t('community.airdrops')}</span>
         </div>
-      )}
+      )} */}
     </>
   )
 }

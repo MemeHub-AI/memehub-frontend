@@ -12,6 +12,7 @@ import { marketingSchema } from '@/components/marketing-field'
 import { MemexCreateReq } from '@/api/memex/types'
 import { useUpdateIdea } from '../../hooks/use-update-idea'
 import { useEditIdeaAutofill } from '../../hooks/use-edit-idea-autofill'
+import { Hash } from 'viem'
 
 const withNonNull = (value: string) => value + t('memex.non-null')
 
@@ -76,6 +77,20 @@ export const useCreateIdeaDetails = () => {
     )
   }
 
+  const handleUpdate = (params: MemexCreateReq, inputBuyAmount: string) => {
+    const isChangedBuyAmount = !BigNumber(inputBuyAmount).eq(initialBuyAmount)
+
+    if (isContractUpdate(params) || isChangedBuyAmount) {
+      updateWithContract({
+        hash: hash!,
+        ...params,
+        initialBuyAmount: inputBuyAmount,
+      })
+    } else {
+      update({ hash: hash!, ...params }).then(router.back)
+    }
+  }
+
   const onSubmit = async (values: z.infer<typeof createDetailSchema>) => {
     if (!(await form.trigger())) return
 
@@ -86,23 +101,17 @@ export const useCreateIdeaDetails = () => {
       description: values.desc,
       airdrop_marketing: values.marketing,
     } as MemexCreateReq
-    const inputBuy = values.initialBuyAmount || '0'
+    const inputBuyAmount = values.initialBuyAmount || '0'
 
     if (values.x) params.twitter_url = values.x
     if (values.tg) params.telegram_url = values.tg
     if (values.website) params.website_url = values.website
 
-    // Update token info
-    if (hash) {
-      isContractUpdate(params) || !BigNumber(inputBuy).eq(initialBuyAmount)
-        ? updateWithContract({ hash, ...params, initialBuyAmount: inputBuy })
-        : update({ hash, ...params }).then(router.back)
-      return
-    }
+    if (hash) return handleUpdate(params, inputBuyAmount)
 
     setIdeaDetails({
       ...params,
-      initialBuyAmount: inputBuy,
+      initialBuyAmount: inputBuyAmount,
     })
     router.back()
   }

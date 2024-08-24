@@ -51,22 +51,25 @@ export const TokenCard = (props: Props) => {
   )
   const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
 
-  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const handleClick = () => {
     if (!card.is_active) {
       toast.error(t('token.active-first'))
       return
     }
+
+    // Graduated ido
     if (isIdo && card.contract_address) {
       return router.push(
         joinPaths(Routes.Main, chainName, card.contract_address)
       )
     }
+
+    // Processing ido
     if (isIdo) {
       return router.push(joinPaths(Routes.Ido, chainName, card.id))
     }
 
     router.push(joinPaths(Routes.Main, chainName, card.contract_address))
-    onClick?.(e)
   }
 
   return (
@@ -75,7 +78,10 @@ export const TokenCard = (props: Props) => {
         'flex items-stretch overflow-hidden gap-2 relative max-sm:gap-0',
         className
       )}
-      onClick={handleClick}
+      onClick={(e) => {
+        handleClick()
+        onClick?.(e)
+      }}
       shadow={card.is_active ? 'default' : 'none'}
       {...restProps}
     >

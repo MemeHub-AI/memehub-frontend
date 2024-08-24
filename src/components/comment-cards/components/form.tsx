@@ -14,6 +14,8 @@ import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
 import { shadowVariants } from '@/styles/variants'
 import { useTokenContext } from '@/contexts/token'
+import ConnectWallet from '@/components/connect-wallet'
+import { useAccount } from 'wagmi'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {
   isCommenting?: boolean
@@ -41,6 +43,7 @@ export const CommentForm = (props: Props) => {
     autoFocus,
   } = props
   const { t } = useTranslation()
+  const { isConnected } = useAccount()
   const { fields, updateField } = useFields({
     comment: createField({}),
   })
@@ -92,13 +95,15 @@ export const CommentForm = (props: Props) => {
       />
 
       <div className="flex items-center">
-        <Button
-          className={cn('px-10 max-sm:px-5', buttonClass)}
-          disabled={disabled}
-          onClick={onCommentClick}
-        >
-          {buttonText ?? t('comment')}
-        </Button>
+        <ConnectWallet>
+          <Button
+            className={cn('px-10 max-sm:px-5', buttonClass)}
+            disabled={disabled}
+            onClick={onCommentClick}
+          >
+            {buttonText ?? t('comment')}
+          </Button>
+        </ConnectWallet>
         {showCancel && (
           <Button
             type="button"
@@ -109,15 +114,17 @@ export const CommentForm = (props: Props) => {
             {t('cancel')}
           </Button>
         )}
-        <Label
-          htmlFor={inputId}
-          variant="icon"
-          className={cn(shadowVariants(), 'shadow ml-2 flex-shrink-0')}
-          disabled={disabled}
-          onClick={clearFile}
-        >
-          <ImageIcon className="cursor-pointer" />
-        </Label>
+        {isConnected && (
+          <Label
+            htmlFor={inputId}
+            variant="icon"
+            className={cn(shadowVariants(), 'shadow ml-2 flex-shrink-0')}
+            disabled={disabled}
+            onClick={clearFile}
+          >
+            <ImageIcon className="cursor-pointer" />
+          </Label>
+        )}
         <ImageUpload
           ref={inputRef}
           id={inputId}

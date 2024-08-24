@@ -12,6 +12,7 @@ import { useUserStore } from '@/stores/use-user-store'
 import { CommunityCard } from '@/components/community-card'
 import { Input } from '@/components/ui/input'
 import { formLink } from '@/config/link'
+import { utilLang } from '@/utils/lang'
 
 export const Communities = () => {
   const { t } = useTranslation()
@@ -77,7 +78,7 @@ export const Communities = () => {
           </Button>
         </MobileQpportunityMoonshot>
         <div className="my-3">
-          {t('community.desc').replace('$1', `${total}` || '-')}
+          {utilLang.replace(t('community.desc'), [total || '-'])}
         </div>
         {userInfo?.role?.community ? null : (
           <Button onClick={() => open(formLink.community)}>

@@ -1,16 +1,15 @@
 import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
 
 import { Button } from '@/components/ui/button'
 
 interface Props {
   likedCount: string
   isLiked: boolean
-  onOpenLike: () => string | number | undefined
+  onClick: () => string | number | undefined
 }
 
-export const IdeaHeartButton = ({ likedCount, isLiked, onOpenLike }: Props) => {
+export const IdeaHeartButton = ({ likedCount, isLiked, onClick }: Props) => {
   const { t } = useTranslation()
 
   return (
@@ -19,12 +18,7 @@ export const IdeaHeartButton = ({ likedCount, isLiked, onOpenLike }: Props) => {
       shadow="none"
       size="sm"
       className="flex items-center space-x-1 rounded-full px-4 max-sm:px-3 shadow-lg shadow-zinc-400"
-      onClick={() => {
-        if (isLiked) {
-          return toast.info(t('already-liked'))
-        }
-        return onOpenLike()
-      }}
+      onClick={onClick}
     >
       {isLiked ? (
         <div className="flex items-center space-x-1 animate-flash-no-infinite">

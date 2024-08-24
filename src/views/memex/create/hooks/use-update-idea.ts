@@ -105,7 +105,7 @@ export const useUpdateIdea = (
     const inputBuyAmount = BigNumber(params.initialBuyAmount)
 
     if (inputBuyAmount.lt(initialBuyAmount)) {
-      console.error('you can only plus')
+      toast.error(t('initial-buy.lt'))
       return
     }
 
@@ -117,13 +117,6 @@ export const useUpdateIdea = (
       }
 
       const value = inputBuyAmount.minus(initialBuyAmount).toFixed()
-
-      console.log(
-        'setTokenInfo',
-        initialBuyAmount,
-        params.initialBuyAmount,
-        value
-      )
 
       writeContract({
         ...config,
