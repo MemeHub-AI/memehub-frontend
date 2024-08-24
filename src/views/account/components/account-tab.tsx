@@ -65,7 +65,7 @@ export const AccountTab = () => {
     [tokenCreated.list]
   )
 
-  console.log('other created', isOtherUser, tokenCreated.list)
+  // console.log('other created', isOtherUser, tokenCreated.list)
 
   return (
     <Tabs
@@ -83,7 +83,7 @@ export const AccountTab = () => {
       <TabsList
         className={cn(
           'h-12 mb-2 max-sm:w-full max-sm:h-10 max-sm:mb-0',
-          isMemex && 'w-full'
+          isMemex && 'bg-white'
         )}
       >
         {tabs.map((t) => (

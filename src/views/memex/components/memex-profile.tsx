@@ -68,6 +68,9 @@ const MemexProfile = () => {
     </HoverCard>
   )
 
+  // let rewardAmount = userInfo?.reward_amount
+  // console.log('11111111111111', typeof rewardAmount, rewardAmount)
+
   return (
     <div className="flex-1 w-full rounded-lg border-2 border-zinc-200 overflow-hidden">
       <div
@@ -121,7 +124,7 @@ const MemexProfile = () => {
                   >
                     <DiamondIcon size={17} />
                     <span className="font-bold">
-                      {userInfo?.reward_amount || 0}
+                      {Number(userInfo?.reward_amount).toFixed(4) || 0}
                     </span>
                   </span>
                 </HoverCardPop>
