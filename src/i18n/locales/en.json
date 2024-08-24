@@ -721,5 +721,6 @@
   "goto.burn": "Go to burn",
   "like": "Love",
   "alread-failed": "Already failed",
-  "memex.create.max-image": "You can upload a maximum of {} images"
+  "memex.create.max-image": "You can upload a maximum of {} images",
+  "initial-buy.lt": "You can only increase the purchase quantity"
 }
