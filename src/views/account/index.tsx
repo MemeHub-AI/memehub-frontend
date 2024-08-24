@@ -1,19 +1,17 @@
-import React, { ReactNode } from 'react'
-import { useRouter } from 'next/router'
-
-import { Profile } from './components/profile'
-import { FollowDesktop } from './components/follow-desktop'
-import { AccountTab } from './components/account-tab'
 import { cn } from '@/lib/utils'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { AccountProvider } from '@/contexts/account'
-import { useUserList } from './hooks/use-user-list'
+import { useRouter } from 'next/router'
+import { FollowDesktop } from '@/views/account/components/follow-desktop'
+import { AccountTab } from '@/views/account/components/account-tab'
+import { useUserList } from '@/views/account/hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
+import { MemexProfile } from '../memex/components/memex-profile'
 import { PrimaryLayout } from '@/components/layouts/primary'
 
 export const AccountPage = () => {
   const { query } = useRouter()
-  const queryAddr = (query.address || '') as string
+  const tokenAddr = (query.address || '') as string
   const {
     userInfo,
     otherUserInfo,
@@ -21,10 +19,9 @@ export const AccountPage = () => {
     isFetchingUserInfo,
     refetchUserInfo,
     refetchOtherUserInfo,
-  } = useUserInfo(queryAddr)
+  } = useUserInfo(tokenAddr)
   const currenUserAddr = String(userInfo?.wallet_address || '')
-  const isOtherUser = queryAddr !== currenUserAddr
-
+  const isOtherUser = tokenAddr !== currenUserAddr
   const followersResults = useUserList(UserListType.Followers)
   const followingResults = useUserList(UserListType.Following)
 
@@ -34,40 +31,38 @@ export const AccountPage = () => {
   }
 
   return (
-    <AccountProvider
-      value={{
-        userInfo: isOtherUser ? otherUserInfo : userInfo,
-        isPending: isFetchingUserInfo || isFetchingOtherUserInfo,
-        isOtherUser: isOtherUser,
-        refetchUserInfo: isOtherUser ? refetchOtherUserInfo : refetchUserInfo,
-        followersResults,
-        followingResults,
-        refetchFollow,
-      }}
-    >
-      <main className="min-h-main px-6 max-sm:px-3 flex gap-4 max-sm:flex-col max-sm:gap-0">
-        {/* Left aside */}
-        <aside
-          className={cn(
-            'h-fit flex flex-col gap-4 max-sm:gap-0 sticky top-20 mt-4 max-sm:mb-2',
-            'max-sm:static max-sm:gap-2'
-          )}
-        >
-          <Profile />
-          <div className="max-sm:hidden max-sm:mt-4">
-            <FollowDesktop />
-          </div>
-        </aside>
+    <PrimaryLayout>
+      <AccountProvider
+        value={{
+          userInfo: isOtherUser ? otherUserInfo : userInfo,
+          isPending: isFetchingUserInfo || isFetchingOtherUserInfo,
+          isOtherUser: isOtherUser,
+          refetchUserInfo: isOtherUser ? refetchOtherUserInfo : refetchUserInfo,
+          followersResults,
+          followingResults,
+          refetchFollow,
+        }}
+      >
+        <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto lg:pl-2 !ml-0">
+          {/* Left aside */}
+          <aside
+            className={cn(
+              'flex flex-col gap-4 sticky top-20 mt-4 mb-2',
+              'static gap-2'
+            )}
+          >
+            <MemexProfile />
+            <div className="hidden mt-4">
+              <FollowDesktop />
+            </div>
+          </aside>
 
-        {/* Right tabs */}
-        <AccountTab />
-      </main>
-    </AccountProvider>
+          {/* Right tabs */}
+          <AccountTab />
+        </div>
+      </AccountProvider>
+    </PrimaryLayout>
   )
 }
-
-AccountPage.getLayout = (page: ReactNode) => (
-  <PrimaryLayout>{page}</PrimaryLayout>
-)
 
 export default AccountPage

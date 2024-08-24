@@ -9,16 +9,7 @@ export const useIsMemex = () => {
   /** It is memex page but not mobile */
   const isMemex = pathname.includes(Routes.Memex) && !isPad
 
-  const isHiddenMoonShot = () => {
-    return (
-      isMemex &&
-      (pathname.includes(Routes.MemexDetailsCoin) ||
-        pathname.includes(Routes.MemexDetailsProfile) ||
-        pathname.includes(Routes.MemexDetailsAirdrop) ||
-        pathname.includes(Routes.MemexDetailsAlliance)) &&
-      isLaptop
-    )
-  }
+  const isHiddenMoonShot = () => {}
 
   return { isMemex, isHiddenMoonShot }
 }

@@ -1,6 +1,8 @@
 export enum Routes {
   Main = '/',
 
+  TokenPage = '/[chain]/[address]',
+
   Create = '/create',
 
   Airdrop = '/airdrop',
@@ -18,8 +20,6 @@ export enum Routes {
   ClassicMeme = '/moonshot/2',
 
   Ido = '/ido',
-
-  TokenPage = '/[chain]/[address]',
 
   Notification = '/notification',
 
@@ -41,13 +41,5 @@ export enum Routes {
 
   MemexIdea = '/memex/idea',
 
-  MemexDetailsCoin = '/memex/coin',
-
   MemexDetailsProfile = '/memex/profile',
-
-  MemexDetailsNotification = '/memex/notification',
-
-  MemexDetailsAirdrop = '/memex/airdrop',
-
-  MemexDetailsAlliance = '/memex/alliance',
 }
