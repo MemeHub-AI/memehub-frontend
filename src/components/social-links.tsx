@@ -54,6 +54,7 @@ export const SocialLinks = ({
       {links.map(({ title, link, icon }) =>
         !!link ? (
           <Button
+            type="button"
             key={title}
             shadow="none"
             size="icon"
