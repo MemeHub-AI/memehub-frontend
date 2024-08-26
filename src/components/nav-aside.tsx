@@ -39,7 +39,7 @@ const langs = Object.entries(resources as Record<string, { name: string }>)
 export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
   const { t, i18n } = useTranslation()
   const { setLang } = useLang()
-  const { pathname } = useRouter()
+  const { pathname, ...router } = useRouter()
   const { userInfo } = useUserStore()
 
   const navs = [
@@ -99,11 +99,11 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
           {navs.map((n, i) => (
             <NavigationMenuItem key={i} className="w-full">
               <NavigationMenuLink
-                href={n.path}
                 className={cn(
-                  'text-xl w-full flex justify-start py-5 space-x-2 pl-2',
+                  'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer',
                   n.isActive && 'font-bold'
                 )}
+                onClick={() => router.push(n.path)}
               >
                 {n.isActive ? n.iconActive : n.icon}
                 <span>{n.title}</span>
