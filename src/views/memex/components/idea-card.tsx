@@ -331,7 +331,7 @@ export const MemexIdeaCard = ({
             )}
         </div>
         {isDetails ? (
-          <p className="mt-1">{idea?.content}</p>
+          <p className="mt-1 whitespace-pre-line">{idea?.content}</p>
         ) : (
           <EllipsisText
             className="mt-1"

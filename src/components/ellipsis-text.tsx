@@ -48,7 +48,7 @@ export const EllipsisText = ({
       {isOverflowed && (
         <p
           className={cn(
-            'text-blue-600 cursor-pointer sm:hover:underline active:underline',
+            'text-blue-600 cursor-pointer sm:hover:underline active:underline whitespace-pre-line',
             showMoreClass
           )}
           onClick={() => {
