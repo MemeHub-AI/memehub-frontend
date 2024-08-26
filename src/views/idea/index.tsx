@@ -11,7 +11,7 @@ import { Routes } from '@/routes'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { useTranslation } from 'react-i18next'
 import { WaterList } from './components/water-list'
-import { MobileQpportunityMoonshot } from '@/components/news-aside'
+import { NewsAsideMobile } from '@/components/news-aside'
 import { MemeStory } from './components/meme-story'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { fmt } from '@/utils/fmt'
@@ -86,10 +86,10 @@ export const IdeaPage = () => {
               <BsStars className="mr-1"></BsStars>
               {type !== '3' ? t('random.meme') : t('meme.it')}
             </Button>
-            <MobileQpportunityMoonshot
+            <NewsAsideMobile
               defalutTab={defualtTab}
               className="max-md:!hidden max-sm:!px-0 "
-            ></MobileQpportunityMoonshot>
+            ></NewsAsideMobile>
           </div>
         </div>
         {/* {+type === 2 ? (

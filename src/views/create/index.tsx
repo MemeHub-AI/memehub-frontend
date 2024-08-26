@@ -9,7 +9,7 @@ import { PrimaryLayout } from '@/components/layouts/primary'
 import { CreateTokenProvider } from '@/contexts/create-token'
 import { cn } from '@/lib/utils'
 import { CreateTokenTitle } from './components/title'
-import { MobileQpportunityMoonshot } from '@/components/news-aside'
+import { NewsAsideMobile } from '@/components/news-aside'
 import { useGenAIIdea } from '@/hooks/use-gen-ai-idea'
 import { AIIdeaBar } from '@/components/ai-idea-bar'
 import { AICreateMemecoinDialog } from '@/components/ai-create-memecoin-dialog'
@@ -48,7 +48,7 @@ export const CreatePage = () => {
         </CreateTokenTitle>
 
         <div className="sm:hidden">
-          <MobileQpportunityMoonshot defalutTab={1} />
+          <NewsAsideMobile defalutTab={1} />
         </div>
 
         <AIIdeaBar
@@ -69,6 +69,7 @@ export const CreatePage = () => {
       </div>
 
       <CreateTokenStatusDialog />
+
       <AICreateMemecoinDialogLoading />
     </CreateTokenProvider>
   )
