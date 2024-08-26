@@ -1,7 +1,6 @@
 import React, { useEffect, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
-import { clsx } from 'clsx'
 import { useQuery } from '@tanstack/react-query'
 
 import { CustomSuspense } from '@/components/custom-suspense'
@@ -23,8 +22,9 @@ import { Button } from './ui/button'
 import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
 import { newsApi } from '@/api/news'
 import { useAsideStore } from '@/stores/use-aside-store'
-import { replace } from 'lodash'
 import { useResponsive } from '@/hooks/use-responsive'
+// TODO/low: wrapped `CollapseAside`
+import { CollapseAside } from './collapse-aside'
 
 interface Props extends ComponentProps<'div'> {
   defalutTab?: string | string[] | number
@@ -88,6 +88,17 @@ export const NewsAside = (props: Props) => {
     }
   }
 
+  const nullback = () => (
+    <div className="mt-10 text-xl text-center">
+      <img
+        src="/images/empty.png"
+        alt="Empty"
+        className="w-[50%] mx-auto mb-2"
+      />
+      <span className="">{t('no.data.news')}</span>
+    </div>
+  )
+
   useEffect(() => {
     if (!defalutTab) return
     if (defalutTab === '1') {
@@ -99,15 +110,15 @@ export const NewsAside = (props: Props) => {
 
   return (
     <div
-      className={clsx(
-        'pr-2 border-r-2 border-black min-h-body max-sm:mr-0 max-sm:pr-0 max-sm:h-min max-sm:border-0',
+      className={cn(
+        'pr-2 border-r-2 border-black h-body max-sm:mr-0 max-sm:pr-0 max-sm:h-min max-sm:border-0',
         'max-sm:!hidden',
         className
       )}
     >
       <div className="hidden h-[98vh]"></div>
       <div
-        className={clsx(
+        className={cn(
           'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
           tab === Tab.Classic ? 'h-[90vh]' : 'h-[92vh]',
           containerClass
@@ -156,8 +167,8 @@ export const NewsAside = (props: Props) => {
           ref={ref}
           isPending={isLoading}
           fallback={<NewsSkeleton />}
-          nullback={tab === Tab.Moonshot ? <Nullback /> : null}
-          className={clsx(
+          nullback={tab === Tab.Moonshot && nullback()}
+          className={cn(
             containerClassName,
             tab === 1 ? 'h-[calc(100vh-160px)]' : 'h-[calc(100vh-210px)]',
             tab === 1 && 'hidden',
@@ -182,8 +193,8 @@ export const NewsAside = (props: Props) => {
           ref={opportunityRef}
           isPending={opportunityListLoading}
           fallback={<NewsSkeleton />}
-          nullback={tab === Tab.Classic ? <Nullback /> : null}
-          className={clsx(
+          nullback={tab === Tab.Classic && nullback()}
+          className={cn(
             containerClassName,
             tab === Tab.Classic
               ? 'h-[calc(100vh-160px)]'
@@ -216,32 +227,17 @@ export const NewsAside = (props: Props) => {
   )
 }
 
-export const MobileQpportunityMoonshot = (props: Props) => {
-  const { children, defalutTab } = props
+export const NewsAsideMobile = ({ children, defalutTab }: Props) => {
   return (
     <Drawer>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
       <DrawerContent className="h-[95vh]">
         <NewsAside
           className="relative"
-          listClassName={clsx('max-md:!overflow-y-auto')}
+          listClassName={cn('max-md:!overflow-y-auto')}
           defalutTab={defalutTab}
         />
       </DrawerContent>
     </Drawer>
-  )
-}
-
-const Nullback = () => {
-  const { t } = useTranslation()
-  return (
-    <div className="mt-10 text-xl text-center">
-      <img
-        src="/images/empty.png"
-        alt="Empty"
-        className="w-[50%] mx-auto mb-2"
-      />
-      <span className="">{t('no.data.news')}</span>
-    </div>
   )
 }

@@ -1,10 +1,9 @@
-import React, { type ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 
 import { NewsAside } from '../news-aside'
 import { cn } from '@/lib/utils'
 import { NavAside } from '@/components/nav-aside'
 import { Header } from '../header'
-import CollapseAside from '@/components/collapse-aside'
 
 interface Props extends ComponentProps<'main'> {
   asideProps?: ComponentProps<typeof NewsAside>
@@ -35,11 +34,9 @@ export const PrimaryLayout = ({
             {children}
           </div>
 
-          <CollapseAside className="sticky top-16 h-[calc(100vh-64px)]">
-            <NewsAside
-              className={cn(newsVisible === 'auto' && 'hidden xl:block')}
-            />
-          </CollapseAside>
+          <NewsAside
+            className={cn(newsVisible === 'auto' && 'hidden xl:block')}
+          />
         </div>
       </div>
     </main>

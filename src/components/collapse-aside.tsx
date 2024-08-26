@@ -1,15 +1,11 @@
-import { useResponsive } from '@/hooks/use-responsive'
-import { cn } from '@/lib/utils'
-import { memo, ReactNode, useEffect, useState } from 'react'
+import { type ComponentProps, memo, useEffect, useState } from 'react'
 import { RiArrowLeftWideLine, RiArrowRightWideLine } from 'react-icons/ri'
 
-const CollapseAside = ({
-  children,
-  className,
-}: {
-  children: ReactNode
-  className?: string
-}) => {
+import { useResponsive } from '@/hooks/use-responsive'
+import { cn } from '@/lib/utils'
+
+export const CollapseAside = memo((props: ComponentProps<'div'>) => {
+  const { children, className } = props
   const [isCollapse, setIsCollapse] = useState(false)
   const { isLaptop } = useResponsive()
 
@@ -18,7 +14,7 @@ const CollapseAside = ({
       return setIsCollapse(true)
     }
 
-    return setIsCollapse(false)
+    return () => setIsCollapse(false)
   }, [isLaptop])
 
   return (
@@ -31,7 +27,7 @@ const CollapseAside = ({
       <div
         onClick={() => setIsCollapse(!isCollapse)}
         className={cn(
-          'absolute top-[50%] -left-5 cursor-pointer bg-zinc-100 z-50 rounded-full p-2 w-10 h-10',
+          'absolute top-1/2 -left-5 cursor-pointer bg-zinc-100 z-50 rounded-full p-2 w-10 h-10',
           'shadow-md shadow-zinc-400 hover:bg-zinc-200 transition-all duration-300'
         )}
       >
@@ -45,6 +41,6 @@ const CollapseAside = ({
       <div className={cn(isCollapse && 'hidden')}>{children}</div>
     </div>
   )
-}
+})
 
-export default memo(CollapseAside)
+export default CollapseAside
