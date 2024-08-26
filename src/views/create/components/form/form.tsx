@@ -21,7 +21,7 @@ import { MarketingField } from '@/components/marketing-field'
 import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { DescriptionField } from './desc'
 import { ChainField } from './chain-field'
-import { BuyDialogField } from './buy-dialog'
+import { InitialBuyField } from './initial-buy-field'
 
 export const CreateTokenForm = () => {
   const { t } = useTranslation()
@@ -167,7 +167,7 @@ export const CreateTokenForm = () => {
 
         {/* Submit button */}
         <div className="flex flex-col items-start space-y-3 max-w-[500px] max-sm:items-center">
-          <BuyDialogField open={open} onOpenChange={setOpen} />
+          <InitialBuyField open={open} onOpenChange={setOpen} />
           <Button variant="default" className="px-10 mt-3" disabled={disabled}>
             {isDeploying ? t('creating') : t('create')}
           </Button>

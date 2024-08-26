@@ -8,6 +8,7 @@ import { Routes } from '@/routes'
 import { Dialog, DialogDescription, DialogTitle } from '@/components/ui/dialog'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { joinPaths } from '@/utils'
+import { isUserReject } from '@/utils/contract'
 
 const withWarningIcon = (children: ReactNode) => {
   return (
@@ -60,6 +61,7 @@ export const CreateTokenStatusDialog = () => {
 
   // Submit error
   if (submitError) {
+    if (isUserReject(submitError)) return
     return (
       <AlertDialog
         open={!!submitError}

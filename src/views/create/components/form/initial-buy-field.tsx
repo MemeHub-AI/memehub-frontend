@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { FormField } from '@/components/ui/form'
 
-export const BuyDialogField = ({
+export const InitialBuyField = ({
   onOpenChange,
   ...props
 }: ComponentProps<typeof Dialog>) => {
@@ -24,6 +24,7 @@ export const BuyDialogField = ({
       {...props}
       contentProps={{
         className: 'flex flex-col justify-center items-center',
+        onInteractOutside: (e) => e.preventDefault(),
       }}
     >
       <DialogTitle>{t('create.buy-title')}</DialogTitle>
@@ -73,4 +74,4 @@ export const BuyDialogField = ({
   )
 }
 
-export default BuyDialogField
+export default InitialBuyField
