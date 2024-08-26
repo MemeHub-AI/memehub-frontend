@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useWaitForTransactionReceipt } from 'wagmi'
-import type { Hash, Address, WaitForTransactionReceiptErrorType } from 'viem'
+import type { Address, WaitForTransactionReceiptErrorType } from 'viem'
 
 interface Options {
   hash: Address | undefined
@@ -15,23 +15,20 @@ interface Options {
 
 export const useWaitForTx = (options: Options) => {
   const { hash, onLoading, onFetching, onSuccess, onError, onFinally } = options
-  const prevHash = useRef<Hash>()
-  const result = useWaitForTransactionReceipt({ hash })
+  const result = useWaitForTransactionReceipt({
+    hash,
+    query: { enabled: !!hash },
+  })
+  const { data, error, isLoading, isFetching, isError, isSuccess } = result
 
+  // Attention: track only the states you need!!!
   useEffect(() => {
-    const { data, error, isLoading, isFetching, isError, isSuccess } = result
-    const isSameHash = prevHash.current === hash
-    const isPending = isLoading || isFetching
-
-    if (isSameHash && isPending) return
     if (isLoading) onLoading?.()
     if (isFetching) onFetching?.()
     if (isError) onError?.(error)
     if (isSuccess) onSuccess?.(data)
-    if (isError || isSuccess) setTimeout(() => onFinally?.(), 500)
-
-    if (hash) prevHash.current = hash
-  }, [result])
+    if (isError || isSuccess) onFinally?.()
+  }, [isLoading, isFetching, isError, isSuccess])
 
   return result
 }
