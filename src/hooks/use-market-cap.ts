@@ -1,39 +1,44 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { first } from 'lodash'
-import { useInterval } from 'ahooks'
 import { formatEther } from 'viem'
 
 import { useTokenContext } from '@/contexts/token'
 import { useUniswapV2Amount } from './uniswapv2/use-uniswapv2-amount'
 
-const DexMarketCapInterval = 10_000 // 10s
+const dexMarketCapInterval = 10_000 // 10s
 
 export const useMarketCap = () => {
+  const timerRef = useRef<NodeJS.Timeout>()
   const [marketCap, setMarketCap] = useState('')
   const { tokenInfo, chainId, tradePrice, tradeRecords } = useTokenContext()
   const { getReserves } = useUniswapV2Amount(chainId, tokenInfo?.graduated_pool)
 
-  // Calc DEX market cap
-  useInterval(
-    async () => {
-      const { price = 0 } = tradePrice ?? {}
-      const { total_supply = 0 } = tokenInfo ?? {}
-      const [reserve0, reserve1] = await getReserves()
-      const reserveAmount = formatEther(reserve1)
-      const tokenAmount = formatEther(reserve0)
+  const calcDexMarketCap = async () => {
+    const { total_supply = 0 } = tokenInfo ?? {}
+    const { price = 0 } = tradePrice ?? {}
 
-      const marketCap = BigNumber(reserveAmount)
-        .div(tokenAmount)
-        .multipliedBy(price)
-        .multipliedBy(total_supply)
-        .toFixed()
+    const [reserve0, reserve1] = await getReserves()
+    const reserveAmount = formatEther(reserve1)
+    const tokenAmount = formatEther(reserve0)
 
-      setMarketCap(marketCap)
-    },
-    tokenInfo?.is_graduated ? DexMarketCapInterval : undefined,
-    { immediate: true }
-  )
+    const marketCap = BigNumber(reserveAmount)
+      .div(tokenAmount)
+      .multipliedBy(price)
+      .multipliedBy(total_supply)
+      .toFixed()
+
+    setMarketCap(marketCap)
+  }
+
+  useEffect(() => {
+    if (!tokenInfo || !tokenInfo.is_graduated) return
+
+    calcDexMarketCap()
+    timerRef.current = setInterval(calcDexMarketCap, dexMarketCapInterval)
+
+    return () => clearInterval(timerRef.current)
+  }, [tokenInfo, tradePrice])
 
   // Calc market cap
   useEffect(() => {
