@@ -97,7 +97,7 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
       <NavigationMenu className="grid grid-cols-1 max-w-full">
         <NavigationMenuList className="grid grid-cols-1 space-x-0 space-y-3">
           {navs.map((n, i) => (
-            <NavigationMenuItem key={i} className="w-full">
+            <NavigationMenuItem key={i} className="w-full cursor-pointer">
               <NavigationMenuLink
                 className={cn(
                   'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer',

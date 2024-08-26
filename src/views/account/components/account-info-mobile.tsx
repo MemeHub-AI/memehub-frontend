@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/popover'
 import { IoMdMore } from 'react-icons/io'
 import { useClipboard } from '@/hooks/use-clipboard'
+import { fmt } from '@/utils/fmt'
+import { useResponsive } from '@/hooks/use-responsive'
 
 export const AccountInfoMoblie = (props: AccountInfoProps) => {
   const {
@@ -39,7 +41,7 @@ export const AccountInfoMoblie = (props: AccountInfoProps) => {
   const { copy } = useClipboard()
 
   return (
-    <div className="relative flex jusrify-around">
+    <div className="relative flex justify-around">
       <div className="absolute -top-[19rem] flex -right-1 space-x-2">
         {isOtherUser ? (
           <Button
@@ -133,7 +135,7 @@ export const AccountInfoMoblie = (props: AccountInfoProps) => {
               >
                 <DiamondIcon size={17} />
                 <span className="font-bold">
-                  {Number(userInfo?.reward_amount).toFixed(4) || 0}
+                  {fmt.decimals(userInfo?.reward_amount) || 0}
                 </span>
                 <p
                   className="max-sm:hidden text-sm text-blue-600 cursor-pointer hover:underline ml-2 underline"

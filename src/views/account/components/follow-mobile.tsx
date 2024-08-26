@@ -34,30 +34,6 @@ export const FollowMoblie = () => {
   const closeRef = useRef<HTMLButtonElement>(null)
   const isFollowers = tab === UserListType.Followers
 
-  // const FollowerSheet = ({
-  //   openContent,
-  //   title,
-  //   children,
-  //   side = 'bottom',
-  // }: {
-  //   openContent: ReactNode
-  //   title: string
-  //   children: ReactNode
-  //   side?: 'top' | 'bottom' | 'left' | 'right' | null | undefined
-  // }) => {
-  //   return (
-  //     <Sheet>
-  //       <SheetTrigger>{openContent}</SheetTrigger>
-  //       <SheetContent side={side}>
-  //         <SheetHeader>
-  //           <SheetTitle>{title}</SheetTitle>
-  //         </SheetHeader>
-  //         {children}
-  //       </SheetContent>
-  //     </Sheet>
-  //   )
-  // }
-
   return (
     <Sheet>
       <div

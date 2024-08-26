@@ -13,6 +13,7 @@ import { Routes } from '@/routes'
 import { useAccountContext } from '@/contexts/account'
 import { cn } from '@/lib/utils'
 import { joinPaths } from '@/utils'
+import { useResponsive } from '@/hooks/use-responsive'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
@@ -64,12 +65,11 @@ export const AccountTab = () => {
         : tokenCreated.list,
     [tokenCreated.list]
   )
-
-  // console.log('other created', isOtherUser, tokenCreated.list)
+  const { isPad } = useResponsive()
 
   return (
     <Tabs
-      className="w-full mt-4 max-sm:mt-0"
+      className="w-full mt-4 max-sm:mt-0 max-lg:px-3"
       value={tab}
       onValueChange={(value) => {
         if (!query.address) return
@@ -82,7 +82,7 @@ export const AccountTab = () => {
       <TabsList
         className={cn(
           'h-12 mb-2 max-sm:w-full max-sm:h-10 max-sm:mb-0',
-          'border-none rounded-none text-base '
+          'border-none rounded-none text-base select-none'
         )}
       >
         {tabs.map((t) => (
@@ -91,9 +91,9 @@ export const AccountTab = () => {
               'h-full w-full max-sm:px-2 max-sm:text-xs',
               ' data-[state=active]:text-black data-[state=active]:bg-white',
               'data-[state=active]:hover:bg-white hover:bg-white relative',
-              'hover:after:absolute after:w-full after:h-[2px] after:bg-purple-500 after:bottom-0 after:left-0 after:hover:animate-left-to-right',
+              'after:absolute hover:after:w-full after:h-[2px] after:bg-purple-500 after:bottom-0 after:left-0 after:hover:animate-left-to-right',
               isShowBorder &&
-                'data-[state=active]:after:absolute after:animate-left-to-right'
+                'data-[state=active]:after:absolute data-[state=active]:after:animate-left-to-right data-[state=active]:after:w-full'
             )}
             key={t.value}
             value={t.value.toString()}
