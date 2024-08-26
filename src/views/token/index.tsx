@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { type ReactNode, useMemo } from 'react'
 import { isAddress } from 'viem'
 import { useTranslation } from 'react-i18next'
 
@@ -15,6 +15,7 @@ import { TradeAirdropProvider } from '@/contexts/trade-airdrop'
 import { Network } from '@/enums/contract'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { useTokenWs } from './hooks/use-token-ws'
+import { PrimaryLayout } from '@/components/layouts/primary'
 
 export const TokenPage = () => {
   const { t } = useTranslation()
@@ -78,7 +79,7 @@ export const TokenPage = () => {
       >
         <main
           className={cn(
-            'px-4 max-sm:px-3 pt-6 max-w-main mx-auto min-h-main',
+            'p-4 max-sm:px-3 max-w-main mx-auto min-h-main',
             'flex space-x-4 max-sm:flex-col max-sm:space-x-0 max-sm:pt-2 pb-4 max-sm:min-h-max'
           )}
         >
@@ -88,5 +89,9 @@ export const TokenPage = () => {
     </TokenProvider>
   )
 }
+
+TokenPage.getLayout = (page: ReactNode) => (
+  <PrimaryLayout disablePadding>{page}</PrimaryLayout>
+)
 
 export default TokenPage

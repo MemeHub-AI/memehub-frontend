@@ -7,7 +7,7 @@ import { Header } from '../header'
 
 interface Props extends ComponentProps<'main'> {
   asideProps?: ComponentProps<typeof NewsAside>
-  padding?: boolean
+  disablePadding?: boolean
   newsVisible?: 'always' | 'auto'
   containerClass?: string
   contentClass?: string
@@ -16,7 +16,7 @@ interface Props extends ComponentProps<'main'> {
 export const PrimaryLayout = ({
   className,
   children,
-  padding = true,
+  disablePadding = false,
   newsVisible = 'auto',
   containerClass,
   contentClass,
@@ -30,7 +30,13 @@ export const PrimaryLayout = ({
       <div className="flex-1">
         <Header />
         <div className={cn('flex', containerClass)}>
-          <div className={cn('flex-1 ', padding && 'p-3 sm:p-6', contentClass)}>
+          <div
+            className={cn(
+              'flex-1 ',
+              !disablePadding && 'p-3 sm:p-6',
+              contentClass
+            )}
+          >
             {children}
           </div>
 

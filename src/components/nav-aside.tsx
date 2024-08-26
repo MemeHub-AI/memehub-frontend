@@ -1,5 +1,5 @@
 import { ComponentProps } from 'react'
-import router, { useRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { IoGift, IoLanguageOutline } from 'react-icons/io5'
 import { IoGiftOutline } from 'react-icons/io5'
