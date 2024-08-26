@@ -1,4 +1,4 @@
-import React, { useEffect, useState, type ComponentProps } from 'react'
+import { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
@@ -8,6 +8,7 @@ import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { Routes } from '@/routes'
 import { TokenChainSelect } from './chain-select'
+import { TokenSortSelect } from './sort-select'
 import { TokenSearchInput } from './token-search-input'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
@@ -67,9 +68,9 @@ export const TokenCards = (props: Props) => {
   }, [cards])
 
   return (
-    <div className={cn(className)}>
-      <CustomSuspense
-        className="flex justify-between items-start gap-4 max-sm:justify-between mb-4 max-sm:gap-0"
+    <div className={cn('mt-4', className)}>
+      {/* <CustomSuspense
+        className="flex justify-between items-start gap-4 max-sm:justify-between max-sm:gap-0"
         isPending={isLoading}
         fallback={
           <>
@@ -78,9 +79,9 @@ export const TokenCards = (props: Props) => {
           </>
         }
       >
-        {/* <TokenChainSelect onValueChange={onChange} /> */}
-        {/* <TokenSortSelect /> */}
-        {/* <TokenSearchInput
+        <TokenChainSelect onValueChange={onChange} />
+        <TokenSortSelect />
+        <TokenSearchInput
           chianTag={chianTag}
           onSearched={(tokens) => setFilteredCards(tokens)}
           onCleared={() => {
@@ -90,9 +91,9 @@ export const TokenCards = (props: Props) => {
               setFilteredCards(cards)
             }
           }}
-          className={cn('ml-4', isMemex && 'hidden')}
-        /> */}
-      </CustomSuspense>
+          className="ml-4"
+        />
+      </CustomSuspense> */}
 
       <CustomSuspense
         className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3 max-sm:gap-3"
