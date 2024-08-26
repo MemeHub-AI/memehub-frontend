@@ -17,6 +17,7 @@ import { PosterImages } from '@/components/poster-images'
 import { SocialLinks } from '../../../components/social-links'
 import { AvatarCard } from '@/components/avatar-card'
 import { listedMarketCap } from '@/config/trade'
+import EllipsisText from '@/components/ellipsis-text'
 
 export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -98,7 +99,7 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
 
       {/* Description */}
       <div className={cn('text-sm mt-1 break-all cursor-pointer')}>
-        {tokenInfo?.description}
+        <EllipsisText>{tokenInfo?.description}</EllipsisText>
       </div>
 
       {/* Contract address */}

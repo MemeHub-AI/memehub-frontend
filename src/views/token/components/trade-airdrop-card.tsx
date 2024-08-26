@@ -86,7 +86,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     }
 
     return (
-      <div className="bg-lime-green flex items-center  rounded-md pr-2">
+      <div className="bg-lime-green flex items-center rounded-md pr-2">
         <Img
           src={kolInfo?.logo ?? communityInfo?.logo}
           alt="avatar"
@@ -131,7 +131,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
       <div className="mt-3 flex items-center justify-between">
         <div className="flex items-center">
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
-          <span className="ml-2 truncate">
+          <span className="ml-2 truncate max-w-40 xl:max-w-72">
             {BigNumber(totalAmount).toFormat()}{' '}
             {tokenInfo?.symbol ?? tokenMetadata?.symbol}
           </span>

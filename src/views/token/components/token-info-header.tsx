@@ -48,7 +48,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         )}
       >
         <div className="max-sm:flex max-sm:w-full max-sm:justify-between">
-          <div className="flex items-center">
+          <div className="flex items-center max-w-64 max-sm:max-w-44">
             <Avatar
               src={tokenInfo?.image_url ?? ''}
               size={26}
@@ -56,7 +56,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
             />
 
             <span
-              className="ml-1 font-bold text-blue-600 max-w-64 truncate"
+              className="ml-1 font-bold text-blue-600  truncate"
               title={tokenLabelName}
             >
               {isNotFound && !isIdoToken && !tokenMetadata
@@ -70,7 +70,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
               alt={tokenChain?.displayName}
               className="w-5 h-5 rounded"
             />
-            <span className="ml-1">
+            <span className="ml-1 whitespace-nowrap">
               {fmt.withChain(tokenChain?.displayName)}
             </span>
           </div>
