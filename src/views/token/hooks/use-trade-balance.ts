@@ -7,7 +7,11 @@ import { useTokenContext } from '@/contexts/token'
 
 export const useTradeBalance = () => {
   const { address } = useAccount()
-  const { chainId, tokenAddr, tokenVersion } = useTokenContext()
+  const {
+    chainId,
+    tokenAddr,
+    tokenInfo: { coin_version } = {},
+  } = useTokenContext()
 
   // Reserve token balance.
   const {
@@ -26,7 +30,7 @@ export const useTradeBalance = () => {
     isFetching: isFetchingToken,
     refetch: refetchTokenBalance,
   } = useReadContract({
-    abi: tokenAbiMap[tokenVersion!],
+    abi: tokenAbiMap[coin_version!],
     address: tokenAddr,
     functionName: 'balanceOf',
     chainId,

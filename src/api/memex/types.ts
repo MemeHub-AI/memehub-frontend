@@ -2,6 +2,7 @@ import { DistributorVersion } from '@/contract/abi/distributor'
 import { TokenVersion } from '@/contract/abi/token'
 import { Marketing } from '../token/types'
 import { MemexFactoryVersion } from '@/contract/abi/memex/factory'
+import { BcVersion } from '@/contract/abi/bonding-curve'
 
 export interface MemexIdeaItem {
   user_logo: string
@@ -34,6 +35,8 @@ export interface MemexIdeaItem {
   coin_factory_address: string
   airdrop_marketing: Marketing[] | undefined
   published_at: null | string
+  bond_version: BcVersion
+  bond_address: string
 }
 
 export interface MemexListReq {

@@ -18,17 +18,22 @@ export const TokenProgress = ({
 }) => {
   const { t } = useTranslation()
   const {
-    tokenInfo,
+    tokenInfo: {
+      coin_version,
+      contract_address,
+      bond_version,
+      bond_address,
+    } = {},
     isIdoToken,
-    tokenAddr,
-    tokenVersion,
     chainId,
     tokenChain,
   } = useTokenContext()
   const { totalSupply, progress, isGraduated } = useTokenDetails(
     chainId,
-    tokenVersion,
-    tokenAddr
+    coin_version,
+    contract_address,
+    bond_version,
+    bond_address
   )
   const { progress: idoProgress } = useIdoProgress(chainId, 0)
 

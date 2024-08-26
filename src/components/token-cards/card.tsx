@@ -47,7 +47,9 @@ export const TokenCard = (props: Props) => {
   const { progress, isGraduated } = useTokenDetails(
     chainId,
     card.coin_version,
-    card.contract_address
+    card.contract_address,
+    card.bond_version,
+    card.bond_address
   )
   const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
 

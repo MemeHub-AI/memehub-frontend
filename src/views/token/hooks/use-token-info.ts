@@ -4,7 +4,6 @@ import { Address } from 'viem'
 import { tokenApi } from '@/api/token'
 import { ApiCode, ApiResponse } from '@/api/types'
 import { useTokenDetails } from '@/hooks/use-token-details'
-import { TokenVersion } from '@/contract/abi/token'
 import { TokenType } from '@/enums/token'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
@@ -30,13 +29,17 @@ export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
     refetchOnWindowFocus: false,
     enabled: !!chainName && !!tokenAddr,
   })
+  const { coin_type, coin_version, bond_version, bond_address } =
+    tokenInfo ?? {}
   const isNotFound = tokenInfoErr?.code === ApiCode.NotFound
-  const isIdoToken = tokenInfo?.coin_type === TokenType.Ido
+  const isIdoToken = coin_type === TokenType.Ido
 
   const { isLoadingDetails, refetchDetails, ...tokenDetails } = useTokenDetails(
     chainId,
-    tokenInfo?.coin_version,
-    isIdoToken || isNotFound ? undefined : tokenAddr
+    coin_version,
+    isIdoToken || isNotFound ? undefined : tokenAddr,
+    bond_version,
+    bond_address
   )
   const { progress, tokenLeftAmount, reserveTotalAmount } = tokenDetails
 

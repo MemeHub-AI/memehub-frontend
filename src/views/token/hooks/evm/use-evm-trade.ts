@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import { useAccount, useWriteContract } from 'wagmi'
-import { parseEther } from 'viem'
+import { Address, parseEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -13,10 +13,9 @@ import { useTradeAmount } from '../use-trade-amount'
 
 export const useEvmTrade = (onSuccess?: () => void) => {
   const {
+    tokenInfo: { bond_version, bond_address } = {},
     tokenAddr,
     chainId,
-    bcVersion,
-    bcAddr,
     isGraduated,
     refetchTokenInfo,
   } = useTokenContext()
@@ -25,8 +24,8 @@ export const useEvmTrade = (onSuccess?: () => void) => {
   const { getTokenAmount, getReserveAmount, getLastAmount } = useTradeAmount()
   const isLastBuy = useRef(false)
   const bcConfig = {
-    abi: bcAbiMap[bcVersion!],
-    address: bcAddr!,
+    abi: bcAbiMap[bond_version!],
+    address: bond_address as Address,
     chainId,
   }
 

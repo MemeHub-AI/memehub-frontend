@@ -8,10 +8,10 @@ import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
 
 export const useEvmTradeAmount = (chainId: number, tokenAddr: Address) => {
-  const { bcVersion, bcAddr } = useTokenContext()
+  const { tokenInfo: { bond_version, bond_address } = {} } = useTokenContext()
   const config = {
-    abi: bcAbiMap[bcVersion!],
-    address: bcAddr!,
+    abi: bcAbiMap[bond_version!],
+    address: bond_address as Address,
     chainId: chainId as ConfigChainId,
   }
 

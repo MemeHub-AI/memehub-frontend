@@ -44,8 +44,12 @@ export const TokenDetailsCard = ({
   const { progress } = useTokenDetails(
     chainId,
     details?.coin_version!,
-    tokenAddr
+    tokenAddr,
+    // TODO/top: waiting for backend return
+    details?.bond_version!,
+    details?.bond_address!
   )
+  console.log('detail', details)
   const isZero = tokenAddr === zeroAddress
   const hasLinks = !!twitter_url || !!telegram_url || !!website_url
 
