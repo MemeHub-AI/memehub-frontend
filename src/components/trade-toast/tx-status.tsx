@@ -7,15 +7,14 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { SlippageError } from './slippage-error'
 import { TxLoading } from './tx-loading'
 import { TxSuccess } from './tx-success'
-import { TradeToastProvider } from '@/contexts/trade-toast'
 
 export interface TxStatusProps {
   hash: Hash
-  txUrl: string
-  isBuy: boolean
-  getRewardAmount: () => number
   tokenLabel: string
   reserveLabel: string
+  reward: string
+  txUrl: string
+  isBuy: boolean
   getToastId: () => string | number
 }
 
@@ -32,10 +31,10 @@ export const TxStatus = (props: TxStatusProps) => {
   }, [])
 
   return (
-    <TradeToastProvider value={props}>
-      {isLoading && <TxLoading />}
-      {isError && <SlippageError />}
-      {isSuccess && <TxSuccess />}
-    </TradeToastProvider>
+    <>
+      {isLoading && <TxLoading {...props} />}
+      {isError && <SlippageError {...props} />}
+      {isSuccess && <TxSuccess {...props} />}
+    </>
   )
 }

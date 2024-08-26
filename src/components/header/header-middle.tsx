@@ -1,6 +1,9 @@
 import SearchInput from '@/components/search-input'
 import { useAllTrades } from '@/hooks/use-all-traces'
-import { TokenCreate, TokenTrade } from '@/views/token/hooks/use-token-ws/types'
+import {
+  TokenWsCreate,
+  TokenWsTrade,
+} from '@/views/token/hooks/use-token-ws/types'
 import { memo, useEffect, useState } from 'react'
 import TradeShake from './trade-shake'
 import CreateCoinShake from './create-coin-shake'
@@ -8,8 +11,8 @@ import CreateCoinShake from './create-coin-shake'
 export const AllTradesFeeds = memo(() => {
   // const colors = utilColor.randomCreate()
   const { allTrades, coinCreate } = useAllTrades()
-  const [trade, setTrade] = useState<TokenTrade>()
-  const [create, setCreate] = useState<TokenCreate>()
+  const [trade, setTrade] = useState<TokenWsTrade>()
+  const [create, setCreate] = useState<TokenWsCreate>()
 
   const colors = [
     '#9390b8',

@@ -5,10 +5,10 @@ import { fmt } from '@/utils/fmt'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { ShakeCardProps } from './type'
-import { TokenTrade } from '@/views/token/hooks/use-token-ws/types'
+import { TokenWsTrade } from '@/views/token/hooks/use-token-ws/types'
 import { joinPaths } from '@/utils'
 
-const TradeShake = (props: ShakeCardProps<TokenTrade>) => {
+const TradeShake = (props: ShakeCardProps<TokenWsTrade>) => {
   const { trade, className, textClass, imageClass, color } = props
   const { push } = useRouter()
 

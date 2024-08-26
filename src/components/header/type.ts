@@ -1,6 +1,9 @@
-import { TokenCreate, TokenTrade } from '@/views/token/hooks/use-token-ws/types'
+import {
+  TokenWsCreate,
+  TokenWsTrade,
+} from '@/views/token/hooks/use-token-ws/types'
 
-export interface ShakeCardProps<T extends TokenCreate | TokenTrade> {
+export interface ShakeCardProps<T extends TokenWsCreate | TokenWsTrade> {
   trade: T
   className?: string
   textClass?: string

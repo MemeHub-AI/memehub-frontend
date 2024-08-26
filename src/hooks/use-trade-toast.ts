@@ -6,38 +6,46 @@ import { BigNumber } from 'bignumber.js'
 import { TradeType } from '@/enums/trade'
 import { TxStatus } from '@/components/trade-toast/tx-status'
 import { useTokenContext } from '@/contexts/token'
+import { useChainInfo } from './use-chain-info'
 
 interface Options {
   hash: Hash
-  txUrl: string
-  type: TradeType | ''
-  reserveLabel: string
-  tokenLabel: string
+  type: TradeType
+  reserveAmount: string
+  tokenAmount: string
 }
 
 export const useTradeToast = () => {
-  const { getReward } = useTokenContext()
+  const { chainName, rewardInfo, tradePrice } = useTokenContext()
+  const { chain: { explorer, native } = {} } = useChainInfo(chainName)
 
-  const getRewardAmount = (hash: string) => {
-    const amount = BigNumber(getReward(hash) || 0).toNumber()
-    const rewardAmount = Number(
-      amount < 100 ? amount.toFixed(4) : amount.toFixed(2)
-    )
+  const getRewardAmount = (type: TradeType, reserveAmount: string) => {
+    const { amount_unit = 0, usd_unit = 0 } = rewardInfo?.[type] ?? {}
+    const { price = 0 } = tradePrice ?? {}
+    const reward = BigNumber(reserveAmount)
+      .multipliedBy(price)
+      .multipliedBy(amount_unit)
+      .multipliedBy(usd_unit)
+      .toFixed(10)
 
-    return rewardAmount
+    return reward
   }
 
-  const showToast = async (options: Options) => {
-    const { type, tokenLabel, reserveLabel, hash, txUrl } = options
+  const showToast = async ({
+    hash,
+    type,
+    reserveAmount,
+    tokenAmount,
+  }: Options) => {
     const toastId = toast(
       createElement(TxStatus, {
         hash,
-        txUrl,
+        tokenLabel: `${tokenAmount} ${native?.symbol}`,
+        reserveLabel: `${reserveAmount} ${native?.symbol}`,
+        reward: getRewardAmount(type, reserveAmount),
         isBuy: type === TradeType.Buy,
-        tokenLabel,
-        reserveLabel,
+        txUrl: `${explorer}/tx/${hash}`,
         getToastId: () => toastId,
-        getRewardAmount: () => getRewardAmount(hash),
       }),
       {
         position: 'bottom-left',

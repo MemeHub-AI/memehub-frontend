@@ -12,14 +12,13 @@ import { Network } from '@/enums/contract'
 import { useTradeAmount } from './use-trade-amount'
 
 // Used for trade success tips.
-const lastTrade = {
-  type: '' as TradeType | '',
-  tokenLabel: '',
-  reserveLabel: '',
+export const lastTrade = {
+  type: '' as TradeType,
+  tokenAmount: '',
+  reserveAmount: '',
 }
 
 export const useTrade = (onSuccess?: () => void) => {
-  const { showToast } = useTradeToast()
   const {
     tokenInfo,
     isIdoToken,
@@ -28,8 +27,8 @@ export const useTrade = (onSuccess?: () => void) => {
     tokenMetadata,
     chainId,
     network,
-    tokenChain,
   } = useTokenContext()
+  const { showToast } = useTradeToast()
 
   const { getTokenAmount, getReserveAmount } = useTradeAmount()
   const {
@@ -61,17 +60,14 @@ export const useTrade = (onSuccess?: () => void) => {
   // TODO: add Sol, TON chains
   const updateLastTrade = async (type: TradeType, inputAmount: string) => {
     lastTrade.type = type
-    const tokenSymbol = tokenInfo?.symbol || tokenMetadata?.symbol
-    const reserveSymbol = tokenChain?.native.symbol
-
     if (type === TradeType.Buy) {
       const [, tokenAmount] = await getTokenAmount(inputAmount)
-      lastTrade.tokenLabel = `${tokenAmount} ${tokenSymbol}`
-      lastTrade.reserveLabel = `${inputAmount} ${reserveSymbol}`
+      lastTrade.tokenAmount = tokenAmount
+      lastTrade.reserveAmount = inputAmount
     } else {
       const [, reserveAmount] = await getReserveAmount(inputAmount)
-      lastTrade.tokenLabel = `${inputAmount} ${tokenSymbol}`
-      lastTrade.reserveLabel = `${reserveAmount} ${reserveSymbol}`
+      lastTrade.tokenAmount = inputAmount
+      lastTrade.reserveAmount = reserveAmount
     }
   }
 
@@ -120,7 +116,7 @@ export const useTrade = (onSuccess?: () => void) => {
     return sell(amount, slippage)
   }
 
-  const handleResetTrade = () => {
+  const resetTrades = () => {
     resetTrade()
     dexResetTrade()
   }
@@ -129,12 +125,8 @@ export const useTrade = (onSuccess?: () => void) => {
   useEffect(() => {
     if (!hash) return
 
-    showToast({
-      ...lastTrade,
-      hash,
-      txUrl: `${tokenChain?.explorer}/tx/${hash}`,
-    })
-    handleResetTrade()
+    showToast({ hash, ...lastTrade })
+    resetTrades()
   }, [hash])
 
   return {

@@ -6,62 +6,52 @@ import { apiUrl } from '@/config/url'
 import { useWebsocket } from '@/hooks/use-websocket'
 import { useTokenQuery } from '../use-token-query'
 import type {
-  TokenOnEvents,
-  TokenEmitEvents,
-  TokenHolder,
-  TokenTradePrice,
-  TokenTrade,
+  TokenWsOnEvents,
+  TokenWsEmitEvents,
+  TokenWsHolder,
+  TokenWsTradePrice,
+  TokenWsTrade,
+  TokenWsRewardInfo,
 } from './types'
 import { Routes } from '@/routes'
-import { useLruMap } from '@/hooks/use-lru-map'
-import { TokenListItem } from '@/api/token/types'
 
-const uniqKey: keyof TokenTrade = 'hash'
+const uniqKey: keyof TokenWsTrade = 'hash'
 
-const sortKey: keyof TokenTrade = 'timestamp'
+const sortKey: keyof TokenWsTrade = 'timestamp'
 
 const pageSize = 10
 
 // TODO/top: calc market cap via `useUniswapV2Amount`
-export const useTokenWs = (
-  tokenInfo: TokenListItem | undefined,
-  disabled = false
-) => {
+export const useTokenWs = (disabled = false) => {
   const { chainName, tokenAddr } = useTokenQuery()
   const router = useRouter()
-  const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
+  const ws = useWebsocket<TokenWsOnEvents, TokenWsEmitEvents>(
     `${apiUrl.ws}/ws/v2/coin/trades`,
     {
       disabled,
       shouldReconnect: () => router.pathname === Routes.TokenPage,
     }
   )
-  const { set, get: getReward } = useLruMap<Record<string, string>>()
-  const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
-  const [holders, setHolders] = useState<TokenHolder[]>([])
-  const [tradePrice, setTradePrice] = useState<TokenTradePrice>()
+  const [tradeRecords, setTradeRecords] = useState<TokenWsTrade[]>([])
+  const [holders, setHolders] = useState<TokenWsHolder[]>([])
+  const [tradePrice, setTradePrice] = useState<TokenWsTradePrice>()
   const [hasMoreTrades, setHasMoreTrades] = useState(false)
+  const [rewardInfo, setRewardInfo] = useState<TokenWsRewardInfo>()
 
-  const onTrades = ({ data, extra }: TokenOnEvents['trades']) => {
-    if (extra?.rewarded) {
-      data.map(({ hash }) => set(hash, extra.rewarded))
-    }
-
+  const onTrades = ({ data, extra }: TokenWsOnEvents['trades']) => {
     setHasMoreTrades(!!extra?.hasmore)
     setTradeRecords((prev) =>
       orderBy(uniqBy([...prev, ...data], uniqKey), [sortKey], 'desc')
     )
   }
 
-  const onHolders = ({ data }: TokenOnEvents['holders']) => {
+  const onPrice = ({ data }: TokenWsOnEvents['price']) => setTradePrice(data)
+
+  const onHolders = ({ data }: TokenWsOnEvents['holders']) => {
     setHolders(data)
   }
 
-  const onPrice = ({ data }: TokenOnEvents['price']) => {
-    setTradePrice(data)
-  }
-
-  const onUpdate = ({ data }: TokenOnEvents['update']) => {
+  const onUpdate = ({ data }: TokenWsOnEvents['update']) => {
     if (data.type === 'trades') return onTrades(data)
     if (data.type === 'holders') return onHolders(data)
     if (data.type === 'price') return onPrice(data)
@@ -85,6 +75,7 @@ export const useTokenWs = (
     ws.on('holders', onHolders)
     ws.on('price', onPrice)
     ws.on('update', onUpdate)
+    ws.on('reward-info', ({ data }) => setRewardInfo(data))
 
     ws.emit('listen', {
       chain: chainName,
@@ -92,6 +83,8 @@ export const useTokenWs = (
       offset: 0,
       limit: pageSize,
     })
+
+    return ws.offAll
   }, [ws.isOpen])
 
   return {
@@ -100,7 +93,7 @@ export const useTokenWs = (
     holders,
     tradePrice,
     hasMoreTrades,
-    getReward,
+    rewardInfo,
     fetchNextTrades,
   }
 }

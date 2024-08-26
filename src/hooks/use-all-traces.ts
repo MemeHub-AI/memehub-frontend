@@ -1,8 +1,8 @@
 import {
-  TokenCreate,
-  TokenEmitEvents,
-  TokenOnEvents,
-  TokenTrade,
+  TokenWsCreate,
+  TokenWsEmitEvents,
+  TokenWsOnEvents,
+  TokenWsTrade,
 } from '@/views/token/hooks/use-token-ws/types'
 import { useWebsocket } from './use-websocket'
 import { apiUrl } from '@/config/url'
@@ -11,14 +11,14 @@ import { Routes } from '@/routes'
 import { useEffect, useState } from 'react'
 
 export const useAllTrades = (disabled = false) => {
-  const [allTrades, setAllTrades] = useState<TokenTrade[]>([])
-  const [coinCreate, setCoinCreate] = useState<TokenCreate>()
-  const ws = useWebsocket<TokenOnEvents, TokenEmitEvents>(
+  const [allTrades, setAllTrades] = useState<TokenWsTrade[]>([])
+  const [coinCreate, setCoinCreate] = useState<TokenWsCreate>()
+  const ws = useWebsocket<TokenWsOnEvents, TokenWsEmitEvents>(
     disabled ? '' : `${apiUrl.ws}/ws/v2/global/feeds`,
     { shouldReconnect: () => router.pathname === Routes.Memex }
   )
 
-  const onUpdate = ({ data }: TokenOnEvents['update']) => {
+  const onUpdate = ({ data }: TokenWsOnEvents['update']) => {
     if (data.type === 'all-trades') setAllTrades(data.data)
     if (data.type === 'all-coin-created') setCoinCreate(data.data)
   }

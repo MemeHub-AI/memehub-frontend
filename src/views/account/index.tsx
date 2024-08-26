@@ -10,7 +10,6 @@ import { useUserList } from '@/views/account/hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
 import { MemexProfile } from './components/profile'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { useResponsive } from '@/hooks/use-responsive'
 
 export const AccountPage = () => {
   const { query } = useRouter()
@@ -27,8 +26,6 @@ export const AccountPage = () => {
   const isOtherUser = tokenAddr !== currenUserAddr
   const followersResults = useUserList(UserListType.Followers)
   const followingResults = useUserList(UserListType.Following)
-
-  const { isPad } = useResponsive()
 
   const refetchFollow = () => {
     followersResults.refetch()

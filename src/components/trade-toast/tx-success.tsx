@@ -4,20 +4,23 @@ import Link from 'next/link'
 
 import { Container } from './container'
 import { DiamondIcon } from './diamond-icon'
-import { useTradeToastContext } from '@/contexts/trade-toast'
 import { useUserInfo } from '@/hooks/use-user-info'
+import { TxStatusProps } from './tx-status'
 
-export const TxSuccess = () => {
-  const { isBuy, getRewardAmount, reserveLabel, tokenLabel, txUrl } =
-    useTradeToastContext()
+export const TxSuccess = ({
+  isBuy,
+  reserveLabel,
+  tokenLabel,
+  txUrl,
+  reward,
+  getToastId,
+}: TxStatusProps) => {
   const { t } = useTranslation()
   const { refetchUserInfo } = useUserInfo()
-
-  const reward = BigNumber(getRewardAmount())
-  const isZero = reward.lte(0)
+  const isZero = BigNumber(reward).lte(0)
 
   return (
-    <Container>
+    <Container getToastId={getToastId}>
       <div className="font-bold mr-2">{t('tx.success')}</div>
       <div className="my-1">
         {isBuy ? t('buy.toast') : t('sell.toast')}{' '}
@@ -27,7 +30,9 @@ export const TxSuccess = () => {
       {!isZero && (
         <div className="flex items-center gap-1 mb-1">
           {t('acquired')}
-          <span className="text-blue-600 text-xl">{reward.toFormat()}</span>
+          <span className="text-blue-600 text-xl">
+            {BigNumber(reward).toFormat()}
+          </span>
           <div className="relative">
             <img
               src="/images/reward/diamond-star.png"

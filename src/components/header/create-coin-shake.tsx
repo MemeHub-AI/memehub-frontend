@@ -2,12 +2,12 @@ import { useRouter } from 'next/router'
 import { ShakeCardProps } from './type'
 import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
-import { TokenCreate } from '@/views/token/hooks/use-token-ws/types'
+import { TokenWsCreate } from '@/views/token/hooks/use-token-ws/types'
 import { useTranslation } from 'react-i18next'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
 
-const CreateCoinShake = (props: ShakeCardProps<TokenCreate>) => {
+const CreateCoinShake = (props: ShakeCardProps<TokenWsCreate>) => {
   const { trade: create, className, textClass, imageClass, color } = props
   const { push } = useRouter()
   const { t } = useTranslation()

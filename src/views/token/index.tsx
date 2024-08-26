@@ -36,7 +36,7 @@ export const TokenPage = () => {
     bond_address,
   } = tokenInfo ?? {}
   const { chain: tokenChain, chainId } = useChainInfo(chainName)
-  const tradeWs = useTokenWs(tokenInfo, otherInfo.isNotFound)
+  const tradeWs = useTokenWs(otherInfo.isNotFound)
   const airdropInfo = useAirdropInfo({
     airdropId: airdrop?.[0]?.distribution_id,
     chainId,

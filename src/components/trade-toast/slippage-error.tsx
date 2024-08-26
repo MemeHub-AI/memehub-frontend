@@ -2,14 +2,13 @@ import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
 import { Container } from './container'
-import { useTradeToastContext } from '@/contexts/trade-toast'
+import { type TxStatusProps } from './tx-status'
 
-export const SlippageError = () => {
+export const SlippageError = ({ txUrl, getToastId }: TxStatusProps) => {
   const { t } = useTranslation()
-  const { txUrl } = useTradeToastContext()
 
   return (
-    <Container>
+    <Container getToastId={getToastId}>
       <div className="font-bold">{t('tx.fail')}</div>
       <div className="flex justify-between">
         <div>

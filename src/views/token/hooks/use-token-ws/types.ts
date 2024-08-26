@@ -1,26 +1,27 @@
 import { WsReceived } from '@/api/types'
 import { TradeType } from '@/enums/trade'
 
-export interface TokenEmitEvents {
-  listen: TokenSendListen
+export interface TokenWsEmitEvents {
+  listen: TokenWsListen
   unlisten: null
-  history: TokenSendListen
+  history: TokenWsListen
 }
 
-interface TokenSendListen {
+interface TokenWsListen {
   chain: string
   token: string
   offset?: number
   limit?: number
 }
 
-export type TokenOnEvents = WsReceived<{
-  trades: [TokenTrade[], TradesExtra]
-  holders: [TokenHolder[]]
-  price: [TokenTradePrice]
-  'all-trades': [TokenTrade[]]
-  'all-coin-created': [TokenCreate]
-  update: [TokenOnEvents[keyof Omit<TokenOnEvents, 'update'>]]
+export type TokenWsOnEvents = WsReceived<{
+  trades: [TokenWsTrade[], TradesExtra]
+  holders: [TokenWsHolder[]]
+  price: [TokenWsTradePrice]
+  'all-trades': [TokenWsTrade[]]
+  'all-coin-created': [TokenWsCreate]
+  update: [TokenWsOnEvents[keyof Omit<TokenWsOnEvents, 'update'>]]
+  'reward-info': [TokenWsRewardInfo]
 }>
 
 interface TradesExtra {
@@ -28,7 +29,7 @@ interface TradesExtra {
   rewarded: string
 }
 
-export interface TokenTrade {
+export interface TokenWsTrade {
   timestamp: number
   chain: string
   hash: string
@@ -47,7 +48,7 @@ export interface TokenTrade {
   image_url: string
 }
 
-export interface TokenHolder {
+export interface TokenWsHolder {
   chain: string
   token: string
   holder: string
@@ -55,12 +56,12 @@ export interface TokenHolder {
   flag: string | null
 }
 
-export interface TokenTradePrice {
+export interface TokenWsTradePrice {
   symbol: string
   price: string
 }
 
-export interface TokenCreate {
+export interface TokenWsCreate {
   chain: string
   coin_type: number
   contract_address: string
@@ -68,4 +69,15 @@ export interface TokenCreate {
   image_url: string
   name: string
   symbol: string
+}
+
+export interface TokenWsRewardInfo {
+  buy: TokenWsRewardInfoItem
+  sell: TokenWsRewardInfoItem
+}
+
+interface TokenWsRewardInfoItem {
+  amount_unit: number
+  usd_unit: number
+  desc: string
 }
