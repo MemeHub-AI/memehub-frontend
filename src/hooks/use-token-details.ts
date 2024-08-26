@@ -68,7 +68,7 @@ export const useTokenDetails = (
       .div(tokenMaxSupply)
       .multipliedBy(100)
 
-    return percent.lte(0) ? '0' : percent.toFixed(2)
+    return percent.lte(0) || percent.isNaN() ? '0' : percent.toFixed(2)
   }, [tokenMaxSupply, tokenLeftAmount, isGraduated])
 
   const refetchDetails = () => {
