@@ -1,9 +1,9 @@
-import React, { type ComponentProps, useEffect, useRef, useState } from 'react'
+import { type ComponentProps, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { isEmpty } from 'lodash'
+import { useSize } from 'ahooks'
 
 import { cn } from '@/lib/utils'
-import { useSize } from 'ahooks'
 
 interface Props {
   maxLine?: number
@@ -22,24 +22,28 @@ export const EllipsisText = ({
   ...props
 }: ComponentProps<'div'> & Props) => {
   const { t } = useTranslation()
-  const ref = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
   const [isOverflowed, setIsOverflowed] = useState(false)
   const [lineClampClass, setLineClampClass] = useState(lineClampBase)
   const { width } = useSize(document.querySelector('body')) ?? {}
 
   useEffect(() => {
-    if (!ref.current) return
-    const { scrollHeight, clientHeight } = ref.current
+    if (!contentRef.current) return
+    const { scrollHeight, clientHeight } = contentRef.current
 
     setIsOverflowed(scrollHeight > clientHeight)
-  }, [ref.current, width, maxLine, children])
+  }, [contentRef.current, width, maxLine, children])
 
   return (
     <>
       <div
         style={{ WebkitLineClamp: maxLine }}
-        className={cn('break-all', lineClampClass, className)}
-        ref={ref}
+        className={cn(
+          'break-all whitespace-pre-line',
+          lineClampClass,
+          className
+        )}
+        ref={contentRef}
         {...props}
       >
         {children}
@@ -48,7 +52,7 @@ export const EllipsisText = ({
       {isOverflowed && (
         <p
           className={cn(
-            'text-blue-600 cursor-pointer sm:hover:underline active:underline whitespace-pre-line',
+            'text-blue-600 cursor-pointer sm:hover:underline active:underline',
             showMoreClass
           )}
           onClick={() => {
