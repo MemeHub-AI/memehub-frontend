@@ -15,7 +15,7 @@ interface Props extends ComponentProps<'div'> {
   size?: number
 }
 
-export const TokenSocialLinks = ({
+export const SocialLinks = ({
   className,
   x,
   tg,
@@ -73,4 +73,4 @@ export const TokenSocialLinks = ({
   )
 }
 
-export default TokenSocialLinks
+export default SocialLinks

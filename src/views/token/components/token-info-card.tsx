@@ -14,7 +14,7 @@ import { utilLang } from '@/utils/lang'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Badge } from '@/components/ui/badge'
 import { PosterImages } from '@/components/poster-images'
-import { TokenSocialLinks } from '../../../components/token-links'
+import { SocialLinks } from '../../../components/social-links'
 import { AvatarCard } from '@/components/avatar-card'
 import { listedMarketCap } from '@/config/trade'
 
@@ -87,7 +87,7 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
       </div>
 
       {/* Links */}
-      <TokenSocialLinks
+      <SocialLinks
         x={tokenInfo?.twitter_url}
         tg={tokenInfo?.telegram_url}
         website={tokenInfo?.website_url}

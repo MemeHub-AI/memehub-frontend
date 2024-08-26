@@ -31,7 +31,7 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent,
 } from '@/components/ui/navigation-menu'
-import TokenLinks from './token-links'
+import { SocialLinks } from './social-links'
 import { joinPaths } from '@/utils'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
@@ -93,7 +93,7 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
 
   return (
     <aside
-      className={cn('flex flex-col space-y-4 w-52 pt-4', className)}
+      className={cn('flex flex-col space-y-4 w-52 pt-4 select-none', className)}
       {...props}
     >
       <Logo showMeme className="w-28" linkClass="pl-1" />
@@ -120,7 +120,7 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
               <span>{t('Languages')}</span>
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="w-52 p-2">
+              <div className="w-52 p-2 space-y-1">
                 {langs.map(([code, { name }], i) => (
                   <Button
                     key={i}
@@ -149,7 +149,7 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
         {t('Post.idea')}
       </Button>
 
-      <TokenLinks
+      <SocialLinks
         x={socialLink.x}
         tg={socialLink.tg}
         size={28}
