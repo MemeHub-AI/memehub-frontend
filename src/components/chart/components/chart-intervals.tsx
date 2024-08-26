@@ -11,7 +11,7 @@ export const ChartIntervals = () => {
   const activeChart = chart?.activeChart()
 
   return (
-    <div className="flex items-center max-sm:max-w-[300px]">
+    <div className="flex items-center max-sm:max-w-sm">
       {datafeedResolutions.map((r) => (
         <Button
           key={r}

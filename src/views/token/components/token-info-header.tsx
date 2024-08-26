@@ -48,7 +48,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
         )}
       >
         <div className="max-sm:flex max-sm:w-full max-sm:justify-between">
-          <div className="flex items-center max-w-64 max-sm:max-w-44">
+          <div className="flex items-center max-w-64 max-sm:max-w-48">
             <Avatar
               src={tokenInfo?.image_url ?? ''}
               size={26}
