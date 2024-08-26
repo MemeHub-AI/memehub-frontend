@@ -10,7 +10,7 @@ export const getMemexLayout = (page: ReactNode, withTabs = false) => (
   <PrimaryLayout
     disablePadding
     contentClass="flex justify-center"
-    newsAsideClass="block"
+    newsAsideClass="lg:block"
   >
     {withTabs ? <MemexTabs>{page}</MemexTabs> : page}
   </PrimaryLayout>

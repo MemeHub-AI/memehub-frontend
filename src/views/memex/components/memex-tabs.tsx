@@ -55,9 +55,8 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
     >
       <TabsList
         className={cn(
-          'border-t-0 border-l-0 border-r-0 md:border-[1px] !border-b border-zinc-200',
-          'justify-start rounded-none h-10 max-sm:w-full',
-          'md:flex md:justify-between md:h-14 md:px-4'
+          'border-zinc-200 border-t-0 border-r-0 border-l-0 justify-start overflow-visible',
+          'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14 md:px-4'
         )}
       >
         {tabs.map(({ id, route, title }) => (
@@ -65,9 +64,8 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
             key={id}
             value={route}
             className={cn(
-              '!text-black font-normal px-0 first:ml-3 mx-2 duration-0 !bg-transparent',
-              pathname === route && 'border-b-2 border-purple-600 font-bold',
-              'md:text-lg'
+              '!text-black font-normal px-0 first:ml-3 mx-2 duration-0 !bg-transparent md:text-lg',
+              pathname === route && 'font-bold shadow-[0_2px_0_0_#9333ea]'
             )}
           >
             {title}
@@ -76,7 +74,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
       </TabsList>
 
       <div
-        className="h-[calc(100vh-64px-2.5rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm md:border"
+        className="h-[calc(100vh-64px-2.5rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm"
         id={memexBodyId}
       >
         {children}

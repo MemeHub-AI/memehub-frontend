@@ -92,7 +92,6 @@ export const MemexIdeaCard = ({
 
     return BigNumber(idea?.is_creator ? ownerPercent : userPercent).toFixed(2)
   }, [idea, ideaInfo])
-  const { isLaptop } = useResponsive()
 
   const {
     initialBuyAmount,
@@ -150,7 +149,7 @@ export const MemexIdeaCard = ({
   return (
     <div
       className={cn(
-        'flex px-3 py-3 border-b-2 relative',
+        'flex px-3 py-3 relative border-b-2',
         isList && 'cursor-pointer',
         className
       )}
