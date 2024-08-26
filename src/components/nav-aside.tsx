@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react'
+import { ComponentProps, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { IoGift, IoLanguageOutline } from 'react-icons/io5'
@@ -33,14 +33,25 @@ import {
 } from '@/components/ui/navigation-menu'
 import { SocialLinks } from './social-links'
 import { joinPaths } from '@/utils'
+import { useResponsive } from '@/hooks/use-responsive'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
-export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
+interface Props {
+  collapsed?: boolean
+}
+
+export const NavAside = ({
+  className,
+  collapsed = false,
+  ...props
+}: ComponentProps<'div'> & Props) => {
   const { t, i18n } = useTranslation()
   const { setLang } = useLang()
   const { pathname, ...router } = useRouter()
   const { userInfo } = useUserStore()
+  const [isCollapsed, setIsCollapsed] = useState(collapsed)
+  const { isDesktop } = useResponsive()
 
   const userNavs = [
     {
@@ -91,12 +102,29 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
     },
   ]
 
+  useEffect(() => {
+    if (collapsed === true) {
+      setIsCollapsed(true)
+      return
+    }
+    setIsCollapsed(!isDesktop)
+  }, [collapsed, isDesktop])
+
   return (
     <aside
-      className={cn('flex flex-col space-y-4 w-52 pt-4 select-none', className)}
+      className={cn(
+        'flex flex-col space-y-4 w-52 pt-4 select-none',
+        isCollapsed && 'w-10 items-center',
+        className
+      )}
       {...props}
     >
-      <Logo showMeme className="w-28" linkClass="pl-1" />
+      <Logo
+        showMeme
+        showLogo={!isCollapsed}
+        className="w-28"
+        linkClass="pl-1"
+      />
 
       <NavigationMenu className="grid grid-cols-1 max-w-full">
         <NavigationMenuList className="grid grid-cols-1 space-x-0 space-y-3">
@@ -105,19 +133,28 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
               <NavigationMenuLink
                 className={cn(
                   'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer',
-                  n.isActive && 'font-bold'
+                  n.isActive && 'font-bold',
+                  isCollapsed && 'space-x-0 p-2 justify-center'
                 )}
                 onClick={() => router.push(n.path)}
+                title={n.title}
               >
                 {n.isActive ? n.iconActive : n.icon}
-                <span>{n.title}</span>
+                {!isCollapsed && <span>{n.title}</span>}
               </NavigationMenuLink>
             </NavigationMenuItem>
           ))}
           <NavigationMenuItem className="w-full">
-            <NavigationMenuTrigger className="text-xl w-full flex justify-start space-x-2 py-5 pl-2">
-              <IoLanguageOutline />
-              <span>{t('Languages')}</span>
+            <NavigationMenuTrigger
+              showClose={!isCollapsed}
+              className={cn(
+                'text-xl w-full flex justify-start space-x-2 py-5 pl-2',
+                isCollapsed && 'space-x-0 p-2 justify-center'
+              )}
+              title={t('language')}
+            >
+              <IoLanguageOutline size={22} />
+              {!isCollapsed && <span>{t('Languages')}</span>}
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <div className="w-52 p-2 space-y-1">
@@ -126,7 +163,10 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
                     key={i}
                     variant="ghost"
                     shadow="none"
-                    className="w-full justify-start hover:bg-zinc-200 rounded-lg p-4 bg-slate-50"
+                    className={cn(
+                      'w-full justify-start hover:bg-zinc-200 rounded-lg p-4',
+                      i18n.language === code && 'bg-zinc-100'
+                    )}
                     onClick={() => setLang(code)}
                   >
                     {name}
@@ -144,16 +184,26 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
       <Button
         shadow="none"
         onClick={() => router.push(Routes.MemexCreate)}
-        className="bg-purple-700 text-white rounded-full border-none max-xl:text-md py-5 text-lg mt-2 max-xl:text-base ml-1"
+        className={cn(
+          'bg-purple-700 text-white rounded-full border-none py-5 text-lg',
+          'mt-2 max-xl:text-base ml-1 max-xl:text-md',
+          isCollapsed && 'p-2'
+        )}
+        size={isCollapsed ? 'icon' : 'default'}
       >
-        {t('Post.idea')}
+        {isCollapsed ? (
+          <img src="/icons/writer.svg" alt="writer" />
+        ) : (
+          t('Post.idea')
+        )}
       </Button>
 
       <SocialLinks
         x={socialLink.x}
         tg={socialLink.tg}
-        size={28}
-        buttonProps={{ size: 'icon-lg' }}
+        size={isCollapsed ? 20 : 28}
+        buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
+        className={cn(isCollapsed && 'flex-col space-x-0 space-y-1 ml-1')}
       />
     </aside>
   )

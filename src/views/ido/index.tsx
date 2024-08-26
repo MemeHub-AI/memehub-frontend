@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import dayjs from 'dayjs'
 
 import { AvatarCard } from '@/components/avatar-card'
-import { TokenSocialLinks } from '@/components/token-links'
+import { SocialLinks } from '@/components/social-links'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useIdoInfo } from './hooks/use-ido-info'
@@ -68,7 +68,7 @@ export const IdoPage = () => {
           <h2 className="font-bold text-xl text-center">Trump407</h2>
           <p className="text-center">{t('ido.time1')}</p>
           <p className="text-center">{t('ido.time2')}</p>
-          <TokenSocialLinks
+          <SocialLinks
             x={idoTrumpLink.x}
             tg={idoTrumpLink.tg}
             website={idoTrumpLink.website}

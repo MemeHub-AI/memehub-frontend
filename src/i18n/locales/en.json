@@ -726,5 +726,6 @@
   "load-more": "Load more",
   "header.post.idea": "Post idea",
   "header.idea": "Idea",
-  "header.coin": "Coin"
+  "header.coin": "Coin",
+  "language": "Language"
 }

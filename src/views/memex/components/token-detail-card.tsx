@@ -5,7 +5,7 @@ import { zeroAddress } from 'viem'
 
 import { Card } from '@/components/ui/card'
 import { Avatar } from '@/components/ui/avatar'
-import { TokenSocialLinks } from '@/components/token-links'
+import { SocialLinks } from '@/components/social-links'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
@@ -89,7 +89,7 @@ export const TokenDetailsCard = ({
         )}
       >
         {hasLinks ? (
-          <TokenSocialLinks
+          <SocialLinks
             className="mt-0"
             buttonProps={{ size: 'icon-sm' }}
             x={twitter_url!}

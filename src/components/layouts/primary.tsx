@@ -11,6 +11,8 @@ interface Props extends ComponentProps<'main'> {
   contentClass?: string
   navAsideClass?: string
   newsAsideClass?: string
+  navAsideProps?: ComponentProps<typeof NavAside>
+  newsAsideProps?: ComponentProps<typeof NewsAside>
 }
 
 export const PrimaryLayout = ({
@@ -21,6 +23,8 @@ export const PrimaryLayout = ({
   contentClass,
   navAsideClass,
   newsAsideClass,
+  navAsideProps,
+  newsAsideProps,
 }: Props) => {
   return (
     <main className={cn('min-h-main flex max-w-[100vw]', className)}>
@@ -30,7 +34,7 @@ export const PrimaryLayout = ({
           navAsideClass
         )}
       >
-        <NavAside className="sticky top-0 shrink-0" />
+        <NavAside className="sticky top-0 shrink-0" {...navAsideProps} />
       </div>
 
       <div className="flex-1">
@@ -46,7 +50,10 @@ export const PrimaryLayout = ({
             {children}
           </div>
 
-          <NewsAside className={cn('sticky top-16', newsAsideClass)} />
+          <NewsAside
+            className={cn('sticky top-16', newsAsideClass)}
+            {...newsAsideProps}
+          />
         </div>
       </div>
     </main>
