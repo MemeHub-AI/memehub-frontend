@@ -29,6 +29,14 @@ export const TokenCardBadge = ({
       </Badge>
     )
   }
+
+  if (token.coin_type === 6) {
+    return (
+      <Badge variant="success" className={classes}>
+        {t('token.memex')}
+      </Badge>
+    )
+  }
 }
 
 export default TokenCardBadge

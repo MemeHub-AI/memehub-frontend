@@ -32,6 +32,7 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
   } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
+  // console.log('tokenInfo: ', tokenInfo)
 
   if (isLoadingTokenInfo) {
     return (

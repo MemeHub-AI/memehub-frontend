@@ -727,5 +727,6 @@
   "header.post.idea": "Post idea",
   "header.idea": "Idea",
   "header.coin": "Coin",
-  "language": "Language"
+  "language": "Language",
+  "token.memex": "Gold"
 }
