@@ -420,7 +420,7 @@
   "burning": "Burning...",
   "airdrop.burn.failed": "Burn failed",
   "airdrop.burn.success": "Burn successful!",
-  "contract.err.sell": "The balance in the pool is insufficient. You cannot sell that many tokens",
+  "contract.err.sell": "Insufficient liquidity in the pool, please reduce the amount for sale",
   "contract.err.burn": "Already burned",
   "contract.err.config-not-found": "Cannot find contract config",
   "contract.err.proof-not-found": "Cannot find proof",
