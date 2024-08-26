@@ -9,9 +9,10 @@ import { DeviceWidth } from '@/hooks/use-responsive'
 import { reportException } from '.'
 import { lowerIncludes } from '@/utils'
 
-const errors = {
+const errs = {
   txExecErr: 'TransactionExecutionError',
   gasTip: 'Gas Tip',
+  gasInsufficient: 'Gas',
   invalidSell: 'MEMEHUB_InvalidSell',
   isBurned: 'MEMEHUB_AlreadyBurn',
 }
@@ -25,22 +26,26 @@ export const CONTRACT_ERR = {
 
     reportException(msg)
 
-    if (errIncludes(errors.gasTip)) {
+    if (errIncludes(errs.gasTip)) {
       toast.error(t('contract.err.gas-estimate'))
       return
     }
-    if (errIncludes(errors.txExecErr)) {
+    if (errIncludes(errs.gasInsufficient)) {
+      toast.error(t('gas-insufficient'))
+      return
+    }
+    if (errIncludes(errs.txExecErr)) {
       toast.message(
         createElement(SlippageError),
         window.innerWidth > DeviceWidth.Mobile ? bottomLeft : undefined
       )
       return
     }
-    if (errIncludes(errors.invalidSell)) {
+    if (errIncludes(errs.invalidSell)) {
       toast.error(t('contract.err.sell'))
       return
     }
-    if (errIncludes(errors.isBurned)) {
+    if (errIncludes(errs.isBurned)) {
       toast.error(t('contract.err.burn'))
       return
     }
