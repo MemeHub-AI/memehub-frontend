@@ -3,9 +3,10 @@ import { RiArrowLeftWideLine, RiArrowRightWideLine } from 'react-icons/ri'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { cn } from '@/lib/utils'
+import { NewsAside } from './news-aside'
 
 export const CollapseAside = memo((props: ComponentProps<'div'>) => {
-  const { children, className } = props
+  const { className } = props
   const [isCollapse, setIsCollapse] = useState(false)
   const { isLaptop } = useResponsive()
 
@@ -38,7 +39,9 @@ export const CollapseAside = memo((props: ComponentProps<'div'>) => {
         )}
       </div>
 
-      <div className={cn(isCollapse && 'hidden')}>{children}</div>
+      <div className={cn(isCollapse && 'hidden')}>
+        <NewsAside />
+      </div>
     </div>
   )
 })
