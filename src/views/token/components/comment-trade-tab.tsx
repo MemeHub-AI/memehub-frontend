@@ -48,7 +48,7 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
           onUnlikeSuccess={refetchComments}
         />
       </TabsContent>
-      <TabsContent value={Tab.Trades} className="max-sm:mt-2">
+      <TabsContent value={Tab.Trades} className="max-sm:mt-2 overflow-auto">
         <TradeTable />
       </TabsContent>
     </Tabs>

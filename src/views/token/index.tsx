@@ -79,7 +79,7 @@ export const TokenPage = () => {
       >
         <main
           className={cn(
-            'p-4 max-sm:px-2 max-w-main mx-auto min-h-main',
+            'p-4 max-sm:px-2 max-w-main max-sm:w-screen mx-auto min-h-main ',
             'flex space-x-4 max-sm:flex-col max-sm:space-x-0 max-sm:pt-0 pb-4 max-sm:min-h-max'
           )}
         >

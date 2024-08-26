@@ -113,7 +113,8 @@ export const TradeTable = () => {
                   ${fmt.decimals(r.usd_price, { round: true })}
                 </TableCell>
                 <TableCell className="max-sm:text-xs">
-                  {fmt.decimals(r.base_amount, { round: true })} {r.base_symbol}
+                  {fmt.decimals(r.base_amount, { round: true })}{' '}
+                  {fmt.ellipsis(r.base_symbol)}
                 </TableCell>
                 <TableCell className="max-sm:text-xs">
                   {fmt.decimals(r.quote_amount, { round: true })}{' '}

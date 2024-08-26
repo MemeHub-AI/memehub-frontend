@@ -56,7 +56,7 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
             />
 
             <span
-              className="ml-1 font-bold text-blue-600  truncate"
+              className="ml-1 font-bold text-blue-600 truncate"
               title={tokenLabelName}
             >
               {isNotFound && !isIdoToken && !tokenMetadata

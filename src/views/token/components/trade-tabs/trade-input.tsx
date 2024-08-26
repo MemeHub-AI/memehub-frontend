@@ -118,7 +118,7 @@ export const TradeInput = ({ value, onChange, disabled }: Props) => {
               )}
             >
               <span className="mr-2 text-zinc-600">
-                {isBuy ? reserveSymbol : tokenSymbol}
+                {isBuy ? reserveSymbol : fmt.ellipsis(tokenSymbol)}
               </span>
               <Img
                 src={isBuy ? tokenChain?.logo : tokenInfo?.image_url}
