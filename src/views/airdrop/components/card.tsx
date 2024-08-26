@@ -101,17 +101,18 @@ export const AirdropCard = ({
       }
     >
       <div className="flex justify-between">
-        <span className="font-bold truncate">
+        <span className="font-bold truncate max-w-[15.25rem]">
           {airdrop?.symbol}({airdrop?.name})
         </span>
         <Countdown
           createdAt={createAt}
           duration={durationSeconds}
           onExpired={setIsExpired}
+          className="whitespace-nowrap"
         />
       </div>
       <div className="mt-3 flex justify-between space-x-4">
-        <div>
+        <div className="flex-1">
           {(isKolCard && !isKol) || (!isKolCard && !hasCommunity) ? (
             <p className="text-zinc-500 font-semibold leading-10">
               {utilLang.replace(t('airdrop.not-nft2'), [
@@ -127,7 +128,6 @@ export const AirdropCard = ({
                   ? kolInfo?.name
                   : fmt.withCommunity(utilLang.locale(communityInfo?.name))
               }
-              containerClass="w-[150px]"
               onClick={(e) => {
                 if (!isKolCard || !kolInfo?.wallet_address) return
                 e.stopPropagation()
