@@ -7,6 +7,7 @@ import { uniswapV2LPAbi } from '@/contract/abi/uniswapv2/lp'
 import { BI_ZERO, BI_ZERO_TUPLE } from '@/constants/number'
 import { reportException } from '@/errors'
 import { addrMap } from '@/contract/address'
+import { UNISWAP_ERR } from '@/errors/uniswap'
 
 export const useUniswapV2Amount = (
   chainId: number,
@@ -20,7 +21,10 @@ export const useUniswapV2Amount = (
   }
 
   const getReserves = async () => {
-    if (!poolAddr) return BI_ZERO_TUPLE
+    if (!poolAddr) {
+      UNISWAP_ERR.message(`Cannot find pool ${poolAddr}`, false)
+      return BI_ZERO_TUPLE
+    }
 
     return readContract(wagmiConfig, {
       abi: uniswapV2LPAbi,
@@ -34,7 +38,10 @@ export const useUniswapV2Amount = (
   }
 
   const getTokenAmount = async (amountIn: string) => {
-    if (!uniswapv2Router) return BI_ZERO
+    if (!uniswapv2Router) {
+      UNISWAP_ERR.message(`Cannot find router ${uniswapv2Router}`, false)
+      return BI_ZERO
+    }
     const [reserve0, reserve1] = await getReserves()
 
     return readContract(wagmiConfig, {
@@ -48,7 +55,10 @@ export const useUniswapV2Amount = (
   }
 
   const getReserveAmount = async (amountIn: string) => {
-    if (!uniswapv2Router) return BI_ZERO
+    if (!uniswapv2Router) {
+      UNISWAP_ERR.message(`Cannot find router ${uniswapv2Router}`, false)
+      return BI_ZERO
+    }
     const [reserve0, reserve1] = await getReserves()
 
     return readContract(wagmiConfig, {

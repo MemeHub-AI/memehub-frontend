@@ -9,17 +9,17 @@ const ERR = {
 }
 
 export const UNISWAP_ERR = {
-  message: (msg: string) => {
+  message: (msg: string, showToast = true) => {
     const m = msg.toLowerCase()
 
-    reportException(msg)
+    reportException(msg, 'UniswapV2')
     if (isUserReject(m)) return
     if (m.includes(ERR.insufficientAmount)) {
       toast.error(t('uniswapv2.err.insufficient-amount'))
       return
     }
 
-    toast.error(t('occurred-error'))
+    if (showToast) toast.error(t('occurred-error'))
   },
 
   reserveNotFound: () => toast.error(t('uniswapv2.err.reserve-not-found')),
