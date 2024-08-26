@@ -5,7 +5,7 @@ import { memo, useEffect, useState } from 'react'
 import TradeShake from './trade-shake'
 import CreateCoinShake from './create-coin-shake'
 
-export const MemexHeaderMiddle = () => {
+export const AllTradesFeeds = memo(() => {
   // const colors = utilColor.randomCreate()
   const { allTrades, coinCreate } = useAllTrades()
   const [trade, setTrade] = useState<TokenTrade>()
@@ -51,6 +51,6 @@ export const MemexHeaderMiddle = () => {
       <SearchInput />
     </div>
   )
-}
+})
 
-export default memo(MemexHeaderMiddle)
+export default AllTradesFeeds

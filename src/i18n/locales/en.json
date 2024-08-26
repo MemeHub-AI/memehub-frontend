@@ -724,9 +724,10 @@
   "memex.create.max-image": "You can upload a maximum of {} images",
   "initial-buy.lt": "You can only increase the purchase quantity",
   "load-more": "Load more",
-  "header.post.idea": "Post idea",
+  "header.post.idea": "Post Idea",
   "header.idea": "Idea",
   "header.coin": "Coin",
   "language": "Language",
-  "token.memex": "Gold"
+  "token.memex": "Gold",
+  "start.token": "Start coin"
 }

@@ -326,7 +326,7 @@
   "reward.desc2": "这是为早期忠实用户打造的奖励计划，让我们一起登月吧！",
   "reward.rule": "奖励规则",
   "reward.rule1": "启动一个新代币将获得7个钻石，感谢你为世界带来了一个有趣的Memecoin。",
-  "reward.rule2": "进行交易将获得钻石，每买入价值10USDT的memecoin将获得5个钻石，每卖出价值10USDT的memecoin将获得3个钻石. ",
+  "reward.rule2": "进行交易将获得钻石，每买入价值10USDT的Memecoin将获得5个钻石，每卖出价值10USDT的Memecoin将获得3个钻石. ",
   "reward.rule3": "当代币到达目标市值启动在dex添加LP时，\n\n你将获得5000个钻石奖励！",
   "rewards": "奖励",
   "deploy.chain.empty": "找不到对应的链",
@@ -714,9 +714,10 @@
   "memex.create.max-image": "最多上传{}张图片",
   "initial-buy.lt": "你只能增加购买量",
   "load-more": "加载更多",
-  "header.post.idea": "发布创意",
+  "header.post.idea": "发布Idea",
   "header.idea": "创意",
   "header.coin": "内盘",
   "language": "语言",
-  "token.memex": "黄金"
+  "token.memex": "黄金",
+  "start.token": "启动代币"
 }

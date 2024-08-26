@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 import { AccountDropdown } from '../account-dropdown'
 import { Button } from '../ui/button'
 import { Routes } from '@/routes'
-import { MemexHeaderMiddle } from './memex/header-middle'
+import { AllTradesFeeds } from './header-middle'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -24,12 +24,12 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
 
   return (
     <>
-      <MemexHeaderMiddle />
+      <AllTradesFeeds />
       <div className="flex items-center justify-center gap-3">
         <RewardButton />
-        <Button onClick={() => router.push(Routes.Create)}>
-          {t('create.token')}
-        </Button>
+        {/* <Button onClick={() => router.push(Routes.Create)}>
+          {t('header.post.idea')}
+        </Button> */}
         <ConnectWallet>
           <AccountDropdown />
         </ConnectWallet>

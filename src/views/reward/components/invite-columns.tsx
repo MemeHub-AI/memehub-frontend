@@ -6,6 +6,7 @@ import { Img } from '@/components/img'
 import { DiamondIcon } from '@/components/diamond-icon'
 import { fmt } from '@/utils/fmt'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import dayjs from 'dayjs'
 
 enum RewardType {
   Token = 1,
@@ -35,6 +36,7 @@ export const inviteColumns: ColumnDef<RewardItem>[] = [
   {
     header: t('time'),
     accessorKey: 'time',
+    cell: ({ row }) => dayjs(row.original.time).format('YYYY-MM-DD HH:mm'),
   },
   {
     header: t('username'),
