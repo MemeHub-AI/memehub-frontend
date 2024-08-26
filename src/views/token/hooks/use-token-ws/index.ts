@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { first, orderBy, uniqBy } from 'lodash'
+import { orderBy, uniqBy } from 'lodash'
 import { useRouter } from 'next/router'
-import { BigNumber } from 'bignumber.js'
 
 import { apiUrl } from '@/config/url'
 import { useWebsocket } from '@/hooks/use-websocket'
@@ -10,7 +9,7 @@ import type {
   TokenOnEvents,
   TokenEmitEvents,
   TokenHolder,
-  TokenPrice,
+  TokenTradePrice,
   TokenTrade,
 } from './types'
 import { Routes } from '@/routes'
@@ -40,9 +39,8 @@ export const useTokenWs = (
   const { set, get: getReward } = useLruMap<Record<string, string>>()
   const [tradeRecords, setTradeRecords] = useState<TokenTrade[]>([])
   const [holders, setHolders] = useState<TokenHolder[]>([])
-  const [tradePrice, setTradePrice] = useState<TokenPrice>()
+  const [tradePrice, setTradePrice] = useState<TokenTradePrice>()
   const [hasMoreTrades, setHasMoreTrades] = useState(false)
-  const [marketCap, setMarketCap] = useState('')
 
   const onTrades = ({ data, extra }: TokenOnEvents['trades']) => {
     if (extra?.rewarded) {
@@ -80,18 +78,6 @@ export const useTokenWs = (
     })
   }
 
-  // Calculate for market cap
-  useEffect(() => {
-    const { start_price = 0, total_supply = 0 } = tokenInfo ?? {}
-    const { price = 0 } = tradePrice ?? {}
-    const { marketcap } = first(tradeRecords) ?? {}
-
-    const tokenPrice = BigNumber(start_price).multipliedBy(total_supply)
-    const marketCap = BigNumber(price).multipliedBy(marketcap || tokenPrice)
-
-    setMarketCap(marketCap.toFixed())
-  }, [tokenInfo, tradePrice, tradeRecords])
-
   useEffect(() => {
     if (!ws.isOpen) return
 
@@ -114,7 +100,6 @@ export const useTokenWs = (
     holders,
     tradePrice,
     hasMoreTrades,
-    marketCap,
     getReward,
     fetchNextTrades,
   }

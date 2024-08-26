@@ -33,11 +33,11 @@ export interface SearchReq {
   search?: string
 }
 
-interface WsReceivedBase<T extends string = string, D = unknown, E = unknown> {
+interface WsReceivedBase<T extends string, D = unknown, E = unknown> {
   type: T
   data: D
-  error?: string
   extra?: E
+  error?: string
 }
 
 export type WsReceived<T extends ObjectLike<[any, any?]>> = {

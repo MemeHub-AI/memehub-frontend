@@ -17,7 +17,7 @@ interface TokenSendListen {
 export type TokenOnEvents = WsReceived<{
   trades: [TokenTrade[], TradesExtra]
   holders: [TokenHolder[]]
-  price: [TokenPrice]
+  price: [TokenTradePrice]
   'all-trades': [TokenTrade[]]
   'all-coin-created': [TokenCreate]
   update: [TokenOnEvents[keyof Omit<TokenOnEvents, 'update'>]]
@@ -55,7 +55,7 @@ export interface TokenHolder {
   flag: string | null
 }
 
-export interface TokenPrice {
+export interface TokenTradePrice {
   symbol: string
   price: string
 }

@@ -11,6 +11,7 @@ import { TokenProgress } from './token-progress'
 import { Avatar } from '@/components/ui/avatar'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useResponsive } from '@/hooks/use-responsive'
+import { useMarketCap } from '@/hooks/use-market-cap'
 
 export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
@@ -21,10 +22,10 @@ export const TokenInfoHeader = ({ className }: ComponentProps<'div'>) => {
     isIdoToken,
     tokenMetadata,
     tokenChain,
-    marketCap,
   } = useTokenContext()
   const { isCopied, copy } = useClipboard()
   const { isMobile } = useResponsive()
+  const { marketCap } = useMarketCap()
 
   const tokenLabelName = `${tokenInfo?.name ?? tokenMetadata?.name}(${
     tokenInfo?.symbol ?? tokenMetadata?.symbol
