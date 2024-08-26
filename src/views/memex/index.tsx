@@ -8,9 +8,9 @@ import { MemexTabs } from './components/memex-tabs'
 
 export const getMemexLayout = (page: ReactNode, withTabs = false) => (
   <PrimaryLayout
-    newsVisible="always"
-    contentClass="flex justify-center"
     disablePadding
+    contentClass="flex justify-center"
+    newsAsideClass="block"
   >
     {withTabs ? <MemexTabs>{page}</MemexTabs> : page}
   </PrimaryLayout>

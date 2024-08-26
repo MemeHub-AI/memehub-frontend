@@ -111,8 +111,8 @@ export const NewsAside = (props: Props) => {
   return (
     <div
       className={cn(
-        'pr-2 border-r-2 border-black h-body max-sm:mr-0 max-sm:pr-0 max-sm:h-min max-sm:border-0',
-        'max-sm:!hidden',
+        'pr-2 border-r-2 border-black h-body hidden xl:block',
+        'max-sm:mr-0 max-sm:pr-0 max-sm:h-min max-sm:border-0',
         className
       )}
     >
