@@ -141,6 +141,7 @@ export const useCreateIdeaDetails = () => {
     form,
     onSubmit,
     isUpdating,
+    initialBuyAmount,
     initialBuyMax,
   }
 }

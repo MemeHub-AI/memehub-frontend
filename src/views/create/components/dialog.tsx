@@ -2,6 +2,7 @@ import React, { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { PiWarningCircle } from 'react-icons/pi'
+import { toast } from 'sonner'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Routes } from '@/routes'
@@ -61,7 +62,10 @@ export const CreateTokenStatusDialog = () => {
 
   // Submit error
   if (submitError) {
-    if (isUserReject(submitError)) return
+    if (isUserReject(submitError)) {
+      toast.warning(t('user-rejected'))
+      return
+    }
     return (
       <AlertDialog
         open={!!submitError}
