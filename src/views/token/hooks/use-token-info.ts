@@ -34,9 +34,9 @@ export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
   const isIdoToken = tokenInfo?.coin_type === TokenType.Ido
 
   const { isLoadingDetails, refetchDetails, ...tokenDetails } = useTokenDetails(
-    isIdoToken || isNotFound ? undefined : tokenAddr,
     chainId,
-    tokenInfo?.coin_version as TokenVersion
+    tokenInfo?.coin_version,
+    isIdoToken || isNotFound ? undefined : tokenAddr
   )
   const { progress, tokenLeftAmount, reserveTotalAmount } = tokenDetails
 

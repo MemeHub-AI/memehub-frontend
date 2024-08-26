@@ -42,9 +42,9 @@ export const TokenDetailsCard = ({
   const { t } = useTranslation()
   const { chainId } = useChainInfo(chain)
   const { progress } = useTokenDetails(
-    tokenAddr,
     chainId,
-    details?.coin_version!
+    details?.coin_version!,
+    tokenAddr
   )
   const isZero = tokenAddr === zeroAddress
   const hasLinks = !!twitter_url || !!telegram_url || !!website_url

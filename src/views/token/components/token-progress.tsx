@@ -8,7 +8,6 @@ import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { Badge } from '@/components/ui/badge'
 import { useIdoProgress } from '@/views/ido/hooks/use-ido-progress'
-import { TokenVersion } from '@/contract/abi/token'
 import { useTokenDetails } from '@/hooks/use-token-details'
 
 export const TokenProgress = ({
@@ -27,9 +26,9 @@ export const TokenProgress = ({
     tokenChain,
   } = useTokenContext()
   const { totalSupply, progress, isGraduated } = useTokenDetails(
-    tokenAddr,
     chainId,
-    tokenVersion as TokenVersion
+    tokenVersion,
+    tokenAddr
   )
   const { progress: idoProgress } = useIdoProgress(chainId, 0)
 
