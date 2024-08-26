@@ -25,6 +25,7 @@ import {
 } from '@radix-ui/react-popover'
 import { IoMdMore } from 'react-icons/io'
 import { useClipboard } from '@/hooks/use-clipboard'
+import { fmt } from '@/utils/fmt'
 
 export const AccountInfoDesktop = (props: AccountInfoProps) => {
   const {
@@ -87,8 +88,14 @@ export const AccountInfoDesktop = (props: AccountInfoProps) => {
               >
                 <DiamondIcon size={17} />
                 <span className="font-bold">
-                  {Number(userInfo?.reward_amount).toFixed(4) || 0}
+                  {fmt.decimals(userInfo?.reward_amount) || 0}
                 </span>
+                <p
+                  className="max-sm:hidden text-sm text-blue-600 cursor-pointer hover:underline ml-2 underline"
+                  onClick={() => router.push(Routes.Reward)}
+                >
+                  ({t('reward.rule')})
+                </p>
               </span>
             </HoverCardPop>
           </div>

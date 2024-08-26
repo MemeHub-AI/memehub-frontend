@@ -8,6 +8,7 @@ import { useUserList } from '@/views/account/hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
 import { MemexProfile } from './components/profile'
 import { PrimaryLayout } from '@/components/layouts/primary'
+import { useResponsive } from '@/hooks/use-responsive'
 
 export const AccountPage = () => {
   const { query } = useRouter()
@@ -25,13 +26,15 @@ export const AccountPage = () => {
   const followersResults = useUserList(UserListType.Followers)
   const followingResults = useUserList(UserListType.Following)
 
+  const { isPad } = useResponsive()
+
   const refetchFollow = () => {
     followersResults.refetch()
     followingResults.refetch()
   }
 
   return (
-    <PrimaryLayout>
+    <PrimaryLayout disablePadding={isPad}>
       <AccountProvider
         value={{
           userInfo: isOtherUser ? otherUserInfo : userInfo,
@@ -44,7 +47,6 @@ export const AccountPage = () => {
         }}
       >
         <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto lg:pl-2 !ml-0">
-          {/* Left aside */}
           <aside
             className={cn(
               'flex flex-col gap-4 sticky top-20 mt-4 mb-2',
@@ -57,7 +59,6 @@ export const AccountPage = () => {
             </div>
           </aside>
 
-          {/* Right tabs */}
           <AccountTab />
         </div>
       </AccountProvider>

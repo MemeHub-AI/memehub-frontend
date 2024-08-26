@@ -23,7 +23,7 @@ export const PrimaryLayout = ({
 }: Props) => {
   return (
     <main className={cn('min-h-main flex max-w-[100vw]', className)}>
-      <div className="border-r-2 px-4 max-sm:hidden min-h-screen">
+      <div className="border-r-2 px-4 max-lg:hidden min-h-screen">
         <NavAside className="sticky top-0 shrink-0" />
       </div>
 
