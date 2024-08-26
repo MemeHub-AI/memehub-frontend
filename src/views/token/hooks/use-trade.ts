@@ -97,26 +97,26 @@ export const useTrade = (onSuccess?: () => void) => {
   const handleBuy = async (amount: string, slippage: string) => {
     if (!(await checkForTrade(amount))) return
 
+    await updateLastTrade(TradeType.Buy, amount)
+
     // DEX/ido trade
     if (isGraduated || isIdoToken) {
       return dexBuy(amount, slippage, isIdoToken)
     }
 
-    // TODO: should update before `dexBuy`
-    await updateLastTrade(TradeType.Buy, amount)
     return buy(amount, slippage)
   }
 
   const handleSell = async (amount: string, slippage: string) => {
     if (!(await checkForTrade(amount))) return
 
+    await updateLastTrade(TradeType.Sell, amount)
+
     // DEX/ido trade
     if (isGraduated || isIdoToken) {
       return dexSell(amount, slippage, isIdoToken)
     }
 
-    // TODO: should update before `dexSell`
-    await updateLastTrade(TradeType.Sell, amount)
     return sell(amount, slippage)
   }
 
