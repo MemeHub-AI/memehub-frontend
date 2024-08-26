@@ -26,14 +26,27 @@ export const TokenPage = () => {
     tokenAddr,
     chainName
   )
+  const {
+    airdrop = [],
+    coin_version,
+    contract_address,
+    airdrop_version,
+    airdrop_address,
+    bond_version,
+    bond_address,
+  } = tokenInfo ?? {}
   const { chain: tokenChain, chainId } = useChainInfo(chainName)
   const tradeWs = useTokenWs(tokenInfo, otherInfo.isNotFound)
-  const airdropInfo = useAirdropInfo(
-    tokenInfo?.airdrop?.[0]?.distribution_id,
-    tokenAddr,
+  const airdropInfo = useAirdropInfo({
+    airdropId: airdrop?.[0]?.distribution_id,
     chainId,
-    tokenInfo?.coin_version
-  )
+    airdropVersion: airdrop_version,
+    airdropAddr: airdrop_address,
+    tokenVersion: coin_version,
+    tokenAddr: contract_address,
+    bcVersion: bond_version,
+    bcAddr: bond_address,
+  })
   const { hasKolAirdrop, hasCommunityAirdrop } = airdropInfo
   const reserveSymbol = tokenChain?.native.symbol
   const network = Network.Evm // TODO: should dynamic

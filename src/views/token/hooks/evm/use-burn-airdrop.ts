@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import { useReadContract, useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
+import { Address } from 'viem'
 
-import { useTokenContext } from '@/contexts/token'
 import {
   distributorAbiMap,
   DistributorVersion,
@@ -14,25 +14,26 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const useBurnAirdrop = (
-  id: number | undefined,
+  airdropId: number | undefined, // airdrop id
+  airdropVersion: DistributorVersion | undefined,
+  airdropAddr: string | undefined,
+  chainId: number,
   onFinally?: () => void
 ) => {
   const { t } = useTranslation()
-  const { chainId, airdropVersion, airdropAddr } = useTokenContext()
   const { checkForConnect, checkForChain } = useCheckAccount()
   const { setIsCalimingAirdrop } = useAirdropStore()
-
-  const airdropConfig = {
-    abi: distributorAbiMap[airdropVersion as DistributorVersion],
-    address: airdropAddr!,
+  const config = {
+    abi: distributorAbiMap[airdropVersion!],
+    address: airdropAddr as Address,
     chainId,
   }
 
   const { data: isBurned, refetch: refetchBurned } = useReadContract({
-    ...airdropConfig,
+    ...config,
     functionName: 'isBurn',
-    args: [BigInt(id ?? -1)],
-    query: { enabled: typeof id === 'number' },
+    args: [BigInt(airdropId ?? -1)],
+    query: { enabled: typeof airdropId === 'number' },
   })
 
   const {
@@ -66,16 +67,16 @@ export const useBurnAirdrop = (
   const burn = async () => {
     if (!checkForConnect()) return
     if (!(await checkForChain(chainId))) return
-    if (!airdropAddr || typeof id !== 'number') {
+    if (!config.address || typeof airdropId !== 'number') {
       CONTRACT_ERR.configNotFound()
       return
     }
 
-    // TODO: should simulate first.
+    // TODO/low: should simulate first.
     writeContract({
-      ...airdropConfig,
+      ...config,
       functionName: 'burnToken',
-      args: [BigInt(id)],
+      args: [BigInt(airdropId)],
     })
   }
 

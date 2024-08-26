@@ -13,8 +13,14 @@ import { fmt } from '@/utils/fmt'
 
 export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
   const { t } = useTranslation()
-  const { tokenInfo, tokenMetadata } = useTokenContext()
-  const { airdrop = [] } = tokenInfo ?? {}
+  const { tokenInfo, tokenMetadata, chainId } = useTokenContext()
+  const {
+    symbol,
+    airdrop = [],
+    airdrop_version,
+    airdrop_address,
+  } = tokenInfo ?? {}
+
   const {
     isOnlyOne,
     airdropTotal,
@@ -35,11 +41,14 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
 
   const { isBurned, isBurning, burn } = useBurnAirdrop(
     airdrop[0]?.distribution_id,
+    airdrop_version,
+    airdrop_address,
+    chainId,
     refetchAirdrop
   )
 
   const burnText = `${remaining} ${fmt.ellipsis(
-    tokenInfo?.symbol ?? tokenMetadata?.symbol
+    symbol ?? tokenMetadata?.symbol
   )}`
 
   return (

@@ -11,17 +11,17 @@ import { DistributorVersion } from '@/contract/abi/distributor'
 export const useTokenDetails = (
   tokenAddr: string | undefined,
   chainId: number,
-  version: TokenVersion | undefined
+  tokenVersion: TokenVersion | undefined
 ) => {
   const tokenConfig = {
-    abi: tokenAbiMap[version!],
+    abi: tokenAbiMap[tokenVersion!],
     address: tokenAddr as Address,
     chainId,
   } as const
-  const enabled = !!tokenAddr && !!chainId && !!version
+  const enabled = !!tokenAddr && !!chainId && !!tokenVersion
 
   const {
-    data: [tokenVersion, bcVersion, airdropVersion, bcAddr, airdropAddr] = [],
+    data: [version, bcVersion, airdropVersion, bcAddr, airdropAddr] = [],
     isLoading,
     refetch,
   } = useReadContracts({
@@ -29,6 +29,7 @@ export const useTokenDetails = (
       { ...tokenConfig, functionName: 'versions' },
       { ...tokenConfig, functionName: 'bondVersion' },
       { ...tokenConfig, functionName: 'distributorVersion' },
+
       { ...tokenConfig, functionName: 'bond' },
       { ...tokenConfig, functionName: 'distributor' },
     ],
@@ -116,7 +117,7 @@ export const useTokenDetails = (
   }
 
   return {
-    tokenVersion: tokenVersion as TokenVersion | undefined,
+    tokenVersion,
     bcVersion: bcVersion as BcVersion | undefined,
     airdropVersion: airdropVersion as DistributorVersion | undefined,
     bcAddr: bcAddr as Address | undefined,

@@ -1,37 +1,63 @@
 import { useMemo } from 'react'
 import { useReadContract } from 'wagmi'
-import { formatEther } from 'viem'
+import { Address, formatEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
 import { useInterval } from 'ahooks'
 
 import { BI_ZERO } from '@/constants/number'
-import { bcAbiMap } from '@/contract/abi/bonding-curve'
-import { distributorAbiMap } from '@/contract/abi/distributor'
-import { useTokenDetails } from '../use-token-details'
-import { TokenVersion } from '@/contract/abi/token'
+import { bcAbiMap, BcVersion } from '@/contract/abi/bonding-curve'
+import {
+  distributorAbiMap,
+  DistributorVersion,
+} from '@/contract/abi/distributor'
+import { tokenAbiMap, TokenVersion } from '@/contract/abi/token'
 import { AirdropFlag } from '@/enums/airdrop'
 
-export const useAirdropInfo = (
-  id: number | undefined,
-  token: string | undefined,
-  chainId: number,
-  tokenVersion: TokenVersion | undefined
-) => {
-  const {
-    airdropAddr,
-    airdropVersion,
-    bcAddr,
-    bcVersion,
-    totalSupply,
-    isLoadingDetails,
-    refetchDetails,
-  } = useTokenDetails(token, chainId, tokenVersion)
+interface Options {
+  airdropId: number
+  chainId: number
+  airdropVersion: DistributorVersion
+  airdropAddr: string
+  bcVersion: BcVersion
+  bcAddr: string
+  tokenVersion: TokenVersion
+  tokenAddr: string
+}
+
+export const useAirdropInfo = ({
+  airdropId,
+  chainId,
+  airdropVersion,
+  airdropAddr,
+  bcVersion,
+  bcAddr,
+  tokenVersion,
+  tokenAddr,
+}: Partial<Options>) => {
+  const isCorrectId = typeof airdropId === 'number'
   const distributorConfig = {
     abi: distributorAbiMap[airdropVersion!],
-    address: airdropAddr,
+    address: airdropAddr as Address,
     chainId,
   }
-  const isCorrectId = typeof id === 'number'
+
+  const { data: ratio = BI_ZERO } = useReadContract({
+    abi: bcAbiMap[bcVersion!],
+    address: bcAddr as Address,
+    chainId,
+    functionName: 'airdropRate_',
+    query: { enabled: !!bcAddr && isCorrectId },
+  })
+  const { data: totalSupply = '0' } = useReadContract({
+    abi: tokenAbiMap[tokenVersion!],
+    address: tokenAddr as Address,
+    chainId,
+    functionName: 'totalSupply',
+    query: {
+      enabled: !!tokenAddr && isCorrectId,
+      select: (data) => formatEther(data),
+    },
+  })
 
   const { data: duration = BI_ZERO } = useReadContract({
     ...distributorConfig,
@@ -39,7 +65,6 @@ export const useAirdropInfo = (
     query: { enabled: !!airdropAddr && isCorrectId },
   })
   const durationSeconds = Number(duration)
-
   const {
     data: airdropInfo = [],
     isLoading: isLoadingInfo,
@@ -47,11 +72,12 @@ export const useAirdropInfo = (
   } = useReadContract({
     ...distributorConfig,
     functionName: 'distributions',
-    args: [BigInt(id ?? -1)],
+    args: [BigInt(airdropId ?? -1)],
     query: { enabled: !!airdropAddr && isCorrectId },
   })
+
   const [
-    tokenAddr,
+    ,
     kolCount = 0,
     communityCount = 0,
     kolClaimedCount = 0,
@@ -68,13 +94,6 @@ export const useAirdropInfo = (
   const hasKolAirdrop = kolFlag !== AirdropFlag.None
   const hasCommunityAirdrop = communityFlag !== AirdropFlag.None
 
-  const { data: ratio = BI_ZERO } = useReadContract({
-    abi: bcAbiMap[bcVersion!],
-    address: bcAddr,
-    chainId,
-    functionName: 'airdropRate_',
-    query: { enabled: !!bcAddr && isCorrectId },
-  })
   const { airdropRatio, airdropTotal } = useMemo(() => {
     const airdropRatio = BigNumber(ratio.toString()).div(100).div(100).toFixed()
     const airdropTotal = BigNumber(airdropRatio)
@@ -116,7 +135,6 @@ export const useAirdropInfo = (
   return {
     hasKolAirdrop,
     hasCommunityAirdrop,
-    tokenAddr,
     kolCount,
     communityCount,
     kolClaimedCount,
@@ -133,7 +151,6 @@ export const useAirdropInfo = (
     communityTotalAmount,
     kolClaimedAmount,
     communityClaimedAmount,
-    isLoadingDetails,
     isLoadingInfo,
     refetchAirdrop,
   }

@@ -51,13 +51,8 @@ export interface TokenListItem {
   twitter_url: string
   updated_at: string
   website_url: string
-}
-
-interface AirdropItem {
-  type: string
-  contract: string
-  distribution_id: number
-  is_all: boolean
+  bond_version: BcVersion
+  bond_address: string
 }
 
 export interface TokenCreateReq {

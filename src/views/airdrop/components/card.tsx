@@ -42,6 +42,8 @@ export const AirdropCard = ({
     coin_version,
     airdrop_address,
     airdrop_version,
+    bond_version,
+    bond_address,
   } = airdrop ?? {}
   const { t } = useTranslation()
   const { query, pathname, ...router } = useRouter()
@@ -59,12 +61,18 @@ export const AirdropCard = ({
     kolCount,
     communityCount,
     communityClaimedCount,
-  } = useAirdropInfo(
-    detail?.distribution_id,
-    contract_address,
+  } = useAirdropInfo({
+    airdropId: detail?.distribution_id,
     chainId,
-    coin_version
-  )
+    airdropVersion: airdrop_version,
+    airdropAddr: airdrop_address,
+    tokenVersion: coin_version,
+    tokenAddr: contract_address,
+    bcVersion: bond_version,
+    bcAddr: bond_address,
+  })
+
+  console.log('airdrop ', airdrop)
 
   const totalAmount = isKolCard ? kolTotalAmount : communityTotalAmount
   const current = isKolCard ? kolClaimedCount : communityClaimedCount

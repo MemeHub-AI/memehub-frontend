@@ -46,7 +46,12 @@ export const TokenMobile = () => {
     airdrop_version,
     chainId
   )
-  const { isBurned } = useBurnAirdrop(airdropId)
+  const { isBurned } = useBurnAirdrop(
+    airdropId,
+    airdrop_version,
+    airdrop_address,
+    chainId
+  )
 
   const targetDate = useMemo(
     () => dayjs.unix(createAt).add(durationSeconds, 'second'),
