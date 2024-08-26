@@ -90,7 +90,7 @@ export const TokenDetailsCard = ({
       >
         {hasLinks ? (
           <SocialLinks
-            className="mt-0"
+            className={editable ? 'my-1' : 'mt-0'}
             buttonProps={{ size: 'icon-sm' }}
             x={twitter_url!}
             tg={telegram_url!}
