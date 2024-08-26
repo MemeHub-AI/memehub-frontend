@@ -1,3 +1,5 @@
+import { type ReactNode } from 'react'
+
 import { cn } from '@/lib/utils'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { AccountProvider } from '@/contexts/account'
@@ -34,36 +36,38 @@ export const AccountPage = () => {
   }
 
   return (
-    <PrimaryLayout disablePadding={isPad}>
-      <AccountProvider
-        value={{
-          userInfo: isOtherUser ? otherUserInfo : userInfo,
-          isPending: isFetchingUserInfo || isFetchingOtherUserInfo,
-          isOtherUser: isOtherUser,
-          refetchUserInfo: isOtherUser ? refetchOtherUserInfo : refetchUserInfo,
-          followersResults,
-          followingResults,
-          refetchFollow,
-        }}
-      >
-        <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto lg:pl-2 !ml-0">
-          <aside
-            className={cn(
-              'flex flex-col gap-4 sticky top-20 mt-4 mb-2',
-              'static gap-2'
-            )}
-          >
-            <MemexProfile />
-            <div className="hidden mt-4">
-              <FollowDesktop />
-            </div>
-          </aside>
+    <AccountProvider
+      value={{
+        userInfo: isOtherUser ? otherUserInfo : userInfo,
+        isPending: isFetchingUserInfo || isFetchingOtherUserInfo,
+        isOtherUser: isOtherUser,
+        refetchUserInfo: isOtherUser ? refetchOtherUserInfo : refetchUserInfo,
+        followersResults,
+        followingResults,
+        refetchFollow,
+      }}
+    >
+      <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto lg:pl-2 !ml-0">
+        <aside
+          className={cn(
+            'flex flex-col gap-4 sticky top-20 mt-4 mb-2',
+            'static gap-2'
+          )}
+        >
+          <MemexProfile />
+          <div className="hidden mt-4">
+            <FollowDesktop />
+          </div>
+        </aside>
 
-          <AccountTab />
-        </div>
-      </AccountProvider>
-    </PrimaryLayout>
+        <AccountTab />
+      </div>
+    </AccountProvider>
   )
 }
+
+AccountPage.getLayout = (page: ReactNode) => (
+  <PrimaryLayout>{page}</PrimaryLayout>
+)
 
 export default AccountPage
