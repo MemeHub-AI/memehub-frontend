@@ -39,14 +39,14 @@ export const PrimaryLayout = ({
           <div
             className={cn(
               'flex-1 ',
-              !disablePadding && 'p-3 sm:p-6',
+              !disablePadding && 'p-3 sm:p-4',
               contentClass
             )}
           >
             {children}
           </div>
 
-          <NewsAside className={newsAsideClass} />
+          <NewsAside className={cn('sticky top-16', newsAsideClass)} />
         </div>
       </div>
     </main>

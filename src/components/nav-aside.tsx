@@ -42,6 +42,16 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
   const { pathname, ...router } = useRouter()
   const { userInfo } = useUserStore()
 
+  const userNavs = [
+    {
+      title: t('profile'),
+      path: joinPaths(Routes.Account, userInfo?.wallet_address || ''),
+      icon: <FaRegUser />,
+      iconActive: <FaUser />,
+      isActive: pathname.includes(Routes.Account),
+    },
+  ]
+
   const navs = [
     {
       title: t('Idea'),
@@ -57,13 +67,7 @@ export const NavAside = ({ className, ...props }: ComponentProps<'div'>) => {
       iconActive: <IoDiamond />,
       isActive: pathname === Routes.Main,
     },
-    {
-      title: t('profile'),
-      path: joinPaths(Routes.Account, userInfo?.wallet_address || ''),
-      icon: <FaRegUser />,
-      iconActive: <FaUser />,
-      isActive: pathname.includes(Routes.Account),
-    },
+    ...(userInfo ? userNavs : []),
     {
       title: t('Notification'),
       path: Routes.Notification,
