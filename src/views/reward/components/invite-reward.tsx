@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Card } from '@/components/ui/card'
@@ -50,7 +50,7 @@ const InviteCard = ({ c }: { c: ChainData }) => {
     <Card shadow="none" padding="sm" className="cursor-[unset]">
       <div className="flex items-center space-x-2">
         <Img src={c.logo} alt="logo" className="w-6 h-6" />
-        <p>{c.name}</p>
+        <p>{chain?.displayName}</p>
       </div>
 
       <div className="mt-3">
