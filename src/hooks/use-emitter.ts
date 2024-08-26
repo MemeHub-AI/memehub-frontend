@@ -36,10 +36,15 @@ export const useEmitter = <OnEvents, EmitEvents>() => {
     }
   }
 
+  const offAll = () => {
+    eventsRef.current = {}
+  }
+
   return {
     events: eventsRef,
     on,
     emit,
     off,
+    offAll,
   }
 }

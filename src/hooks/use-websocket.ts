@@ -82,7 +82,8 @@ export const useWebsocket = <
     isClosing,
     isClosed,
     on: emitter.on,
-    off: emitter.off,
     emit,
+    off: emitter.off,
+    offAll: emitter.offAll,
   }
 }
