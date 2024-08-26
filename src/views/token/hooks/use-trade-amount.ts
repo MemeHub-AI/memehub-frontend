@@ -6,7 +6,7 @@ import { useUniswapV2Amount } from '@/hooks/uniswapv2/use-uniswapv2-amount'
 import { BI_ZERO } from '@/constants/number'
 
 export const useTradeAmount = () => {
-  const { chainId, tokenAddr, tokenInfo, tokenLeft, isGraduated, isIdoToken } =
+  const { chainId, tokenAddr, tokenInfo, tokenLeft, isGraduated } =
     useTokenContext()
 
   const evm = useEvmTradeAmount(chainId, tokenAddr)

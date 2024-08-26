@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useAccount, useWriteContract } from 'wagmi'
 import { parseEther } from 'viem'
 import { BigNumber } from 'bignumber.js'
@@ -11,10 +12,18 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useTradeAmount } from '../use-trade-amount'
 
 export const useEvmTrade = (onSuccess?: () => void) => {
-  const { tokenAddr, chainId, bcVersion, bcAddr } = useTokenContext()
+  const {
+    tokenAddr,
+    chainId,
+    bcVersion,
+    bcAddr,
+    isGraduated,
+    refetchTokenInfo,
+  } = useTokenContext()
   const { address } = useAccount()
   const { getReferrals } = useInvite()
-  const { getTokenAmount, getReserveAmount } = useTradeAmount()
+  const { getTokenAmount, getReserveAmount, getLastAmount } = useTradeAmount()
+  const isLastBuy = useRef(false)
   const bcConfig = {
     abi: bcAbiMap[bcVersion!],
     address: bcAddr!,
@@ -39,17 +48,33 @@ export const useEvmTrade = (onSuccess?: () => void) => {
   const { isFetched: isTraded } = useWaitForTx({
     hash,
     onSuccess,
-    onFinally: () => resetTrade(),
+    onFinally: () => {
+      resetTrade()
+      if (isLastBuy.current) refetchTokenInfo()
+    },
   })
+
+  const checkForWrite = async (amount: string) => {
+    if (BigNumber(amount).lte(0)) {
+      CONTRACT_ERR.balanceInvalid()
+      return false
+    }
+    return true
+  }
+
+  const checkForLastBuy = async (amount: string) => {
+    if (isGraduated || isLastBuy.current) return
+    const [, amountLeft] = await getLastAmount()
+    isLastBuy.current = BigNumber(amountLeft).minus(amount).lte(0)
+  }
 
   const buy = async (reserveAmount: string, slippage: string) => {
     const [, tokenAmount] = await getTokenAmount(reserveAmount)
-    if (BigNumber(tokenAmount).lte(0)) {
-      CONTRACT_ERR.balanceInvalid()
-      return
-    }
+    if (!(await checkForWrite(tokenAmount))) return
+
     const reserveValue = parseEther(reserveAmount)
 
+    checkForLastBuy(reserveAmount)
     writeContract({
       ...bcConfig,
       functionName: 'mint',
@@ -67,10 +92,7 @@ export const useEvmTrade = (onSuccess?: () => void) => {
 
   const sell = async (tokenAmount: string, slippage: string) => {
     const [, reserveAmount] = await getReserveAmount(tokenAmount)
-    if (BigNumber(reserveAmount).lte(0)) {
-      CONTRACT_ERR.balanceInvalid()
-      return
-    }
+    if (!(await checkForWrite(reserveAmount))) return
 
     writeContract({
       ...bcConfig,

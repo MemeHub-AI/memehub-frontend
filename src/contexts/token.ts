@@ -10,7 +10,7 @@ import { useTokenWs } from '@/views/token/hooks/use-token-ws'
 interface Context
   extends Omit<ReturnType<typeof useTokenInfo>, 'isRefetchingTokenInfo'>,
     ReturnType<typeof useTokenWs> {
-  // TOOD: remove all `isIdoToken` condition, because it's also `isGraduated`.
+  // TOOD/top: remove all `isIdoToken` condition, because it's also `isGraduated`.
   isIdoToken: boolean
   isGraduated: boolean
   reserveSymbol: string | undefined
