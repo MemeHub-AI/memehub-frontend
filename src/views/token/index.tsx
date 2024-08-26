@@ -90,14 +90,16 @@ export const TokenPage = () => {
   )
 }
 
-TokenPage.getLayout = (page: ReactNode) => (
-  <PrimaryLayout
-    disablePadding
-    newsAsideClass="!hidden"
-    navAsideProps={{ collapsed: true }}
-  >
-    {page}
-  </PrimaryLayout>
-)
+TokenPage.getLayout = (page: ReactNode) => {
+  return (
+    <PrimaryLayout
+      disablePadding
+      newsAsideClass="!hidden"
+      navAsideProps={{ collapseSize: 'isXl2' }}
+    >
+      {page}
+    </PrimaryLayout>
+  )
+}
 
 export default TokenPage

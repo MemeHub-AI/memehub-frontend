@@ -38,20 +38,20 @@ import { useResponsive } from '@/hooks/use-responsive'
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
 interface Props {
-  collapsed?: boolean
+  collapseSize?: keyof ReturnType<typeof useResponsive>
 }
 
 export const NavAside = ({
   className,
-  collapsed = false,
+  collapseSize = 'isLaptop',
   ...props
 }: ComponentProps<'div'> & Props) => {
   const { t, i18n } = useTranslation()
   const { setLang } = useLang()
   const { pathname, ...router } = useRouter()
   const { userInfo } = useUserStore()
-  const [isCollapsed, setIsCollapsed] = useState(collapsed)
-  const { isDesktop } = useResponsive()
+  const responsive = useResponsive()
+  const [isCollapsed, setIsCollapsed] = useState(responsive[collapseSize])
 
   const userNavs = [
     {
@@ -103,12 +103,8 @@ export const NavAside = ({
   ]
 
   useEffect(() => {
-    if (collapsed === true) {
-      setIsCollapsed(true)
-      return
-    }
-    setIsCollapsed(!isDesktop)
-  }, [collapsed, isDesktop])
+    setIsCollapsed(responsive[collapseSize])
+  }, [responsive, collapseSize])
 
   return (
     <aside
