@@ -24,7 +24,7 @@ export const CreateTokenStatusDialog = () => {
   const { t } = useTranslation()
   const {
     deployedAddr,
-    createTokenData,
+    createTokenData: { chain } = {},
     isSubmitting,
     isConfirming,
     isDeploySuccess,
@@ -120,13 +120,13 @@ export const CreateTokenStatusDialog = () => {
         onCancel={resetDeploy}
         onConfirm={() => {
           resetDeploy()
-          router.push(
-            joinPaths(
-              Routes.Main,
-              createTokenData?.chain ?? '',
-              deployedAddr || 'invalid'
+          if (!chain || !deployedAddr) {
+            toast.error(
+              `${t('deploy.err.chain-addr-missing')} ${chain} ${deployedAddr}`
             )
-          )
+            return
+          }
+          router.push(joinPaths(Routes.Main, chain, deployedAddr))
         }}
         showCancel={false}
         confirmText={t('go-to.buy')}

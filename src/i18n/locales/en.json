@@ -733,5 +733,6 @@
   "create-idea.initial-buy-invalid": "You can only increase to a value greater than or equal to the initial purchase of {}. You cannot decrease it",
   "create-idea.initial-buy-tips": "You have already paid {}. Therefore, you only need to pay {} more",
   "gas-insufficient": "Not enough balance to pay for gas fees",
-  "start-coin": "Start coin"
+  "start-coin": "Start coin",
+  "deploy.err.chain-addr-missing": "Cannot find chian or token address"
 }
