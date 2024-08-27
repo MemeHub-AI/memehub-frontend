@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useWaitForTransactionReceipt } from 'wagmi'
 import type { Address, WaitForTransactionReceiptErrorType } from 'viem'
+import { Router } from 'next/router'
 
 interface Options {
   hash: Address | undefined
@@ -29,6 +30,16 @@ export const useWaitForTx = (options: Options) => {
     if (isSuccess) onSuccess?.(data)
     if (isError || isSuccess) onFinally?.()
   }, [isLoading, isFetching, isError, isSuccess])
+
+  const onRotueChange = () => {
+    if (result.status === 'pending') onFinally?.()
+  }
+
+  useEffect(() => {
+    Router.events.on('routeChangeStart', onRotueChange)
+
+    return () => Router.events.off('routeChangeStart', onRotueChange)
+  }, [])
 
   return result
 }

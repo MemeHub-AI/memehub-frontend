@@ -1,11 +1,4 @@
-import {
-  Dispatch,
-  memo,
-  SetStateAction,
-  useMemo,
-  useState,
-  type ComponentProps,
-} from 'react'
+import { useMemo, useState, type ComponentProps } from 'react'
 import { HeartFilledIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
@@ -28,7 +21,6 @@ import { useClipboard } from '@/hooks/use-clipboard'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
 import { IdeaHeartButton } from './idea-heart-button'
-import { UseFormReturn } from 'react-hook-form'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -47,6 +39,7 @@ export const IdeaLikeComment = ({
     setCommentOpen(false)
     onCommentSuccess?.()
   })
+
   const ideaInfo = useIdeaInfo(idea?.ido_address, chainId, idea?.memex_version)
   const { isLiking, like } = useIdeaLike(
     idea?.ido_address,
@@ -139,134 +132,6 @@ export const IdeaLikeComment = ({
         </DialogFooter>
       </Dialog>
 
-      {/* <Dialog
-        open={commentOpen}
-        onOpenChange={setCommentOpen}
-        contentProps={{
-          className: 'p-0',
-          showClose: false,
-          onClick: (e) => e.stopPropagation(),
-        }}
-      >
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col items-center p-6 space-y-3"
-          >
-            <DialogTitle>{t('like-success')}</DialogTitle>
-            <HeartFilledIcon className="w-20 h-20 text-red-500" />
-
-            <FormField
-              control={form.control}
-              name="comment"
-              render={({ field }) => (
-                <Textarea
-                  autoFocus
-                  rows={5}
-                  placeholder={t('post-comment')}
-                  {...field}
-                />
-              )}
-            />
-
-            <DialogFooter className="flex-row space-x-4">
-              <Button
-                variant="yellow"
-                shadow="none"
-                size="sm"
-                type="submit"
-                disabled={isPending}
-              >
-                {isPending ? t('comment.loading') : t('confirm')}
-              </Button>
-              <Button
-                type="button"
-                shadow="none"
-                size="sm"
-                disabled={isPending}
-                onClick={() => setCommentOpen(false)}
-              >
-                {t('cancel')}
-              </Button>
-            </DialogFooter>
-          </form>
-        </Form>
-      </Dialog> */}
-
-      <CommentDialog
-        commentOpen={commentOpen}
-        setCommentOpen={setCommentOpen}
-        onSubmit={onSubmit}
-        form={form}
-        isPending={isPending}
-      />
-
-      <div className="flex items-center justify-between mt-2">
-        <div className="flex items-center space-x-3 select-none">
-          <div
-            className="flex items-center space-x-1 text-sm cursor-pointer"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <IdeaHeartButton
-              likedCount={likedCount}
-              isLiked={isLiked}
-              onClick={onOpenLike}
-            />
-          </div>
-          <div className="flex items-center space-x-1 text-sm cursor-pointer">
-            <GoComment className="w-5 h-5" />
-            <span>{idea?.comment_count ?? 0}</span>
-          </div>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              if (!idea?.hash) {
-                toast.error(t('copy-failed'))
-                return
-              }
-              copy(joinPaths(location.origin, Routes.MemexIdea, idea.hash), {
-                successTip: t('link-copy-success'),
-              })
-            }}
-          >
-            <PiShareFat size={20} />
-          </button>
-        </div>
-
-        <div className="flex items-center space-x-1 text-sm">
-          <img src={chain?.logo} alt="chain" className="w-5 h-5" />
-          <span>{chain?.displayName}</span>
-        </div>
-      </div>
-    </>
-  )
-}
-
-const CommentDialog = memo(
-  ({
-    commentOpen,
-    setCommentOpen,
-    onSubmit,
-    form,
-    isPending,
-  }: {
-    commentOpen: boolean
-    setCommentOpen: Dispatch<SetStateAction<boolean>>
-    onSubmit: (data: any) => void
-    form: UseFormReturn<
-      {
-        comment: string
-        images: string[]
-      },
-      any,
-      undefined
-    >
-    isPending: boolean
-  }) => {
-    const { t } = useTranslation()
-
-    return (
       <Dialog
         open={commentOpen}
         onOpenChange={setCommentOpen}
@@ -320,8 +185,47 @@ const CommentDialog = memo(
           </form>
         </Form>
       </Dialog>
-    )
-  }
-)
+
+      <div className="flex items-center justify-between mt-2">
+        <div className="flex items-center space-x-3 select-none">
+          <div
+            className="flex items-center space-x-1 text-sm cursor-pointer"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <IdeaHeartButton
+              likedCount={likedCount}
+              isLiked={isLiked}
+              onClick={onOpenLike}
+            />
+          </div>
+          <div className="flex items-center space-x-1 text-sm cursor-pointer">
+            <GoComment className="w-5 h-5" />
+            <span>{idea?.comment_count ?? 0}</span>
+          </div>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              if (!idea?.hash) {
+                toast.error(t('copy-failed'))
+                return
+              }
+              copy(joinPaths(location.origin, Routes.MemexIdea, idea.hash), {
+                successTip: t('link-copy-success'),
+              })
+            }}
+          >
+            <PiShareFat size={20} />
+          </button>
+        </div>
+
+        <div className="flex items-center space-x-1 text-sm">
+          <img src={chain?.logo} alt="chain" className="w-5 h-5" />
+          <span>{chain?.displayName}</span>
+        </div>
+      </div>
+    </>
+  )
+}
 
 export default IdeaLikeComment

@@ -72,8 +72,6 @@ export const AirdropCard = ({
     bcAddr: bond_address,
   })
 
-  console.log('airdrop ', airdrop)
-
   const totalAmount = isKolCard ? kolTotalAmount : communityTotalAmount
   const current = isKolCard ? kolClaimedCount : communityClaimedCount
   const total = isKolCard ? kolCount : communityCount
