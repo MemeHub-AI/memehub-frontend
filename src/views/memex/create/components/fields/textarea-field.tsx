@@ -29,15 +29,17 @@ export const CreateIdeaTextareaField = () => {
                 }`}
                 disableFocusBorder
                 className="border-none shadow-none focus:shadow-none text-base mt-0.5 px-1 caret-[2px]"
-                rows={5}
+                rows={7}
                 maxLength={500}
                 {...field}
                 disabled={isCreating || field.disabled}
               />
-              <PicturesPreview disabled={isCreating || field.disabled} />
+              <PicturesPreview
+                disabled={isCreating || field.disabled}
+                className="mt-2"
+              />
             </div>
           </div>
-
           <Separator height={2} />
         </FormItem>
       )}
