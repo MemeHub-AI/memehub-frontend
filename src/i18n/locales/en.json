@@ -735,5 +735,6 @@
   "gas-insufficient": "Not enough balance to pay for gas fees",
   "start-coin": "Start coin",
   "deploy.err.chain-addr-missing": "Cannot find chian or token address",
-  "airdrop.no-amount": "All airdrops claimed"
+  "airdrop.no-amount": "All airdrops claimed",
+  "upload.too-large": "Image size is too large"
 }

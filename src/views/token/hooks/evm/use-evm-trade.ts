@@ -96,7 +96,7 @@ export const useEvmTrade = (onSuccess?: () => void) => {
     })
   }
 
-  // Parse `MemeHubAddLiquidity` event logs
+  // Listen `MemeHubAddLiquidity` event logs
   useEffect(() => {
     if (!logs) return
 
@@ -105,10 +105,8 @@ export const useEvmTrade = (onSuccess?: () => void) => {
       eventName: 'MemeHubAddLiquidity',
       logs,
     })
-    console.log('parsed trade logs', logs)
-
     if (!result) return
-    console.log('parsed trade AddLiquidity', result)
+
     setFallbackGraduated(result.args.pair)
   }, [logs])
 

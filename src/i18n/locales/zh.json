@@ -725,5 +725,6 @@
   "gas-insufficient": "没有足够的余额支付 Gas 费用",
   "start-coin": "启动代币",
   "deploy.err.chain-addr-missing": "找不到链或代币地址",
-  "airdrop.no-amount": "全部领取完毕"
+  "airdrop.no-amount": "全部领取完毕",
+  "upload.too-large": "图片尺寸过大"
 }
