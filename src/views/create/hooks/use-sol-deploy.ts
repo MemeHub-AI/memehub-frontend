@@ -2,7 +2,7 @@ import { Program, AnchorProvider, setProvider } from '@coral-xyz/anchor'
 import * as anchor from '@coral-xyz/anchor'
 import { v4 as uuidv4 } from 'uuid'
 import { useMutation } from '@tanstack/react-query'
-import { IDL } from '@/contract/abi/sol/contract_meme_hub_solana_program'
+import { IDL } from '@/program/sol/contract_meme_hub_solana_program'
 
 export const useSolDeploy = () => {
   const { connection } = useConnection()
