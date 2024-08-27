@@ -3,18 +3,18 @@ import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
 
 import { cn } from '@/lib/utils'
-import { TokenCard } from './card'
+import { TokenCard } from './token-card'
 import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { Routes } from '@/routes'
-import { TokenChainSelect } from './chain-select'
-import { TokenSortSelect } from './sort-select'
+import { TokenChainSelect } from './token-chain-select'
 import { TokenSearchInput } from './token-search-input'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TokenListItem } from '@/api/token/types'
 import { IdoCard } from '../ido-card'
 import { LoadMore } from '../load-more'
+import { useAggregateTokens } from '@/hooks/token/use-aggregate-tokens'
 
 interface Props extends ComponentProps<'div'> {
   cards?: TokenListItem[]
@@ -25,21 +25,34 @@ interface Props extends ComponentProps<'div'> {
   onFetchNext?: () => void
 }
 
-export const TokenCards = (props: Props) => {
-  const {
-    className,
-    cards = [],
-    idoTokens = [],
-    total,
-    isLoading,
-    isPending = false,
-    onFetchNext,
-  } = props
+export const TokenCards = ({
+  className,
+  cards = [],
+  idoTokens = [],
+  total,
+  isLoading,
+  isPending = false,
+  onFetchNext,
+}: Props) => {
   const { t } = useTranslation()
   const [chianTag, setChainTag] = useState('all')
-  const [filteredCards, setFilteredCards] = useState(cards)
+  const [filteredTokens, setFilteredTokens] = useState(cards)
+
   const { isPlayHomeAudio, setIsPlayHomeAudio } = useIsPlayAudio()
   const { playHome } = useAudioPlayer()
+
+  const { aggregatedTokens } = useAggregateTokens(cards)
+
+  const onChange = (chain: string) => {
+    setChainTag(chain)
+
+    if (chain === 'all') {
+      setFilteredTokens(cards)
+      return
+    }
+
+    setFilteredTokens(cards.filter((c) => c.chain === chain))
+  }
 
   useEffect(() => {
     if (isPlayHomeAudio) {
@@ -48,23 +61,8 @@ export const TokenCards = (props: Props) => {
     }
   }, [])
 
-  const onChange = (chain: string) => {
-    setChainTag(chain)
-
-    if (chain === 'all') {
-      setFilteredCards(cards)
-      return
-    }
-
-    setFilteredCards(cards.filter((c) => c.chain === chain))
-  }
-
   useEffect(() => {
-    setFilteredCards(cards)
-  }, [cards])
-
-  useEffect(() => {
-    setFilteredCards(cards)
+    setFilteredTokens(cards)
   }, [cards])
 
   return (
@@ -82,13 +80,14 @@ export const TokenCards = (props: Props) => {
         <TokenChainSelect onValueChange={onChange} />
         <TokenSortSelect />
         <TokenSearchInput
+          className={cn('ml-auto', isMemex && 'hidden')}
           chianTag={chianTag}
-          onSearched={(tokens) => setFilteredCards(tokens)}
+          onSearched={(tokens) => setFilteredTokens(tokens)}
           onCleared={() => {
             if (chianTag !== 'all') {
-              setFilteredCards(cards.filter((c) => c.chain === chianTag))
+              setFilteredTokens(cards.filter((c) => c.chain === chianTag))
             } else {
-              setFilteredCards(cards)
+              setFilteredTokens(cards)
             }
           }}
           className="ml-4"
@@ -103,7 +102,7 @@ export const TokenCards = (props: Props) => {
           <div className="text-zinc-500">
             {t('tokens.list.empty')},
             <Link className="text-blue-600 ml-2" href={Routes.Create}>
-              {t('token.create')}
+              {t('start-coin')}
             </Link>
             {t('period')}
           </div>
@@ -112,13 +111,22 @@ export const TokenCards = (props: Props) => {
         {idoTokens.map((t) => (
           <IdoCard key={t.id} token={t} />
         ))}
-        {!!cards.length &&
-          filteredCards.map((t, i) => <TokenCard key={i} card={t} />)}
+        {/* {!!cards.length &&
+          filteredCards.map((t, i) => <TokenCard key={i} card={t} />)} */}
+        {aggregatedTokens.map((t, i) => (
+          <TokenCard
+            key={i}
+            card={t}
+            progress={t.progress}
+            isGraduated={t.isGraduated}
+          />
+        ))}
       </CustomSuspense>
 
       <LoadMore
         className="mt-2"
-        hasMore={cards.length < total}
+        list={aggregatedTokens}
+        total={total}
         isLoading={isPending}
         onFetchMore={onFetchNext}
       />

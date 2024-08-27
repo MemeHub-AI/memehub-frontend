@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
-import { formatEther, parseEther } from 'viem'
+import { formatEther, parseEther, parseEventLogs } from 'viem'
 import {
   useAccount,
   useBalance,
@@ -12,7 +12,7 @@ import { BI_ZERO } from '@/constants/number'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { getDeployLogsAddr, getEvmAirdropParams } from '@/utils/contract'
+import { getEvmAirdropParams } from '@/utils/contract'
 import { DeployFormParams } from './use-deploy'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { useInvite } from '@/hooks/use-invite'
@@ -64,7 +64,17 @@ export const useEvmDeploy = (chainName: string) => {
     isSuccess: isDeploySuccess,
     isError: isDeployError,
   } = useWaitForTx({ hash })
-  const deployedAddr = useMemo(() => getDeployLogsAddr(logs), [logs])
+
+  const deployedAddr = useMemo(() => {
+    if (!logs) return
+    const [result] = parseEventLogs({
+      abi: bcConfig.abi,
+      eventName: 'MemeHubDeployToken',
+      logs,
+    })
+
+    return result.args.token
+  }, [logs])
 
   const checkForDeploy = () => {
     if (BigNumber(balance.toString()).lt(deployFee.toString())) {

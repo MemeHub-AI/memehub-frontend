@@ -21,6 +21,8 @@ export interface TokenListItem {
    * 9: All KOL & select community
    * 10: All KOL & community
    */
+  bond_address: string
+  bond_version: BcVersion
   airdrop_type: number
   airdrop_version: DistributorVersion
   chain: string
@@ -51,8 +53,6 @@ export interface TokenListItem {
   twitter_url: string
   updated_at: string
   website_url: string
-  bond_version: BcVersion
-  bond_address: string
 }
 
 export interface TokenCreateReq {

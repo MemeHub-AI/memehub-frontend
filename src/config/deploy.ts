@@ -10,8 +10,3 @@ export const deployEvmAirdropParams = {
   CommunityFlag: AirdropFlag.None,
   flag: [] as bigint[],
 }
-
-export const deployLogAddr =
-  '0x33665efef2048723cc078145d6c0f64ae6bd5cb4ae7ea41dd0c42dfc34de5af1'
-
-export const deployLogAddrIdx = 1

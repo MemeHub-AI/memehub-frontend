@@ -13,6 +13,7 @@ import { useTokenConfig } from '@/hooks/use-token-config'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
+import { useInvite } from '@/hooks/use-invite'
 
 export const useDeployIdea = (
   chainName: string | undefined,
@@ -24,6 +25,7 @@ export const useDeployIdea = (
     useTokenConfig(chainName)
   const { chainsMap } = useChainsStore()
   const { checkForChain } = useCheckAccount()
+  const { getReferrals } = useInvite()
 
   const deployConfig = {
     abi: memexFactoryAbiMap[memexFactoryVersion!],
@@ -90,6 +92,7 @@ export const useDeployIdea = (
     }
     const hasInfo = !!name && !!symbol
     const totalFee = BigNumber(deployFee).plus(initialBuyAmount).toFixed()
+    const [referral] = await getReferrals()
 
     return writeContractAsync({
       ...deployConfig,
@@ -97,10 +100,13 @@ export const useDeployIdea = (
       args: [
         BigInt(projectId),
         parseEther(initialBuyAmount),
+        referral,
         hasInfo ? [name, symbol] : [],
         [BigInt(tokenId || 0)], // 0 is not an error!!!!
         getEvmAirdropParams(configValue, marketing),
       ],
+      // In the previous version, we did not need to pay "value".
+      // @ts-ignore
       value: parseEther(totalFee),
     })
   }

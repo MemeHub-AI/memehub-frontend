@@ -6,11 +6,11 @@ import { useUniswapV2Amount } from '@/hooks/uniswapv2/use-uniswapv2-amount'
 import { BI_ZERO } from '@/constants/number'
 
 export const useTradeAmount = () => {
-  const { chainId, tokenAddr, tokenInfo, tokenLeft, isGraduated } =
+  const { chainId, tokenAddr, tokenLeft, isGraduated, graduatedPool } =
     useTokenContext()
 
   const evm = useEvmTradeAmount(chainId, tokenAddr)
-  const uniswapV2 = useUniswapV2Amount(chainId, tokenInfo?.graduated_pool)
+  const uniswapV2 = useUniswapV2Amount(chainId, graduatedPool)
 
   const getReserveAmount = async (tokenAmount: string) => {
     if (isGraduated) {

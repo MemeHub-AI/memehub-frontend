@@ -77,6 +77,7 @@ export const AirdropCard = ({
   const totalAmount = isKolCard ? kolTotalAmount : communityTotalAmount
   const current = isKolCard ? kolClaimedCount : communityClaimedCount
   const total = isKolCard ? kolCount : communityCount
+  const hasAmount = total - current > 0
 
   const { isKolClaimed, isCommunityClaimed, isBurned } = useAirdrop(
     detail?.distribution_id,
@@ -85,12 +86,13 @@ export const AirdropCard = ({
     chainId
   )
   const isClaimed = isKolCard ? isKolClaimed : isCommunityClaimed
-  const disabled = isClaimed || isBurned
+  const disabled = isClaimed || isBurned || !hasAmount
 
   const renderButtonText = () => {
     if (isClaimed) return t('airdrop.claimed')
     if (isBurned) return t('airdrop.burned')
     if (isExpired) return t('goto.burn')
+    if (!hasAmount) return t('airdrop.no-amount')
 
     return t('claim.airdrop')
   }

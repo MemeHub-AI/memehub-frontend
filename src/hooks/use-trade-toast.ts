@@ -7,6 +7,7 @@ import { TradeType } from '@/enums/trade'
 import { TxStatus } from '@/components/trade-toast/tx-status'
 import { useTokenContext } from '@/contexts/token'
 import { useChainInfo } from './use-chain-info'
+import { fmt } from '@/utils/fmt'
 
 interface Options {
   hash: Hash
@@ -16,7 +17,7 @@ interface Options {
 }
 
 export const useTradeToast = () => {
-  const { chainName, rewardInfo, tradePrice } = useTokenContext()
+  const { chainName, rewardInfo, tradePrice, tokenInfo } = useTokenContext()
   const { chain: { explorer, native } = {} } = useChainInfo(chainName)
 
   const getRewardAmount = (type: TradeType, reserveAmount: string) => {
@@ -25,10 +26,10 @@ export const useTradeToast = () => {
     const reward = BigNumber(reserveAmount)
       .multipliedBy(price)
       .multipliedBy(amount_unit)
-      .multipliedBy(usd_unit)
-      .toFixed(10)
+      .div(usd_unit)
+      .toFixed()
 
-    return reward
+    return fmt.decimals(reward)
   }
 
   const showToast = async ({
@@ -40,8 +41,8 @@ export const useTradeToast = () => {
     const toastId = toast(
       createElement(TxStatus, {
         hash,
-        tokenLabel: `${tokenAmount} ${native?.symbol}`,
-        reserveLabel: `${reserveAmount} ${native?.symbol}`,
+        tokenLabel: `${fmt.decimals(tokenAmount)} ${tokenInfo?.symbol}`,
+        reserveLabel: `${fmt.decimals(reserveAmount)} ${native?.symbol}`,
         reward: getRewardAmount(type, reserveAmount),
         isBuy: type === TradeType.Buy,
         txUrl: `${explorer}/tx/${hash}`,

@@ -8,7 +8,7 @@ import { useDebounceEffect } from 'ahooks'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverAnchor } from '@/components/ui/popover'
 import { tokenApi } from '@/api/token'
-import { TokenCard } from './token-cards/card'
+import { TokenCard } from './token-cards/token-card'
 import { cn } from '@/lib/utils'
 
 export const SearchInput = ({ className }: ComponentProps<typeof Input>) => {

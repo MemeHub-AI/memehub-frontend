@@ -10,7 +10,7 @@ import { cn } from '@/lib/utils'
 import { tokenApi } from '@/api/token'
 import { TokenListItem } from '@/api/token/types'
 
-interface Props extends ComponentProps<typeof Input> {
+interface Props extends ComponentProps<'form'> {
   chianTag: string
   onSearched: (tokens: TokenListItem[]) => void
   onCleared?: () => void
@@ -36,7 +36,7 @@ export const TokenSearchInput = ({
     const { data: { results = [] } = {} } = await mutateAsync({
       page: 1,
       page_size: 50,
-      token: value,
+      search: value,
     })
 
     const tokens =
@@ -75,9 +75,10 @@ export const TokenSearchInput = ({
         e.preventDefault()
         onSearch()
       }}
+      className={className}
     >
       <Input
-        className={cn('shadow-offset h-9 select-none', className)}
+        className={cn('shadow-offset h-9 select-none')}
         value={value}
         onChange={({ target }) => setValue(target.value)}
         placeholder={t('search.placeholder')}

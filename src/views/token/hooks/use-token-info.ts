@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Address } from 'viem'
 
@@ -9,6 +10,7 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
   const { chainId } = useChainInfo(chainName)
+  const [fallbackGraduated, setFallbackGraduated] = useState<Address>()
 
   const {
     data: tokenInfo,
@@ -42,8 +44,8 @@ export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
     bond_address
   )
   const { progress, tokenLeftAmount, reserveTotalAmount } = tokenDetails
-
   const isGraduated = tokenDetails.isGraduated || isIdoToken
+  const graduatedPool = tokenInfo?.graduated_pool || fallbackGraduated
 
   const refetchTokenInfo = () => {
     refetchInfo()
@@ -59,6 +61,8 @@ export const useTokenInfo = (tokenAddr: Address, chainName: string) => {
     isLoadingDetails,
     refetchTokenInfo,
     refetchDetails,
+    graduatedPool,
+    setFallbackGraduated,
 
     ...tokenDetails,
     progress,

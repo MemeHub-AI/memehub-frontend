@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { ComponentProps, useState } from 'react'
 import { Cross2Icon } from '@radix-ui/react-icons'
 
 import { Button } from '@/components/ui/button'
@@ -7,20 +7,25 @@ import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
 import { cn } from '@/lib/utils'
 
 // TODO: refactor to public comp
-export const PicturesPreview = ({ disabled }: { disabled?: boolean }) => {
+export const PicturesPreview = ({
+  disabled,
+  className,
+  ...props
+}: ComponentProps<'div'> & { disabled?: boolean }) => {
   const [srcIdx, setSrcIdx] = useState(-1)
   const { form } = useCreateIdeaContext()
   const pictures = form.watch('pictures')
 
   return (
     <div
-      className={cn('grid max-2xl:gap-2', disabled && 'opacity-50')}
+      className={cn('grid max-2xl:gap-2', disabled && 'opacity-50', className)}
       style={{
         gridTemplateColumns: `repeat(${Math.min(
           pictures.length,
           2
         )}, minmax(0, 1fr))`,
       }}
+      {...props}
     >
       <ImagesPreviewDialog
         images={pictures}

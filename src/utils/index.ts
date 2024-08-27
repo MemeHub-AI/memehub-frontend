@@ -1,6 +1,7 @@
-import { first, isEmpty } from 'lodash'
+import { first, isEmpty, sortBy } from 'lodash'
 
 import { mediaLinks } from '@/config/link'
+import { ObjectLike } from './types'
 
 export const strToBool = (str: string | undefined | null) => {
   if (!str) return false
@@ -29,10 +30,20 @@ export const joinPaths = (...args: (string | number)[]) => {
 
 export const parseMediaUrl = (media: keyof typeof mediaLinks, url = '') => {
   if (isEmpty(url)) return url
-
-  if (!(media === 'website')) {
+  if (media !== 'website') {
     url = url.replace('@', '')
   }
 
   return /^https?:\/\//.test(url) ? url : `${mediaLinks[media]}${url}`
+}
+
+// TODO/low: type safe
+export const sortVersions = <T>(
+  inputs: string[] | ObjectLike<T>,
+  order: 'asc' | 'desc' = 'desc'
+) => {
+  inputs = Array.isArray(inputs) ? inputs : Object.keys(inputs)
+  const versions = sortBy(inputs, (v) => v.split('.').map((v) => +v), order)
+
+  return order === 'desc' ? versions.reverse() : versions
 }

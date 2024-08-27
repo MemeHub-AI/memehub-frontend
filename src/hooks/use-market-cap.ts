@@ -11,8 +11,9 @@ const dexMarketCapInterval = 10_000 // 10s
 export const useMarketCap = () => {
   const timerRef = useRef<NodeJS.Timeout>()
   const [marketCap, setMarketCap] = useState('')
-  const { tokenInfo, chainId, tradePrice, tradeRecords } = useTokenContext()
-  const { getReserves } = useUniswapV2Amount(chainId, tokenInfo?.graduated_pool)
+  const { tokenInfo, chainId, tradePrice, tradeRecords, graduatedPool } =
+    useTokenContext()
+  const { getReserves } = useUniswapV2Amount(chainId, graduatedPool)
 
   const calcDexMarketCap = async () => {
     const { total_supply = 0 } = tokenInfo ?? {}

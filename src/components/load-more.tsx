@@ -3,25 +3,28 @@ import { useTranslation } from 'react-i18next'
 
 import { cn } from '@/lib/utils'
 
-interface Props {
+interface Props<T> extends ComponentProps<'div'> {
+  list: T[]
+  total: number
   isLoading?: boolean
-  hasMore?: boolean
   onFetchMore?: () => void
 }
 
 const baseClass = 'text-center text-zinc-500'
 
-export const LoadMore = ({
+export const LoadMore = <T,>({
   className,
   children,
+  list,
+  total,
   isLoading,
-  hasMore,
   onFetchMore,
   ...props
-}: ComponentProps<'div'> & Props) => {
+}: Props<T>) => {
   const { t } = useTranslation()
+  const isEmpty = list.length === 0 || total === 0
 
-  if (!hasMore) {
+  if (list.length >= total || isEmpty) {
     return (
       <div className={cn(baseClass, className)} {...props}>
         {t('nomore')}

@@ -10,6 +10,7 @@ import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
 import { BI_ZERO } from '@/constants/number'
+import { useInvite } from '@/hooks/use-invite'
 
 export const useIdeaLike = (
   addr: string | null | undefined,
@@ -25,6 +26,7 @@ export const useIdeaLike = (
   })
   const balance = formatEther(value)
   const { checkForChain, checkForConnect } = useCheckAccount()
+  const { getReferrals } = useInvite()
 
   const {
     data: hash,
@@ -74,6 +76,7 @@ export const useIdeaLike = (
       address: addr as Address,
       chainId,
       functionName: 'like',
+      args: [await getReferrals()],
       value: parseEther(value),
     })
   }
