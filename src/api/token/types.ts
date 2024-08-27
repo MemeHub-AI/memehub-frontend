@@ -53,8 +53,6 @@ export interface TokenListItem {
   twitter_url: string
   updated_at: string
   website_url: string
-  bond_version: BcVersion
-  bond_address: string
 }
 
 export interface TokenCreateReq {

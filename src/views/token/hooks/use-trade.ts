@@ -20,25 +20,19 @@ export const lastTrade = {
 
 export const useTrade = (onSuccess?: () => void) => {
   const {
-    tokenInfo,
     isIdoToken,
     isGraduated,
     tokenAddr,
     tokenMetadata,
     chainId,
     network,
+    graduatedPool,
   } = useTokenContext()
   const { showToast } = useTradeToast()
 
   const { getTokenAmount, getReserveAmount } = useTradeAmount()
-  const {
-    dexHash,
-    isDexSubmitting,
-    isDexTraded,
-    dexBuy,
-    dexSell,
-    dexResetTrade,
-  } = useDexTrade(tokenAddr, tokenInfo?.graduated_pool, chainId, { onSuccess })
+  const { dexHash, isDexSubmitting, isDexTraded, dexBuy, dexSell } =
+    useDexTrade(tokenAddr, graduatedPool, chainId, { onSuccess })
   const evmTrade = useEvmTrade(onSuccess)
 
   const {
@@ -116,17 +110,11 @@ export const useTrade = (onSuccess?: () => void) => {
     return sell(amount, slippage)
   }
 
-  const resetTrades = () => {
-    resetTrade()
-    dexResetTrade()
-  }
-
   // show trade toast
   useEffect(() => {
     if (!hash) return
 
     showToast({ hash, ...lastTrade })
-    resetTrades()
   }, [hash])
 
   return {

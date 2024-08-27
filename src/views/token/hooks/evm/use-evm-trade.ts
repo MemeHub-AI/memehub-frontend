@@ -1,6 +1,6 @@
-import { useRef } from 'react'
+import { useEffect } from 'react'
 import { useAccount, useWriteContract } from 'wagmi'
-import { Address, parseEther } from 'viem'
+import { Address, parseEther, parseEventLogs } from 'viem'
 import { BigNumber } from 'bignumber.js'
 
 import { CONTRACT_ERR } from '@/errors/contract'
@@ -10,19 +10,18 @@ import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useTokenContext } from '@/contexts/token'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useTradeAmount } from '../use-trade-amount'
+import { masterAbiLatest } from '@/contract/abi/master'
 
 export const useEvmTrade = (onSuccess?: () => void) => {
   const {
     tokenInfo: { bond_version, bond_address } = {},
     tokenAddr,
     chainId,
-    isGraduated,
-    refetchTokenInfo,
+    setFallbackGraduated,
   } = useTokenContext()
   const { address } = useAccount()
   const { getReferrals } = useInvite()
-  const { getTokenAmount, getReserveAmount, getLastAmount } = useTradeAmount()
-  const isLastBuy = useRef(false)
+  const { getTokenAmount, getReserveAmount } = useTradeAmount()
   const bcConfig = {
     abi: bcAbiMap[bond_version!],
     address: bond_address as Address,
@@ -44,13 +43,10 @@ export const useEvmTrade = (onSuccess?: () => void) => {
   })
 
   // This `useWaitForTx` only track status.
-  const { isFetched: isTraded } = useWaitForTx({
+  const { data: { logs } = {}, isFetched: isTraded } = useWaitForTx({
     hash,
     onSuccess,
-    onFinally: () => {
-      resetTrade()
-      if (isLastBuy.current) refetchTokenInfo()
-    },
+    onFinally: resetTrade,
   })
 
   const checkForWrite = async (amount: string) => {
@@ -61,19 +57,12 @@ export const useEvmTrade = (onSuccess?: () => void) => {
     return true
   }
 
-  const checkForLastBuy = async (amount: string) => {
-    if (isGraduated || isLastBuy.current) return
-    const [, amountLeft] = await getLastAmount()
-    isLastBuy.current = BigNumber(amountLeft).minus(amount).lte(0)
-  }
-
   const buy = async (reserveAmount: string, slippage: string) => {
     const [, tokenAmount] = await getTokenAmount(reserveAmount)
     if (!(await checkForWrite(tokenAmount))) return
 
     const reserveValue = parseEther(reserveAmount)
 
-    checkForLastBuy(reserveAmount)
     writeContract({
       ...bcConfig,
       functionName: 'mint',
@@ -107,12 +96,29 @@ export const useEvmTrade = (onSuccess?: () => void) => {
     })
   }
 
+  // Parse `MemeHubAddLiquidity` event logs
+  useEffect(() => {
+    if (!logs) return
+
+    const [result] = parseEventLogs({
+      abi: masterAbiLatest,
+      eventName: 'MemeHubAddLiquidity',
+      logs,
+    })
+    console.log('parsed trade logs', logs)
+
+    if (!result) return
+    console.log('parsed trade AddLiquidity', result)
+    setFallbackGraduated(result.args.pair)
+  }, [logs])
+
   return {
     hash,
     isSubmitting,
+    // TODO/middle: Maybe we don't need it?
     isTraded,
     buy,
     sell,
-    resetTrade,
+    resetTrade: () => {},
   }
 }
