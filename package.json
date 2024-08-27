@@ -66,6 +66,7 @@
     "react-responsive": "^10.0.0",
     "react-use-websocket": "^4.8.1",
     "rehype-raw": "^7.0.0",
+    "scroll-into-view-if-needed": "^3.1.0",
     "sonner": "^1.4.3",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",

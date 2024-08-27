@@ -12,6 +12,9 @@ import { useIdeaInfo } from '../hooks/use-idea-info'
 import { MemexIdeaCard } from '../components/idea-card'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getMemexLayout } from '..'
+import { useEffect, useState } from 'react'
+import { useResponsive } from '@/hooks/use-responsive'
+import { cn } from '@/lib/utils'
 
 export const IdeaDetailsPage = () => {
   const { query } = useRouter()

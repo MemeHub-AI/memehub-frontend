@@ -8,11 +8,14 @@ import { MemexListType } from '@/api/memex/types'
 import { useIdeaList } from '../hooks/use-idea-list'
 import { MemexInfiniteScroll } from '../components/memex-infinite-scroll'
 import { getMemexLayout } from '..'
+import IdeaTest from '../components/idea-test'
 
 export const LatestPage = () => {
   const { list, total, isLoading, refetch, fetchNextPage } = useIdeaList(
     MemexListType.Latest
   )
+
+  // console.log('latest', list)
 
   return (
     <CustomSuspense

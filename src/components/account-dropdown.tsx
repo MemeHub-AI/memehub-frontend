@@ -1,7 +1,7 @@
 import React, { ReactNode, useState } from 'react'
 import { useRouter } from 'next/router'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
-import { LuTwitter, LuUser } from 'react-icons/lu'
+import { LuUser } from 'react-icons/lu'
 import { useAccount, useDisconnect } from 'wagmi'
 import { MdLogout } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
@@ -23,6 +23,8 @@ import {
 import { socialLink } from '@/config/link'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { useWallet } from '@/hooks/use-wallet'
+import { cn } from '@/lib/utils'
+import { FaXTwitter } from 'react-icons/fa6'
 
 export const AccountDropdown = () => {
   const { t } = useTranslation()
@@ -66,7 +68,10 @@ export const AccountDropdown = () => {
       }
     >
       <Button
-        className="w-full px-2 grid grid-cols-[1.5rem_1fr] text-start"
+        className={cn(
+          'w-full px-2 grid grid-cols-[1.5rem_1fr] text-start',
+          !isMobile && 'hidden'
+        )}
         variant="ghost"
         shadow="none"
         onClick={() =>
@@ -80,17 +85,23 @@ export const AccountDropdown = () => {
       <Button
         variant="ghost"
         shadow="none"
-        className="w-full px-2 grid grid-cols-[1.5rem_1fr] text-start"
+        className={cn(
+          'w-full px-2 grid grid-cols-[1.5rem_1fr] text-start',
+          !isMobile && 'hidden'
+        )}
         onClick={() => window.open(socialLink.x)}
       >
-        <LuTwitter size={18} />
+        <FaXTwitter size={18} />
         <span>{t('twitter-x')}</span>
       </Button>
 
       <Button
         variant="ghost"
         shadow="none"
-        className="w-full px-2 grid grid-cols-[1.5rem_1fr] text-start"
+        className={cn(
+          'w-full px-2 grid grid-cols-[1.5rem_1fr] text-start',
+          !isMobile && 'hidden'
+        )}
         onClick={() => window.open(socialLink.x)}
       >
         <LiaTelegramPlane size={20} />

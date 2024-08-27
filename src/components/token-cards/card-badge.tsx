@@ -30,7 +30,7 @@ export const TokenCardBadge = ({
     )
   }
 
-  if (token.coin_type === 6) {
+  if (token.coin_type === 6 && !isGraduated) {
     return (
       <Badge variant="success" className={classes}>
         {t('token.memex')}

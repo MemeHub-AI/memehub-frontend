@@ -119,7 +119,7 @@ export const HeaderMobile = (props: Props) => {
           variant="outline"
           className="mx-3 max-sm:mx-0"
           size="sm"
-          onClick={() => router.push(Routes.Create)}
+          onClick={() => router.push(Routes.MemexCreate)}
         >
           {t('header.post.idea')}
         </Button>

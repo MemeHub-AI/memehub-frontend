@@ -22,20 +22,23 @@ export const TokenList = ({ ideaData }: Props) => {
     return tokenList.map((token) => {
       return (
         <div className="mt-2 flex justify-between items-center" key={token.id}>
-          <div className="flex items-center">
+          <div className="flex items-center max-w-[70%]">
             <Img
-              src={token.logo}
+              src={token.image_url}
               alt="Logo"
               className="w-[25px] h-[25px] object-cover rounded-md mr-2"
             />
-            <span>{token.name}</span>
+            <span className="whitespace-nowrap truncate">{token.name}</span>
           </div>
-          <div className="">
+          <div className="whitespace-nowrap">
             <span
               className="text-sm text-blue-600 cursor-pointer select-none"
               onClick={() => {
-                if (isEmpty(token.chain.name) || isEmpty(token.address)) return
-                open(joinPaths(Routes.Main, token.chain.name, token.address))
+                if (isEmpty(token.chain) || isEmpty(token.contract_address))
+                  return
+                open(
+                  joinPaths(Routes.Main, token.chain, token.contract_address)
+                )
               }}
             >
               {t('live.in.up')}

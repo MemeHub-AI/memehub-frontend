@@ -16,12 +16,13 @@ export interface IdeaDataList {
 }
 
 export interface IdeaTokens {
-  id: number
+  id: string
   name: string
-  ticker: string
-  logo: string
-  address: string
-  chain: Chain
+  symbol: string
+  image_url: string
+  contract_address: string
+  chain: string
+  coin_type: number
 }
 
 export interface IdeaRes {

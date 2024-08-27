@@ -10,6 +10,7 @@ import { TokenInfo } from './token-info'
 import { queryClient } from '@/components/app-providers'
 import { IdeaDataList } from '@/api/idea/type'
 import { TokenList } from './token-list'
+import { BentoGrid } from '@/components/magicui/bento-grid'
 
 interface Props {
   newsId: string
@@ -98,13 +99,13 @@ export const WaterList = ({ newsId, type }: Props) => {
         nullback={<div className="mt-5 text-gray-500">{t('no.idea')}</div>}
       >
         {waterfallList?.list?.length ? (
-          <div className="flex gap-4 pb-6">
+          <div className="grid grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2 gap-4 max-sm:gap-2 pb-6">
+            {/* {
+              waterfallList
+            } */}
             {waterfallList.list?.map((cols, i) => {
               return (
-                <div
-                  key={i}
-                  className="flex-1  max-sm:w-full max-sm:max-w-full"
-                >
+                <div key={i} className="max-sm:w-full max-sm:max-w-full">
                   {cols.map((item) => (
                     <div
                       key={item.id}
