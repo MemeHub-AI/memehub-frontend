@@ -102,7 +102,7 @@ export const TokenCards = ({
           <div className="text-zinc-500">
             {t('tokens.list.empty')},
             <Link className="text-blue-600 ml-2" href={Routes.Create}>
-              {t('token.create')}
+              {t('start-coin')}
             </Link>
             {t('period')}
           </div>

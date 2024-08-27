@@ -722,5 +722,6 @@
   "start.token": "启动代币",
   "create-idea.initial-buy-invalid": "您只能大于等于初始购买的{}，不能减少它",
   "create-idea.initial-buy-tips": "您已经支付了{}，所以只需要再支付{}即可",
-  "gas-insufficient": "没有足够的余额支付 Gas 费用"
+  "gas-insufficient": "没有足够的余额支付 Gas 费用",
+  "start-coin": "启动代币"
 }
