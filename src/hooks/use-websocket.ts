@@ -18,13 +18,17 @@ interface WsBase<T extends OnEvents> {
   data: T[keyof T]
 }
 
+interface WsOptions extends Options {
+  disabled?: boolean
+}
+
 /** Based on `react-use-websocket`, binding {@link WsBase} data format. */
 export const useWebsocket = <
   OEvents extends OnEvents,
   EEvents extends EmitEvents
 >(
   url: string,
-  options?: Options & Partial<{ disabled: boolean }>
+  { disabled, ...options }: WsOptions = {}
 ) => {
   type AllEvents = OEvents & EEvents
 
@@ -45,7 +49,7 @@ export const useWebsocket = <
       filter: filterHeartbeta,
       ...options,
     },
-    !options?.disabled
+    disabled
   )
   const [isConnecting, isOpen, isClosing, isClosed] = useMemo(
     () => [
