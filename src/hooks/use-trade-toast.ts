@@ -26,7 +26,7 @@ export const useTradeToast = () => {
     const reward = BigNumber(reserveAmount)
       .multipliedBy(price)
       .multipliedBy(amount_unit)
-      .multipliedBy(usd_unit)
+      .div(usd_unit)
       .toFixed()
 
     return fmt.decimals(reward)
