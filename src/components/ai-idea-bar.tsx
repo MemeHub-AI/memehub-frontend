@@ -32,7 +32,7 @@ export const AIIdeaBar = (props: Props) => {
   const { data: { list: ideas = [] } = {} } = useQuery({
     queryKey: ['getTrendingIdeas'],
     queryFn: () => {
-      return newsApi.getOpportunity({ page: 1, page_size: 4 })
+      return newsApi.getOpportunity({ page: 1, page_size: 3 })
     },
     select: ({ data }) => ({
       total: data.count || 0,
