@@ -59,10 +59,11 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
   const totalAmount = isKolCard ? kolTotalAmount : communityTotalAmount
   const current = isKolCard ? kolClaimedCount : communityClaimedCount
   const total = isKolCard ? kolCount : communityCount
+  const hasAmount = total - current > 0
 
   const isNoNft = (isKolCard && !isKol) || (isCommunityCard && !hasCommunity)
   const isClaimed = isKolCard ? isKolClaimed : isCommunityClaimed
-  const disabled = isExpired || isClaimed || isNoNft || isClaiming
+  const disabled = isExpired || isClaimed || isNoNft || isClaiming || !hasAmount
 
   const claim = () => {
     if (isKolCard) {
@@ -108,6 +109,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     if (isClaiming) return t('claiming')
     if (isNoNft) return t('airdrop.not-nft')
     if (isExpired) return t('expired')
+    if (!hasAmount) return t('airdrop.no-amount')
 
     return t('airdrop.claim')
   }
