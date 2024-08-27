@@ -6,6 +6,7 @@ import { recommendAbi0_1_12 } from './0.1.12'
 import { recommendAbi0_1_14 } from './0.1.14'
 import { recommendAbi0_1_13 } from './0.1.13'
 import { recommendAbi0_1_15 } from './0.1.15'
+import { recommendAbi0_1_17 } from './0.1.17'
 
 export const recommendAbiMap = {
   '0.1.0': recommendAbi0_1_0,
@@ -16,6 +17,7 @@ export const recommendAbiMap = {
   '0.1.13': recommendAbi0_1_13,
   '0.1.14': recommendAbi0_1_14,
   '0.1.15': recommendAbi0_1_15,
+  '0.1.17': recommendAbi0_1_17,
 }
 
 export type RecommendVersion = keyof typeof recommendAbiMap
