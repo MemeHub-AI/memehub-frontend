@@ -80,7 +80,7 @@ export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
       </div>
 
       {/* Name/symbol */}
-      <div className="font-bold leading-none text-center mt-2">
+      <div className="font-bold leading-none text-center mt-2 break-all">
         {isNotFound && !isIdoToken && !tokenMetadata
           ? t('token.not-found')
           : `${tokenInfo?.name ?? tokenMetadata?.name}(${
