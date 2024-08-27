@@ -6,8 +6,8 @@ import { useTranslation } from 'react-i18next'
 
 import { otherApi } from '@/api/other'
 import { useStorage } from './use-storage'
-import { UPLOAD_ERR } from '@/errors/upload'
 import { reportException } from '@/errors'
+import { ApiCode } from '@/api/types'
 
 interface Options {
   inputEl?: HTMLInputElement | null
@@ -35,10 +35,12 @@ export const useUploadImage = (options?: Options) => {
       toast.dismiss(id)
       onFinally?.()
     },
-    onError: ({ message }) => {
-      UPLOAD_ERR.message(message)
-      onError?.(message)
+    onError: (e: Response & Error) => {
       clearFile()
+      onError?.(e.message)
+      const msg =
+        e.status === ApiCode.TooLarge ? t('upload.too-large') : e.message
+      toast.error(t('upload.failed') + ' ' + msg)
     },
     onSuccess: ({ data }) => {
       toast.success(t('upload.success'))
@@ -66,8 +68,8 @@ export const useUploadImage = (options?: Options) => {
     try {
       const { data } = await mutateAsync(formData)
       return data.image_url
-    } catch (error) {
-      reportException(error)
+    } catch (err) {
+      reportException(err)
     }
   }
 
