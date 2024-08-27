@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash'
 
 import { userApi } from '@/api/user'
 import { UserListRes, UserListType } from '@/api/user/types'
+import { tokenApi } from '@/api/token'
 
 type ListMap = {
   [K in UserListType]: {
@@ -13,7 +14,7 @@ type ListMap = {
   }
 }
 
-export const useUserList = (type: UserListType) => {
+export const useUserList = (type: UserListType, isOtherUser = true) => {
   // Why we need a map?
   // An error will occured when `AccountTab` change if use uniform `list`.
   // Because the new tab uses the old list data, it will cause data format errors.
@@ -62,6 +63,33 @@ export const useUserList = (type: UserListType) => {
       total: data.pages[0].data.count,
     }),
   })
+  const {
+    data: { myTokenList = [], myTokenTotal = 0 } = {},
+    isLoading: isLoadingMyTokens,
+    isFetching: isFetchingMyTokens,
+    fetchNextPage: fetchNextMyTokens,
+    refetch: refetchMyTokens,
+  } = useInfiniteQuery({
+    queryKey: [tokenApi.getListByUser.name, userAddr, type],
+    queryFn: ({ pageParam }) => {
+      return tokenApi.getListByUser({
+        address: userAddr,
+        page: pageParam,
+        page_size: 25,
+      })
+    },
+    initialPageParam: 1,
+    getNextPageParam: (_, __, page) => page + 1,
+    select: (data) => ({
+      myTokenList: data.pages.flatMap((p) => p.data.results || []),
+      myTokenTotal: data.pages[0].data.count,
+    }),
+    enabled: isCreated,
+  })
+  const myTokens = useMemo(
+    () => (isOtherUser ? myTokenList.filter((t) => t.is_active) : myTokenList),
+    [myTokenList]
+  )
 
   // Set list mapping.
   useEffect(() => {
@@ -88,5 +116,12 @@ export const useUserList = (type: UserListType) => {
     isFetching,
     fetchNextPage,
     refetch,
+
+    myTokens,
+    myTokenTotal,
+    isLoadingMyTokens,
+    isFetchingMyTokens,
+    fetchNextMyTokens,
+    refetchMyTokens,
   }
 }

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -13,13 +13,14 @@ import { Routes } from '@/routes'
 import { useAccountContext } from '@/contexts/account'
 import { cn } from '@/lib/utils'
 import { joinPaths } from '@/utils'
-import { useResponsive } from '@/hooks/use-responsive'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
-  const { query, ...router } = useRouter()
   const { isOtherUser } = useAccountContext()
   const [isShowBorder, setIsShowBorder] = useState(true)
+  const { query, ...router } = useRouter()
+
+  const tab = String(query.tab || UserListType.CoinsCreated)
   const myAccountTabs = [
     {
       label: t('comments'),
@@ -41,9 +42,8 @@ export const AccountTab = () => {
     },
     ...(isOtherUser ? [] : myAccountTabs),
   ]
-  const tab = String(query.tab || UserListType.CoinsCreated)
+
   const {
-    tokenCreated,
     tokenHeld,
     comments,
     mentions,
@@ -51,21 +51,12 @@ export const AccountTab = () => {
     isFetching,
     fetchNextPage,
 
-    // myTokens,
-    // myTokenTotal,
-    // isLoadingMyTokens,
-    // isFetchingMyTokens,
-    // fetchNextMyTokens,
-  } = useUserList(Number(tab))
-
-  const createdList = useMemo(
-    () =>
-      isOtherUser
-        ? tokenCreated.list.filter((t) => t.is_active)
-        : tokenCreated.list,
-    [tokenCreated.list]
-  )
-  const { isPad } = useResponsive()
+    myTokens,
+    myTokenTotal,
+    isLoadingMyTokens,
+    isFetchingMyTokens,
+    fetchNextMyTokens,
+  } = useUserList(Number(tab), isOtherUser)
 
   return (
     <Tabs
@@ -109,11 +100,11 @@ export const AccountTab = () => {
       <TabsContent value={UserListType.CoinsCreated.toString()}>
         <TokenCards
           className="md:grid-cols-2 xl:grid-cols-3"
-          cards={createdList}
-          total={tokenCreated.total}
-          isLoading={isLoading}
-          isPending={isFetching}
-          onFetchNext={fetchNextPage}
+          cards={myTokens}
+          total={myTokenTotal}
+          isLoading={isLoadingMyTokens}
+          isPending={isFetchingMyTokens}
+          onFetchNext={fetchNextMyTokens}
         />
       </TabsContent>
 

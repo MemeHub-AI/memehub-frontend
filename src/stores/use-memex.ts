@@ -20,8 +20,8 @@ interface MemexStore {
   idea: IdeaRequired | null
   ideaDetails: IdeaOptional | null
 
-  setIdea: (post: MemexStore['idea']) => void
-  setIdeaDetails: (postDetails: MemexStore['ideaDetails']) => void
+  setIdea: (idea: MemexStore['idea']) => void
+  setIdeaDetails: (ideaDetails: MemexStore['ideaDetails']) => void
 }
 
 export const useMemexStore = create<MemexStore>((set) => ({
