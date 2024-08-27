@@ -26,7 +26,7 @@ export const useUniswapV2Amount = (
       return BI_ZERO_TUPLE
     }
 
-    return readContract(wagmiConfig, {
+    const [reserve0, reserve1] = await readContract(wagmiConfig, {
       abi: uniswapV2LPAbi,
       address: poolAddr as Address,
       chainId: config.chainId,
@@ -35,6 +35,11 @@ export const useUniswapV2Amount = (
       reportException(e)
       return BI_ZERO_TUPLE
     })
+    const reserves = [Number(reserve0), Number(reserve1)]
+    const reserveAmount = BigInt(Math.min(...reserves))
+    const tokenAmount = BigInt(Math.max(...reserves))
+
+    return [reserveAmount, tokenAmount]
   }
 
   const getTokenAmount = async (amountIn: string) => {
@@ -42,12 +47,12 @@ export const useUniswapV2Amount = (
       UNISWAP_ERR.message(`Cannot find router ${uniswapv2Router}`, false)
       return BI_ZERO
     }
-    const [reserve0, reserve1] = await getReserves()
+    const [reserveAmount, tokenAmount] = await getReserves()
 
     return readContract(wagmiConfig, {
       ...config,
       functionName: 'getAmountOut',
-      args: [parseEther(amountIn), reserve0, reserve1],
+      args: [parseEther(amountIn), reserveAmount, tokenAmount],
     }).catch((e: Error) => {
       reportException(e)
       return BI_ZERO
@@ -59,12 +64,12 @@ export const useUniswapV2Amount = (
       UNISWAP_ERR.message(`Cannot find router ${uniswapv2Router}`, false)
       return BI_ZERO
     }
-    const [reserve0, reserve1] = await getReserves()
+    const [reserveAmount, tokenAmount] = await getReserves()
 
     return readContract(wagmiConfig, {
       ...config,
       functionName: 'getAmountOut',
-      args: [parseEther(amountIn), reserve1, reserve0],
+      args: [parseEther(amountIn), tokenAmount, reserveAmount],
     }).catch((e: Error) => {
       reportException(e)
       return BI_ZERO
