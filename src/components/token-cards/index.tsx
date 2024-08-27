@@ -14,7 +14,7 @@ import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TokenListItem } from '@/api/token/types'
 import { IdoCard } from '../ido-card'
 import { LoadMore } from '../load-more'
-import { useTokenPools } from '@/hooks/token/use-token-pools'
+import { useAggregatePools } from '@/hooks/token/use-aggregate-pools'
 
 interface Props extends ComponentProps<'div'> {
   cards?: TokenListItem[]
@@ -41,7 +41,7 @@ export const TokenCards = ({
   const { isPlayHomeAudio, setIsPlayHomeAudio } = useIsPlayAudio()
   const { playHome } = useAudioPlayer()
 
-  const { poolTokens } = useTokenPools(cards)
+  const { pooledTokens } = useAggregatePools(cards)
 
   const onChange = (chain: string) => {
     setChainTag(chain)
@@ -113,7 +113,7 @@ export const TokenCards = ({
         ))}
         {/* {!!cards.length &&
           filteredCards.map((t, i) => <TokenCard key={i} card={t} />)} */}
-        {poolTokens.map((t, i) => (
+        {pooledTokens.map((t, i) => (
           <TokenCard
             key={i}
             card={t}

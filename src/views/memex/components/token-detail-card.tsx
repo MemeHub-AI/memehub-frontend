@@ -49,7 +49,6 @@ export const TokenDetailsCard = ({
     details?.bond_version!,
     details?.bond_address!
   )
-  console.log('detail', details)
   const isZero = tokenAddr === zeroAddress
   const hasLinks = !!twitter_url || !!telegram_url || !!website_url
 
