@@ -49,7 +49,7 @@ export const useWebsocket = <
       filter: filterHeartbeta,
       ...options,
     },
-    disabled
+    !disabled
   )
   const [isConnecting, isOpen, isClosing, isClosed] = useMemo(
     () => [
