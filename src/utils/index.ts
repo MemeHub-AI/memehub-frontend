@@ -30,8 +30,7 @@ export const joinPaths = (...args: (string | number)[]) => {
 
 export const parseMediaUrl = (media: keyof typeof mediaLinks, url = '') => {
   if (isEmpty(url)) return url
-
-  if (!(media === 'website')) {
+  if (media !== 'website') {
     url = url.replace('@', '')
   }
 
