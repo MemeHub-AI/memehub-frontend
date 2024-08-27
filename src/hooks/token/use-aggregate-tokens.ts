@@ -9,12 +9,6 @@ import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { BI_ZERO } from '@/constants/number'
 
-interface PooledTokens extends TokenListItem {
-  progress: string
-  maxSupply: string
-  isGraduated: boolean
-}
-
 type Pools = [
   `0x${string}`,
   bigint,
@@ -26,7 +20,13 @@ type Pools = [
   `0x${string}`
 ]
 
-export const useAggregatePools = (tokens: TokenListItem[]) => {
+interface AggregatedToken extends TokenListItem {
+  progress: string
+  maxSupply: string
+  isGraduated: boolean
+}
+
+export const useAggregateTokens = (tokens: TokenListItem[]) => {
   const { chainsMap } = useChainsStore()
 
   const enabled = useMemo(() => {
@@ -43,7 +43,7 @@ export const useAggregatePools = (tokens: TokenListItem[]) => {
     contracts: tokens.map((token) => ({
       abi: bcAbiMap[token.bond_version!]!,
       address: token.bond_address as Address,
-      chainId: +chainsMap[token.chain]!.id,
+      chainId: Number(chainsMap[token.chain]?.id || 0),
       functionName: 'pools_',
       args: [token.contract_address as Address],
     })),
@@ -73,7 +73,7 @@ export const useAggregatePools = (tokens: TokenListItem[]) => {
     return percent.lte(0) || percent.isNaN() ? '0' : percent.toFixed(2)
   }
 
-  const pooledTokens = useMemo(() => {
+  const aggregatedTokens = useMemo(() => {
     if (isEmpty(pools)) return []
     return tokens.map((token, i) => {
       const [
@@ -100,11 +100,11 @@ export const useAggregatePools = (tokens: TokenListItem[]) => {
         ...token,
         isGraduated,
         progress,
-      } as PooledTokens
+      } as AggregatedToken
     })
   }, [pools])
 
   return {
-    pooledTokens,
+    aggregatedTokens,
   }
 }
