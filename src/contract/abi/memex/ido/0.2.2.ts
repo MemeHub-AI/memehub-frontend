@@ -6,209 +6,35 @@ export const memexIdoAbi0_2_2 = [
         name: '_bond',
         type: 'address',
       },
-    ],
-    stateMutability: 'nonpayable',
-    type: 'constructor',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_FeeInsufficient',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_IllegalAddress',
-    type: 'error',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'string',
-        name: 'param',
-        type: 'string',
-      },
-    ],
-    name: 'MEMEHUB_InvalidParams',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_InvalidParamsReferrers',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_NoOwner',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_NotEOA',
-    type: 'error',
-  },
-  {
-    inputs: [],
-    name: 'MEMEHUB_ValueNotTrue',
-    type: 'error',
-  },
-  {
-    inputs: [
       {
         internalType: 'address',
-        name: 'owner',
-        type: 'address',
-      },
-    ],
-    name: 'OwnableInvalidOwner',
-    type: 'error',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: 'account',
-        type: 'address',
-      },
-    ],
-    name: 'OwnableUnauthorizedAccount',
-    type: 'error',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'flag',
-        type: 'uint256',
-      },
-      {
-        indexed: false,
-        internalType: 'string',
-        name: 'version',
-        type: 'string',
-      },
-    ],
-    name: 'MemeHubContractDeploy',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'projectId',
-        type: 'uint256',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'memeXAddress',
+        name: '_owner',
         type: 'address',
       },
       {
-        indexed: false,
         internalType: 'address',
-        name: 'user',
+        name: '_factory',
         type: 'address',
       },
       {
-        indexed: false,
-        internalType: 'uint256',
-        name: 'startTime',
-        type: 'uint256',
-      },
-    ],
-    name: 'MemeHubProjectCreate',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
         internalType: 'address',
-        name: 'user',
+        name: '_receiveRemainToken',
         type: 'address',
       },
       {
-        indexed: true,
         internalType: 'address',
-        name: 'referrer',
+        name: '_trump',
         type: 'address',
       },
-      {
-        indexed: true,
-        internalType: 'uint256',
-        name: 'flag',
-        type: 'uint256',
-      },
-    ],
-    name: 'MemeHubReferrer',
-    type: 'event',
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'previousOwner',
-        type: 'address',
-      },
-      {
-        indexed: true,
-        internalType: 'address',
-        name: 'newOwner',
-        type: 'address',
-      },
-    ],
-    name: 'OwnershipTransferred',
-    type: 'event',
-  },
-  {
-    inputs: [],
-    name: 'ETHAmountOfLike',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'bond',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
       {
         internalType: 'uint256',
         name: '_projectId',
         type: 'uint256',
       },
       {
-        internalType: 'uint256',
-        name: '_initAmountIn',
-        type: 'uint256',
-      },
-      {
-        internalType: 'address',
-        name: '_referrer',
-        type: 'address',
+        internalType: 'uint256[]',
+        name: '_idoParams',
+        type: 'uint256[]',
       },
       {
         internalType: 'string[]',
@@ -268,163 +94,740 @@ export const memexIdoAbi0_2_2 = [
         type: 'tuple',
       },
     ],
-    name: 'create',
-    outputs: [
+    stateMutability: 'payable',
+    type: 'constructor',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_AlreadyDeploy',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_AlreadyLike',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_AlreadyOver',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_ExceedValue',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_InvalidParamsReferrers',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NoModification',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NoOver',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NoTrueAddress',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NotClaimToken',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NotEOA',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NotHasInitETH',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NotTime',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NotTokenId',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NotValue',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_NotWithdraw',
+    type: 'error',
+  },
+  {
+    inputs: [],
+    name: 'MEMEHUB_TokenAmountNoEnough',
+    type: 'error',
+  },
+  {
+    inputs: [
       {
-        internalType: 'contract MEMEHUB_MemeX',
-        name: 'ido',
+        internalType: 'address',
+        name: 'owner',
         type: 'address',
       },
     ],
+    name: 'OwnableInvalidOwner',
+    type: 'error',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'account',
+        type: 'address',
+      },
+    ],
+    name: 'OwnableUnauthorizedAccount',
+    type: 'error',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'projectId',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'claimAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubClaimToken',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'projectId',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+    ],
+    name: 'MemeHubLike',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'projectId',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'receiveRemainToken',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'time',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'claimAmount',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubLikeCreateToken',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'user',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'referrer',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'flag',
+        type: 'uint256',
+      },
+    ],
+    name: 'MemeHubReferrer',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'projectId',
+        type: 'uint256',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'tokenId',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'name',
+        type: 'string',
+      },
+      {
+        indexed: false,
+        internalType: 'string',
+        name: 'symbol',
+        type: 'string',
+      },
+    ],
+    name: 'MemeHubSetTokenInfo',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'previousOwner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'address',
+        name: 'newOwner',
+        type: 'address',
+      },
+    ],
+    name: 'OwnershipTransferred',
+    type: 'event',
+  },
+  {
+    inputs: [],
+    name: 'CommunityFlag',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'DENOMINATOR',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'ETHAmountOfLike',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'TOTAL_SUPPLY',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'alreadyClaimCount',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'bond',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'claimToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'distributionRatioCommunity',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'distributionRatioKol',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'endTime',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'factory',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'flag',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getProjectInfo',
+    outputs: [
+      {
+        components: [
+          {
+            internalType: 'address',
+            name: 'owner',
+            type: 'address',
+          },
+          {
+            internalType: 'address',
+            name: 'token',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: 'likeCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'maxCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'ETHAmountOfLike',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'ownerRatio',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'userRatio',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'alreadyClaimCount',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'startTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'endTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'overTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'uint256',
+            name: 'waitingTime',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bool',
+            name: 'isOver',
+            type: 'bool',
+          },
+          {
+            internalType: 'bool',
+            name: 'isDeploy',
+            type: 'bool',
+          },
+        ],
+        internalType: 'struct MEMEHUB_MemeX.ProjectInfo',
+        name: '',
+        type: 'tuple',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'infos',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'initAmountIn',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'isCanClaimToken',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'sender',
+        type: 'address',
+      },
+    ],
+    name: 'isCanWithdraw',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'isClaimToken',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'isDeploy',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'isDistribution',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'isHasInitWithdraw',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'isInitWithdrawETH',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'isLike',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'isOver',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'isWithdrawETH',
+    outputs: [
+      {
+        internalType: 'bool',
+        name: '',
+        type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'kolFlag',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address[]',
+        name: 'referrers',
+        type: 'address[]',
+      },
+    ],
+    name: 'like',
+    outputs: [],
     stateMutability: 'payable',
     type: 'function',
   },
   {
     inputs: [],
-    name: 'duration',
+    name: 'likeCount',
     outputs: [
       {
         internalType: 'uint256',
         name: '',
         type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'ethAmount',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'getIdoCount',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256[]',
-        name: 'projectIds',
-        type: 'uint256[]',
-      },
-    ],
-    name: 'getIdoInfo',
-    outputs: [
-      {
-        internalType: 'uint256[]',
-        name: 'likeCounts',
-        type: 'uint256[]',
-      },
-      {
-        internalType: 'uint256[]',
-        name: 'maxCounts',
-        type: 'uint256[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'idoCount',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    name: 'idos',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'isAdmin',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    name: 'isLegal',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'isOpen',
-    outputs: [
-      {
-        internalType: 'bool',
-        name: '',
-        type: 'bool',
       },
     ],
     stateMutability: 'view',
@@ -471,6 +874,19 @@ export const memexIdoAbi0_2_2 = [
   },
   {
     inputs: [],
+    name: 'overTime',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'owner',
     outputs: [
       {
@@ -490,6 +906,51 @@ export const memexIdoAbi0_2_2 = [
         internalType: 'uint256',
         name: '',
         type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'params',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'projectId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'projectOwner',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
       },
     ],
     stateMutability: 'view',
@@ -522,11 +983,6 @@ export const memexIdoAbi0_2_2 = [
         name: 'to',
         type: 'address',
       },
-      {
-        internalType: 'uint256',
-        name: 'value',
-        type: 'uint256',
-      },
     ],
     name: 'rescueETHMemeHub',
     outputs: [],
@@ -536,226 +992,66 @@ export const memexIdoAbi0_2_2 = [
   {
     inputs: [
       {
-        internalType: 'address[]',
-        name: 'memex',
-        type: 'address[]',
+        internalType: 'string[]',
+        name: '_infos',
+        type: 'string[]',
       },
       {
-        internalType: 'address',
-        name: 'to',
-        type: 'address',
+        internalType: 'uint256[]',
+        name: '_params',
+        type: 'uint256[]',
+      },
+      {
+        components: [
+          {
+            internalType: 'bool',
+            name: 'isDistribution',
+            type: 'bool',
+          },
+          {
+            internalType: 'uint40',
+            name: 'distributionRatioKol',
+            type: 'uint40',
+          },
+          {
+            internalType: 'uint40',
+            name: 'distributionRatioCommunity',
+            type: 'uint40',
+          },
+          {
+            internalType: 'uint40',
+            name: 'walletCountKol',
+            type: 'uint40',
+          },
+          {
+            internalType: 'uint40',
+            name: 'walletCountCommunity',
+            type: 'uint40',
+          },
+          {
+            internalType: 'uint16',
+            name: 'kolFlag',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint16',
+            name: 'CommunityFlag',
+            type: 'uint16',
+          },
+          {
+            internalType: 'uint256[]',
+            name: 'flag',
+            type: 'uint256[]',
+          },
+        ],
+        internalType: 'struct IMEMEHUB_Distributor.DistributionParams',
+        name: 'dp',
+        type: 'tuple',
       },
     ],
-    name: 'rescueETHMemeX',
+    name: 'setTokenInfo',
     outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_admin',
-        type: 'address',
-      },
-      {
-        internalType: 'bool',
-        name: 'status',
-        type: 'bool',
-      },
-    ],
-    name: 'setAdmin',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_bond',
-        type: 'address',
-      },
-    ],
-    name: 'setBond',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_duration',
-        type: 'uint256',
-      },
-    ],
-    name: 'setDuration',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_ETHAmountOfLike',
-        type: 'uint256',
-      },
-    ],
-    name: 'setETHAmountOfLike',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_ethAmount',
-        type: 'uint256',
-      },
-    ],
-    name: 'setEthAmount',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'setIdoCount',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'bool',
-        name: '_isOpen',
-        type: 'bool',
-      },
-    ],
-    name: 'setIsOpen',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_maxBuy',
-        type: 'uint256',
-      },
-    ],
-    name: 'setMaxBuy',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_maxCount',
-        type: 'uint256',
-      },
-    ],
-    name: 'setMaxCount',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_maxCountToRemain',
-        type: 'uint256',
-      },
-    ],
-    name: 'setMaxCountToRemain',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_ownerRatio',
-        type: 'uint256',
-      },
-    ],
-    name: 'setOwnerRatio',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_receiveRemainToken',
-        type: 'address',
-      },
-    ],
-    name: 'setReceiveRemainToken',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_startTime',
-        type: 'uint256',
-      },
-    ],
-    name: 'setStartTime',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'address',
-        name: '_trump',
-        type: 'address',
-      },
-    ],
-    name: 'setTrump',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_userRatio',
-        type: 'uint256',
-      },
-    ],
-    name: 'setUserRatio',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_waitingTime',
-        type: 'uint256',
-      },
-    ],
-    name: 'setWaitingTime',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
@@ -772,66 +1068,29 @@ export const memexIdoAbi0_2_2 = [
     type: 'function',
   },
   {
-    inputs: [
-      {
-        internalType: 'uint256',
-        name: '_ethAmount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_maxCount',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_ETHAmountOfLike',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_ownerRatio',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_userRatio',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_duration',
-        type: 'uint256',
-      },
-      {
-        internalType: 'uint256',
-        name: '_waitingTime',
-        type: 'uint256',
-      },
+    inputs: [],
+    name: 'token',
+    outputs: [
       {
         internalType: 'address',
-        name: '_receiveRemainToken',
+        name: '',
         type: 'address',
       },
-      {
-        internalType: 'address',
-        name: '_trump',
-        type: 'address',
-      },
-      {
-        internalType: 'uint256',
-        name: '_maxBuy',
-        type: 'uint256',
-      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'tokenId',
+    outputs: [
       {
         internalType: 'uint256',
-        name: '_maxCountToRemain',
+        name: '',
         type: 'uint256',
       },
     ],
-    name: 'test',
-    outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -900,7 +1159,43 @@ export const memexIdoAbi0_2_2 = [
     type: 'function',
   },
   {
-    stateMutability: 'payable',
-    type: 'receive',
+    inputs: [],
+    name: 'walletCountCommunity',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'walletCountKol',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'withdrawETH',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'withdrawInitETH',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
   },
 ] as const
