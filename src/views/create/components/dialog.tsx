@@ -62,10 +62,7 @@ export const CreateTokenStatusDialog = () => {
 
   // Submit error
   if (submitError) {
-    if (isUserReject(submitError)) {
-      toast.warning(t('user-rejected'))
-      return
-    }
+    if (isUserReject(submitError)) return
     return (
       <AlertDialog
         open={!!submitError}
