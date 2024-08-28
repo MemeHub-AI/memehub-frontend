@@ -14,7 +14,7 @@ interface Options {
 export const useNewsList = (options?: Options) => {
   const { isOpportunity = false } = options || {}
   const { getStorage } = useLocalStorage()
-  const storedArea = +getStorage('area')
+  const storedArea = Number(getStorage('area') || 0)
 
   const [area, setArea] = useState(storedArea)
   const ref = useRef<HTMLDivElement>(null)

@@ -1,3 +1,5 @@
+export const storageNamespace = 'memehub'
+
 // Don't use `interface`
 export type LocalStorage = {
   lang: string

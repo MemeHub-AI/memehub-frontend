@@ -1,12 +1,16 @@
-import { LocalStorage, SessionStorage } from '@/config/storage'
+import {
+  storageNamespace,
+  LocalStorage,
+  SessionStorage,
+} from '@/config/storage'
 
-const withNs = (name: string) => `memehub::${name}`
+const withNs = (key: string) => `${storageNamespace}::${key}`
 
 const useStorage = <S extends Record<string, string>>(
   storage: Storage | undefined
 ) => {
   const getStorage = <T extends keyof S = keyof S>(k: T & string) =>
-    storage?.getItem(withNs(k)) as S[T]
+    storage?.getItem(withNs(k)) as S[T] | undefined
 
   const setStorage = <T extends keyof S = keyof S>(k: T & string, v: S[T]) =>
     storage?.setItem(withNs(k), v)
