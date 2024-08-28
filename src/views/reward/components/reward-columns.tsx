@@ -14,21 +14,22 @@ enum RewardType {
   Diamond,
 }
 
-const rewardSourceMap: Record<keyof RewardInfoRes, string> = {
-  buy: t('reward.buy'),
-  sell: t('reward.sell'),
-  create: t('reward.create'),
-  graduated: t('reward.graduated'),
-  join_community: t('reward.join-community'),
-  memex_created: t('reward.memex-create'),
-  memex_launched: t('reward.memex-launched'),
-  memex_liked: t('reward.memex-liked'),
+// Must be function, because i18n.
+const rewardSourceMap: Record<keyof RewardInfoRes, () => string> = {
+  buy: () => t('reward.buy'),
+  sell: () => t('reward.sell'),
+  create: () => t('reward.create'),
+  graduated: () => t('reward.graduated'),
+  join_community: () => t('reward.join-community'),
+  memex_created: () => t('reward.memex-create'),
+  memex_launched: () => t('reward.memex-launched'),
+  memex_liked: () => t('reward.memex-liked'),
 }
 
 export const rewardTableCols: ColumnDef<RewardItem>[] = [
   {
-    header: t('earned'),
     accessorKey: 'earned',
+    header: () => t('earned'),
     cell: ({ row }) => {
       const { earned, category } = row.original
       const { chain } = useChainInfo(row.original.chain)
@@ -46,18 +47,18 @@ export const rewardTableCols: ColumnDef<RewardItem>[] = [
     },
   },
   {
-    header: t('time'),
     accessorKey: 'time',
+    header: () => t('time'),
     cell: ({ row }) => dayjs(row.original.time).format('YYYY-MM-DD HH:mm'),
   },
   {
-    header: t('username'),
     accessorKey: 'username',
+    header: () => t('username'),
   },
   {
-    header: t('reward.source'),
     accessorKey: 'flag',
+    header: () => t('reward.source'),
     cell: ({ row }) =>
-      rewardSourceMap[row.original.flag] || t('reward.unknown'),
+      rewardSourceMap[row.original.flag]?.() || t('reward.unknown'),
   },
 ]
