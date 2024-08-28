@@ -2,7 +2,7 @@ import { ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 import { Routes } from '@/routes'
-import { IdeaCardSkeleton } from './components/idea-card-skeleton'
+import { IdeaCardSkeleton } from './components/idea-card/skeleton'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { MemexTabs } from './components/memex-tabs'
 

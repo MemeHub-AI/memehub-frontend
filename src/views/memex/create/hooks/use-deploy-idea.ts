@@ -20,7 +20,7 @@ export const useDeployIdea = (
   onFinally?: () => void
 ) => {
   const { t } = useTranslation()
-  const { chainId = 0 } = useAccount() // TODO/memex: multi chain
+  const { chainId = 0 } = useAccount()
   const { configValue, memexFactoryAddr, memexFactoryVersion } =
     useTokenConfig(chainName)
   const { chainsMap } = useChainsStore()
