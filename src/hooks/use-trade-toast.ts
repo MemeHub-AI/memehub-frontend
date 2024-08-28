@@ -17,10 +17,12 @@ interface Options {
 }
 
 export const useTradeToast = () => {
-  const { chainName, rewardInfo, tradePrice, tokenInfo } = useTokenContext()
+  const { chainName, rewardInfo, tradePrice, tokenInfo, isGraduated } =
+    useTokenContext()
   const { chain: { explorer, native } = {} } = useChainInfo(chainName)
 
   const getRewardAmount = (type: TradeType, reserveAmount: string) => {
+    if (isGraduated) return '0'
     const { amount_unit = 0, usd_unit = 0 } = rewardInfo?.[type] ?? {}
     const { price = 0 } = tradePrice ?? {}
     const reward = BigNumber(reserveAmount)
