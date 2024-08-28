@@ -11,6 +11,7 @@ import { bcAbi0_1_15 } from './0.1.15'
 import { bcAbi0_1_16 } from './0.1.16'
 import { bcAbi0_2_0 } from './0.2.0'
 import { bcAbi0_2_2 } from './0.2.2'
+import { bcAbi0_6_0 } from './0.6.0'
 
 export const bcAbiMap = {
   '0.1.0': bcAbi0_1_0,
@@ -26,6 +27,7 @@ export const bcAbiMap = {
   '0.1.16': bcAbi0_1_16,
   '0.2.0': bcAbi0_2_0,
   '0.2.2': bcAbi0_2_2,
+  '0.6.0': bcAbi0_6_0,
 } as const
 
 export type BcVersion = keyof typeof bcAbiMap
