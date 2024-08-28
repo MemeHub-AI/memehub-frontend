@@ -67,6 +67,7 @@ export const IdeaLikeComment = ({
     ownerPercent,
     userPercent,
   } = ideaInfo
+  const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
 
   const onOpenLike = () => {
     if (isLiked) return toast.error(t('already-liked'))
@@ -102,11 +103,7 @@ export const IdeaLikeComment = ({
           </span>
         </div>
         <div className="text-zinc-500 text-sm">
-          <p>
-            {utilLang.replace(t('memex.like.desc'), [
-              idea?.is_creator ? ownerPercent : userPercent + '%',
-            ])}
-          </p>
+          <p>{utilLang.replace(t('memex.like.desc'), [rewardPercent + '%'])}</p>
           <p>
             {utilLang.replace(t('memex.like.desc2'), [
               Number(durationSeconds / 60 / 60).toFixed(2) + t('hours'),
