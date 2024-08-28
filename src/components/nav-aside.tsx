@@ -190,7 +190,7 @@ export const NavAside = ({
         {isCollapsed ? (
           <img src="/icons/writer.svg" alt="writer" />
         ) : (
-          t('Post.idea')
+          t('post-idea')
         )}
       </Button>
 

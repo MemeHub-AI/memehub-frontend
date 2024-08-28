@@ -1,6 +1,8 @@
 export enum Routes {
   Main = '/',
 
+  NotFound = '/404',
+
   TokenPage = '/[chain]/[address]',
 
   Create = '/create',

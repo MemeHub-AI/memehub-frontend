@@ -10,6 +10,7 @@ import { useUserList } from '@/views/account/hooks/use-user-list'
 import { UserListType } from '@/api/user/types'
 import { MemexProfile } from './components/profile'
 import { PrimaryLayout } from '@/components/layouts/primary'
+import { useZeroFallback } from '@/hooks/use-zero-fallback'
 
 export const AccountPage = () => {
   const { query } = useRouter()
@@ -31,6 +32,8 @@ export const AccountPage = () => {
     followersResults.refetch()
     followingResults.refetch()
   }
+
+  useZeroFallback()
 
   return (
     <AccountProvider

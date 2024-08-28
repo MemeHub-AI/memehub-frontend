@@ -6,6 +6,7 @@ import { isEmpty } from 'lodash'
 import { Button } from '@/components/ui/button'
 import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
+import PrimaryLayout from './layouts/primary'
 
 interface Props extends Omit<ComponentProps<'div'>, 'title'> {
   src?: string
@@ -49,9 +50,9 @@ export const NotFound = (props: Props) => {
           <Button onClick={() => push(Routes.Main)}>{t('goto.home')}</Button>
           <Button
             className="bg-lime-green ml-3"
-            onClick={() => push(Routes.Create)}
+            onClick={() => push(Routes.MemexCreate)}
           >
-            {t('token.create')}
+            {t('post-idea')}
           </Button>
         </div>
       )}
@@ -59,5 +60,7 @@ export const NotFound = (props: Props) => {
     </div>
   )
 }
+
+NotFound.getLayout = (page: ReactNode) => <PrimaryLayout>{page}</PrimaryLayout>
 
 export default NotFound

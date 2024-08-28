@@ -683,7 +683,6 @@
   "Coin": "代币",
   "profile": "个人资料",
   "Notification": "消息",
-  "Post.idea": "发布Idea",
   "link-copy-success": "复制分享链接成功！",
   "airdrop.burned-desc": "当前有{}个代币被销毁了",
   "no-more": "没有更多了",
@@ -739,5 +738,6 @@
   "reward.memex-liked": "点赞创意",
   "reward.unknown": "未知",
   "memex.idea": "创意",
-  "reward.trade": "下级交易奖励"
+  "reward.trade": "下级交易奖励",
+  "post-idea": "发布创意"
 }
