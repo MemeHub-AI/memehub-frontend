@@ -24,12 +24,12 @@ export const Header = () => {
 
   const navs: Nav[] = [
     {
-      title: withMobileIcon('🏠', t('home')),
-      path: Routes.Main,
+      title: withMobileIcon('💡', t('memex.idea')),
+      path: Routes.MemexIdea,
     },
     {
-      title: withMobileIcon('🌟', t('memex.idea')),
-      path: Routes.MemexIdea,
+      title: withMobileIcon('💎', t('home')),
+      path: Routes.Main,
     },
 
     {
