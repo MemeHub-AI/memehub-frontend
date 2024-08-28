@@ -21,7 +21,7 @@ interface EvmDeployParams {
   tokenId: string
 }
 
-export const useEvmDeploy = (chainName: string) => {
+export const useEvmDeploy = (chainName: string, onFinally?: () => void) => {
   const { address, chainId = 0 } = useAccount()
   const { data: { value: balance = BI_ZERO } = {} } = useBalance({ address })
   const { configValue, bcAddress, bcVersion } = useTokenConfig(chainName)
@@ -63,7 +63,7 @@ export const useEvmDeploy = (chainName: string) => {
     isLoading: isConfirming,
     isSuccess: isDeploySuccess,
     isError: isDeployError,
-  } = useWaitForTx({ hash })
+  } = useWaitForTx({ hash, onFinally })
 
   const deployedAddr = useMemo(() => {
     if (!logs) return

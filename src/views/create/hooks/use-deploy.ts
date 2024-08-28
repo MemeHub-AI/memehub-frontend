@@ -2,10 +2,11 @@ import { useMemo, useState } from 'react'
 
 import type { TokenCreateReq } from '@/api/token/types'
 import { useCreateToken } from './use-create-token'
-import { useEvmDeploy } from './use-evm-deploy'
 import { Network } from '@/enums/contract'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { deployErr } from '@/errors/deploy'
+import { useUserInfo } from '@/hooks/use-user-info'
+import { useEvmDeploy } from './use-evm-deploy'
 import { useSolDeploy } from './use-sol-deploy'
 
 export type DeployFormParams = Omit<
@@ -20,8 +21,13 @@ export const useDeploy = (chainName: string) => {
   const { createTokenData, isCreatingToken, createToken } =
     useCreateToken(chainName)
   const { chainsMap } = useChainsStore()
+  const { refetchUserInfo } = useUserInfo()
 
-  const evmDeploy = useEvmDeploy(chainName)
+  const onDeployFinally = () => {
+    refetchUserInfo()
+  }
+
+  const evmDeploy = useEvmDeploy(chainName, onDeployFinally)
   // const solDeploy = useSolDeploy()
   // const tvmDeploy = useTvmDeploy()
 
