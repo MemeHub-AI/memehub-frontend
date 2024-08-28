@@ -738,5 +738,6 @@
   "reward.memex-launched": "创意成功",
   "reward.memex-liked": "点赞创意",
   "reward.unknown": "未知",
-  "memex.idea": "创意"
+  "memex.idea": "创意",
+  "reward.trade": "下级交易奖励"
 }

@@ -748,5 +748,6 @@
   "reward.memex-launched": "Idea successful",
   "reward.memex-liked": "Like idea",
   "reward.unknown": "Unknown",
-  "memex.idea": "Idea"
+  "memex.idea": "Idea",
+  "reward.trade": "Subsequent trade"
 }

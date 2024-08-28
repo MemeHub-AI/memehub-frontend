@@ -24,6 +24,7 @@ const rewardSourceMap: Record<keyof RewardInfoRes, () => string> = {
   memex_created: () => t('reward.memex-create'),
   memex_launched: () => t('reward.memex-launched'),
   memex_liked: () => t('reward.memex-liked'),
+  trade: () => t('reward.trade'),
 }
 
 export const rewardTableCols: ColumnDef<RewardItem>[] = [
