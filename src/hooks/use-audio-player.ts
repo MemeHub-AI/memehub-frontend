@@ -32,11 +32,11 @@ export const useAudioPlayer = () => {
 
   const playFire = () => playAudio('/audio/fire.mp3')
 
-  const playHome = () => playAudio('/audio/home.mp3', 0.5)
+  const playHome = () => playAudio('/audio/home.mp3', 0.3)
 
-  const playRap = () => playAudio('/audio/rap-dos-memes.mp3', 0.5)
+  const playRap = () => playAudio('/audio/rap-dos-memes.mp3', 0.3)
 
-  const playAlliance = () => playAudio('/audio/alliance.mp3', 0.5)
+  const playAlliance = () => playAudio('/audio/alliance.mp3', 0.3)
 
   return {
     isPlaying,
