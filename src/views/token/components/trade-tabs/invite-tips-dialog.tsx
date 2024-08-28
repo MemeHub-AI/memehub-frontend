@@ -11,7 +11,7 @@ export const InviteTipsDialog = ({
 }: Pick<ComponentProps<typeof AlertDialog>, 'open' | 'onOpenChange'>) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
-  const { setInviteCode } = useStorage()
+  const { setInviteCode } = useStorage(true)
 
   return (
     <AlertDialog

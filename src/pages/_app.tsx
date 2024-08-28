@@ -18,6 +18,7 @@ export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
+
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
   ;(global as any).Buffer = Buffer
 
