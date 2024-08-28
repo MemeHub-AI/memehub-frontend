@@ -45,7 +45,6 @@ export const TokenDetailsCard = ({
     chainId,
     details?.coin_version!,
     tokenAddr,
-    // TODO/top: waiting for backend return
     details?.bond_version!,
     details?.bond_address!
   )

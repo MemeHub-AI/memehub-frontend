@@ -21,7 +21,6 @@ const sortKey: keyof TokenWsTrade = 'timestamp'
 
 const pageSize = 10
 
-// TODO/top: calc market cap via `useUniswapV2Amount`
 export const useTokenWs = (disabled = false) => {
   const { chainName, tokenAddr } = useTokenQuery()
   const router = useRouter()
