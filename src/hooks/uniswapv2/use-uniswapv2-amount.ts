@@ -1,5 +1,5 @@
 import { readContract } from 'wagmi/actions'
-import { Address, parseEther } from 'viem'
+import { type Address, parseEther } from 'viem'
 
 import { ConfigChainId, wagmiConfig } from '@/config/wagmi'
 import { uniswapV2RouterAbi } from '@/contract/abi/uniswapv2/router'

@@ -19,9 +19,9 @@ export const useMarketCap = () => {
     const { total_supply = 0 } = tokenInfo ?? {}
     const { price = 0 } = tradePrice ?? {}
 
-    const [reserve0, reserve1] = await getReserves()
-    const reserveAmount = formatEther(reserve1)
-    const tokenAmount = formatEther(reserve0)
+    const reserves = await getReserves()
+    const reserveAmount = formatEther(reserves[0])
+    const tokenAmount = formatEther(reserves[1])
 
     const marketCap = BigNumber(reserveAmount)
       .div(tokenAmount)
