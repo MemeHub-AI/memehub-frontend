@@ -6,6 +6,7 @@ import { Container } from './container'
 import { DiamondIcon } from './diamond-icon'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { TxStatusProps } from './tx-status'
+import { fmt } from '@/utils/fmt'
 
 export const TxSuccess = ({
   isBuy,
@@ -30,9 +31,7 @@ export const TxSuccess = ({
       {!isZero && (
         <div className="flex items-center gap-1 mb-1">
           {t('acquired')}
-          <span className="text-blue-600 text-xl">
-            {BigNumber(reward).toFormat()}
-          </span>
+          <span className="text-blue-600 text-xl">{fmt.decimals(reward)}</span>
           <div className="relative">
             <img
               src="/images/reward/diamond-star.png"

@@ -23,15 +23,15 @@ export const useTradeToast = () => {
 
   const getRewardAmount = (type: TradeType, reserveAmount: string) => {
     if (isGraduated) return '0'
+
     const { amount_unit = 0, usd_unit = 0 } = rewardInfo?.[type] ?? {}
     const { price = 0 } = tradePrice ?? {}
     const reward = BigNumber(reserveAmount)
       .multipliedBy(price)
       .multipliedBy(amount_unit)
       .div(usd_unit)
-      .toFixed()
 
-    return fmt.decimals(reward)
+    return reward.isNaN() ? '0' : reward.toFixed()
   }
 
   const showToast = async ({
