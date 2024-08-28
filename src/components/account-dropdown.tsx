@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
 } from './ui/dropdown-menu'
-import { socialLink } from '@/config/link'
+import { memehubLinks } from '@/config/link'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { useWallet } from '@/hooks/use-wallet'
 import { cn } from '@/lib/utils'
@@ -89,7 +89,7 @@ export const AccountDropdown = () => {
           'w-full px-2 grid grid-cols-[1.5rem_1fr] text-start',
           !isMobile && 'hidden'
         )}
-        onClick={() => window.open(socialLink.x)}
+        onClick={() => window.open(memehubLinks.x)}
       >
         <FaXTwitter size={18} />
         <span>{t('twitter-x')}</span>
@@ -102,7 +102,7 @@ export const AccountDropdown = () => {
           'w-full px-2 grid grid-cols-[1.5rem_1fr] text-start',
           !isMobile && 'hidden'
         )}
-        onClick={() => window.open(socialLink.x)}
+        onClick={() => window.open(memehubLinks.x)}
       >
         <LiaTelegramPlane size={20} />
         <span>{t('telegram')}</span>

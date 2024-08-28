@@ -61,7 +61,7 @@ export const SocialLinks = ({
             title={title}
             onClick={() => open(link)}
             className={cn(
-              'border-transparent !bg-transparent hover:border-black',
+              'border-transparent !bg-transparent sm:hover:border-black',
               buttonClass
             )}
             {...buttonProps}

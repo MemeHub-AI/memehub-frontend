@@ -9,9 +9,9 @@ import { CommunityCategory } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { utilLang } from '@/utils/lang'
-import { formLink } from '@/config/link'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { ConnectWallet } from '@/components/connect-wallet'
+import { memehubLinks } from '@/config/link'
 
 export const Ids = () => {
   const { t } = useTranslation()
@@ -92,7 +92,7 @@ export const Ids = () => {
       {!isKol && (
         <div className="mt-4">
           <Link
-            href={formLink.kol}
+            href={memehubLinks.kolForm}
             target="_blank"
             className="text-blue-700 cursor-pointer hover:underline"
           >

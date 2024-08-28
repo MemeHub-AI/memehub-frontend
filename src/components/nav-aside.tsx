@@ -21,7 +21,7 @@ import { useLang } from '@/hooks/use-lang'
 import { resources } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
-import { socialLink } from '@/config/link'
+import { memehubLinks } from '@/config/link'
 import { Logo } from './logo'
 import {
   NavigationMenu,
@@ -195,8 +195,8 @@ export const NavAside = ({
       </Button>
 
       <SocialLinks
-        x={socialLink.x}
-        tg={socialLink.tg}
+        x={memehubLinks.x}
+        tg={memehubLinks.tg}
         size={isCollapsed ? 20 : 28}
         buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
         className={cn(isCollapsed && 'flex-col space-x-0 space-y-1 ml-1')}

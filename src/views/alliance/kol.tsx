@@ -11,8 +11,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
 import { KolCard } from '@/components/kol-card'
 import { Input } from '@/components/ui/input'
-import { formLink } from '@/config/link'
 import { utilLang } from '@/utils/lang'
+import { memehubLinks } from '@/config/link'
 
 export const Kol = () => {
   const { t } = useTranslation()
@@ -82,7 +82,9 @@ export const Kol = () => {
         </div>
 
         {userInfo?.role?.kol ? null : (
-          <Button onClick={() => open(formLink.kol)}>{t('apply.kol')}</Button>
+          <Button onClick={() => open(memehubLinks.kolForm)}>
+            {t('apply.kol')}
+          </Button>
         )}
 
         <Input

@@ -11,8 +11,8 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'
 import { CommunityCard } from '@/components/community-card'
 import { Input } from '@/components/ui/input'
-import { formLink } from '@/config/link'
 import { utilLang } from '@/utils/lang'
+import { memehubLinks } from '@/config/link'
 
 export const Communities = () => {
   const { t } = useTranslation()
@@ -81,7 +81,7 @@ export const Communities = () => {
           {utilLang.replace(t('community.desc'), [total || '-'])}
         </div>
         {userInfo?.role?.community ? null : (
-          <Button onClick={() => open(formLink.community)}>
+          <Button onClick={() => open(memehubLinks.communityForm)}>
             {t('apply.community')}
           </Button>
         )}

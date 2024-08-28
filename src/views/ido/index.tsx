@@ -14,7 +14,7 @@ import { Countdown } from '@/components/countdown'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useRouter } from 'next/router'
 import { IdoTag } from '@/components/ido-tag'
-import { idoTrumpLink } from '@/config/link'
+import { trumpLinks } from '@/config/link'
 import { IdoIntro } from './components/ido-intro'
 
 export const IdoPage = () => {
@@ -69,9 +69,9 @@ export const IdoPage = () => {
           <p className="text-center">{t('ido.time1')}</p>
           <p className="text-center">{t('ido.time2')}</p>
           <SocialLinks
-            x={idoTrumpLink.x}
-            tg={idoTrumpLink.tg}
-            website={idoTrumpLink.website}
+            x={trumpLinks.x}
+            tg={trumpLinks.tg}
+            website={trumpLinks.website}
             className="my-1 text-zinc-600"
           />
           <p>{t('ido.trump407-desc')}</p>

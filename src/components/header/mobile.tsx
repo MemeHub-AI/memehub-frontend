@@ -1,10 +1,9 @@
-import React, { type ComponentProps, useRef } from 'react'
+import { type ComponentProps, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { SlMenu } from 'react-icons/sl'
 import { MdArrowDropDown } from 'react-icons/md'
 import { useRouter } from 'next/router'
 import { useAccount } from 'wagmi'
-import { FaTelegramPlane } from 'react-icons/fa'
 
 import type { Nav } from '.'
 import { Button } from '../ui/button'
@@ -15,9 +14,9 @@ import { ConnectWallet } from '../connect-wallet'
 import { Routes } from '@/routes'
 import { RewardButton } from '../reward-button'
 import { cn } from '@/lib/utils'
-import { socialLink } from '@/config/link'
+import { memehubLinks } from '@/config/link'
 import { AccountDropdown } from '../account-dropdown'
-import { FaXTwitter } from 'react-icons/fa6'
+import { SocialLinks } from '../social-links'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -30,19 +29,6 @@ export const HeaderMobile = (props: Props) => {
   const { pathname, ...router } = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
   const { isConnected } = useAccount()
-
-  const links = [
-    {
-      name: t('telegram'),
-      icon: <FaTelegramPlane />,
-      link: socialLink.tg,
-    },
-    {
-      name: t('twitter-x'),
-      icon: <FaXTwitter />,
-      link: socialLink.x,
-    },
-  ]
 
   return (
     <>
@@ -90,24 +76,19 @@ export const HeaderMobile = (props: Props) => {
               'size-fit w-full justify-start text-lg'
             )}
           />
-          <div className="flex space-x-6 text-2xl mt-20">
-            {links.map(({ link, icon }, i) => (
-              <div
-                key={i}
-                className="gap-2 px-2 justify-start items-start max-sm:!px-0 max-sm:py-2"
-                onClick={() => link && open(link)}
-              >
-                {icon}
-              </div>
-            ))}
-          </div>
+          <SocialLinks
+            x={memehubLinks.x}
+            tg={memehubLinks.tg}
+            className="justify-start"
+            size={28}
+          />
         </SheetContent>
       </Sheet>
 
       <div className="flex justify-between items-center space-x-2 ml-1">
         <Button
           className="bg-lime-green w-8 p-0"
-          size={'sm'}
+          size="sm"
           onClick={() => router.push(Routes.Airdrop)}
         >
           <img src="/images/gift.png" className="w-5" />

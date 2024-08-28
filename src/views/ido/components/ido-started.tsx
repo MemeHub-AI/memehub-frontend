@@ -12,7 +12,7 @@ import { EndedButtons } from './ended-buttons'
 import { utilLang } from '@/utils/lang'
 import { ParticipatedTips } from './participated-tips'
 import { Button } from '@/components/ui/button'
-import { idoTrumpLink } from '@/config/link'
+import { trumpLinks } from '@/config/link'
 
 export const IdoStarted = () => {
   const { t } = useTranslation()
@@ -55,7 +55,7 @@ export const IdoStarted = () => {
         variant="yellow"
         shadow="none"
         className="mt-2"
-        onClick={() => open(idoTrumpLink.ca)}
+        onClick={() => open(trumpLinks.ca)}
       >
         {t('go-to.buy')}
       </Button>

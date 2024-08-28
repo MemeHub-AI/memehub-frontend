@@ -23,30 +23,35 @@ export const Header = () => {
     isMobile ? `${icon} ${text}` : text
 
   const navs: Nav[] = [
-    { title: withMobileIcon('🏠', t('home')), path: Routes.Main },
-    { title: t('next.moonshot'), path: Routes.Moonshot, mobileOnly: true },
-    { title: t('classic.meme'), path: Routes.ClassicMeme, mobileOnly: true },
-    // { title: t('create'), path: Routes.Create },
-    { title: t('airdrop'), path: Routes.Airdrop },
-    { title: withMobileIcon('🤝', t('alliance')), path: Routes.Alliance },
-    { title: withMobileIcon('🌟', t('header.idea')), path: Routes.Memex },
-
-    // { title: t('KOL'), path: Routes.KOL },
-    // { title: t('community'), path: Routes.Community },
+    {
+      title: withMobileIcon('🏠', t('home')),
+      path: Routes.Main,
+    },
+    {
+      title: withMobileIcon('🔥', t('next.moonshot')),
+      path: Routes.Moonshot,
+      mobileOnly: true,
+    },
+    {
+      title: withMobileIcon('💡', t('classic.meme')),
+      path: Routes.ClassicMeme,
+      mobileOnly: true,
+    },
+    {
+      title: t('airdrop'),
+      path: Routes.Airdrop,
+    },
+    {
+      title: withMobileIcon('🤝', t('alliance')),
+      path: Routes.Alliance,
+    },
+    {
+      title: withMobileIcon('🌟', t('header.idea')),
+      path: Routes.Memex,
+    },
   ]
 
-  const mobileNav: Nav[] = [
-    { title: withMobileIcon('🌟', t('header.idea')), path: Routes.Memex },
-    { title: withMobileIcon('🏠', t('header.coin')), path: Routes.Main },
-    { title: t('next.moonshot'), path: Routes.Moonshot },
-    { title: t('classic.meme'), path: Routes.ClassicMeme },
-    { title: t('airdrop'), path: Routes.Airdrop },
-    { title: withMobileIcon('🤝', t('alliance')), path: Routes.Alliance },
-  ]
-
-  const onNavClick = (n: Nav) => {
-    push({ pathname: n.path })
-  }
+  const onNavClick = ({ path }: Nav) => push({ pathname: path })
 
   return (
     <header
@@ -56,7 +61,7 @@ export const Header = () => {
       )}
     >
       {isPad ? (
-        <HeaderMobile navs={mobileNav} onNavClick={onNavClick} />
+        <HeaderMobile navs={navs} onNavClick={onNavClick} />
       ) : (
         <HeaderDesktop navs={navs} onNavClick={onNavClick} />
       )}
