@@ -22,6 +22,10 @@ export const useWaitForTx = (options: Options) => {
   })
   const { data, error, isLoading, isFetching, isError, isSuccess } = result
 
+  const onRotueChange = () => {
+    if (result.fetchStatus === 'fetching') onFinally?.()
+  }
+
   // Attention: track only the states you need!!!
   useEffect(() => {
     if (isLoading) onLoading?.()
@@ -29,17 +33,11 @@ export const useWaitForTx = (options: Options) => {
     if (isError) onError?.(error)
     if (isSuccess) onSuccess?.(data)
     if (isError || isSuccess) onFinally?.()
-  }, [isLoading, isFetching, isError, isSuccess])
 
-  const onRotueChange = () => {
-    if (result.status === 'pending') onFinally?.()
-  }
-
-  useEffect(() => {
     Router.events.on('routeChangeStart', onRotueChange)
 
     return () => Router.events.off('routeChangeStart', onRotueChange)
-  }, [])
+  }, [isLoading, isFetching, isError, isSuccess])
 
   return result
 }
