@@ -11,6 +11,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
 import { BI_ZERO } from '@/constants/number'
 import { useInvite } from '@/hooks/use-invite'
+import { useUserInfo } from '@/hooks/use-user-info'
 
 export const useIdeaLike = (
   addr: string | null | undefined,
@@ -27,6 +28,7 @@ export const useIdeaLike = (
   const balance = formatEther(value)
   const { checkForChain, checkForConnect } = useCheckAccount()
   const { getReferrals } = useInvite()
+  const { refetchUserInfo } = useUserInfo()
 
   const {
     data: hash,
@@ -49,9 +51,10 @@ export const useIdeaLike = (
     onError: ({ message }) => CONTRACT_ERR.message(message),
     onSuccess: () => toast.success(t('tx.success')),
     onFinally: () => {
-      toast.dismiss()
-      onFillay?.()
       reset()
+      onFillay?.()
+      refetchUserInfo()
+      toast.dismiss()
     },
   })
 

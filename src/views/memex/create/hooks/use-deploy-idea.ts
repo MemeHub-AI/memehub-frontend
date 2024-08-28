@@ -14,6 +14,7 @@ import { useChainsStore } from '@/stores/use-chains-store'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 import { useInvite } from '@/hooks/use-invite'
+import { useUserInfo } from '@/hooks/use-user-info'
 
 export const useDeployIdea = (
   chainName: string | undefined,
@@ -26,6 +27,7 @@ export const useDeployIdea = (
   const { chainsMap } = useChainsStore()
   const { checkForChain } = useCheckAccount()
   const { getReferrals } = useInvite()
+  const { refetchUserInfo } = useUserInfo()
 
   const deployConfig = {
     abi: memexFactoryAbiMap[memexFactoryVersion!],
@@ -71,9 +73,10 @@ export const useDeployIdea = (
       reportException(message)
     },
     onFinally: () => {
-      toast.dismiss()
       reset()
+      refetchUserInfo()
       onFinally?.()
+      toast.dismiss()
     },
   })
 
