@@ -322,12 +322,12 @@
   "diamond": "钻石",
   "reward.diamond": "Memehub 钻石奖励",
   "reward.my-diamond": "我的奖励",
-  "reward.desc1": "Memehub将成为全世界最大的memecoin发射器。",
+  "reward.desc1": "Memehub将成为全世界最大的 Memecoin 发射器。",
   "reward.desc2": "这是为早期忠实用户打造的奖励计划，让我们一起登月吧！",
   "reward.rule": "奖励规则",
-  "reward.rule1": "启动一个新代币将获得7个钻石，感谢你为世界带来了一个有趣的Memecoin。",
-  "reward.rule2": "进行交易将获得钻石，每买入价值10USDT的Memecoin将获得5个钻石，每卖出价值10USDT的Memecoin将获得3个钻石. ",
-  "reward.rule3": "当代币到达目标市值启动在dex添加LP时，\n\n你将获得5000个钻石奖励！",
+  "reward.rule1": "启动一个新代币将获得 {} 个钻石，感谢你为世界带来了一个有趣的 Memecoin。",
+  "reward.rule2": "进行交易将获得钻石，每买入价值 {} USDT 的 Memecoin 将获得 {} 个钻石，每卖出价值 {} USDT 的 Memecoin 将获得 {} 个钻石。",
+  "reward.rule3": "当代币到达目标市值启动在 DEX 添加 LP 时，你将获得 {} 个钻石奖励！",
   "rewards": "奖励",
   "deploy.chain.empty": "找不到对应的链",
   "deploy.coin-type": "代币类型",
@@ -726,5 +726,6 @@
   "start-coin": "启动代币",
   "deploy.err.chain-addr-missing": "找不到链或代币地址",
   "airdrop.no-amount": "全部领取完毕",
-  "upload.too-large": "图片尺寸过大"
+  "upload.too-large": "图片尺寸过大",
+  "reward.rule4": "发布一个创意，将获得 {} 个钻石；点赞一个创意，将获得 {} 个钻石；创意成功发射后，将获得 {} 个钻石！"
 }

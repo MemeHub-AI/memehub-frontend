@@ -328,11 +328,11 @@
   "referral": "Referral",
   "diamond": "Diamond",
   "reward.desc2": "This is a reward program designed for early loyal users. Let's go to the moon together!",
-  "reward.desc1": "Memehub will become the largest memecoin launcher in the world.",
+  "reward.desc1": "Memehub will become the largest Memecoin launcher in the world.",
   "reward.rule": "Reward Rules",
-  "reward.rule1": "Start a new coin will earn you 7 diamonds, thank you for bringing an interesting Memecoin to the world.",
-  "reward.rule2": "Engaging in transactions will earn you diamonds; for every purchase of Memecoin valued at 10 USDT, you will receive 5 diamonds, and for every sale of Memecoin valued at 10 USDT, you will receive 3 diamonds.",
-  "reward.rule3": "When the coin reaches its target market capitalization and is launched on the dex with LP added, you will receive a reward of 1000 diamonds!",
+  "reward.rule1": "Start a new coin will earn you {} diamonds, thank you for bringing an interesting Memecoin to the world.",
+  "reward.rule2": "Engaging in transactions will earn you diamonds; for every purchase of Memecoin valued at {} USDT, you will receive {} diamonds, and for every sale of Memecoin valued at {} USDT, you will receive {} diamonds.",
+  "reward.rule3": "When the coin reaches its target market capitalization and is launched on the DEX with LP added, you will receive a reward of {} diamonds!",
   "reward.diamond": "Memehub diamond reward",
   "reward.my-diamond": "My reward",
   "rewards": "Rewards",
@@ -736,5 +736,6 @@
   "start-coin": "Start coin",
   "deploy.err.chain-addr-missing": "Cannot find chian or token address",
   "airdrop.no-amount": "All airdrops claimed",
-  "upload.too-large": "Image size is too large"
+  "upload.too-large": "Image size is too large",
+  "reward.rule4": "Publish an idea and receive {} diamonds; like an idea and receive {} diamonds; upon successful launch of the idea, receive {} diamonds."
 }

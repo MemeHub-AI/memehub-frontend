@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { useTradeTabsContext } from '@/contexts/trade-tabs'
 import { useTokenContext } from '@/contexts/token'
 import { TradeCommentDialog } from '../trade-comment-dialog'
-import { inviteReward } from '@/config/invite'
+import { inviteRewardPercet } from '@/config/reward'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { useUserStore } from '@/stores/use-user-store'
 import { useCheckAccount } from '@/hooks/use-check-chain'
@@ -91,7 +91,7 @@ export const TradeButton = ({
             </Button>
             <p className="text-xs text-zinc-500 mt-3">
               {t('referral.desc').split('$')[0]}
-              {inviteReward}%{t('referral.desc').split('$')[1]}
+              {inviteRewardPercet}%{t('referral.desc').split('$')[1]}
             </p>
           </>
         )}

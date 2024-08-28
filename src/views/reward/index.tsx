@@ -13,10 +13,11 @@ import { InviteReward } from './components/invite-reward'
 import { InviteTable } from './components/invite-table'
 import { useUserStore } from '@/stores/use-user-store'
 import { PrimaryLayout } from '@/components/layouts/primary'
-import { inviteReward } from '@/config/invite'
+import { inviteRewardPercet } from '@/config/reward'
 import { cn } from '@/lib/utils'
 import { ConnectWallet } from '@/components/connect-wallet'
 import { fmt } from '@/utils/fmt'
+import { InfoIconDialog } from '@/components/info-icon-dialog'
 
 export const RewardPage = () => {
   const { t } = useTranslation()
@@ -34,7 +35,7 @@ export const RewardPage = () => {
         <p className="leading-9">
           {t('reward.invite-desc').split('$')[0]}
           <span className="text-blue-600 font-bold text-xl">
-            {inviteReward}%
+            {inviteRewardPercet}%
           </span>
           {t('reward.invite-desc').split('$')[1]}
         </p>
@@ -42,7 +43,12 @@ export const RewardPage = () => {
 
       <div className="flex items-stretch gap-8 mt-2 flex-wrap">
         <div className="flex flex-col justify-between flex-auto">
-          <h3 className="font-bold text-lg">{t('reward.diamond-reward')}</h3>
+          <h3 className="font-bold text-lg inline-flex items-center">
+            {t('reward.diamond-reward')}
+            <InfoIconDialog>
+              <RewardRules />
+            </InfoIconDialog>
+          </h3>
           <div className="flex items-center space-x-2">
             <DiamondIcon size={36} />
             <p className="text-blue-600 text-2xl font-bold">
