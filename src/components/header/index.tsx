@@ -28,13 +28,13 @@ export const Header = () => {
       path: Routes.Main,
     },
     {
-      title: withMobileIcon('🔥', t('next.moonshot')),
-      path: Routes.Moonshot,
+      title: t('next.moonshot'),
+      path: Routes.NewsMoonshot,
       mobileOnly: true,
     },
     {
-      title: withMobileIcon('💡', t('classic.meme')),
-      path: Routes.ClassicMeme,
+      title: t('classic.meme'),
+      path: Routes.NewsClassicMeme,
       mobileOnly: true,
     },
     {

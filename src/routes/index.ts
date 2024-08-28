@@ -15,9 +15,9 @@ export enum Routes {
 
   Reward = '/reward',
 
-  Moonshot = '/moonshot/1',
-
-  ClassicMeme = '/moonshot/2',
+  News = '/news',
+  NewsMoonshot = '/news/tab/1',
+  NewsClassicMeme = '/news/tab/2',
 
   Ido = '/ido',
 
@@ -26,20 +26,14 @@ export enum Routes {
   Memex = '/memex',
 
   MemexLatest = '/memex/latest',
-
   MemexHots = '/memex/hots',
-
   MemexMyInvolved = '/memex/my-involved',
-
   MemexMyIdea = '/memex/my-idea',
-
   MemexSuccessed = '/memex/successed',
 
   MemexCreate = '/memex/create',
-
   MemexCreateDetails = '/memex/create/details',
 
   MemexIdea = '/memex/idea',
-
   MemexDetailsProfile = '/memex/profile',
 }

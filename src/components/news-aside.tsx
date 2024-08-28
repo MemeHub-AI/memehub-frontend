@@ -1,4 +1,4 @@
-import React, { useEffect, type ComponentProps } from 'react'
+import { useEffect, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { useQuery } from '@tanstack/react-query'
@@ -30,6 +30,7 @@ interface Props extends ComponentProps<'div'> {
   defalutTab?: string | string[] | number
   listClassName?: string
   containerClass?: string
+  tabClass?: string
 }
 
 enum Tab {
@@ -39,8 +40,13 @@ enum Tab {
 
 const containerClassName = `flex flex-col gap-3 max-md:gap-4 max-md:overflow-y-clip  overflow-y-auto`
 
-export const NewsAside = (props: Props) => {
-  const { defalutTab = 1, className, listClassName, containerClass } = props
+export const NewsAside = ({
+  defalutTab = 1,
+  className,
+  listClassName,
+  containerClass,
+  tabClass,
+}: Props) => {
   const storage = useStorage()
   const { t } = useTranslation()
   const { push, replace, query, ...router } = useRouter()
@@ -83,8 +89,8 @@ export const NewsAside = (props: Props) => {
     setTab(idx)
 
     if (isPad) {
-      if (idx === 0) push(Routes.Moonshot)
-      else if (idx === 1) push(Routes.ClassicMeme)
+      if (idx === 0) push(Routes.NewsMoonshot)
+      else if (idx === 1) push(Routes.NewsClassicMeme)
     }
   }
 
@@ -124,16 +130,17 @@ export const NewsAside = (props: Props) => {
           containerClass
         )}
       >
-        <div className="flex items-start justify-around">
+        <div className="flex items-start justify-between">
           {tabs.map((t, i) => {
             return (
               <div
                 key={i}
                 className={cn(
                   'px-2.5 py-1.5 text-nowrap rounded-xl my-5 cursor-pointer border-2 border-transparent',
-                  'hover:border-black select-none',
+                  'hover:border-black select-none flex-1 text-center',
                   i === Tab.Classic && 'ml-3',
-                  tab === i && 'bg-black text-[#ffe770]'
+                  tab === i && 'bg-black text-[#ffe770]',
+                  tabClass
                 )}
                 onClick={() => onChangeTab(i)}
               >
