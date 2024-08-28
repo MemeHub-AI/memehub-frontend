@@ -11,6 +11,7 @@ import { queryClient } from '@/components/app-providers'
 import { IdeaDataList } from '@/api/idea/type'
 import { TokenList } from './token-list'
 import { BentoGrid } from '@/components/magicui/bento-grid'
+import Masonry from 'react-responsive-masonry'
 
 interface Props {
   newsId: string
@@ -45,25 +46,8 @@ export const WaterList = ({ newsId, type }: Props) => {
       return page + 1
     },
     select: (result) => {
-      const list = result.pages.flatMap((p) => p.data.results)
-
-      let count = 0
-      const limit = width > 1550 ? 4 : width > 1220 ? 3 : width > 600 ? 2 : 1
-
-      const waterfallList = new Array<IdeaDataList[]>(limit)
-        .fill([])
-        .map(() => [] as IdeaDataList[])
-
-      list?.forEach((item) => {
-        waterfallList[count].push(item!)
-        if (++count === limit) {
-          return (count = 0)
-        }
-      })
       return {
-        list: waterfallList,
-        current: list.length,
-        total: result.pages[0]?.data.count,
+        list: result.pages.flatMap((p) => p.data.results),
       }
     },
   })
@@ -76,8 +60,8 @@ export const WaterList = ({ newsId, type }: Props) => {
         -(window.innerHeight / 2) &&
       hasNextPage &&
       !isFetching &&
-      !isFetchNextPageError &&
-      Number(waterfallList?.total) > Number(waterfallList?.current)
+      !isFetchNextPageError
+      // Number(waterfallList?.total) > Number(waterfallList?.current)
     ) {
       fetchNextPage()
     }
@@ -89,7 +73,7 @@ export const WaterList = ({ newsId, type }: Props) => {
 
   return (
     <>
-      {waterfallList?.list.length ? (
+      {waterfallList?.list ? (
         <div className="my-5">{t('go.bold.man')} </div>
       ) : null}
 
@@ -98,26 +82,23 @@ export const WaterList = ({ newsId, type }: Props) => {
         fallback={<WaterSkeleton />}
         nullback={<div className="mt-5 text-gray-500">{t('no.idea')}</div>}
       >
-        {waterfallList?.list?.length ? (
-          <div className="grid grid-cols-3 max-sm:grid-cols-1 max-xl:grid-cols-2 gap-4 max-sm:gap-2 pb-6">
-            {/* {
-              waterfallList
-            } */}
-            {waterfallList.list?.map((cols, i) => {
-              return (
-                <div key={i} className="max-sm:w-full max-sm:max-w-full">
-                  {cols.map((item) => (
-                    <div
-                      key={item.id}
-                      className="mb-2 border-black rounded-lg border-2 py-2 max-sm:py-3"
-                    >
-                      <TokenInfo ideaData={item} />
-                      <TokenList ideaData={item} />
-                    </div>
-                  ))}
+        {waterfallList?.list ? (
+          <div className="gap-4 max-sm:gap-2 pb-6">
+            <Masonry
+              columnsCount={3}
+              gutter="1rem"
+              className="max-sm:w-full max-sm:max-w-full w-full"
+            >
+              {waterfallList.list.map((item) => (
+                <div
+                  key={item?.id}
+                  className="mb-2 border-black rounded-lg border-2 py-2 max-sm:py-3"
+                >
+                  <TokenInfo ideaData={item} />
+                  <TokenList ideaData={item} />
                 </div>
-              )
-            })}
+              ))}
+            </Masonry>
           </div>
         ) : null}
       </CustomSuspense>

@@ -56,7 +56,7 @@ export const IdeaCommentForm = () => {
         className="border-y p-3 mt-3 flex space-x-2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {jj && <span className="w-full">OKX我日你母牛</span>}
+        {/* {jj && <span className="w-full">OKX我日你母牛</span>} */}
         <Avatar src={userInfo?.logo} fallback={userInfo?.name[0]} />
         <div className="flex-1">
           <FormField

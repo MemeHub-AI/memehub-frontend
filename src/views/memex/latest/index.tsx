@@ -25,6 +25,7 @@ export const LatestPage = () => {
       nullback={<IdeaEmpty />}
     >
       <MemexInfiniteScroll list={list} total={total} fetchNext={fetchNextPage}>
+        {/* <IdeaTest /> */}
         {list.map((t) => (
           <MemexIdeaCard key={t?.hash} idea={t} onCommentSuccess={refetch} />
         ))}

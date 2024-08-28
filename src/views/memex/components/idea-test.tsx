@@ -235,14 +235,14 @@ const Data2 = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <IdeaHeartButton
-                likedCount={'8'}
+                likedCount={'80'}
                 isLiked={true}
                 onClick={() => 111}
               />
             </div>
             <div className="flex items-center space-x-1 text-sm cursor-pointer">
               <GoComment className="w-5 h-5" />
-              <span>8</span>
+              <span>30</span>
             </div>
 
             <button>
