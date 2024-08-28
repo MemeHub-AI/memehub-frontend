@@ -11,7 +11,8 @@ const nextConfig = {
   },
   transpilePackages: ['@tanstack/query-core'],
   compiler: {
-    removeConsole: process.env.NEXT_PUBLIC_ENV === 'prod',
+    // TODO: open in prod
+    // removeConsole: process.env.NEXT_PUBLIC_ENV === 'prod',
   },
 }
 
