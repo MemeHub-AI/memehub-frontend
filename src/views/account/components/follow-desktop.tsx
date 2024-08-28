@@ -52,8 +52,8 @@ export const FollowDesktop = () => {
               {t('followers')}({followers.total})
             </span> */}
             <span className="space-x-1 text-base">
-              <span className="font-bold ">{followers.total}</span>
-              <span className="text-blue-deep ">{t('followers')}</span>
+              <span className="font-bold">{followers.total}</span>
+              <span className="text-blue-deep">{t('followers')}</span>
             </span>
           </Button>
         </DialogTrigger>

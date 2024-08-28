@@ -1,7 +1,4 @@
-import { UserInfoRes, UserUpdateReq } from '@/api/user/types'
 import MemexAvatar from '../../memex/components/memex-avatar'
-import { UseMutateAsyncFunction } from '@tanstack/react-query'
-import { ApiResponse } from '@/api/types'
 import FollowDesktop from '@/views/account/components/follow-desktop'
 import { AccountInfoProps, HoverCardPop } from './profile'
 import { useTranslation } from 'react-i18next'
@@ -59,13 +56,14 @@ export const AccountInfoDesktop = (props: AccountInfoProps) => {
           <div className="flex space-x-4 items-center">
             <HoverCardPop content={t('account.total-likes')}>
               <span className="inline-flex items-center text-red-500">
-                <HeartFilledIcon className="mr-1" /> {userInfo?.like_count || 0}
+                <HeartFilledIcon className="mr-1 w-4 h-4" />
+                {userInfo?.like_count || 0}
               </span>
             </HoverCardPop>
 
             <HoverCardPop content={t('account.total-mentions')}>
               <span className="inline-flex items-center ml-1 text-black">
-                <EnvelopeClosedIcon className="mr-1" />
+                <EnvelopeClosedIcon className="mr-1 w-4 h-4" />
                 {userInfo?.mention_count || 0}
               </span>
             </HoverCardPop>
@@ -90,12 +88,12 @@ export const AccountInfoDesktop = (props: AccountInfoProps) => {
                 <span className="font-bold">
                   {fmt.decimals(userInfo?.reward_amount) || 0}
                 </span>
-                <p
-                  className="max-sm:hidden text-sm text-blue-600 cursor-pointer hover:underline ml-2 underline"
+                <span
+                  className="max-sm:hidden text-sm text-blue-600 cursor-pointer hover:underline ml-2"
                   onClick={() => router.push(Routes.Reward)}
                 >
                   ({t('reward.rule')})
-                </p>
+                </span>
               </span>
             </HoverCardPop>
           </div>

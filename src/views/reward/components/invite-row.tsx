@@ -20,10 +20,10 @@ export const InviteRow = () => {
   const { isConnected } = useAccount()
   const { isCopied, copy } = useClipboard()
 
-  const link = `${window.location.origin}?r=${userInfo?.code || ''}`
+  const inviteLink = `${window.location.origin}?r=${userInfo?.code || ''}`
 
   return (
-    <div className="flex items-stretch gap-8 mt-2 flex-wrap">
+    <div className="flex items-stretch mt-2 flex-wrap">
       <div className="flex flex-col justify-between flex-auto">
         <h3 className="font-bold text-lg inline-flex items-center">
           {t('reward.diamond-reward')}
@@ -38,6 +38,7 @@ export const InviteRow = () => {
           </p>
         </div>
       </div>
+
       <div className="flex flex-col justify-between flex-auto">
         <h3 className="font-bold text-lg">{t('reward.direct-invite-count')}</h3>
         <div className="flex items-center space-x-2">
@@ -47,6 +48,7 @@ export const InviteRow = () => {
           </p>
         </div>
       </div>
+
       <div className="flex flex-col justify-between flex-auto">
         <h3 className="font-bold text-lg">
           {t('reward.indirect-invite-count')}
@@ -58,6 +60,7 @@ export const InviteRow = () => {
           </p>
         </div>
       </div>
+
       <div className="flex flex-col justify-between">
         <h3 className="font-bold text-lg">{t('reward.invite-friends')}</h3>
         <ConnectWallet>
@@ -68,15 +71,15 @@ export const InviteRow = () => {
             )}
           >
             <Link
-              href={link}
+              href={inviteLink}
               target="_blank"
               className="text-blue-600 hover:underline line-clamp-1"
             >
-              {link}
+              {inviteLink}
             </Link>
             <div
               className="border-2 border-black rounded py-0.5 px-3 cursor-pointer hover:bg-zinc-100 whitespace-nowrap"
-              onClick={() => copy(link)}
+              onClick={() => copy(inviteLink)}
             >
               {isCopied ? (
                 <IoCheckmark size={24} className="mx-2.5" />
