@@ -727,5 +727,15 @@
   "deploy.err.chain-addr-missing": "找不到链或代币地址",
   "airdrop.no-amount": "全部领取完毕",
   "upload.too-large": "图片尺寸过大",
-  "reward.rule4": "发布一个创意，将获得 {} 个钻石；点赞一个创意，将获得 {} 个钻石；创意成功发射后，将获得 {} 个钻石！"
+  "reward.rule4": "发布一个创意，将获得 {} 个钻石；点赞一个创意，将获得 {} 个钻石；创意成功发射后，将获得 {} 个钻石！",
+  "reward.source": "奖励来源",
+  "reward.buy": "购买代币",
+  "reward.sell": "出售代币",
+  "reward.create": "启动代币",
+  "reward.graduated": "代币毕业",
+  "reward.join-community": "加入社区",
+  "reward.memex-create": "发布创意",
+  "reward.memex-launched": "创意成功",
+  "reward.memex-liked": "点赞创意",
+  "reward.unknown": "未知"
 }

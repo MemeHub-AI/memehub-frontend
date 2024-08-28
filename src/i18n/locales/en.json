@@ -737,5 +737,15 @@
   "deploy.err.chain-addr-missing": "Cannot find chian or token address",
   "airdrop.no-amount": "All airdrops claimed",
   "upload.too-large": "Image size is too large",
-  "reward.rule4": "Publish an idea and receive {} diamonds; like an idea and receive {} diamonds; upon successful launch of the idea, receive {} diamonds."
+  "reward.rule4": "Publish an idea and receive {} diamonds; like an idea and receive {} diamonds; upon successful launch of the idea, receive {} diamonds.",
+  "reward.source": "Source",
+  "reward.buy": "Buy token",
+  "reward.sell": "Sell token",
+  "reward.create": "Start coin",
+  "reward.graduated": "Token graduation",
+  "reward.join-community": "Join community",
+  "reward.memex-create": "Post idea",
+  "reward.memex-launched": "Idea successful",
+  "reward.memex-liked": "Like idea",
+  "reward.unknown": "Unknown"
 }

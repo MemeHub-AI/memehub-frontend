@@ -1,9 +1,13 @@
+import { RewardInfoRes } from '../reward/types'
+
 export interface RewardItem {
   category: number
   chain: string
   earned: string
   time: string
   username: string
+  flag: keyof RewardInfoRes
+  tx_hash: string
 }
 
 export interface RewardDetailRes {

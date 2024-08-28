@@ -10,6 +10,7 @@ const emptyArr = [] as any[]
 
 export const useRewardTable = () => {
   const { userInfo } = useUserStore()
+
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: [inviteApi.getRewardList.name, userInfo?.id],
     queryFn: ({ pageParam }) => {
