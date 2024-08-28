@@ -91,8 +91,6 @@ export const MemexIdeaCard = ({
     return BigNumber(idea?.is_creator ? ownerPercent : userPercent).toFixed(2)
   }, [idea, ideaInfo])
 
-  console.log('idea', idea)
-
   const {
     initialBuyAmount,
     canRefundInitial,
@@ -149,8 +147,8 @@ export const MemexIdeaCard = ({
   return (
     <div
       className={cn(
-        'flex px-3 py-3 relative border-b-2',
-        isList && 'cursor-pointer',
+        'flex px-3 py-3 relative border-b-2 duration-150',
+        isList && 'cursor-pointer sm:hover:bg-zinc-50',
         className
       )}
       onClick={() => {

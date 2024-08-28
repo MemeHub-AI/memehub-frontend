@@ -24,7 +24,7 @@ export const useIdeaList = (type: MemexListType) => {
       getIdeaList({
         type,
         page: pageParam,
-        page_size: pageParam == 1 ? 10 : 20,
+        page_size: 10,
       }),
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,
