@@ -43,7 +43,9 @@ const prod: AddrMap = {
     uniswapv2Router: '0x10ED43C718714eb63d5aA57B78B54704E256024E',
 
     exchangeNft: '0xeB22DaC6525b0763AC0fEa2834Ca2C396859b3BF',
-    kolNft: '0x4e1571c2460034A5Fe120aE312678cB3180BFC74',
+    kolNft: '0xE9daa7f8ea7aF0803C9563bc340F250bb834ABA2',
+    // TODO/top: use this as prod!!!!!
+    // kolNft: '0x4e1571c2460034A5Fe120aE312678cB3180BFC74',
 
     ido: '0xCa96dC5e86543cd185B39Fe48194890c57b6a38f',
     idoAirdrop: '0x00d39283788ebD6cc029E2001EEfE1DedBB5Fa96',
