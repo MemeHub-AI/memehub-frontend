@@ -1,4 +1,3 @@
-import { CommonHeaders } from '@/hooks/use-fetch'
 import { api } from '..'
 import { ApiResponse } from '../types'
 import {

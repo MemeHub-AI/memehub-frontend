@@ -1,8 +1,7 @@
 import { api } from '..'
-import { qs } from '@/hooks/use-fetch'
-
-import { RewardDetailRes, RewardItem } from './types'
-import { ApiResponse, PaginationReq, PaginationRes } from '../types'
+import { qs } from '@/utils/qs'
+import type { RewardDetailRes, RewardItem } from './types'
+import type { ApiResponse, PaginationReq, PaginationRes } from '../types'
 
 export const inviteApi = {
   getRewardList: (req: PaginationReq) => {

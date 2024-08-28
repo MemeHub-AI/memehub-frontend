@@ -24,10 +24,10 @@ import { IdeaProgress } from './idea-progress'
 import { getIdeaStatus } from '@/utils/memex/idea'
 import { useIdeaClaimRefund } from '../hooks/use-claim-refund'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { qs } from '@/hooks/use-fetch'
 import { memexIdeaConfig } from '@/config/memex/idea'
 import { useIdeaInitialBuy } from '../create/details/hooks/use-idea-initial-buy'
 import { joinPaths } from '@/utils'
+import { qs } from '@/utils/qs'
 
 interface Props {
   idea: MemexIdeaItem | undefined

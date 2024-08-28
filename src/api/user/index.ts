@@ -1,6 +1,5 @@
-import { qs } from '@/hooks/use-fetch'
 import { api } from '..'
-
+import { qs } from '@/utils/qs'
 import type { ApiResponse, PaginationRes } from '../types'
 import type {
   UserLoginReq,
@@ -13,33 +12,33 @@ import type {
 } from './types'
 
 export const userApi = {
-  login(req: UserLoginReq) {
+  login: (req: UserLoginReq) => {
     return api.POST<ApiResponse<UserLoginRes>>('/api/v1/user/users/', {
       body: req,
     })
   },
-  getOtherInfo(addr: string) {
+  getOtherInfo: (addr: string) => {
     return api.GET<ApiResponse<UserInfoRes>>(`/api/v1/user/users/${addr}/`)
   },
-  getInfo() {
+  getInfo: () => {
     return api.GET<ApiResponse<UserInfoRes>>('/api/v1/user/users/')
   },
-  list<T extends UserListType>(addr: string, req: UserListReq) {
+  list: <T extends UserListType>(addr: string, req: UserListReq) => {
     return api.GET<ApiResponse<PaginationRes<UserListRes[T]>>>(
       `/api/v1/user/infolist/${addr}/${qs.stringify(req)}`
     )
   },
-  updateInfo(req: UserUpdateReq) {
+  updateInfo: (req: UserUpdateReq) => {
     return api.PATCH<ApiResponse<UserInfoRes>>('/api/v1/user/users/', {
       body: req,
     })
   },
-  follow(addr: string) {
+  follow: (addr: string) => {
     return api.POST<ApiResponse<UserInfoRes>>(
       `/api/v1/user/users/${addr}/followers/`
     )
   },
-  unfollow(id: string) {
+  unfollow: (id: string) => {
     return api.DELETE<ApiResponse<UserInfoRes>>(
       `/api/v1/user/users/${id}/followers/`
     )

@@ -1,8 +1,8 @@
-import React, { ComponentProps, useMemo } from 'react'
+import { type ComponentProps, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useTokenQuery } from '@/views/token/hooks/use-token-query'
-import { qs } from '@/hooks/use-fetch'
+import { qs } from '@/utils/qs'
 
 export const ChartDexScreener = ({
   className,

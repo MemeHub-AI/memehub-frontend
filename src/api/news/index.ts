@@ -1,6 +1,5 @@
-import { qs } from '@/hooks/use-fetch'
 import { api } from '..'
-
+import { qs } from '@/utils/qs'
 import type { ApiResponse, PaginationRes } from '../types'
 import type {
   CountryData,
@@ -11,21 +10,20 @@ import type {
 } from './types'
 
 export const newsApi = {
-  async getNews(query: NewsQuery) {
+  getNews: (query: NewsQuery) => {
     return api.GET<ApiResponse<PaginationRes<MemeInfoDialogData>>>(
       '/api/v1/news/' + qs.stringify(query)
     )
   },
-  async getCountry() {
+  getCountry: () => {
     return api.GET<ApiResponse<CountryData[]>>('/api/v1/country/')
   },
-  async getOpportunity(query: NewsQuery) {
+  getOpportunity: (query: NewsQuery) => {
     return api.GET<ApiResponse<PaginationRes<OpportunityData>>>(
       '/api/v1/hotnews/' + qs.stringify(query)
     )
   },
-
-  async getNewsMeme(query: NewsQuery) {
+  getNewsMeme: (query: NewsQuery) => {
     return api.GET<ApiResponse<PaginationRes<MemeInfoDialogData>>>(
       '/api/v1/news/meme/' + qs.stringify(query)
     )

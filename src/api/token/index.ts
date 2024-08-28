@@ -1,6 +1,5 @@
 import { api } from '..'
-import { qs } from '@/hooks/use-fetch'
-
+import { qs } from '@/utils/qs'
 import type {
   TokenCreateReq,
   TokenUpdateReq,

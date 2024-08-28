@@ -114,23 +114,3 @@ export const useFetch = (baseURL: string) => {
 const isJson = (h: Headers) => {
   return h.get(CommonHeaders.ContentType)?.includes(ContentType.Json)
 }
-
-export const qs = {
-  stringify(query?: Record<string, any>, withPrefix = true) {
-    const searchParams = new URLSearchParams(query)
-
-    if (searchParams.size === 0) return ''
-    return withPrefix ? `?${searchParams}` : searchParams.toString()
-  },
-  parse(query?: string) {
-    if (!query) return {} as Record<string, string>
-
-    const removeQuestionMark = query.startsWith('?') ? query.slice(1) : query
-    const result = removeQuestionMark.split('&').reduce((p, q) => {
-      const [key, value] = q.split('=')
-      return (p[key] = value), p
-    }, {} as Record<string, string>)
-
-    return result
-  },
-}

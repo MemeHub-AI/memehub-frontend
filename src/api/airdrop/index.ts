@@ -1,15 +1,7 @@
-import { ApiResponse, PaginationRes, PaginationReq } from '../types'
-import {
-  AirdropMerkleRootReq,
-  AirdropMerkleRootRes,
-  AirdropProofReq,
-  AirdropProofRes,
-  IdentityList,
-  AirdropItem,
-} from './types'
-
 import { api } from '..'
-import { qs } from '@/hooks/use-fetch'
+import { qs } from '@/utils/qs'
+import type { ApiResponse, PaginationRes, PaginationReq } from '../types'
+import type { AirdropItem } from './types'
 
 export const airdropApi = {
   getList: (query: PaginationReq) => {

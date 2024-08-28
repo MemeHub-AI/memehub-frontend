@@ -1,7 +1,7 @@
-import { qs } from '@/hooks/use-fetch'
 import { api } from '..'
-import { ApiResponse, PaginationReq, PaginationRes } from '../types'
-import {
+import { qs } from '@/utils/qs'
+import type { ApiResponse, PaginationReq, PaginationRes } from '../types'
+import type {
   MemexIdeaItem,
   MemexCreateReq,
   MemexIdeaHash,
