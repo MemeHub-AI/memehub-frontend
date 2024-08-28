@@ -215,7 +215,8 @@ export const MemexIdeaCard = ({
 
           {!hasDetails &&
             idea?.is_creator &&
-            (isProcessing || !isFailedWaiting) && (
+            (isProcessing || !isFailedWaiting) &&
+            !isFailed && (
               <Button
                 variant="yellow"
                 shadow="none"
