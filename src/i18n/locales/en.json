@@ -747,5 +747,6 @@
   "reward.memex-create": "Post idea",
   "reward.memex-launched": "Idea successful",
   "reward.memex-liked": "Like idea",
-  "reward.unknown": "Unknown"
+  "reward.unknown": "Unknown",
+  "memex.idea": "Idea"
 }

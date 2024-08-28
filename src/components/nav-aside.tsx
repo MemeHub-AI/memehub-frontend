@@ -65,7 +65,7 @@ export const NavAside = ({
 
   const navs = [
     {
-      title: t('Idea'),
+      title: t('memex.idea'),
       path: Routes.MemexIdea,
       icon: <FaRegLightbulb />,
       iconActive: <FaLightbulb />,

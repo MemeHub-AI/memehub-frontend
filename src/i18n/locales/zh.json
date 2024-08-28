@@ -737,5 +737,6 @@
   "reward.memex-create": "发布创意",
   "reward.memex-launched": "创意成功",
   "reward.memex-liked": "点赞创意",
-  "reward.unknown": "未知"
+  "reward.unknown": "未知",
+  "memex.idea": "创意"
 }

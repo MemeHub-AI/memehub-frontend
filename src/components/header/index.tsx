@@ -28,15 +28,10 @@ export const Header = () => {
       path: Routes.Main,
     },
     {
-      title: t('next.moonshot'),
-      path: Routes.NewsMoonshot,
-      mobileOnly: true,
+      title: withMobileIcon('🌟', t('memex.idea')),
+      path: Routes.MemexIdea,
     },
-    {
-      title: t('classic.meme'),
-      path: Routes.NewsClassicMeme,
-      mobileOnly: true,
-    },
+
     {
       title: t('airdrop'),
       path: Routes.Airdrop,
@@ -46,8 +41,14 @@ export const Header = () => {
       path: Routes.Alliance,
     },
     {
-      title: withMobileIcon('🌟', t('header.idea')),
-      path: Routes.MemexIdea,
+      title: t('next.moonshot'),
+      path: Routes.NewsMoonshot,
+      mobileOnly: true,
+    },
+    {
+      title: t('classic.meme'),
+      path: Routes.NewsClassicMeme,
+      mobileOnly: true,
     },
   ]
 
