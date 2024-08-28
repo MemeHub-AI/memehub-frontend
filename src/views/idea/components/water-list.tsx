@@ -1,27 +1,31 @@
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { useScroll, useSize } from 'ahooks'
+import { useScroll } from 'ahooks'
 
 import { ideaApi } from '@/api/idea'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { Skeleton } from '@/components/ui/skeleton'
 import { TokenInfo } from './token-info'
 import { queryClient } from '@/components/app-providers'
-import { IdeaDataList } from '@/api/idea/type'
 import { TokenList } from './token-list'
-import { BentoGrid } from '@/components/magicui/bento-grid'
-import Masonry from 'react-responsive-masonry'
+import dynamic from 'next/dynamic'
+import { useResponsive } from '@/hooks/use-responsive'
 
 interface Props {
   newsId: string
   type: string
 }
 
+const Layout = dynamic(() => import('react-masonry-list'), {
+  ssr: false,
+})
+
 export const WaterList = ({ newsId, type }: Props) => {
   const { t } = useTranslation()
   const { top } = useScroll(document) ?? { top: 0 }
-  const { width } = useSize(document.querySelector('html')) ?? { width: 0 }
+  // const { width } = useSize(document.querySelector('html')) ?? { width: 0 }
+  const { isMobile, isPad } = useResponsive()
 
   const queryKey = [ideaApi.getIdeaList.name, newsId, type]
 
@@ -46,8 +50,11 @@ export const WaterList = ({ newsId, type }: Props) => {
       return page + 1
     },
     select: (result) => {
+      const nextPages = result.pages[result.pages.length - 1]
+
       return {
         list: result.pages.flatMap((p) => p.data.results),
+        isNextPages: nextPages.data.next !== null,
       }
     },
   })
@@ -60,8 +67,8 @@ export const WaterList = ({ newsId, type }: Props) => {
         -(window.innerHeight / 2) &&
       hasNextPage &&
       !isFetching &&
-      !isFetchNextPageError
-      // Number(waterfallList?.total) > Number(waterfallList?.current)
+      !isFetchNextPageError &&
+      waterfallList?.isNextPages
     ) {
       fetchNextPage()
     }
@@ -83,22 +90,22 @@ export const WaterList = ({ newsId, type }: Props) => {
         nullback={<div className="mt-5 text-gray-500">{t('no.idea')}</div>}
       >
         {waterfallList?.list ? (
-          <div className="gap-4 max-sm:gap-2 pb-6">
-            <Masonry
-              columnsCount={3}
-              gutter="1rem"
+          <div className="pb-6">
+            <Layout
+              colCount={isPad ? (isMobile ? 1 : 2) : 3}
+              gap={10}
+              minWidth={200}
               className="max-sm:w-full max-sm:max-w-full w-full"
-            >
-              {waterfallList.list.map((item) => (
+              items={waterfallList.list.map((item) => (
                 <div
                   key={item?.id}
-                  className="mb-2 border-black rounded-lg border-2 py-2 max-sm:py-3"
+                  className="border-black rounded-lg border-2 py-2 max-sm:py-3 !h-auto"
                 >
                   <TokenInfo ideaData={item} />
                   <TokenList ideaData={item} />
                 </div>
               ))}
-            </Masonry>
+            />
           </div>
         ) : null}
       </CustomSuspense>

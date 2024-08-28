@@ -20,7 +20,7 @@ export const IdeaDetailsHeader = () => {
         <ArrowLeftIcon className="w-6 h-6" />
       </Button>
       {/* TODO/memex: use logo iamge */}
-      <h3 className="ml-6 font-semibold md:text-xl">Memex</h3>
+      <h3 className="ml-6 font-semibold md:text-xl">Idea</h3>
     </div>
   )
 }
