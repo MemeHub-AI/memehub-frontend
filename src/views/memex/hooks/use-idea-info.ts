@@ -56,6 +56,7 @@ export const useIdeaInfo = (
   } = useReadContract({
     ...idoConfig,
     functionName: 'getProjectInfo',
+    args: version === '0.5.0' ? [address!] : [],
     query: {
       enabled: !!addr && !!chainId,
       refetchInterval: 5_000,
