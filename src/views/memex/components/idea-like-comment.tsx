@@ -24,11 +24,13 @@ import { IdeaHeartButton } from './idea-heart-button'
 
 interface Props {
   idea: MemexIdeaItem | undefined
+  onLikeSuccess?: () => void
   onCommentSuccess?: () => void
 }
 
 export const IdeaLikeComment = ({
   idea,
+  onLikeSuccess,
   onCommentSuccess,
 }: ComponentProps<'div'> & Props) => {
   const { t } = useTranslation()
@@ -48,7 +50,7 @@ export const IdeaLikeComment = ({
     () => {
       setLikeOpen(false)
       setCommentOpen(true)
-      ideaInfo.refetchInfo()
+      onLikeSuccess?.()
     }
   )
   const { isFailed, isEnded, isSuccess } = useMemo(

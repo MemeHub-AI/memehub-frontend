@@ -354,7 +354,11 @@ export const MemexIdeaCard = ({
 
         <GridImages urls={image_urls} />
 
-        <IdeaLikeComment idea={idea} onCommentSuccess={onCommentSuccess} />
+        <IdeaLikeComment
+          idea={idea}
+          onLikeSuccess={refetchInfo}
+          onCommentSuccess={onCommentSuccess}
+        />
 
         <IdeaProgress value={Number(progress)} className="!h-5" />
       </div>
