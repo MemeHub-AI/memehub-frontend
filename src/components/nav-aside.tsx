@@ -66,10 +66,10 @@ export const NavAside = ({
   const navs = [
     {
       title: t('Idea'),
-      path: Routes.Memex,
+      path: Routes.MemexIdea,
       icon: <FaRegLightbulb />,
       iconActive: <FaLightbulb />,
-      isActive: pathname.includes(Routes.Memex),
+      isActive: pathname.includes(Routes.MemexIdea),
     },
     {
       title: t('Coin'),

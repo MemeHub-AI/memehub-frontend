@@ -21,17 +21,14 @@ export enum Routes {
 
   Notification = '/notification',
 
-  Memex = '/memex',
+  MemexIdea = '/idea',
 
-  MemexLatest = '/memex/latest',
-  MemexHots = '/memex/hots',
-  MemexMyInvolved = '/memex/my-involved',
-  MemexMyIdea = '/memex/my-idea',
-  MemexSuccessed = '/memex/successed',
+  MemexLatest = '/idea/latest',
+  MemexHots = '/idea/hots',
+  MemexMyInvolved = '/idea/my-involved',
+  MemexMyIdea = '/idea/my-idea',
+  MemexSuccessed = '/idea/successed',
 
-  MemexCreate = '/memex/create',
-  MemexCreateDetails = '/memex/create/details',
-
-  MemexIdea = '/memex/idea',
-  MemexDetailsProfile = '/memex/profile',
+  MemexCreate = '/idea/create',
+  MemexCreateDetails = '/idea/create/details',
 }

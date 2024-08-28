@@ -52,8 +52,8 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
                       'px-2 py-1.5 rounded-lg cursor-pointer !border-2 border-transparent',
                       'hover:border-black text-nowrap font-bold xl:px-4',
                       (pathname === n.path ||
-                        (pathname.includes(Routes.Memex) &&
-                          n.path.includes(Routes.Memex))) &&
+                        (pathname.includes(Routes.MemexIdea) &&
+                          n.path.includes(Routes.MemexIdea))) &&
                         'bg-black text-white border-black'
                     )}
                     onClick={() => onNavClick?.(n)}

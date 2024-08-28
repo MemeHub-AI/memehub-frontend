@@ -47,7 +47,7 @@ export const Header = () => {
     },
     {
       title: withMobileIcon('🌟', t('header.idea')),
-      path: Routes.Memex,
+      path: Routes.MemexIdea,
     },
   ]
 
