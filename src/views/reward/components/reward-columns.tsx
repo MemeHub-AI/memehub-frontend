@@ -1,19 +1,19 @@
-import { ColumnDef } from '@tanstack/react-table'
+import { type ColumnDef } from '@tanstack/react-table'
 import { t } from 'i18next'
+import dayjs from 'dayjs'
 
 import { RewardItem } from '@/api/invite/types'
 import { Img } from '@/components/img'
 import { DiamondIcon } from '@/components/diamond-icon'
 import { fmt } from '@/utils/fmt'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import dayjs from 'dayjs'
 
 enum RewardType {
   Token = 1,
   Diamond,
 }
 
-export const inviteColumns: ColumnDef<RewardItem>[] = [
+export const rewardTableCols: ColumnDef<RewardItem>[] = [
   {
     header: t('earned'),
     accessorKey: 'earned',

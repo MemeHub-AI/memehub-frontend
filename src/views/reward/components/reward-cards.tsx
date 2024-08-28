@@ -12,7 +12,7 @@ import { fmt } from '@/utils/fmt'
 import { useReward } from '../hooks/use-reward'
 import { useChainInfo } from '@/hooks/use-chain-info'
 
-export const InviteReward = ({ className }: ComponentProps<'h2'>) => {
+export const RewardCards = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
   const { rewardList } = useRewardList()
 
@@ -31,14 +31,14 @@ export const InviteReward = ({ className }: ComponentProps<'h2'>) => {
         )}
       >
         {rewardList.map((r, i) => (
-          <InviteCard key={i} c={r} />
+          <RewardCard key={i} c={r} />
         ))}
       </CustomSuspense>
     </>
   )
 }
 
-const InviteCard = ({ c }: { c: ChainData }) => {
+const RewardCard = ({ c }: { c: ChainData }) => {
   const { t } = useTranslation()
   const { totalAmount, unclaimedAmount, isClaiming, isClaimed, claimReward } =
     useReward(c.name, +c.id)
@@ -79,4 +79,4 @@ const InviteCard = ({ c }: { c: ChainData }) => {
   )
 }
 
-export default InviteReward
+export default RewardCards

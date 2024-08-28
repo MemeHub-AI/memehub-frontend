@@ -14,18 +14,17 @@ import {
 } from '@/components/ui/table'
 import { cn } from '@/lib/utils'
 import { useRewardTable } from '../hooks/use-reward-table'
-import { inviteColumns } from './invite-columns'
 
-export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
+export const RewardTable = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
-  const { ths, rows, total, fetchNextPage } = useRewardTable(inviteColumns)
+  const { ths, rows, total, fetchNextPage } = useRewardTable()
 
   return (
     <>
       <h2 className={cn('font-bold text-2xl mb-2', className)}>
         {t('reward.record')}
       </h2>
-      <Table containerClass="border-2 border-black rounded-md px-2 w-4/5 2xl:w-3/5 w-full">
+      <Table containerClass="border-2 border-black rounded-md px-2 lg:w-4/5 2xl:w-3/5 w-full">
         <TableHeader>
           {ths.map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -85,4 +84,4 @@ export const InviteTable = ({ className }: ComponentProps<'h2'>) => {
   )
 }
 
-export default InviteTable
+export default RewardTable

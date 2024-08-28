@@ -1,18 +1,14 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import {
-  useReactTable,
-  getCoreRowModel,
-  ColumnDef,
-} from '@tanstack/react-table'
+import { useReactTable, getCoreRowModel } from '@tanstack/react-table'
 import { first } from 'lodash'
 
 import { inviteApi } from '@/api/invite'
-import { RewardItem } from '@/api/invite/types'
 import { useUserStore } from '@/stores/use-user-store'
+import { rewardTableCols } from '../components/reward-columns'
 
 const emptyArr = [] as any[]
 
-export const useRewardTable = (columns: ColumnDef<RewardItem>[]) => {
+export const useRewardTable = () => {
   const { userInfo } = useUserStore()
   const { data, fetchNextPage } = useInfiniteQuery({
     queryKey: [inviteApi.getRewardList.name, userInfo?.id],
@@ -35,7 +31,7 @@ export const useRewardTable = (columns: ColumnDef<RewardItem>[]) => {
 
   const table = useReactTable({
     data: data?.list ?? emptyArr,
-    columns,
+    columns: rewardTableCols,
     getCoreRowModel: getCoreRowModel(),
   })
 
