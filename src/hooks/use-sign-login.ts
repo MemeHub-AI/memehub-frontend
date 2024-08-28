@@ -6,14 +6,14 @@ import { useMutation } from '@tanstack/react-query'
 import { reportException } from '@/errors'
 import { userApi } from '@/api/user'
 import { useUserStore } from '@/stores/use-user-store'
-import { useStorage } from './use-storage'
+import { useLocalStorage } from './use-storage'
 
 export const useSignLogin = () => {
   const { t } = useTranslation()
   const { address, chainId, connector } = useAccount()
 
   const { setUserInfo } = useUserStore()
-  const { setToken } = useStorage()
+  const { setStorage, removeStorage } = useLocalStorage()
 
   const { isPending, mutateAsync } = useMutation({
     mutationKey: [userApi.login.name],
@@ -47,7 +47,7 @@ export const useSignLogin = () => {
         timestamp,
       })
 
-      setToken(data.token)
+      setStorage('token', data.token)
       setUserInfo(data.user)
     } catch (e) {
       reportException(e)
@@ -57,7 +57,7 @@ export const useSignLogin = () => {
 
   const logout = () => {
     setUserInfo(null)
-    setToken('')
+    removeStorage('token')
   }
 
   return {

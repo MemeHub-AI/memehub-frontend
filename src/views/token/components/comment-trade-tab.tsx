@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { CommentCards } from '@/components/comment-cards'
 import { TradeTable } from './trade-table'
 import { useComments } from '@/components/comment-cards/hooks/use-comments'
-import { useStorage } from '@/hooks/use-storage'
+import { useLocalStorage } from '@/hooks/use-storage'
 import { useTokenContext } from '@/contexts/token'
 
 enum Tab {
@@ -16,7 +16,7 @@ enum Tab {
 
 export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()
-  const { getCommentTradeTab, setCommentTradeTab } = useStorage()
+  const { getStorage, setStorage } = useLocalStorage()
   const { isNotFound } = useTokenContext()
 
   const { comments, total, isLoading, fetchNextPage, refetchComments } =
@@ -24,9 +24,9 @@ export const CommentTradeTab = ({ className }: ComponentProps<'div'>) => {
 
   return (
     <Tabs
-      defaultValue={getCommentTradeTab() || Tab.Comments}
+      defaultValue={getStorage('comment_trade_tab') || Tab.Comments}
       className={cn('mt-3', className)}
-      onValueChange={(value) => setCommentTradeTab(value)}
+      onValueChange={(value) => setStorage('comment_trade_tab', value)}
     >
       <TabsList className="rounded-md select-none">
         <TabsTrigger value={Tab.Comments} disabled={isNotFound}>

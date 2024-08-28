@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { useChart } from './hooks/use-chart'
 import { useTokenContext } from '@/contexts/token'
-import { useStorage } from '@/hooks/use-storage'
+import { useLocalStorage } from '@/hooks/use-storage'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
 import { useTokenQuery } from '@/views/token/hooks/use-token-query'
@@ -18,7 +18,7 @@ export const Chart = memo(() => {
   const { tokenAddr } = useTokenQuery()
   const { tokenInfo, isNotFound, isIdoToken, isGraduated } = useTokenContext()
   const { isConnected, isCreating, createChart, removeChart } = useChart()
-  const { getChartInterval } = useStorage()
+  const { getStorage } = useLocalStorage()
 
   useEffect(() => {
     if (
@@ -34,7 +34,7 @@ export const Chart = memo(() => {
 
     createChart(chartRef.current, {
       symbol: tokenInfo.symbol,
-      interval: getChartInterval() || datafeedDefaultInterval,
+      interval: getStorage('chart_interval') || datafeedDefaultInterval,
       tokenAddr,
     })
 

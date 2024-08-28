@@ -1,4 +1,4 @@
-import { useStorage } from './use-storage'
+import { useLocalStorage } from './use-storage'
 import { ApiCode, ApiResponse } from '@/api/types'
 import { REQUEST_ERR } from '@/errors/request'
 
@@ -23,11 +23,12 @@ export interface FetcherOptions extends Omit<RequestInit, 'body'> {
 export type AliasOptions = Omit<FetcherOptions, 'method'>
 
 export const useFetch = (baseURL: string) => {
-  const { getToken, setToken } = useStorage()
+  const { getStorage, removeStorage } = useLocalStorage()
 
   // Init headers config.
   const initHeaders = ({ requireAuth = true, headers }: FetcherOptions) => {
     const newHeaders = new Headers(headers)
+    const token = getStorage('token')
 
     // Content-Type header.
     if (!newHeaders.has(CommonHeaders.ContentType)) {
@@ -42,10 +43,10 @@ export const useFetch = (baseURL: string) => {
     // Auth header.
     if (
       requireAuth &&
-      getToken()?.trim() &&
+      token?.trim() &&
       !newHeaders.get(CommonHeaders.Authorization)
     ) {
-      newHeaders.set(CommonHeaders.Authorization, `Bearer ${getToken()}`)
+      newHeaders.set(CommonHeaders.Authorization, `Bearer ${token}`)
     }
 
     return newHeaders
@@ -67,7 +68,7 @@ export const useFetch = (baseURL: string) => {
             : JSON.stringify(options.body),
       })
 
-      if (response.status === ApiCode.AuthError) setToken('')
+      if (response.status === ApiCode.AuthError) removeStorage('token')
 
       // Response error.
       if (!response.ok) throw response

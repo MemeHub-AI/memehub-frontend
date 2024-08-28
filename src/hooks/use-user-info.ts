@@ -2,13 +2,13 @@ import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 
 import { userApi } from '@/api/user'
-import { useStorage } from './use-storage'
+import { useLocalStorage } from './use-storage'
 import { useUserStore } from '@/stores/use-user-store'
 
 export const useUserInfo = (addr?: string) => {
   const { setUserInfo } = useUserStore()
-  const { getToken } = useStorage()
-  const token = getToken() || ''
+  const { getStorage } = useLocalStorage()
+  const token = getStorage('token')
 
   // Query other user info.
   const {

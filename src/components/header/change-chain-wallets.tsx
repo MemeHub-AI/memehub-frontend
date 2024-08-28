@@ -8,7 +8,6 @@ import { useAccountEffect } from 'wagmi'
 import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 import { Button } from '../ui/button'
 import { DialogDescription } from '@radix-ui/react-dialog'
-import { useStorage } from '@/hooks/use-storage'
 
 export const ChangeChainWallets = ({
   ...props
@@ -18,22 +17,10 @@ export const ChangeChainWallets = ({
   const { openConnectModal } = useConnectModal()
   const { isMobile } = useResponsive()
   const [isOpening, setIsOpening] = useState(false)
-  const { setMainChain } = useStorage()
 
   // const { setVisible } = useWalletModal()
   // const { buttonState } = useWalletMultiButton({
   //   onSelectWallet() {},
-  // })
-
-  // if (buttonState === 'connecting') {
-  //   setMainChain('solana')
-  // }
-
-  // EVM monitor connection
-  // useAccountEffect({
-  //   onConnect() {
-  //     setMainChain('evm')
-  //   },
   // })
 
   // const chainList = [

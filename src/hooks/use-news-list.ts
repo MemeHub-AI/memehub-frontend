@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useScroll } from 'ahooks'
 
 import { newsApi } from '@/api/news'
-import { useStorage } from './use-storage'
+import { useLocalStorage } from './use-storage'
 import { defaultImg } from '@/config/link'
 import { utilTime } from '@/utils/time'
 
@@ -13,9 +13,10 @@ interface Options {
 
 export const useNewsList = (options?: Options) => {
   const { isOpportunity = false } = options || {}
+  const { getStorage } = useLocalStorage()
+  const storedArea = +getStorage('area')
 
-  const { getArea } = useStorage()
-  const [area, setArea] = useState(+getArea())
+  const [area, setArea] = useState(storedArea)
   const ref = useRef<HTMLDivElement>(null)
   const { top } = useScroll(ref) ?? { top: 0 }
   const newsListKeys = [newsApi.getNews.name, area, isOpportunity]
@@ -65,7 +66,7 @@ export const useNewsList = (options?: Options) => {
       const getData: any = async () => {
         try {
           const { data } = await newsApi.getNews({
-            country: +getArea(),
+            country: storedArea,
             page: pageParam,
             page_size: 10,
           })

@@ -7,7 +7,6 @@ import { useAccount } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useResponsive } from '@/hooks/use-responsive'
-import { useStorage } from '@/hooks/use-storage'
 
 export const ConnectWallet = ({
   children,
@@ -19,7 +18,6 @@ export const ConnectWallet = ({
   const { openConnectModal } = useConnectModal()
   const { isMobile } = useResponsive()
   const [isOpening, setIsOpening] = useState(false)
-  const { setMainChain } = useStorage()
 
   return isConnected ? (
     children

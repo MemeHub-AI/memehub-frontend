@@ -4,20 +4,20 @@ import dayjs from 'dayjs'
 import dayjsZh from 'dayjs/locale/zh-cn'
 import dayjsEn from 'dayjs/locale/en'
 
-import { useStorage } from './use-storage'
+import { useLocalStorage } from './use-storage'
 import { utilTime } from '@/utils/time'
 
 export const useLang = () => {
   const { i18n } = useTranslation()
-  const { getLang, setLang: set } = useStorage()
+  const { getStorage, setStorage } = useLocalStorage()
 
   const setLang = (code: string) => {
     i18n.changeLanguage(code)
-    set(code)
+    setStorage('lang', code)
   }
 
   useEffect(() => {
-    const lang = getLang()
+    const lang = getStorage('lang')
     if (lang) return setLang(lang)
     if (utilTime.isUtcOffset8()) setLang('zh')
   }, [])
@@ -27,7 +27,7 @@ export const useLang = () => {
   }, [i18n.language])
 
   return {
-    getLang,
+    getLang: () => getStorage('lang'),
     setLang,
   }
 }

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
 import { AlertDialog } from '@/components/ui/alert-dialog'
-import { useStorage } from '@/hooks/use-storage'
+import { useSessionStorage } from '@/hooks/use-storage'
 
 export const InviteTipsDialog = ({
   open,
@@ -11,7 +11,7 @@ export const InviteTipsDialog = ({
 }: Pick<ComponentProps<typeof AlertDialog>, 'open' | 'onOpenChange'>) => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
-  const { setInviteCode } = useStorage(true)
+  const { removeStorage } = useSessionStorage()
 
   return (
     <AlertDialog
@@ -31,7 +31,7 @@ export const InviteTipsDialog = ({
       onConfirm={() => {
         // Clear invite code
         query.r = ''
-        setInviteCode('')
+        removeStorage('invite_code')
         router.replace({ pathname: router.pathname, query }, undefined, {
           shallow: true,
         })

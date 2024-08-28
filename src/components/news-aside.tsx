@@ -14,7 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { useStorage } from '@/hooks/use-storage'
+import { useLocalStorage } from '@/hooks/use-storage'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
@@ -48,7 +48,7 @@ export const NewsAside = ({
   containerClass,
   tabClass,
 }: Props) => {
-  const storage = useStorage()
+  const { getStorage, setStorage } = useLocalStorage()
   const { t } = useTranslation()
   const { push, replace, query, ...router } = useRouter()
   const { tab, setTab } = useAsideStore()
@@ -82,7 +82,7 @@ export const NewsAside = ({
   const tabs = [t('next.moonshot'), t('classic.meme')]
 
   const onChange = (value: string) => {
-    storage.setArea(value)
+    setStorage('area', value)
     setArea(+value)
   }
 
@@ -151,7 +151,7 @@ export const NewsAside = ({
           })}
         </div>
         {tab === Tab.Moonshot ? (
-          <Select defaultValue={storage.getArea()} onValueChange={onChange}>
+          <Select defaultValue={getStorage('area')} onValueChange={onChange}>
             {loadingCountry ? (
               <Button className="mb-4 w-[inheirt] max-sm:mb-2">
                 {t('loading.country')}
@@ -164,7 +164,7 @@ export const NewsAside = ({
             <SelectContent>
               {countryList?.data?.map((country, i) => (
                 <SelectItem key={i} value={`${country.id}`}>
-                  {utilLang.getContent(country.name)}
+                  {utilLang.locale(country.name)}
                 </SelectItem>
               ))}
             </SelectContent>

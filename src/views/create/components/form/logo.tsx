@@ -16,7 +16,6 @@ import { aiApi } from '@/api/ai'
 import { Button } from '@/components/ui/button'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { useCheckAccount } from '@/hooks/use-check-chain'
-import { useStorage } from '@/hooks/use-storage'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { ConnectWallet } from '@/components/connect-wallet'
 import { useCreateTokenContext } from '@/contexts/create-token'
@@ -32,7 +31,6 @@ export const LogoField = () => {
   // TODO: check for connect
   // const { checkForConnect } = useCheckAccount()
   const {} = useConnectWallet()
-  const { getMainChain } = useStorage()
 
   const createLogo = (e: any) => {
     e.stopPropagation()
@@ -72,12 +70,6 @@ export const LogoField = () => {
       playGuaGua()
       fetchMemeLogo()
     }
-    // TODO: Such back-end support
-    if (getMainChain() === 'ton')
-      form.setValue(
-        formFields.logo,
-        'https://pfst.cf2.poecdn.net/base/image/52af7598e88bd3ea4acfa47a790cb2c63b86491e0b0cad383a1bba5aa55aa34d?w=1024&h=1024&pmaid=126316015'
-      )
   }, [loadingLogo])
 
   useEffect(() => {

@@ -11,7 +11,6 @@ import { Marketing } from '@/api/token/types'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { TokenType } from '@/enums/token'
 import { useConnectWallet } from '@/hooks/use-connect-wallet'
-import { useStorage } from '@/hooks/use-storage'
 import { marketingSchema } from '@/components/marketing-field'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { parseMediaUrl } from '@/utils'
@@ -78,7 +77,6 @@ export const useCreateTokenForm = () => {
   const {} = useConnectWallet()
   const { evmChainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
-  const { getMainChain } = useStorage()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

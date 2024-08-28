@@ -18,7 +18,7 @@ import { fmt } from '@/utils/fmt'
 import { cn } from '@/lib/utils'
 import { Avatar } from '@/components/ui/avatar'
 import { Routes } from '@/routes'
-import { useStorage } from '@/hooks/use-storage'
+import { useLocalStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils'
 import { utilLang } from '@/utils/lang'
 import { TradeType } from '@/enums/trade'
@@ -27,8 +27,8 @@ import { useChainsStore } from '@/stores/use-chains-store'
 
 export const TradeTable = () => {
   const { t } = useTranslation()
-  const { getTableShowAge, setTableShowAge } = useStorage()
-  const [showAge, setShowAge] = useState(strToBool(getTableShowAge()))
+  const { getStorage, setStorage } = useLocalStorage()
+  const [showAge, setShowAge] = useState(strToBool(getStorage('show_age')))
   const router = useRouter()
   const { tradeRecords, hasMoreTrades, fetchNextTrades } = useTokenContext()
   const { chainsMap } = useChainsStore()
@@ -69,7 +69,7 @@ export const TradeTable = () => {
                     className="flex items-center cursor-pointer hover:text-black"
                     onClick={() => {
                       setShowAge(!showAge)
-                      setTableShowAge(String(!showAge))
+                      setStorage('show_age', String(!showAge))
                     }}
                   >
                     <span>{t}</span>

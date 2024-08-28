@@ -12,7 +12,7 @@ import { AirdropProvider } from '@/contexts/airdrop'
 import { useAirdropList } from './hooks/use-airdrop-list'
 import { AirdropDetailType } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
-import { useStorage } from '@/hooks/use-storage'
+import { useLocalStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils'
 
 export const AirdropPage = () => {
@@ -21,8 +21,10 @@ export const AirdropPage = () => {
     useAirdropList()
   const { isKol, hasCommunity } = useUserStore()
 
-  const { getAirdropChecked, setAirdropChecked } = useStorage()
-  const [checked, setChecked] = useState(strToBool(getAirdropChecked()))
+  const { getStorage, setStorage } = useLocalStorage()
+  const [checked, setChecked] = useState(
+    strToBool(getStorage('airdrop_checked'))
+  )
 
   const renderLoadingStatus = () => {
     if (isFetching && total) {
@@ -49,7 +51,7 @@ export const AirdropPage = () => {
   }
 
   useEffect(() => {
-    setAirdropChecked(String(checked))
+    setStorage('airdrop_checked', String(checked))
   }, [checked])
 
   return (

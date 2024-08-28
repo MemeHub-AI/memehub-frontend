@@ -11,7 +11,7 @@ import {
   datafeedUnit,
   symbolInfoConfig,
 } from '@/config/datafeed'
-import { useStorage } from '@/hooks/use-storage'
+import { useLocalStorage } from '@/hooks/use-storage'
 import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { formatInterval, parsePricescale } from '@/utils/chart'
 import { withPair } from '@/utils/datafeed'
@@ -30,8 +30,8 @@ export const useDatafeed = () => {
   )
   const cache = useLruMap<DatafeedCache>()
 
-  const { getChartInterval, setChartInterval } = useStorage()
-  const interval = getChartInterval() || datafeedDefaultInterval
+  const { getStorage, setStorage } = useLocalStorage()
+  const interval = getStorage('chart_interval') || datafeedDefaultInterval
 
   const createDatafeed = () => {
     return {
@@ -62,7 +62,7 @@ export const useDatafeed = () => {
 
         if (period.firstDataRequest) {
           const cachedBars = cache.get('bars') || []
-          const cachedInterval = getChartInterval()
+          const cachedInterval = getStorage('chart_interval')
 
           // Have cached bars & interval no change, use cache
           if (!isEmpty(cachedBars) && cachedInterval === interval) {
@@ -74,7 +74,7 @@ export const useDatafeed = () => {
             const bars = data[datafeedUnit]
 
             if (!isEmpty(bars)) cache.set('lastBar', last(bars))
-            setChartInterval(interval)
+            setStorage('chart_interval', interval)
             onResult(bars, { noData: isEmpty(data) })
           })
           ws.emit('unlisten', null)
