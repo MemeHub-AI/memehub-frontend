@@ -6,6 +6,7 @@ import { TokenWsCreate } from '@/views/token/hooks/use-token-ws/types'
 import { useTranslation } from 'react-i18next'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
+import { animatedShakeRef } from '@/utils/animation'
 
 const CreateCoinShake = (props: ShakeCardProps<TokenWsCreate>) => {
   const { trade: create, className, textClass, imageClass, color } = props
@@ -18,9 +19,10 @@ const CreateCoinShake = (props: ShakeCardProps<TokenWsCreate>) => {
         <div
           style={{ backgroundColor: color }}
           className={cn(
-            'p-2 flex gap-1 items-center rounded-sm text-white font-medium animate-hori-shake',
+            'p-2 flex gap-1 items-center rounded-sm text-white font-medium',
             className
           )}
+          ref={animatedShakeRef}
         >
           <img
             src={create.image_url}

@@ -7,6 +7,7 @@ import { useMemo } from 'react'
 import { ShakeCardProps } from './type'
 import { TokenWsTrade } from '@/views/token/hooks/use-token-ws/types'
 import { joinPaths } from '@/utils'
+import { animatedShakeRef } from '@/utils/animation'
 
 const TradeShake = (props: ShakeCardProps<TokenWsTrade>) => {
   const { trade, className, textClass, imageClass, color } = props
@@ -29,9 +30,10 @@ const TradeShake = (props: ShakeCardProps<TokenWsTrade>) => {
         <div
           style={{ backgroundColor: color }}
           className={cn(
-            'p-2 flex gap-1 items-center rounded-sm text-white font-medium animate-hori-shake',
+            'p-2 flex gap-1 items-center rounded-sm text-white font-medium ',
             className
           )}
+          ref={animatedShakeRef}
         >
           <span className={cn('text-nowrap text-sm', textClass)}>
             {/* executor */}

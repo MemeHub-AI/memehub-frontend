@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 import { AccountDropdown } from '../account-dropdown'
 import { Button } from '../ui/button'
 import { Routes } from '@/routes'
-import { AllTradesFeeds } from './header-middle'
+import { AllTradesFeeds } from './all-trades-feed'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
