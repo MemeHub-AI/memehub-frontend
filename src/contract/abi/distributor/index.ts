@@ -10,6 +10,7 @@ import { distributorAbi0_1_14 } from './0.1.14'
 import { distributorAbi0_1_15 } from './0.1.15'
 import { distributorAbi0_1_16 } from './0.1.16'
 import { distributorAbi0_1_18 } from './0.1.18'
+import { distributorAbi0_1_19 } from './0.1.19'
 
 export const distributorAbiMap = {
   '0.1.0': distributorAbi0_1_0,
@@ -24,6 +25,7 @@ export const distributorAbiMap = {
   '0.1.15': distributorAbi0_1_15,
   '0.1.16': distributorAbi0_1_16,
   '0.1.18': distributorAbi0_1_18,
+  '0.1.19': distributorAbi0_1_19,
 }
 
 export type DistributorVersion = keyof typeof distributorAbiMap
