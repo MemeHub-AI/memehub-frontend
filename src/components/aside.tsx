@@ -7,8 +7,9 @@ import { NewsSkeleton } from '@/components/news/skeleton'
 import { useNewsList } from '@/hooks/use-news-list'
 import { NewsCard } from '@/components/news'
 import { Routes } from '@/routes'
+import { joinPaths } from '@/utils'
 
-export const HotNewsAside = () => {
+export const HotNewsList = () => {
   const { t } = useTranslation()
   const { push } = useRouter()
   const { isLoading, newsList, ref } = useNewsList({
@@ -16,7 +17,7 @@ export const HotNewsAside = () => {
   })
 
   return (
-    <aside className="w-aside max-sm:hidden border-r-2 border-black pt-3 min-h-body">
+    <div className="w-aside max-sm:hidden border-r-2 border-black pt-3 min-h-body">
       <div className="h-fit sticky top-20">
         <h2 className="text-red-500 text-xl font-bold mb-4">
           {t('hot-opportunity')}
@@ -33,7 +34,10 @@ export const HotNewsAside = () => {
               key={i}
               news={news!}
               onClick={() => {
-                push(`${Routes.Idea}/${news?.id}?type=2`)
+                push({
+                  pathname: joinPaths(Routes.News, news?.id),
+                  query: { type: 2 },
+                })
               }}
             />
           ))}
@@ -49,8 +53,8 @@ export const HotNewsAside = () => {
           onConfirm={() => {}}
         /> */}
       </div>
-    </aside>
+    </div>
   )
 }
 
-export default HotNewsAside
+export default HotNewsList

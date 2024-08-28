@@ -25,6 +25,7 @@ import { useAsideStore } from '@/stores/use-aside-store'
 import { useResponsive } from '@/hooks/use-responsive'
 // TODO/low: wrapped `CollapseAside`
 import { CollapseAside } from './collapse-aside'
+import { joinPaths } from '@/utils'
 
 interface Props extends ComponentProps<'div'> {
   defalutTab?: string | string[] | number
@@ -115,7 +116,7 @@ export const NewsAside = ({
   }, [defalutTab])
 
   return (
-    <div
+    <aside
       className={cn(
         'pr-2 border-r-2 border-black h-body hidden xl:block',
         'max-sm:mr-0 max-sm:pr-0 max-sm:h-min max-sm:border-0',
@@ -187,7 +188,10 @@ export const NewsAside = ({
               news={news!}
               key={i}
               onClick={() => {
-                push(`${Routes.Idea}/${news?.id}?type=${tab + 1}`)
+                push({
+                  pathname: joinPaths(Routes.News, news?.id),
+                  query: { type: tab + 1 },
+                })
               }}
             />
           ))}
@@ -215,12 +219,15 @@ export const NewsAside = ({
               news={news!}
               key={i}
               onClick={() => {
-                if (router.pathname.startsWith(Routes.Idea)) {
-                  replace(
-                    `${Routes.Idea}/${news?.id}?type=${tab === 1 ? 3 : 1}`
-                  )
+                const url = {
+                  pathname: joinPaths(Routes.News, news?.id),
+                  query: { type: tab === 1 ? 3 : 1 },
+                }
+
+                if (router.pathname.startsWith(Routes.News)) {
+                  replace(url)
                 } else {
-                  push(`${Routes.Idea}/${news?.id}?type=${tab === 1 ? 3 : 1}`)
+                  push(url)
                 }
               }}
             />
@@ -230,7 +237,7 @@ export const NewsAside = ({
           ) : null}
         </CustomSuspense>
       </div>
-    </div>
+    </aside>
   )
 }
 

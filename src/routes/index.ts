@@ -11,8 +11,6 @@ export enum Routes {
 
   Account = '/account',
 
-  Idea = '/idea',
-
   Reward = '/reward',
 
   News = '/news',

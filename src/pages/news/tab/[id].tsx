@@ -1,1 +1,1 @@
-export { default } from '@/views/news/tab'
+export { default } from '@/views/news/tab/[id]'

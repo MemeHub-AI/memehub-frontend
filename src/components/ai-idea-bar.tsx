@@ -15,6 +15,7 @@ import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { ConnectWallet } from './connect-wallet'
+import { joinPaths } from '@/utils'
 
 interface Props {
   className?: string
@@ -116,7 +117,10 @@ export const AIIdeaBar = (props: Props) => {
                 key={item.id}
                 className="flex items-center cursor-pointer"
                 onClick={() => {
-                  push(`${Routes.Idea}/${item.id}?type=2`)
+                  push({
+                    pathname: joinPaths(Routes.News, item.id),
+                    query: { type: 2 },
+                  })
                 }}
               >
                 <img
