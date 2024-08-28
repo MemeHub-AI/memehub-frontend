@@ -54,6 +54,11 @@ export const rewardTableCols: ColumnDef<RewardItem>[] = [
   {
     accessorKey: 'username',
     header: () => t('username'),
+    cell: ({ row }) => (
+      <span className={row.original.is_self ? 'text-blue-600' : ''}>
+        {row.original.username}
+      </span>
+    ),
   },
   {
     accessorKey: 'flag',

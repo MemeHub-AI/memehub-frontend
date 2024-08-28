@@ -8,6 +8,7 @@ export interface RewardItem {
   username: string
   flag: keyof RewardInfoRes
   tx_hash: string
+  is_self: boolean
 }
 
 export interface RewardDetailRes {
