@@ -11,6 +11,7 @@ export enum ApiCode {
   AuthError = 401,
   NotFound = 404,
   TooLarge = 413,
+  Conflict = 409,
 }
 
 export interface PaginationReq {

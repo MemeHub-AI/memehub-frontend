@@ -16,6 +16,15 @@ import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 import { useInvite } from '@/hooks/use-invite'
 import { useUserInfo } from '@/hooks/use-user-info'
 
+export interface DeployIdeaParams {
+  projectId: string
+  tokenId: string | null
+  name: string | undefined
+  symbol: string | undefined
+  marketing: Marketing[] | undefined
+  initialBuyAmount: string
+}
+
 export const useDeployIdea = (
   chainName: string | undefined,
   onFinally?: () => void
@@ -80,14 +89,14 @@ export const useDeployIdea = (
     },
   })
 
-  const deploy = async (
-    projectId: string,
-    tokenId: string | null,
-    name: string | undefined,
-    symbol: string | undefined,
-    marketing: Marketing[] | undefined,
-    initialBuyAmount: string
-  ) => {
+  const deploy = async ({
+    projectId,
+    name,
+    symbol,
+    initialBuyAmount,
+    tokenId,
+    marketing,
+  }: DeployIdeaParams) => {
     if (!(await checkForChain(chainsMap[chainName || '']?.id))) return
     if (!memexFactoryAddr || !configValue) {
       CONTRACT_ERR.contractAddrNotFound()

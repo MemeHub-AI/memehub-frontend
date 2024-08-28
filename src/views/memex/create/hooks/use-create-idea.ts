@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,7 +12,7 @@ import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
 import { useMemexStore } from '@/stores/use-memex'
 import { memexCreateConfig } from '@/config/memex/idea'
-import { useDeployIdea } from './use-deploy-idea'
+import { DeployIdeaParams, useDeployIdea } from './use-deploy-idea'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { REQUEST_ERR } from '@/errors/request'
@@ -20,6 +20,7 @@ import { useEditIdeaAutofill } from './use-edit-idea-autofill'
 import { useUpdateIdea } from './use-update-idea'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useChainsStore } from '@/stores/use-chains-store'
+import { ApiCode } from '@/api/types'
 
 const schema = z.object({
   content: z
@@ -29,6 +30,11 @@ const schema = z.object({
   chain: z.string().min(1),
   pictures: z.array(z.string()).min(1).max(memexCreateConfig.maxImage),
 })
+
+const lastCreateParams: Pick<DeployIdeaParams, 'projectId' | 'tokenId'> = {
+  projectId: '',
+  tokenId: '',
+}
 
 export const useCreateIdea = () => {
   const { t } = useTranslation()
@@ -53,7 +59,8 @@ export const useCreateIdea = () => {
     mutationFn: memexApi.createIdea,
     onMutate: () => toast.loading(t('memex.creating')),
     onSettled: (_, __, ___, id) => toast.dismiss(id),
-    onError: ({ message }) => {
+    onError: ({ message, status }: Response & Error) => {
+      if (status === ApiCode.Conflict) return
       reset()
       REQUEST_ERR.message(message)
       toast.error(t('memex.create-failed'))
@@ -106,6 +113,13 @@ export const useCreateIdea = () => {
       return
     }
 
+    const deployParams = {
+      name: ideaDetails?.name,
+      symbol: ideaDetails?.symbol,
+      marketing: ideaDetails?.airdrop_marketing,
+      initialBuyAmount: ideaDetails?.initialBuyAmount || '0',
+    }
+
     try {
       const { data } = await mutateAsync({
         factory_address: memexFactoryAddr,
@@ -117,15 +131,13 @@ export const useCreateIdea = () => {
         ...values,
       })
 
-      await deploy(
-        data.hash,
-        data.coin_id,
-        ideaDetails?.name,
-        ideaDetails?.symbol,
-        ideaDetails?.airdrop_marketing,
-        ideaDetails?.initialBuyAmount || '0'
-      )
+      lastCreateParams.projectId = data.hash
+      lastCreateParams.tokenId = data.coin_id
+      await deploy({ ...lastCreateParams, ...deployParams })
     } catch (e) {
+      if ((e as Response).status === ApiCode.Conflict) {
+        return deploy({ ...lastCreateParams, ...deployParams }).catch(() => {})
+      }
       reportException(e)
     }
   }
