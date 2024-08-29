@@ -8,9 +8,9 @@ import { useChainsStore } from '@/stores/use-chains-store'
  * compatible all chains, not just EVM.
  */
 export const useChainInfo = (name: string | null | undefined) => {
-  const { chains, chainsMap } = useChainsStore()
+  const { chains, chainsMap, getChainId } = useChainsStore()
 
-  return useMemo(() => {
+  const chianInfos = useMemo(() => {
     const chain = chainsMap[name || '']
     const chainName = chain?.name || ''
     const chainId = Number(chain?.id || 0)
@@ -23,4 +23,9 @@ export const useChainInfo = (name: string | null | undefined) => {
       configChainId,
     }
   }, [chains, chainsMap, name])
+
+  return {
+    ...chianInfos,
+    getChainId,
+  }
 }

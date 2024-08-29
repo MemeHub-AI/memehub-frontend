@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,6 +7,8 @@ import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
+import { useAccount, useBalance } from 'wagmi'
+import { formatEther } from 'viem'
 
 import { memexApi } from '@/api/memex'
 import { reportException } from '@/errors'
@@ -19,8 +21,8 @@ import { REQUEST_ERR } from '@/errors/request'
 import { useEditIdeaAutofill } from './use-edit-idea-autofill'
 import { useUpdateIdea } from './use-update-idea'
 import { useCheckAccount } from '@/hooks/use-check-chain'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { ApiCode } from '@/api/types'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 const schema = z.object({
   content: z
@@ -36,12 +38,12 @@ const lastCreateParams: Pick<DeployIdeaParams, 'projectId' | 'tokenId'> = {
   tokenId: '',
 }
 
+// TODO/low: refactor
 export const useCreateIdea = () => {
   const { t } = useTranslation()
   const { query, ...router } = useRouter()
   const { idea, ideaDetails, setIdea, setIdeaDetails } = useMemexStore()
   const hash = query.hash as string
-  const { chainsMap } = useChainsStore()
 
   const form = useForm<z.infer<typeof schema>>({
     mode: 'onChange',
@@ -53,6 +55,14 @@ export const useCreateIdea = () => {
     },
   })
   const chainName = idea?.chain || form.getValues('chain')
+
+  const { chainId, getChainId } = useChainInfo(chainName)
+  const { address } = useAccount()
+  const { data: balabce = '0' } = useBalance({
+    address,
+    chainId,
+    query: { select: ({ value }) => formatEther(value) },
+  })
 
   const { isPending, mutateAsync, reset } = useMutation({
     mutationKey: [memexApi.createIdea.name],
@@ -79,7 +89,7 @@ export const useCreateIdea = () => {
     setIdeaDetails(null)
     router.back()
   })
-  const { checkForChain } = useCheckAccount()
+  const { checkAccount } = useCheckAccount()
 
   const totalDeployFee = useMemo(
     () =>
@@ -90,7 +100,7 @@ export const useCreateIdea = () => {
   )
 
   const onSubmit = async ({ pictures, ...values }: z.infer<typeof schema>) => {
-    if (!(await checkForChain(chainsMap[values.chain]?.id))) return
+    if (!(await checkAccount(getChainId(values.chain)))) return
     if (
       !(await form.trigger()) ||
       !memexFactoryAddr ||
@@ -100,6 +110,10 @@ export const useCreateIdea = () => {
       CONTRACT_ERR.configNotFound(
         `${chainName} ${memexFactoryAddr} ${airdropAddress} ${bcAddress}`
       )
+      return
+    }
+    if (BigNumber(balabce).lt(totalDeployFee)) {
+      CONTRACT_ERR.balanceInsufficient()
       return
     }
 
