@@ -68,10 +68,7 @@ export const AccountDropdown = () => {
       }
     >
       <Button
-        className={cn(
-          'w-full px-2 grid grid-cols-[1.5rem_1fr] text-start',
-          !isMobile && 'hidden'
-        )}
+        className={cn('w-full px-2 grid grid-cols-[1.5rem_1fr] text-start')}
         variant="ghost"
         shadow="none"
         onClick={() =>
@@ -85,10 +82,7 @@ export const AccountDropdown = () => {
       <Button
         variant="ghost"
         shadow="none"
-        className={cn(
-          'w-full px-2 grid grid-cols-[1.5rem_1fr] text-start',
-          !isMobile && 'hidden'
-        )}
+        className={cn('w-full px-2 grid grid-cols-[1.5rem_1fr] text-start')}
         onClick={() => window.open(memehubLinks.x)}
       >
         <FaXTwitter size={18} />
@@ -98,10 +92,7 @@ export const AccountDropdown = () => {
       <Button
         variant="ghost"
         shadow="none"
-        className={cn(
-          'w-full px-2 grid grid-cols-[1.5rem_1fr] text-start',
-          !isMobile && 'hidden'
-        )}
+        className={cn('w-full px-2 grid grid-cols-[1.5rem_1fr] text-start')}
         onClick={() => window.open(memehubLinks.x)}
       >
         <LiaTelegramPlane size={20} />
