@@ -5,6 +5,7 @@ import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 import { AiOutlineSwap } from 'react-icons/ai'
+import { BigNumber } from 'bignumber.js'
 
 import {
   Table,
@@ -36,9 +37,9 @@ export const TradeTable = () => {
   const ths = [
     t('account'),
     t('type'),
-    t('price'),
     t('amount'),
     t('volume'),
+    'USD',
     showAge ? t('age') : t('date'),
     t('tx.hash'),
   ]
@@ -109,9 +110,7 @@ export const TradeTable = () => {
                 >
                   {isBuy ? t('trade.buy') : t('trade.sell')}
                 </TableCell>
-                <TableCell className="max-sm:text-xs">
-                  ${fmt.decimals(r.usd_price, { round: true })}
-                </TableCell>
+
                 <TableCell className="max-sm:text-xs">
                   {fmt.decimals(r.base_amount, { round: true })}{' '}
                   {fmt.ellipsis(r.base_symbol)}
@@ -119,6 +118,16 @@ export const TradeTable = () => {
                 <TableCell className="max-sm:text-xs">
                   {fmt.decimals(r.quote_amount, { round: true, fixed: 4 })}{' '}
                   {r.quote_symbol}
+                </TableCell>
+                <TableCell className="max-sm:text-xs">
+                  $
+                  {fmt.decimals(
+                    BigNumber(r.usd_price)
+                      .div(r.price)
+                      .multipliedBy(r.quote_amount)
+                      .toFixed(),
+                    { round: true }
+                  )}
                 </TableCell>
                 <TableCell className="max-sm:text-xs w-48">
                   {showAge
