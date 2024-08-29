@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { CustomSuspense } from '@/components/custom-suspense'
 import { NewsCard } from '@/components/news'
-import { useNewsList } from '@/hooks/use-news-list'
+import { newsDefaultArea, useNewsList } from '@/hooks/use-news-list'
 import { NewsSkeleton } from '@/components/news/skeleton'
 import {
   Select,
@@ -151,7 +151,10 @@ export const NewsAside = ({
           })}
         </div>
         {tab === Tab.Moonshot ? (
-          <Select defaultValue={getStorage('area')} onValueChange={onChange}>
+          <Select
+            defaultValue={getStorage('area') || newsDefaultArea}
+            onValueChange={onChange}
+          >
             {loadingCountry ? (
               <Button className="mb-4 w-[inheirt] max-sm:mb-2">
                 {t('loading.country')}

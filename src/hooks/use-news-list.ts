@@ -11,10 +11,12 @@ interface Options {
   isOpportunity?: boolean
 }
 
+export const newsDefaultArea = '24'
+
 export const useNewsList = (options?: Options) => {
   const { isOpportunity = false } = options || {}
   const { getStorage } = useLocalStorage()
-  const storedArea = Number(getStorage('area') || 0)
+  const storedArea = Number(getStorage('area') || newsDefaultArea)
 
   const [area, setArea] = useState(storedArea)
   const ref = useRef<HTMLDivElement>(null)
