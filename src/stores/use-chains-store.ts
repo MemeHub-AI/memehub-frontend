@@ -18,6 +18,10 @@ interface ChainsStore {
   setChainsMap: (chains: ChainData[]) => void
   /** If you want to find a single chain, please use `chainsMap` */
   findChains: (namOrIds: (string | number | undefined)[]) => ChainData[]
+  getChainId: (
+    chainName: string | undefined | null,
+    fallback?: number
+  ) => number
 }
 
 export const useChainsStore = create<ChainsStore>((set, get) => ({
@@ -69,4 +73,6 @@ export const useChainsStore = create<ChainsStore>((set, get) => ({
 
     return chains
   },
+  getChainId: (name, fallback) =>
+    Number(get().chainsMap[name || '']?.id || fallback || 0),
 }))
