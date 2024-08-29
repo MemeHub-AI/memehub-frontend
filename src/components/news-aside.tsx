@@ -118,7 +118,7 @@ export const NewsAside = ({
   return (
     <aside
       className={cn(
-        'pr-2 border-r-2 border-black h-body hidden xl:block',
+        'pr-2 border-l border-zinc-200 h-body hidden xl:block',
         'max-sm:mr-0 max-sm:pr-0 max-sm:h-min max-sm:border-0',
         className
       )}

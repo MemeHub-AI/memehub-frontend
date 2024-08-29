@@ -24,6 +24,7 @@ import { IdeaHeartButton } from './idea-heart-button'
 import { useIdeaStatus } from '../hooks/use-idea-status'
 import { useIdeaCardContext } from '@/contexts/memex/idea-card'
 import { BI_ZERO } from '@/constants/number'
+import CopyIcon from '@/components/copy-icon'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -210,25 +211,23 @@ export const IdeaLikeComment = ({
               onClick={onOpenLike}
             />
           </div>
-          <div className="flex items-center space-x-1 text-sm cursor-pointer">
+
+          <button className="flex items-center space-x-1 text-sm cursor-pointer text-zinc-500 sm:hover:text-black duration-150">
             <GoComment className="w-5 h-5" />
             <span>{idea?.comment_count ?? 0}</span>
-          </div>
-
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              if (!idea?.hash) {
-                toast.error(t('copy-failed'))
-                return
-              }
-              copy(joinPaths(location.origin, Routes.MemexIdea, idea.hash), {
-                successTip: t('link-copy-success'),
-              })
-            }}
-          >
-            <PiShareFat size={20} />
           </button>
+
+          <CopyIcon
+            size={20}
+            content={joinPaths(
+              location.origin,
+              Routes.MemexIdea,
+              idea?.hash || ''
+            )}
+            onClick={(e) => e.preventDefault()}
+            className="text-zinc-500 sm:hover:text-black duration-150"
+            icon={<PiShareFat size={20} />}
+          />
         </div>
 
         <div className="flex items-center space-x-1 text-sm">

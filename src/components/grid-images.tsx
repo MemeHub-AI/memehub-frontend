@@ -25,7 +25,7 @@ export const GridImages = ({
     <PhotoProvider>
       <div
         className={cn(
-          'grid grid-cols-1 gap-1 rounded-md overflow-hidden mt-2',
+          'grid grid-cols-1 gap-1 rounded-2xl border overflow-hidden mt-2',
           className
         )}
         style={{

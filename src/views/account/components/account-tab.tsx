@@ -105,6 +105,7 @@ export const AccountTab = () => {
           isLoading={isLoadingMyTokens}
           isPending={isFetchingMyTokens}
           onFetchNext={fetchNextMyTokens}
+          showSearch={false}
         />
       </TabsContent>
 

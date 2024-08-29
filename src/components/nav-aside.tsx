@@ -181,7 +181,7 @@ export const NavAside = ({
         shadow="none"
         onClick={() => router.push(Routes.MemexCreate)}
         className={cn(
-          'bg-purple-700 text-white rounded-full border-none py-5 text-lg',
+          'bg-blue-400 text-white rounded-full border-none py-6 text-lg',
           'mt-2 max-xl:text-base ml-1 max-xl:text-md',
           isCollapsed && 'p-2'
         )}

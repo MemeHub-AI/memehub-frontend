@@ -28,6 +28,7 @@ interface Props extends ComponentProps<'div'> {
   isLoading: boolean
   isPending?: boolean
   onFetchNext?: () => void
+  showSearch?: boolean
 }
 
 export const TokenCards = ({
@@ -37,6 +38,7 @@ export const TokenCards = ({
   total,
   isLoading,
   isPending = false,
+  showSearch = true,
   onFetchNext,
 }: Props) => {
   const { t } = useTranslation()
@@ -97,19 +99,20 @@ export const TokenCards = ({
           />
           <span>{t('filter.only-graduated')}</span>
         </Label>
-
-        <TokenSearchInput
-          showPopover={false}
-          chianTag={chianTag}
-          onSearched={(tokens) => setFilteredTokens(tokens)}
-          onCleared={() => {
-            if (chianTag !== 'all') {
-              setFilteredTokens(cards.filter((c) => c.chain === chianTag))
-            } else {
-              setFilteredTokens(cards)
-            }
-          }}
-        />
+        {showSearch && (
+          <TokenSearchInput
+            showPopover={false}
+            chianTag={chianTag}
+            onSearched={(tokens) => setFilteredTokens(tokens)}
+            onCleared={() => {
+              if (chianTag !== 'all') {
+                setFilteredTokens(cards.filter((c) => c.chain === chianTag))
+              } else {
+                setFilteredTokens(cards)
+              }
+            }}
+          />
+        )}
       </CustomSuspense>
 
       <CustomSuspense

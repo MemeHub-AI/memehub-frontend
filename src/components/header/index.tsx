@@ -24,11 +24,11 @@ export const Header = () => {
 
   const navs: Nav[] = [
     {
-      title: withMobileIcon('💡', t('memex.idea')),
+      title: withMobileIcon('💡', 'Idea'),
       path: Routes.MemexIdea,
     },
     {
-      title: withMobileIcon('💎', t('home')),
+      title: withMobileIcon('💎', 'Coin'),
       path: Routes.Main,
     },
 
@@ -57,7 +57,7 @@ export const Header = () => {
   return (
     <header
       className={cn(
-        'min-h-header flex justify-between items-center px-6 relative border-b-2',
+        'min-h-header flex justify-between items-center px-6 relative border-b',
         'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3'
       )}
     >

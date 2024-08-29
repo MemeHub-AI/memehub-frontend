@@ -29,6 +29,7 @@ import { IdoInfo } from '../../hooks/use-ido-infos'
 import { BI_ZERO } from '@/constants/number'
 import { useIdeaStatus } from '../../hooks/use-idea-status'
 import { IdeaCardProvider } from '@/contexts/memex/idea-card'
+import { simplifyFromNow } from '@/utils/time'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -149,7 +150,7 @@ export const MemexIdeaCard = ({
     <IdeaCardProvider value={{ idea, ideaInfo: info }}>
       <div
         className={cn(
-          'flex px-3 py-3 relative border-b-2 duration-150',
+          'flex px-3 py-3 relative border-b duration-150',
           isList && 'cursor-pointer sm:hover:bg-zinc-50',
           className
         )}
@@ -201,7 +202,7 @@ export const MemexIdeaCard = ({
               </span>
               <span>·</span>
               <span className="shrink-0">
-                {dayjs(idea?.created_at).fromNow()}
+                {simplifyFromNow(idea?.created_at)}
               </span>
             </div>
           )}
@@ -238,7 +239,7 @@ export const MemexIdeaCard = ({
               )}
 
             {isSuccess && !hasDetails && !isFailedWaiting && (
-              <div className="flex space-x-2 border-2 border-yellow-600 rounded mt-2 p-2 text-yellow-600 w-full">
+              <div className="flex space-x-2 border border-yellow-600 rounded mt-2 p-2 text-yellow-600 w-full">
                 <BsLightningFill className="shrink-0" size={22} />
                 <div className="text-sm font-bold w-full">
                   <div className="leading-none flex flex-1 justify-between">
@@ -356,7 +357,7 @@ export const MemexIdeaCard = ({
             />
           )}
 
-          <GridImages urls={image_urls} />
+          <GridImages urls={image_urls} onClick={(e) => e.stopPropagation()} />
 
           <IdeaLikeComment
             idea={idea}

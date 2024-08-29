@@ -40,7 +40,7 @@ export const CreateIdeaTextareaField = () => {
               />
             </div>
           </div>
-          <Separator height={2} />
+          <Separator />
         </FormItem>
       )}
     />

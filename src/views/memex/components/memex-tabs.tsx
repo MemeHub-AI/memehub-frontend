@@ -55,7 +55,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
     >
       <TabsList
         className={cn(
-          'border-zinc-200 border-t-0 border-r-0 border-l-0 justify-start overflow-visible',
+          'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] justify-start overflow-visible',
           'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14 md:px-4'
         )}
       >
@@ -64,8 +64,10 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
             key={id}
             value={route}
             className={cn(
-              '!text-black font-normal px-0 first:ml-3 mx-2 duration-0 !bg-transparent md:text-lg',
-              pathname === route && 'font-bold shadow-[0_2px_0_0_#9333ea]'
+              '!text-zinc-500 font-normal px-0 first:ml-3 mx-2 duration-0 !bg-transparent md:text-lg] relative',
+              'data-[state=active]:before:content-[""] data-[state=active]:before:w-full data-[state=active]:before:h-1',
+              'data-[state=active]:before:absolute data-[state=active]:before:bottom-0 data-[state=active]:before:rounded-full',
+              'data-[state=active]:font-bold data-[state=active]:!text-black data-[state=active]:before:bg-blue-400'
             )}
           >
             {title}

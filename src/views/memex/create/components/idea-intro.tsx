@@ -1,4 +1,3 @@
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Card } from '@/components/ui/card'
@@ -21,7 +20,7 @@ export const CreateIdeaIntro = () => {
     <Card
       shadow="none"
       padding="sm"
-      className="bg-indigo-200 space-y-1 text-sm font-semibold"
+      className="bg-indigo-200 space-y-1 text-sm"
     >
       <h3 className="font-bold text-base">{t('memex.intro-title')}</h3>
       <p>{utilLang.replace(t('memex.intro-desc1'), [createFee])}</p>

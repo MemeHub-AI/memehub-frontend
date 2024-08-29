@@ -23,7 +23,7 @@ export const IdeaProgress = ({
   return (
     <Progress
       value={value}
-      className={cn('mt-2 h-5 rounded border-2 border-black', className)}
+      className={cn('mt-2 h-5 rounded border border-black', className)}
       indicatorClass={cn('bg-red-500', indicatorClass)}
       {...props}
     />
