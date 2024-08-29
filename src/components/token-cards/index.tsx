@@ -1,6 +1,7 @@
 import { useEffect, useState, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import Link from 'next/link'
+import { isEmpty } from 'lodash'
 
 import { cn } from '@/lib/utils'
 import { TokenCard } from './token-card'
@@ -8,13 +9,17 @@ import { Skeleton } from '../ui/skeleton'
 import { CustomSuspense } from '../custom-suspense'
 import { Routes } from '@/routes'
 import { TokenChainSelect } from './token-chain-select'
-import { TokenSearchInput } from './token-search-input'
+import { TokenSearchInput } from '../token/search-input'
 import { useIsPlayAudio } from '@/stores/use-is-play-audio'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 import { TokenListItem } from '@/api/token/types'
 import { IdoCard } from '../ido-card'
 import { LoadMore } from '../load-more'
-import { useAggregateTokens } from '@/hooks/token/use-aggregate-tokens'
+import { useTokensPools } from '@/hooks/token/use-tokens-pools'
+import { Switch } from '../ui/switch'
+import { Label } from '../ui/label'
+import { useLocalStorage } from '@/hooks/use-storage'
+import { strToBool } from '@/utils'
 
 interface Props extends ComponentProps<'div'> {
   cards?: TokenListItem[]
@@ -37,11 +42,14 @@ export const TokenCards = ({
   const { t } = useTranslation()
   const [chianTag, setChainTag] = useState('all')
   const [filteredTokens, setFilteredTokens] = useState(cards)
+  const { getStorage, setStorage } = useLocalStorage()
+  const [checked, setChecked] = useState(
+    strToBool(getStorage('only_graduated_checked'))
+  )
 
   const { isPlayHomeAudio, setIsPlayHomeAudio } = useIsPlayAudio()
   const { playHome } = useAudioPlayer()
-
-  const { aggregatedTokens } = useAggregateTokens(cards)
+  const { pools, isLoadingPools } = useTokensPools(cards)
 
   const onChange = (chain: string) => {
     setChainTag(chain)
@@ -67,8 +75,8 @@ export const TokenCards = ({
 
   return (
     <div className={cn('mt-4', className)}>
-      {/* <CustomSuspense
-        className="flex justify-between items-start gap-4 max-sm:justify-between max-sm:gap-0"
+      <CustomSuspense
+        className="flex justify-between items-center max-sm:justify-between max-sm:gap-0 mb-4"
         isPending={isLoading}
         fallback={
           <>
@@ -77,10 +85,21 @@ export const TokenCards = ({
           </>
         }
       >
-        <TokenChainSelect onValueChange={onChange} />
-        <TokenSortSelect />
+        {/* <TokenChainSelect onValueChange={onChange} />
+        <TokenSortSelect /> */}
+        <Label className="inline-flex items-center space-x-2">
+          <Switch
+            checked={checked}
+            onCheckedChange={(checked) => {
+              setChecked(checked)
+              setStorage('only_graduated_checked', checked.toString())
+            }}
+          />
+          <span>{t('filter.only-graduated')}</span>
+        </Label>
+
         <TokenSearchInput
-          className={cn('ml-auto', isMemex && 'hidden')}
+          showPopover={false}
           chianTag={chianTag}
           onSearched={(tokens) => setFilteredTokens(tokens)}
           onCleared={() => {
@@ -90,13 +109,12 @@ export const TokenCards = ({
               setFilteredTokens(cards)
             }
           }}
-          className="ml-4"
         />
-      </CustomSuspense> */}
+      </CustomSuspense>
 
       <CustomSuspense
         className="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-3 max-sm:gap-3"
-        isPending={isLoading}
+        isPending={isLoading || isLoadingPools}
         fallback={<CardSkeleton />}
         nullback={
           <div className="text-zinc-500">
@@ -111,21 +129,20 @@ export const TokenCards = ({
         {idoTokens.map((t) => (
           <IdoCard key={t.id} token={t} />
         ))}
-        {/* {!!cards.length &&
-          filteredCards.map((t, i) => <TokenCard key={i} card={t} />)} */}
-        {aggregatedTokens.map((t, i) => (
-          <TokenCard
-            key={i}
-            card={t}
-            progress={t.progress}
-            isGraduated={t.isGraduated}
-          />
-        ))}
+        {!isEmpty(cards) &&
+          filteredTokens.map((t, i) => (
+            <TokenCard
+              key={i}
+              card={t}
+              pool={pools[i]}
+              onlyGraduated={checked}
+            />
+          ))}
       </CustomSuspense>
 
       <LoadMore
         className="mt-2"
-        list={aggregatedTokens}
+        list={filteredTokens}
         total={total}
         isLoading={isPending}
         onFetchMore={onFetchNext}

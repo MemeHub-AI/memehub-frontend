@@ -173,3 +173,19 @@ export const getContractsEnabled = <T extends any[]>(
 
   return list.length === versions.length && !hasFalse
 }
+
+export const getTokenProgress = (
+  left: bigint | string,
+  total: bigint | string,
+  isGraduated = false
+) => {
+  if (isGraduated) return '100'
+  if (isGraduated && BigNumber(left.toString()).isZero()) return '0'
+
+  const percent = BigNumber(total.toString())
+    .minus(left.toString())
+    .div(total.toString())
+    .multipliedBy(100)
+
+  return percent.lt(0.01) || percent.isNaN() ? '0' : percent.toFixed(2)
+}

@@ -10,6 +10,7 @@ export type LocalStorage = {
   chart_interval: string
   slippage: string
   airdrop_checked: string
+  only_graduated_checked: string
 }
 
 // Don't use `interface`

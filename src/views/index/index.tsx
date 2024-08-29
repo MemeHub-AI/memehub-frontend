@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 
 import { TokenCards } from '@/components/token-cards'
 import { useTokens } from '@/hooks/use-tokens'

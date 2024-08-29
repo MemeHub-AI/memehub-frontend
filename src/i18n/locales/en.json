@@ -750,5 +750,6 @@
   "memex.idea": "Idea",
   "reward.trade": "Subsequent trade",
   "post-idea": "Post Idea",
-  "airdrop.invalid": "No information"
+  "airdrop.invalid": "No information",
+  "filter.only-graduated": "Only graduated"
 }

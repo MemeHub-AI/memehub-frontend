@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 import { useDebounceEffect } from 'ahooks'
@@ -44,7 +44,7 @@ export const TradeInput = ({ value, onChange, disabled }: Props) => {
   const balanceSymbol = isBuy ? reserveSymbol : tokenSymbol
   const balanceLabel = `${fmt.decimals(balance)} ${balanceSymbol}`
 
-  const leftValue = fmt.decimals(value || 0, { fixed: 3 })
+  const leftValue = fmt.decimals(value || 0, { fixed: 4 })
   const leftLabel = `${leftValue} ${isBuy ? reserveSymbol : tokenSymbol}`
   const rightLabel = `${rightValue} ${isBuy ? tokenSymbol : reserveSymbol}`
 
@@ -79,7 +79,7 @@ export const TradeInput = ({ value, onChange, disabled }: Props) => {
       amount = reserveAmount
     }
 
-    setRightValue(fmt.decimals(amount))
+    setRightValue(fmt.decimals(amount, { fixed: 4 }))
   }
 
   useDebounceEffect(

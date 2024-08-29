@@ -1,8 +1,9 @@
-import React, { useState, type ComponentProps } from 'react'
+import { useState, type ComponentProps } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { isNumber } from 'lodash'
 import { toast } from 'sonner'
+import { zeroAddress } from 'viem'
 
 import { Card, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
@@ -17,6 +18,9 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 import { TokenCardBadge } from './token-card-badge'
 import { Button } from '../ui/button'
 import { joinPaths } from '@/utils'
+import { PoolItem } from '@/hooks/token/use-tokens-pools'
+import { BI_ZERO } from '@/constants/number'
+import { getTokenProgress } from '@/utils/contract'
 
 interface Props extends ComponentProps<typeof Card> {
   card: TokenListItem
@@ -26,8 +30,8 @@ interface Props extends ComponentProps<typeof Card> {
   idoEndAt?: number
   idoProgress?: number | string
 
-  isGraduated?: boolean
-  progress?: number | string
+  pool: PoolItem | undefined
+  onlyGraduated?: boolean
 }
 
 export const TokenCard = ({
@@ -39,8 +43,8 @@ export const TokenCard = ({
   idoDuration,
   idoProgress,
 
-  progress = 0,
-  isGraduated = false,
+  pool,
+  onlyGraduated,
   ...props
 }: Props) => {
   const router = useRouter()
@@ -48,6 +52,15 @@ export const TokenCard = ({
   const [isExpired, setIsExpired] = useState(false)
   const { chain, chainName } = useChainInfo(card.chain)
   const isIdo = isNumber(idoCreateAt) && isNumber(idoDuration)
+
+  const {
+    tokenReserve = BI_ZERO,
+    headmaster = zeroAddress,
+    maxSupply = BI_ZERO,
+  } = pool ?? {}
+  const isGraduated = headmaster !== zeroAddress
+
+  const progress = getTokenProgress(tokenReserve, maxSupply, isGraduated)
 
   const handleClick = () => {
     if (!card.is_active) {
@@ -69,6 +82,8 @@ export const TokenCard = ({
 
     router.push(joinPaths(Routes.Main, chainName, card.contract_address))
   }
+
+  if (onlyGraduated && !isGraduated) return
 
   return (
     <Card

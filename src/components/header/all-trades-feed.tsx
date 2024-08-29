@@ -1,10 +1,11 @@
-import SearchInput from '@/components/search-input'
+import { memo, useEffect, useState } from 'react'
+
+import { TokenSearchInput } from '@/components/token/search-input'
 import { useAllTrades } from '@/hooks/use-all-traces'
 import {
   TokenWsCreate,
   TokenWsTrade,
 } from '@/views/token/hooks/use-token-ws/types'
-import { memo, useEffect, useState } from 'react'
 import TradeShake from './trade-shake'
 import CreateCoinShake from './create-coin-shake'
 
@@ -51,7 +52,7 @@ export const AllTradesFeeds = memo(() => {
         )}
       </div>
 
-      <SearchInput />
+      <TokenSearchInput />
     </div>
   )
 })
