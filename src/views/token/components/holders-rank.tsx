@@ -11,6 +11,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useTokenContext } from '@/contexts/token'
 import { useChainsStore } from '@/stores/use-chains-store'
 import { lowerIncludes } from '@/utils'
+import { linkStyle } from '@/styles/variants/link'
 
 enum Flag {
   Bc = 'Bonding Curve',
@@ -70,7 +71,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
                     <Link
                       href={`${chainsMap[chainName]?.explorer}/address/${r.holder}`}
                       target="_blank"
-                      className="sm:hover:text-black sm:hover:underline transition-all cursor-pointer active:underline"
+                      className={linkStyle('sm:hover:text-black')}
                     >
                       {fmt.addr(r.holder)}
                     </Link>
