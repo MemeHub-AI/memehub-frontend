@@ -1,13 +1,15 @@
 import { BigNumber } from 'bignumber.js'
-import { Hash, parseEther, Log } from 'viem'
+import { Hash, parseEther } from 'viem'
 import dayjs from 'dayjs'
 import { getBlock } from 'wagmi/actions'
+import { isEmpty } from 'lodash'
 
 import { wagmiConfig } from '@/config/wagmi'
 import { Network } from '@/enums/contract'
 import { deployEvmAirdropParams } from '@/config/deploy'
 import { Marketing, MarketType } from '@/api/token/types'
 import { AirdropFlag } from '@/enums/airdrop'
+import { AirdropItem } from '@/api/airdrop/types'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -144,4 +146,24 @@ export const getEvmAirdropParams = (
   }
 
   return params
+}
+
+export const getEvmAirdropId = (item?: AirdropItem) =>
+  BigInt(item?.airdrop[0]?.distribution_id || -1)
+
+export const getContractsEnabled = <T extends any[]>(
+  list: T,
+  versionKey: keyof NonNullable<T[number]>,
+  addressKey: keyof NonNullable<T[number]>,
+  ...conditions: boolean[]
+) => {
+  if (isEmpty(list.filter(Boolean))) return false
+
+  const versions = list.map((item) => item[versionKey]).filter(Boolean)
+  const addresses = list.map((item) => item[addressKey]).filter(Boolean)
+  if (versions.length !== addresses.length) return false
+
+  const hasFalse = conditions.some((c) => !c)
+
+  return list.length === versions.length && !hasFalse
 }

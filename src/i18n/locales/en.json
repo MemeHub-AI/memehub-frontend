@@ -749,5 +749,6 @@
   "reward.unknown": "Unknown",
   "memex.idea": "Idea",
   "reward.trade": "Subsequent trade",
-  "post-idea": "Post Idea"
+  "post-idea": "Post Idea",
+  "airdrop.invalid": "No information"
 }

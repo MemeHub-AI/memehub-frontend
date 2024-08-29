@@ -14,41 +14,24 @@ import { AirdropDetailType } from '@/api/airdrop/types'
 import { useUserStore } from '@/stores/use-user-store'
 import { useLocalStorage } from '@/hooks/use-storage'
 import { strToBool } from '@/utils'
+import { LoadMore } from '@/components/load-more'
 
 export const AirdropPage = () => {
   const { t } = useTranslation()
-  const { airdrops, total, isLoading, isFetching, fetchNextPage } =
-    useAirdropList()
+  const {
+    airdrops,
+    airdropInfos,
+    total,
+    isLoading,
+    isFetching,
+    fetchNextPage,
+  } = useAirdropList()
   const { isKol, hasCommunity } = useUserStore()
 
   const { getStorage, setStorage } = useLocalStorage()
   const [checked, setChecked] = useState(
     strToBool(getStorage('airdrop_checked'))
   )
-
-  const renderLoadingStatus = () => {
-    if (isFetching && total) {
-      return (
-        <p
-          className="mt-2 text-center lg:col-span-2 2xl:col-span-3"
-          onClick={() => fetchNextPage()}
-        >
-          {t('loading')}
-        </p>
-      )
-    }
-
-    if (total > airdrops.length) {
-      return (
-        <p
-          className="mt-2 text-center text-blue-600 cursor-pointer hover:underline lg:col-span-2 2xl:col-span-3"
-          onClick={() => fetchNextPage()}
-        >
-          {t('loading.more')}
-        </p>
-      )
-    }
-  }
 
   useEffect(() => {
     setStorage('airdrop_checked', String(checked))
@@ -81,13 +64,19 @@ export const AirdropPage = () => {
             a?.airdrop.map((detail) => (
               <AirdropCard
                 key={i}
-                airdrop={a}
-                detail={detail}
                 isKolCard={detail.type === AirdropDetailType.Kol}
+                airdrop={a}
+                distribution={airdropInfos[i]}
               />
             ))
           )}
-          {renderLoadingStatus()}
+          <LoadMore
+            className="text-center lg:col-span-2 2xl:col-span-3"
+            list={airdrops}
+            total={total}
+            isLoading={isFetching}
+            onFetchMore={fetchNextPage}
+          />
         </CustomSuspense>
       ) : (
         <AirdropSkeleton />
@@ -107,9 +96,9 @@ const AirdropSkeleton = () => {
         <AirdropCard
           key={i}
           className="blur-lg pointer-events-none select-none"
-          airdrop={airdrop}
-          detail={airdrop.airdrop[0]}
           isKolCard
+          airdrop={airdrop}
+          distribution={undefined}
         />
       ))}
     </div>

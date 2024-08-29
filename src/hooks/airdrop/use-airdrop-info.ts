@@ -46,7 +46,10 @@ export const useAirdropInfo = ({
     address: bcAddr as Address,
     chainId,
     functionName: 'airdropRate_',
-    query: { enabled: !!bcAddr && isCorrectId },
+    // query: { enabled: !!bcAddr && isCorrectId },
+    query: {
+      enabled: false,
+    },
   })
   const { data: totalSupply = '0' } = useReadContract({
     abi: tokenAbiMap[tokenVersion!],
@@ -54,7 +57,8 @@ export const useAirdropInfo = ({
     chainId,
     functionName: 'totalSupply',
     query: {
-      enabled: !!tokenAddr && isCorrectId,
+      // enabled: !!tokenAddr && isCorrectId,
+      enabled: false,
       select: (data) => formatEther(data),
     },
   })
@@ -73,7 +77,10 @@ export const useAirdropInfo = ({
     ...distributorConfig,
     functionName: 'distributions',
     args: [BigInt(airdropId ?? -1)],
-    query: { enabled: !!airdropAddr && isCorrectId },
+    query: {
+      // enabled: !!airdropAddr && isCorrectId
+      enabled: false,
+    },
   })
 
   const [
@@ -103,7 +110,7 @@ export const useAirdropInfo = ({
   }, [ratio, totalSupply])
 
   // TODO: may need to `refetchDetails`, but it will refresh the page
-  useInterval(refetchAirdrop, 5_000)
+  // useInterval(refetchAirdrop, 5_000)
 
   return {
     hasKolAirdrop,

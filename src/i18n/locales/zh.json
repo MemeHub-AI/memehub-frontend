@@ -739,5 +739,6 @@
   "reward.unknown": "未知",
   "memex.idea": "创意",
   "reward.trade": "下级交易奖励",
-  "post-idea": "发布创意"
+  "post-idea": "发布创意",
+  "airdrop.invalid": "无法获取空投信息"
 }
