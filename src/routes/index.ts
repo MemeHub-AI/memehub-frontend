@@ -2,6 +2,7 @@ export enum Routes {
   Main = '/',
 
   NotFound = '/404',
+  NotFoundEmpty = '/404?t=empty',
 
   TokenPage = '/[chain]/[address]',
 

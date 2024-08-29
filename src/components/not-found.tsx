@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash'
 import { Button } from '@/components/ui/button'
 import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
-import PrimaryLayout from './layouts/primary'
+import { PrimaryLayout } from './layouts/primary'
 
 interface Props extends Omit<ComponentProps<'div'>, 'title'> {
   src?: string
@@ -27,7 +27,7 @@ export const NotFound = (props: Props) => {
     className,
     imgClass,
   } = props
-  const { push } = useRouter()
+  const { query, ...router } = useRouter()
 
   return (
     <div
@@ -47,10 +47,12 @@ export const NotFound = (props: Props) => {
       {!isEmpty(desc) && <h2 className="my-2">{desc}</h2>}
       {showButton && (
         <div className="flex items-center">
-          <Button onClick={() => push(Routes.Main)}>{t('goto.home')}</Button>
+          <Button onClick={() => router.replace(Routes.Main)}>
+            {t('goto.home')}
+          </Button>
           <Button
             className="bg-lime-green ml-3"
-            onClick={() => push(Routes.MemexCreate)}
+            onClick={() => router.replace(Routes.MemexCreate)}
           >
             {t('post-idea')}
           </Button>
