@@ -42,7 +42,7 @@ export const PrimaryLayout = ({
         <div className={cn('flex', containerClass)}>
           <div
             className={cn(
-              'flex-1 ',
+              'flex-1',
               !disablePadding && 'p-3 sm:p-4',
               contentClass
             )}

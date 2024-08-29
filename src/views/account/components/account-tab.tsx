@@ -64,10 +64,14 @@ export const AccountTab = () => {
       value={tab}
       onValueChange={(value) => {
         if (!query.address) return
-        router.push({
-          pathname: joinPaths(Routes.Account, query.address as string),
-          query: { tab: value },
-        })
+        router.push(
+          {
+            pathname: joinPaths(Routes.Account, query.address as string),
+            query: { tab: value },
+          },
+          undefined,
+          { shallow: true }
+        )
       }}
     >
       <TabsList

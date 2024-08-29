@@ -23,7 +23,7 @@ export const InviteRow = () => {
   const inviteLink = `${window.location.origin}?r=${userInfo?.code || ''}`
 
   return (
-    <div className="flex items-stretch mt-2 flex-wrap">
+    <div className="flex items-stretch mt-2 flex-wrap max-sm:max-w-full">
       <div className="flex flex-col justify-between flex-auto">
         <h3 className="font-bold text-lg inline-flex items-center">
           {t('reward.diamond-reward')}

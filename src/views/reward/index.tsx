@@ -12,7 +12,7 @@ export const RewardPage = () => {
   const { t } = useTranslation()
 
   return (
-    <div className="my-4">
+    <div className="mb-4">
       <h2 className="font-bold text-2xl mb-2">{t('reward.title')}</h2>
       {/* Descriptions */}
       <div className="">
