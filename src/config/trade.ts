@@ -10,6 +10,8 @@ import {
   polygon,
 } from 'wagmi/chains'
 
+export const slippages = ['1', '3', '5', '49']
+
 const items = {
   eth: ['0.05', '0.1', '0.2', '0.5'],
   bnb: ['0.2', '0.5', '1', '2'],

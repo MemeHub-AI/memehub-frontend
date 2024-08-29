@@ -7,9 +7,7 @@ import { AlertDialog } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
-import { maxSlippage } from '@/config/trade'
-
-const slippages = ['1', '3', '5', '49']
+import { maxSlippage, slippages } from '@/config/trade'
 
 interface Props {
   value: string
@@ -28,7 +26,7 @@ export const SlippageButton = (props: Props) => {
         title={<p>{t('slippage.title')}</p>}
         description={t('slippage.description')}
         content={
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 max-sm:flex-wrap">
             {slippages.map((s) => (
               <Button
                 key={s}
