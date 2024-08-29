@@ -47,9 +47,7 @@ export const NotFound = (props: Props) => {
       {!isEmpty(desc) && <h2 className="my-2">{desc}</h2>}
       {showButton && (
         <div className="flex items-center">
-          <Button onClick={() => router.replace(Routes.Main)}>
-            {t('goto.home')}
-          </Button>
+          <Button onClick={router.back}>{t('back')}</Button>
           <Button
             className="bg-lime-green ml-3"
             onClick={() => router.replace(Routes.MemexCreate)}
