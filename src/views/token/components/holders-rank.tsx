@@ -61,13 +61,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
           nullback={<p>{t('no.holders')}</p>}
         >
           {holders
-            .filter(
-              // Not airdrop & greater than 0
-              (r) =>
-                // TODO: should uncomment
-                // !r.flag?.includes('Air') &&
-                BigNumber(r.amount).gt(0)
-            )
+            .filter((r) => BigNumber(r.amount).gt(0))
             .map((r, i) => {
               return (
                 <li key={i} className="flex items-center justify-between">
@@ -76,7 +70,7 @@ export const HoldersRank = ({ className }: ComponentProps<'div'>) => {
                     <Link
                       href={`${chainsMap[chainName]?.explorer}/address/${r.holder}`}
                       target="_blank"
-                      className="hover:text-black hover:underline transition-all cursor-pointer"
+                      className="sm:hover:text-black sm:hover:underline transition-all cursor-pointer active:underline"
                     >
                       {fmt.addr(r.holder)}
                     </Link>

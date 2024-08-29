@@ -12,9 +12,9 @@ import { FormTextareaField } from '@/components/form-field'
 import { Label } from '@/components/ui/label'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { ImageUpload } from '@/components/image-upload'
-import { shadowVariants } from '@/styles/variants'
+import { shadowVariants } from '@/styles/variants/offset-shadow'
 import { useTokenContext } from '@/contexts/token'
-import ConnectWallet from '@/components/connect-wallet'
+import { ConnectWallet } from '@/components/connect-wallet'
 import { useAccount } from 'wagmi'
 
 interface Props extends Omit<ComponentProps<'form'>, 'onSubmit'> {

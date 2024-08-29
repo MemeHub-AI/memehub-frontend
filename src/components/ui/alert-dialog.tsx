@@ -1,11 +1,11 @@
 import * as React from 'react'
 import * as AlertDialogPrimitive from '@radix-ui/react-alert-dialog'
 import { useTranslation } from 'react-i18next'
+import { Cross2Icon } from '@radix-ui/react-icons'
 
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '@/components/ui/button'
-import { shadowVariants } from '@/styles/variants'
-import { Cross2Icon } from '@radix-ui/react-icons'
+import { shadowVariants } from '@/styles/variants/offset-shadow'
 
 interface Props extends AlertDialogPrimitive.AlertDialogProps {
   title?: React.ReactNode

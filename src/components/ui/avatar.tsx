@@ -3,7 +3,10 @@ import * as AvatarPrimitive from '@radix-ui/react-avatar'
 import { cva, VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
-import { ShadowVariantsProps, shadowVariants } from '@/styles/variants'
+import {
+  ShadowVariantsProps,
+  shadowVariants,
+} from '@/styles/variants/offset-shadow'
 import { defaultImg } from '@/config/link'
 
 const avatarVariants = cva('', {

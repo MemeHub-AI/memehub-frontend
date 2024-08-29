@@ -3,7 +3,10 @@ import { Slot } from '@radix-ui/react-slot'
 import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
-import { shadowVariants, ShadowVariantsProps } from '@/styles/variants'
+import {
+  shadowVariants,
+  ShadowVariantsProps,
+} from '@/styles/variants/offset-shadow'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
 
 const buttonVariants = cva(

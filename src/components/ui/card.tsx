@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import {
   shadowBorderVariants,
   ShadowBorderVariantsProps,
-} from '@/styles/variants'
+} from '@/styles/variants/offset-shadow'
 
 const cardVariants = cva(
   'rounded-lg bg-card text-card-foreground transition-all duration-300',
