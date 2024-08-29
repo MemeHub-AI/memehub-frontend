@@ -1,9 +1,11 @@
-import { useMemo, useState, type ComponentProps } from 'react'
+import { useState, type ComponentProps } from 'react'
 import { HeartFilledIcon } from '@radix-ui/react-icons'
 import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PiShareFat } from 'react-icons/pi'
+import { BigNumber } from 'bignumber.js'
+import { formatEther } from 'viem'
 
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { Textarea } from '@/components/ui/textarea'
@@ -13,14 +15,15 @@ import { useIdeaLike } from '../hooks/use-idea-like'
 import { useCommentForm } from '../idea/hooks/use-comment-form'
 import { Form, FormField } from '@/components/ui/form'
 import { MemexIdeaItem } from '@/api/memex/types'
-import { useIdeaInfo } from '../hooks/use-idea-info'
-import { getIdeaStatus } from '@/utils/memex/idea'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { memexIdeaConfig } from '@/config/memex/idea'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
 import { IdeaHeartButton } from './idea-heart-button'
+import { useIdeaStatus } from '../hooks/use-idea-status'
+import { useIdeaCardContext } from '@/contexts/memex/idea-card'
+import { BI_ZERO } from '@/constants/number'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -37,12 +40,30 @@ export const IdeaLikeComment = ({
   const [likeOpen, setLikeOpen] = useState(false)
   const [commentOpen, setCommentOpen] = useState(false)
   const { chain, chainId } = useChainInfo(idea?.chain)
+  const { ideaInfo } = useIdeaCardContext()
+
   const { form, isPending, onSubmit } = useCommentForm(idea?.hash || '', () => {
     setCommentOpen(false)
     onCommentSuccess?.()
   })
 
-  const ideaInfo = useIdeaInfo(idea?.ido_address, chainId, idea?.memex_version)
+  const {
+    isLike = false,
+    ETHAmountOfLike = BI_ZERO,
+    likeCount = BI_ZERO,
+    startTime = BI_ZERO,
+    endTime = BI_ZERO,
+    ownerRatio = BI_ZERO,
+    userAmount = BI_ZERO,
+  } = ideaInfo ?? {}
+  const likeValue = formatEther(ETHAmountOfLike)
+  const startAt = Number(startTime)
+  const endAt = Number(endTime)
+  const duration = endAt - startAt
+  const ownerPercent = BigNumber(ownerRatio.toString()).div(100).toFixed()
+
+  const { isFailed, isEnded, isSuccess } = useIdeaStatus(idea, ideaInfo)
+  const { copy } = useClipboard()
   const { isLiking, like } = useIdeaLike(
     idea?.ido_address,
     chainId,
@@ -53,26 +74,12 @@ export const IdeaLikeComment = ({
       onLikeSuccess?.()
     }
   )
-  const { isFailed, isEnded, isSuccess } = useMemo(
-    () => getIdeaStatus(idea, ideaInfo),
-    [idea, ideaInfo]
-  )
-  const { copy } = useClipboard()
-
-  const {
-    isLiked,
-    likeValue,
-    likedCount,
-    durationSeconds,
-    ownerPercent,
-    userPercent,
-  } = ideaInfo
-  const rewardPercent = idea?.is_creator ? ownerPercent : userPercent
 
   const onOpenLike = () => {
-    if (isLiked) return toast.error(t('already-liked'))
+    if (isLike) return toast.error(t('already-liked'))
     if (isFailed) return toast.error(t('alread-failed'))
     if (isEnded || isSuccess) return toast.error(t('alread-ended'))
+
     setLikeOpen(true)
   }
 
@@ -103,10 +110,16 @@ export const IdeaLikeComment = ({
           </span>
         </div>
         <div className="text-zinc-500 text-sm">
-          <p>{utilLang.replace(t('memex.like.desc'), [rewardPercent + '%'])}</p>
+          <p>
+            {idea?.is_creator
+              ? utilLang.replace(t('memex.like.desc'), [ownerPercent + '%'])
+              : utilLang.replace(t('memex.liker-desc'), [
+                  memexIdeaConfig.likeUsdtFee,
+                ])}
+          </p>
           <p>
             {utilLang.replace(t('memex.like.desc2'), [
-              Number(durationSeconds / 60 / 60).toFixed(2) + t('hours'),
+              Number(duration / 60 / 60).toFixed(2) + t('hours'),
             ])}
           </p>
         </div>
@@ -192,8 +205,8 @@ export const IdeaLikeComment = ({
             onClick={(e) => e.stopPropagation()}
           >
             <IdeaHeartButton
-              likedCount={likedCount}
-              isLiked={isLiked}
+              likedCount={likeCount.toString()}
+              isLiked={isLike}
               onClick={onOpenLike}
             />
           </div>

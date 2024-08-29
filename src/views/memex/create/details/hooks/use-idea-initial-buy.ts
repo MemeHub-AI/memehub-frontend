@@ -1,116 +1,58 @@
-import { useAccount, useReadContract, useWriteContract } from 'wagmi'
+import { useReadContract } from 'wagmi'
 import { Address, formatEther } from 'viem'
-import { toast } from 'sonner'
-import { useTranslation } from 'react-i18next'
 
 import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { BI_ZERO } from '@/constants/number'
 import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
-import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { useChainInfo } from '@/hooks/use-chain-info'
-import { CONTRACT_ERR } from '@/errors/contract'
 
 export const useIdeaInitialBuy = (
   chain: string | undefined,
-  idoAddr?: string,
-  idoVersion?: MemexIdoVersion
+  version?: MemexIdoVersion,
+  contract?: string
 ) => {
-  const { t } = useTranslation()
-  const { address } = useAccount()
   const { memexFactoryAddr, memexFactoryVersion } = useTokenConfig(chain)
   const { chainId } = useChainInfo(chain)
   const idoConfig = {
-    abi: memexIdoAbiMap[idoVersion!],
-    address: idoAddr as Address,
+    abi: memexIdoAbiMap[version!],
+    address: contract as Address,
     chainId,
   }
-  const idoQuery = { enabled: !!idoAddr && !!idoVersion }
-
-  const { data: maxBuy = BI_ZERO, refetch: refetchInitialMax } =
-    useReadContract({
-      abi: memexFactoryAbiMap[memexFactoryVersion!],
-      address: memexFactoryAddr!,
-      chainId,
-      functionName: 'maxBuy',
-      query: { enabled: !!memexFactoryAddr && !!memexFactoryVersion },
-    })
-  const initialBuyMax = formatEther(maxBuy)
-
-  const { data: canRefundInitial = false, refetch: refetchCanRefund } =
-    useReadContract({
-      ...idoConfig,
-      functionName: 'isHasInitWithdraw',
-      query: idoQuery,
-    })
-  const { data: isRefundedInitial = false, refetch: refetchIsRefunded } =
-    useReadContract({
-      ...idoConfig,
-      functionName: 'isInitWithdrawETH',
-      args: [address!],
-      query: { enabled: idoQuery.enabled && !!address },
-    })
-  const { data: initAmountIn = BI_ZERO, refetch: refetchInitialAmount } =
-    useReadContract({
-      ...idoConfig,
-      functionName: 'initAmountIn',
-      query: idoQuery,
-    })
-  const initialBuyAmount = formatEther(initAmountIn)
 
   const {
-    data: hash,
-    isPending,
-    writeContract,
-    reset,
-  } = useWriteContract({
-    mutation: {
-      onMutate: () => toast.loading(t('refunding')),
-      onSettled: (_, __, ___, id) => toast.dismiss(id),
-      onError: ({ message }) => {
-        CONTRACT_ERR.message(message)
-        reset()
-      },
-    },
+    data: maxBuy = BI_ZERO,
+    isLoading: isLoadingMax,
+    refetch: refetchInitialMax,
+  } = useReadContract({
+    abi: memexFactoryAbiMap[memexFactoryVersion!],
+    address: memexFactoryAddr!,
+    chainId,
+    functionName: 'maxBuy',
+    query: { enabled: !!memexFactoryAddr && !!memexFactoryVersion },
   })
-  const { isLoading } = useWaitForTx({
-    hash,
-    onLoading: () => toast.loading(t('refunding')),
-    onError: ({ message }) => CONTRACT_ERR.message(message),
-    onSuccess: () => toast.success(t('refund-success')),
-    onFinally: () => {
-      reset()
-      refetchInitalBuy()
-      toast.dismiss()
-    },
+  const initialBuyMax = formatEther(maxBuy)
+
+  const {
+    data: initAmountIn = BI_ZERO,
+    isLoading: isLoadingAmount,
+    refetch: refetchInitialAmount,
+  } = useReadContract({
+    ...idoConfig,
+    functionName: 'initAmountIn',
+    query: { enabled: !!contract && !!version },
   })
-
-  const refundInitialBuy = () => {
-    if (!idoQuery.enabled) {
-      CONTRACT_ERR.configNotFound()
-      return
-    }
-
-    writeContract({
-      ...idoConfig,
-      functionName: 'withdrawInitETH',
-    })
-  }
+  const initialBuyAmount = formatEther(initAmountIn)
 
   const refetchInitalBuy = () => {
     refetchInitialMax()
-    refetchCanRefund()
-    refetchIsRefunded()
     refetchInitialAmount()
   }
 
   return {
     initialBuyMax,
     initialBuyAmount,
-    canRefundInitial,
-    isRefundedInitial,
-    isRefundingInitial: isPending || isLoading,
+    isRefundingInitial: isLoadingMax || isLoadingAmount,
     refetchInitalBuy,
-    refundInitialBuy,
   }
 }

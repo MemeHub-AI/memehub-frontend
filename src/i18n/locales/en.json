@@ -751,5 +751,6 @@
   "reward.trade": "Subsequent trade",
   "post-idea": "Post Idea",
   "airdrop.invalid": "No information",
-  "filter.only-graduated": "Only graduated"
+  "filter.only-graduated": "Only graduated",
+  "memex.liker-desc": "Likers receive bottom chips worth around {} USDT"
 }

@@ -4,6 +4,7 @@ import { useInfiniteQuery } from '@tanstack/react-query'
 import { memexApi } from '@/api/memex'
 import { MemexListType } from '@/api/memex/types'
 import { ApiCode } from '@/api/types'
+import { useIdoInfos } from './use-ido-infos'
 
 export const useIdeaList = (type: MemexListType) => {
   const getIdeaList = useMemo(() => {
@@ -39,13 +40,17 @@ export const useIdeaList = (type: MemexListType) => {
     },
   })
 
+  const { idoInfos, isLoadingIdoInfos, refetchIdoInfos } = useIdoInfos(list)
+
   return {
     list,
     total,
     isError,
-    isLoading,
+    isLoading: isLoading || isLoadingIdoInfos,
     isFetching,
     refetch,
     fetchNextPage,
+    idoInfos,
+    refetchIdoInfos,
   }
 }

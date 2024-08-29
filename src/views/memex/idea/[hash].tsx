@@ -12,9 +12,6 @@ import { useIdeaInfo } from '../hooks/use-idea-info'
 import { MemexIdeaCard } from '../components/idea-card'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getMemexLayout } from '..'
-import { useEffect, useState } from 'react'
-import { useResponsive } from '@/hooks/use-responsive'
-import { cn } from '@/lib/utils'
 
 export const IdeaDetailsPage = () => {
   const { query } = useRouter()
@@ -25,9 +22,9 @@ export const IdeaDetailsPage = () => {
   const { comments, isLoadingComments, refetchComments } = ideaComments
   const { chainId } = useChainInfo(details?.chain)
   const ideaInfo = useIdeaInfo(
-    details?.ido_address,
     chainId,
-    details?.memex_version
+    details?.memex_version,
+    details?.ido_address
   )
 
   return (
@@ -41,10 +38,12 @@ export const IdeaDetailsPage = () => {
       >
         <IdeaDetailsHeader />
         <MemexIdeaCard
-          idea={details}
-          onCommentSuccess={refetchComments}
-          className="py-0 border-none"
           mode="details"
+          className="py-0 border-none"
+          idea={details}
+          info={ideaInfo.ideaInfo}
+          refetchInfo={ideaInfo.refetchInfo}
+          onCommentSuccess={refetchComments}
         />
         <IdeaCommentForm />
         {comments.map((c) => (

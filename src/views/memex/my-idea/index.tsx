@@ -10,9 +10,15 @@ import { MemexInfiniteScroll } from '../components/memex-infinite-scroll'
 import { getMemexLayout } from '..'
 
 export const MyIdeaPage = () => {
-  const { list, total, isLoading, refetch, fetchNextPage } = useIdeaList(
-    MemexListType.My
-  )
+  const {
+    list,
+    idoInfos,
+    total,
+    isLoading,
+    refetch,
+    refetchIdoInfos,
+    fetchNextPage,
+  } = useIdeaList(MemexListType.My)
 
   return (
     <CustomSuspense
@@ -21,8 +27,15 @@ export const MyIdeaPage = () => {
       nullback={<IdeaEmpty />}
     >
       <MemexInfiniteScroll list={list} total={total} fetchNext={fetchNextPage}>
-        {list.map((t) => (
-          <MemexIdeaCard key={t?.hash} idea={t} onCommentSuccess={refetch} />
+        {list.map((idea, i) => (
+          <MemexIdeaCard
+            key={idea?.hash}
+            idea={idea}
+            info={idoInfos[i]}
+            refetchInfo={refetchIdoInfos}
+            onCommentSuccess={refetch}
+            listType={MemexListType.My}
+          />
         ))}
       </MemexInfiniteScroll>
     </CustomSuspense>

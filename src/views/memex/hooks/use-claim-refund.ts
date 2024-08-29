@@ -1,5 +1,5 @@
 import { type Address } from 'viem'
-import { useAccount, useReadContracts, useWriteContract } from 'wagmi'
+import { useAccount, useWriteContract } from 'wagmi'
 import { toast } from 'sonner'
 import { useTranslation } from 'react-i18next'
 
@@ -10,7 +10,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
 
 export const useIdeaClaimRefund = (
-  addr: string | undefined | null,
+  contract: string | undefined | null,
   chainId: number,
   version: MemexIdoVersion | undefined,
   onFinally?: () => void
@@ -27,36 +27,12 @@ export const useIdeaClaimRefund = (
       success: () => toast.success(t('refund-success')),
     },
   })
-  const { checkForChain } = useCheckAccount()
-
-  const idoConfig = {
+  const { checkAccount } = useCheckAccount()
+  const config = {
     abi: memexIdoAbiMap[version!],
-    address: addr as Address,
+    address: contract as Address,
     chainId,
   }
-  const args = [address!] as const
-
-  const {
-    data: [
-      canClaim = false,
-      canRefund = false,
-      isClaimed = false,
-      isRefunded = false,
-    ] = [],
-    isLoading,
-    refetch,
-  } = useReadContracts({
-    contracts: [
-      { ...idoConfig, functionName: 'isCanClaimToken', args },
-      { ...idoConfig, functionName: 'isCanWithdraw', args },
-      { ...idoConfig, functionName: 'isClaimToken', args },
-      { ...idoConfig, functionName: 'isWithdrawETH', args },
-    ],
-    query: {
-      enabled: !!address && !!addr && !!idoConfig.abi,
-      select: (data) => data.map((d) => d.result),
-    },
-  })
 
   const {
     data: hash,
@@ -80,49 +56,51 @@ export const useIdeaClaimRefund = (
     onSuccess: toasts.success,
     onFinally: () => {
       reset()
-      refetch()
       onFinally?.()
       toast.dismiss()
     },
   })
 
   const checkForWrite = async () => {
-    if (!addr || !address || !idoConfig.abi) return false
-    if (!(await checkForChain(chainId))) return false
+    if (!contract || !address || !config.abi) return false
+    if (!(await checkAccount(chainId))) return false
     return true
   }
 
   const claim = async () => {
-    if (!canClaim) return
     if (!(await checkForWrite())) return
 
     setToastType('claim')
     writeContract({
-      ...idoConfig,
+      ...config,
       functionName: 'claimToken',
     })
   }
 
   const refund = async () => {
-    if (!canRefund) return
     if (!(await checkForWrite())) return
 
     setToastType('refund')
     writeContract({
-      ...idoConfig,
+      ...config,
       functionName: 'withdrawETH',
     })
   }
 
+  const refundInitial = async () => {
+    if (!(await checkForWrite())) return
+
+    setToastType('refund')
+    writeContract({
+      ...config,
+      functionName: 'withdrawInitETH',
+    })
+  }
+
   return {
-    canClaim,
-    canRefund,
-    isClaimed,
-    isRefunded,
-    isLoading,
     isPending: isPending || isWaiting,
-    refetch,
     claim,
     refund,
+    refundInitial,
   }
 }

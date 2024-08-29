@@ -35,8 +35,8 @@ export const useUpdateIdea = (
   const { checkForChain } = useCheckAccount()
   const { initialBuyAmount, initialBuyMax } = useIdeaInitialBuy(
     details?.chain || (query.chain as string),
-    details?.ido_address,
-    details?.memex_version
+    details?.memex_version,
+    details?.ido_address
   )
 
   const {

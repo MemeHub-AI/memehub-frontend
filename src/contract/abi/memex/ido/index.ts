@@ -40,4 +40,6 @@ export const memexIdoAbiMap = {
   '0.7.2': memexIdoAbi0_7_2,
 }
 
+export const memexIdoLatest = memexIdoAbiMap['0.7.2']
+
 export type MemexIdoVersion = keyof typeof memexIdoAbiMap

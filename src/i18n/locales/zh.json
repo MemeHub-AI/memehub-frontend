@@ -741,5 +741,6 @@
   "reward.trade": "下级交易奖励",
   "post-idea": "发布创意",
   "airdrop.invalid": "无法获取空投信息",
-  "filter.only-graduated": "只看已毕业代币"
+  "filter.only-graduated": "只看已毕业代币",
+  "memex.liker-desc": "点赞者获得价值 {} USDT左右的底部筹码"
 }

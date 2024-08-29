@@ -8,14 +8,17 @@ import { MemexListType } from '@/api/memex/types'
 import { useIdeaList } from '../hooks/use-idea-list'
 import { MemexInfiniteScroll } from '../components/memex-infinite-scroll'
 import { getMemexLayout } from '..'
-import IdeaTest from '../components/idea-test'
 
 export const LatestPage = () => {
-  const { list, total, isLoading, refetch, fetchNextPage } = useIdeaList(
-    MemexListType.Latest
-  )
-
-  // console.log('latest', list)
+  const {
+    list,
+    idoInfos,
+    total,
+    isLoading,
+    refetch,
+    refetchIdoInfos,
+    fetchNextPage,
+  } = useIdeaList(MemexListType.Latest)
 
   return (
     <CustomSuspense
@@ -25,9 +28,14 @@ export const LatestPage = () => {
       nullback={<IdeaEmpty />}
     >
       <MemexInfiniteScroll list={list} total={total} fetchNext={fetchNextPage}>
-        {/* <IdeaTest /> */}
-        {list.map((t) => (
-          <MemexIdeaCard key={t?.hash} idea={t} onCommentSuccess={refetch} />
+        {list.map((idea, i) => (
+          <MemexIdeaCard
+            key={idea?.hash}
+            idea={idea}
+            info={idoInfos[i]}
+            refetchInfo={refetchIdoInfos}
+            onCommentSuccess={refetch}
+          />
         ))}
       </MemexInfiniteScroll>
     </CustomSuspense>
