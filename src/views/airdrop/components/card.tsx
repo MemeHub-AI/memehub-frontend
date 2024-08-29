@@ -53,15 +53,12 @@ export const AirdropCard = ({
     isClaimedCommunity = false,
     isBurn: isBurned = false,
   } = distribution ?? {}
-  const [perAmount, currentCount, totalCount, isClaimed] = useMemo(
-    () => [
-      formatEther(isKolCard ? amountPerClaimKOL : amountPerClaimCommunity),
-      isKolCard ? claimedCountKOL : claimedCountCommunity,
-      isKolCard ? walletCountKOL : walletCountCommunity,
-      isKolCard ? isClaimedKOL : isClaimedCommunity,
-    ],
-    [isKolCard, distribution]
+  const perAmount = formatEther(
+    isKolCard ? amountPerClaimKOL : amountPerClaimCommunity
   )
+  const currentCount = isKolCard ? claimedCountKOL : claimedCountCommunity
+  const totalCount = isKolCard ? walletCountKOL : walletCountCommunity
+  const isClaimed = isKolCard ? isClaimedKOL : isClaimedCommunity
   const isClaimedAll = totalCount - currentCount > 0
   const isNoCount = totalCount <= 0
   const disabled = isClaimed || isBurned || isClaimedAll || isNoCount

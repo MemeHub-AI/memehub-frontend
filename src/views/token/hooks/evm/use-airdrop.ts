@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useReadContract, useWriteContract } from 'wagmi'
+import { useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Address, zeroAddress } from 'viem'
@@ -15,54 +15,20 @@ import {
 import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const useAirdrop = (
-  id: number | undefined,
-  addr: string | undefined,
+  id: bigint,
+  chainId: number,
   version: DistributorVersion | undefined,
-  chainId: number | undefined,
+  contract: string | undefined,
   onFinally?: () => void
 ) => {
   const { t } = useTranslation()
   const { playFire } = useAudioPlayer()
-  const { address, checkForChain, checkForConnect } = useCheckAccount()
+  const { checkAccount } = useCheckAccount()
   const { setIsCalimingAirdrop } = useAirdropStore()
-
-  const airdropConfig = {
+  const config = {
     abi: distributorAbiMap[version!],
-    address: addr as Address,
+    address: contract as Address,
     chainId,
-  }
-
-  const query = {
-    enabled: !!address && !!addr && !!chainId && typeof id === 'number',
-    refetchInterval: 5_000,
-  }
-
-  const { data: isKolClaimed = false, refetch: refetchKolClaimed } =
-    useReadContract({
-      ...airdropConfig,
-      functionName: 'isClaimedKOL',
-      args: [BigInt(id ?? -1), address!],
-      query,
-    })
-
-  const { data: isCommunityClaimed = false, refetch: refetchCommunityCalimed } =
-    useReadContract({
-      ...airdropConfig,
-      functionName: 'isClaimedCommunity',
-      args: [BigInt(id ?? -1), address!],
-      query,
-    })
-
-  const { data: isBurned, refetch: refetchBurned } = useReadContract({
-    ...airdropConfig,
-    functionName: 'isBurn',
-    args: [BigInt(id ?? -1)],
-    query: { enabled: typeof id === 'number' },
-  })
-
-  const refetch = () => {
-    refetchKolClaimed()
-    refetchCommunityCalimed()
   }
 
   const {
@@ -88,7 +54,6 @@ export const useAirdrop = (
     onSuccess: () => toast.success(t('airdrop.claim.success')),
     onFinally: () => {
       reset()
-      refetch()
       onFinally?.()
       toast.dismiss()
     },
@@ -96,9 +61,8 @@ export const useAirdrop = (
   const isClaiming = isPending || isLoading
 
   const checkForClaim = async () => {
-    if (!checkForConnect()) return false
-    if (!(await checkForChain(chainId))) return false
-    if (!addr || typeof id !== 'number') {
+    if (!(await checkAccount(chainId))) return false
+    if (!contract) {
       CONTRACT_ERR.configNotFound()
       return false
     }
@@ -110,7 +74,7 @@ export const useAirdrop = (
     if (!(await checkForClaim())) return
 
     writeContract({
-      ...airdropConfig,
+      ...config,
       functionName: 'claimKol',
       args: [BigInt(id!), BigInt(kolId)],
     })
@@ -124,7 +88,7 @@ export const useAirdrop = (
     if (!(await checkForClaim())) return
 
     writeContract({
-      ...airdropConfig,
+      ...config,
       functionName: 'claimCommunity',
       args: [BigInt(id!), BigInt(exchangeId), nftId, tokenId],
     })
@@ -134,12 +98,7 @@ export const useAirdrop = (
 
   return {
     isClaiming,
-    isKolClaimed,
-    isCommunityClaimed,
-    isBurned,
-    refetchBurned,
     claimKol,
     claimCommunity,
-    resetClaim: reset,
   }
 }

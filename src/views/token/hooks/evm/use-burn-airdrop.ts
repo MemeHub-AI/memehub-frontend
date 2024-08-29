@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useReadContract, useWriteContract } from 'wagmi'
+import { useWriteContract } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { Address } from 'viem'
@@ -14,27 +14,20 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { useAirdropStore } from '@/stores/use-airdrop'
 
 export const useBurnAirdrop = (
-  airdropId: number | undefined, // airdrop id
-  airdropVersion: DistributorVersion | undefined,
-  airdropAddr: string | undefined,
+  id: bigint,
   chainId: number,
+  version: DistributorVersion | undefined,
+  contract: string | undefined,
   onFinally?: () => void
 ) => {
   const { t } = useTranslation()
-  const { checkForConnect, checkForChain } = useCheckAccount()
+  const { checkAccount } = useCheckAccount()
   const { setIsCalimingAirdrop } = useAirdropStore()
   const config = {
-    abi: distributorAbiMap[airdropVersion!],
-    address: airdropAddr as Address,
+    abi: distributorAbiMap[version!],
+    address: contract as Address,
     chainId,
   }
-
-  const { data: isBurned, refetch: refetchBurned } = useReadContract({
-    ...config,
-    functionName: 'isBurn',
-    args: [BigInt(airdropId ?? -1)],
-    query: { enabled: typeof airdropId === 'number' },
-  })
 
   const {
     data: hash,
@@ -58,32 +51,28 @@ export const useBurnAirdrop = (
     onFinally: () => {
       reset()
       onFinally?.()
-      refetchBurned()
       toast.dismiss()
     },
   })
   const isBurning = isPending || isLoading
 
   const burn = async () => {
-    if (!checkForConnect()) return
-    if (!(await checkForChain(chainId))) return
-    if (!config.address || typeof airdropId !== 'number') {
+    if (!(await checkAccount(chainId))) return
+    if (!config.address) {
       CONTRACT_ERR.configNotFound()
       return
     }
 
-    // TODO/low: should simulate first.
     writeContract({
       ...config,
       functionName: 'burnToken',
-      args: [BigInt(airdropId)],
+      args: [id],
     })
   }
 
   useEffect(() => setIsCalimingAirdrop(isBurning), [isBurning])
 
   return {
-    isBurned,
     isBurning,
     burn,
   }

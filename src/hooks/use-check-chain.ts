@@ -28,11 +28,19 @@ export const useCheckAccount = () => {
     }
   }
 
+  const checkAccount = async (chainId: number | string | undefined) => {
+    if (!checkForConnect()) return false
+    if (!(await checkForChain(chainId))) return false
+
+    return true
+  }
+
   return {
     address,
     isConnected,
     walletChainId,
     checkForConnect,
     checkForChain,
+    checkAccount,
   }
 }

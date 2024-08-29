@@ -4,8 +4,6 @@ import { BsGraphUpArrow } from 'react-icons/bs'
 import { LuUsers } from 'react-icons/lu'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
-import dayjs from 'dayjs'
-import { useCountDown } from 'ahooks'
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { TokenInfoHeader } from './token-info-header'
@@ -16,15 +14,14 @@ import { Chart } from '@/components/chart'
 import { TradeAirdrop } from './trade-airdrop'
 import { HoldersRank } from './holders-rank'
 import { cn } from '@/lib/utils'
-import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
-import { useAirdrop } from '../hooks/evm/use-airdrop'
-import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 import { useTokenContext } from '@/contexts/token'
 import { useUserStore } from '@/stores/use-user-store'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
+import { getEvmAirdropId } from '@/utils/contract'
+import { useAirdropInfo } from '@/hooks/airdrop/use-airdrop-info'
 
-const enum TabName {
+const enum Tab {
   Trade = '0',
   Chart = '1',
   Holder = '2',
@@ -32,50 +29,47 @@ const enum TabName {
 
 export const TokenMobile = () => {
   const { t } = useTranslation()
-  const { query, replace } = useRouter()
-  const tab = (query.tab || TabName.Trade) as string
+  const { query, ...router } = useRouter()
   const { tokenInfo, chainId } = useTokenContext()
-  const { airdrop, airdrop_address, airdrop_version } = tokenInfo ?? {}
-  const airdropId = airdrop?.[0]?.distribution_id
-
-  const { createAt, durationSeconds } = useTradeAirdropContext()
   const { isKol, hasCommunity } = useUserStore()
-  const { isKolClaimed, isCommunityClaimed } = useAirdrop(
-    airdropId,
-    airdrop_address,
-    airdrop_version,
-    chainId
-  )
-  const { isBurned } = useBurnAirdrop(
-    airdropId,
-    airdrop_version,
-    airdrop_address,
-    chainId
-  )
+  const { airdrop, airdrop_address, airdrop_version } = tokenInfo ?? {}
+  const tab = (query.tab || Tab.Trade) as string
 
-  const targetDate = useMemo(
-    () => dayjs.unix(createAt).add(durationSeconds, 'second'),
-    [createAt, durationSeconds]
+  const {
+    hasKolAirdrop,
+    hasCommunityAirdrop,
+    isClaimedKOL,
+    isClaimedCommunity,
+    isBurned,
+  } = useAirdropInfo(
+    getEvmAirdropId(airdrop),
+    chainId,
+    airdrop_version,
+    airdrop_address
   )
-  const [countdown] = useCountDown({ targetDate })
-  const isAirdropExpired = countdown <= 0
 
   const tipsCount = useMemo(() => {
-    if (isAirdropExpired || isBurned) return
+    if (isBurned) return
     let count = 0
 
-    if (isKol && !isKolClaimed) count++
-    if (hasCommunity && !isCommunityClaimed) count++
+    if (isKol && !isClaimedKOL) count++
+    if (hasCommunity && !isClaimedCommunity) count++
 
     return count
-  }, [createAt, durationSeconds, isKolClaimed, isCommunityClaimed, isBurned])
+  }, [
+    hasKolAirdrop,
+    hasCommunityAirdrop,
+    isClaimedKOL,
+    isClaimedCommunity,
+    isBurned,
+  ])
 
   return (
     <Tabs
       defaultValue={tab}
       className="w-full min-h-max flex flex-col justify-between"
       onValueChange={(tab) => {
-        replace({
+        router.replace({
           pathname: joinPaths(
             Routes.Main,
             query.chain as string,
@@ -85,35 +79,35 @@ export const TokenMobile = () => {
         })
       }}
     >
-      <TabsContent value={TabName.Trade}>
+      <TabsContent value={Tab.Trade}>
         <TokenInfoHeader />
         <TradeTab className="mt-3" />
         <div className="pt-2"></div>
         <TokenInfoCard />
         <CommentTradeTab />
       </TabsContent>
-      <TabsContent value={TabName.Chart}>
+      <TabsContent value={Tab.Chart}>
         <Chart />
         <TradeAirdrop />
       </TabsContent>
-      <TabsContent value={TabName.Holder}>
+      <TabsContent value={Tab.Holder}>
         <TokenInfoHeader />
         <HoldersRank />
       </TabsContent>
       <div className="h-[36px] mb-2">
         <div className="fixed left-0 bottom-0 w-full">
           <TabsList className="h-11 grid w-full rounded-none grid-cols-3 bg-white">
-            <TabsTrigger value={TabName.Trade} className="bg-white">
+            <TabsTrigger value={Tab.Trade} className="bg-white">
               <BsArrowDownUp className="mr-1" size={16}></BsArrowDownUp>
               {t('trade.tab')}
             </TabsTrigger>
             <TabsTrigger
               className="border-x-2 border-black relative bg-white"
-              value={TabName.Chart}
+              value={Tab.Chart}
             >
               <BsGraphUpArrow className="mr-1" size={16}></BsGraphUpArrow>
               {t('chart')}
-              {!!tipsCount && tab !== TabName.Chart && (
+              {!!tipsCount && tab !== Tab.Chart && (
                 <div
                   className={cn(
                     'absolute top-2 right-4 bg-red-500 rounded-full',
@@ -125,7 +119,7 @@ export const TokenMobile = () => {
                 </div>
               )}
             </TabsTrigger>
-            <TabsTrigger value={TabName.Holder} className="bg-white">
+            <TabsTrigger value={Tab.Holder} className="bg-white">
               <LuUsers className="mr-1" size={20}></LuUsers>
               {t('holder')}
             </TabsTrigger>

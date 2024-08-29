@@ -1,4 +1,4 @@
-import React, { useMemo, type ComponentProps } from 'react'
+import { useMemo, type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BigNumber } from 'bignumber.js'
 
@@ -10,6 +10,7 @@ import { useTokenContext } from '@/contexts/token'
 import { useBurnAirdrop } from '../hooks/evm/use-burn-airdrop'
 import { utilLang } from '@/utils/lang'
 import { fmt } from '@/utils/fmt'
+import { getEvmAirdropId } from '@/utils/contract'
 
 export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
   const { t } = useTranslation()
@@ -20,36 +21,48 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
     airdrop_version,
     airdrop_address,
   } = tokenInfo ?? {}
-
   const {
     isOnlyOne,
-    airdropTotal,
-    kolClaimedAmount,
-    communityClaimedAmount,
-    refetchAirdrop,
+    perKolAmount,
+    perCommunityAmount,
+    walletCountKOL,
+    walletCountCommunity,
+    claimedCountKOL,
+    claimedCountCommunity,
+    isBurned,
+    refetchInfo,
   } = useTradeAirdropContext()
-  const remaining = useMemo(
-    () =>
-      BigNumber(
-        BigNumber(airdropTotal)
-          .minus(kolClaimedAmount)
-          .minus(communityClaimedAmount)
-          .toFixed(0, BigNumber.ROUND_UP)
-      ).toFormat(),
-    [airdropTotal, kolClaimedAmount, communityClaimedAmount]
-  )
 
-  const { isBurned, isBurning, burn } = useBurnAirdrop(
-    airdrop[0]?.distribution_id,
+  const burnAmount = useMemo(() => {
+    const kolTotal = BigNumber(walletCountKOL)
+      .minus(claimedCountKOL)
+      .multipliedBy(perKolAmount)
+    const communityTotal = BigNumber(walletCountCommunity)
+      .minus(claimedCountCommunity)
+      .multipliedBy(perCommunityAmount)
+    const total = kolTotal.plus(communityTotal).toFixed(0, BigNumber.ROUND_UP)
+
+    return BigNumber(total).toFormat()
+  }, [perKolAmount, perCommunityAmount, walletCountKOL, walletCountCommunity])
+
+  const { isBurning, burn } = useBurnAirdrop(
+    getEvmAirdropId(airdrop),
+    chainId,
     airdrop_version,
     airdrop_address,
-    chainId,
-    refetchAirdrop
+    refetchInfo
   )
 
-  const burnText = `${remaining} ${fmt.ellipsis(
+  const burnText = `${burnAmount} ${fmt.ellipsis(
     symbol ?? tokenMetadata?.symbol
   )}`
+
+  const renderBurnButton = () => {
+    if (isBurned) return t('airdrop.burned')
+    if (isBurning) return t('burning')
+
+    return t('burn.button') + burnText
+  }
 
   return (
     <Card
@@ -80,12 +93,7 @@ export const TradeBurnCard = ({ className }: ComponentProps<typeof Card>) => {
         disabled={isBurned || isBurning}
         onClick={burn}
       >
-        🔥{' '}
-        {isBurned
-          ? t('airdrop.burned')
-          : isBurning
-          ? t('burning')
-          : t('burn.button').replace('$1', burnText)}
+        🔥 {renderBurnButton()}
       </Button>
     </Card>
   )

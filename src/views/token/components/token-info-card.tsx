@@ -17,7 +17,7 @@ import { PosterImages } from '@/components/poster-images'
 import { SocialLinks } from '../../../components/social-links'
 import { AvatarCard } from '@/components/avatar-card'
 import { listedMarketCap } from '@/config/trade'
-import EllipsisText from '@/components/ellipsis-text'
+import { EllipsisText } from '@/components/ellipsis-text'
 
 export const TokenInfoCard = ({ className }: ComponentProps<'div'>) => {
   const { t } = useTranslation()

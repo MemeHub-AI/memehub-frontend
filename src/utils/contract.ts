@@ -9,7 +9,7 @@ import { Network } from '@/enums/contract'
 import { deployEvmAirdropParams } from '@/config/deploy'
 import { Marketing, MarketType } from '@/api/token/types'
 import { AirdropFlag } from '@/enums/airdrop'
-import { AirdropItem } from '@/api/airdrop/types'
+import { AirdropDetail, AirdropItem } from '@/api/airdrop/types'
 
 // Whether user rejected error.
 export const isUserReject = (err: string | unknown) => {
@@ -148,8 +148,14 @@ export const getEvmAirdropParams = (
   return params
 }
 
-export const getEvmAirdropId = (item?: AirdropItem) =>
-  BigInt(item?.airdrop[0]?.distribution_id || -1)
+export const getEvmAirdropId = (
+  item: AirdropItem | AirdropDetail[] | undefined
+) => {
+  if (!item) return BigInt(-1)
+  item = Array.isArray(item) ? item : item.airdrop
+
+  return BigInt(item?.[0]?.distribution_id || -1)
+}
 
 export const getContractsEnabled = <T extends any[]>(
   list: T,

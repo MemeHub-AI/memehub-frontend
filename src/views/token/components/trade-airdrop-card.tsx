@@ -14,6 +14,7 @@ import { useAirdrop } from '../hooks/evm/use-airdrop'
 import { fmt } from '@/utils/fmt'
 import { useTradeAirdropContext } from '@/contexts/trade-airdrop'
 import { useUserStore } from '@/stores/use-user-store'
+import { getEvmAirdropId } from '@/utils/contract'
 
 interface Props extends ComponentProps<typeof Card> {
   type: 'kol' | 'community'
@@ -22,48 +23,45 @@ interface Props extends ComponentProps<typeof Card> {
 export const TradeAirdropCard = ({ className, type }: Props) => {
   const { t } = useTranslation()
   const [isExpired, setIsExpired] = useState(false)
+  const { isKol, hasCommunity, kolInfo, communityInfo } = useUserStore() // KOL is userself
   const { tokenInfo, tokenMetadata, chainId } = useTokenContext()
   const { airdrop, airdrop_address, airdrop_version } = tokenInfo ?? {}
-
-  const {
-    createAt,
-    durationSeconds,
-    kolCount,
-    kolClaimedCount,
-    communityCount,
-    communityClaimedCount,
-    perKolAmount,
-    perCommunityAmount,
-    refetchAirdrop,
-  } = useTradeAirdropContext()
-  const {
-    isKolClaimed,
-    isCommunityClaimed,
-    isClaiming,
-    claimKol,
-    claimCommunity,
-  } = useAirdrop(
-    airdrop?.[0]?.distribution_id,
-    airdrop_address,
-    airdrop_version,
-    chainId,
-    refetchAirdrop
-  )
-
-  const { isKol, hasCommunity, kolInfo, communityInfo } = useUserStore() // KOL is userself
   const [isKolCard, isCommunityCard] = useMemo(
     () => [type === 'kol', type === 'community'],
     [type]
   )
+
+  const {
+    createAt,
+    durationSeconds,
+    perKolAmount,
+    perCommunityAmount,
+    claimedCountKOL,
+    claimedCountCommunity,
+    walletCountKOL,
+    walletCountCommunity,
+    isClaimedKOL,
+    isClaimedCommunity,
+    refetchInfo,
+  } = useTradeAirdropContext()
+  const { isClaiming, claimKol, claimCommunity } = useAirdrop(
+    getEvmAirdropId(airdrop),
+    chainId,
+    airdrop_version,
+    airdrop_address,
+    refetchInfo
+  )
+
   const suffix = isKolCard ? t('ambassador') : t('pure.community')
-  const totalAmount = isKolCard ? perKolAmount : perCommunityAmount
-  const current = isKolCard ? kolClaimedCount : communityClaimedCount
-  const total = isKolCard ? kolCount : communityCount
-  const hasAmount = total - current > 0
+  const perAmount = isKolCard ? perKolAmount : perCommunityAmount
+  const currentCount = isKolCard ? claimedCountKOL : claimedCountCommunity
+  const totalCount = isKolCard ? walletCountKOL : walletCountCommunity
+  const isClaimedAll = totalCount - currentCount <= 0
 
   const isNoNft = (isKolCard && !isKol) || (isCommunityCard && !hasCommunity)
-  const isClaimed = isKolCard ? isKolClaimed : isCommunityClaimed
-  const disabled = isExpired || isClaimed || isNoNft || isClaiming || !hasAmount
+  const isClaimed = isKolCard ? isClaimedKOL : isClaimedCommunity
+  const disabled =
+    isExpired || isClaimed || isNoNft || isClaiming || isClaimedAll
 
   const claim = () => {
     if (isKolCard) {
@@ -109,7 +107,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     if (isClaiming) return t('claiming')
     if (isNoNft) return t('airdrop.not-nft')
     if (isExpired) return t('expired')
-    if (!hasAmount) return t('airdrop.no-amount')
+    if (isClaimedAll) return t('airdrop.no-amount')
 
     return t('airdrop.claim')
   }
@@ -134,7 +132,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
         <div className="flex items-center">
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
           <span className="ml-2 truncate max-w-40 xl:max-w-72">
-            {BigNumber(BigNumber(totalAmount).toFixed(0)).toFormat()}{' '}
+            {BigNumber(BigNumber(perAmount).toFixed(0)).toFormat()}{' '}
             {tokenInfo?.symbol ?? tokenMetadata?.symbol}
           </span>
         </div>
@@ -142,7 +140,8 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
         <div className="flex items-center shrink-0">
           <TbUsers size={20} />
           <span className="ml-2">
-            {BigNumber(current).toFormat()} / {BigNumber(total).toFormat()}
+            {BigNumber(currentCount).toFormat()} /{' '}
+            {BigNumber(totalCount).toFormat()}
           </span>
         </div>
       </div>
