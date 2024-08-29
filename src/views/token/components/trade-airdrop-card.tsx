@@ -28,12 +28,12 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
   const {
     createAt,
     durationSeconds,
-    kolTotalAmount,
     kolCount,
     kolClaimedCount,
-    communityTotalAmount,
     communityCount,
     communityClaimedCount,
+    perKolAmount,
+    perCommunityAmount,
     refetchAirdrop,
   } = useTradeAirdropContext()
   const {
@@ -56,7 +56,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
     [type]
   )
   const suffix = isKolCard ? t('ambassador') : t('pure.community')
-  const totalAmount = isKolCard ? kolTotalAmount : communityTotalAmount
+  const totalAmount = isKolCard ? perKolAmount : perCommunityAmount
   const current = isKolCard ? kolClaimedCount : communityClaimedCount
   const total = isKolCard ? kolCount : communityCount
   const hasAmount = total - current > 0
@@ -134,7 +134,7 @@ export const TradeAirdropCard = ({ className, type }: Props) => {
         <div className="flex items-center">
           <img src="/images/gift.png" alt="Avatar" className="w-7 h-7" />
           <span className="ml-2 truncate max-w-40 xl:max-w-72">
-            {BigNumber(totalAmount).toFormat()}{' '}
+            {BigNumber(BigNumber(totalAmount).toFixed(0)).toFormat()}{' '}
             {tokenInfo?.symbol ?? tokenMetadata?.symbol}
           </span>
         </div>

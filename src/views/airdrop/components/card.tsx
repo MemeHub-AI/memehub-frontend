@@ -55,8 +55,8 @@ export const AirdropCard = ({
   const {
     createAt,
     durationSeconds,
-    kolTotalAmount,
-    communityTotalAmount,
+    perKolAmount,
+    perCommunityAmount,
     kolClaimedCount,
     kolCount,
     communityCount,
@@ -72,7 +72,7 @@ export const AirdropCard = ({
     bcAddr: bond_address,
   })
 
-  const totalAmount = isKolCard ? kolTotalAmount : communityTotalAmount
+  const totalAmount = isKolCard ? perKolAmount : perCommunityAmount
   const current = isKolCard ? kolClaimedCount : communityClaimedCount
   const total = isKolCard ? kolCount : communityCount
   const hasAmount = total - current > 0
@@ -146,7 +146,7 @@ export const AirdropCard = ({
           <div className="mt-3 flex items-center">
             <img src="/images/gift.png" alt="gift" className="w-6 h-6" />
             <span className="ml-2 text-gray-500 break-all line-clamp-1">
-              {BigNumber(totalAmount ?? 0).toFormat()} {symbol}
+              {BigNumber(BigNumber(totalAmount).toFixed(0)).toFormat()} {symbol}
             </span>
           </div>
           <div className="mt-3 flex items-center text-gray-500">

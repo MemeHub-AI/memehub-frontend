@@ -102,33 +102,6 @@ export const useAirdropInfo = ({
     return { airdropTotal, airdropRatio }
   }, [ratio, totalSupply])
 
-  const [
-    kolTotalAmount,
-    communityTotalAmount,
-    kolClaimedAmount,
-    communityClaimedAmount,
-  ] = useMemo(
-    () => [
-      BigNumber(kolCount)
-        .multipliedBy(perKolAmount)
-        .toFixed(2, BigNumber.ROUND_UP),
-      BigNumber(communityCount)
-        .multipliedBy(perCommunityAmount)
-        .toFixed(2, BigNumber.ROUND_UP),
-      BigNumber(kolClaimedCount).multipliedBy(perKolAmount).toFixed(),
-      BigNumber(communityClaimedCount)
-        .multipliedBy(perCommunityAmount)
-        .toFixed(),
-    ],
-    [
-      kolCount,
-      perKolAmount,
-      communityCount,
-      perCommunityAmount,
-      communityClaimedCount,
-    ]
-  )
-
   // TODO: may need to `refetchDetails`, but it will refresh the page
   useInterval(refetchAirdrop, 5_000)
 
@@ -147,10 +120,8 @@ export const useAirdropInfo = ({
     airdropTotal,
     createAt,
     durationSeconds,
-    kolTotalAmount,
-    communityTotalAmount,
-    kolClaimedAmount,
-    communityClaimedAmount,
+    perKolAmount,
+    perCommunityAmount,
     isLoadingInfo,
     refetchAirdrop,
   }
