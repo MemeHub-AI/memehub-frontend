@@ -3,15 +3,16 @@ import { GoComment } from 'react-icons/go'
 import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 import { PiShareFat } from 'react-icons/pi'
+import { HeartFilledIcon, HeartIcon } from '@radix-ui/react-icons'
 
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
-import { IdeaHeartButton } from '../idea-heart-button'
 import { useIdeaCardContext } from '@/contexts/memex/idea-card'
 import { BI_ZERO } from '@/constants/number'
 import { CopyIcon } from '@/components/copy-icon'
 import { LikeDialog } from './like-dialog'
 import { CommentDialog } from './comment-dialog'
+import { Button } from '@/components/ui/button'
 
 export const IdeaCardLikeComment = ({
   onCommentSuccess,
@@ -57,16 +58,26 @@ export const IdeaCardLikeComment = ({
 
       <div className="flex items-center justify-between mt-2">
         <div className="flex items-center space-x-3 select-none">
-          <div
-            className="flex items-center space-x-1 text-sm cursor-pointer"
-            onClick={(e) => e.stopPropagation()}
+          <Button
+            variant="red"
+            shadow="none"
+            size="sm"
+            className="flex items-center space-x-1 rounded-full px-3.5 shadow-lg shadow-zinc-400"
+            disabled={isLike}
+            onClick={(e) => {
+              e.stopPropagation()
+              onOpenLike()
+            }}
           >
-            <IdeaHeartButton
-              likedCount={likeCount.toString()}
-              isLiked={isLike}
-              onClick={onOpenLike}
-            />
-          </div>
+            <div className="flex items-center space-x-0.5 text-sm">
+              {isLike ? (
+                <HeartFilledIcon className="w-5 h-5 max-sm:w-4 max-sm:h-4" />
+              ) : (
+                <HeartIcon className="w-5 h-5" />
+              )}
+              <span>{likeCount.toString()}</span>
+            </div>
+          </Button>
 
           <button className="flex items-center space-x-1 text-sm cursor-pointer text-zinc-500 sm:hover:text-black duration-150">
             <GoComment className="w-5 h-5" />
