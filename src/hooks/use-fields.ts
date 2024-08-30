@@ -19,6 +19,10 @@ export const createField = (field?: Field) => ({
   ...field,
 })
 
+/**
+ * TODO/middle
+ * @deprecated use `useForm` instead
+ */
 export const useFields = <T extends Fields<T>>(originFields: T) => {
   const [fields, setFields] = useState(originFields)
 

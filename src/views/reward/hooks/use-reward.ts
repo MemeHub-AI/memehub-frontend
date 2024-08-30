@@ -11,6 +11,7 @@ import { useTokenConfig } from '@/hooks/use-token-config'
 import { recommendAbiMap } from '@/contract/abi/recommend'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 
+// TODO/top: aggregate multi
 export const useReward = (chainName: string, chainId: number) => {
   const { t } = useTranslation()
   const { address } = useAccount()

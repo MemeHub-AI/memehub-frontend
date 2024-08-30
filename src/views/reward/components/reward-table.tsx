@@ -1,85 +1,61 @@
-import React, { type ComponentProps } from 'react'
+import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { isEmpty } from 'lodash'
-import { flexRender } from '@tanstack/react-table'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import { useReactTable, getCoreRowModel } from '@tanstack/react-table'
+import { first } from 'lodash'
 
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  TableFooter,
-} from '@/components/ui/table'
 import { cn } from '@/lib/utils'
-import { useRewardTable } from '../hooks/use-reward-table'
+import { DataTable } from '@/components/data-table'
+import { inviteApi } from '@/api/invite'
+import { useUserStore } from '@/stores/use-user-store'
+import { rewardColumns } from '../components/reward-columns'
+import { RewardItem } from '@/api/invite/types'
+
+const empty = [] as RewardItem[]
 
 export const RewardTable = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
-  const { ths, rows, total, fetchNextPage } = useRewardTable()
+  const { userInfo } = useUserStore()
+
+  const {
+    data: { list = [], total = 0 } = {},
+    isLoading,
+    fetchNextPage,
+  } = useInfiniteQuery({
+    queryKey: [inviteApi.getRewardList.name, userInfo?.id],
+    queryFn: ({ pageParam }) => {
+      return inviteApi.getRewardList({
+        page: pageParam,
+        page_size: 5,
+      })
+    },
+    enabled: !!userInfo,
+    initialPageParam: 1,
+    getNextPageParam: (_, __, page) => page + 1,
+    select: (data) => ({
+      total: first(data.pages)?.data.count ?? 0,
+      list: data.pages.flatMap((p) => p.data.results ?? []).filter(Boolean),
+    }),
+  })
+
+  const table = useReactTable({
+    data: list ?? empty,
+    columns: rewardColumns,
+    getCoreRowModel: getCoreRowModel(),
+  })
 
   return (
     <>
       <h2 className={cn('font-bold text-2xl mb-2', className)}>
         {t('reward.record')}
       </h2>
-      <Table containerClass="border-2 border-black rounded-md px-2 lg:w-4/5 2xl:w-3/5 max-sm:max-w-[94vw]">
-        <TableHeader>
-          {ths.map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => {
-                return (
-                  <TableHead key={header.id} className="text-black px-3">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                  </TableHead>
-                )
-              })}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.id}
-              data-state={row.getIsSelected() && 'selected'}
-            >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className="px-3">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-          {isEmpty(rows) && (
-            <tr>
-              <td
-                colSpan={ths[0]?.headers.length}
-                className="text-zinc-400 text-center py-4"
-              >
-                {t('no.earned')}
-              </td>
-            </tr>
-          )}
-        </TableBody>
-        {rows.length < total && (
-          <TableFooter className="bg-transparent text-center">
-            <TableRow onClick={() => fetchNextPage()}>
-              <TableCell
-                colSpan={ths[0]?.headers.length}
-                className="text-blue-600 cursor-pointer hover:underline"
-              >
-                {t('view-more')}...
-              </TableCell>
-            </TableRow>
-          </TableFooter>
-        )}
-      </Table>
+      <DataTable
+        containerClass="border-2 border-black rounded-md px-2 lg:w-4/5 2xl:w-3/5 max-sm:max-w-[94vw]"
+        table={table}
+        total={total}
+        isLoading={isLoading}
+        onFetchNext={fetchNextPage}
+      />
     </>
   )
 }

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Img } from '@/components/img'
 import { CustomSuspense } from '@/components/custom-suspense'
 import { cn } from '@/lib/utils'
-import { useRewardList } from '../hooks/use-reward-list'
+import { useRewardCards } from '../hooks/use-reward-cards'
 import { ChainData } from '@/api/chain/type'
 import { fmt } from '@/utils/fmt'
 import { useReward } from '../hooks/use-reward'
@@ -14,7 +14,7 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const RewardCards = ({ className }: ComponentProps<'h2'>) => {
   const { t } = useTranslation()
-  const { rewardList } = useRewardList()
+  const { rewardList } = useRewardCards()
 
   return (
     <>
@@ -40,9 +40,9 @@ export const RewardCards = ({ className }: ComponentProps<'h2'>) => {
 
 const RewardCard = ({ c }: { c: ChainData }) => {
   const { t } = useTranslation()
+  const { chain, chainName, chainId } = useChainInfo(c.name)
   const { totalAmount, unclaimedAmount, isClaiming, isClaimed, claimReward } =
-    useReward(c.name, +c.id)
-  const { chain } = useChainInfo(c.name)
+    useReward(chainName, chainId)
 
   const disabeld = isClaiming || isClaimed
 

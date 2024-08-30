@@ -27,7 +27,7 @@ const rewardSourceMap: Record<keyof RewardInfoRes, () => string> = {
   trade: () => t('reward.trade'),
 }
 
-export const rewardTableCols: ColumnDef<RewardItem>[] = [
+export const rewardColumns: ColumnDef<RewardItem>[] = [
   {
     accessorKey: 'earned',
     header: () => t('earned'),
