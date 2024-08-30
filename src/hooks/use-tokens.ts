@@ -12,10 +12,13 @@ export const useTokens = () => {
   } = useInfiniteQuery({
     queryKey: [tokenApi.getList.name],
     queryFn: ({ pageParam }) => {
-      return tokenApi.getList({
-        page: pageParam,
-        page_size: 25,
-      })
+      return tokenApi.getList([
+        ['page', pageParam.toString()],
+        ['page_size', '25'],
+        ['orderby', 'type'],
+        ['orderby', '-marketcap'],
+        ['orderby', '-time'],
+      ])
     },
     initialPageParam: 1,
     getNextPageParam: (_, __, page) => page + 1,

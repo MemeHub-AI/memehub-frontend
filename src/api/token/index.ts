@@ -1,5 +1,7 @@
 import { api } from '..'
 import { qs } from '@/utils/qs'
+import { ApiResponse, PaginationRes, PaginationReq } from '../types'
+
 import type {
   TokenCreateReq,
   TokenUpdateReq,
@@ -12,8 +14,8 @@ import type {
   TokenDetailReq,
   TokenCommentsReq,
   TokenLikereq,
+  TokenListReq,
 } from './types'
-import { ApiResponse, PaginationRes, PaginationReq } from '../types'
 
 export const tokenApi = {
   getConfig: () => {
@@ -29,7 +31,7 @@ export const tokenApi = {
       body: req,
     })
   },
-  getList: (req: PaginationReq & { search?: string }) => {
+  getList: (req: TokenListReq & { search?: string }) => {
     return api.GET<ApiResponse<PaginationRes<TokenListItem>>>(
       '/api/v2/coin/list' + qs.stringify(req)
     )

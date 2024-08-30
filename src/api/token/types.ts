@@ -6,6 +6,10 @@ import type { MemexFactoryVersion } from '@/contract/abi/memex/factory'
 import type { RecommendVersion } from '@/contract/abi/recommend'
 import type { BcVersion } from '@/contract/abi/bonding-curve'
 
+export type TokenListQueryKey = 'page' | 'page_size' | 'orderby'
+
+export type TokenListReq = [TokenListQueryKey, string][]
+
 export interface TokenListItem {
   airdrop: AirdropDetail[]
   airdrop_address: string
