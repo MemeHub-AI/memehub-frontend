@@ -33,7 +33,6 @@ export const TokenInfo = ({ ideaData }: Props) => {
     chainName: '',
     chainData: {} as OnchainTokensChain,
   })
-  const uniqueKey = useMemo(nanoid, [])
   const { onIdeaConfirm } = useGenAIIdea()
   const { setFormInfo, setLoadingLogo, setLoadingPoster } = useAimemeInfoStore()
   const { checkForConnect } = useCheckAccount()
@@ -41,7 +40,7 @@ export const TokenInfo = ({ ideaData }: Props) => {
   const onCreateNow = (item: IdeaDataList) => {
     if (!checkForConnect()) return
 
-    router.push(`${Routes.Create}`)
+    router.push(Routes.Create)
     setFormInfo({
       name: item?.name,
       symbol: item?.symbol,
@@ -52,8 +51,9 @@ export const TokenInfo = ({ ideaData }: Props) => {
   }
 
   const { data } = useQuery({
-    enabled: !!ideaData?.name,
-    queryKey: [uniqueKey],
+    // enabled: !!ideaData?.name,
+    enabled: false, // TODO/low: waiting for datahourse
+    queryKey: ['searchForTokens'],
     queryFn: () => tokenApi.searchTokens(ideaData?.name ?? ''),
   })
   const chains = data?.data || {}
