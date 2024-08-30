@@ -40,9 +40,9 @@ export const GridImages = ({
           <PhotoView key={i} src={src}>
             <img
               src={src}
-              alt=""
+              alt="img"
               className={cn(
-                'w-full h-full max-sm:max-h-48 object-cover lg:max-h-100 lg: max-w-128',
+                'w-full h-full max-h-48 object-cover lg:max-h-100',
                 imgClass
               )}
             />
