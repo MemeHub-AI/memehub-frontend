@@ -1,4 +1,3 @@
-import { useMemo } from 'react'
 import dayjs from 'dayjs'
 import { useAccount } from 'wagmi'
 import { zeroAddress } from 'viem'
@@ -23,26 +22,21 @@ export const useIdeaStatus = (
     waitingTime = BI_ZERO,
   } = ideaInfo ?? {}
 
-  const { isLikeEnd, isWaitingEnd } = useMemo(() => {
-    const isLikeEnd = dayjs().isAfter(dayjs.unix(Number(endTime)), 'second')
-    const waitingEndAt = dayjs
-      .unix(Number(overTime))
-      .add(Number(waitingTime), 'second')
-      .unix()
-    const isWaitingEnd = dayjs().isAfter(waitingEndAt, 'second')
-
-    return {
-      isLikeEnd,
-      isWaitingEnd,
-    }
-  }, [endTime, overTime, waitingTime])
+  const isLikeEnd = dayjs().isAfter(dayjs.unix(Number(endTime)), 'second')
+  const waitingEndAt = dayjs
+    .unix(Number(overTime))
+    .add(Number(waitingTime), 'second')
+    .unix()
+  const isWaitingEnd = overTime
+    ? dayjs().isAfter(waitingEndAt, 'second')
+    : false
 
   const isCreator = owner === address
 
   const isSuccessLike = isOver
   const isSuccess = isOver && isDeploy
 
-  const isFailedWaiting = overTime !== BI_ZERO && isWaitingEnd && !isSuccess
+  const isFailedWaiting = isWaitingEnd && !isSuccess
   const isFailed = (isLikeEnd || isFailedWaiting) && !isSuccess
 
   const isProcessing = !isSuccess && !isFailed
