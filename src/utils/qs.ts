@@ -1,5 +1,5 @@
 export const qs = {
-  stringify: (query?: Record<string, any>, withPrefix = true) => {
+  stringify: (query?: Record<string, any> | string[][], withPrefix = true) => {
     const searchParams = new URLSearchParams(query)
     if (searchParams.size === 0) return ''
 
