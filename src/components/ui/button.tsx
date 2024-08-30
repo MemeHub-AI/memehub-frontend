@@ -65,40 +65,46 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants>,
     ShadowVariantsProps {
   asChild?: boolean
+  isLoading?: boolean
+  loadingChild?: React.ReactNode
 }
 
-const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  (props, ref) => {
-    const {
-      className,
-      variant,
-      size,
-      asChild = false,
-      shadow,
-      onClick,
-      ...restProps
-    } = props
-    const Comp = asChild ? Slot : 'button'
-    const { playGua } = useAudioPlayer()
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>((p, ref) => {
+  const {
+    className,
+    variant,
+    size,
+    asChild = false,
+    shadow,
+    onClick,
+    children,
+    isLoading,
+    loadingChild,
+    disabled,
+    ...props
+  } = p
+  const Comp = asChild ? Slot : 'button'
+  const { playGua } = useAudioPlayer()
 
-    return (
-      <Comp
-        ref={ref}
-        className={cn(
-          buttonVariants({ variant, size }),
-          shadowVariants({ shadow }),
-          className,
-          'min-w-5'
-        )}
-        onClick={(e) => {
-          playGua()
-          onClick?.(e)
-        }}
-        {...restProps}
-      />
-    )
-  }
-)
+  return (
+    <Comp
+      ref={ref}
+      className={cn(
+        buttonVariants({ variant, size }),
+        shadowVariants({ shadow }),
+        className,
+        'min-w-5'
+      )}
+      onClick={(e) => {
+        playGua()
+        onClick?.(e)
+      }}
+      disabled={disabled || isLoading}
+      children={isLoading && loadingChild ? loadingChild : children}
+      {...props}
+    />
+  )
+})
 Button.displayName = 'Button'
 
 export { Button, buttonVariants }

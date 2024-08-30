@@ -41,7 +41,7 @@ export const IdeaDetailsPage = () => {
           mode="details"
           className="py-0 border-none"
           idea={details}
-          info={ideaInfo.ideaInfo}
+          ideaInfo={ideaInfo.ideaInfo}
           refetchInfo={ideaInfo.refetchInfo}
           onCommentSuccess={refetchComments}
         />

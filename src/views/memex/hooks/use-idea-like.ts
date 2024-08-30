@@ -14,9 +14,9 @@ import { useInvite } from '@/hooks/use-invite'
 import { useUserInfo } from '@/hooks/use-user-info'
 
 export const useIdeaLike = (
-  addr: string | null | undefined,
   chainId: number,
   version: MemexIdoVersion | undefined,
+  contract: string | null | undefined,
   onFillay?: () => void
 ) => {
   const { t } = useTranslation()
@@ -65,7 +65,7 @@ export const useIdeaLike = (
       CONTRACT_ERR.balanceInsufficient()
       return
     }
-    if (!addr || !memexIdoAbiMap[version!]) {
+    if (!contract || !memexIdoAbiMap[version!]) {
       CONTRACT_ERR.configNotFound()
       return
     }
@@ -76,7 +76,7 @@ export const useIdeaLike = (
 
     writeContract({
       abi: memexIdoAbiMap[version!],
-      address: addr as Address,
+      address: contract as Address,
       chainId,
       functionName: 'like',
       args: [await getReferrals()],

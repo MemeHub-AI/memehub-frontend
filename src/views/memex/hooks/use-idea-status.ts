@@ -1,6 +1,9 @@
+import { useMemo } from 'react'
 import dayjs from 'dayjs'
+import { useAccount } from 'wagmi'
+import { zeroAddress } from 'viem'
 
-import { IdeaStatus, MemexIdeaItem } from '@/api/memex/types'
+import { MemexIdeaItem } from '@/api/memex/types'
 import { IdoInfo } from './use-ido-infos'
 import { BI_ZERO } from '@/constants/number'
 
@@ -8,21 +11,49 @@ export const useIdeaStatus = (
   idea: MemexIdeaItem | undefined,
   ideaInfo: IdoInfo | undefined
 ) => {
-  const { name, symbol, logo_url, description } = idea ?? {}
-  const { endTime = BI_ZERO } = ideaInfo ?? {}
+  const { address } = useAccount()
 
-  const isStarted = idea?.status === IdeaStatus.Activated
-  const isEnded = dayjs().isAfter(dayjs.unix(Number(endTime)))
-  const isDeployed = ideaInfo?.isDeploy
-  const isSuccess = ideaInfo?.isOver // TODO: should `&& isDeployed`
+  const { name, symbol, logo_url, description } = idea ?? {}
+  const {
+    owner = zeroAddress,
+    endTime = BI_ZERO,
+    isOver,
+    isDeploy,
+    overTime = BI_ZERO,
+    waitingTime = BI_ZERO,
+  } = ideaInfo ?? {}
+
+  const { isLikeEnd, isWaitingEnd } = useMemo(() => {
+    const isLikeEnd = dayjs().isAfter(dayjs.unix(Number(endTime)))
+    const waitingEndAt = dayjs
+      .unix(Number(overTime))
+      .add(Number(waitingTime), 'second')
+    const isWaitingEnd = dayjs().isAfter(waitingEndAt)
+
+    return {
+      isLikeEnd,
+      isWaitingEnd,
+    }
+  }, [endTime, overTime, waitingTime])
+
+  const isCreator = owner === address
+
+  const isSuccessLike = isOver
+  const isSuccess = isOver && isDeploy
+
+  const isFailed = isLikeEnd && isWaitingEnd && !isSuccess
+
+  const isProcessing = !isSuccess && !isFailed
+  const hasDetails = !!name && !!symbol && !!logo_url && !!description
 
   return {
-    hasDetails: !!name && !!symbol && !!logo_url && !!description,
-    isStarted,
-    isEnded,
-    isProcessing: isStarted && !isEnded && !isSuccess,
+    isCreator,
+    isLikeEnd,
+    isWaitingEnd,
     isSuccess,
-    isFailed: isEnded && !isSuccess && !isDeployed,
-    isDeployed,
+    isSuccessLike,
+    isFailed,
+    isProcessing,
+    hasDetails,
   }
 }

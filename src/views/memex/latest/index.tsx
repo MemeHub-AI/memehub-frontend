@@ -32,7 +32,7 @@ export const LatestPage = () => {
           <MemexIdeaCard
             key={idea?.hash}
             idea={idea}
-            info={idoInfos[i]}
+            ideaInfo={idoInfos[i]}
             refetchInfo={refetchIdoInfos}
             onCommentSuccess={refetch}
           />

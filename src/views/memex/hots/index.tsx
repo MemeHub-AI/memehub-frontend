@@ -9,6 +9,7 @@ import { MemexListType } from '@/api/memex/types'
 import { MemexInfiniteScroll } from '../components/memex-infinite-scroll'
 import { getMemexLayout } from '..'
 
+// TODO/middle: reuse latest/hots/my-involved/my-idea/successed
 export const HotsPage = () => {
   const {
     list,
@@ -31,7 +32,7 @@ export const HotsPage = () => {
           <MemexIdeaCard
             key={idea?.hash}
             idea={idea}
-            info={idoInfos[i]}
+            ideaInfo={idoInfos[i]}
             refetchInfo={refetchIdoInfos}
             onCommentSuccess={refetch}
           />
