@@ -8,6 +8,7 @@ import { FormField, FormItem } from '@/components/ui/form'
 import { PicturesPreview } from '../pictures-preview'
 import { useUserStore } from '@/stores/use-user-store'
 import { useCreateIdeaContext } from '@/contexts/memex/create-idea'
+import { memexCreateConfig } from '@/config/memex/idea'
 
 export const CreateIdeaTextareaField = () => {
   const { t } = useTranslation()
@@ -30,7 +31,7 @@ export const CreateIdeaTextareaField = () => {
                 disableFocusBorder
                 className="border-none shadow-none focus:shadow-none text-base mt-0.5 px-1 caret-[2px]"
                 rows={7}
-                maxLength={500}
+                maxLength={memexCreateConfig.maxChar}
                 {...field}
                 disabled={isCreating || field.disabled}
               />

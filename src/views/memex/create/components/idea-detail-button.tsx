@@ -18,7 +18,7 @@ export const CreateIdeaDetailButton = () => {
     <Button
       shadow="none"
       type="button"
-      className="px-2"
+      className="px-2 sm:hover:bg-zinc-200"
       disabled={isCreating}
       onClick={() => {
         const values = form.getValues()

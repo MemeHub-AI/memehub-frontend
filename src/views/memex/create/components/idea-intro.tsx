@@ -18,6 +18,7 @@ export const CreateIdeaIntro = () => {
 
   return (
     <Card
+      hover="none"
       shadow="none"
       padding="sm"
       className="bg-indigo-200 space-y-1 text-sm"

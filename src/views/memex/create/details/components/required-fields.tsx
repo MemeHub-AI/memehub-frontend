@@ -69,7 +69,7 @@ export const RequiredFields = () => {
             <div className="flex items-center space-x-2">
               <Label
                 className={cn(
-                  'border-2 border-black rounded-md w-fit',
+                  'border-2 border-black rounded-md w-fit cursor-pointer sm:hover:bg-zinc-200',
                   field.value ? 'overflow-hidden' : 'p-1.5'
                 )}
                 htmlFor="create-detail-logo"
@@ -111,6 +111,7 @@ export const RequiredFields = () => {
               <Textarea
                 placeholder={t('description')}
                 className="px-2"
+                disableFocusBorder
                 rows={5}
                 {...field}
                 disabled={isUpdating || field.disabled}

@@ -20,6 +20,8 @@ import { useIdeaDetailsContext } from '@/contexts/memex/idea-details'
 import ConnectWallet from '@/components/connect-wallet'
 import scrollIntoView from 'scroll-into-view-if-needed'
 
+const { commentMaxImg, commentMaxChar } = memexIdeaConfig
+
 export const IdeaCommentForm = () => {
   const { t } = useTranslation()
   const { query } = useRouter()
@@ -71,6 +73,8 @@ export const IdeaCommentForm = () => {
                 {...field}
                 disabled={field.disabled || isPending}
                 ref={ref}
+                maxLength={commentMaxChar}
+                rows={3}
                 onClick={() => {
                   // console.log('browsor:', navigator.userAgent)
                   setJJ(navigator.userAgent)
@@ -115,7 +119,6 @@ export const IdeaCommentForm = () => {
                       disabled={field.disabled || isPending}
                       ref={inputRef}
                       onChange={async (e) => {
-                        const { commentMaxImg } = memexIdeaConfig
                         if (field.value.length >= commentMaxImg) {
                           form.setError('images', {
                             message: utilLang.replace(t('iamges.max'), [

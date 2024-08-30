@@ -28,12 +28,12 @@ export const CreateIdeaPicturesField = () => {
         <Button
           type="button"
           shadow="none"
-          className="px-2"
+          className="px-2 sm:hover:bg-zinc-200"
           disabled={field.disabled || isCreating}
         >
           <Label
             htmlFor="memex-upload"
-            className="flex items-center"
+            className="flex items-center cursor-pointer"
             disabled={field.disabled}
             onClick={clearFile}
           >
