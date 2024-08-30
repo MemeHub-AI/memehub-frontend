@@ -73,7 +73,7 @@ export const TokenDetailsCard = ({
           className="text-blue-600 absolute top-1 right-1"
         />
       )}
-      <div className="flex space-x-2">
+      <div className="flex space-x-2 mb-2">
         <Avatar src={logo_url || ''} fallback={symbol?.[0]} />
         <div className="text-zinc-500 text-sm flex flex-col justify-between">
           <p>

@@ -16,6 +16,7 @@ export const IdeaRefundClaimButton = () => {
     chain: { native } = {},
     ownerPercent,
     likeValue,
+    refetchInfo,
   } = useIdeaCardContext()
   const { isCreator, isSuccess, isFailed } = ideaStatus
   const {
@@ -30,9 +31,10 @@ export const IdeaRefundClaimButton = () => {
   const initialAmount = formatEther(initAmountIn)
 
   const { isPending, claim, refund, refundInitial } = useIdeaClaimRefund(
-    idea?.ido_address,
     chainId,
-    idea?.memex_version
+    idea?.memex_version,
+    idea?.ido_address,
+    refetchInfo
   )
 
   const canClaimToken = isSuccess && (isCanClaimToken || isClaimToken)

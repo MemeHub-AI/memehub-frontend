@@ -24,11 +24,12 @@ export const useIdeaStatus = (
   } = ideaInfo ?? {}
 
   const { isLikeEnd, isWaitingEnd } = useMemo(() => {
-    const isLikeEnd = dayjs().isAfter(dayjs.unix(Number(endTime)))
+    const isLikeEnd = dayjs().isAfter(dayjs.unix(Number(endTime)), 'second')
     const waitingEndAt = dayjs
       .unix(Number(overTime))
       .add(Number(waitingTime), 'second')
-    const isWaitingEnd = dayjs().isAfter(waitingEndAt)
+      .unix()
+    const isWaitingEnd = dayjs().isAfter(waitingEndAt, 'second')
 
     return {
       isLikeEnd,
@@ -41,7 +42,8 @@ export const useIdeaStatus = (
   const isSuccessLike = isOver
   const isSuccess = isOver && isDeploy
 
-  const isFailed = isLikeEnd && isWaitingEnd && !isSuccess
+  const isFailedWaiting = overTime !== BI_ZERO && isWaitingEnd && !isSuccess
+  const isFailed = (isLikeEnd || isFailedWaiting) && !isSuccess
 
   const isProcessing = !isSuccess && !isFailed
   const hasDetails = !!name && !!symbol && !!logo_url && !!description

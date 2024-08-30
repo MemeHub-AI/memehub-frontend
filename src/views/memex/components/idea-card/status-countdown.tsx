@@ -16,7 +16,7 @@ export const IdeaStatusCountdown = () => {
   const { overTime, waitingTime } = ideaInfo ?? {}
   const { isProcessing, hasDetails, isCreator, isSuccessLike } = ideaStatus
 
-  const canCountdown = isList && isProcessing
+  const canCountdown = isList && isProcessing && !isSuccessLike
   const canEditCoinDetails = !hasDetails && isCreator && isProcessing
   const canShowSuccessTips = isSuccessLike && !hasDetails && isProcessing
 

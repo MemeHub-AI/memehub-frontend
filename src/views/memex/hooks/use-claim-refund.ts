@@ -10,9 +10,9 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexIdoAbiMap, MemexIdoVersion } from '@/contract/abi/memex/ido'
 
 export const useIdeaClaimRefund = (
-  contract: string | undefined | null,
   chainId: number,
   version: MemexIdoVersion | undefined,
+  contract: string | undefined | null,
   onFinally?: () => void
 ) => {
   const { t } = useTranslation()

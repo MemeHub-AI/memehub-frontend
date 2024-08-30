@@ -23,6 +23,7 @@ import { useUpdateIdea } from './use-update-idea'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { ApiCode } from '@/api/types'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { Routes } from '@/routes'
 
 const schema = z.object({
   content: z
@@ -87,7 +88,7 @@ export const useCreateIdea = () => {
   const { deployFee, isDeploying, deploy } = useDeployIdea(chainName, () => {
     setIdea(null)
     setIdeaDetails(null)
-    router.back()
+    router.push(Routes.MemexLatest)
   })
   const { checkAccount } = useCheckAccount()
 
