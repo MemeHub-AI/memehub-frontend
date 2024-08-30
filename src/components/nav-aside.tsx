@@ -153,7 +153,7 @@ export const NavAside = ({
               {!isCollapsed && <span>{t('Languages')}</span>}
             </NavigationMenuTrigger>
             <NavigationMenuContent>
-              <div className="w-52 p-2 space-y-1">
+              <div className={cn('w-52 p-2 space-y-1', isCollapsed && 'w-32')}>
                 {langs.map(([code, { name }], i) => (
                   <Button
                     key={i}
@@ -185,7 +185,7 @@ export const NavAside = ({
           'mt-2 max-xl:text-base ml-1 max-xl:text-md',
           isCollapsed && 'p-2'
         )}
-        size={isCollapsed ? 'icon' : 'default'}
+        size={isCollapsed ? 'icon-lg' : 'default'}
       >
         {isCollapsed ? (
           <img src="/icons/writer.svg" alt="writer" />

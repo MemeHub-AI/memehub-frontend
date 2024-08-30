@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 
@@ -50,13 +50,14 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
 
   return (
     <Tabs
+      value={pathname}
       onValueChange={(v) => router.push(v)}
-      className="flex-1 md:max-w-xl max-xl:relative max-xl:before:absolute max-xl:before:-top-4 max-xl:before:border-l max-xl:before:border-zinc-200 max-xl:before:left-0"
+      className="flex-1 md:max-w-2xl max-xl:relative max-xl:before:absolute max-xl:before:-top-4 max-xl:before:border-l max-xl:before:border-zinc-200 max-xl:before:left-0"
     >
       <TabsList
         className={cn(
           'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] justify-start overflow-visible',
-          'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14 md:px-4'
+          'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14'
         )}
       >
         {tabs.map(({ id, route, title }) => (
@@ -64,13 +65,20 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
             key={id}
             value={route}
             className={cn(
-              '!text-zinc-500 font-normal px-0 first:ml-3 mx-2 duration-0 !bg-transparent md:text-lg] relative',
-              'data-[state=active]:before:content-[""] data-[state=active]:before:w-full data-[state=active]:before:h-1',
-              'data-[state=active]:before:absolute data-[state=active]:before:bottom-0 data-[state=active]:before:rounded-full',
-              'data-[state=active]:font-bold data-[state=active]:!text-black data-[state=active]:before:bg-blue-400'
+              '!text-zinc-500 font-normal px-2 first:ml-3 duration-0 !bg-transparent',
+              'group !mx-0 py-0 duration-150 flex-1 sm:text-base sm:hover:!bg-zinc-100'
             )}
           >
-            {title}
+            <span
+              className={cn(
+                'h-full flex justify-center items-center relative',
+                'group-data-[state=active]:before:content-[""] group-data-[state=active]:before:w-full group-data-[state=active]:before:h-1',
+                'group-data-[state=active]:before:absolute group-data-[state=active]:before:bottom-0 group-data-[state=active]:before:rounded-full',
+                'group-data-[state=active]:font-bold group-data-[state=active]:!text-black group-data-[state=active]:before:bg-purple-600'
+              )}
+            >
+              {title}
+            </span>
           </TabsTrigger>
         ))}
       </TabsList>
