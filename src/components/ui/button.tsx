@@ -37,7 +37,7 @@ const buttonVariants = cva(
           'h-9 w-9 rounded-full bg-black/60 text-white sm:hover:bg-black/80 active:bg-black/80',
         red: 'bg-red-500 border-none sm:hover:bg-red-500/90 active:bg-red-500/90 text-white',
         'hover-circle':
-          'h-9 w-9 rounded-full sm:hover:bg-zinc-100 !duration-300 shrink-0',
+          'h-9 w-9 rounded-full sm:hover:bg-zinc-100 !duration-300 shrink-0 !p-1',
       },
       size: {
         default: 'h-9 px-4 py-2',

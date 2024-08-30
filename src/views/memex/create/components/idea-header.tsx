@@ -38,9 +38,8 @@ export const CreateIdeaHeader = () => {
     <div className="flex items-center justify-between space-x-2 mx-1">
       <div className="flex items-center space-x-1">
         <Button
+          variant="hover-circle"
           shadow="none"
-          size="icon-sm"
-          className="border-none rounded-full"
           type="button"
           disabled={isCreating}
           onClick={router.back}

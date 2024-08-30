@@ -26,7 +26,7 @@ export const CreateIdeaPage = () => {
   const { query, ...router } = useRouter()
 
   const hasDetails = useMemo(
-    () => isEmpty(Object.values(ideaDetails || {}).filter(Boolean)),
+    () => !!ideaDetails && !isEmpty(Object.values(ideaDetails).filter(Boolean)),
     [ideaDetails]
   )
 
