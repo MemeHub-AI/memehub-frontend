@@ -19,6 +19,13 @@ import { useUserId } from '@/hooks/use-user-id'
 import { MaintainTips } from '../maintain-tips'
 import { useKeepReferralCode } from '@/hooks/use-keep-referral-code'
 
+// Extends style css variable for react
+declare module 'react' {
+  interface CSSProperties {
+    [k: `--${string}`]: string | number
+  }
+}
+
 dayjs.extend(utc)
 dayjs.extend(timezone)
 dayjs.extend(relativeTime)
