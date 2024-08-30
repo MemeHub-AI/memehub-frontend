@@ -19,8 +19,8 @@ import { useUserInfo } from '@/hooks/use-user-info'
 export interface DeployIdeaParams {
   projectId: string
   tokenId: string | null
-  name: string | undefined
-  symbol: string | undefined
+  name: string | undefined | null
+  symbol: string | undefined | null
   marketing: Marketing[] | undefined
   initialBuyAmount: string
 }
@@ -103,7 +103,9 @@ export const useDeployIdea = (
       return
     }
     const hasInfo = !!name && !!symbol
-    const totalFee = BigNumber(deployFee).plus(initialBuyAmount).toFixed()
+    const totalFee = BigNumber(deployFee)
+      .plus(initialBuyAmount || 0)
+      .toFixed()
     const [referral] = await getReferrals()
 
     return writeContractAsync({

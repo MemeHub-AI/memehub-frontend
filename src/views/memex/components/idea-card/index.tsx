@@ -63,6 +63,7 @@ export const MemexIdeaCard = ({
   )
   const { chain, chainId, chainName } = useChainInfo(idea?.chain)
   const ideaStatus = useIdeaStatus(idea, ideaInfo)
+  const isNonPay = isMyIdeas && !ideaInfo
 
   const onPushToAccount = () => {
     if (!idea?.user_address) return
@@ -78,6 +79,7 @@ export const MemexIdeaCard = ({
         isList,
         isDetails,
         isMyIdeas,
+        isNonPay,
         chain,
         chainId,
         startAt,
@@ -121,18 +123,20 @@ export const MemexIdeaCard = ({
             <IdeaRefundClaimButton />
           </div>
 
-          {isDetails ? (
-            <p className="mt-1 whitespace-pre-line">{idea?.content}</p>
-          ) : (
-            <EllipsisText
-              className="mt-1"
-              showMoreClass="text-purple-600"
-              maxLine={memexIdeaConfig.contentMaxLine}
-              disableClickShowMore
-            >
-              {idea?.content}
-            </EllipsisText>
-          )}
+          <div className={cn(isNonPay && 'mt-4')}>
+            {isDetails ? (
+              <p className="mt-1 whitespace-pre-line">{idea?.content}</p>
+            ) : (
+              <EllipsisText
+                className="mt-1"
+                showMoreClass="text-purple-600"
+                maxLine={memexIdeaConfig.contentMaxLine}
+                disableClickShowMore
+              >
+                {idea?.content}
+              </EllipsisText>
+            )}
+          </div>
 
           {ideaStatus.hasDetails && (
             <TokenDetailsCard

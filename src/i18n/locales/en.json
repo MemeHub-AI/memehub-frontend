@@ -752,5 +752,7 @@
   "post-idea": "Post Idea",
   "airdrop.invalid": "No information",
   "filter.only-graduated": "Only graduated",
-  "memex.liker-desc": "Likers receive bottom chips worth around {} USDT"
+  "memex.liker-desc": "Likers receive bottom chips worth around {} USDT",
+  "memex.recreate": "Republish",
+  "memex.publsih-failed": "This Idea was not successfully published"
 }

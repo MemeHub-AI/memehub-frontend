@@ -744,5 +744,7 @@
   "filter.only-graduated": "只看已毕业代币",
   "memex.liker-desc": "点赞者获得价值 {} USDT左右的底部筹码",
   "pure.idea": "Idea",
-  "ago": "以前"
+  "ago": "以前",
+  "memex.recreate": "重新发布",
+  "memex.publsih-failed": "此 Idea 未成功发布"
 }

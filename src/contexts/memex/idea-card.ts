@@ -13,6 +13,7 @@ interface Value {
   isList: boolean
   isDetails: boolean
   isMyIdeas: boolean
+  isNonPay: boolean
   chain: ChainData | undefined
   chainId: number
   startAt: number
