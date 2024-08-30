@@ -1,4 +1,6 @@
+import { useMemo } from 'react'
 import { useRouter } from 'next/router'
+import { isEmpty } from 'lodash'
 
 import { useCreateIdea } from './hooks/use-create-idea'
 import { CreateIdeaProvider } from '@/contexts/memex/create-idea'
@@ -23,6 +25,11 @@ export const CreateIdeaPage = () => {
   const { ideaDetails, setIdea } = useMemexStore()
   const { query, ...router } = useRouter()
 
+  const hasDetails = useMemo(
+    () => isEmpty(Object.values(ideaDetails || {}).filter(Boolean)),
+    [ideaDetails]
+  )
+
   useCreateIdeaCleanup()
 
   return (
@@ -40,10 +47,10 @@ export const CreateIdeaPage = () => {
 
             <div className="flex space-x-2">
               <CreateIdeaPicturesField />
-              {!ideaDetails && <CreateIdeaDetailButton />}
+              {!hasDetails && <CreateIdeaDetailButton />}
             </div>
 
-            {!!ideaDetails && (
+            {hasDetails && (
               <TokenDetailsCard
                 className="pb-0"
                 details={ideaDetails as unknown as MemexIdeaItem}
