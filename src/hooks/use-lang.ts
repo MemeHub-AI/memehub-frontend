@@ -5,7 +5,7 @@ import dayjsZh from 'dayjs/locale/zh-cn'
 import dayjsEn from 'dayjs/locale/en'
 
 import { useLocalStorage } from './use-storage'
-import { utilTime } from '@/utils/time'
+import { utilTime } from '@/utils/day'
 
 export const useLang = () => {
   const { i18n } = useTranslation()

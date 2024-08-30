@@ -1,4 +1,4 @@
-import { utilTime } from '@/utils/time'
+import { utilTime } from '@/utils/day'
 import { api } from '..'
 import { ApiResponse } from '../types'
 import { ChainData } from './type'

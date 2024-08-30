@@ -29,7 +29,7 @@ import { IdoInfo } from '../../hooks/use-ido-infos'
 import { BI_ZERO } from '@/constants/number'
 import { useIdeaStatus } from '../../hooks/use-idea-status'
 import { IdeaCardProvider } from '@/contexts/memex/idea-card'
-import { simplifyFromNow } from '@/utils/time'
+import { simplifyFromNow } from '@/utils/day'
 
 interface Props {
   idea: MemexIdeaItem | undefined

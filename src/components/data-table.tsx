@@ -23,22 +23,32 @@ import { Skeleton } from './ui/skeleton'
 interface Props<T extends RowData> extends ComponentProps<typeof Table> {
   table: ITable<T>
   total?: number
+  hasMore?: boolean
   disabled?: boolean
   isLoading?: boolean
   noData?: ReactNode
   skeleton?: ReactNode
   onFetchNext?: () => void
+  headerRowClass?: string
+  bodyRowClass?: string
+  footerRowClass?: string
+  bodyCellClass?: string
 }
 
 export const DataTable = <T extends RowData>({
   table,
   total = 0,
+  hasMore = false,
   disabled = false,
   isLoading = false,
   noData,
   skeleton,
   onFetchNext,
   containerClass,
+  headerRowClass,
+  bodyRowClass,
+  footerRowClass,
+  bodyCellClass,
   ...props
 }: Props<T>) => {
   const { t } = useTranslation()
@@ -51,10 +61,10 @@ export const DataTable = <T extends RowData>({
 
     if (isEmpty(rows)) {
       return (
-        <TableRow>
+        <TableRow className={bodyRowClass}>
           <TableCell
             colSpan={cols.length}
-            className="h-24 text-center text-zinc-500"
+            className={cn('h-24 text-center text-zinc-500', bodyCellClass)}
           >
             {noData ?? t('no.data')}
           </TableCell>
@@ -63,9 +73,13 @@ export const DataTable = <T extends RowData>({
     }
 
     return rows.map((row) => (
-      <TableRow key={row.id} data-state={row.getIsSelected() && 'selected'}>
+      <TableRow
+        key={row.id}
+        data-state={row.getIsSelected() && 'selected'}
+        className={bodyRowClass}
+      >
         {row.getVisibleCells().map((cell) => (
-          <TableCell key={cell.id} className="px-3">
+          <TableCell key={cell.id} className={cn('px-3 my-2', bodyCellClass)}>
             {flexRender(cell.column.columnDef.cell, cell.getContext())}
           </TableCell>
         ))}
@@ -85,7 +99,7 @@ export const DataTable = <T extends RowData>({
       >
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
+            <TableRow key={headerGroup.id} className={headerRowClass}>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id} className="text-black px-3">
@@ -102,9 +116,10 @@ export const DataTable = <T extends RowData>({
           ))}
         </TableHeader>
         <TableBody>{renderBody()}</TableBody>
-        {rows.length < total && (
+        {(rows.length < total || hasMore) && (
           <TableFooter className="bg-transparent text-center">
             <TableRow
+              className={footerRowClass}
               onClick={() => {
                 if (disabled) return
                 onFetchNext?.()

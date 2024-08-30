@@ -31,6 +31,12 @@ export const simplifyFromNow = (date: string | undefined) => {
       .replace('second', 's')
       .replace('ss', 's')
   }
-
   return day
+}
+
+export const formatFromTz = (ts: number) => {
+  const date = dayjs(ts)
+  return utilLang.isEn()
+    ? date.utc().format('YYYY-MM-DD HH:mm:ss')
+    : date.format('YYYY-MM-DD HH:mm:ss')
 }

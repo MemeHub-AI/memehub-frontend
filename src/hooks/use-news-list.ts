@@ -5,7 +5,7 @@ import { useScroll } from 'ahooks'
 import { newsApi } from '@/api/news'
 import { useLocalStorage } from './use-storage'
 import { defaultImg } from '@/config/link'
-import { utilTime } from '@/utils/time'
+import { utilTime } from '@/utils/day'
 
 interface Options {
   isOpportunity?: boolean
