@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import { watchAccount } from 'wagmi/actions'
 
 import { AlertDialog } from './ui/alert-dialog'
@@ -13,6 +13,7 @@ export const SignLoginDialog = () => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const { isConnected } = useAccount()
+  const { disconnect } = useDisconnect()
   const { isLoggingIn, signLogin, logout } = useSignLogin()
   const { getStorage } = useLocalStorage()
 
@@ -22,6 +23,7 @@ export const SignLoginDialog = () => {
         const isFirst = !!(address && !prevAddress)
         const isChanged = !!(address && prevAddress && address !== prevAddress)
         const isAutoConnect = !!address && !!prevAddress && isConnected
+        const hasToken = !!getStorage('token')
 
         // logout if disconnect.
         if (!isConnected) logout()
@@ -34,18 +36,13 @@ export const SignLoginDialog = () => {
         }
 
         // Latest connected, but not token, re-sign.
-        if (isAutoConnect && !getStorage('token')) {
+        if (isAutoConnect && !hasToken) {
           logout()
-          setOpen(true)
+          disconnect()
           return
         }
       },
     })
-  }, [isConnected])
-
-  // Listen wallet connect, logout if disconnect.
-  useEffect(() => {
-    if (!isConnected) logout()
   }, [isConnected])
 
   return (
