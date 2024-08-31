@@ -42,7 +42,7 @@ export const useEvmDeploy = (chainName: string, onFinally?: () => void) => {
     functionName: 'maxBuy_',
     query: { enabled: !!bcAddress },
   })
-  const buyAmoutMax = formatEther(maxBuy_)
+  const initialBuyMax = formatEther(maxBuy_)
 
   const {
     data: hash,
@@ -121,7 +121,7 @@ export const useEvmDeploy = (chainName: string, onFinally?: () => void) => {
   }
 
   return {
-    buyAmoutMax,
+    initialBuyMax,
     deployFee: formatEther(deployFee),
     deployHash: hash,
     deployedAddr,

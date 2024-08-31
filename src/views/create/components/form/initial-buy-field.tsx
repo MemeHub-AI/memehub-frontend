@@ -13,7 +13,12 @@ export const InitialBuyField = ({
   ...props
 }: ComponentProps<typeof Dialog>) => {
   const { t } = useTranslation()
-  const { buyAmoutMax, reserveSymbol, form, onSubmit } = useCreateTokenContext()
+  const {
+    initialBuyMax: buyAmoutMax,
+    reserveSymbol,
+    form,
+    onSubmit,
+  } = useCreateTokenContext()
 
   return (
     <Dialog

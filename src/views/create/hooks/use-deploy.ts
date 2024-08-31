@@ -7,7 +7,7 @@ import { useChainsStore } from '@/stores/use-chains-store'
 import { deployErr } from '@/errors/deploy'
 import { useUserInfo } from '@/hooks/use-user-info'
 import { useEvmDeploy } from './use-evm-deploy'
-import { useSolDeploy } from './use-sol-deploy'
+import { useSvmDeploy } from './use-svm-deploy'
 
 export type DeployFormParams = Omit<
   TokenCreateReq,
@@ -28,11 +28,11 @@ export const useDeploy = (chainName: string) => {
   }
 
   const evmDeploy = useEvmDeploy(chainName, onDeployFinally)
-  // const solDeploy = useSolDeploy()
+  const svmDeploy = useSvmDeploy()
   // const tvmDeploy = useTvmDeploy()
 
   const {
-    buyAmoutMax,
+    initialBuyMax,
     deployFee,
     deployHash,
     deployedAddr,
@@ -46,10 +46,10 @@ export const useDeploy = (chainName: string) => {
   } = useMemo(() => {
     return {
       [Network.Evm]: evmDeploy,
-      [Network.Svm]: evmDeploy,
+      [Network.Svm]: svmDeploy,
       [Network.Tvm]: evmDeploy,
     }[network]
-  }, [network, evmDeploy]) // TODO: add more deps...
+  }, [network, evmDeploy, svmDeploy])
 
   const deploy = async (params: DeployFormParams) => {
     const tokenId = await createToken(params)
@@ -63,7 +63,7 @@ export const useDeploy = (chainName: string) => {
       return evmDeploy.deploy({ ...params, tokenId: tokenId! })
     }
     if (network === Network.Svm) {
-      // Solana
+      return svmDeploy.deploy()
     }
     if (network === Network.Tvm) {
       // TON
@@ -72,7 +72,7 @@ export const useDeploy = (chainName: string) => {
   }
 
   return {
-    buyAmoutMax,
+    initialBuyMax,
     deployFee,
     deployHash,
     deployedAddr,

@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { useRouter } from 'next/router'
 import { ChevronDownIcon } from '@radix-ui/react-icons'
 import { LuUser } from 'react-icons/lu'
@@ -23,6 +23,7 @@ import {
 } from './ui/dropdown-menu'
 import { memehubLinks } from '@/config/link'
 import { cn } from '@/lib/utils'
+import { useWallet } from '@solana/wallet-adapter-react'
 
 export const AccountDropdown = () => {
   const { t } = useTranslation()
@@ -30,8 +31,16 @@ export const AccountDropdown = () => {
   const [disconnectOpen, setDisconnectOpen] = useState(false)
   const { userInfo } = useUserStore()
   const { isMobile } = useResponsive()
+
   const { address } = useAccount()
   const { disconnect } = useDisconnect()
+
+  const { disconnect: disconnectSol } = useWallet()
+
+  const onDisconnect = () => {
+    disconnect()
+    disconnectSol()
+  }
 
   return (
     <Container
@@ -110,7 +119,7 @@ export const AccountDropdown = () => {
         onOpenChange={setDisconnectOpen}
         title={t('wallet.disconnect')}
         description={t('wallet.disconnect.confirm')}
-        onConfirm={() => disconnect()}
+        onConfirm={onDisconnect}
       />
     </Container>
   )

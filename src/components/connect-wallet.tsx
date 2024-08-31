@@ -5,6 +5,7 @@ import { useConnectModal } from '@rainbow-me/rainbowkit'
 
 import { Button } from './ui/button'
 import { useResponsive } from '@/hooks/use-responsive'
+import { ConnectSolWallet } from './connect-sol-wallet'
 
 export const ConnectWallet = ({
   children,
@@ -15,6 +16,9 @@ export const ConnectWallet = ({
   const { openConnectModal } = useConnectModal()
   const { isMobile } = useResponsive()
   const [isOpening, setIsOpening] = useState(false)
+
+  // TODO/top: solana testing...
+  return <ConnectSolWallet children={children} {...props} />
 
   return isConnected ? (
     children
