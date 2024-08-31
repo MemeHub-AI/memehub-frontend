@@ -6,6 +6,7 @@ import { useAccount, useDisconnect } from 'wagmi'
 import { MdLogout } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { LiaTelegramPlane } from 'react-icons/lia'
+import { FaXTwitter } from 'react-icons/fa6'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { Avatar } from './ui/avatar'
@@ -21,10 +22,7 @@ import {
   DropdownMenuContent,
 } from './ui/dropdown-menu'
 import { memehubLinks } from '@/config/link'
-import { useConnectWallet } from '@/hooks/use-connect-wallet'
-import { useWallet } from '@/hooks/use-wallet'
 import { cn } from '@/lib/utils'
-import { FaXTwitter } from 'react-icons/fa6'
 
 export const AccountDropdown = () => {
   const { t } = useTranslation()
@@ -32,8 +30,6 @@ export const AccountDropdown = () => {
   const [disconnectOpen, setDisconnectOpen] = useState(false)
   const { userInfo } = useUserStore()
   const { isMobile } = useResponsive()
-  // const { walletAddress } = useWallet()
-  // const { walletDisconnect } = useConnectWallet()
   const { address } = useAccount()
   const { disconnect } = useDisconnect()
 

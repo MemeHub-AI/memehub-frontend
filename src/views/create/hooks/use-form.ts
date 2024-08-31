@@ -10,7 +10,6 @@ import { useAimemeInfoStore } from '@/stores/use-ai-meme-info-store'
 import { Marketing } from '@/api/token/types'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { TokenType } from '@/enums/token'
-import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { marketingSchema } from '@/components/marketing-field'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { parseMediaUrl } from '@/utils'
@@ -74,7 +73,6 @@ const formSchema = z
 export const useCreateTokenForm = () => {
   const { formInfo } = useAimemeInfoStore()
   const { checkForChain } = useCheckAccount()
-  const {} = useConnectWallet()
   const { evmChainsMap, loadingChains } = useChainsStore()
   const { url, onChangeUpload } = useUploadImage()
 

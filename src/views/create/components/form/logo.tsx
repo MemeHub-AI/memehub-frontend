@@ -15,8 +15,6 @@ import { Input } from '@/components/input'
 import { aiApi } from '@/api/ai'
 import { Button } from '@/components/ui/button'
 import { useAudioPlayer } from '@/hooks/use-audio-player'
-import { useCheckAccount } from '@/hooks/use-check-chain'
-import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { ConnectWallet } from '@/components/connect-wallet'
 import { useCreateTokenContext } from '@/contexts/create-token'
 
@@ -27,10 +25,6 @@ export const LogoField = () => {
   const { loadingLogo, setLoadingLogo } = useAimemeInfoStore()
   const { playGuaGua } = useAudioPlayer()
   const inputRef = useRef<HTMLInputElement>(null)
-
-  // TODO: check for connect
-  // const { checkForConnect } = useCheckAccount()
-  const {} = useConnectWallet()
 
   const createLogo = (e: any) => {
     e.stopPropagation()

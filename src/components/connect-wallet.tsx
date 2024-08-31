@@ -1,18 +1,15 @@
-import React, { useState, type ComponentProps } from 'react'
-
-import { Button } from './ui/button'
-import { ChangeChainWallets } from './header/change-chain-wallets'
-import { useConnectWallet } from '@/hooks/use-connect-wallet'
+import { useState, type ComponentProps } from 'react'
 import { useAccount } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
+
+import { Button } from './ui/button'
 import { useResponsive } from '@/hooks/use-responsive'
 
 export const ConnectWallet = ({
   children,
   ...props
 }: ComponentProps<typeof Button>) => {
-  // const { walletIsConnected } = useConnectWallet()
   const { t } = useTranslation()
   const { isConnected, isConnecting } = useAccount()
   const { openConnectModal } = useConnectModal()
