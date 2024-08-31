@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils'
 import { Header } from '../header'
 import { NewsAside } from '../news-aside'
 import { NavAside } from '@/components/nav-aside'
+import MobileNavBottom from '../mobile-nav-bottom'
 
 interface Props extends ComponentProps<'main'> {
   disablePadding?: boolean
@@ -37,7 +38,7 @@ export const PrimaryLayout = ({
         <NavAside className="sticky top-0 shrink-0" {...navAsideProps} />
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1 pb-12">
         <Header />
         <div className={cn('flex', containerClass)}>
           <div
@@ -55,6 +56,8 @@ export const PrimaryLayout = ({
             {...newsAsideProps}
           />
         </div>
+
+        <MobileNavBottom />
       </div>
     </main>
   )

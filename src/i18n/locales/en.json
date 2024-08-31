@@ -754,5 +754,6 @@
   "filter.only-graduated": "Only graduated",
   "memex.liker-desc": "Likers receive bottom chips worth around {} USDT",
   "memex.recreate": "Republish",
-  "memex.publsih-failed": "This Idea was not successfully published"
+  "memex.publsih-failed": "This Idea was not successfully published",
+  "apply.cooperation": "Apply for cooperation"
 }

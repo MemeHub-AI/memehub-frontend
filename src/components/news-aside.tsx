@@ -126,8 +126,10 @@ export const NewsAside = ({
       <div className="hidden h-[98vh]"></div>
       <div
         className={cn(
-          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
-          tab === Tab.Classic ? 'h-[90vh]' : 'h-[92vh]',
+          'sticky top-[65px] ml-6 w-aside max-sm:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
+          tab === Tab.Classic
+            ? 'h-[90vh] max-lg:h-[84vh]'
+            : 'h-[92vh] max-lg:h-[84vh]',
           containerClass
         )}
       >
