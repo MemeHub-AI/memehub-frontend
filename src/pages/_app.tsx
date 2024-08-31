@@ -4,10 +4,10 @@ import { Buffer } from 'buffer'
 import { ReactElement, ReactNode } from 'react'
 import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
-import '@/styles/globals.css'
 import '@rainbow-me/rainbowkit/styles.css'
 import 'react-photo-view/dist/react-photo-view.css'
 
+import '@/styles/globals.css'
 import { AppProviders } from '@/components/app-providers'
 import { AppLayout } from '@/components/layouts/app'
 
@@ -20,7 +20,7 @@ type AppPropsWithLayout = AppProps & {
 }
 
 export default function App({ Component, pageProps }: AppPropsWithLayout) {
-  ;(global as any).Buffer = Buffer
+  global.Buffer = Buffer
 
   const getLayout = Component.getLayout ?? ((page) => page)
 
