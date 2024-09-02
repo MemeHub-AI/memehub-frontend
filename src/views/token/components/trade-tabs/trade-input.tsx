@@ -32,6 +32,7 @@ export const TradeInput = ({ value, onChange, disabled }: Props) => {
     tokenMetadata,
     tokenChain,
     totalSupply,
+    tradePrice,
   } = useTokenContext()
   const { isBuy, isTraded, reserveBalance, tokenBalance } =
     useTradeTabsContext()
@@ -44,9 +45,17 @@ export const TradeInput = ({ value, onChange, disabled }: Props) => {
   const balanceSymbol = isBuy ? reserveSymbol : tokenSymbol
   const balanceLabel = `${fmt.decimals(balance)} ${balanceSymbol}`
 
+  const usdtPrice = BigNumber(isBuy ? value : rightValue).multipliedBy(
+    tradePrice?.price || 0
+  )
+  const usdtLabel = `($${
+    usdtPrice.isNaN() || usdtPrice.lte(0) ? 0 : fmt.decimals(usdtPrice)
+  })`
   const leftValue = fmt.decimals(value || 0, { fixed: 4 })
   const leftLabel = `${leftValue} ${isBuy ? reserveSymbol : tokenSymbol}`
-  const rightLabel = `${rightValue} ${isBuy ? tokenSymbol : reserveSymbol}`
+  const rightLabel = `${fmt.decimals(rightValue, { fixed: 4 })} ${
+    isBuy ? tokenSymbol : reserveSymbol
+  }`
 
   const checkLastOrder = async () => {
     if (isGraduated) return true
@@ -79,7 +88,7 @@ export const TradeInput = ({ value, onChange, disabled }: Props) => {
       amount = reserveAmount
     }
 
-    setRightValue(fmt.decimals(amount, { fixed: 4 }))
+    setRightValue(amount)
   }
 
   useDebounceEffect(
@@ -141,7 +150,7 @@ export const TradeInput = ({ value, onChange, disabled }: Props) => {
         className="text-zinc-500 text-xs flex flex-col space-y-1 mt-1"
       >
         <span>
-          {leftLabel} ≈ {rightLabel}
+          {leftLabel} {isBuy && usdtLabel} ≈ {rightLabel} {!isBuy && usdtLabel}
         </span>
         <span className="mt-1">
           {t('balance')}: {balanceLabel}
