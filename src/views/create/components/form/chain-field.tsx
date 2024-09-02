@@ -12,11 +12,16 @@ import { fmt } from '@/utils/fmt'
 import { ChainSelect } from '@/components/chain-select'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { useChainInfo } from '@/hooks/use-chain-info'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const ChainField = () => {
   const { form, formFields } = useCreateTokenContext()
-  const { chainId } = useAccount()
-  const { chainName, displayName } = useChainInfo(form.watch('chainName'))
+  const { chainId = 0 } = useAccount()
+  const { evmChainsMap } = useChainsStore()
+  const { chainName, displayName } = useChainInfo(
+    // TODO/middle: multi chain like `sol`
+    form.watch('chainName') || evmChainsMap[chainId]?.name
+  )
 
   // Default select.
   useEffect(() => {
@@ -35,7 +40,7 @@ export const ChainField = () => {
           </FormLabel>
           <FormControl>
             <ChainSelect
-              defaultValue={chainId?.toString()}
+              defaultValue={chainName}
               value={field.value}
               onChange={(c) => field.onChange(c.name)}
             />
