@@ -54,6 +54,7 @@ const main = async () => {
   const mapStartLine = lines.findIndex((l) => l.includes('export const')) + 1
   const mapEndLine = lines.findLastIndex((l) => l.includes('as const')) + 1
   const versions = lines.slice(mapStartLine, mapEndLine)
+  const restLines = lines.slice(mapEndLine + 1)
 
   const newVersions = files.filter((f) => !imports.some((i) => i.includes(f)))
 
@@ -67,7 +68,7 @@ const main = async () => {
     versions.splice(-1, 0, `  '${v}': ${camelSnake},`)
   }
 
-  console.log('gen abi version', [...imports, '', ...versions, ''])
+  console.log('gen abi version', restLines)
 }
 
 main()

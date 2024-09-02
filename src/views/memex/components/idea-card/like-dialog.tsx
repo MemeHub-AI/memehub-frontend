@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { Dialog, DialogFooter, DialogTitle } from '@/components/ui/dialog'
 import { utilLang } from '@/utils/lang'
 import { Button } from '@/components/ui/button'
-import { memexIdeaConfig } from '@/config/memex/idea'
+import { memexIdeaConfig, memexIntroConfig } from '@/config/memex/idea'
 import { useIdeaCardContext } from '@/contexts/memex/idea-card'
 import { useIdeaLike } from '../../hooks/use-idea-like'
 
@@ -14,6 +14,8 @@ interface Props {
 }
 
 const { likeUsdtFee } = memexIdeaConfig
+
+const { likerReward } = memexIntroConfig
 
 export const LikeDialog = ({
   open,
@@ -68,7 +70,7 @@ export const LikeDialog = ({
         <p>
           {isCreator
             ? utilLang.replace(t('memex.like.desc'), [ownerPercent + '%'])
-            : utilLang.replace(t('memex.liker-desc'), [likeUsdtFee])}
+            : utilLang.replace(t('memex.liker-desc'), [likerReward])}
         </p>
         <p>
           {utilLang.replace(t('memex.like.desc2'), [
