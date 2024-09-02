@@ -28,11 +28,10 @@ export const SignLoginDialog = () => {
         console.log('sign', isFirst, isChanged, isAutoConnect, hasToken)
 
         // logout if disconnect.
-        if (!isConnected) logout()
+        if (!isConnected || isChanged) logout()
 
         // First connect or change account, sign.
         if (isFirst || isChanged) {
-          logout()
           setOpen(true)
           return
         }
