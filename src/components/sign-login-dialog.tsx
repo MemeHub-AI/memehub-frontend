@@ -25,6 +25,8 @@ export const SignLoginDialog = () => {
         const isAutoConnect = !!address && !!prevAddress && isConnected
         const hasToken = !!getStorage('token')
 
+        console.log('sign', isFirst, isChanged, isAutoConnect, hasToken)
+
         // logout if disconnect.
         if (!isConnected) logout()
 
@@ -39,6 +41,7 @@ export const SignLoginDialog = () => {
         if (isAutoConnect && !hasToken) {
           logout()
           disconnect()
+          setOpen(false)
           return
         }
       },
