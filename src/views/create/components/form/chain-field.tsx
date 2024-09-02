@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { isEmpty } from 'lodash'
+import { useWallet } from '@solana/wallet-adapter-react'
 
 import {
   FormControl,
@@ -10,23 +10,21 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { fmt } from '@/utils/fmt'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { ChainSelect } from '@/components/chain-select'
 import { useCreateTokenContext } from '@/contexts/create-token'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const ChainField = () => {
-  const { chainId, chain } = useAccount()
   const { form, formFields } = useCreateTokenContext()
-  // TODO: may need to compatible the all chains
-  const { chains, evmChainsMap } = useChainsStore()
+  const { chainId } = useAccount()
+  const { publicKey } = useWallet()
+  const { chainName, displayName } = useChainInfo(form.watch('chainName'))
 
   // Default select.
   useEffect(() => {
-    if (!chainId || isEmpty(chains)) return
-    if (!evmChainsMap[chainId]) return
-
-    form.setValue(formFields.chainName, evmChainsMap[chainId].name)
-  }, [chainId, evmChainsMap])
+    if (!chainId && !publicKey) return
+    form.setValue('chainName', chainName)
+  }, [chainId, publicKey])
 
   return (
     <FormField
@@ -35,10 +33,7 @@ export const ChainField = () => {
       render={({ field }) => (
         <FormItem className="mt-0">
           <FormLabel className="mt-0 font-bold">
-            *
-            {fmt.withChain(
-              evmChainsMap[field.value]?.displayName || chain?.name
-            )}
+            *{fmt.withChain(displayName)}
           </FormLabel>
           <FormControl>
             <ChainSelect
