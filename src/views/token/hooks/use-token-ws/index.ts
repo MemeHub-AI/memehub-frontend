@@ -84,7 +84,7 @@ export const useTokenWs = (disabled = false) => {
     })
 
     return ws.offAll
-  }, [ws.isOpen])
+  }, [ws.isOpen, chainName, tokenAddr])
 
   return {
     ...ws,
