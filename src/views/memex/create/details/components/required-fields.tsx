@@ -24,13 +24,13 @@ export const RequiredFields = () => {
     <div className="space-y-2 mt-2">
       <FormField
         control={form.control}
-        name="symbol"
+        name="name"
         render={({ field }) => (
           <div>
-            <FormLabel className="font-bold">{t('ticker')}*</FormLabel>
+            <FormLabel className="font-bold">{t('name')}*</FormLabel>
             <div>
               <Input
-                placeholder={t('ticker')}
+                placeholder={t('name')}
                 className="px-2"
                 {...field}
                 disabled={isUpdating || field.disabled}
@@ -43,13 +43,13 @@ export const RequiredFields = () => {
 
       <FormField
         control={form.control}
-        name="name"
+        name="symbol"
         render={({ field }) => (
           <div>
-            <FormLabel className="font-bold">{t('name')}*</FormLabel>
+            <FormLabel className="font-bold">{t('ticker')}*</FormLabel>
             <div>
               <Input
-                placeholder={t('name')}
+                placeholder={t('ticker')}
                 className="px-2"
                 {...field}
                 disabled={isUpdating || field.disabled}
