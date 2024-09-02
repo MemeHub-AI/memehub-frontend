@@ -27,7 +27,10 @@ export const useIdeaInfo = (
     ...idoConfig,
     functionName: 'getProjectInfo',
     args: [address!],
-    query: { enabled: !!contract && !!chainId },
+    query: {
+      enabled: !!contract && !!chainId,
+      refetchInterval: 5_000,
+    },
   })
 
   return {
