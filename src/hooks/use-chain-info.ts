@@ -1,31 +1,35 @@
 import { useMemo } from 'react'
 
-import { type ConfigChainId } from '@/config/wagmi'
+import type { ConfigChainId } from '@/config/wagmi'
 import { useChainsStore } from '@/stores/use-chains-store'
+import { Network } from '@/enums/contract'
 
 /**
  * Getting chain info from `useChainStore`,
  * compatible all chains, not just EVM.
  */
-export const useChainInfo = (name: string | null | undefined) => {
+export const useChainInfo = (chainName_: string | null | undefined) => {
   const { chains, chainsMap, getChainId } = useChainsStore()
 
-  const chianInfos = useMemo(() => {
-    const chain = chainsMap[name || '']
+  const chianInfo = useMemo(() => {
+    const chain = chainsMap[chainName_ || '']
     const chainName = chain?.name || ''
     const chainId = Number(chain?.id || 0)
     const configChainId = chainId as ConfigChainId
+    const network = chain?.network || Network.Evm
 
     return {
+      ...chain,
       chain,
       chainName,
       chainId,
       configChainId,
+      network,
     }
-  }, [chains, chainsMap, name])
+  }, [chains, chainsMap, chainName_])
 
   return {
-    ...chianInfos,
+    ...chianInfo,
     getChainId,
   }
 }
