@@ -76,7 +76,7 @@ export const wagmiConfig = getDefaultConfig({
     [mainnet.id]: fallback([http(), unstable_connector(injected)]),
     [bsc.id]: fallback([
       http(
-        'https://smart-burned-patron.bsc.quiknode.pro/d8340a43ded2474d18828922b6df34efc4d4f190/'
+        'https://boldest-lingering-glitter.bsc.quiknode.pro/6c56a67ee96c7b3e30f1f4f3fe24dc91c0d8a77d/'
       ),
       http(),
       unstable_connector(injected),
