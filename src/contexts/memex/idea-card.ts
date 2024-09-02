@@ -21,6 +21,7 @@ interface Value {
   duration: number
   likeValue: string
   ownerPercent: string
+  userClaimAmount: string
   refetchInfo: VoidFunction
 }
 

@@ -49,12 +49,14 @@ export const MemexIdeaCard = ({
     endTime = BI_ZERO,
     ETHAmountOfLike = BI_ZERO,
     ownerRatio = BI_ZERO,
+    userAmount = BI_ZERO,
   } = ideaInfo ?? {}
   const likeValue = formatEther(ETHAmountOfLike)
   const startAt = Number(startTime)
   const endAt = Number(endTime)
   const duration = endAt - startAt
   const ownerPercent = BigNumber(ownerRatio.toString()).div(100).toFixed()
+  const userClaimAmount = formatEther(userAmount)
 
   const { query, ...router } = useRouter()
   const [isList, isDetails, isMyIdeas] = useMemo(
@@ -87,6 +89,7 @@ export const MemexIdeaCard = ({
         duration,
         likeValue,
         ownerPercent,
+        userClaimAmount,
         refetchInfo,
       }}
     >
