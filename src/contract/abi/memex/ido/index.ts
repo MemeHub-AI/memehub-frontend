@@ -17,6 +17,7 @@ import { memexIdoAbi0_6_0 } from './0.6.0'
 import { memexIdoAbi0_7_0 } from './0.7.0'
 import { memexIdoAbi0_7_1 } from './0.7.1'
 import { memexIdoAbi0_7_2 } from './0.7.2'
+import { memexIdoAbi1_0_0 } from './1.0.0'
 
 export const memexIdoAbiMap = {
   '0.1.15': memexIdoAbi0_1_15,
@@ -38,6 +39,7 @@ export const memexIdoAbiMap = {
   '0.7.0': memexIdoAbi0_7_0,
   '0.7.1': memexIdoAbi0_7_1,
   '0.7.2': memexIdoAbi0_7_2,
+  '1.0.0': memexIdoAbi1_0_0,
 }
 
 export const memexIdoLatest = memexIdoAbiMap['0.7.2']
