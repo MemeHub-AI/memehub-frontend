@@ -1,4 +1,4 @@
-import { ComponentProps, useEffect, useState } from 'react'
+import { Children, ComponentProps, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { IoGift, IoLanguageOutline } from 'react-icons/io5'
@@ -7,13 +7,15 @@ import { FaRegLightbulb } from 'react-icons/fa'
 import { FaLightbulb } from 'react-icons/fa'
 import { IoDiamondOutline } from 'react-icons/io5'
 import { IoDiamond } from 'react-icons/io5'
-import { RiNotification3Line } from 'react-icons/ri'
+import { RiNotification3Line, RiRocketFill, RiRocketLine } from 'react-icons/ri'
 import { RiNotification3Fill } from 'react-icons/ri'
 import { FaRegHandshake } from 'react-icons/fa'
 import { FaHandshake } from 'react-icons/fa6'
 import { FaRegUser } from 'react-icons/fa6'
 import { FaUser } from 'react-icons/fa6'
 import { CheckIcon } from '@radix-ui/react-icons'
+import { IoIosMore } from 'react-icons/io'
+import { MdLogout } from 'react-icons/md'
 
 import { Button } from '@/components/ui/button'
 import { useUserStore } from '@/stores/use-user-store'
@@ -34,6 +36,11 @@ import {
 import { SocialLinks } from './social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
+import DialogHowWork from './dialog-how-work'
+import { fmt } from '@/utils/fmt'
+import RewardButton from './reward-button'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import { useDisconnect } from 'wagmi'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -52,6 +59,7 @@ export const NavAside = ({
   const { userInfo } = useUserStore()
   const responsive = useResponsive()
   const [isCollapsed, setIsCollapsed] = useState(responsive[collapseSize])
+  const { disconnect } = useDisconnect()
 
   const userNavs = [
     {
@@ -74,11 +82,18 @@ export const NavAside = ({
     {
       title: t('Coin'),
       path: Routes.Main,
-      icon: <IoDiamondOutline />,
-      iconActive: <IoDiamond />,
+      icon: <RiRocketLine />,
+      iconActive: <RiRocketFill />,
       isActive: pathname === Routes.Main,
     },
     ...(userInfo ? userNavs : []),
+    {
+      title: t('award'),
+      path: Routes.Reward,
+      icon: <IoDiamondOutline />,
+      iconActive: <IoDiamond />,
+      isActive: pathname === Routes.Reward,
+    },
     {
       title: t('Notification'),
       path: Routes.Notification,
@@ -102,6 +117,24 @@ export const NavAside = ({
     },
   ]
 
+  const PopoverPubilic = ({ children }: { children: React.ReactNode }) => {
+    return (
+      <Popover>
+        <PopoverTrigger>{children}</PopoverTrigger>
+        <PopoverContent
+          className="border border-zinc-200 rounded-sm flex space-x-2 items-center hover:bg-slate-100 cursor-pointer p-2 w-40"
+          side="top"
+          align="end"
+          alignOffset={-2}
+          onClick={() => disconnect()}
+        >
+          <MdLogout />
+          <p>{t('disconnect')}</p>
+        </PopoverContent>
+      </Popover>
+    )
+  }
+
   useEffect(() => {
     setIsCollapsed(responsive[collapseSize])
   }, [responsive, collapseSize])
@@ -109,7 +142,7 @@ export const NavAside = ({
   return (
     <aside
       className={cn(
-        'flex flex-col space-y-4 w-52 pt-4 select-none',
+        'flex flex-col space-y-4 w-56 pt-4 select-none',
         isCollapsed && 'w-10 items-center',
         className
       )}
@@ -194,13 +227,56 @@ export const NavAside = ({
         )}
       </Button>
 
+      <DialogHowWork isCollapsed={isCollapsed} />
+
       <SocialLinks
         x={memehubLinks.x}
         tg={memehubLinks.tg}
+        gitbook={memehubLinks.gitbook}
         size={isCollapsed ? 20 : 28}
         buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
-        className={cn(isCollapsed && 'flex-col space-x-0 space-y-1 ml-1')}
+        className={cn(
+          'justify-start',
+          isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
+        )}
       />
+
+      <div
+        className={cn(
+          'flex flex-col items-start fixed left-4 bottom-4',
+          !userInfo && 'hidden'
+        )}
+      >
+        {!isCollapsed && (
+          <div className="flex items-center">
+            <img src={userInfo?.logo} className="rounded-full w-10 h-10" />
+            <div className="flex flex-col space-y-1">
+              <span className="text-sm ml-2 font-semibold">
+                {userInfo?.name}
+              </span>
+              <span className="text-xs ml-2 text-gray-500">
+                {fmt.addr(userInfo?.wallet_address)}
+              </span>
+            </div>
+            <PopoverPubilic>
+              <IoIosMore className="ml-24 cursor-pointer" />
+            </PopoverPubilic>
+          </div>
+        )}
+        {isCollapsed && (
+          <PopoverPubilic>
+            <img src={userInfo?.logo} className="rounded-full w-10 h-10" />
+          </PopoverPubilic>
+        )}
+        <RewardButton
+          shadow="none"
+          showReferral={isCollapsed ? false : true}
+          className={cn(
+            'border-none w-[90%] justify-between mt-3',
+            isCollapsed && 'w-fit p-2'
+          )}
+        />
+      </div>
     </aside>
   )
 }

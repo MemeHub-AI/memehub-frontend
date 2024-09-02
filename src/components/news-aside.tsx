@@ -26,6 +26,7 @@ import { useResponsive } from '@/hooks/use-responsive'
 // TODO/low: wrapped `CollapseAside`
 import { CollapseAside } from './collapse-aside'
 import { joinPaths } from '@/utils'
+import AllTradesFeeds from './header/all-trades-feed'
 
 interface Props extends ComponentProps<'div'> {
   defalutTab?: string | string[] | number
@@ -118,18 +119,19 @@ export const NewsAside = ({
   return (
     <aside
       className={cn(
-        'pr-2 border-l border-zinc-200 h-body hidden xl:block',
+        'pr-2 h-body hidden xl:block',
         'max-sm:mr-0 max-sm:pr-0 max-sm:h-min max-sm:border-0',
+        'lg:before:absolute lg:before:border-l lg:before:border-zinc-200 lg:before:-top-28 lg:before:left-0 lg:before:-bottom-16',
         className
       )}
     >
-      <div className="hidden h-[98vh]"></div>
+      <AllTradesFeeds />
       <div
         className={cn(
-          'sticky top-[65px] ml-6 w-aside max-sm:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
+          'sticky top-[20px] ml-6 w-aside max-sm:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
           tab === Tab.Classic
-            ? 'h-[90vh] max-lg:h-[84vh]'
-            : 'h-[92vh] max-lg:h-[84vh]',
+            ? 'h-[80vh] max-lg:h-[84vh]'
+            : 'h-[82vh] max-lg:h-[84vh]',
           containerClass
         )}
       >
@@ -183,7 +185,7 @@ export const NewsAside = ({
           nullback={tab === Tab.Moonshot && nullback()}
           className={cn(
             containerClassName,
-            tab === 1 ? 'h-[calc(100vh-160px)]' : 'h-[calc(100vh-210px)]',
+            tab === 1 ? 'h-[calc(100vh-170px)]' : 'h-[calc(100vh-220px)]',
             tab === 1 && 'hidden',
             listClassName
           )}
@@ -213,8 +215,8 @@ export const NewsAside = ({
           className={cn(
             containerClassName,
             tab === Tab.Classic
-              ? 'h-[calc(100vh-160px)]'
-              : 'h-[calc(100vh-210px)]',
+              ? 'h-[calc(100vh-170px)]'
+              : 'h-[calc(100vh-120px)]',
             tab === Tab.Moonshot ? 'hidden' : '',
             listClassName
           )}

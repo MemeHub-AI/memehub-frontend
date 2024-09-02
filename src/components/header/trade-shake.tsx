@@ -61,7 +61,7 @@ const TradeShake = (props: ShakeCardProps<TokenWsTrade>) => {
               push(joinPaths(Routes.Main, trade.chain, trade.base_address))
             }
           >
-            {fmt.ellipsis(trade.base_symbol)}
+            {fmt.ellipsis(trade.base_symbol, 13)}
           </span>
         </div>
       )

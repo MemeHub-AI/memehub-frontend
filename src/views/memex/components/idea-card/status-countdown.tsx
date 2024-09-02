@@ -63,6 +63,7 @@ export const IdeaStatusCountdown = () => {
                 onExpired={refetchInfo}
               />
             </div>
+
             {isCreator ? (
               <p>{t('memex.done-desc2')}</p>
             ) : (

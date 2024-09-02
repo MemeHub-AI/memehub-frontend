@@ -52,12 +52,14 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
     <Tabs
       value={pathname}
       onValueChange={(v) => router.push(v)}
-      className="flex-1 sm:max-w-2xl max-xl:relative max-xl:before:absolute max-xl:before:-top-4 max-xl:before:border-l max-xl:before:border-zinc-200 max-xl:before:left-0"
+      className={cn('flex-1 sm:max-w-2xl')}
     >
       <TabsList
         className={cn(
-          'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] justify-start overflow-visible',
-          'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14'
+          'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] lg:border-none justify-start overflow-visible',
+          'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14',
+          'lg:relative lg:after:absolute lg:after:-left-96 lg:after:-right-96 lg:after:border-b lg:after:border-zinc-200 lg:after:bottom-0',
+          'max-lg:sticky max-lg:top-0 max-lg:z-50 max-lg:bg-white'
         )}
       >
         {tabs.map(({ id, route, title }) => (
@@ -74,7 +76,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
                 'h-full flex justify-center items-center relative',
                 'group-data-[state=active]:before:content-[""] group-data-[state=active]:before:w-full group-data-[state=active]:before:h-1',
                 'group-data-[state=active]:before:absolute group-data-[state=active]:before:bottom-0 group-data-[state=active]:before:rounded-full',
-                'group-data-[state=active]:font-bold group-data-[state=active]:!text-black group-data-[state=active]:before:bg-purple-600'
+                'group-data-[state=active]:font-bold group-data-[state=active]:!text-black group-data-[state=active]:before:bg-blue-500'
               )}
             >
               {title}
@@ -84,7 +86,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
       </TabsList>
 
       <div
-        className="h-[calc(100vh-64px-5.75rem)] md:h-[calc(100vh-64px-3.5rem)] overflow-auto max-sm:max-w-sm"
+        className="lg:h-[calc(100vh-64px)] overflow-auto max-sm:max-w-sm"
         id={memexBodyId}
       >
         {children}

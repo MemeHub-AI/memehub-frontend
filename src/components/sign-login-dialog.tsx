@@ -38,7 +38,7 @@ export const SignLoginDialog = () => {
         // Latest connected, but not token, re-sign.
         if (isAutoConnect && !hasToken) {
           logout()
-          disconnect()
+          // disconnect()
           return
         }
       },

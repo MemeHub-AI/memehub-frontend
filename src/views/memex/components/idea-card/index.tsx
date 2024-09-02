@@ -92,7 +92,7 @@ export const MemexIdeaCard = ({
     >
       <div
         className={cn(
-          'flex px-3 py-3 relative border-b duration-150',
+          'lg:flex px-3 py-3 relative border-b duration-150',
           isList && 'cursor-pointer sm:hover:bg-zinc-50',
           className
         )}
@@ -102,23 +102,34 @@ export const MemexIdeaCard = ({
         }}
       >
         <IdeaCardBadge />
-
-        {isList && (
-          <Avatar
-            src={idea?.user_logo}
-            fallback={idea?.user_name?.[0]}
-            className="rounded-md mr-2"
-            onClick={(e) => {
-              e.stopPropagation()
-              onPushToAccount()
-            }}
-          />
-        )}
+        <div className="max-lg:flex max-lg:space-x-2">
+          {isList && (
+            <Avatar
+              src={idea?.user_logo}
+              fallback={idea?.user_name?.[0]}
+              className={cn(
+                'rounded-md mr-2',
+                'max-lg:rounded-full max-lg:mr-2 max-lg:w-11 max-lg:h-11'
+              )}
+              onClick={(e) => {
+                e.stopPropagation()
+                onPushToAccount()
+              }}
+            />
+          )}
+          <div className="flex items-start flex-col flex-1 lg:hidden">
+            <IdeaCardProfile onPush={onPushToAccount} />
+            <IdeaStatusCountdown />
+            <IdeaRefundClaimButton />
+          </div>
+        </div>
 
         <div className="flex-1">
-          <IdeaCardProfile onPush={onPushToAccount} />
+          <div className="max-lg:hidden">
+            <IdeaCardProfile onPush={onPushToAccount} />
+          </div>
 
-          <div className="flex flex-col items-start">
+          <div className="flex flex-col items-start max-lg:hidden">
             <IdeaStatusCountdown />
             <IdeaRefundClaimButton />
           </div>

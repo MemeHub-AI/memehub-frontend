@@ -12,9 +12,11 @@ export const ConnectWallet = ({
 }: ComponentProps<typeof Button>) => {
   // const { walletIsConnected } = useConnectWallet()
   const { t } = useTranslation()
-  const { isConnected, isConnecting } = useAccount()
+  const { isConnected, isConnecting, address } = useAccount()
   const { openConnectModal } = useConnectModal()
   const { isMobile } = useResponsive()
+
+  console.log('address', address)
 
   return isConnected ? (
     children

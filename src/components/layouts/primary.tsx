@@ -5,6 +5,7 @@ import { Header } from '../header'
 import { NewsAside } from '../news-aside'
 import { NavAside } from '@/components/nav-aside'
 import MobileNavBottom from '../mobile-nav-bottom'
+import HandleScroll, { ScrollVariant } from '../handle-scroll'
 
 interface Props extends ComponentProps<'main'> {
   disablePadding?: boolean
@@ -38,12 +39,15 @@ export const PrimaryLayout = ({
         <NavAside className="sticky top-0 shrink-0" {...navAsideProps} />
       </div>
 
-      <div className="flex-1 pb-12">
-        <Header />
+      <div className="flex-1 max-lg:pb-14">
+        <HandleScroll variant={ScrollVariant.Top}>
+          <Header />
+        </HandleScroll>
+
         <div className={cn('flex', containerClass)}>
           <div
             className={cn(
-              'flex-1',
+              'flex-1 lg:overflow-x-hidden',
               !disablePadding && 'p-3 sm:p-4',
               contentClass
             )}
@@ -57,7 +61,9 @@ export const PrimaryLayout = ({
           />
         </div>
 
-        <MobileNavBottom />
+        <HandleScroll variant={ScrollVariant.Bottom}>
+          <MobileNavBottom />
+        </HandleScroll>
       </div>
     </main>
   )

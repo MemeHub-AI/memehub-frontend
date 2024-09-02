@@ -57,15 +57,11 @@ export const Header = () => {
   return (
     <header
       className={cn(
-        'min-h-header flex justify-between items-center px-6 relative border-b',
-        'sticky top-0 bg-background z-50 transition-all duration-300 max-sm:px-3'
+        'min-h-header lg:min-h-0 flex justify-between items-center px-6 relative max-lg:border-b',
+        'max-sm:px-3'
       )}
     >
-      {isPad ? (
-        <HeaderMobile navs={navs} onNavClick={onNavClick} />
-      ) : (
-        <HeaderDesktop navs={navs} onNavClick={onNavClick} />
-      )}
+      {isPad && <HeaderMobile navs={navs} onNavClick={onNavClick} />}
     </header>
   )
 }
