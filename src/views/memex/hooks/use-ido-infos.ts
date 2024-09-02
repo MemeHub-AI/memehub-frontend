@@ -1,5 +1,5 @@
 import { useAccount, useReadContracts } from 'wagmi'
-import { Address } from 'viem'
+import { Address, zeroAddress } from 'viem'
 
 import { MemexIdeaItem } from '@/api/memex/types'
 import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
@@ -45,15 +45,10 @@ export const useIdoInfos = (ideas: MemexIdeaItem[]) => {
       address: idea.factory_address as Address,
       chainId: getChainId(idea.chain),
       functionName: 'getIdoInfos',
-      args: [[idea.hash], address],
+      args: [[idea.hash], address || zeroAddress],
     })),
     query: {
-      enabled: getContractsEnabled(
-        ideas,
-        'memex_version',
-        'factory_address',
-        !!address
-      ),
+      enabled: getContractsEnabled(ideas, 'memex_version', 'factory_address'),
       select: (data) =>
         // @ts-ignore
         data.flatMap((d) => d.result) as (IdoInfo | undefined)[],

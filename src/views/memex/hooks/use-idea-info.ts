@@ -1,4 +1,4 @@
-import { Address } from 'viem'
+import { Address, zeroAddress } from 'viem'
 import { useAccount, useReadContract } from 'wagmi'
 
 import {
@@ -26,7 +26,7 @@ export const useIdeaInfo = (
   } = useReadContract({
     ...idoConfig,
     functionName: 'getProjectInfo',
-    args: [address!],
+    args: [address || zeroAddress],
     query: {
       enabled: !!contract && !!chainId,
       refetchInterval: 5_000,

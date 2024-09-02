@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { useAccount, useReadContract } from 'wagmi'
-import { Address, formatEther } from 'viem'
+import { Address, formatEther, zeroAddress } from 'viem'
 
 import {
   distributorAbiMap,
@@ -43,9 +43,9 @@ export const useAirdropInfo = (
     address: contract as Address,
     chainId,
     functionName: 'getDistributions',
-    args: [[id], address!],
+    args: [[id], address || zeroAddress],
     query: {
-      enabled: !!address && !!version,
+      enabled: !!contract && !!version,
       select: (data) => data[0],
     },
   })
