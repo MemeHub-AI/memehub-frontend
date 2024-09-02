@@ -57,6 +57,7 @@ export const useIdoInfos = (ideas: MemexIdeaItem[]) => {
       select: (data) =>
         // @ts-ignore
         data.flatMap((d) => d.result) as (IdoInfo | undefined)[],
+      refetchInterval: 5_000,
     },
   })
 
