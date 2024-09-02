@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { useWallet } from '@solana/wallet-adapter-react'
 
 import {
   FormControl,
@@ -17,14 +16,13 @@ import { useChainInfo } from '@/hooks/use-chain-info'
 export const ChainField = () => {
   const { form, formFields } = useCreateTokenContext()
   const { chainId } = useAccount()
-  const { publicKey } = useWallet()
   const { chainName, displayName } = useChainInfo(form.watch('chainName'))
 
   // Default select.
   useEffect(() => {
-    if (!chainId && !publicKey) return
+    if (!chainId) return
     form.setValue('chainName', chainName)
-  }, [chainId, publicKey])
+  }, [chainId])
 
   return (
     <FormField
