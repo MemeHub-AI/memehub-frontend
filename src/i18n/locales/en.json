@@ -643,7 +643,7 @@
   "memex.intro-title": "Introduction to gameplay",
   "memex.intro-desc1": "Release Memecoin idea (cost ~{}).",
   "memex.intro-desc2": "Within {}, if you successfully collect {} likes, you will enter internal trading (each like costs ~{})",
-  "memex.intro-desc3": "The publisher receives a total of {} token reward, and the likers receive a total of {} token reward.",
+  "memex.intro-desc3": "The publisher receives a total of {} token reward, and likers receive bottom chips worth around {}",
   "memex.create-message1": "Please select the blockchain to issue",
   "memex.create-message2": "Please enter at least {} characters",
   "memex.create-message3": "Please upload at least one image",
@@ -752,7 +752,7 @@
   "post-idea": "Post Idea",
   "airdrop.invalid": "No information",
   "filter.only-graduated": "Only graduated",
-  "memex.liker-desc": "Likers receive bottom chips worth around {} USDT",
+  "memex.liker-desc": "Likers receive bottom chips worth around {}",
   "memex.recreate": "Republish",
   "memex.publsih-failed": "This Idea was not successfully published"
 }

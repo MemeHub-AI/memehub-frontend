@@ -17,5 +17,5 @@ export const memexIntroConfig = {
   totalLike: 100,
   likeFee: '5 USDT',
   creatorReward: '0.5%',
-  likerReward: '0.05%',
+  likerReward: '5 USDT',
 }
