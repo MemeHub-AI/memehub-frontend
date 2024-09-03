@@ -48,7 +48,7 @@ export const tradeColumns: ColumnDef<TokenWsTrade>[] = [
   },
   {
     accessorKey: 'type',
-    header: () => t('type'),
+    header: () => <span className="whitespace-nowrap">{t('type')}</span>,
     cell: ({ row }) => {
       const isBuy = row.original.type === TradeType.Buy
       return (
