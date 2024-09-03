@@ -35,11 +35,11 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
       title: t('latest'),
       route: Routes.MemexLatest,
     },
-    {
-      id: 2,
-      title: t('hots'),
-      route: Routes.MemexHots,
-    },
+    // {
+    //   id: 2,
+    //   title: t('hots'),
+    //   route: Routes.MemexHots,
+    // },
     ...(userInfo ? userTabs : []),
     {
       id: 5,
