@@ -16,7 +16,7 @@ export const ConnectWallet = ({
   const { openConnectModal } = useConnectModal()
   const { isMobile } = useResponsive()
 
-  console.log('address', address)
+  // console.log('address', address)
 
   return isConnected ? (
     children

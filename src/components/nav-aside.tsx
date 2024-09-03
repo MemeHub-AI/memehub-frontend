@@ -40,7 +40,7 @@ import DialogHowWork from './dialog-how-work'
 import { fmt } from '@/utils/fmt'
 import RewardButton from './reward-button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { useDisconnect } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 import { Avatar } from './ui/avatar'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useSignLogin } from '@/hooks/use-sign-login'
@@ -63,6 +63,7 @@ export const NavAside = ({
   const responsive = useResponsive()
   const [isCollapsed, setIsCollapsed] = useState(responsive[collapseSize])
   const { openConnectModal } = useConnectModal()
+  const { isConnecting } = useAccount()
   const { disconnect } = useDisconnect()
   const { logout } = useSignLogin()
 
@@ -86,10 +87,10 @@ export const NavAside = ({
     },
     {
       title: t('Coin'),
-      path: Routes.Main,
+      path: Routes.Coin,
       icon: <RiRocketLine />,
       iconActive: <RiRocketFill />,
-      isActive: pathname === Routes.Main,
+      isActive: pathname === Routes.Coin,
     },
     ...(userInfo ? userNavs : []),
     {
@@ -121,6 +122,58 @@ export const NavAside = ({
       isActive: pathname === Routes.Alliance,
     },
   ]
+
+  const PutUserInfo = () => {
+    if (userInfo) {
+      if (isCollapsed) {
+        return (
+          <PopoverPubilic>
+            <Avatar src={userInfo?.logo} className="rounded-full w-10 h-10" />
+          </PopoverPubilic>
+        )
+      }
+
+      return (
+        <div className="flex items-center">
+          <div
+            className="flex items-end cursor-pointer"
+            onClick={() =>
+              router.push(`${Routes.Account}/${userInfo?.wallet_address}`)
+            }
+          >
+            <Avatar src={userInfo?.logo} className="rounded-full w-12 h-12" />
+            <div className="flex flex-col space-y-1">
+              <span className="text-sm ml-2 font-semibold">
+                {userInfo?.name}
+              </span>
+              <span className="text-xs ml-2 text-gray-500">
+                {fmt.addr(userInfo?.wallet_address)}
+              </span>
+            </div>
+          </div>
+
+          <PopoverPubilic>
+            <IoIosMore className="ml-24 cursor-pointer" />
+          </PopoverPubilic>
+        </div>
+      )
+    }
+
+    return (
+      <Button
+        variant="outline"
+        shadow={'none'}
+        disabled={isConnecting}
+        className={cn(
+          !isCollapsed && 'w-52',
+          isCollapsed && 'absolute -left-4 bottom-4 p-1 ml-px'
+        )}
+        onClick={() => openConnectModal?.()}
+      >
+        {t('connect')}
+      </Button>
+    )
+  }
 
   const PopoverPubilic = ({ children }: { children: React.ReactNode }) => {
     return (
@@ -169,7 +222,7 @@ export const NavAside = ({
             <NavigationMenuItem key={i} className="w-full cursor-pointer">
               <NavigationMenuLink
                 className={cn(
-                  'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer',
+                  'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer font-normal',
                   n.isActive && 'font-bold',
                   isCollapsed && 'space-x-0 p-2 justify-center'
                 )}
@@ -241,7 +294,7 @@ export const NavAside = ({
         x={memehubLinks.x}
         tg={memehubLinks.tg}
         gitbook={memehubLinks.gitbook}
-        size={isCollapsed ? 20 : 28}
+        size={isCollapsed ? 20 : 24}
         buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
         className={cn(
           'justify-start',
@@ -251,48 +304,17 @@ export const NavAside = ({
 
       <div
         className={cn(
-          'flex flex-col items-start fixed left-4 bottom-4 cursor-pointer'
+          'flex flex-col items-start fixed left-4 bottom-4',
+          !userInfo && 'w-full'
         )}
-        onClick={() => {
-          if (userInfo) return
-
-          openConnectModal?.()
-        }}
       >
-        {!isCollapsed ? (
-          <div className="flex items-center">
-            <Avatar src={userInfo?.logo} className="rounded-full w-10 h-10" />
-            <div className="flex flex-col space-y-1">
-              <span className="text-sm ml-2 font-semibold">
-                {userInfo?.name}
-              </span>
-              <span
-                className={cn(
-                  'text-xs ml-2 text-gray-500',
-                  !userInfo && 'text-base text-black font-bold'
-                )}
-              >
-                {userInfo
-                  ? fmt.addr(userInfo?.wallet_address)
-                  : t('login-before')}
-              </span>
-            </div>
-            <PopoverPubilic>
-              <IoIosMore
-                className={cn('ml-24 cursor-pointer', !userInfo && 'hidden')}
-              />
-            </PopoverPubilic>
-          </div>
-        ) : (
-          <PopoverPubilic>
-            <Avatar src={userInfo?.logo} className="rounded-full w-10 h-10" />
-          </PopoverPubilic>
-        )}
+        <PutUserInfo />
+
         <RewardButton
           shadow="none"
           showReferral={isCollapsed ? false : true}
           className={cn(
-            'border-none w-[90%] justify-between mt-3',
+            'border-none w-full justify-between mt-3',
             isCollapsed && 'w-fit p-2'
           )}
         />

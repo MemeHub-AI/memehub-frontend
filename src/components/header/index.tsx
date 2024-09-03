@@ -31,7 +31,6 @@ export const Header = () => {
       title: withMobileIcon('💎', 'Coin'),
       path: Routes.Main,
     },
-
     {
       title: t('airdrop'),
       path: Routes.Airdrop,

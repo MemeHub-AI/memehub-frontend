@@ -26,10 +26,10 @@ export const MobileNavBottom = () => {
     },
     {
       title: t('Coin'),
-      path: Routes.Main,
+      path: Routes.Coin,
       icon: <BsRocketTakeoff />,
       iconActive: <BsRocketTakeoffFill />,
-      isActive: pathname === Routes.Main,
+      isActive: pathname === Routes.Coin,
     },
     {
       title: t('reward'),

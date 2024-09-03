@@ -69,7 +69,7 @@ export const AccountPage = () => {
 }
 
 AccountPage.getLayout = (page: ReactNode) => (
-  <PrimaryLayout disablePadding>
+  <PrimaryLayout>
     <PageFallback>{page}</PageFallback>
   </PrimaryLayout>
 )

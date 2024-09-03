@@ -85,10 +85,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
         ))}
       </TabsList>
 
-      <div
-        className="lg:h-[calc(100vh-64px)] overflow-auto max-sm:max-w-sm"
-        id={memexBodyId}
-      >
+      <div className="lg:h-[calc(100vh-64px)] overflow-auto" id={memexBodyId}>
         {children}
       </div>
 

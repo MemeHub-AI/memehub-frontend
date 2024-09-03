@@ -60,7 +60,7 @@ export const MemexProfile = () => {
   // console.log('userinfo:', userInfo)
 
   return (
-    <div className="flex-1">
+    <div className="flex-1 border border-zinc-200 rounded-sm">
       <div
         className="bg-cover bg-center h-72"
         style={{ backgroundImage: `url(/images/memex-profile-bg.jpg)` }}

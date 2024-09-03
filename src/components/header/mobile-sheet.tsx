@@ -35,7 +35,7 @@ export const HeaderMobileSheet = ({
     {
       title: t('profile'),
       icon: <LuUser2 />,
-      path: `/${Routes.Account}/${userInfo?.code}`,
+      path: `/${Routes.Account}/${userInfo?.wallet_address}`,
     },
     {
       title: t('airdrop.no.icon'),
