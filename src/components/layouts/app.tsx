@@ -18,6 +18,7 @@ import { SignLoginDialog } from '../sign-login-dialog'
 import { useUserId } from '@/hooks/use-user-id'
 import { MaintainTips } from '../maintain-tips'
 import { useKeepReferralCode } from '@/hooks/use-keep-referral-code'
+import { useRootFontSize } from '@/hooks/use-root-font-size'
 
 // Extends style css variable for react
 declare module 'react' {
@@ -47,6 +48,8 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   useUserId() // init user identify
 
   useKeepReferralCode() // keep referral code query
+
+  useRootFontSize()
 
   if (isNotMounted) return
 

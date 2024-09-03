@@ -11,9 +11,7 @@
     "gav": "tsx ./src/contract/scripts/generate-abi-version.ts"
   },
   "dependencies": {
-    "@coral-xyz/anchor": "^0.29.0",
     "@hookform/resolvers": "^3.4.2",
-    "@next/third-parties": "^14.2.4",
     "@radix-ui/react-accordion": "^1.2.0",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -79,6 +77,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@inquirer/prompts": "^5.4.0",
     "@types/lodash": "^4.17.6",
     "@types/node": "^20",
     "@types/react": "^18",

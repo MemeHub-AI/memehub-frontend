@@ -114,29 +114,29 @@ export const TradeInput = ({ value, onChange, disabled }: Props) => {
         }}
         disabled={disabled}
         endIcon={
-          isLoadingTokenInfo ? (
-            <div className="flex items-center mr-2">
-              <Skeleton className="w-12 h-4" />
-              <Skeleton className="w-6 h-6 ml-1" />
-            </div>
-          ) : (
-            <div
-              className={cn(
-                'flex items-center shrink-0 pr-2',
-                disabled && 'opacity-50'
-              )}
-            >
-              <span className="mr-2 text-zinc-600">
-                {isBuy ? reserveSymbol : fmt.ellipsis(tokenSymbol)}
-              </span>
-              <Img
-                src={isBuy ? tokenChain?.logo : tokenInfo?.image_url}
-                width={20}
-                height={20}
-                className="object-contain rounded"
-              />
-            </div>
-          )
+          <CustomSuspense
+            className={cn(
+              'flex items-center shrink-0 pr-2',
+              disabled && 'opacity-50'
+            )}
+            isPending={isLoadingTokenInfo}
+            fallback={
+              <>
+                <Skeleton className="w-12 h-4" />
+                <Skeleton className="w-6 h-6 ml-1" />
+              </>
+            }
+          >
+            <span className="mr-2 text-zinc-600">
+              {isBuy ? reserveSymbol : fmt.ellipsis(tokenSymbol)}
+            </span>
+            <Img
+              src={isBuy ? tokenChain?.logo : tokenInfo?.image_url}
+              width={20}
+              height={20}
+              className="object-contain rounded"
+            />
+          </CustomSuspense>
         }
       />
       <CustomSuspense

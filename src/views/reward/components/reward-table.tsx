@@ -50,7 +50,7 @@ export const RewardTable = ({ className }: ComponentProps<'h2'>) => {
         {t('reward.record')}
       </h2>
       <DataTable
-        containerClass="border-2 border-black rounded-md px-2 lg:w-4/5 2xl:w-3/5 max-sm:max-w-[94vw]"
+        containerClass="border-2 border-black rounded-md lg:w-4/5 2xl:w-3/5 max-sm:max-w-[94vw]"
         table={table}
         total={total}
         isLoading={isLoading}

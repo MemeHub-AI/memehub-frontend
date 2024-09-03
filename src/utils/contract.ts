@@ -154,7 +154,7 @@ export const getEvmAirdropId = (
   if (!item) return BigInt(-1)
   item = Array.isArray(item) ? item : item.airdrop
 
-  return BigInt(item?.[0]?.distribution_id || -1)
+  return BigInt(item?.[0]?.distribution_id ?? -1)
 }
 
 export const getContractsEnabled = <T extends any[]>(
