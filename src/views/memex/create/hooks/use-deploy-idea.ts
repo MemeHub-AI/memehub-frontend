@@ -7,7 +7,7 @@ import { BigNumber } from 'bignumber.js'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { reportException } from '@/errors'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { getEvmAirdropParams, parseHash } from '@/utils/contract'
+import { getEvmAirdropParams, formatHash } from '@/utils/contract'
 import { Marketing } from '@/api/token/types'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { useChainsStore } from '@/stores/use-chains-store'
@@ -15,6 +15,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 import { useInvite } from '@/hooks/use-invite'
 import { useUserInfo } from '@/hooks/use-user-info'
+import { BI_ZERO } from '@/constants/number'
 
 export interface DeployIdeaParams {
   projectId: string
@@ -106,17 +107,6 @@ export const useDeployIdea = (
     const totalFee = BigNumber(deployFee).plus(initialBuyAmount).toFixed()
     const [referral] = await getReferrals()
 
-    const prefix = tokenId?.startsWith('0x') ? tokenId : '0x' + tokenId
-
-    console.log('idea', [
-      BigInt(projectId),
-      parseEther(initialBuyAmount),
-      referral,
-      hasInfo ? [name, symbol] : [],
-      [BigInt(tokenId ? prefix : 0)], // 0 is not an error!!!!
-      getEvmAirdropParams(configValue, marketing),
-    ])
-
     return writeContractAsync({
       ...deployConfig,
       functionName: 'create',
@@ -125,7 +115,7 @@ export const useDeployIdea = (
         parseEther(initialBuyAmount),
         referral,
         hasInfo ? [name, symbol] : [],
-        [BigInt(tokenId ? prefix : 0)], // 0 is not an error!!!!
+        [tokenId ? formatHash(tokenId) : BI_ZERO], // 0 is not an error!!!!
         getEvmAirdropParams(configValue, marketing),
       ],
       // In the previous version, we did not need to pay "value".

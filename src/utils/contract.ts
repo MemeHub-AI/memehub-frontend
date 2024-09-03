@@ -92,6 +92,11 @@ export const parseHash = (value: bigint, with0x = true) => {
   return with0x ? addPrefix0x(hex)[0] : hex
 }
 
+export const formatHash = (value: string) => {
+  const hex = value.padStart(64, '0')
+  return BigInt(addPrefix0x(hex)[0])
+}
+
 /**
  * @example
  * ```ts

@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js'
 import { useAccount, useReadContract } from 'wagmi'
 import { useQuery } from '@tanstack/react-query'
 
