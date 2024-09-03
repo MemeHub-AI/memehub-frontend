@@ -106,7 +106,12 @@ export const useEvmDeploy = (chainName: string, onFinally?: () => void) => {
       .plus(parseEther(buyAmount).toString())
       .toFixed()
 
-    console.log('hash', tokenId, parseHash(tokenId))
+    console.log(
+      'hash',
+      tokenId,
+      parseHash(tokenId),
+      tokenId.startsWith('0x') ? BigInt(tokenId) : BigInt('0x' + tokenId)
+    )
 
     writeContract({
       ...bcConfig,
@@ -115,7 +120,7 @@ export const useEvmDeploy = (chainName: string, onFinally?: () => void) => {
         parseEther(buyAmount),
         await getReferrals(),
         [name, symbol],
-        [parseHash(tokenId)],
+        [tokenId.startsWith('0x') ? BigInt(tokenId) : BigInt('0x' + tokenId)],
         airdropParams,
       ],
       value: BigInt(totalDeployFee),
