@@ -15,7 +15,7 @@ export const SignLoginDialog = () => {
   const { isConnected } = useAccount()
   const { disconnect } = useDisconnect()
   const { isLoggingIn, signLogin, logout } = useSignLogin()
-  const { getStorage } = useLocalStorage()
+  const { getStorage, setStorage } = useLocalStorage()
 
   useEffect(() => {
     return watchAccount(wagmiConfig, {

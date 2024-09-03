@@ -11,6 +11,7 @@ export type LocalStorage = {
   slippage: string
   airdrop_checked: string
   only_graduated_checked: string
+  clear_token: string
 }
 
 // Don't use `interface`

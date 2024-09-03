@@ -7,7 +7,7 @@ import { BigNumber } from 'bignumber.js'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { reportException } from '@/errors'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { getEvmAirdropParams } from '@/utils/contract'
+import { getEvmAirdropParams, parseHash } from '@/utils/contract'
 import { Marketing } from '@/api/token/types'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { useChainsStore } from '@/stores/use-chains-store'
@@ -97,7 +97,6 @@ export const useDeployIdea = (
     tokenId,
     marketing,
   }: DeployIdeaParams) => {
-    tokenId = tokenId || '0'
     if (!(await checkForChain(chainsMap[chainName || '']?.id))) return
     if (!memexFactoryAddr || !configValue) {
       CONTRACT_ERR.contractAddrNotFound()
@@ -107,6 +106,17 @@ export const useDeployIdea = (
     const totalFee = BigNumber(deployFee).plus(initialBuyAmount).toFixed()
     const [referral] = await getReferrals()
 
+    const prefix = tokenId?.startsWith('0x') ? tokenId : '0x' + tokenId
+
+    console.log('idea', [
+      BigInt(projectId),
+      parseEther(initialBuyAmount),
+      referral,
+      hasInfo ? [name, symbol] : [],
+      [BigInt(tokenId ? prefix : 0)], // 0 is not an error!!!!
+      getEvmAirdropParams(configValue, marketing),
+    ])
+
     return writeContractAsync({
       ...deployConfig,
       functionName: 'create',
@@ -115,7 +125,7 @@ export const useDeployIdea = (
         parseEther(initialBuyAmount),
         referral,
         hasInfo ? [name, symbol] : [],
-        [BigInt(tokenId.startsWith('0x') ? tokenId : '0x' + tokenId)], // 0 is not an error!!!!
+        [BigInt(tokenId ? prefix : 0)], // 0 is not an error!!!!
         getEvmAirdropParams(configValue, marketing),
       ],
       // In the previous version, we did not need to pay "value".
