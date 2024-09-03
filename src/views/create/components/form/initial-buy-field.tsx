@@ -18,9 +18,10 @@ export const InitialBuyField = ({
 }: ComponentProps<typeof Dialog>) => {
   const { t } = useTranslation()
   const { buyAmoutMax, reserveSymbol, form, onSubmit } = useCreateTokenContext()
-  const { address } = useAccount()
+  const { address, chainId } = useAccount()
   const { data: balance = '0' } = useBalance({
     address,
+    chainId,
     query: { select: ({ value }) => formatEther(value || BI_ZERO) },
   })
 
