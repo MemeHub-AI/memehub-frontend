@@ -34,6 +34,7 @@ import {
 import { SocialLinks } from './social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
+import DialogHowWork from './dialog-how-work'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -109,7 +110,7 @@ export const NavAside = ({
   return (
     <aside
       className={cn(
-        'flex flex-col space-y-4 w-52 pt-4 select-none',
+        'flex flex-col space-y-4 w-56 pt-4 select-none',
         isCollapsed && 'w-10 items-center',
         className
       )}
@@ -194,10 +195,13 @@ export const NavAside = ({
         )}
       </Button>
 
+      <DialogHowWork isCollapsed={isCollapsed} />
+
       <SocialLinks
         x={memehubLinks.x}
         tg={memehubLinks.tg}
-        size={isCollapsed ? 20 : 28}
+        gitbook={memehubLinks.gitbook}
+        size={isCollapsed ? 20 : 24}
         buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
         className={cn(isCollapsed && 'flex-col space-x-0 space-y-1 ml-1')}
       />
