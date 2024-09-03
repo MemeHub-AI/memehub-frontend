@@ -19,7 +19,7 @@ export const CreateIdeaMessages = () => {
   }, [])
 
   return (
-    <div className="text-green-700 font-semibold text-sm">
+    <div className="text-green-700 text-sm">
       {errors.chain && <p>{t('memex.create-message1')}</p>}
       {errors.content && (
         <p>
