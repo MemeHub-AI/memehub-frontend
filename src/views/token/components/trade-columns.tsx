@@ -6,6 +6,7 @@ import { BigNumber } from 'bignumber.js'
 import dayjs from 'dayjs'
 import Link from 'next/link'
 import { AiOutlineSwap } from 'react-icons/ai'
+import { zeroAddress } from 'viem'
 
 import { type TokenWsTrade } from '../hooks/use-token-ws/types'
 import { joinPaths } from '@/utils'
@@ -29,12 +30,16 @@ export const tradeColumns: ColumnDef<TokenWsTrade>[] = [
     header: () => t('account'),
     cell: ({ row }) => {
       const { executor } = row.original
+      const isZeroAddr = executor === zeroAddress
       const router = useRouter()
 
       return (
         <span
-          className={linkStyle('font-bold')}
-          onClick={() => router.push(joinPaths(Routes.Account, executor))}
+          className={isZeroAddr ? 'font-bold' : linkStyle('font-bold')}
+          onClick={() => {
+            if (isZeroAddr) return
+            router.push(joinPaths(Routes.Account, executor))
+          }}
         >
           {fmt.addr(executor)}
         </span>

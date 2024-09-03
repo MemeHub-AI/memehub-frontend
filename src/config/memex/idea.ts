@@ -14,8 +14,8 @@ export const memexIdeaConfig = {
 export const memexIntroConfig = {
   createFee: '10 USDT',
   durationHours: '48h',
-  totalLike: 100,
+  totalLike: 50,
   likeFee: '5 USDT',
   creatorReward: '0.5%',
-  likerReward: '0.05%',
+  likerReward: '5 USDT',
 }

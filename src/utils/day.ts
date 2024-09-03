@@ -20,18 +20,18 @@ export const utilTime = {
 export const simplifyFromNow = (date: string | undefined) => {
   const day = dayjs(date).fromNow(true)
 
-  if (utilLang.isEn()) {
-    return day
-      .replace('day', 'd')
-      .replace('ds', 'd')
-      .replace('hour', 'h')
-      .replace('hs', 'h')
-      .replace('minute', 'm')
-      .replace('ms', 'm')
-      .replace('second', 's')
-      .replace('ss', 's')
-  }
+  if (utilLang.isZh()) return day
+
   return day
+    .replace('an ', '1')
+    .replace('day', 'd')
+    .replace('ds', 'd')
+    .replace('hour', 'h')
+    .replace('hs', 'h')
+    .replace('minute', 'm')
+    .replace('ms', 'm')
+    .replace('second', 's')
+    .replace('ss', 's')
 }
 
 export const formatFromTz = (ts: number) => {

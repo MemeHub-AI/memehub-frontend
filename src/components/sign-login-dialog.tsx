@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useAccount, useDisconnect } from 'wagmi'
 import { watchAccount } from 'wagmi/actions'
+import { useTranslation } from 'react-i18next'
 
 import { AlertDialog } from './ui/alert-dialog'
-import { useTranslation } from 'react-i18next'
 import { Button } from './ui/button'
 import { useSignLogin } from '@/hooks/use-sign-login'
 import { wagmiConfig } from '@/config/wagmi'
@@ -25,20 +25,28 @@ export const SignLoginDialog = () => {
         const isAutoConnect = !!address && !!prevAddress && isConnected
         const hasToken = !!getStorage('token')
 
+        console.log('sign', {
+          isConnected,
+          isFirst,
+          isChanged,
+          isAutoConnect,
+          hasToken,
+        })
+
         // logout if disconnect.
-        if (!isConnected) logout()
+        if (!isConnected || isChanged) logout()
 
         // First connect or change account, sign.
         if (isFirst || isChanged) {
-          logout()
           setOpen(true)
           return
         }
 
         // Latest connected, but not token, re-sign.
-        if (isAutoConnect && !hasToken) {
+        if (isAutoConnect && !isConnected && !hasToken) {
           logout()
-          // disconnect()
+          disconnect()
+          setOpen(false)
           return
         }
       },

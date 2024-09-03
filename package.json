@@ -7,7 +7,8 @@
     "dev-https": "next dev --experimental-https",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gav": "tsx ./src/contract/scripts/generate-abi-version.ts"
   },
   "dependencies": {
     "@coral-xyz/anchor": "^0.29.0",

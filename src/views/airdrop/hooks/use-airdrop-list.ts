@@ -1,6 +1,6 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useAccount, useReadContracts } from 'wagmi'
-import { Address } from 'viem'
+import { Address, zeroAddress } from 'viem'
 
 import { airdropApi } from '@/api/airdrop'
 import { useUserStore } from '@/stores/use-user-store'
@@ -55,14 +55,13 @@ export const useAirdropList = () => {
       address: a?.airdrop_address as Address,
       chainId: getChainId(a?.chain),
       functionName: 'getDistributions',
-      args: [[getEvmAirdropId(a)], address!],
+      args: [[getEvmAirdropId(a)], address || zeroAddress],
     })),
     query: {
       enabled: getContractsEnabled(
         airdrops,
         'airdrop_version',
-        'airdrop_address',
-        !!address
+        'airdrop_address'
       ),
       select: (data) =>
         // @ts-ignore, Don't use `filter(Boolean)`, as it will disrupt the element count

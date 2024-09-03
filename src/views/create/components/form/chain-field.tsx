@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { useAccount } from 'wagmi'
-import { isEmpty } from 'lodash'
 
 import {
   FormControl,
@@ -10,23 +9,25 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { fmt } from '@/utils/fmt'
-import { useChainsStore } from '@/stores/use-chains-store'
 import { ChainSelect } from '@/components/chain-select'
 import { useCreateTokenContext } from '@/contexts/create-token'
+import { useChainInfo } from '@/hooks/use-chain-info'
+import { useChainsStore } from '@/stores/use-chains-store'
 
 export const ChainField = () => {
-  const { chainId, chain } = useAccount()
   const { form, formFields } = useCreateTokenContext()
-  // TODO: may need to compatible the all chains
-  const { chains, evmChainsMap } = useChainsStore()
+  const { chainId = 0 } = useAccount()
+  const { evmChainsMap } = useChainsStore()
+  const { chainName, displayName } = useChainInfo(
+    // TODO/middle: multi chain like `sol`
+    form.watch('chainName') || evmChainsMap[chainId]?.name
+  )
 
   // Default select.
   useEffect(() => {
-    if (!chainId || isEmpty(chains)) return
-    if (!evmChainsMap[chainId]) return
-
-    form.setValue(formFields.chainName, evmChainsMap[chainId].name)
-  }, [chainId, evmChainsMap])
+    if (!chainId) return
+    form.setValue('chainName', chainName)
+  }, [chainId])
 
   return (
     <FormField
@@ -35,14 +36,11 @@ export const ChainField = () => {
       render={({ field }) => (
         <FormItem className="mt-0">
           <FormLabel className="mt-0 font-bold">
-            *
-            {fmt.withChain(
-              evmChainsMap[field.value]?.displayName || chain?.name
-            )}
+            *{fmt.withChain(displayName)}
           </FormLabel>
           <FormControl>
             <ChainSelect
-              defaultValue={chainId?.toString()}
+              defaultValue={chainName}
               value={field.value}
               onChange={(c) => field.onChange(c.name)}
             />

@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { formatEther } from 'viem'
+import { BigNumber } from 'bignumber.js'
 
 import { Button } from '@/components/ui/button'
 import { useIdeaCardContext } from '@/contexts/memex/idea-card'
@@ -16,6 +17,7 @@ export const IdeaRefundClaimButton = () => {
     chain: { native } = {},
     ownerPercent,
     likeValue,
+    userClaimAmount,
     refetchInfo,
   } = useIdeaCardContext()
   const { isCreator, isSuccess, isFailed } = ideaStatus
@@ -42,7 +44,10 @@ export const IdeaRefundClaimButton = () => {
   const canRefundInitial =
     isFailed && isCreator && (isHasInitWithdraw || isInitWithdrawETH)
 
-  const claimLabel = `${t('pure.claim')} ${ownerPercent}% $${idea?.symbol}`
+  const claimLabel = `${t('pure.claim')} ${
+    isCreator ? `${ownerPercent}%` : BigNumber(userClaimAmount).toFormat(0)
+  }  ${idea?.symbol}`
+
   const refundLabel = `${t('refund')} ${likeValue} ${native?.symbol}`
   const refundInitialLabel = `${t('refund-initial-buy')} ${initialAmount} ${
     native?.symbol
