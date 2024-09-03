@@ -58,7 +58,7 @@ export const MemexProfile = () => {
   const tokenAddr = (query.address || '') as string
 
   return (
-    <div className="flex-1 w-full rounded-lg border-2 border-zinc-200">
+    <div className="flex-1">
       <div
         className="bg-cover bg-center h-72"
         style={{ backgroundImage: `url(/images/memex-profile-bg.jpg)` }}
