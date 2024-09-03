@@ -97,15 +97,14 @@ export const useDeployIdea = (
     tokenId,
     marketing,
   }: DeployIdeaParams) => {
+    tokenId = tokenId || '0'
     if (!(await checkForChain(chainsMap[chainName || '']?.id))) return
     if (!memexFactoryAddr || !configValue) {
       CONTRACT_ERR.contractAddrNotFound()
       return
     }
     const hasInfo = !!name && !!symbol
-    const totalFee = BigNumber(deployFee)
-      .plus(initialBuyAmount || 0)
-      .toFixed()
+    const totalFee = BigNumber(deployFee).plus(initialBuyAmount).toFixed()
     const [referral] = await getReferrals()
 
     return writeContractAsync({
@@ -116,7 +115,7 @@ export const useDeployIdea = (
         parseEther(initialBuyAmount),
         referral,
         hasInfo ? [name, symbol] : [],
-        [BigInt(tokenId || 0)], // 0 is not an error!!!!
+        [BigInt(tokenId.startsWith('0x') ? tokenId : '0x' + tokenId)], // 0 is not an error!!!!
         getEvmAirdropParams(configValue, marketing),
       ],
       // In the previous version, we did not need to pay "value".
