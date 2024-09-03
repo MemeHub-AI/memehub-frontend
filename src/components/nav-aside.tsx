@@ -41,6 +41,8 @@ import { fmt } from '@/utils/fmt'
 import RewardButton from './reward-button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { useDisconnect } from 'wagmi'
+import { Avatar } from './ui/avatar'
+import { useConnectModal } from '@rainbow-me/rainbowkit'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -59,6 +61,7 @@ export const NavAside = ({
   const { userInfo } = useUserStore()
   const responsive = useResponsive()
   const [isCollapsed, setIsCollapsed] = useState(responsive[collapseSize])
+  const { openConnectModal } = useConnectModal()
   const { disconnect } = useDisconnect()
 
   const userNavs = [
@@ -243,29 +246,41 @@ export const NavAside = ({
 
       <div
         className={cn(
-          'flex flex-col items-start fixed left-4 bottom-4',
-          !userInfo && 'hidden'
+          'flex flex-col items-start fixed left-4 bottom-4 cursor-pointer'
         )}
+        onClick={() => {
+          if (userInfo) return
+
+          openConnectModal?.()
+        }}
       >
-        {!isCollapsed && (
+        {!isCollapsed ? (
           <div className="flex items-center">
-            <img src={userInfo?.logo} className="rounded-full w-10 h-10" />
+            <Avatar src={userInfo?.logo} className="rounded-full w-10 h-10" />
             <div className="flex flex-col space-y-1">
               <span className="text-sm ml-2 font-semibold">
                 {userInfo?.name}
               </span>
-              <span className="text-xs ml-2 text-gray-500">
-                {fmt.addr(userInfo?.wallet_address)}
+              <span
+                className={cn(
+                  'text-xs ml-2 text-gray-500',
+                  !userInfo && 'text-base text-black font-bold'
+                )}
+              >
+                {userInfo
+                  ? fmt.addr(userInfo?.wallet_address)
+                  : t('login-before')}
               </span>
             </div>
             <PopoverPubilic>
-              <IoIosMore className="ml-24 cursor-pointer" />
+              <IoIosMore
+                className={cn('ml-24 cursor-pointer', !userInfo && 'hidden')}
+              />
             </PopoverPubilic>
           </div>
-        )}
-        {isCollapsed && (
+        ) : (
           <PopoverPubilic>
-            <img src={userInfo?.logo} className="rounded-full w-10 h-10" />
+            <Avatar src={userInfo?.logo} className="rounded-full w-10 h-10" />
           </PopoverPubilic>
         )}
         <RewardButton
