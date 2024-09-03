@@ -56,7 +56,7 @@ export const PrimaryLayout = ({
           </div>
 
           <NewsAside
-            className={cn('sticky top-16', newsAsideClass)}
+            className={cn('sticky top-0', newsAsideClass)}
             {...newsAsideProps}
           />
         </div>

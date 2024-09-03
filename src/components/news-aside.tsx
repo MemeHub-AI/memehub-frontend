@@ -125,13 +125,14 @@ export const NewsAside = ({
         className
       )}
     >
-      <AllTradesFeeds />
+      <div className={isPad ? 'hidden' : ''}>
+        <AllTradesFeeds />
+      </div>
+
       <div
         className={cn(
           'sticky top-[20px] ml-6 w-aside max-sm:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
-          tab === Tab.Classic
-            ? 'h-[80vh] max-lg:h-[84vh]'
-            : 'h-[82vh] max-lg:h-[84vh]',
+          tab === Tab.Classic ? 'h-[80vh]' : 'h-[82vh]',
           containerClass
         )}
       >
@@ -141,7 +142,7 @@ export const NewsAside = ({
               <div
                 key={i}
                 className={cn(
-                  'px-2.5 py-1.5 text-nowrap rounded-xl my-5 cursor-pointer border-2 border-transparent',
+                  'px-2.5 py-1.5 text-nowrap rounded-xl my-3 cursor-pointer border-2 border-transparent',
                   'hover:border-black select-none flex-1 text-center',
                   i === Tab.Classic && 'ml-3',
                   tab === i && 'bg-black text-[#ffe770]',
@@ -185,7 +186,7 @@ export const NewsAside = ({
           nullback={tab === Tab.Moonshot && nullback()}
           className={cn(
             containerClassName,
-            tab === 1 ? 'h-[calc(100vh-170px)]' : 'h-[calc(100vh-220px)]',
+            tab === 1 ? 'h-[calc(100vh-11rem)]' : 'h-[calc(100vh-14rem)]',
             tab === 1 && 'hidden',
             listClassName
           )}
@@ -215,8 +216,8 @@ export const NewsAside = ({
           className={cn(
             containerClassName,
             tab === Tab.Classic
-              ? 'h-[calc(100vh-170px)]'
-              : 'h-[calc(100vh-120px)]',
+              ? 'h-[calc(100vh-11rem)]'
+              : 'h-[calc(100vh-14rem)]',
             tab === Tab.Moonshot ? 'hidden' : '',
             listClassName
           )}

@@ -40,7 +40,7 @@ export const AllTradesFeeds = memo(() => {
   }, [coinCreate])
 
   return (
-    <div className="flex justify-between flex-1 mr-2 ml-6 mt-2">
+    <div className="flex justify-between flex-1 mr-2 ml-8 mt-2">
       <div className="flex flex-col items-start space-y-2">
         {trade && <TradeShake color={colors[randomIdx]} trade={trade} />}
         {create && (
