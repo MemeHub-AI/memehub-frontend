@@ -1,9 +1,8 @@
-import { useMutation } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
 import { toast } from 'sonner'
 
+import { useMutation } from '@tanstack/react-query'
+import { useTranslation } from 'react-i18next'
 import type { UserInfoRes } from '@/api/user/types'
-
 import { userApi } from '@/api/user'
 import { useUserStore } from '@/stores/use-user-store'
 

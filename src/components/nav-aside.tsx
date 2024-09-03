@@ -43,6 +43,7 @@ import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 import { useDisconnect } from 'wagmi'
 import { Avatar } from './ui/avatar'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
+import { useSignLogin } from '@/hooks/use-sign-login'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -63,6 +64,7 @@ export const NavAside = ({
   const [isCollapsed, setIsCollapsed] = useState(responsive[collapseSize])
   const { openConnectModal } = useConnectModal()
   const { disconnect } = useDisconnect()
+  const { logout } = useSignLogin()
 
   const userNavs = [
     {
@@ -129,7 +131,10 @@ export const NavAside = ({
           side="top"
           align="end"
           alignOffset={-2}
-          onClick={() => disconnect()}
+          onClick={() => {
+            logout()
+            disconnect()
+          }}
         >
           <MdLogout />
           <p>{t('disconnect')}</p>

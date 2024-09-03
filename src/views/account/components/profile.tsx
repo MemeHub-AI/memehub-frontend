@@ -57,6 +57,8 @@ export const MemexProfile = () => {
   const { isPad } = useResponsive()
   const tokenAddr = (query.address || '') as string
 
+  // console.log('userinfo:', userInfo)
+
   return (
     <div className="flex-1">
       <div
