@@ -91,7 +91,7 @@ export const AccountDropdown = () => {
         variant="ghost"
         shadow="none"
         className={cn('w-full px-2 grid grid-cols-[1.5rem_1fr] text-start')}
-        onClick={() => window.open(memehubLinks.x)}
+        onClick={() => window.open(memehubLinks.tg)}
       >
         <LiaTelegramPlane size={20} />
         <span>{t('telegram')}</span>
