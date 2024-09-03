@@ -120,10 +120,18 @@ export const MemexIdeaCard = ({
               }}
             />
           )}
-          <div className="flex items-start flex-col flex-1 lg:hidden">
+
+          <div className="flex items-start flex-1 lg:hidden">
             <IdeaCardProfile onPush={onPushToAccount} />
-            <IdeaStatusCountdown />
-            <IdeaRefundClaimButton />
+          </div>
+        </div>
+
+        <div className="flex justify-between items-center my-2 lg:hidden">
+          <IdeaStatusCountdown />
+          <IdeaRefundClaimButton />
+          <div className="flex items-center space-x-1 text-sm text-zinc-500">
+            <img src={chain?.logo} alt="chain" className="w-5 h-5" />
+            <span>{chain?.displayName}</span>
           </div>
         </div>
 
@@ -166,7 +174,7 @@ export const MemexIdeaCard = ({
 
           <GridImages urls={image_urls} onClick={(e) => e.stopPropagation()} />
           <IdeaCardLikeComment onCommentSuccess={onCommentSuccess} />
-          <IdeaProgress />
+          <IdeaProgress className="bg-white" />
         </div>
       </div>
     </IdeaCardProvider>

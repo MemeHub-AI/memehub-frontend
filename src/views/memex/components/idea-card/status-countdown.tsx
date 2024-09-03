@@ -22,14 +22,14 @@ export const IdeaStatusCountdown = () => {
 
   return (
     <>
-      {canCountdown && (
+      {/* {canCountdown && (
         <Countdown
-          className="text-sm text-green-700"
+          className="text-sm text-green-600/90"
           createdAt={startAt}
           duration={duration}
           onExpired={refetchInfo}
         />
-      )}
+      )} */}
 
       {canEditCoinDetails && (
         <Button
@@ -49,6 +49,23 @@ export const IdeaStatusCountdown = () => {
           {t('coin-detail')}
         </Button>
       )}
+
+      {/* <div className="flex space-x-2 border border-yellow-600 rounded mt-2 p-2 text-yellow-600 w-full">
+        <BsLightningFill className="shrink-0" size={22} />
+        <div className="text-sm font-bold w-full">
+          <div className="leading-none flex flex-1 justify-between">
+            <span>{t('memex.done-desc1')}</span>
+            <Countdown
+              className="text-green-600 self-end"
+              createdAt={Number(overTime)}
+              duration={Number(waitingTime)}
+              onExpired={refetchInfo}
+            />
+          </div>
+
+          <p>{t('memex.done-desc2')}</p>
+        </div>
+      </div> */}
 
       {canShowSuccessTips && (
         <div className="flex space-x-2 border border-yellow-600 rounded mt-2 p-2 text-yellow-600 w-full">

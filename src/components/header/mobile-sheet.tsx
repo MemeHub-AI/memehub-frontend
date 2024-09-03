@@ -18,8 +18,10 @@ import { memehubLinks } from '@/config/link'
 
 export const HeaderMobileSheet = ({
   userInfo,
+  setSheetOpen,
 }: {
   userInfo: UserInfoRes | null
+  setSheetOpen: (status: boolean) => void
 }) => {
   const { t } = useTranslation()
   const { chains } = useChainsStore()
@@ -28,8 +30,6 @@ export const HeaderMobileSheet = ({
   const { push } = useRouter()
   const { followers } = followersResults
   const { following } = followingResults
-
-  console.log('userInfo', userInfo)
 
   const navs = [
     {
@@ -85,8 +85,11 @@ export const HeaderMobileSheet = ({
         {navs.map((nav, i) => (
           <div
             key={i}
-            className="flex items-center text-base font-semibold space-x-4"
-            onClick={() => push(nav.path)}
+            className="flex items-center text-base font-semibold space-x-4 cursor-pointer"
+            onClick={() => {
+              setSheetOpen(false)
+              push(nav.path)
+            }}
           >
             <span className="text-xl">{nav.icon}</span>
             <span className="whitespace-nowrap">{nav.title}</span>

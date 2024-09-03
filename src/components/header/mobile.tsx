@@ -1,4 +1,4 @@
-import { type ComponentProps, useRef } from 'react'
+import { type ComponentProps, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { LuUser2 } from 'react-icons/lu'
 
@@ -29,10 +29,19 @@ export const HeaderMobile = (props: Props) => {
   const { pathname, ...router } = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
   const { userInfo } = useUserStore()
+  const [sheetOpen, setSheetOpen] = useState(false)
+
+  // console.log('userinfo:', userInfo)
 
   return (
     <>
-      <Sheet>
+      <Sheet
+        open={sheetOpen}
+        onOpenChange={(status) => {
+          if (!userInfo) return
+          setSheetOpen(status)
+        }}
+      >
         <SheetTrigger asChild ref={closeRef}>
           <div className="flex justify-start items-center space-x-2 max-sm:space-x-0">
             <div className="flex text-xl mt-1">
@@ -51,7 +60,7 @@ export const HeaderMobile = (props: Props) => {
           side="left"
           className="pt-4 px-3"
         >
-          <HeaderMobileSheet userInfo={userInfo} />
+          <HeaderMobileSheet userInfo={userInfo} setSheetOpen={setSheetOpen} />
           {/* <ul className="flex flex-col space-y-3 mt-3 mb-1">
             {navs.map((n, i) => (
               <li

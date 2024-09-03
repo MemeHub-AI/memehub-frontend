@@ -26,6 +26,7 @@ export const HandleScroll = ({
   const { pathname } = useRouter()
 
   const isMemex = pathname.includes(Routes.MemexIdea)
+  const isTokenPage = pathname.includes(Routes.TokenPage)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -48,7 +49,7 @@ export const HandleScroll = ({
         'overflow-y-auto opacity-100 top-0 z-50 bg-white transition-all duration-300',
         !visible && variant === ScrollVariant.Bottom && isPad && 'opacity-50',
         !visible && variant === ScrollVariant.Top && isPad && '-top-80',
-        !isMemex && 'sticky',
+        !(isMemex || isTokenPage) && 'sticky',
         classname
       )}
       ref={ref}

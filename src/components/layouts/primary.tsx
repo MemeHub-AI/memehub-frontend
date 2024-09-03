@@ -6,6 +6,8 @@ import { NewsAside } from '../news-aside'
 import { NavAside } from '@/components/nav-aside'
 import MobileNavBottom from '../mobile-nav-bottom'
 import HandleScroll, { ScrollVariant } from '../handle-scroll'
+import { useRouter } from 'next/router'
+import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'main'> {
   disablePadding?: boolean
@@ -28,6 +30,10 @@ export const PrimaryLayout = ({
   navAsideProps,
   newsAsideProps,
 }: Props) => {
+  const { pathname } = useRouter()
+
+  const isTokenPage = pathname.includes(Routes.TokenPage)
+
   return (
     <main className={cn('min-h-main flex max-w-[100vw]', className)}>
       <div
@@ -61,7 +67,10 @@ export const PrimaryLayout = ({
           />
         </div>
 
-        <HandleScroll variant={ScrollVariant.Bottom}>
+        <HandleScroll
+          variant={ScrollVariant.Bottom}
+          classname={isTokenPage ? 'hidden' : ''}
+        >
           <MobileNavBottom />
         </HandleScroll>
       </div>
