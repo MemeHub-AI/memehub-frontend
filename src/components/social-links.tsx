@@ -6,11 +6,13 @@ import { FaXTwitter } from 'react-icons/fa6'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { parseMediaUrl } from '@/utils'
+import { AiFillBook } from 'react-icons/ai'
 
 interface Props extends ComponentProps<'div'> {
   x?: string
   tg?: string
   website?: string
+  gitbook?: string
   buttonProps?: ComponentProps<typeof Button>
   size?: number
 }
@@ -20,6 +22,7 @@ export const SocialLinks = ({
   x,
   tg,
   website,
+  gitbook,
   buttonProps,
   size = 20,
   ...props
@@ -40,6 +43,11 @@ export const SocialLinks = ({
       title: 'Website',
       link: parseMediaUrl('website', website),
       icon: <FaGlobe size={size} />,
+    },
+    {
+      title: 'GitBook',
+      link: parseMediaUrl('gitbook', gitbook),
+      icon: <AiFillBook size={size} />,
     },
   ]
 

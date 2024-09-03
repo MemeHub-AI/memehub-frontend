@@ -754,5 +754,10 @@
   "filter.only-graduated": "Only graduated",
   "memex.liker-desc": "Likers receive bottom chips worth around {}",
   "memex.recreate": "Republish",
-  "memex.publsih-failed": "This Idea was not successfully published"
+  "memex.publsih-failed": "This Idea was not successfully published",
+  "how.to.work": "How to work?",
+  "how.work.1": "1. Come up with your genius idea about memecoin",
+  "how.work.2": "2. Get 50 likes!",
+  "how.work.3": "3. Degen with a like gets the bottom chip,$5 worth of Memecoins!",
+  "how.work.4": "4. Enter Bonding Curve and add LP to decentralized exchange when market cap reaches ~$30,000(Beta)"
 }
