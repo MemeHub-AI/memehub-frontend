@@ -200,7 +200,7 @@ export const NavAside = ({
       <SocialLinks
         x={memehubLinks.x}
         tg={memehubLinks.tg}
-        gitbook={memehubLinks.gitbook}
+        whitepaper={memehubLinks.whitepaper}
         size={isCollapsed ? 20 : 24}
         buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
         className={cn(isCollapsed && 'flex-col space-x-0 space-y-1 ml-1')}

@@ -76,6 +76,7 @@ export const HeaderMobile = (props: Props) => {
           <SocialLinks
             x={memehubLinks.x}
             tg={memehubLinks.tg}
+            whitepaper={memehubLinks.whitepaper}
             className="justify-start"
             size={28}
           />
