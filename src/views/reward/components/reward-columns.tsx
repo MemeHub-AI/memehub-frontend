@@ -15,7 +15,7 @@ enum RewardType {
 }
 
 // Must be function, because i18n.
-const rewardSourceMap: Record<keyof RewardInfoRes, () => string> = {
+const rewardSource: Record<keyof RewardInfoRes, () => string> = {
   buy: () => t('reward.buy'),
   sell: () => t('reward.sell'),
   create: () => t('reward.create'),
@@ -25,6 +25,7 @@ const rewardSourceMap: Record<keyof RewardInfoRes, () => string> = {
   memex_launched: () => t('reward.memex-launched'),
   memex_liked: () => t('reward.memex-liked'),
   trade: () => t('reward.trade'),
+  answer_question: () => t('reward.answer-question'),
 }
 
 export const rewardColumns: ColumnDef<RewardItem>[] = [
@@ -65,6 +66,6 @@ export const rewardColumns: ColumnDef<RewardItem>[] = [
     accessorKey: 'flag',
     header: () => t('reward.source'),
     cell: ({ row }) =>
-      rewardSourceMap[row.original.flag]?.() || t('reward.unknown'),
+      rewardSource[row.original.flag]?.() || t('reward.unknown'),
   },
 ]

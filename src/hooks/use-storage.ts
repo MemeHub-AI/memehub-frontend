@@ -4,7 +4,7 @@ import {
   SessionStorage,
 } from '@/config/storage'
 
-const withNs = (key: string) => `${storageNamespace}::${key}`
+const withNs = (key: string) => `${storageNamespace}:${key}`
 
 const useStorage = <S extends Record<string, string>>(
   storage: Storage | undefined

@@ -8,6 +8,7 @@ interface Props extends ComponentProps<'img'> {
   showMeme?: boolean
   showLogo?: boolean
   linkClass?: string
+  betaClass?: string
 }
 
 export const Logo = ({
@@ -15,6 +16,7 @@ export const Logo = ({
   showMeme = false,
   showLogo = true,
   linkClass,
+  betaClass,
   ...props
 }: Props) => {
   return (
@@ -36,6 +38,9 @@ export const Logo = ({
           {...props}
         />
       )}
+      <span className={cn('font-normal text-blue-400 mt-1', betaClass)}>
+        Beta
+      </span>
     </Link>
   )
 }

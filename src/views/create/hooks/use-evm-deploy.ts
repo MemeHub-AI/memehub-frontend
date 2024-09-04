@@ -12,7 +12,7 @@ import { BI_ZERO } from '@/constants/number'
 import { bcAbiMap } from '@/contract/abi/bonding-curve'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
-import { getEvmAirdropParams } from '@/utils/contract'
+import { getEvmAirdropParams, parseHash } from '@/utils/contract'
 import { DeployFormParams } from './use-deploy'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { useInvite } from '@/hooks/use-invite'
@@ -113,7 +113,7 @@ export const useEvmDeploy = (chainName: string, onFinally?: () => void) => {
         parseEther(buyAmount),
         await getReferrals(),
         [name, symbol],
-        [BigInt(tokenId)],
+        [parseHash(tokenId)],
         airdropParams,
       ],
       value: BigInt(totalDeployFee),

@@ -8,6 +8,7 @@ export interface RewardInfoRes {
   memex_launched: RewardInfoBase
   memex_liked: RewardInfoBase
   trade: RewardInfoBase
+  answer_question: RewardInfoBase
 }
 
 export interface RewardInfoTrade {

@@ -7,7 +7,7 @@ import { BigNumber } from 'bignumber.js'
 import { useWaitForTx } from '@/hooks/use-wait-for-tx'
 import { reportException } from '@/errors'
 import { CONTRACT_ERR } from '@/errors/contract'
-import { getEvmAirdropParams } from '@/utils/contract'
+import { getEvmAirdropParams, parseHash } from '@/utils/contract'
 import { Marketing } from '@/api/token/types'
 import { useTokenConfig } from '@/hooks/use-token-config'
 import { useChainsStore } from '@/stores/use-chains-store'
@@ -15,6 +15,7 @@ import { useCheckAccount } from '@/hooks/use-check-chain'
 import { memexFactoryAbiMap } from '@/contract/abi/memex/factory'
 import { useInvite } from '@/hooks/use-invite'
 import { useUserInfo } from '@/hooks/use-user-info'
+import { BI_ZERO } from '@/constants/number'
 
 export interface DeployIdeaParams {
   projectId: string
@@ -103,9 +104,7 @@ export const useDeployIdea = (
       return
     }
     const hasInfo = !!name && !!symbol
-    const totalFee = BigNumber(deployFee)
-      .plus(initialBuyAmount || 0)
-      .toFixed()
+    const totalFee = BigNumber(deployFee).plus(initialBuyAmount).toFixed()
     const [referral] = await getReferrals()
 
     return writeContractAsync({
@@ -116,7 +115,7 @@ export const useDeployIdea = (
         parseEther(initialBuyAmount),
         referral,
         hasInfo ? [name, symbol] : [],
-        [BigInt(tokenId || 0)], // 0 is not an error!!!!
+        [tokenId ? parseHash(tokenId) : BI_ZERO], // 0 is not an error!!!!
         getEvmAirdropParams(configValue, marketing),
       ],
       // In the previous version, we did not need to pay "value".

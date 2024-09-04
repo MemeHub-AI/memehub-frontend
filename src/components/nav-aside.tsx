@@ -36,7 +36,6 @@ import {
 import { SocialLinks } from './social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
-import DialogHowWork from './dialog-how-work'
 import { fmt } from '@/utils/fmt'
 import RewardButton from './reward-button'
 import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
@@ -44,6 +43,7 @@ import { useAccount, useDisconnect } from 'wagmi'
 import { Avatar } from './ui/avatar'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useSignLogin } from '@/hooks/use-sign-login'
+import HowToWorkDialog from './how-to-work-dialog'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -213,7 +213,8 @@ export const NavAside = ({
         showMeme
         showLogo={!isCollapsed}
         className="w-28"
-        linkClass="pl-1"
+        linkClass="pl-1 relative"
+        betaClass={isCollapsed ? 'absolute -bottom-5' : ''}
       />
 
       <NavigationMenu className="grid grid-cols-1 max-w-full">
@@ -288,12 +289,12 @@ export const NavAside = ({
         )}
       </Button>
 
-      <DialogHowWork isCollapsed={isCollapsed} />
+      <HowToWorkDialog isCollapsed={isCollapsed} />
 
       <SocialLinks
         x={memehubLinks.x}
         tg={memehubLinks.tg}
-        gitbook={memehubLinks.gitbook}
+        whitepaper={memehubLinks.whitepaper}
         size={isCollapsed ? 20 : 24}
         buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
         className={cn(

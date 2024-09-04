@@ -6,6 +6,7 @@ import { useAccount, useDisconnect } from 'wagmi'
 import { MdLogout } from 'react-icons/md'
 import { useTranslation } from 'react-i18next'
 import { LiaTelegramPlane } from 'react-icons/lia'
+import { FaXTwitter } from 'react-icons/fa6'
 
 import { useResponsive } from '@/hooks/use-responsive'
 import { Avatar } from './ui/avatar'
@@ -21,11 +22,7 @@ import {
   DropdownMenuContent,
 } from './ui/dropdown-menu'
 import { memehubLinks } from '@/config/link'
-import { useConnectWallet } from '@/hooks/use-connect-wallet'
-import { useWallet } from '@/hooks/use-wallet'
 import { cn } from '@/lib/utils'
-import { FaXTwitter } from 'react-icons/fa6'
-import { useLocalStorage } from '@/hooks/use-storage'
 import { useSignLogin } from '@/hooks/use-sign-login'
 
 export const AccountDropdown = () => {
@@ -34,11 +31,9 @@ export const AccountDropdown = () => {
   const [disconnectOpen, setDisconnectOpen] = useState(false)
   const { userInfo } = useUserStore()
   const { isMobile } = useResponsive()
-  const { logout } = useSignLogin()
-  // const { walletAddress } = useWallet()
-  // const { walletDisconnect } = useConnectWallet()
   const { address } = useAccount()
   const { disconnect } = useDisconnect()
+  const { logout } = useSignLogin()
 
   return (
     <Container
@@ -96,7 +91,7 @@ export const AccountDropdown = () => {
         variant="ghost"
         shadow="none"
         className={cn('w-full px-2 grid grid-cols-[1.5rem_1fr] text-start')}
-        onClick={() => window.open(memehubLinks.x)}
+        onClick={() => window.open(memehubLinks.tg)}
       >
         <LiaTelegramPlane size={20} />
         <span>{t('telegram')}</span>
@@ -118,8 +113,8 @@ export const AccountDropdown = () => {
         title={t('wallet.disconnect')}
         description={t('wallet.disconnect.confirm')}
         onConfirm={() => {
-          logout()
           disconnect()
+          logout()
         }}
       />
     </Container>

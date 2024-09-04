@@ -17,6 +17,8 @@ import { SocialLinks } from '../social-links'
 import { useUserStore } from '@/stores/use-user-store'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 import HeaderMobileSheet from './mobile-sheet'
+import HowToWorkDialog from '../how-to-work-dialog'
+import Logo from '../logo'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -51,6 +53,12 @@ export const HeaderMobile = (props: Props) => {
                 alt="avatar"
               />
             </div>
+            <Logo
+              src="/images/logo.png"
+              alt="logo"
+              showLogo={false}
+              className="mt-1 w-10 max-sm:hidden absolute"
+            />
           </div>
         </SheetTrigger>
 
@@ -77,11 +85,13 @@ export const HeaderMobile = (props: Props) => {
                 {n.title}
               </li>
             ))}
-          </ul> */}
-
-          {/* <SocialLinks
+          </ul>
+          <LangSelect className="size-fit w-full justify-start text-lg" />
+          <HowToWorkDialog className="my-3" />
+          <SocialLinks
             x={memehubLinks.x}
             tg={memehubLinks.tg}
+            whitepaper={memehubLinks.whitepaper}
             className="justify-start"
             size={28}
           /> */}

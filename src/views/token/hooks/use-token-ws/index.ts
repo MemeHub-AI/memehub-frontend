@@ -76,6 +76,7 @@ export const useTokenWs = (disabled = false) => {
     ws.on('update', onUpdate)
     ws.on('reward-info', ({ data }) => setRewardInfo(data))
 
+    setTradeRecords([])
     ws.emit('listen', {
       chain: chainName,
       token: tokenAddr,

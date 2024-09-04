@@ -101,7 +101,7 @@ export const wagmiConfig = getDefaultConfig({
     [zkSync.id]: fallback([http(), unstable_connector(injected)]),
 
     // testnet
-    ...(dotenv.isDev ? dev.transports : ({} as typeof dev.transports)),
+    ...(dotenv.isDev ? dev.transports : []),
   },
 })
 

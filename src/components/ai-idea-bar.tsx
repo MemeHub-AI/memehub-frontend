@@ -102,8 +102,8 @@ export const AIIdeaBar = (props: Props) => {
           </ConnectWallet>
         </form>
       </div>
-      <div className="w-full h-[1px] bg-[#e2e2e2] my-4 max-sm:hidden"></div>
-      <div className="flex justify-start px-7 max-md:px-3 max-md:flex-col max-md:items-start max-sm:mt-4">
+      {/* <div className="w-full h-[1px] bg-[#e2e2e2] my-4 max-sm:hidden"></div> */}
+      {/* <div className="flex justify-start px-7 max-md:px-3 max-md:flex-col max-md:items-start max-sm:mt-4">
         <div className="flex-shrink-0">{t('trending.idea')}</div>
         <div
           className={cn(
@@ -135,7 +135,7 @@ export const AIIdeaBar = (props: Props) => {
             )
           })}
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
