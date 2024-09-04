@@ -36,6 +36,7 @@ export const Logo = ({
           {...props}
         />
       )}
+      <span className="font-normal text-blue-400 mt-1">Beta</span>
     </Link>
   )
 }
