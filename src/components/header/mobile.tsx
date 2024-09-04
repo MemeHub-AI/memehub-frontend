@@ -43,6 +43,7 @@ export const HeaderMobile = (props: Props) => {
             <Logo
               src="/images/logo.png"
               alt="logo"
+              showLogo={false}
               className="mt-1 w-10 max-sm:hidden absolute"
             />
           </div>
