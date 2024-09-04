@@ -120,7 +120,8 @@ export const NavAside = ({
         showMeme
         showLogo={!isCollapsed}
         className="w-28"
-        linkClass="pl-1"
+        linkClass="pl-1 relative"
+        betaClass={isCollapsed ? 'absolute -bottom-5' : ''}
       />
 
       <NavigationMenu className="grid grid-cols-1 max-w-full">
