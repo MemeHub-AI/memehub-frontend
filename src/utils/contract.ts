@@ -83,13 +83,26 @@ export const getDeadline = async (seconds = 300) => {
 /**
  * @example
  * ```ts
- * const hash = parseHash(743682847302839237012018537797613726790590966769178093576926872255665103969n)
- * // 0x01a4e8d9e9ec74503ba4d82cc1305e238cb3e9d9d40f062201a5a40aba356461
+ * formatHash(BigInt('743682847302839237012018537797613726790590966769178093576926872255665103969'))
+ * // '0x01a4e8d9e9ec74503ba4d82cc1305e238cb3e9d9d40f062201a5a40aba356461'
  * ```
  */
-export const parseHash = (value: bigint, with0x = true) => {
+export const formatHash = (value: bigint, with0x = true) => {
   const hex = value.toString(16).padStart(64, '0')
   return with0x ? addPrefix0x(hex)[0] : hex
+}
+
+/**
+ * @example
+ * ```ts
+ * parseHash('1a4e8d9e9ec74503ba4d82cc1305e238cb3e9d9d40f062201a5a40aba356461')
+ * // 743682847302839237012018537797613726790590966769178093576926872255665103969n
+ * ```
+ */
+export const parseHash = (value: string) => {
+  value = value.startsWith('0x') ? value.slice(2) : value
+  const [hex] = addPrefix0x(value.padStart(64, '0'))
+  return BigInt(hex)
 }
 
 /**

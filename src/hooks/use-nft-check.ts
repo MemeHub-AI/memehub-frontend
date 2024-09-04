@@ -1,4 +1,3 @@
-import { BigNumber } from 'bignumber.js'
 import { useAccount, useReadContract } from 'wagmi'
 import { useQuery } from '@tanstack/react-query'
 
@@ -8,7 +7,7 @@ import { addrMap } from '@/contract/address'
 import { exchangeNftAbi } from '@/contract/abi/nft/exchange-nft'
 import { COMMUNITY_NFT_IDX } from '@/config/nft'
 import { allianceApi } from '@/api/alliance'
-import { parseHash } from '@/utils/contract'
+import { formatHash } from '@/utils/contract'
 import { useUserStore } from '@/stores/use-user-store'
 
 export const useNftCheck = (chainId: number) => {
@@ -47,7 +46,7 @@ export const useNftCheck = (chainId: number) => {
     ],
     queryFn: () => {
       return allianceApi.getCommunityDetail({
-        identity: parseHash(communityId),
+        identity: formatHash(communityId),
       })
     },
     select: ({ data }) => data,

@@ -7,6 +7,10 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useCreateTokenContext } from '@/contexts/create-token'
 import { FormField } from '@/components/ui/form'
+import { useAccount, useBalance } from 'wagmi'
+import { formatEther } from 'viem'
+import { BI_ZERO } from '@/constants/number'
+import { fmt } from '@/utils/fmt'
 
 export const InitialBuyField = ({
   onOpenChange,
@@ -14,6 +18,12 @@ export const InitialBuyField = ({
 }: ComponentProps<typeof Dialog>) => {
   const { t } = useTranslation()
   const { buyAmoutMax, reserveSymbol, form, onSubmit } = useCreateTokenContext()
+  const { address, chainId } = useAccount()
+  const { data: balance = '0' } = useBalance({
+    address,
+    chainId,
+    query: { select: ({ value }) => formatEther(value || BI_ZERO) },
+  })
 
   return (
     <Dialog
@@ -33,36 +43,45 @@ export const InitialBuyField = ({
         control={form.control}
         name="buyAmount"
         render={({ field }) => (
-          <Input
-            autoFocus
-            className="w-48"
-            placeholder="0"
-            value={field.value}
-            onChange={({ target }) => {
-              if (BigNumber(target.value).isNaN()) {
-                field.onChange('')
-                return
+          <div>
+            <Input
+              autoFocus
+              placeholder="0"
+              value={field.value}
+              onChange={({ target }) => {
+                const v = target.value
+                if (BigNumber(v).isNaN()) {
+                  field.onChange('')
+                  return
+                }
+                if (BigNumber(v).gt(buyAmoutMax)) {
+                  field.onChange(buyAmoutMax)
+                  return
+                }
+                if (BigNumber(v).gt(balance)) {
+                  field.onChange(balance)
+                  return
+                }
+                field.onChange(target.value)
+              }}
+              endIcon={
+                <p
+                  className="text-xs text-zinc-500 shrink-0 mr-2 cursor-pointer"
+                  onClick={() => field.onChange(buyAmoutMax)}
+                >
+                  {t('max')}: {buyAmoutMax} {reserveSymbol}
+                </p>
               }
-              if (BigNumber(target.value).gt(buyAmoutMax)) {
-                field.onChange(buyAmoutMax)
-                return
-              }
-              field.onChange(target.value)
-            }}
-            endIcon={
-              <p
-                className="text-xs text-zinc-500 shrink-0 mr-2 cursor-pointer"
-                onClick={() => field.onChange(buyAmoutMax)}
-              >
-                {t('max')}: {buyAmoutMax} {reserveSymbol}
-              </p>
-            }
-          />
+            />
+            <span className="text-sm text-zinc-500">
+              {t('balance')}: {fmt.decimals(balance)} {reserveSymbol}
+            </span>
+          </div>
         )}
       />
 
       <Button
-        className="w-48"
+        className="w-"
         onClick={() => {
           form.handleSubmit(onSubmit)()
           onOpenChange?.(false)

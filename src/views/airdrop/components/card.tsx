@@ -59,7 +59,7 @@ export const AirdropCard = ({
   const currentCount = isKolCard ? claimedCountKOL : claimedCountCommunity
   const totalCount = isKolCard ? walletCountKOL : walletCountCommunity
   const isClaimed = isKolCard ? isClaimedKOL : isClaimedCommunity
-  const isClaimedAll = totalCount - currentCount > 0
+  const isClaimedAll = totalCount - currentCount <= 0
   const isNoCount = totalCount <= 0
   const disabled = isClaimed || isBurned || isClaimedAll || isNoCount
 

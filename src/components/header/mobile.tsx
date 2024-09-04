@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils'
 import { memehubLinks } from '@/config/link'
 import { AccountDropdown } from '../account-dropdown'
 import { SocialLinks } from '../social-links'
+import HowToWorkDialog from '../how-to-work-dialog'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -35,15 +36,15 @@ export const HeaderMobile = (props: Props) => {
       <Sheet>
         <SheetTrigger asChild ref={closeRef}>
           <div className="flex justify-start items-center space-x-2 max-sm:space-x-0">
-            <Logo
-              src="/images/logo.png"
-              alt="logo"
-              className="mt-1 w-10 max-sm:hidden"
-            />
             <div className="flex text-xl mt-1">
               <SlMenu />
               <MdArrowDropDown />
             </div>
+            <Logo
+              src="/images/logo.png"
+              alt="logo"
+              className="mt-1 w-10 max-sm:hidden absolute"
+            />
           </div>
         </SheetTrigger>
 
@@ -70,15 +71,12 @@ export const HeaderMobile = (props: Props) => {
               </li>
             ))}
           </ul>
-          <LangSelect
-            className={cn(
-              isConnected && 'mb-9',
-              'size-fit w-full justify-start text-lg'
-            )}
-          />
+          <LangSelect className="size-fit w-full justify-start text-lg" />
+          <HowToWorkDialog className="my-3" />
           <SocialLinks
             x={memehubLinks.x}
             tg={memehubLinks.tg}
+            whitepaper={memehubLinks.whitepaper}
             className="justify-start"
             size={28}
           />

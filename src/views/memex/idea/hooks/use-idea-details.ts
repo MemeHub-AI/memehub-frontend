@@ -12,6 +12,7 @@ export const useIdeaDetails = (hash: string | undefined) => {
     queryFn: () => memexApi.getIdeaDetail(hash!),
     enabled: !!hash,
     select: ({ data }) => data,
+    refetchOnWindowFocus: false,
   })
 
   return {

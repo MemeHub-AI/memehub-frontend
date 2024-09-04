@@ -26,10 +26,7 @@ export const useIdeaStatus = (
   const waitingEndAt = dayjs
     .unix(Number(overTime))
     .add(Number(waitingTime), 'second')
-    .unix()
-  const isWaitingEnd = overTime
-    ? dayjs().isAfter(waitingEndAt, 'second')
-    : false
+  const isWaitingEnd = overTime ? dayjs().isAfter(waitingEndAt) : false
 
   const isCreator = owner === address
 

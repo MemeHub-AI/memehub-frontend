@@ -40,18 +40,9 @@ export const RewardButton = React.forwardRef<
     setDiamondEl(diamondRef.current)
   }, [diamondRef.current])
 
-  if (userInfo?.id == null) {
-    return <></>
-  }
+  if (!userInfo) return
 
-  const getMoney = () => {
-    const money = userInfo?.reward_amount.toString()
-    if (money.length > 4) {
-      return money.substring(0, 4) + '...'
-    } else {
-      return money
-    }
-  }
+  console.log('reward', userInfo?.reward_amount)
 
   return (
     <Button
@@ -78,11 +69,9 @@ export const RewardButton = React.forwardRef<
             decimals={0}
             start={oldUserInfo?.reward_amount}
             end={userInfo?.reward_amount}
-          ></Countup>
-        ) : showReferral ? (
-          t('rewards')
+          />
         ) : (
-          t(getMoney())
+          t('rewards')
         )}
       </div>
     </Button>

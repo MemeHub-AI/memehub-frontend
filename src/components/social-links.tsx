@@ -2,17 +2,17 @@ import React, { type ComponentProps } from 'react'
 import { FaTelegramPlane } from 'react-icons/fa'
 import { FaGlobe } from 'react-icons/fa'
 import { FaXTwitter } from 'react-icons/fa6'
+import { AiFillBook } from 'react-icons/ai'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { parseMediaUrl } from '@/utils'
-import { AiFillBook } from 'react-icons/ai'
 
 interface Props extends ComponentProps<'div'> {
   x?: string
   tg?: string
   website?: string
-  gitbook?: string
+  whitepaper?: string
   buttonProps?: ComponentProps<typeof Button>
   size?: number
 }
@@ -22,7 +22,7 @@ export const SocialLinks = ({
   x,
   tg,
   website,
-  gitbook,
+  whitepaper,
   buttonProps,
   size = 20,
   ...props
@@ -45,8 +45,8 @@ export const SocialLinks = ({
       icon: <FaGlobe size={size} />,
     },
     {
-      title: 'GitBook',
-      link: parseMediaUrl('gitbook', gitbook),
+      title: 'Whitepaper',
+      link: parseMediaUrl('website', whitepaper),
       icon: <AiFillBook size={size} />,
     },
   ]

@@ -3,7 +3,7 @@ export const defaultImg = '/images/logo.png'
 export const memehubLinks = {
   x: 'https://x.com/memehubai',
   tg: 'https://t.me/memehubai',
-  gitbook: 'https://memehubai.gitbook.io/memehub',
+  whitepaper: 'https://memehubai.gitbook.io/memehub',
 
   kolForm: 'https://forms.gle/7Y2e6pZqWjoSX2Ra8',
   communityForm: '',
@@ -20,5 +20,4 @@ export const mediaLinks = {
   x: 'https://x.com/',
   tg: 'https://t.me/',
   website: 'https://',
-  gitbook: 'https://',
 }

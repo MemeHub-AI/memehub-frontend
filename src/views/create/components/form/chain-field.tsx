@@ -27,7 +27,7 @@ export const ChainField = () => {
   useEffect(() => {
     if (!chainId) return
     form.setValue('chainName', chainName)
-  }, [chainId])
+  }, [chainId, chainName])
 
   return (
     <FormField

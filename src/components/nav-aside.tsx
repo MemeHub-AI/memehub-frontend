@@ -34,7 +34,7 @@ import {
 import { SocialLinks } from './social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
-import DialogHowWork from './dialog-how-work'
+import HowToWorkDialog from './how-to-work-dialog'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -120,7 +120,8 @@ export const NavAside = ({
         showMeme
         showLogo={!isCollapsed}
         className="w-28"
-        linkClass="pl-1"
+        linkClass="pl-1 relative"
+        betaClass={isCollapsed ? 'absolute -bottom-5' : ''}
       />
 
       <NavigationMenu className="grid grid-cols-1 max-w-full">
@@ -195,12 +196,12 @@ export const NavAside = ({
         )}
       </Button>
 
-      <DialogHowWork isCollapsed={isCollapsed} />
+      <HowToWorkDialog isCollapsed={isCollapsed} />
 
       <SocialLinks
         x={memehubLinks.x}
         tg={memehubLinks.tg}
-        gitbook={memehubLinks.gitbook}
+        whitepaper={memehubLinks.whitepaper}
         size={isCollapsed ? 20 : 24}
         buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
         className={cn(isCollapsed && 'flex-col space-x-0 space-y-1 ml-1')}

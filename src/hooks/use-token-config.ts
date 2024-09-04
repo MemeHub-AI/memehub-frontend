@@ -41,7 +41,7 @@ export const useTokenConfig = (chain: string | undefined) => {
     isLoading: isLoadingConfig,
     refetch: refetchConfig,
   } = useQuery({
-    queryKey: [tokenApi.getConfig.name],
+    queryKey: [tokenApi.getConfig.name, chain],
     queryFn: tokenApi.getConfig,
     select: ({ data }) => data,
     refetchInterval: 30_000,

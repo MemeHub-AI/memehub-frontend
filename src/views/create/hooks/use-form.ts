@@ -95,11 +95,11 @@ export const useCreateTokenForm = () => {
       buyAmount: '',
     },
   })
-  const { chain } = useChainInfo(form.getValues(formFields.chainName))
+  const chainName = form.watch('chainName')
+  const { chain } = useChainInfo(chainName)
+  const deployResults = useDeploy(chainName)
 
-  const reserveSymbol = chain?.native.symbol
-
-  const deployResults = useDeploy(form.getValues('chainName'))
+  console.log('chainName', chainName)
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     if (!(await form.trigger())) return
@@ -107,8 +107,6 @@ export const useCreateTokenForm = () => {
     // TODO: Modified after having new library
     // if (!checkForConnect()) return
     if (!(await checkForChain(evmChainsMap[values.chainName]?.id))) return
-
-    // if (!walletIsConnected()) return
 
     if (deployResults.isDeploying) return
 
@@ -135,7 +133,7 @@ export const useCreateTokenForm = () => {
     formFields,
     formSchema,
     loadingChains: loadingChains,
-    reserveSymbol,
+    reserveSymbol: chain?.native.symbol,
     onSubmit,
     onChangeUpload,
     ...deployResults,
