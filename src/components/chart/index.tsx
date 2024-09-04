@@ -20,6 +20,8 @@ export const Chart = memo(() => {
   const { isConnected, isCreating, createChart, removeChart } = useChart()
   const { getStorage } = useLocalStorage()
 
+  console.log('')
+
   useEffect(() => {
     if (
       !chartRef.current ||
