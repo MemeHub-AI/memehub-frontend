@@ -1,15 +1,20 @@
+import { useTranslation } from 'react-i18next'
+
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { cn } from '@/lib/utils'
-import { useTranslation } from 'react-i18next'
 
-export const DialogHowWork = ({ isCollapsed }: { isCollapsed?: boolean }) => {
+interface Props {
+  isCollapsed?: boolean
+  className?: string
+}
+
+export const HowToWorkDialog = ({ isCollapsed, className }: Props) => {
   const { t } = useTranslation()
 
   return (
@@ -18,7 +23,8 @@ export const DialogHowWork = ({ isCollapsed }: { isCollapsed?: boolean }) => {
         <div
           className={cn(
             'border border-zinc-200 p-2 flex items-start space-x-2 hover:bg-zinc-100 cursor-pointer rounded-sm',
-            isCollapsed && 'p-0 border-none'
+            isCollapsed && 'p-0 border-none',
+            className
           )}
         >
           <img
@@ -34,21 +40,19 @@ export const DialogHowWork = ({ isCollapsed }: { isCollapsed?: boolean }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle className="text-center">{t('how.to.work')}</DialogTitle>
-          <DialogDescription>
-            <div>
-              <p>{t('how.work.1')}</p>
-              <br />
-              <p>{t('how.work.2')}</p>
-              <br />
-              <p>{t('how.work.3')}</p>
-              <br />
-              <p>{t('how.work.4')}</p>
-            </div>
-          </DialogDescription>
+          <div className="text-zinc-500 text-sm sm:text-base">
+            <p>{t('how.work.1')}</p>
+            <br />
+            <p>{t('how.work.2')}</p>
+            <br />
+            <p>{t('how.work.3')}</p>
+            <br />
+            <p>{t('how.work.4')}</p>
+          </div>
         </DialogHeader>
       </DialogContent>
     </Dialog>
   )
 }
 
-export default DialogHowWork
+export default HowToWorkDialog

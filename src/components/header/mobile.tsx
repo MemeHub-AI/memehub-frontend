@@ -17,6 +17,7 @@ import { cn } from '@/lib/utils'
 import { memehubLinks } from '@/config/link'
 import { AccountDropdown } from '../account-dropdown'
 import { SocialLinks } from '../social-links'
+import HowToWorkDialog from '../how-to-work-dialog'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -70,12 +71,8 @@ export const HeaderMobile = (props: Props) => {
               </li>
             ))}
           </ul>
-          <LangSelect
-            className={cn(
-              isConnected && 'mb-9',
-              'size-fit w-full justify-start text-lg'
-            )}
-          />
+          <LangSelect className="size-fit w-full justify-start text-lg" />
+          <HowToWorkDialog className="my-3" />
           <SocialLinks
             x={memehubLinks.x}
             tg={memehubLinks.tg}

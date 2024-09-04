@@ -34,7 +34,7 @@ import {
 import { SocialLinks } from './social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
-import DialogHowWork from './dialog-how-work'
+import HowToWorkDialog from './how-to-work-dialog'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 
@@ -195,7 +195,7 @@ export const NavAside = ({
         )}
       </Button>
 
-      <DialogHowWork isCollapsed={isCollapsed} />
+      <HowToWorkDialog isCollapsed={isCollapsed} />
 
       <SocialLinks
         x={memehubLinks.x}
