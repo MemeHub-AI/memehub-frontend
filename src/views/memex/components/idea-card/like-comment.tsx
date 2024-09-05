@@ -92,7 +92,7 @@ export const IdeaCardLikeComment = ({
               Routes.MemexIdea,
               idea?.hash || ''
             )}
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => e.stopPropagation()}
             className="text-zinc-500 sm:hover:text-black duration-150"
             icon={<CiShare2 size={25} />}
           />

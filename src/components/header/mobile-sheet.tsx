@@ -15,6 +15,8 @@ import { useUserList } from '@/views/account/hooks/use-user-list'
 import { Routes } from '@/routes'
 import { useRouter } from 'next/router'
 import { memehubLinks } from '@/config/link'
+import HowToWorkDialog from '../how-to-work-dialog'
+import SocialLinks from '../social-links'
 
 export const HeaderMobileSheet = ({
   userInfo,
@@ -96,6 +98,14 @@ export const HeaderMobileSheet = ({
           </div>
         ))}
         <LangSelect className="w-full justify-start text-base" />
+        <HowToWorkDialog />
+        <SocialLinks
+          x={memehubLinks.x}
+          tg={memehubLinks.tg}
+          whitepaper={memehubLinks.whitepaper}
+          className="justify-start"
+          size={28}
+        />
       </div>
     </div>
   )
