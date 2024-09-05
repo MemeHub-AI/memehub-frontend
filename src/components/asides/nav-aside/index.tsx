@@ -20,19 +20,19 @@ import { useLang } from '@/hooks/use-lang'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { memehubLinks } from '@/config/link'
-import { Logo } from '../../logo'
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
 } from '@/components/ui/navigation-menu'
-import { SocialLinks } from '../../social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
-import RewardButton from '../../reward-button'
-import HowToWorkDialog from '../../how-to-work-dialog'
+import Logo from '@/components/logo'
+import HowToWorkDialog from '@/components/how-to-work-dialog'
+import SocialLinks from '@/components/social-links'
 import NavAccount from './nav- account'
+import RewardButton from '@/components/reward-button'
 
 interface Props {
   collapseSize?: keyof ReturnType<typeof useResponsive>

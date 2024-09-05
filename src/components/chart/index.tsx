@@ -2,14 +2,14 @@ import { useEffect, useRef, memo, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
-import { useChart } from './hooks/use-chart'
+import { useChart } from '../../hooks/chart/use-chart'
 import { useTokenContext } from '@/contexts/token'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
 import { ChartDexScreener } from '../chart-dexscrenner'
 import { ChartIntervals } from './chart-intervals'
 import { ChartUnitButton } from './chart-unit-button'
-import { DatafeedCandles } from './hooks/use-datafeed/types'
+import { DatafeedCandles } from '../../hooks/chart/datafeed-types'
 
 export const Chart = memo(() => {
   const { t } = useTranslation()

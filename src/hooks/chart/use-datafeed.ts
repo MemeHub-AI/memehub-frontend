@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import type {
   IBasicDataFeed,
   LibrarySymbolInfo,
-} from '../../../../../public/js/charting_library/charting_library'
+} from '../../../public/js/charting_library/charting_library'
 import {
   datafeedConfig,
   datafeedDefaultInterval,
@@ -20,7 +20,7 @@ import {
   DatafeedOnEvents,
   DatafeedCache,
   DatafeedCandles,
-} from './types'
+} from './datafeed-types'
 import { useLruMap } from '@/hooks/use-lru-map'
 import { apiUrl } from '@/config/url'
 import { Routes } from '@/routes'

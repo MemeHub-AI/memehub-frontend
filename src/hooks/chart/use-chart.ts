@@ -7,13 +7,13 @@ import {
   LanguageCode,
   ResolutionString,
   Timezone,
-} from '../../../../public/js/charting_library/charting_library'
+} from '../../../public/js/charting_library/charting_library'
 import { useDatafeed } from './use-datafeed'
 import { useChartStore } from '@/stores/use-chart-store'
 import { chartOptions, chartOverrides } from '@/config/chart'
 import { parseInterval } from '@/utils/chart'
 import { reportException } from '@/errors'
-import { DatafeedCandles } from './use-datafeed/types'
+import { DatafeedCandles } from './datafeed-types'
 import { datafeedDefaultInterval } from '@/config/datafeed'
 import { useLocalStorage } from '@/hooks/use-storage'
 
