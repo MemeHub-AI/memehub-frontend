@@ -1,14 +1,18 @@
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
+import { useDisconnect } from 'wagmi'
 
 import { userApi } from '@/api/user'
 import { useLocalStorage } from './use-storage'
 import { useUserStore } from '@/stores/use-user-store'
+import { useSignLogin } from './use-sign-login'
 
 export const useUserInfo = (addr?: string) => {
   const { setUserInfo } = useUserStore()
   const { getStorage } = useLocalStorage()
   const token = getStorage('token')
+  const { logout } = useSignLogin()
+  const { disconnect } = useDisconnect()
 
   // Query other user info.
   const {
@@ -29,7 +33,6 @@ export const useUserInfo = (addr?: string) => {
   } = useQuery({
     queryKey: [userApi.getInfo.name, token],
     queryFn: () => userApi.getInfo(),
-    enabled: !!token,
   })
 
   // Update latest user info if it's not null.
@@ -37,6 +40,13 @@ export const useUserInfo = (addr?: string) => {
     if (!userInfo?.data) return
     setUserInfo(userInfo.data)
   }, [userInfo])
+
+  // logout if has not token.
+  useEffect(() => {
+    if (!!token) return
+    logout()
+    disconnect()
+  }, [token])
 
   return {
     userInfo: userInfo?.data,
