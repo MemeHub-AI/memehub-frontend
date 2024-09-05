@@ -21,6 +21,7 @@ export const recommendAbiMap = {
   '0.1.15': recommendAbi0_1_15,
   '0.1.17': recommendAbi0_1_17,
   '0.6.0': recommendAbi0_6_0,
+  '0.9.0': recommendAbi0_6_0,
   '1.0.0': recommendAbi1_0_0,
 }
 

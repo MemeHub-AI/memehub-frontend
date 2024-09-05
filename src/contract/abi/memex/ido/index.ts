@@ -39,6 +39,7 @@ export const memexIdoAbiMap = {
   '0.7.0': memexIdoAbi0_7_0,
   '0.7.1': memexIdoAbi0_7_1,
   '0.7.2': memexIdoAbi0_7_2,
+  '0.9.0': memexIdoAbi0_7_2,
   '1.0.0': memexIdoAbi1_0_0,
 }
 
