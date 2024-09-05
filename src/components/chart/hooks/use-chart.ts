@@ -13,11 +13,14 @@ import { useChartStore } from '@/stores/use-chart-store'
 import { chartOptions, chartOverrides } from '@/config/chart'
 import { parseInterval } from '@/utils/chart'
 import { reportException } from '@/errors'
+import { DatafeedCandles } from './use-datafeed/types'
+import { datafeedDefaultInterval } from '@/config/datafeed'
+import { useLocalStorage } from '@/hooks/use-storage'
 
 interface ChartOptions {
   symbol: string
-  interval: string
   tokenAddr: string
+  unit: keyof DatafeedCandles
 }
 
 export const useChart = () => {
@@ -25,9 +28,11 @@ export const useChart = () => {
   const [isCreating, setIsCreating] = useState(true)
   const { chart, setChart, setChartEl } = useChartStore()
   const { isConnected, createDatafeed, removeDatafeed } = useDatafeed()
+  const { getStorage } = useLocalStorage()
 
   const createChart = (container: HTMLDivElement, options: ChartOptions) => {
-    const { symbol, interval } = options || {}
+    const { symbol, unit } = options || {}
+    const interval = getStorage('chart_interval') || datafeedDefaultInterval
 
     setChartEl(container)
     try {
@@ -36,7 +41,7 @@ export const useChart = () => {
         container,
         symbol,
         interval: parseInterval(interval) as ResolutionString,
-        datafeed: createDatafeed(),
+        datafeed: createDatafeed(unit),
         locale: i18n.language as LanguageCode,
         autosize: true,
         timezone: dayjs.tz.guess() as Timezone,
