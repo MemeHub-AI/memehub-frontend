@@ -24,7 +24,7 @@ import { resources } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { memehubLinks } from '@/config/link'
-import { Logo } from './logo'
+import { Logo } from '../logo'
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -33,17 +33,17 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent,
 } from '@/components/ui/navigation-menu'
-import { SocialLinks } from './social-links'
+import { SocialLinks } from '../social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
 import { fmt } from '@/utils/fmt'
-import RewardButton from './reward-button'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
+import RewardButton from '../reward-button'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { useAccount, useDisconnect } from 'wagmi'
-import { Avatar } from './ui/avatar'
+import { Avatar } from '../ui/avatar'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useSignLogin } from '@/hooks/use-sign-login'
-import HowToWorkDialog from './how-to-work-dialog'
+import HowToWorkDialog from '../how-to-work-dialog'
 
 const langs = Object.entries(resources as Record<string, { name: string }>)
 

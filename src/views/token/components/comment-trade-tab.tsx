@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { CommentCards } from '@/components/comment-cards'
 import { TradeTable } from './trade-table'
-import { useComments } from '@/components/comment-cards/hooks/use-comments'
+import { useComments } from '@/hooks/comment/use-comments'
 import { useLocalStorage } from '@/hooks/use-storage'
 import { useTokenContext } from '@/contexts/token'
 

@@ -2,8 +2,8 @@ import React, { type ReactNode, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { AlertDialog, AlertDialogCancel } from '@/components/ui/alert-dialog'
-import { CommentForm } from '@/components/comment-cards/components/form'
-import { useComment } from '@/components/comment-cards/hooks/use-comment'
+import { CommentForm } from '@/components/comment-cards/form'
+import { useComment } from '@/hooks/comment/use-comment'
 import { useCommentsStore } from '@/stores/use-comments'
 import { useTokenQuery } from '../hooks/use-token-query'
 

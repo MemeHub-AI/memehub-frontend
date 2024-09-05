@@ -18,15 +18,15 @@ import { useLocalStorage } from '@/hooks/use-storage'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
-import { Button } from './ui/button'
-import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
+import { Button } from '../ui/button'
+import { DrawerTrigger, DrawerContent, Drawer } from '../ui/drawer'
 import { newsApi } from '@/api/news'
 import { useAsideStore } from '@/stores/use-aside-store'
 import { useResponsive } from '@/hooks/use-responsive'
 // TODO/low: wrapped `CollapseAside`
 import { CollapseAside } from './collapse-aside'
 import { joinPaths } from '@/utils'
-import AllTradesFeeds from './header/all-trades-feed'
+import AllTradesFeeds from '../header/all-trades-feed'
 
 interface Props extends ComponentProps<'div'> {
   defalutTab?: string | string[] | number
