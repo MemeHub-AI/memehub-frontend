@@ -68,8 +68,7 @@ export const TokenCard = ({
       return
     }
 
-    // Graduated ido
-    if (isIdo && card.contract_address) {
+    if (card.contract_address) {
       return router.push(
         joinPaths(Routes.Main, chainName, card.contract_address)
       )
@@ -79,8 +78,6 @@ export const TokenCard = ({
     if (isIdo) {
       return router.push(joinPaths(Routes.Ido, chainName, card.id))
     }
-
-    router.push(joinPaths(Routes.Main, chainName, card.contract_address))
   }
 
   if (onlyGraduated && !isGraduated) return
