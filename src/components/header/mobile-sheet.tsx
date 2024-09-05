@@ -98,7 +98,7 @@ export const HeaderMobileSheet = ({
           </div>
         ))}
         <LangSelect className="w-full justify-start text-base" />
-        <HowToWorkDialog className="my-3" />
+        <HowToWorkDialog />
         <SocialLinks
           x={memehubLinks.x}
           tg={memehubLinks.tg}
