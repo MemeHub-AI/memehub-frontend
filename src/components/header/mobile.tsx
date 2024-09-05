@@ -63,32 +63,6 @@ export const HeaderMobile = (props: Props) => {
           className="pt-4 px-3"
         >
           <HeaderMobileSheet userInfo={userInfo} setSheetOpen={setSheetOpen} />
-          {/* <ul className="flex flex-col space-y-3 mt-3 mb-1">
-            {navs.map((n, i) => (
-              <li
-                key={i}
-                className={cn(
-                  'w-full justify-start text-lg',
-                  pathname === n.path && 'text-blue-600'
-                )}
-                onClick={() => {
-                  onNavClick?.(n)
-                  closeRef.current?.click()
-                }}
-              >
-                {n.title}
-              </li>
-            ))}
-          </ul>
-          <LangSelect className="size-fit w-full justify-start text-lg" />
-          <HowToWorkDialog className="my-3" />
-          <SocialLinks
-            x={memehubLinks.x}
-            tg={memehubLinks.tg}
-            whitepaper={memehubLinks.whitepaper}
-            className="justify-start"
-            size={28}
-          /> */}
         </SheetContent>
       </Sheet>
 
