@@ -38,7 +38,7 @@ export const PrimaryLayout = ({
     <main className={cn('min-h-main flex max-w-[100vw]', className)}>
       <div
         className={cn(
-          'border-r px-4 max-lg:hidden min-h-screen',
+          'border-r px-4 max-lg:hidden min-h-screen bg-white z-50',
           navAsideClass
         )}
       >
@@ -53,7 +53,7 @@ export const PrimaryLayout = ({
         <div className={cn('flex', containerClass)}>
           <div
             className={cn(
-              'flex-1 lg:overflow-x-hidden',
+              'flex-1',
               !disablePadding && 'p-3 sm:p-4',
               contentClass
             )}

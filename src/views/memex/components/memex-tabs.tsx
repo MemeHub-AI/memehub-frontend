@@ -52,11 +52,11 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
       onValueChange={(v) => router.push(v)}
       className={cn('flex-1 sm:max-w-2xl')}
     >
+      <div className="lg:fixed lg:left-0 lg:right-0 lg:h-px lg:bg-zinc-200 lg:top-14 overflow-hidden" />
       <TabsList
         className={cn(
           'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] lg:border-none justify-start overflow-visible',
-          'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14',
-          'lg:relative lg:after:absolute lg:after:-left-96 lg:after:-right-96 lg:after:border-b lg:after:border-zinc-200 lg:after:bottom-0',
+          'rounded-none h-10 md:h-14 max-md:w-full md:flex md:justify-between',
           'sticky top-0 z-50 bg-white'
         )}
       >
