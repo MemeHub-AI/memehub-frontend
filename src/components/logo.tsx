@@ -38,7 +38,9 @@ export const Logo = ({
           {...props}
         />
       )}
-      <span className={cn('font-normal text-blue-400 mt-1', betaClass)}>
+      <span
+        className={cn('font-normal text-blue-400 mt-1 max-lg:ml-2', betaClass)}
+      >
         Beta
       </span>
     </Link>

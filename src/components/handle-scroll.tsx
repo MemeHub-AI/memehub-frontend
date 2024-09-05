@@ -46,7 +46,7 @@ export const HandleScroll = ({
   return (
     <div
       className={cn(
-        'overflow-y-auto opacity-100 top-0 z-50 bg-white transition-all duration-300',
+        'overflow-y-auto opacity-100 top-0 z-50 bg-white transition-all duration-500',
         !visible && variant === ScrollVariant.Bottom && isPad && 'opacity-50',
         !visible && variant === ScrollVariant.Top && isPad && '-top-80',
         !(isMemex || isTokenPage) && 'sticky',
