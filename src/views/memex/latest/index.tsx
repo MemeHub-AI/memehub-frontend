@@ -21,13 +21,13 @@ export const LatestPage = () => {
   } = useIdeaList(MemexListType.Latest)
 
   return (
-    <CustomSuspense
-      className="mx-auto"
-      isPending={isLoading}
-      fallback={<IdeaCardSkeleton />}
-      nullback={<IdeaEmpty />}
-    >
-      <MemexInfiniteScroll list={list} total={total} fetchNext={fetchNextPage}>
+    <MemexInfiniteScroll list={list} total={total} fetchNext={fetchNextPage}>
+      <CustomSuspense
+        className="mx-auto"
+        isPending={isLoading}
+        fallback={<IdeaCardSkeleton />}
+        nullback={<IdeaEmpty />}
+      >
         {list.map((idea, i) => (
           <MemexIdeaCard
             key={idea?.hash}
@@ -37,8 +37,8 @@ export const LatestPage = () => {
             onCommentSuccess={refetch}
           />
         ))}
-      </MemexInfiniteScroll>
-    </CustomSuspense>
+      </CustomSuspense>
+    </MemexInfiniteScroll>
   )
 }
 

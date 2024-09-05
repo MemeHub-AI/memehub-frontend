@@ -97,10 +97,10 @@ export const IdeaCardLikeComment = ({
           />
         </div>
 
-        <div className="flex items-center space-x-1 text-sm text-zinc-500 max-lg:hidden">
+        {/* <div className="flex items-center space-x-1 text-sm text-zinc-500 max-lg:hidden">
           <img src={chain?.logo} alt="chain" className="w-5 h-5" />
           <span>{chain?.displayName}</span>
-        </div>
+        </div> */}
       </div>
     </>
   )

@@ -95,7 +95,7 @@ export const MemexIdeaCard = ({
     >
       <div
         className={cn(
-          'lg:flex px-3 py-3 relative border-b duration-150',
+          'px-3 py-3 relative border-b duration-150',
           isList && 'cursor-pointer sm:hover:bg-zinc-50',
           className
         )}
@@ -104,8 +104,7 @@ export const MemexIdeaCard = ({
           router.push(joinPaths(Routes.MemexIdea, idea?.hash))
         }}
       >
-        <IdeaCardBadge />
-        <div className="max-lg:flex max-lg:space-x-2">
+        <div className="flex space-x-2">
           {isList && (
             <Avatar
               src={idea?.user_logo}
@@ -121,29 +120,30 @@ export const MemexIdeaCard = ({
             />
           )}
 
-          <div className="flex items-start flex-1 lg:hidden">
+          <div className="flex flex-col items-start flex-1 space-y-1">
             <IdeaCardProfile onPush={onPushToAccount} />
+            <div className="flex items-center space-x-1 text-sm text-zinc-500">
+              <img src={chain?.logo} alt="chain" className="w-5 h-5" />
+              <span>{chain?.displayName}</span>
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-between items-center my-2 lg:hidden">
+        <div className="flex justify-between items-center my-2">
+          <IdeaCardBadge />
           <IdeaStatusCountdown />
           <IdeaRefundClaimButton />
-          <div className="flex items-center space-x-1 text-sm text-zinc-500">
-            <img src={chain?.logo} alt="chain" className="w-5 h-5" />
-            <span>{chain?.displayName}</span>
-          </div>
         </div>
 
         <div className="flex-1">
-          <div className="max-lg:hidden">
+          {/* <div className="hidden">
             <IdeaCardProfile onPush={onPushToAccount} />
-          </div>
+          </div> */}
 
-          <div className="flex flex-col items-start max-lg:hidden">
+          {/* <div className="flex flex-col items-start hidden">
             <IdeaStatusCountdown />
             <IdeaRefundClaimButton />
-          </div>
+          </div> */}
 
           <div className={cn(isNonPay && 'mt-4')}>
             {isDetails ? (

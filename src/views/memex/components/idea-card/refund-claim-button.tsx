@@ -91,7 +91,7 @@ export const IdeaRefundClaimButton = () => {
         </Button>
       )}
 
-      <Button
+      {/* <Button
         variant="yellow"
         shadow="none"
         size="xs"
@@ -105,7 +105,7 @@ export const IdeaRefundClaimButton = () => {
         }}
       >
         {isInitWithdrawETH ? t('refunded-initial-buy') : refundInitialLabel}
-      </Button>
+      </Button> */}
 
       {canRefundInitial && (
         <Button

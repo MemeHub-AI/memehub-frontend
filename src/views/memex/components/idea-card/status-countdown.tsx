@@ -7,6 +7,7 @@ import { Countdown } from '@/components/countdown'
 import { useIdeaCardContext } from '@/contexts/memex/idea-card'
 import { Button } from '@/components/ui/button'
 import { Routes } from '@/routes'
+import { ChainData } from '@/api/chain/type'
 
 export const IdeaStatusCountdown = () => {
   const { t } = useTranslation()
@@ -20,16 +21,18 @@ export const IdeaStatusCountdown = () => {
   const canEditCoinDetails = !hasDetails && isCreator && isProcessing
   const canShowSuccessTips = isSuccessLike && !hasDetails && isProcessing
 
+  // console.log('hasdetails:', hasDetails)
+
   return (
     <>
-      {/* {canCountdown && (
+      {canCountdown && (
         <Countdown
           className="text-sm text-green-600/90"
           createdAt={startAt}
           duration={duration}
           onExpired={refetchInfo}
         />
-      )} */}
+      )}
 
       {canEditCoinDetails && (
         <Button
