@@ -25,7 +25,7 @@ export const SignLoginDialog = () => {
         const isAutoConnect = !!address && !!prevAddress && isConnected
         const hasToken = !!getStorage('token')
 
-        console.log('sign', {
+        console.log('sign login', {
           isConnected,
           isFirst,
           isChanged,

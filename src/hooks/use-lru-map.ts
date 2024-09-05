@@ -18,7 +18,7 @@ export const useLruMap = <T extends ObjectLike<any>>(maxSize = 8192) => {
   }
 
   return {
-    ...mapRef.current,
+    size: mapRef.current.size,
     get,
     set,
   }
