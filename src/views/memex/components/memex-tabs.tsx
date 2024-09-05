@@ -9,8 +9,6 @@ import { useUserStore } from '@/stores/use-user-store'
 import { IdeaFloatButton } from './idea-float-button'
 import { useResponsive } from '@/hooks/use-responsive'
 
-export const memexBodyId = 'memex-body'
-
 export const MemexTabs = ({ children }: { children: ReactNode }) => {
   const { t } = useTranslation()
   const { pathname, ...router } = useRouter()
@@ -59,7 +57,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
           'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] lg:border-none justify-start overflow-visible',
           'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14',
           'lg:relative lg:after:absolute lg:after:-left-96 lg:after:-right-96 lg:after:border-b lg:after:border-zinc-200 lg:after:bottom-0',
-          'max-lg:sticky max-lg:top-0 max-lg:z-50 max-lg:bg-white'
+          'sticky top-0 z-50 bg-white'
         )}
       >
         {tabs.map(({ id, route, title }) => (
@@ -84,11 +82,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
           </TabsTrigger>
         ))}
       </TabsList>
-
-      <div className="lg:h-[calc(100vh-64px)] overflow-auto" id={memexBodyId}>
-        {children}
-      </div>
-
+      {children}
       {isPad && <IdeaFloatButton />}
     </Tabs>
   )

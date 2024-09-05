@@ -1,24 +1,23 @@
-import { useEffect, useRef, memo } from 'react'
+import { useEffect, useRef, memo, useState } from 'react'
 import { isEmpty } from 'lodash'
 import { useTranslation } from 'react-i18next'
 
 import { useChart } from './hooks/use-chart'
 import { useTokenContext } from '@/contexts/token'
-import { useLocalStorage } from '@/hooks/use-storage'
 import { cn } from '@/lib/utils'
 import { Skeleton } from '../ui/skeleton'
-import { useTokenQuery } from '@/views/token/hooks/use-token-query'
 import { ChartDexScreener } from '../chart-dexscrenner'
-import { ChartIntervals } from './components/chart-intervals'
-import { datafeedDefaultInterval } from '@/config/datafeed'
+import { ChartIntervals } from './chart-intervals'
+import { ChartUnitButton } from './chart-unit-button'
+import { DatafeedCandles } from './hooks/use-datafeed/types'
 
 export const Chart = memo(() => {
   const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
-  const { tokenAddr } = useTokenQuery()
-  const { tokenInfo, isNotFound, isIdoToken, isGraduated } = useTokenContext()
+  const { tokenInfo, isNotFound, isIdoToken, isGraduated, tokenAddr } =
+    useTokenContext()
   const { isConnected, isCreating, createChart, removeChart } = useChart()
-  const { getStorage } = useLocalStorage()
+  const [unit, setUnit] = useState<keyof DatafeedCandles>('master')
 
   useEffect(() => {
     if (
@@ -34,12 +33,12 @@ export const Chart = memo(() => {
 
     createChart(chartRef.current, {
       symbol: tokenInfo.symbol,
-      interval: getStorage('chart_interval') || datafeedDefaultInterval,
       tokenAddr,
+      unit: unit,
     })
 
     return removeChart
-  }, [tokenInfo, isConnected])
+  }, [tokenInfo, isConnected, unit])
 
   if (isNotFound && !isIdoToken) {
     return (
@@ -56,10 +55,15 @@ export const Chart = memo(() => {
 
   return (
     <>
+      <ChartUnitButton
+        className="block sm:hidden w-full text-end pr-0.5"
+        activeUnit={unit}
+        onClick={setUnit}
+      />
       <div
         className={cn(
           'min-h-[415px] max-sm:h-[20vh] border-2 border-black',
-          'rounded-md overflow-hidden max-sm:mt-3'
+          'rounded-md overflow-hidden'
         )}
       >
         {isCreating && !isGraduated && !isIdoToken && <ChartSkeleton />}
@@ -67,7 +71,14 @@ export const Chart = memo(() => {
           <ChartDexScreener className="w-full h-full" />
         ) : (
           <div className="flex flex-col h-full">
-            <ChartIntervals />
+            <div className="flex items-center justify-between">
+              <ChartIntervals />
+              <ChartUnitButton
+                className="hidden sm:block"
+                activeUnit={unit}
+                onClick={setUnit}
+              />
+            </div>
             <hr />
             <div ref={chartRef} className="w-full h-full flex-1"></div>
           </div>

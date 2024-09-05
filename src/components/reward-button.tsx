@@ -42,8 +42,6 @@ export const RewardButton = React.forwardRef<
 
   if (!userInfo) return
 
-  console.log('reward', userInfo?.reward_amount)
-
   return (
     <Button
       variant="outline"

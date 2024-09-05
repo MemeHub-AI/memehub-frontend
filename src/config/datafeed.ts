@@ -63,5 +63,3 @@ export const symbolInfoConfig: LibrarySymbolInfo = {
   volume_precision: 18,
   currency_code: 'Memehub',
 }
-
-export const datafeedUnit: keyof DatafeedCandles = 'master'

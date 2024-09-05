@@ -19,6 +19,7 @@ import { useUserId } from '@/hooks/use-user-id'
 import { MaintainTips } from '../maintain-tips'
 import { useKeepReferralCode } from '@/hooks/use-keep-referral-code'
 import { useRootFontSize } from '@/hooks/use-root-font-size'
+import { useKeepScrollPosition } from '@/hooks/use-keep-scroll-position'
 
 // Extends style css variable for react
 declare module 'react' {
@@ -50,6 +51,8 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   useKeepReferralCode() // keep referral code query
 
   useRootFontSize()
+
+  useKeepScrollPosition()
 
   if (isNotMounted) return
 
