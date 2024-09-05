@@ -80,7 +80,7 @@ export const IdeaCardLikeComment = ({
             </div>
           </Button>
 
-          <button className="flex items-center space-x-1 text-base cursor-pointer text-zinc-500 sm:hover:text-black duration-150">
+          <button className="flex items-center mr-9 space-x-1 text-base cursor-pointer text-zinc-500 sm:hover:text-black duration-150">
             <GoComment className="w-5 h-5" />
             <span>{idea?.comment_count ?? 0}</span>
           </button>

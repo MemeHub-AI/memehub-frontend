@@ -167,7 +167,12 @@ export const NavAside = ({
 
       <HowToWorkDialog isCollapsed={isCollapsed} />
 
-      <div className="flex space-x-2 items-center">
+      <div
+        className={cn(
+          'flex space-x-2 items-center',
+          isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
+        )}
+      >
         <div
           className={cn(
             'flex justify-center items-center mt-1 space-x-1 ',
@@ -178,7 +183,7 @@ export const NavAside = ({
           <Button
             type="button"
             shadow="none"
-            size="icon-lg"
+            size={isCollapsed ? 'icon' : 'icon-lg'}
             title={t('change.language')}
             onClick={() =>
               i18n.language === 'en' ? setLang('zh') : setLang('en')

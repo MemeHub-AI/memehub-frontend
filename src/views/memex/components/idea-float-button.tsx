@@ -18,7 +18,7 @@ export const IdeaFloatButton = () => {
         size="icon-2xl"
         shadow="none"
         className={cn(
-          'rounded-full shadow-lg shadow-black',
+          'rounded-full shadow-lg shadow-black bg-blue-400',
           isPad && 'fixed bottom-16 right-2 p-3.5',
           !isPad && 'p-2 w-12 h-12'
         )}

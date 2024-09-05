@@ -10,13 +10,26 @@ import { Routes } from '@/routes'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
+import { useScroll } from 'ahooks'
+import { PERCENT } from './back-to-top'
+import { FaArrowCircleUp } from 'react-icons/fa'
+
+interface BottomNav {
+  title: string
+  path: string
+  icon: React.ReactNode
+  iconActive: React.ReactNode
+  isActive: boolean
+}
 
 export const MobileNavBottom = () => {
   const { isPad } = useResponsive()
   const { t } = useTranslation()
   const { push, pathname } = useRouter()
+  const { top } = useScroll(document) ?? { top: 0 }
+  const isShow = top / window.innerHeight > PERCENT
 
-  const navs = [
+  const navs: BottomNav[] = [
     {
       title: t('memex.idea'),
       path: Routes.MemexIdea,
@@ -61,6 +74,17 @@ export const MobileNavBottom = () => {
     },
   ]
 
+  const navCoin = (nav: BottomNav) => {
+    if (nav.isActive) {
+      if (nav.path === Routes.MemexIdea && isShow)
+        return <FaArrowCircleUp color="#3b82f6" />
+
+      return nav.iconActive
+    }
+
+    return nav.icon
+  }
+
   if (!isPad) return null
 
   return (
@@ -71,10 +95,17 @@ export const MobileNavBottom = () => {
       )}
     >
       {navs.map((nav, i) => (
-        <div key={i} className="py-3 sm:px-4" onClick={() => push(nav.path)}>
-          <span className="text-2xl">
-            {nav.isActive ? nav.iconActive : nav.icon}
-          </span>
+        <div
+          key={i}
+          className="py-3 sm:px-4"
+          onClick={() => {
+            if (nav.isActive && nav.path === Routes.MemexIdea) {
+              return window.scrollTo({ top: 0, behavior: 'smooth' })
+            }
+            push(nav.path)
+          }}
+        >
+          <span className="text-2xl">{navCoin(nav)}</span>
         </div>
       ))}
     </div>
