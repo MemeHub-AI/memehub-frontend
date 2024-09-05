@@ -50,16 +50,14 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
     <Tabs
       value={pathname}
       onValueChange={(v) => router.push(v)}
-      className={cn(
-        'flex-1 sm:max-w-2xl max-xl:relative max-xl:before:absolute max-xl:before:-top-4 max-xl:before:border-l max-xl:before:border-zinc-200',
-        'max-xl:before:left-0'
-      )}
+      className={cn('flex-1 sm:max-w-2xl')}
     >
+      <div className="lg:fixed lg:left-0 lg:right-0 lg:h-px lg:bg-zinc-200 lg:top-14 overflow-hidden" />
       <TabsList
         className={cn(
-          'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] justify-start overflow-visible',
-          'rounded-none h-10 max-sm:w-full md:flex md:justify-between md:h-14',
-          'sticky top-16 z-50 bg-white'
+          'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] lg:border-none justify-start overflow-visible',
+          'rounded-none h-10 md:h-14 max-md:w-full md:flex md:justify-between',
+          'sticky top-0 z-50 bg-white'
         )}
       >
         {tabs.map(({ id, route, title }) => (
@@ -76,7 +74,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
                 'h-full flex justify-center items-center relative',
                 'group-data-[state=active]:before:content-[""] group-data-[state=active]:before:w-full group-data-[state=active]:before:h-1',
                 'group-data-[state=active]:before:absolute group-data-[state=active]:before:bottom-0 group-data-[state=active]:before:rounded-full',
-                'group-data-[state=active]:font-bold group-data-[state=active]:!text-black group-data-[state=active]:before:bg-purple-600'
+                'group-data-[state=active]:font-bold group-data-[state=active]:!text-black group-data-[state=active]:before:bg-blue-500'
               )}
             >
               {title}

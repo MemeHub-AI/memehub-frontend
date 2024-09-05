@@ -1,17 +1,17 @@
+import { useMemo } from 'react'
+
 import { useRouter } from 'next/router'
 import { ShakeCardProps } from './type'
-import { useMemo } from 'react'
 import { cn } from '@/lib/utils'
 import { TokenWsCreate } from '@/views/token/hooks/use-token-ws/types'
-import { useTranslation } from 'react-i18next'
 import { Routes } from '@/routes'
 import { joinPaths } from '@/utils'
 import { animatedShakeRef } from '@/utils/animation'
+import { fmt } from '@/utils/fmt'
 
 const CreateCoinShake = (props: ShakeCardProps<TokenWsCreate>) => {
   const { trade: create, className, textClass, imageClass, color } = props
   const { push } = useRouter()
-  const { t } = useTranslation()
 
   const ShakeCard = useMemo(
     () => () => {
@@ -37,9 +37,7 @@ const CreateCoinShake = (props: ShakeCardProps<TokenWsCreate>) => {
                 )
               }
             >
-              {create.name.length < 15
-                ? create.name.slice(0, 15)
-                : create.name.slice(0, 15) + '...'}
+              {fmt.ellipsis(create.name, 16)}
             </span>{' '}
             {/* {t('was.created')} */}
             was created {create.coin_type === 6 ? 'on Memex' : ''}

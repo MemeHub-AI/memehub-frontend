@@ -14,6 +14,7 @@ export const MemexInfiniteScroll = <T,>({
   fetchNext: () => void
 }) => {
   const { t } = useTranslation()
+  // const { isPad } = useResponsive()
 
   return (
     <InfiniteScroll

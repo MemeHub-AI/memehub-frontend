@@ -1,8 +1,6 @@
 import React, { useState, type ComponentProps } from 'react'
 
 import { Button } from './ui/button'
-import { ChangeChainWallets } from './header/change-chain-wallets'
-import { useConnectWallet } from '@/hooks/use-connect-wallet'
 import { useAccount } from 'wagmi'
 import { useTranslation } from 'react-i18next'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
@@ -14,10 +12,11 @@ export const ConnectWallet = ({
 }: ComponentProps<typeof Button>) => {
   // const { walletIsConnected } = useConnectWallet()
   const { t } = useTranslation()
-  const { isConnected, isConnecting } = useAccount()
+  const { isConnected, isConnecting, address } = useAccount()
   const { openConnectModal } = useConnectModal()
   const { isMobile } = useResponsive()
-  const [isOpening, setIsOpening] = useState(false)
+
+  // console.log('address', address)
 
   return isConnected ? (
     children

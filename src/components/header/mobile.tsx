@@ -1,23 +1,18 @@
-import { type ComponentProps, useRef } from 'react'
-import { useTranslation } from 'react-i18next'
-import { SlMenu } from 'react-icons/sl'
-import { MdArrowDropDown } from 'react-icons/md'
-import { useRouter } from 'next/router'
-import { useAccount } from 'wagmi'
+import { type ComponentProps, useRef, useState } from 'react'
 
+import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
 import type { Nav } from '.'
 import { Button } from '../ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '../ui/sheet'
-import { Logo } from '../logo'
-import { LangSelect } from '../lang-select'
 import { ConnectWallet } from '../connect-wallet'
 import { Routes } from '@/routes'
-import { RewardButton } from '../reward-button'
-import { cn } from '@/lib/utils'
-import { memehubLinks } from '@/config/link'
 import { AccountDropdown } from '../account-dropdown'
-import { SocialLinks } from '../social-links'
+import { useUserStore } from '@/stores/use-user-store'
+import { Avatar } from '../ui/avatar'
+import HeaderMobileSheet from './mobile-sheet'
 import HowToWorkDialog from '../how-to-work-dialog'
+import Logo from '../logo'
 
 interface Props extends ComponentProps<'div'> {
   navs: Nav[]
@@ -29,16 +24,28 @@ export const HeaderMobile = (props: Props) => {
   const { t } = useTranslation()
   const { pathname, ...router } = useRouter()
   const closeRef = useRef<HTMLButtonElement>(null)
-  const { isConnected } = useAccount()
+  const { userInfo } = useUserStore()
+  const [sheetOpen, setSheetOpen] = useState(false)
+
+  // console.log('userinfo:', userInfo)
 
   return (
     <>
-      <Sheet>
+      <Sheet
+        open={sheetOpen}
+        onOpenChange={(status) => {
+          if (!userInfo) return
+          setSheetOpen(status)
+        }}
+      >
         <SheetTrigger asChild ref={closeRef}>
           <div className="flex justify-start items-center space-x-2 max-sm:space-x-0">
             <div className="flex text-xl mt-1">
-              <SlMenu />
-              <MdArrowDropDown />
+              <Avatar
+                className="w-10 h-10 rounded-full"
+                src={userInfo?.logo}
+                alt="avatar"
+              />
             </div>
             <Logo
               src="/images/logo.png"
@@ -52,10 +59,11 @@ export const HeaderMobile = (props: Props) => {
         <SheetContent
           onOpenAutoFocus={(e) => e.preventDefault()}
           showClose={false}
-          side="bottom"
-          className="pt-4 px-3 rounded-t-lg font-bold"
+          side="left"
+          className="pt-4 px-3"
         >
-          <ul className="flex flex-col space-y-3 mt-3 mb-1">
+          <HeaderMobileSheet userInfo={userInfo} setSheetOpen={setSheetOpen} />
+          {/* <ul className="flex flex-col space-y-3 mt-3 mb-1">
             {navs.map((n, i) => (
               <li
                 key={i}
@@ -80,21 +88,11 @@ export const HeaderMobile = (props: Props) => {
             whitepaper={memehubLinks.whitepaper}
             className="justify-start"
             size={28}
-          />
+          /> */}
         </SheetContent>
       </Sheet>
 
       <div className="flex justify-between items-center space-x-2 ml-1">
-        <Button
-          className="bg-lime-green w-8 p-0"
-          size="sm"
-          onClick={() => router.push(Routes.Airdrop)}
-        >
-          <img src="/images/gift.png" className="w-5" />
-        </Button>
-        {isConnected && (
-          <RewardButton className="max-sm:px-2" showReferral={false} />
-        )}
         <Button
           variant="outline"
           className="mx-3 max-sm:mx-0"

@@ -16,6 +16,8 @@ export enum Routes {
 
   Reward = '/reward',
 
+  Coin = '/coin',
+
   News = '/news',
   NewsMoonshot = '/news/tab/1',
   NewsClassicMeme = '/news/tab/2',

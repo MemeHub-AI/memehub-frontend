@@ -1,26 +1,27 @@
-import MemexAvatar from '../../memex/components/memex-avatar'
-import FollowDesktop from '@/views/account/components/follow-desktop'
-import { AccountInfoProps, HoverCardPop } from './profile'
-import { useTranslation } from 'react-i18next'
+import { IoMdMore } from 'react-icons/io'
 import {
   EnvelopeClosedIcon,
   HeartFilledIcon,
   MinusIcon,
   PlusIcon,
 } from '@radix-ui/react-icons'
+import { IoCopyOutline, IoSettingsOutline } from 'react-icons/io5'
+
+import MemexAvatar from '../../memex/components/memex-avatar'
+import FollowDesktop from '@/views/account/components/follow-desktop'
+import { AccountInfoProps, HoverCardPop } from './profile'
+import { useTranslation } from 'react-i18next'
 import router from 'next/router'
 import { Routes } from '@/routes'
 import { cn } from '@/lib/utils'
 import DiamondIcon from '@/components/diamond-icon'
 import { Button } from '@/components/ui/button'
 import ProfileForm from '@/views/account/components/profile-form'
-import { IoCopyOutline, IoSettingsOutline } from 'react-icons/io5'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@radix-ui/react-popover'
-import { IoMdMore } from 'react-icons/io'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { fmt } from '@/utils/fmt'
 

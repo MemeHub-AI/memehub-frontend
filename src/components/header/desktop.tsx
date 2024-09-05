@@ -24,7 +24,6 @@ export const HeaderDesktop = ({ navs, onNavClick }: Props) => {
 
   return (
     <>
-      <AllTradesFeeds />
       <div className="flex items-center justify-center gap-3">
         <RewardButton />
         {/* <Button onClick={() => router.push(Routes.Create)}>

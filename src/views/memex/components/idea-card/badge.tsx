@@ -18,7 +18,8 @@ export const IdeaCardBadge = () => {
     return (
       <Badge
         className={cn(
-          'absolute top-4 right-2 px-0.5 bg-purple-600 hover:bg-purple-600',
+          // 'absolute top-4 right-2 px-0.5 bg-purple-600 hover:bg-purple-600',
+          'px-1 bg-green-600/80 hover:bg-green-600/60 text-sm font-medium',
           isDetails && 'top-0 right-3'
         )}
       >
@@ -29,7 +30,8 @@ export const IdeaCardBadge = () => {
 
   if (isNonPay) {
     return (
-      <div className="absolute top-3 right-3 text-right">
+      // <div className="absolute top-3 right-3 text-right">
+      <div className="text-right">
         <Button
           type="button"
           variant="yellow"
@@ -60,9 +62,15 @@ export const IdeaCardBadge = () => {
 
   if (isFailed) {
     return (
-      <p className="absolute top-2 right-3 font-bold text-zinc-400">
-        {t('fail').toUpperCase()}
-      </p>
+      <Badge
+        className={cn(
+          // 'absolute top-4 right-2 px-0.5 bg-purple-600 hover:bg-purple-600',
+          'px-1 bg-yellow-300/80 hover:bg-yellow-300/60 text-sm font-medium text-black',
+          isDetails && 'top-0 right-3'
+        )}
+      >
+        😅 {t('fail')}
+      </Badge>
     )
   }
 }

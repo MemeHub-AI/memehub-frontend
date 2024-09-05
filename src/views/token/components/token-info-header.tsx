@@ -1,6 +1,6 @@
 import { type ComponentProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { IoCheckmark } from 'react-icons/io5'
+import { IoArrowBack, IoCheckmark } from 'react-icons/io5'
 import { MdContentCopy } from 'react-icons/md'
 
 import { useTokenContext } from '@/contexts/token'

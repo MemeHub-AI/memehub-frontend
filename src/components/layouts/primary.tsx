@@ -4,6 +4,10 @@ import { cn } from '@/lib/utils'
 import { Header } from '../header'
 import { NewsAside } from '../news-aside'
 import { NavAside } from '@/components/nav-aside'
+import MobileNavBottom from '../mobile-nav-bottom'
+import HandleScroll, { ScrollVariant } from '../handle-scroll'
+import { useRouter } from 'next/router'
+import { Routes } from '@/routes'
 
 interface Props extends ComponentProps<'main'> {
   disablePadding?: boolean
@@ -26,19 +30,26 @@ export const PrimaryLayout = ({
   navAsideProps,
   newsAsideProps,
 }: Props) => {
+  const { pathname } = useRouter()
+
+  const isTokenPage = pathname.includes(Routes.TokenPage)
+
   return (
     <main className={cn('min-h-main flex max-w-[100vw]', className)}>
       <div
         className={cn(
-          'border-r px-4 max-lg:hidden min-h-screen',
+          'border-r px-4 max-lg:hidden min-h-screen bg-white z-50',
           navAsideClass
         )}
       >
         <NavAside className="sticky top-0 shrink-0" {...navAsideProps} />
       </div>
 
-      <div className="flex-1">
-        <Header />
+      <div className="flex-1 max-lg:pb-14">
+        <HandleScroll variant={ScrollVariant.Top}>
+          <Header />
+        </HandleScroll>
+
         <div className={cn('flex', containerClass)}>
           <div
             className={cn(
@@ -51,10 +62,17 @@ export const PrimaryLayout = ({
           </div>
 
           <NewsAside
-            className={cn('sticky top-16', newsAsideClass)}
+            className={cn('sticky top-0', newsAsideClass)}
             {...newsAsideProps}
           />
         </div>
+
+        <HandleScroll
+          variant={ScrollVariant.Bottom}
+          classname={isTokenPage ? 'hidden' : ''}
+        >
+          <MobileNavBottom />
+        </HandleScroll>
       </div>
     </main>
   )

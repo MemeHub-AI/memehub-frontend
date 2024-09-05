@@ -1,3 +1,8 @@
+import { isEmpty } from 'lodash'
+import { useRef, useState } from 'react'
+import { AiOutlineEdit } from 'react-icons/ai'
+
+import { UseMutateAsyncFunction } from '@tanstack/react-query'
 import { ApiResponse } from '@/api/types'
 import { UserInfoRes, UserUpdateReq } from '@/api/user/types'
 import ImageUpload from '@/components/image-upload'
@@ -7,11 +12,13 @@ import { Label } from '@/components/ui/label'
 import { useResponsive } from '@/hooks/use-responsive'
 import { useUploadImage } from '@/hooks/use-upload-image'
 import { cn } from '@/lib/utils'
-import { UseMutateAsyncFunction } from '@tanstack/react-query'
-import { isEmpty } from 'lodash'
-import { useRef, useState } from 'react'
-import { AiOutlineEdit } from 'react-icons/ai'
-const MemexAvatar: React.FC<{
+
+export const MemexAvatar = ({
+  userInfo,
+  isOtherUser,
+  update,
+  refetchUserInfo,
+}: {
   userInfo: UserInfoRes | undefined
   isOtherUser: boolean
   update: UseMutateAsyncFunction<
@@ -21,7 +28,7 @@ const MemexAvatar: React.FC<{
     string | number
   >
   refetchUserInfo: VoidFunction
-}> = ({ userInfo, isOtherUser, update, refetchUserInfo }) => {
+}) => {
   const [open, setOpen] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
   const { onChangeUpload, clearFile } = useUploadImage({
@@ -64,7 +71,7 @@ const MemexAvatar: React.FC<{
           src={userInfo?.logo || ''}
           fallback={userInfo?.wallet_address.slice(-4)}
           size={128}
-          className="border-4 border-amber-300/40 bg-gray-50 bottom-10"
+          className="border-4 border-zinc-100 bg-gray-50 bottom-10"
         />
         {!isOtherUser && (
           <>
