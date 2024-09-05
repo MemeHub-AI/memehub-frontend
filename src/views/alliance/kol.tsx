@@ -5,7 +5,7 @@ import { debounce } from 'lodash'
 
 import { allianceApi } from '@/api/alliance'
 import { CustomSuspense } from '@/components/custom-suspense'
-import { NewsAsideMobile } from '@/components/news-aside'
+import { NewsAsideMobile } from '@/components/asides/news-aside'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useUserStore } from '@/stores/use-user-store'

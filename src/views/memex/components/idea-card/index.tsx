@@ -67,9 +67,6 @@ export const MemexIdeaCard = ({
   const { chain, chainId, chainName } = useChainInfo(idea?.chain)
   const ideaStatus = useIdeaStatus(idea, ideaInfo)
   const isNonPay = isMyIdeas && !ideaInfo
-  const { isProcessing, hasDetails, isCreator } = ideaStatus
-
-  const canEditCoinDetails = !hasDetails && isCreator && isProcessing
 
   const onPushToAccount = () => {
     if (!idea?.user_address) return
@@ -124,7 +121,7 @@ export const MemexIdeaCard = ({
 
           <div className="flex flex-col items-start flex-1">
             <IdeaCardProfile onPush={onPushToAccount} />
-            <span className="text-sm text-zinc-500">@{idea?.user_name}</span>
+            {/* <span className="text-sm text-zinc-500">@{idea?.user_name}</span> */}
           </div>
         </div>
 

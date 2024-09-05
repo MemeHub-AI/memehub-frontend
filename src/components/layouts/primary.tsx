@@ -2,12 +2,12 @@ import { type ComponentProps } from 'react'
 
 import { cn } from '@/lib/utils'
 import { Header } from '../header'
-import { NewsAside } from '../news-aside'
-import { NavAside } from '@/components/nav-aside'
+import { NewsAside } from '../asides/news-aside'
 import MobileNavBottom from '../mobile-nav-bottom'
 import HandleScroll, { ScrollVariant } from '../handle-scroll'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
+import { NavAside } from '../asides/nav-aside'
 
 interface Props extends ComponentProps<'main'> {
   disablePadding?: boolean

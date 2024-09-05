@@ -58,7 +58,7 @@ export const IdeaCardLikeComment = ({
       />
 
       <div className="flex items-center mt-2">
-        <div className="flex items-center justify-between space-x-3 select-none max-lg:w-full lg:space-x-4">
+        <div className="flex items-center justify-between select-none w-full">
           <Button
             variant="red"
             shadow="none"

@@ -1,7 +1,7 @@
 import { type ReactNode, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-import { NewsAside } from '@/components/news-aside'
+import { NewsAside } from '@/components/asides/news-aside'
 import { useResponsive } from '@/hooks/use-responsive'
 import { Routes } from '@/routes'
 import { PrimaryLayout } from '@/components/layouts/primary'

@@ -1,6 +1,4 @@
-import { Children, ComponentProps, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
+import { ComponentProps, useEffect, useState } from 'react'
 import { IoGift, IoLanguageOutline } from 'react-icons/io5'
 import { IoGiftOutline } from 'react-icons/io5'
 import { FaRegLightbulb } from 'react-icons/fa'
@@ -13,39 +11,28 @@ import { FaRegHandshake } from 'react-icons/fa'
 import { FaHandshake } from 'react-icons/fa6'
 import { FaRegUser } from 'react-icons/fa6'
 import { FaUser } from 'react-icons/fa6'
-import { CheckIcon } from '@radix-ui/react-icons'
-import { IoIosMore } from 'react-icons/io'
-import { MdLogout } from 'react-icons/md'
 
+import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { useUserStore } from '@/stores/use-user-store'
 import { useLang } from '@/hooks/use-lang'
-import { resources } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { memehubLinks } from '@/config/link'
-import { Logo } from './logo'
+import { Logo } from '../../logo'
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
 } from '@/components/ui/navigation-menu'
-import { SocialLinks } from './social-links'
+import { SocialLinks } from '../../social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
-import { fmt } from '@/utils/fmt'
-import RewardButton from './reward-button'
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
-import { useAccount, useDisconnect } from 'wagmi'
-import { Avatar } from './ui/avatar'
-import { useConnectModal } from '@rainbow-me/rainbowkit'
-import { useSignLogin } from '@/hooks/use-sign-login'
-import HowToWorkDialog from './how-to-work-dialog'
-
-const langs = Object.entries(resources as Record<string, { name: string }>)
+import RewardButton from '../../reward-button'
+import HowToWorkDialog from '../../how-to-work-dialog'
+import NavAccount from './nav- account'
 
 interface Props {
   collapseSize?: keyof ReturnType<typeof useResponsive>
@@ -62,10 +49,6 @@ export const NavAside = ({
   const { userInfo } = useUserStore()
   const responsive = useResponsive()
   const [isCollapsed, setIsCollapsed] = useState(responsive[collapseSize])
-  const { openConnectModal } = useConnectModal()
-  const { isConnecting } = useAccount()
-  const { disconnect } = useDisconnect()
-  const { logout } = useSignLogin()
 
   const userNavs = [
     {
@@ -123,79 +106,6 @@ export const NavAside = ({
     },
   ]
 
-  const PutUserInfo = () => {
-    if (userInfo) {
-      if (isCollapsed) {
-        return (
-          <PopoverPubilic>
-            <Avatar src={userInfo?.logo} className="rounded-full w-10 h-10" />
-          </PopoverPubilic>
-        )
-      }
-
-      return (
-        <div className="flex items-center">
-          <div
-            className="flex items-end cursor-pointer"
-            onClick={() =>
-              router.push(`${Routes.Account}/${userInfo?.wallet_address}`)
-            }
-          >
-            <Avatar src={userInfo?.logo} className="rounded-full w-12 h-12" />
-            <div className="flex flex-col space-y-1">
-              <span className="text-sm ml-2 font-semibold">
-                {userInfo?.name}
-              </span>
-              <span className="text-xs ml-2 text-gray-500">
-                {fmt.addr(userInfo?.wallet_address)}
-              </span>
-            </div>
-          </div>
-
-          <PopoverPubilic>
-            <IoIosMore className="ml-24 cursor-pointer" />
-          </PopoverPubilic>
-        </div>
-      )
-    }
-
-    return (
-      <Button
-        variant="outline"
-        shadow={'none'}
-        disabled={isConnecting}
-        className={cn(
-          !isCollapsed && 'w-52',
-          isCollapsed && 'absolute -left-4 bottom-4 p-1 ml-px'
-        )}
-        onClick={() => openConnectModal?.()}
-      >
-        {t('connect')}
-      </Button>
-    )
-  }
-
-  const PopoverPubilic = ({ children }: { children: React.ReactNode }) => {
-    return (
-      <Popover>
-        <PopoverTrigger>{children}</PopoverTrigger>
-        <PopoverContent
-          className="border border-zinc-200 rounded-sm flex space-x-2 items-center hover:bg-slate-100 cursor-pointer p-2 w-40"
-          side="top"
-          align="end"
-          alignOffset={-2}
-          onClick={() => {
-            logout()
-            disconnect()
-          }}
-        >
-          <MdLogout />
-          <p>{t('disconnect')}</p>
-        </PopoverContent>
-      </Popover>
-    )
-  }
-
   useEffect(() => {
     setIsCollapsed(responsive[collapseSize])
   }, [responsive, collapseSize])
@@ -235,40 +145,6 @@ export const NavAside = ({
               </NavigationMenuLink>
             </NavigationMenuItem>
           ))}
-          <NavigationMenuItem className="w-full">
-            <NavigationMenuTrigger
-              showClose={!isCollapsed}
-              className={cn(
-                'text-xl w-full flex justify-start space-x-2 py-5 pl-2',
-                isCollapsed && 'space-x-0 p-2 justify-center'
-              )}
-              title={t('language')}
-            >
-              <IoLanguageOutline size={22} />
-              {!isCollapsed && <span>{t('Languages')}</span>}
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className={cn('w-52 p-2 space-y-1', isCollapsed && 'w-32')}>
-                {langs.map(([code, { name }], i) => (
-                  <Button
-                    key={i}
-                    variant="ghost"
-                    shadow="none"
-                    className={cn(
-                      'w-full justify-start hover:bg-zinc-200 rounded-lg p-4',
-                      i18n.language === code && 'bg-zinc-100'
-                    )}
-                    onClick={() => setLang(code)}
-                  >
-                    {name}
-                    {i18n.language === code && (
-                      <CheckIcon className="h-5 w-5" />
-                    )}
-                  </Button>
-                ))}
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
 
@@ -291,17 +167,40 @@ export const NavAside = ({
 
       <HowToWorkDialog isCollapsed={isCollapsed} />
 
-      <SocialLinks
-        x={memehubLinks.x}
-        tg={memehubLinks.tg}
-        whitepaper={memehubLinks.whitepaper}
-        size={isCollapsed ? 20 : 24}
-        buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
-        className={cn(
-          'justify-start',
-          isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
-        )}
-      />
+      <div className="flex space-x-2 items-center">
+        <div
+          className={cn(
+            'flex justify-center items-center mt-1 space-x-1 ',
+            className
+          )}
+          {...props}
+        >
+          <Button
+            type="button"
+            shadow="none"
+            size="icon-lg"
+            title={t('change.language')}
+            onClick={() =>
+              i18n.language === 'en' ? setLang('zh') : setLang('en')
+            }
+            className="border-transparent !bg-transparent sm:hover:border-black"
+          >
+            <IoLanguageOutline size={20} />
+          </Button>
+        </div>
+
+        <SocialLinks
+          x={memehubLinks.x}
+          tg={memehubLinks.tg}
+          whitepaper={memehubLinks.whitepaper}
+          size={20}
+          buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
+          className={cn(
+            'justify-start',
+            isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
+          )}
+        />
+      </div>
 
       <div
         className={cn(
@@ -309,7 +208,7 @@ export const NavAside = ({
           !userInfo && 'w-full'
         )}
       >
-        <PutUserInfo />
+        <NavAccount userInfo={userInfo} isCollapsed={isCollapsed} />
 
         <RewardButton
           shadow="none"

@@ -50,7 +50,7 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
     <Tabs
       value={pathname}
       onValueChange={(v) => router.push(v)}
-      className={cn('flex-1 sm:max-w-2xl')}
+      className={cn('flex-1 sm:max-w-xl')}
     >
       <div className="lg:fixed lg:left-0 lg:right-0 lg:h-px lg:bg-zinc-200 lg:top-14 overflow-hidden" />
       <TabsList
