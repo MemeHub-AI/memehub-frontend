@@ -44,8 +44,8 @@ export const useUserInfo = (addr?: string) => {
   // logout if has not token.
   useEffect(() => {
     if (!!token) return
-    logout()
-    disconnect()
+    // logout()
+    // disconnect()
   }, [token])
 
   return {
