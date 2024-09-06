@@ -31,7 +31,7 @@ import { useResponsive } from '@/hooks/use-responsive'
 import Logo from '@/components/logo'
 import HowToWorkDialog from '@/components/how-to-work-dialog'
 import SocialLinks from '@/components/social-links'
-import NavAccount from './nav- account'
+import NavAccount from './nav-account'
 import RewardButton from '@/components/reward-button'
 
 interface Props {
