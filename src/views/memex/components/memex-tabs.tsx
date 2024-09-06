@@ -57,7 +57,8 @@ export const MemexTabs = ({ children }: { children: ReactNode }) => {
         className={cn(
           'border-zinc-200 border-t-0 border-r-0 border-l-0 border-b-[1px] lg:border-none justify-start overflow-visible',
           'rounded-none h-10 md:h-14 max-md:w-full md:flex md:justify-between',
-          'sticky top-0 z-50 bg-white'
+          'sticky top-0 z-50 bg-white',
+          pathname.includes(Routes.MemexCreate) && 'hidden'
         )}
       >
         {tabs.map(({ id, route, title }) => (
