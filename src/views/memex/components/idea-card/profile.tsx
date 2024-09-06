@@ -14,44 +14,44 @@ export const IdeaCardProfile = ({ onPush }: { onPush: VoidFunction }) => {
   const { isCreator, isProcessing } = ideaStatus
 
   const withDetailsLayout = (children: ReactNode) => {
-    if (isDetails) {
-      return (
-        <div className="flex">
-          {isCreator && isProcessing && (
-            <div className="flex items-center space-x-2 absolute right-4 top-0 text-purple-600">
-              {/* TODO: uncomment? */}
-              {/* <Link href="#" className={linkStyle()}>
-                Blink
-              </Link> */}
-              <Link
-                href={{
-                  pathname: Routes.MemexCreate,
-                  query: { hash: idea?.hash },
-                }}
-              >
-                <AiOutlineEdit size={20} />
-              </Link>
-            </div>
-          )}
-          <Avatar
-            src={idea?.user_logo}
-            fallback={idea?.user_name?.[0]}
-            className="rounded-md mr-2"
-          />
-          <div className="w-full">
-            {children}
-            {isProcessing && (
-              <Countdown
-                createdAt={startAt}
-                duration={duration}
-                className="text-sm text-green-700"
-                onExpired={refetchInfo}
-              />
-            )}
-          </div>
-        </div>
-      )
-    }
+    // if (isDetails) {
+    //   return (
+    //     <div className="flex">
+    //       {isCreator && isProcessing && (
+    //         <div className="flex items-center space-x-2 absolute right-4 top-0 text-purple-600">
+    //           {/* TODO: uncomment? */}
+    //           {/* <Link href="#" className={linkStyle()}>
+    //             Blink
+    //           </Link> */}
+    //           <Link
+    //             href={{
+    //               pathname: Routes.MemexCreate,
+    //               query: { hash: idea?.hash },
+    //             }}
+    //           >
+    //             <AiOutlineEdit size={20} />
+    //           </Link>
+    //         </div>
+    //       )}
+    //       <Avatar
+    //         src={idea?.user_logo}
+    //         fallback={idea?.user_name?.[0]}
+    //         className="rounded-md mr-2"
+    //       />
+    //       <div className="w-full">
+    //         {children}
+    //         {isProcessing && (
+    //           <Countdown
+    //             createdAt={startAt}
+    //             duration={duration}
+    //             className="text-sm text-green-700"
+    //             onExpired={refetchInfo}
+    //           />
+    //         )}
+    //       </div>
+    //     </div>
+    //   )
+    // }
 
     return children
   }

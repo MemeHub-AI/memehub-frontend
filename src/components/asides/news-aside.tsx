@@ -18,14 +18,15 @@ import { useLocalStorage } from '@/hooks/use-storage'
 import { utilLang } from '@/utils/lang'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
-import { Button } from './ui/button'
-import { DrawerTrigger, DrawerContent, Drawer } from './ui/drawer'
+import { Button } from '../ui/button'
+import { DrawerTrigger, DrawerContent, Drawer } from '../ui/drawer'
 import { newsApi } from '@/api/news'
 import { useAsideStore } from '@/stores/use-aside-store'
 import { useResponsive } from '@/hooks/use-responsive'
 // TODO/low: wrapped `CollapseAside`
 import { CollapseAside } from './collapse-aside'
 import { joinPaths } from '@/utils'
+import AllTradesFeeds from '../header/all-trades-feed'
 
 interface Props extends ComponentProps<'div'> {
   defalutTab?: string | string[] | number
@@ -118,16 +119,20 @@ export const NewsAside = ({
   return (
     <aside
       className={cn(
-        'pr-2 border-l border-zinc-200 h-body hidden xl:block',
+        'pr-2 h-body hidden xl:block bg-white z-50',
         'max-sm:mr-0 max-sm:pr-0 max-sm:h-min max-sm:border-0',
+        'lg:before:absolute lg:before:border-l lg:before:border-zinc-200 lg:before:-top-28 lg:before:left-0 lg:before:-bottom-16',
         className
       )}
     >
-      <div className="hidden h-[98vh]"></div>
+      <div className={isPad ? 'hidden' : ''}>
+        <AllTradesFeeds />
+      </div>
+
       <div
         className={cn(
-          'sticky top-[65px] ml-6 w-aside max-md:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
-          tab === Tab.Classic ? 'h-[90vh]' : 'h-[92vh]',
+          'sticky top-[20px] ml-6 w-aside max-sm:ml-0 max-md:px-4 max-md:order-2 max-md:w-full',
+          tab === Tab.Classic ? 'h-[80vh]' : 'h-[82vh]',
           containerClass
         )}
       >
@@ -137,7 +142,7 @@ export const NewsAside = ({
               <div
                 key={i}
                 className={cn(
-                  'px-2.5 py-1.5 text-nowrap rounded-xl my-5 cursor-pointer border-2 border-transparent',
+                  'px-2.5 py-1.5 text-nowrap rounded-xl my-3 cursor-pointer border-2 border-transparent',
                   'hover:border-black select-none flex-1 text-center',
                   i === Tab.Classic && 'ml-3',
                   tab === i && 'bg-black text-[#ffe770]',
@@ -181,7 +186,7 @@ export const NewsAside = ({
           nullback={tab === Tab.Moonshot && nullback()}
           className={cn(
             containerClassName,
-            tab === 1 ? 'h-[calc(100vh-160px)]' : 'h-[calc(100vh-210px)]',
+            tab === 1 ? 'h-[calc(100vh-11rem)]' : 'h-[calc(100vh-14rem)]',
             tab === 1 && 'hidden',
             listClassName
           )}
@@ -211,8 +216,8 @@ export const NewsAside = ({
           className={cn(
             containerClassName,
             tab === Tab.Classic
-              ? 'h-[calc(100vh-160px)]'
-              : 'h-[calc(100vh-210px)]',
+              ? 'h-[calc(100vh-11rem)]'
+              : 'h-[calc(100vh-14rem)]',
             tab === Tab.Moonshot ? 'hidden' : '',
             listClassName
           )}

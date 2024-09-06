@@ -18,7 +18,6 @@ import { utilLang } from '@/utils/lang'
 import { memexIdeaConfig } from '@/config/memex/idea'
 import { useIdeaDetailsContext } from '@/contexts/memex/idea-details'
 import ConnectWallet from '@/components/connect-wallet'
-import scrollIntoView from 'scroll-into-view-if-needed'
 
 const { commentMaxImg, commentMaxChar } = memexIdeaConfig
 
@@ -38,19 +37,6 @@ export const IdeaCommentForm = () => {
   const { isConnected } = useAccount()
   // const [keyboardHeigt, setKeyboardHeigt] = useState(0)
   const ref = useRef<HTMLTextAreaElement>(null)
-  const [jj, setJJ] = useState('')
-
-  const setScrollINtoView = () => {
-    if (!ref.current) return
-
-    // setKeyboardHeigt(useKeyboardHeight())
-
-    scrollIntoView(ref.current, {
-      scrollMode: 'if-needed',
-      block: 'center',
-      behavior: 'smooth',
-    })
-  }
 
   return (
     <Form {...form}>
@@ -58,7 +44,6 @@ export const IdeaCommentForm = () => {
         className="border-y p-3 mt-3 flex space-x-2"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        {/* {jj && <span className="w-full">OKX我日你母牛</span>} */}
         <Avatar src={userInfo?.logo} fallback={userInfo?.name[0]} />
         <div className="flex-1">
           <FormField
@@ -75,12 +60,6 @@ export const IdeaCommentForm = () => {
                 ref={ref}
                 maxLength={commentMaxChar}
                 rows={3}
-                onClick={() => {
-                  // console.log('browsor:', navigator.userAgent)
-                  setJJ(navigator.userAgent)
-                  setScrollINtoView()
-                  // console.log('scroll', keyboardHeigt)
-                }}
               />
             )}
           />

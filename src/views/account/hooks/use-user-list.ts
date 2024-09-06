@@ -14,6 +14,8 @@ type ListMap = {
   }
 }
 
+const empty = { list: [], total: 0 }
+
 export const useUserList = (type: UserListType, isOtherUser = true) => {
   // Why we need a map?
   // An error will occured when `AccountTab` change if use uniform `list`.
@@ -40,7 +42,7 @@ export const useUserList = (type: UserListType, isOtherUser = true) => {
   )
 
   const {
-    data = { list: [], total: 0 },
+    data = empty,
     isLoading,
     isFetching,
     isFetched,
@@ -86,10 +88,9 @@ export const useUserList = (type: UserListType, isOtherUser = true) => {
     }),
     enabled: isCreated,
   })
-  const myTokens = useMemo(
-    () => (isOtherUser ? myTokenList.filter((t) => t.is_active) : myTokenList),
-    [myTokenList]
-  )
+  const myTokens = useMemo(() => {
+    return isOtherUser ? myTokenList.filter((t) => t.is_active) : myTokenList
+  }, [myTokenList])
 
   // Set list mapping.
   useEffect(() => {

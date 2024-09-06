@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import { useRouter } from 'next/router'
 
 import { Form } from '@/components/ui/form'
@@ -42,6 +43,6 @@ export const CreateDetailPage = () => {
   )
 }
 
-CreateDetailPage.getLayout = getMemexLayout
+CreateDetailPage.getLayout = (page: ReactNode) => getMemexLayout(page, false)
 
 export default CreateDetailPage

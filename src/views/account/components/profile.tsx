@@ -57,8 +57,10 @@ export const MemexProfile = () => {
   const { isPad } = useResponsive()
   const tokenAddr = (query.address || '') as string
 
+  // console.log('userinfo:', userInfo)
+
   return (
-    <div className="flex-1 w-full rounded-lg border-2 border-zinc-200">
+    <div className="flex-1 border border-zinc-200 rounded-md">
       <div
         className="bg-cover bg-center h-72"
         style={{ backgroundImage: `url(/images/memex-profile-bg.jpg)` }}

@@ -1,5 +1,3 @@
-import { type ReactNode } from 'react'
-
 import { CustomSuspense } from '@/components/custom-suspense'
 import { MemexIdeaCard } from '../components/idea-card'
 import { IdeaEmpty } from '../components/idea-empty'
@@ -42,6 +40,6 @@ export const MyIdeaPage = () => {
   )
 }
 
-MyIdeaPage.getLayout = (page: ReactNode) => getMemexLayout(page, true)
+MyIdeaPage.getLayout = getMemexLayout
 
 export default MyIdeaPage

@@ -45,10 +45,14 @@ export const AccountPage = () => {
         refetchFollow,
       }}
     >
-      <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto lg:pl-2 !ml-0">
+      <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto !ml-0 ">
+        {/* <div
+          className="bg-cover bg-center h-72"
+          style={{ backgroundImage: `url(/images/memex-profile-bg.jpg)` }}
+        /> */}
         <aside
           className={cn(
-            'flex flex-col gap-4 sticky top-20 mt-4 mb-2',
+            'flex flex-col gap-4 sticky top-20 mb-2',
             'static gap-2'
           )}
         >

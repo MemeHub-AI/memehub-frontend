@@ -29,6 +29,7 @@ export const bcAbiMap = {
   '0.2.0': bcAbi0_2_0,
   '0.2.2': bcAbi0_2_2,
   '0.6.0': bcAbi0_6_0,
+  '0.9.2': bcAbi0_6_0,
   '1.0.0': bcAbi1_0_0,
 } as const
 

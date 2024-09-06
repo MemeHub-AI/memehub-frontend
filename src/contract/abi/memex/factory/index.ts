@@ -39,6 +39,7 @@ export const memexFactoryAbiMap = {
   '0.7.0': memexFactoryAbi0_7_0,
   '0.7.1': memexFactoryAbi0_7_1,
   '0.7.2': memexFactoryAbi0_7_2,
+  '0.9.0': memexFactoryAbi0_7_2,
   '1.0.0': memexFactoryAbi1_0_0,
 } as const
 

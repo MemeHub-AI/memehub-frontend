@@ -15,6 +15,7 @@ import { fmt } from '@/utils/fmt'
 import { CONTRACT_ERR } from '@/errors/contract'
 import { useCheckAccount } from '@/hooks/use-check-chain'
 import { utilLang } from '@/utils/lang'
+import { useChainInfo } from '@/hooks/use-chain-info'
 
 export const JoinInput = () => {
   const { t } = useTranslation()
@@ -27,6 +28,7 @@ export const JoinInput = () => {
   const { data: reserveBalance } = useBalance({ address, chainId })
   const balance = formatEther(reserveBalance?.value ?? BI_ZERO)
   const { checkForConnect, checkForChain } = useCheckAccount()
+  const { chain } = useChainInfo('bsc')
 
   const isEmptyPools = useMemo(() => {
     const p = pools.filter((p) => p && p !== zeroAddress)
@@ -96,7 +98,7 @@ export const JoinInput = () => {
           disabled={disabeld}
         />
         <div className="flex items-center space-x-1">
-          <img src="/images/bsc.svg" alt="logo" className="w-5" />
+          <img src={chain?.logo} alt="logo" className="w-5" />
           <span>{reserveSymbol}</span>
         </div>
       </div>

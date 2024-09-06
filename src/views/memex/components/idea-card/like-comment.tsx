@@ -13,6 +13,7 @@ import { CopyIcon } from '@/components/copy-icon'
 import { LikeDialog } from './like-dialog'
 import { CommentDialog } from './comment-dialog'
 import { Button } from '@/components/ui/button'
+import { CiShare2 } from 'react-icons/ci'
 
 export const IdeaCardLikeComment = ({
   onCommentSuccess,
@@ -56,8 +57,8 @@ export const IdeaCardLikeComment = ({
         }}
       />
 
-      <div className="flex items-center justify-between mt-2">
-        <div className="flex items-center space-x-3 select-none">
+      <div className="flex items-center mt-2">
+        <div className="flex items-center justify-between select-none w-full">
           <Button
             variant="red"
             shadow="none"
@@ -79,28 +80,28 @@ export const IdeaCardLikeComment = ({
             </div>
           </Button>
 
-          <button className="flex items-center space-x-1 text-sm cursor-pointer text-zinc-500 sm:hover:text-black duration-150">
+          <button className="flex items-center mr-9 space-x-1 text-base cursor-pointer text-zinc-500 sm:hover:text-black duration-150">
             <GoComment className="w-5 h-5" />
             <span>{idea?.comment_count ?? 0}</span>
           </button>
 
           <CopyIcon
-            size={20}
+            size={25}
             content={joinPaths(
               location.origin,
               Routes.MemexIdea,
               idea?.hash || ''
             )}
-            onClick={(e) => e.preventDefault()}
+            onClick={(e) => e.stopPropagation()}
             className="text-zinc-500 sm:hover:text-black duration-150"
-            icon={<PiShareFat size={20} />}
+            icon={<CiShare2 size={25} />}
           />
         </div>
 
-        <div className="flex items-center space-x-1 text-sm text-zinc-500">
+        {/* <div className="flex items-center space-x-1 text-sm text-zinc-500 max-lg:hidden">
           <img src={chain?.logo} alt="chain" className="w-5 h-5" />
           <span>{chain?.displayName}</span>
-        </div>
+        </div> */}
       </div>
     </>
   )

@@ -29,6 +29,7 @@ export const distributorAbiMap = {
   '0.1.18': distributorAbi0_1_18,
   '0.1.19': distributorAbi0_1_19,
   '0.6.0': distributorAbi0_6_0,
+  '0.9.0': distributorAbi0_6_0,
   '1.0.0': distributorAbi1_0_0,
 }
 

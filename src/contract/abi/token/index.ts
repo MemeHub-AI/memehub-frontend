@@ -13,6 +13,7 @@ import { tokenAbi0_2_1 } from './0.2.1'
 import { tokenAbi0_2_2 } from './0.2.2'
 import { tokenAbi0_6_0 } from './0.6.0'
 import { tokenAbi1_0_0 } from './1.0.0'
+import { tokenAbi0_9_0 } from './0.9.0'
 
 export const tokenAbiMap = {
   '0.1.2': tokenAbi0_1_2,
@@ -29,6 +30,8 @@ export const tokenAbiMap = {
   '0.2.1': tokenAbi0_2_1,
   '0.2.2': tokenAbi0_2_2,
   '0.6.0': tokenAbi0_6_0,
+  '0.9.0': tokenAbi0_9_0,
+  '0.9.1': tokenAbi0_9_0,
   '1.0.0': tokenAbi1_0_0,
 }
 

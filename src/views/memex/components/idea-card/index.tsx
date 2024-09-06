@@ -1,8 +1,8 @@
 import { type ComponentProps, useMemo } from 'react'
-import { formatEther, zeroAddress } from 'viem'
-import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
 
+import { useRouter } from 'next/router'
+import { formatEther, zeroAddress } from 'viem'
 import { Avatar } from '@/components/ui/avatar'
 import { TokenDetailsCard } from '../token-detail-card'
 import { MemexIdeaItem, MemexListType } from '@/api/memex/types'
@@ -23,6 +23,7 @@ import { IdeaStatusCountdown } from './status-countdown'
 import { IdeaRefundClaimButton } from './refund-claim-button'
 import { IdeaCardProfile } from './profile'
 import { BI_ZERO } from '@/constants/number'
+import IdeaInfoNotice from './idea-info-notice'
 
 interface Props {
   idea: MemexIdeaItem | undefined
@@ -95,8 +96,8 @@ export const MemexIdeaCard = ({
     >
       <div
         className={cn(
-          'flex px-3 py-3 relative border-b duration-150',
-          isList && 'cursor-pointer sm:hover:bg-zinc-50',
+          'px-3 py-3 relative border-b duration-150',
+          'cursor-pointer sm:hover:bg-zinc-50 min-w-aside',
           className
         )}
         onClick={() => {
@@ -104,28 +105,44 @@ export const MemexIdeaCard = ({
           router.push(joinPaths(Routes.MemexIdea, idea?.hash))
         }}
       >
-        <IdeaCardBadge />
-
-        {isList && (
+        <div className="flex space-x-2">
           <Avatar
             src={idea?.user_logo}
             fallback={idea?.user_name?.[0]}
-            className="rounded-md mr-2"
+            className={cn(
+              'rounded-md mr-2',
+              'max-lg:rounded-full max-lg:mr-2 max-lg:w-11 max-lg:h-11'
+            )}
             onClick={(e) => {
               e.stopPropagation()
               onPushToAccount()
             }}
           />
-        )}
 
-        <div className="flex-1">
-          <IdeaCardProfile onPush={onPushToAccount} />
+          <div className="flex flex-col items-start flex-1">
+            <IdeaCardProfile onPush={onPushToAccount} />
+          </div>
+        </div>
 
-          <div className="flex flex-col items-start">
+        <div className="flex justify-between items-center my-2">
+          <div>
+            <div className="flex items-center space-x-2">
+              <IdeaCardBadge />
+              <IdeaRefundClaimButton />
+            </div>
+
             <IdeaStatusCountdown />
-            <IdeaRefundClaimButton />
           </div>
 
+          <div className="flex items-center space-x-1 text-sm text-zinc-500">
+            <img src={chain?.logo} alt="chain" className="w-5 h-5" />
+            <span>{chain?.displayName}</span>
+          </div>
+        </div>
+
+        <IdeaInfoNotice />
+
+        <div className="flex-1">
           <div className={cn(isNonPay && 'mt-4')}>
             {isDetails ? (
               <p className="mt-1 whitespace-pre-line">{idea?.content}</p>
@@ -155,7 +172,7 @@ export const MemexIdeaCard = ({
 
           <GridImages urls={image_urls} onClick={(e) => e.stopPropagation()} />
           <IdeaCardLikeComment onCommentSuccess={onCommentSuccess} />
-          <IdeaProgress />
+          <IdeaProgress className="bg-white" />
         </div>
       </div>
     </IdeaCardProvider>

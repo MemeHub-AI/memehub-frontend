@@ -3,7 +3,7 @@ import { ComponentProps } from 'react'
 import { cn } from '@/lib/utils'
 import { linkStyle } from '@/styles/variants/link'
 import { useTokenContext } from '@/contexts/token'
-import { DatafeedCandles } from './hooks/use-datafeed/types'
+import { DatafeedCandles } from '../../hooks/chart/datafeed-types'
 
 interface Props extends Omit<ComponentProps<'div'>, 'onClick'> {
   activeUnit: keyof DatafeedCandles

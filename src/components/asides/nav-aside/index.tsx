@@ -1,42 +1,38 @@
 import { ComponentProps, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import { useTranslation } from 'react-i18next'
 import { IoGift, IoLanguageOutline } from 'react-icons/io5'
 import { IoGiftOutline } from 'react-icons/io5'
 import { FaRegLightbulb } from 'react-icons/fa'
 import { FaLightbulb } from 'react-icons/fa'
 import { IoDiamondOutline } from 'react-icons/io5'
 import { IoDiamond } from 'react-icons/io5'
-import { RiNotification3Line } from 'react-icons/ri'
+import { RiNotification3Line, RiRocketFill, RiRocketLine } from 'react-icons/ri'
 import { RiNotification3Fill } from 'react-icons/ri'
 import { FaRegHandshake } from 'react-icons/fa'
 import { FaHandshake } from 'react-icons/fa6'
 import { FaRegUser } from 'react-icons/fa6'
 import { FaUser } from 'react-icons/fa6'
-import { CheckIcon } from '@radix-ui/react-icons'
 
+import { useRouter } from 'next/router'
+import { useTranslation } from 'react-i18next'
 import { Button } from '@/components/ui/button'
 import { useUserStore } from '@/stores/use-user-store'
 import { useLang } from '@/hooks/use-lang'
-import { resources } from '@/i18n'
 import { cn } from '@/lib/utils'
 import { Routes } from '@/routes'
 import { memehubLinks } from '@/config/link'
-import { Logo } from './logo'
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuContent,
 } from '@/components/ui/navigation-menu'
-import { SocialLinks } from './social-links'
 import { joinPaths } from '@/utils'
 import { useResponsive } from '@/hooks/use-responsive'
-import HowToWorkDialog from './how-to-work-dialog'
-
-const langs = Object.entries(resources as Record<string, { name: string }>)
+import Logo from '@/components/logo'
+import HowToWorkDialog from '@/components/how-to-work-dialog'
+import SocialLinks from '@/components/social-links'
+import NavAccount from './nav-account'
+import RewardButton from '@/components/reward-button'
 
 interface Props {
   collapseSize?: keyof ReturnType<typeof useResponsive>
@@ -74,12 +70,19 @@ export const NavAside = ({
     },
     {
       title: t('Coin'),
-      path: Routes.Main,
-      icon: <IoDiamondOutline />,
-      iconActive: <IoDiamond />,
-      isActive: pathname === Routes.Main,
+      path: Routes.Coin,
+      icon: <RiRocketLine />,
+      iconActive: <RiRocketFill />,
+      isActive: pathname === Routes.Coin,
     },
     ...(userInfo ? userNavs : []),
+    {
+      title: t('award'),
+      path: Routes.Reward,
+      icon: <IoDiamondOutline />,
+      iconActive: <IoDiamond />,
+      isActive: pathname === Routes.Reward,
+    },
     {
       title: t('Notification'),
       path: Routes.Notification,
@@ -130,7 +133,7 @@ export const NavAside = ({
             <NavigationMenuItem key={i} className="w-full cursor-pointer">
               <NavigationMenuLink
                 className={cn(
-                  'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer',
+                  'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer font-normal',
                   n.isActive && 'font-bold',
                   isCollapsed && 'space-x-0 p-2 justify-center'
                 )}
@@ -142,40 +145,6 @@ export const NavAside = ({
               </NavigationMenuLink>
             </NavigationMenuItem>
           ))}
-          <NavigationMenuItem className="w-full">
-            <NavigationMenuTrigger
-              showClose={!isCollapsed}
-              className={cn(
-                'text-xl w-full flex justify-start space-x-2 py-5 pl-2',
-                isCollapsed && 'space-x-0 p-2 justify-center'
-              )}
-              title={t('language')}
-            >
-              <IoLanguageOutline size={22} />
-              {!isCollapsed && <span>{t('Languages')}</span>}
-            </NavigationMenuTrigger>
-            <NavigationMenuContent>
-              <div className={cn('w-52 p-2 space-y-1', isCollapsed && 'w-32')}>
-                {langs.map(([code, { name }], i) => (
-                  <Button
-                    key={i}
-                    variant="ghost"
-                    shadow="none"
-                    className={cn(
-                      'w-full justify-start hover:bg-zinc-200 rounded-lg p-4',
-                      i18n.language === code && 'bg-zinc-100'
-                    )}
-                    onClick={() => setLang(code)}
-                  >
-                    {name}
-                    {i18n.language === code && (
-                      <CheckIcon className="h-5 w-5" />
-                    )}
-                  </Button>
-                ))}
-              </div>
-            </NavigationMenuContent>
-          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
 
@@ -198,14 +167,63 @@ export const NavAside = ({
 
       <HowToWorkDialog isCollapsed={isCollapsed} />
 
-      <SocialLinks
-        x={memehubLinks.x}
-        tg={memehubLinks.tg}
-        whitepaper={memehubLinks.whitepaper}
-        size={isCollapsed ? 20 : 24}
-        buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
-        className={cn(isCollapsed && 'flex-col space-x-0 space-y-1 ml-1')}
-      />
+      <div
+        className={cn(
+          'flex space-x-2 items-center',
+          isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
+        )}
+      >
+        <div
+          className={cn(
+            'flex justify-center items-center mt-1 space-x-1 ',
+            className
+          )}
+          {...props}
+        >
+          <Button
+            type="button"
+            shadow="none"
+            size={isCollapsed ? 'icon' : 'icon-lg'}
+            title={t('change.language')}
+            onClick={() =>
+              i18n.language === 'en' ? setLang('zh') : setLang('en')
+            }
+            className="border-transparent !bg-transparent sm:hover:border-black"
+          >
+            <IoLanguageOutline size={20} />
+          </Button>
+        </div>
+
+        <SocialLinks
+          x={memehubLinks.x}
+          tg={memehubLinks.tg}
+          whitepaper={memehubLinks.whitepaper}
+          size={20}
+          buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
+          className={cn(
+            'justify-start',
+            isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
+          )}
+        />
+      </div>
+
+      <div
+        className={cn(
+          'flex flex-col items-start fixed left-4 bottom-4',
+          !userInfo && 'w-full'
+        )}
+      >
+        <NavAccount userInfo={userInfo} isCollapsed={isCollapsed} />
+
+        <RewardButton
+          shadow="none"
+          showReferral={isCollapsed ? false : true}
+          className={cn(
+            'border-none w-full justify-between mt-3',
+            isCollapsed && 'w-fit p-2'
+          )}
+        />
+      </div>
     </aside>
   )
 }

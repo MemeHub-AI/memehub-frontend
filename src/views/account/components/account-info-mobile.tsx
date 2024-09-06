@@ -42,7 +42,7 @@ export const AccountInfoMoblie = (props: AccountInfoProps) => {
 
   return (
     <div className="relative flex justify-around">
-      <div className="absolute -top-[19rem] flex -right-1 space-x-2">
+      <div className="absolute -top-[18rem] flex -right-1 space-x-2">
         {isOtherUser ? (
           <Button
             variant={'purple'}
