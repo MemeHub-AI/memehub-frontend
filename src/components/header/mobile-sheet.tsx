@@ -86,14 +86,16 @@ export const HeaderMobileSheet = ({
           </span>
         )}
 
-        <span className="whitespace-nowrap overflow-hidden">
+        <span>
           <span className="truncate font-semibold">
             {BigNumber(fmt.decimals(followers.total)).toFormat()}
           </span>{' '}
           <span className="text-zinc-500 text-sm">{t('following')}</span>
         </span>
-        <span className="truncate">
-          <span>{BigNumber(fmt.decimals(following.total)).toFormat()} </span>
+        <span>
+          <span className="truncate font-semibold">
+            {BigNumber(fmt.decimals(following.total)).toFormat()}{' '}
+          </span>
           <span className="text-zinc-500 text-sm">{t('followers')}</span>
         </span>
       </div>

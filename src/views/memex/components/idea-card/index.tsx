@@ -125,12 +125,15 @@ export const MemexIdeaCard = ({
         </div>
 
         <div className="flex justify-between items-center my-2">
-          <div className="flex items-center space-x-2">
-            <IdeaCardBadge />
-            <IdeaRefundClaimButton />
+          <div>
+            <div className="flex items-center space-x-2">
+              <IdeaCardBadge />
+              <IdeaRefundClaimButton />
+            </div>
+
+            <IdeaStatusCountdown />
           </div>
 
-          <IdeaStatusCountdown />
           <div className="flex items-center space-x-1 text-sm text-zinc-500">
             <img src={chain?.logo} alt="chain" className="w-5 h-5" />
             <span>{chain?.displayName}</span>
