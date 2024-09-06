@@ -60,7 +60,7 @@ export const IdeaRefundClaimButton = () => {
           variant="yellow"
           shadow="none"
           size="xs"
-          className="py-3 mt-2 rounded-md max-lg:mt-0"
+          className="py-3 rounded-md"
           disabled={!isCanClaimToken || isClaimToken}
           isLoading={isPending}
           loadingChild={t('claiming')}
@@ -78,7 +78,7 @@ export const IdeaRefundClaimButton = () => {
           variant="yellow"
           shadow="none"
           size="xs"
-          className="py-3 mt-2 rounded-md max-lg:mt-0"
+          className="py-3 rounded-md"
           disabled={!isCanWithdraw || isWithdrawETH}
           isLoading={isPending}
           loadingChild={t('refunding')}
@@ -96,7 +96,7 @@ export const IdeaRefundClaimButton = () => {
           variant="yellow"
           shadow="none"
           size="xs"
-          className="py-3 mt-2 rounded-md max-lg:mt-0"
+          className="py-3 rounded-md"
           disabled={!isHasInitWithdraw || isInitWithdrawETH}
           isLoading={isPending}
           loadingChild={t('refunding')}

@@ -48,15 +48,6 @@ export const IdeaStatusCountdown = () => {
           </Button>
         )}
       </div>
-
-      {/* {canCountdown && (
-        <Countdown
-          className="text-sm text-green-600/90"
-          createdAt={startAt}
-          duration={duration}
-          onExpired={refetchInfo}
-        />
-      )} */}
     </>
   )
 }

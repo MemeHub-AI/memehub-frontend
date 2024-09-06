@@ -1,8 +1,8 @@
 import { type ComponentProps, useMemo } from 'react'
-import { formatEther, zeroAddress } from 'viem'
-import { useRouter } from 'next/router'
 import { BigNumber } from 'bignumber.js'
 
+import { useRouter } from 'next/router'
+import { formatEther, zeroAddress } from 'viem'
 import { Avatar } from '@/components/ui/avatar'
 import { TokenDetailsCard } from '../token-detail-card'
 import { MemexIdeaItem, MemexListType } from '@/api/memex/types'
@@ -121,7 +121,6 @@ export const MemexIdeaCard = ({
 
           <div className="flex flex-col items-start flex-1">
             <IdeaCardProfile onPush={onPushToAccount} />
-            {/* <span className="text-sm text-zinc-500">@{idea?.user_name}</span> */}
           </div>
         </div>
 
@@ -141,15 +140,6 @@ export const MemexIdeaCard = ({
         <IdeaInfoNotice />
 
         <div className="flex-1">
-          {/* <div className="hidden">
-            <IdeaCardProfile onPush={onPushToAccount} />
-          </div> */}
-
-          {/* <div className="flex flex-col items-start hidden">
-            <IdeaStatusCountdown />
-            <IdeaRefundClaimButton />
-          </div> */}
-
           <div className={cn(isNonPay && 'mt-4')}>
             {isDetails ? (
               <p className="mt-1 whitespace-pre-line">{idea?.content}</p>
