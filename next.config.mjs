@@ -10,10 +10,6 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   transpilePackages: ['@tanstack/query-core'],
-  compiler: {
-    // TODO: open in prod
-    // removeConsole: process.env.NEXT_PUBLIC_ENV === 'prod',
-  },
 }
 
 export default withSentryConfig(nextConfig, {
