@@ -6,10 +6,14 @@ import { useTranslation } from 'react-i18next'
 import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { useResponsive } from '@/hooks/use-responsive'
 
+interface ConnectWalletProps {
+  text?: string
+}
+
 export const ConnectWallet = ({
   children,
   ...props
-}: ComponentProps<typeof Button>) => {
+}: ComponentProps<typeof Button> & ConnectWalletProps) => {
   // const { walletIsConnected } = useConnectWallet()
   const { t } = useTranslation()
   const { isConnected, isConnecting, address } = useAccount()
@@ -28,7 +32,9 @@ export const ConnectWallet = ({
       onClick={() => openConnectModal?.()}
       {...props}
     >
-      {isConnecting ? t('wallet.connecting') : t('wallet.connect')}
+      {isConnecting
+        ? t('wallet.connecting')
+        : props.text || t('wallet.connect')}
     </Button>
   )
 }

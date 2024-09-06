@@ -1,9 +1,9 @@
 import { CiWallet } from 'react-icons/ci'
-import { useMemo } from 'react'
 import BigNumber from 'bignumber.js'
 import { LuUser2 } from 'react-icons/lu'
 import { IoGiftOutline } from 'react-icons/io5'
 import { BsFileEarmarkPlus } from 'react-icons/bs'
+import { MdErrorOutline } from 'react-icons/md'
 
 import { UserInfoRes, UserListType } from '@/api/user/types'
 import { Avatar } from '../ui/avatar'
@@ -17,6 +17,7 @@ import { useRouter } from 'next/router'
 import { memehubLinks } from '@/config/link'
 import HowToWorkDialog from '../how-to-work-dialog'
 import SocialLinks from '../social-links'
+import { useAccount } from 'wagmi'
 
 export const HeaderMobileSheet = ({
   userInfo,
@@ -26,12 +27,15 @@ export const HeaderMobileSheet = ({
   setSheetOpen: (status: boolean) => void
 }) => {
   const { t } = useTranslation()
-  const { chains } = useChainsStore()
   const followersResults = useUserList(UserListType.Followers)
   const followingResults = useUserList(UserListType.Following)
   const { push } = useRouter()
   const { followers } = followersResults
   const { following } = followingResults
+
+  const { chain } = useAccount()
+  const { evmChainsMap } = useChainsStore()
+  const currentChain = evmChainsMap[chain?.id || 0]
 
   const navs = [
     {
@@ -68,10 +72,20 @@ export const HeaderMobileSheet = ({
           <CiWallet />
           <span>{fmt.addr(userInfo?.wallet_address)}</span>
         </span>
-        <span className="flex items-center space-x-2 text-sm">
-          <img src={chains[0].logo} className="w-5 h-5" />
-          <span>{chains[0].native.name} Chain</span>
-        </span>
+
+        {currentChain && (
+          <span className="flex items-center space-x-2 text-sm">
+            <img src={currentChain?.logo} className="w-5 h-5" />
+            <span>{currentChain?.displayName}</span>
+          </span>
+        )}
+        {!currentChain && (
+          <span className="flex items-center space-x-2 text-sm text-red-500">
+            <MdErrorOutline />
+            <span>{t('error.chain')}</span>
+          </span>
+        )}
+
         <span className="whitespace-nowrap overflow-hidden">
           <span className="truncate font-semibold">
             {BigNumber(fmt.decimals(followers.total)).toFormat()}

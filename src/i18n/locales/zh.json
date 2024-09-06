@@ -755,5 +755,6 @@
   "how.work.3": "3. 点赞的聪明人获得底部筹码，价值$5的Meme币！",
   "how.work.4": "4. 进入内盘交易，市值达到~$30000（Beta）时添加LP到去中心化交易所",
   "reward.answer-question": "回答问题",
-  "change.language": "切换语言"
+  "change.language": "切换语言",
+  "error.chain": "不支持该链"
 }

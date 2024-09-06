@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { isEmpty } from 'lodash'
 
@@ -75,6 +75,6 @@ export const CreateIdeaPage = () => {
   )
 }
 
-CreateIdeaPage.getLayout = getMemexLayout
+CreateIdeaPage.getLayout = (page: ReactNode) => getMemexLayout(page, false)
 
 export default CreateIdeaPage

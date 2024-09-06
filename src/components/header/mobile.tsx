@@ -60,7 +60,7 @@ export const HeaderMobile = (props: Props) => {
           onOpenAutoFocus={(e) => e.preventDefault()}
           showClose={false}
           side="left"
-          className="pt-4 px-3"
+          className="pt-4 px-2"
         >
           <HeaderMobileSheet userInfo={userInfo} setSheetOpen={setSheetOpen} />
         </SheetContent>

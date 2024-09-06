@@ -6,13 +6,13 @@ import { IdeaCardSkeleton } from './components/idea-card/skeleton'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { MemexTabs } from './components/memex-tabs'
 
-export const getMemexLayout = (page: ReactNode) => (
+export const getMemexLayout = (page: ReactNode, withTabs = true) => (
   <PrimaryLayout
     disablePadding
     contentClass="flex justify-center"
     newsAsideClass="lg:block"
   >
-    <MemexTabs>{page}</MemexTabs>
+    {withTabs ? <MemexTabs>{page}</MemexTabs> : page}
   </PrimaryLayout>
 )
 

@@ -12,6 +12,7 @@ import { useIdeaInfo } from '../hooks/use-idea-info'
 import { MemexIdeaCard } from '../components/idea-card'
 import { useChainInfo } from '@/hooks/use-chain-info'
 import { getMemexLayout } from '..'
+import { ReactNode } from 'react'
 
 export const IdeaDetailsPage = () => {
   const { query } = useRouter()
@@ -54,6 +55,6 @@ export const IdeaDetailsPage = () => {
   )
 }
 
-IdeaDetailsPage.getLayout = getMemexLayout
+IdeaDetailsPage.getLayout = (page: ReactNode) => getMemexLayout(page, false)
 
 export default IdeaDetailsPage
