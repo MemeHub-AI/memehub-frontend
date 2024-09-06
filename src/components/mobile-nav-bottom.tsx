@@ -11,7 +11,6 @@ import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
 import { useScroll } from 'ahooks'
-import { PERCENT } from './back-to-top'
 import { FaArrowCircleUp } from 'react-icons/fa'
 
 interface BottomNav {
@@ -22,6 +21,7 @@ interface BottomNav {
   isActive: boolean
 }
 
+const PERCENT = 0.5
 export const MobileNavBottom = () => {
   const { isPad } = useResponsive()
   const { t } = useTranslation()

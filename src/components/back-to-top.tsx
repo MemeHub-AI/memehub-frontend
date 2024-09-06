@@ -8,7 +8,7 @@ import HandleScroll, { ScrollVariant } from './handle-scroll'
 import { useRouter } from 'next/router'
 import { Routes } from '@/routes'
 
-export const PERCENT = 0.3
+const PERCENT = 0.3
 
 export const BackToTop = () => {
   const { top } = useScroll(document) ?? { top: 0 }
