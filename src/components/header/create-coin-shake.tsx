@@ -40,7 +40,7 @@ const CreateCoinShake = (props: ShakeCardProps<TokenWsCreate>) => {
               {fmt.ellipsis(create.name, 16)}
             </span>{' '}
             {/* {t('was.created')} */}
-            was created {create.coin_type === 6 ? 'on Memex' : ''}
+            was created {create.coin_type === 6 ? 'on Idea' : ''}
           </span>
         </div>
       )
