@@ -7,6 +7,7 @@ export const masterAbiMap = {
   '0.1.8': masterAbi0_1_18,
   '0.6.0': masterAbi0_6_0,
   '0.9.0': masterAbi0_9_0,
+  '0.9.1': masterAbi0_9_0,
   '1.0.0': masterAbi1_0_0,
 }
 
