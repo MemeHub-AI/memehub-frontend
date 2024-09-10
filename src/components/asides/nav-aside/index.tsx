@@ -113,106 +113,103 @@ export const NavAside = ({
   return (
     <aside
       className={cn(
-        'flex flex-col space-y-4 w-56 pt-4 select-none',
+        'flex flex-col w-56 pt-4 select-none justify-between h-screen pb-4',
         isCollapsed && 'w-10 items-center',
         className
       )}
       {...props}
     >
-      <Logo
-        showMeme
-        showLogo={!isCollapsed}
-        className="w-28"
-        linkClass="pl-1 relative"
-        betaClass={isCollapsed ? 'absolute -bottom-5' : ''}
-      />
+      <div className="space-y-4">
+        <Logo
+          showMeme
+          showLogo={!isCollapsed}
+          className="w-28"
+          linkClass="pl-1 relative"
+          betaClass={isCollapsed ? 'absolute -bottom-5' : ''}
+        />
 
-      <NavigationMenu className="grid grid-cols-1 max-w-full">
-        <NavigationMenuList className="grid grid-cols-1 space-x-0 space-y-3">
-          {navs.map((n, i) => (
-            <NavigationMenuItem key={i} className="w-full cursor-pointer">
-              <NavigationMenuLink
-                className={cn(
-                  'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer font-normal',
-                  n.isActive && 'font-bold',
-                  isCollapsed && 'space-x-0 p-2 justify-center'
-                )}
-                onClick={() => router.push(n.path)}
-                title={n.title}
-              >
-                {n.isActive ? n.iconActive : n.icon}
-                {!isCollapsed && <span>{n.title}</span>}
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-          ))}
-        </NavigationMenuList>
-      </NavigationMenu>
+        <NavigationMenu className="grid grid-cols-1 max-w-full">
+          <NavigationMenuList className="grid grid-cols-1 space-x-0 space-y-3">
+            {navs.map((n, i) => (
+              <NavigationMenuItem key={i} className="w-full cursor-pointer">
+                <NavigationMenuLink
+                  className={cn(
+                    'text-xl w-full flex justify-start py-5 space-x-2 pl-2 cursor-pointer font-normal',
+                    n.isActive && 'font-bold',
+                    isCollapsed && 'space-x-0 p-2 justify-center'
+                  )}
+                  onClick={() => router.push(n.path)}
+                  title={n.title}
+                >
+                  {n.isActive ? n.iconActive : n.icon}
+                  {!isCollapsed && <span>{n.title}</span>}
+                </NavigationMenuLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </NavigationMenu>
 
-      <Button
-        shadow="none"
-        onClick={() => router.push(Routes.MemexCreate)}
-        className={cn(
-          'bg-blue-400 text-white rounded-full border-none py-6 text-lg',
-          'mt-2 max-xl:text-base ml-1 max-xl:text-md',
-          isCollapsed && 'p-2'
-        )}
-        size={isCollapsed ? 'icon-lg' : 'default'}
-      >
-        {isCollapsed ? (
-          <img src="/icons/writer.svg" alt="writer" />
-        ) : (
-          t('post-idea')
-        )}
-      </Button>
+        <Button
+          shadow="none"
+          onClick={() => router.push(Routes.MemexCreate)}
+          className={cn(
+            'bg-blue-400 text-white rounded-full border-none py-6 text-lg',
+            'mt-2 max-xl:text-base ml-1 max-xl:text-md w-full',
+            isCollapsed && 'p-2'
+          )}
+          size={isCollapsed ? 'icon-lg' : 'default'}
+        >
+          {isCollapsed ? (
+            <img src="/icons/writer.svg" alt="writer" />
+          ) : (
+            t('post-idea')
+          )}
+        </Button>
 
-      <HowToWorkDialog isCollapsed={isCollapsed} />
+        <HowToWorkDialog isCollapsed={isCollapsed} />
 
-      <div
-        className={cn(
-          'flex space-x-2 items-center',
-          isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
-        )}
-      >
         <div
           className={cn(
-            'flex justify-center items-center mt-1 space-x-1 ',
-            className
-          )}
-          {...props}
-        >
-          <Button
-            type="button"
-            shadow="none"
-            size={isCollapsed ? 'icon' : 'icon-lg'}
-            title={t('change.language')}
-            onClick={() =>
-              i18n.language === 'en' ? setLang('zh') : setLang('en')
-            }
-            className="border-transparent !bg-transparent sm:hover:border-black"
-          >
-            <IoLanguageOutline size={20} />
-          </Button>
-        </div>
-
-        <SocialLinks
-          x={memehubLinks.x}
-          tg={memehubLinks.tg}
-          whitepaper={memehubLinks.whitepaper}
-          size={20}
-          buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
-          className={cn(
-            'justify-start',
+            'flex space-x-2 items-center',
             isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
           )}
-        />
+        >
+          <div
+            className={cn(
+              'flex justify-center items-center mt-1 space-x-1 ',
+              className
+            )}
+            {...props}
+          >
+            <Button
+              type="button"
+              shadow="none"
+              size={isCollapsed ? 'icon' : 'icon-lg'}
+              title={t('change.language')}
+              onClick={() =>
+                i18n.language === 'en' ? setLang('zh') : setLang('en')
+              }
+              className="border-transparent !bg-transparent sm:hover:border-black"
+            >
+              <IoLanguageOutline size={20} />
+            </Button>
+          </div>
+
+          <SocialLinks
+            x={memehubLinks.x}
+            tg={memehubLinks.tg}
+            whitepaper={memehubLinks.whitepaper}
+            size={20}
+            buttonProps={{ size: isCollapsed ? 'icon' : 'icon-lg' }}
+            className={cn(
+              'justify-start',
+              isCollapsed && 'flex-col space-x-0 space-y-1 ml-1'
+            )}
+          />
+        </div>
       </div>
 
-      <div
-        className={cn(
-          'flex flex-col items-start fixed left-4 bottom-4',
-          !userInfo && 'w-full'
-        )}
-      >
+      <div className={cn('flex flex-col items-start', !userInfo && 'w-full')}>
         <NavAccount userInfo={userInfo} isCollapsed={isCollapsed} />
 
         <RewardButton
