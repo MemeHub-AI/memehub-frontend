@@ -36,39 +36,34 @@ export const FollowMoblie = () => {
 
   return (
     <Sheet>
-      <div
-        className="flex items-center justify-between"
-        style={{ margin: '0 10px 10px 10px' }}
-      >
-        <SheetTrigger asChild>
-          <Button
-            variant="secondary"
-            size="sm"
-            shadow="none"
-            onClick={() => setTab(UserListType.Followers)}
-            className="!bg-white shadow-none pl-0"
-          >
-            <span className="space-x-1 text-base flex flex-col">
-              <span className="font-bold ">{followers.total}</span>
-              <span className="text-blue-deep ">{t('followers')}</span>
-            </span>
-          </Button>
-        </SheetTrigger>
-        <SheetTrigger asChild>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => setTab(UserListType.Following)}
-            shadow="none"
-            className="!bg-white shadow-none"
-          >
-            <span className="space-x-1 text-base flex flex-col">
-              <span className="font-bold ">{following.total}</span>
-              <span className="text-blue-deep">{t('following')}</span>
-            </span>
-          </Button>
-        </SheetTrigger>
-      </div>
+      <SheetTrigger asChild>
+        <Button
+          variant="secondary"
+          size="sm"
+          shadow="none"
+          onClick={() => setTab(UserListType.Followers)}
+          className="!bg-white shadow-none pl-0"
+        >
+          <span className="text-base flex flex-col text-start">
+            <span className="font-bold">{followers.total}</span>
+            <span className="text-zinc-500 text-sm pl-0">{t('followers')}</span>
+          </span>
+        </Button>
+      </SheetTrigger>
+      <SheetTrigger asChild>
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => setTab(UserListType.Following)}
+          shadow="none"
+          className="!bg-white shadow-none"
+        >
+          <span className="text-base flex flex-col text-start">
+            <span className="font-bold">{following.total}</span>
+            <span className="text-zinc-500 text-sm">{t('following')}</span>
+          </span>
+        </Button>
+      </SheetTrigger>
 
       <SheetContent
         className="p-4 min-h-100 max-h-[80vh] rounded-t-md"

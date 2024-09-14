@@ -756,5 +756,9 @@
   "how.work.4": "4. 进入内盘交易，市值达到~$30000（Beta）时添加LP到去中心化交易所",
   "reward.answer-question": "回答问题",
   "change.language": "切换语言",
-  "error.chain": "不支持该链"
+  "error.chain": "不支持该链",
+  "referrals": "推荐",
+  "Ideas": "创意",
+  "graduation.coin": "毕业的代币",
+  "call": "助力"
 }

@@ -764,5 +764,9 @@
   "how.work.4": "4. Enter Bonding Curve and add LP to decentralized exchange when market cap reaches ~$30,000(Beta)",
   "reward.answer-question": "Answer Question",
   "change.language": "switch the language",
-  "error.chain": "Unsupported"
+  "error.chain": "Unsupported",
+  "referrals": "Referrals",
+  "Ideas": "Ideas",
+  "graduation.coin": "Graduation coins",
+  "call": "Call"
 }

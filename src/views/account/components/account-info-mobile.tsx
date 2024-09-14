@@ -24,6 +24,7 @@ import { IoMdMore } from 'react-icons/io'
 import { useClipboard } from '@/hooks/use-clipboard'
 import { fmt } from '@/utils/fmt'
 import { useResponsive } from '@/hooks/use-responsive'
+import RewardButton from '@/components/reward-button'
 
 export const AccountInfoMoblie = (props: AccountInfoProps) => {
   const {
@@ -32,6 +33,9 @@ export const AccountInfoMoblie = (props: AccountInfoProps) => {
     isFollowing,
     isUnfollowing,
     tokenAddr,
+    total,
+    followers,
+    followings,
     update,
     follow,
     unfollow,
@@ -40,9 +44,93 @@ export const AccountInfoMoblie = (props: AccountInfoProps) => {
   const { t } = useTranslation()
   const { copy } = useClipboard()
 
+  const userInfoList = [
+    {
+      name: t('referrals'),
+      value: 203,
+    },
+    // {
+    //   name: t('followers'),
+    //   value: followers.total,
+    // },
+    // {
+    //   name: t('following'),
+    //   value: followings.total,
+    // },
+    {
+      name: t('Ideas'),
+      value: total,
+    },
+  ]
+
   return (
-    <div className="relative flex justify-around">
-      <div className="absolute -top-[18rem] flex -right-1 space-x-2">
+    <div className="flex flex-col px-2">
+      <div className="flex justify-between items-end absolute left-2 right-2 top-[14.6rem]">
+        <div className="flex space-x-2 items-end">
+          <MemexAvatar
+            userInfo={userInfo}
+            isOtherUser={isOtherUser}
+            update={update}
+            refetchUserInfo={refetchUserInfo}
+          />
+          <RewardButton
+            shadow={'none'}
+            showReferral={false}
+            className="!border-none rounded-full"
+          />
+        </div>
+        <div className="mt-4">
+          {isOtherUser ? (
+            <Button
+              variant={'secondary'}
+              shadow={'none'}
+              className="flex items-center space-x-2 bg-black text-white rounded-full font-semibold"
+              disabled={isFollowing || isUnfollowing}
+              onClick={() =>
+                userInfo?.is_follower ? unfollow(tokenAddr) : follow(tokenAddr)
+              }
+            >
+              {/* {userInfo?.is_follower ? <MinusIcon /> : <PlusIcon />} */}
+              <span className="text-sm">
+                {userInfo?.is_follower ? t('unfollow') : t('follow')}
+              </span>
+            </Button>
+          ) : (
+            <ProfileForm>
+              <Button
+                variant={'secondary'}
+                shadow={'none'}
+                className="flex items-center space-x-2 bg-black text-white rounded-full font-semibold"
+              >
+                <IoSettingsOutline size={18} />
+                <span className="text-sm">{t('edit')}</span>
+              </Button>
+            </ProfileForm>
+          )}
+        </div>
+      </div>
+      <div className="mt-10 text-xl font-semibold">
+        <span>{userInfo?.name}</span>
+      </div>
+      <div className="flex justify-between items-center my-2">
+        <FollowMoblie />
+        {userInfoList.map((item, i) => (
+          <div key={i}>
+            <p className="font-semibold">{item.value}</p>
+            <p className="text-sm text-zinc-500 whitespace-nowrap">
+              {item.name}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default AccountInfoMoblie
+
+/**
+  <div className="absolute -top-[18rem] flex -right-1 space-x-2">
         {isOtherUser ? (
           <Button
             variant={'purple'}
@@ -148,8 +236,4 @@ export const AccountInfoMoblie = (props: AccountInfoProps) => {
           </div>
         </div>
       </div>
-    </div>
-  )
-}
-
-export default AccountInfoMoblie
+ */

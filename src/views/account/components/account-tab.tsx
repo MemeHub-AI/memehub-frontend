@@ -13,6 +13,9 @@ import { Routes } from '@/routes'
 import { useAccountContext } from '@/contexts/account'
 import { cn } from '@/lib/utils'
 import { joinPaths } from '@/utils'
+import MyIdeaPage from '@/views/memex/my-idea'
+import AirdropPage from '@/views/airdrop'
+import AccountLatestCard from './account-latest-card'
 
 export const AccountTab = () => {
   const { t } = useTranslation()
@@ -20,27 +23,46 @@ export const AccountTab = () => {
   const [isShowBorder, setIsShowBorder] = useState(true)
   const { query, ...router } = useRouter()
 
-  const tab = String(query.tab || UserListType.CoinsCreated)
-  const myAccountTabs = [
-    {
-      label: t('comments'),
-      value: UserListType.Comments,
-    },
-    {
-      label: t('mentions'),
-      value: UserListType.Mentions,
-    },
-  ]
+  const tab = String(query.tab || UserListType.Latest)
+  // const myAccountTabs = [
+  //   {
+  //     label: t('comments'),
+  //     value: UserListType.Comments,
+  //   },
+  //   {
+  //     label: t('mentions'),
+  //     value: UserListType.Mentions,
+  //   },
+  // ]
+  // const tabs = [
+  //   {
+  //     label: t('token.created'),
+  //     value: UserListType.CoinsCreated,
+  //   },
+  //   {
+  //     label: t('token.held'),
+  //     value: UserListType.CoinsHeld,
+  //   },
+  //   ...(isOtherUser ? [] : myAccountTabs),
+  // ]
   const tabs = [
     {
-      label: t('token.created'),
-      value: UserListType.CoinsCreated,
+      label: t('latest'),
+      value: UserListType.Latest,
     },
     {
-      label: t('token.held'),
-      value: UserListType.CoinsHeld,
+      label: `🚀 ${t('Idea')}`,
+      value: UserListType.Idea,
     },
-    ...(isOtherUser ? [] : myAccountTabs),
+    // ...(userInfo ? userTabs : []),
+    {
+      label: t('airdrop'),
+      value: UserListType.Airdrops,
+    },
+    {
+      label: `✊ ${t('call')}`,
+      value: UserListType.Mentions,
+    },
   ]
 
   const {
@@ -76,24 +98,19 @@ export const AccountTab = () => {
     >
       <TabsList
         className={cn(
-          'h-12 mb-2 max-sm:w-full max-sm:h-10 max-sm:mb-0',
-          'border-none rounded-none text-base select-none'
+          'h-12 mb-2 max-sm:w-full max-sm:h-10 max-sm:mb-0 flex items-center justify-start',
+          'border-none rounded-none text-base select-none space-x-1 md:space-x-2'
         )}
       >
         {tabs.map((t) => (
           <TabsTrigger
             className={cn(
-              'h-full w-full max-sm:px-2 max-sm:text-xs',
-              ' data-[state=active]:text-black data-[state=active]:bg-white',
-              'data-[state=active]:hover:bg-white hover:bg-white relative',
-              'after:absolute hover:after:w-full after:h-[2px] after:bg-purple-500 after:bottom-0 after:left-0 after:hover:animate-left-to-right',
-              isShowBorder &&
-                'data-[state=active]:after:absolute data-[state=active]:after:animate-left-to-right data-[state=active]:after:w-full'
+              'max-sm:text-xs border border-zinc-700 rounded-full w-20 h-7',
+              'data-[state=active]:bg-blue-600',
+              'data-[state=active]:hover:bg-blue-600 hover:bg-gray-200'
             )}
             key={t.value}
             value={t.value.toString()}
-            onMouseEnter={() => setIsShowBorder(false)}
-            onMouseLeave={() => setIsShowBorder(true)}
           >
             {t.label}
           </TabsTrigger>
@@ -101,8 +118,8 @@ export const AccountTab = () => {
       </TabsList>
 
       {/* Token created */}
-      <TabsContent value={UserListType.CoinsCreated.toString()}>
-        <TokenCards
+      <TabsContent value={UserListType.Latest.toString()}>
+        {/* <TokenCards
           className="md:grid-cols-2 xl:grid-cols-3"
           cards={myTokens}
           total={myTokenTotal}
@@ -110,25 +127,27 @@ export const AccountTab = () => {
           isPending={isFetchingMyTokens}
           onFetchNext={fetchNextMyTokens}
           showSearch={false}
-        />
+        /> */}
+        <AccountLatestCard />
       </TabsContent>
 
       {/* Token held */}
-      <TabsContent value={UserListType.CoinsHeld.toString()}>
-        <TokenHeldCards
+      <TabsContent value={UserListType.Idea.toString()}>
+        {/* <TokenHeldCards
           cards={tokenHeld.list}
           total={tokenHeld.total}
           isLoading={isLoading}
           isPending={isFetching}
           onFetchNext={fetchNextPage}
-        />
+        /> */}
+        <MyIdeaPage />
       </TabsContent>
 
       {/* Only self can see. */}
       {!isOtherUser && (
         <>
-          <TabsContent value={UserListType.Comments.toString()}>
-            <CommentCards
+          <TabsContent value={UserListType.Airdrops.toString()}>
+            {/* <CommentCards
               disableToProfile
               readonly
               cards={comments.list}
@@ -136,7 +155,8 @@ export const AccountTab = () => {
               isLoading={isLoading}
               isPending={isFetching}
               onFetchNext={fetchNextPage}
-            />
+            /> */}
+            <AirdropPage />
           </TabsContent>
           <TabsContent value={UserListType.Mentions.toString()}>
             <MentionCards

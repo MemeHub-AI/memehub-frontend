@@ -1,6 +1,8 @@
 import type { Address } from 'viem'
 import type { PaginationReq } from '../types'
 import type { TokenCommentListRes, TokenListItem } from '../token/types'
+import { MemexIdeaItem } from '../memex/types'
+import { AirdropItem } from '../airdrop/types'
 
 export interface UserLoginReq {
   name?: string
@@ -79,6 +81,9 @@ export enum UserListType {
   Followers,
   Following,
   CoinsHeld,
+  Latest,
+  Idea,
+  Airdrops,
 }
 
 export interface UserListReq extends PaginationReq {
@@ -92,6 +97,9 @@ export interface UserListRes {
   [UserListType.Mentions]: UserNotification
   [UserListType.Followers]: UserFollow
   [UserListType.Following]: UserFollow
+  [UserListType.Latest]: MemexIdeaItem
+  [UserListType.Idea]: MemexIdeaItem
+  [UserListType.Airdrops]: AirdropItem
 }
 
 interface User {

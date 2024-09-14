@@ -9,12 +9,13 @@ import { useUser } from '@/hooks/use-user'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'react-i18next'
 import { cn } from '@/lib/utils'
-import { UserInfoRes, UserUpdateReq } from '@/api/user/types'
+import { UserFollow, UserInfoRes, UserUpdateReq } from '@/api/user/types'
 import { UseMutateAsyncFunction } from '@tanstack/react-query'
 import { ApiResponse } from '@/api/types'
 import AccountInfoDesktop from './account-info-desktop'
 import { useResponsive } from '@/hooks/use-responsive'
 import AccountInfoMoblie from './account-info-mobile'
+import EllipsisText from '@/components/ellipsis-text'
 
 export interface AccountInfoProps {
   userInfo: UserInfoRes | undefined
@@ -22,6 +23,15 @@ export interface AccountInfoProps {
   isFollowing: boolean
   isUnfollowing: boolean
   tokenAddr: string
+  total: number
+  followers: {
+    total: number
+    list: UserFollow[]
+  }
+  followings: {
+    total: number
+    list: UserFollow[]
+  }
   update: UseMutateAsyncFunction<
     ApiResponse<UserInfoRes>,
     Error,
@@ -44,8 +54,15 @@ export interface AccountInfoProps {
 }
 
 export const MemexProfile = () => {
-  const { userInfo, isOtherUser, refetchUserInfo, refetchFollow } =
-    useAccountContext()
+  const {
+    userInfo,
+    isOtherUser,
+    followersResults,
+    followingResults,
+    publishIdeas,
+    refetchUserInfo,
+    refetchFollow,
+  } = useAccountContext()
   const { isFollowing, isUnfollowing, follow, unfollow, update } = useUser({
     onFollowFinlly: () => {
       refetchUserInfo()
@@ -56,16 +73,19 @@ export const MemexProfile = () => {
   const { query } = useRouter()
   const { isPad } = useResponsive()
   const tokenAddr = (query.address || '') as string
+  const { followers } = followersResults
+  const { following } = followingResults
+  const { total } = publishIdeas
 
   // console.log('userinfo:', userInfo)
 
   return (
-    <div className="flex-1 border border-zinc-200 rounded-md">
+    <div className="flex-1">
       <div
-        className="bg-cover bg-center h-72"
+        className="bg-cover bg-center h-72 max-md:h-52"
         style={{ backgroundImage: `url(/images/memex-profile-bg.jpg)` }}
       />
-      <div className="bg-white px-2 pt-2 relative after:absolute after:w-full after:h-px after:bg-zinc-200 after:bottom-5 after:left-0">
+      <div className="bg-white px-2 pt-2">
         {!isPad ? (
           <AccountInfoDesktop
             userInfo={userInfo}
@@ -73,6 +93,9 @@ export const MemexProfile = () => {
             isFollowing={isFollowing}
             isUnfollowing={isUnfollowing}
             tokenAddr={tokenAddr}
+            total={total}
+            followers={followers}
+            followings={following}
             update={update}
             follow={follow}
             unfollow={unfollow}
@@ -85,6 +108,9 @@ export const MemexProfile = () => {
             isFollowing={isFollowing}
             isUnfollowing={isUnfollowing}
             tokenAddr={tokenAddr}
+            total={total}
+            followers={followers}
+            followings={following}
             update={update}
             follow={follow}
             unfollow={unfollow}
@@ -92,11 +118,13 @@ export const MemexProfile = () => {
           />
         )}
       </div>
-      <div className="align-top p-2 relative bottom-[0.65rem]">
-        <p className="text-zinc-600">
-          {t('bio')}:{' '}
+      <div className="align-top px-4 pt-2">
+        {/* <p className="text-zinc-600"> */}
+        {/* {t('bio')}:{' '} */}
+        <EllipsisText maxLine={2} className="text-zinc-600">
           {userInfo?.description ? userInfo?.description : t('there.noting')}
-        </p>
+        </EllipsisText>
+        {/* </p> */}
       </div>
     </div>
   )

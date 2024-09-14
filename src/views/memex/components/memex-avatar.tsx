@@ -70,8 +70,8 @@ export const MemexAvatar = ({
         <Avatar
           src={userInfo?.logo || ''}
           fallback={userInfo?.wallet_address.slice(-4)}
-          size={128}
-          className="border-4 border-zinc-100 bg-gray-50 bottom-10"
+          size={80}
+          className="border-4 border-zinc-100 bg-gray-50"
         />
         {!isOtherUser && (
           <>

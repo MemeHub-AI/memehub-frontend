@@ -11,6 +11,8 @@ import { UserListType } from '@/api/user/types'
 import { MemexProfile } from './components/profile'
 import { PrimaryLayout } from '@/components/layouts/primary'
 import { PageFallback } from '@/components/page-fallback'
+import { MemexListType } from '@/api/memex/types'
+import { useIdeaList } from '../memex/hooks/use-idea-list'
 
 export const AccountPage = () => {
   const { query } = useRouter()
@@ -27,6 +29,7 @@ export const AccountPage = () => {
   const isOtherUser = tokenAddr !== currenUserAddr
   const followersResults = useUserList(UserListType.Followers)
   const followingResults = useUserList(UserListType.Following)
+  const publishIdeas = useIdeaList(MemexListType.My)
 
   const refetchFollow = () => {
     followersResults.refetch()
@@ -39,22 +42,20 @@ export const AccountPage = () => {
         userInfo: isOtherUser ? otherUserInfo : userInfo,
         isPending: isFetchingUserInfo || isFetchingOtherUserInfo,
         isOtherUser: isOtherUser,
+        publishIdeas,
         refetchUserInfo: isOtherUser ? refetchOtherUserInfo : refetchUserInfo,
         followersResults,
         followingResults,
         refetchFollow,
       }}
     >
-      <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto !ml-0 ">
+      <div className="flex-1 min-h-main flex gap-2 flex-col overflow-auto !ml-0">
         {/* <div
           className="bg-cover bg-center h-72"
           style={{ backgroundImage: `url(/images/memex-profile-bg.jpg)` }}
         /> */}
         <aside
-          className={cn(
-            'flex flex-col gap-4 sticky top-20 mb-2',
-            'static gap-2'
-          )}
+          className={cn('flex flex-col gap-4 sticky top-20', 'static gap-2')}
         >
           <MemexProfile />
           <div className="hidden mt-4">
@@ -69,7 +70,7 @@ export const AccountPage = () => {
 }
 
 AccountPage.getLayout = (page: ReactNode) => (
-  <PrimaryLayout>
+  <PrimaryLayout disablePadding>
     <PageFallback>{page}</PageFallback>
   </PrimaryLayout>
 )

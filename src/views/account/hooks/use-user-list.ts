@@ -27,6 +27,9 @@ export const useUserList = (type: UserListType, isOtherUser = true) => {
     [UserListType.Mentions]: { total: 0, list: [] },
     [UserListType.Followers]: { total: 0, list: [] },
     [UserListType.Following]: { total: 0, list: [] },
+    [UserListType.Latest]: { total: 0, list: [] },
+    [UserListType.Idea]: { total: 0, list: [] },
+    [UserListType.Airdrops]: { total: 0, list: [] },
   })
   const { query } = useRouter()
   const userAddr = (query.address || '') as string
